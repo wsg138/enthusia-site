@@ -15,7 +15,7 @@
   <div class="container">
     <div class="brand">
       <span class="logo">🛡️</span>
-      <span class="name">Enthusia SMP</span>
+      <span class="name grad-text">Enthusia SMP</span>
     </div>
     <nav class="nav">
       <a href="index.html" class="active">Home</a>
@@ -31,10 +31,10 @@
   <section class="hero">
     <div class="container hero-inner">
       <div class="hero-copy">
-        <h1>Welcome to <span>Enthusia SMP</span></h1>
+        <h1>Welcome to <span class="grad-text">Enthusia SMP</span></h1>
         <p class="lead">Semi-Anarchy • Mostly Vanilla • Player-Driven Economy</p>
         <div class="cta-row">
-          <button class="btn" id="copyIpBtn" data-ip="SERVER_IP">Copy IP</button>
+          <button class="btn" id="copyIpBtn" data-ip="Unavailable">Copy IP</button>
           <a id="joinDiscordBtn" class="btn ghost" target="_blank" rel="noopener">Join Discord</a>
           <a id="openStoreBtn" class="btn ghost" target="_blank" rel="noopener">Open Store</a>
         </div>
@@ -42,7 +42,7 @@
         <div class="status">
           <div class="status-card">
             <div class="status-label">Server</div>
-            <div class="status-value" id="serverIp">SERVER_IP</div>
+            <div class="status-value" id="serverIp">Unavailable</div>
           </div>
           <div class="status-card">
             <div class="status-label">Players Online</div>
@@ -50,17 +50,17 @@
           </div>
           <div class="status-card">
             <div class="status-label">Status</div>
-            <div class="status-badge" id="serverStatus">checking…</div>
+            <div class="status-badge" id="serverStatus">TBA</div>
           </div>
         </div>
-        <small class="status-note">Status updates every ~60s. API: mcstatus.io</small>
+        <small class="status-note">Status will appear after launch. Discord link works now.</small>
       </div>
 
       <div class="hero-embed">
-        <!-- Discord server widget (needs a real numeric server ID) -->
+        <!-- Discord server widget -->
         <iframe
           id="discordWidget"
-          src="https://discord.com/widget?id=DISCORD_SERVER_ID&theme=dark"
+          src="https://discord.com/widget?id=1410303324745371709&theme=dark"
           width="350"
           height="500"
           allowtransparency="true"
@@ -83,7 +83,7 @@
       </div>
       <div class="card">
         <h3>Balanced PvP</h3>
-        <p>Mace capped, fair fights, skill-based gameplay.</p>
+        <p>Mace tuned, fair fights, skill-based gameplay.</p>
       </div>
     </div>
   </section>
@@ -97,9 +97,9 @@
 
 <script src="assets/script.js"></script>
 <script>
-  /* Fill these with your real values */
+  /* Fill these later when you launch */
   window.ENTHUSIA = {
-    serverIp: "your.server.host:25565",
+    serverIp: "Unavailable",
     tebexUrl: "https://yourstore.tebex.io",
     discordInvite: "https://discord.gg/5ccgDCmNSc",
     discordServerId: "1410303324745371709"
