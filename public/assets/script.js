@@ -1,3 +1,4 @@
+// Site init + server status via mcstatus.io + BIG cursor glow (mouse & touch)
 function initSite(cfg){
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -33,25 +34,7 @@ function initSite(cfg){
   const ipEl = document.getElementById('serverIp');
   if (ipEl) ipEl.textContent = ip || 'Unavailable';
 
-  // Discord widget
-  const widget = document.getElementById('discordWidget');
-  if (widget && discordId) {
-    let loaded = false;
-    widget.addEventListener('load', ()=> loaded = true);
-    widget.src = `https://discord.com/widget?id=${encodeURIComponent(discordId)}&theme=dark`;
-    // Fallback if widget never loads (e.g., not enabled)
-    setTimeout(()=>{
-      if (!loaded) {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <h3 class="grad-text" style="margin-top:0">Join our Discord</h3>
-          <p>The live widget isn’t available yet. Click below to join:</p>
-          <p><a class="btn" href="${invite}" target="_blank" rel="noopener">Open Discord</a></p>`;
-        widget.replaceWith(card);
-      }
-    }, 5000);
-  }
+  // Discord widget/banner: you’re using the banner <img>, so no iframe logic needed here
 
   // Server status via mcstatus.io (skip if IP unavailable)
   const validIp = ip && ip.toLowerCase() !== 'unavailable';
@@ -79,4 +62,36 @@ function initSite(cfg){
   }
   fetchStatus();
   setInterval(fetchStatus, 60000);
+
+  // === BIG cursor glow (mouse & touch) ===
+  const glow = document.getElementById('cursor-glow');
+  if (glow && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let raf = null;
+    let hideTimer = null;
+    function moveGlow(x, y){
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(()=>{ glow.style.transform = `translate(${x}px, ${y}px)`; });
+    }
+    function showGlow(){
+      glow.style.opacity = '0.9';
+      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+      hideTimer = setTimeout(()=> glow.style.opacity = '0.55', 800); // gentle fade after idle
+    }
+
+    // Mouse
+    window.addEventListener('pointermove', (e)=>{
+      moveGlow(e.clientX, e.clientY);
+      showGlow();
+    }, { passive:true });
+
+    // Touch (iOS): follow finger while moving; fade after lift
+    window.addEventListener('touchmove', (e)=>{
+      const t = e.touches && e.touches[0];
+      if (!t) return;
+      moveGlow(t.clientX, t.clientY);
+      showGlow();
+    }, { passive:true });
+    window.addEventListener('touchend', ()=>{ glow.style.opacity = '0.45'; }, { passive:true });
+    window.addEventListener('mouseleave', ()=>{ glow.style.opacity = '0.45'; });
+  }
 }
