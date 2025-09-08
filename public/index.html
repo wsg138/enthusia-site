@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enthusia SMP — Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+  <meta name="description" content="Enthusia SMP — Mostly-vanilla, player-driven economy, PvP tuned. Join our community!">
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="brand">
+      <span class="logo">🛡️</span>
+      <span class="name">Enthusia SMP</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="plugins.html">About & Plugins</a>
+      <a href="rules.html">Rules</a>
+      <a id="storeLink" target="_blank" rel="noopener">Store</a>
+      <a id="discordLink" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <h1>Welcome to <span>Enthusia SMP</span></h1>
+        <p class="lead">Semi-Anarchy • Mostly Vanilla • Player-Driven Economy</p>
+        <div class="cta-row">
+          <button class="btn" id="copyIpBtn" data-ip="SERVER_IP">Copy IP</button>
+          <a id="joinDiscordBtn" class="btn ghost" target="_blank" rel="noopener">Join Discord</a>
+          <a id="openStoreBtn" class="btn ghost" target="_blank" rel="noopener">Open Store</a>
+        </div>
+        <div class="status">
+          <div class="status-card">
+            <div class="status-label">Server</div>
+            <div class="status-value" id="serverIp">SERVER_IP</div>
+          </div>
+          <div class="status-card">
+            <div class="status-label">Players Online</div>
+            <div class="status-value" id="playerCount">—</div>
+          </div>
+          <div class="status-card">
+            <div class="status-label">Status</div>
+            <div class="status-badge" id="serverStatus">checking…</div>
+          </div>
+        </div>
+        <small class="status-note">Status updates every ~60s. API: mcstatus.io</small>
+      </div>
+      <div class="hero-embed">
+        <!-- Discord server widget -->
+        <iframe
+          id="discordWidget"
+          src="https://discord.com/widget?id=DISCORD_SERVER_ID&theme=dark"
+          width="350"
+          height="500"
+          allowtransparency="true"
+          frameborder="0"
+          sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container grid-3">
+      <div class="card">
+        <h3>Protected Spawn & Market</h3>
+        <p>Safe zones for trading, building, and meeting.</p>
+      </div>
+      <div class="card">
+        <h3>Item-for-Item Economy</h3>
+        <p>No virtual money. Trade with real in-game items.</p>
+      </div>
+      <div class="card">
+        <h3>Balanced PvP</h3>
+        <p>Mace capped; fair fights; skill-based gameplay.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© <span id="year"></span> Enthusia SMP</p>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+<script>
+  window.ENTHUSIA = {
+    serverIp: "SERVER_IP",
+    tebexUrl: "TEBEX_STORE_URL",
+    discordInvite: "DISCORD_INVITE_URL",
+    discordServerId: "DISCORD_SERVER_ID"
+  };
+  initSite(window.ENTHUSIA);
+</script>
+</body>
+</html>
