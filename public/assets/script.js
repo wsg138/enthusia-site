@@ -1,4 +1,4 @@
-// Basic site init and server status fetch using mcstatus.io
+// Site init + server status via mcstatus.io
 function initSite(cfg){
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -8,13 +8,13 @@ function initSite(cfg){
   const invite = cfg.discordInvite || 'https://discord.gg/yourInvite';
   const discordId = cfg.discordServerId || '';
 
-  // Wire header links
+  // Header links
   const storeLink = document.getElementById('storeLink');
   if (storeLink) storeLink.href = tebex;
   const discordLink = document.getElementById('discordLink');
   if (discordLink) discordLink.href = invite;
 
-  // Wire hero CTAs
+  // Hero CTAs
   const copyIpBtn = document.getElementById('copyIpBtn');
   if (copyIpBtn) {
     copyIpBtn.addEventListener('click', async () => {
@@ -29,13 +29,13 @@ function initSite(cfg){
   const ipEl = document.getElementById('serverIp');
   if (ipEl) ipEl.textContent = ip;
 
-  // Update Discord widget iframe if provided
+  // Update Discord widget with real server ID
   const widget = document.getElementById('discordWidget');
   if (widget && discordId) {
     widget.src = `https://discord.com/widget?id=${encodeURIComponent(discordId)}&theme=dark`;
   }
 
-  // Fetch player count from mcstatus.io (cached ~60s on their side)
+  // Status
   async function fetchStatus(){
     const statusEl = document.getElementById('serverStatus');
     const countEl = document.getElementById('playerCount');
