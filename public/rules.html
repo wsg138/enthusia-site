@@ -22,26 +22,102 @@
     </nav>
   </div>
 </header>
+
 <main class="container pad">
-  <h1>Server Rules</h1>
-  <ol class="rules">
-    <li>No cheating, dupes, or exploits. Report bugs immediately.</li>
-    <li>Respect other players. No harassment, hate speech, or doxxing.</li>
-    <li>Minimal griefing outside protected zones (follow local event rules).</li>
-    <li>Market stalls must clearly list trades and follow item-economy rules.</li>
-    <li>No pay-to-win. Store perks are cosmetic or QoL only.</li>
-    <li>Follow Discord rules while in-game voice/text</li>
-  </ol>
-  <p>Rules evolve with community feedback. Suggest changes in <strong>#suggestions</strong>.</p>
+  <h1>🌍 SMP & Discord Rules</h1>
+  <p class="callout"><em>By playing on the server or participating in the Discord, you agree to follow all rules. Continued play means acceptance of current and future rule updates.</em></p>
+
+  <div class="rules-grid">
+
+    <section class="rule-card" id="chat-conduct">
+      <h2>💬 Chat & Conduct (Minecraft + Discord)</h2>
+      <p><strong>Keep all spaces fun, fair, and respectful.</strong></p>
+      <ul>
+        <li><strong>Respect everyone.</strong> No hate speech, racism, sexism, homophobia, or other discrimination.</li>
+        <li><strong>No harassment or targeted toxicity.</strong> Includes DMs related to the server.</li>
+        <li><strong>Swearing allowed</strong> in moderation—never directed at players.</li>
+        <li><strong>No spam/flooding/excessive caps.</strong></li>
+        <li><strong>No sound spam</strong> (note blocks, bells, portals, etc.) or mic spam in VC.</li>
+        <li><strong>Use channels correctly.</strong> Stay on-topic in Discord channels.</li>
+        <li><strong>Keep usernames, skins, item names, and builds appropriate.</strong> No hate symbols, offensive imagery, or NSFW content.</li>
+        <li><strong>No impersonation</strong> of staff, players, or media.</li>
+        <li><strong>No advertising</strong> other servers/Discords/unrelated media.</li>
+      </ul>
+    </section>
+
+    <section class="rule-card" id="gameplay-pvp">
+      <h2>🛡️ Minecraft Gameplay & PvP</h2>
+      <p><strong>Vanilla-based SMP. PvP is enabled everywhere except market and spawn.</strong></p>
+      <ul>
+        <li><strong>No hacks or cheating.</strong> (Hacked clients, x-ray, ESP, freecam, baritone, autoclickers, macros, bots, etc.)</li>
+        <li><strong>No bug abuse or dupes.</strong> <em>TNT duping is allowed; all other duplication is banned.</em></li>
+        <li><strong>No chunk loaders.</strong> Don’t keep chunks loaded while offline.</li>
+        <li><strong>No lag machines or unreasonably laggy farms.</strong> Staff may remove if needed.</li>
+        <li><strong>No combat logging.</strong> If you’re in a fight, see it through.</li>
+        <li><strong>Spawn is a community hub.</strong> Griefing/stealing/bypassing protections is forbidden.</li>
+        <li><strong>Builder projects at spawn must be respected.</strong> Only approved builders edit spawn.</li>
+        <li><strong>End Portal:</strong> Don’t block the main End entrance with traps or constant TNT. <em>Camping is allowed.</em></li>
+      </ul>
+    </section>
+
+    <section class="rule-card" id="mods-clients">
+      <h2>🧰 Mods & Clients</h2>
+      <p><strong>Cosmetic and quality-of-life mods only.</strong></p>
+      <p><strong>✅ Allowed:</strong></p>
+      <ul>
+        <li>Performance mods (Optifine, Sodium, Iris, etc.)</li>
+        <li>Litematica/Schematica <em>for building only</em></li>
+        <li>Replay Mod (evidence/personal use)</li>
+        <li>Basic minimaps (no player/entity radar, no cave/base reveal)</li>
+      </ul>
+      <p><strong>⛔ Not Allowed:</strong></p>
+      <ul>
+        <li>Hacked clients or combat mods</li>
+        <li>X-ray, ESP, freecam, baritone, entity radar</li>
+        <li>Auto-clickers, macros, scripts</li>
+        <li>Easy Place <em>in combat</em></li>
+        <li>Bots of any kind (chat or movement)</li>
+      </ul>
+    </section>
+
+    <section class="rule-card" id="staff-expectations">
+      <h2>👤 Staff & Player Expectations</h2>
+      <p><strong>Trust and fairness keep the community alive.</strong></p>
+      <ul>
+        <li><strong>Follow staff instructions.</strong></li>
+        <li><strong>Do not lie to staff</strong> or provide fake evidence.</li>
+        <li><strong>Use tickets</strong> for reports/disputes—not DMs or public spam.</li>
+        <li><strong>No alt abuse.</strong> No ban evasion; one account per player; no account sharing.</li>
+        <li><strong>No VPNs</strong> unless approved by a <em>@Founder</em> or <em>@Developer</em> who vouches for you.</li>
+        <li><strong>Do not share personal information</strong> (yours or others’).</li>
+      </ul>
+      <p><strong>Zero tolerance for:</strong> sexual harassment/grooming; doxxing, blackmail, or threats; illegal content; ban evasion.</p>
+    </section>
+
+    <section class="rule-card" id="enforcement">
+      <h2>🔁 Enforcement & Updates</h2>
+      <ul>
+        <li>Rules may change anytime—watch announcements.</li>
+        <li><strong>Inventory rollbacks</strong> only for major server issues or with solid evidence.</li>
+        <li>Staff may act immediately to protect the server and community.</li>
+        <li>Punishments may include warnings, mutes, kicks, or bans depending on severity.</li>
+      </ul>
+    </section>
+
+    <section class="rule-card" id="final-notes">
+      <h2>✏️ Final Notes</h2>
+      <p><em>This SMP is designed to be fair, competitive, and community-driven. PvP is allowed, survival is raw, and spawn is protected as a hub for everyone. Respect the rules, respect each other, and enjoy the game.</em></p>
+    </section>
+  </div>
 </main>
+
 <footer class="site-footer">
   <div class="container">
     <p>© <span id="year"></span> Enthusia SMP</p>
   </div>
 </footer>
+
 <script src="assets/script.js"></script>
-<script>
-  initSite(window.ENTHUSIA || {});
-</script>
+<script>initSite(window.ENTHUSIA || {});</script>
 </body>
 </html>
