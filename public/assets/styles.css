@@ -42,14 +42,38 @@ a{color:var(--accent);text-decoration:none}
   background:rgba(11,14,19,.85);backdrop-filter: blur(8px);
   border-bottom:1px solid #1b2230;
 }
-.site-header .container{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:64px}
+.site-header .container{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:64px
+}
 .brand{display:flex;align-items:center;gap:10px;font-weight:900}
 .brand .logo{font-size:24px}
 .brand .name{letter-spacing:.4px}
 
-.nav{display:flex;flex-wrap:wrap;gap:8px}
-.nav a{padding:8px 10px;border-radius:8px}
-.nav a.active,.nav a:hover{background:#1a2232}
+/* Tabs (desktop defaults) */
+.nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:flex-end;       /* desktop: to the right of brand */
+  align-items:center;
+}
+.nav a{
+  padding:10px 14px;
+  border-radius:999px;            /* pill tabs */
+  line-height:1;
+  font-weight:700;
+  background:#1a2232;
+  border:1px solid var(--border);
+  color:var(--text);
+  transition:background .15s ease, transform .06s ease;
+}
+.nav a:hover{ background:#202a3a; }
+.nav a:active{ transform:translateY(1px); }
+.nav a.active{
+  background:var(--brand-grad);
+  color:#181b20;
+  border-color:transparent;
+}
 
 /* Hero */
 .hero{
@@ -105,14 +129,12 @@ a{color:var(--accent);text-decoration:none}
 }
 .callout strong{color:#ffe39e}
 
-/* ===== Cursor glow (site-wide) — BIGGER & STRONGER ===== */
 /* ===== Cursor glow (fullscreen, desktop + iOS) ===== */
 #cursor-glow{
   position: fixed;
   inset: 0;                /* cover the whole viewport */
   pointer-events: none;
-  z-index: 9999;           /* above everything; still clickable because of pointer-events:none */
-  /* big, bright glow that follows CSS vars --mx/--my */
+  z-index: 9999;           /* above everything; stays click-through */
   background:
     radial-gradient(
       circle at var(--mx, 50%) var(--my, 50%),
@@ -122,7 +144,7 @@ a{color:var(--accent);text-decoration:none}
       rgba(0,0,0,0) 46%
     );
   filter: blur(50px);
-  mix-blend-mode: screen;   /* nice additive feel on dark BG */
+  mix-blend-mode: screen;
   opacity: 0.9;
   transition: opacity .25s ease;
   will-change: background-position, opacity, filter;
@@ -131,6 +153,27 @@ a{color:var(--accent);text-decoration:none}
   #cursor-glow{ display:none; }
 }
 
+/* ===== Homepage add-ons (FAQ / Gallery) if used ===== */
+.faq { display:grid; gap:12px; }
+.faq details.card summary { cursor:pointer; outline:none; }
+.faq details.card[open] { border-color: #344767; }
+
+.gallery{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:12px;
+}
+.gallery .shot{
+  background:
+    linear-gradient(180deg, rgba(255,138,0,.10), rgba(255,59,59,.10)),
+    #0f141d;
+  border:1px solid var(--border);
+  border-radius:14px;
+  min-height:140px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--muted);
+  font-weight:600;
+}
 
 /* ===== Responsive tweaks (phones & tablets) ===== */
 @media (max-width:940px){
@@ -141,10 +184,27 @@ a{color:var(--accent);text-decoration:none}
 }
 @media (max-width:780px){
   .grid-3{grid-template-columns:repeat(2,1fr)}
+
+  /* Stack header, center brand + tabs */
+  .site-header .container{
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:10px 12px;
+  }
+  .brand{ width:100%; justify-content:center; }
+  .nav{
+    width:100%;
+    justify-content:center;        /* center tabs on iOS/phones */
+    gap:10px 12px;                 /* roomier spacing */
+  }
+  .nav a{ padding:12px 16px; }     /* bigger tap targets */
 }
 @media (max-width:560px){
   .grid-3{grid-template-columns:1fr}
   .hero-copy h1{font-size:32px}
   .status-card{min-width:unset; flex:1}
-  .nav{gap:6px}
+  .nav{gap:8px}
+  .gallery{ grid-template-columns: 1fr; }
 }
