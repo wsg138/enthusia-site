@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enthusia SMP — About & Plugins</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <div class="brand">
+      <span class="logo">🛡️</span>
+      <span class="name">Enthusia SMP</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="plugins.html" class="active">About & Plugins</a>
+      <a href="rules.html">Rules</a>
+      <a id="storeLink" target="_blank" rel="noopener">Store</a>
+      <a id="discordLink" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container pad">
+  <h1>About the Server</h1>
+  <p>Enthusia SMP is a mostly-vanilla, PvP-aware survival world with a player-driven item economy. We run Purpur 1.21.8 with custom plugins built for performance, fairness, and fun.</p>
+
+  <div class="features" style="padding-top:12px">
+    <div class="grid-3">
+      <div class="card">
+        <h3>MaceGuard</h3>
+        <p>Caps mace burst damage in protected regions to keep spawn/market fights fair. Customizable regions and thresholds.</p>
+      </div>
+      <div class="card">
+        <h3>PieCloak</h3>
+        <p>Blocks pie-chart/ESP info leaks and “intel abuse.” Keeps bases and events harder to sniff out.</p>
+      </div>
+      <div class="card">
+        <h3>Item Shops</h3>
+        <p>Stalls with item-for-item trades—no virtual currency. Color-coded stock, sleek GUIs, anti-dupe checks.</p>
+      </div>
+      <div class="card">
+        <h3>Guilds</h3>
+        <p>Teams with homes, invites, ranks, and trust. Clear UI, confirmation prompts, and logs for staff.</p>
+      </div>
+      <div class="card">
+        <h3>Beacon Control</h3>
+        <p>Objective-based events with timers, tokens, and rewards. Designed for low-lag and clean rotations.</p>
+      </div>
+      <div class="card">
+        <h3>Quality of Life</h3>
+        <p>Cosmetics, trails, /hat, and more (all EULA-friendly). Expect frequent polish and performance updates.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Want the nitty-gritty?</strong> We post changelogs and dev notes in Discord. Join us and peek the <em>#announcements</em> and <em>#dev-updates</em> channels.
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© <span id="year"></span> Enthusia SMP</p>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+<script>
+  initSite(window.ENTHUSIA || {});
+</script>
+</body>
+</html>
