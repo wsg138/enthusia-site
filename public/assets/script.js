@@ -63,35 +63,41 @@ function initSite(cfg){
   fetchStatus();
   setInterval(fetchStatus, 60000);
 
-  // === BIG cursor glow (mouse & touch) ===
+  // === BIG cursor glow (mouse & touch) using CSS vars ===
   const glow = document.getElementById('cursor-glow');
   if (glow && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    let raf = null;
-    let hideTimer = null;
-    function moveGlow(x, y){
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(()=>{ glow.style.transform = `translate(${x}px, ${y}px)`; });
+    const root = document.documentElement;
+    let raf = null, fadeTimer = null;
+
+    function setGlow(x, y){
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        root.style.setProperty('--mx', x + 'px');
+        root.style.setProperty('--my', y + 'px');
+        raf = null;
+      });
     }
-    function showGlow(){
+    function nudgeOpacity(){
       glow.style.opacity = '0.9';
-      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
-      hideTimer = setTimeout(()=> glow.style.opacity = '0.55', 800); // gentle fade after idle
+      if (fadeTimer) clearTimeout(fadeTimer);
+      fadeTimer = setTimeout(() => { glow.style.opacity = '0.6'; }, 800);
     }
 
-    // Mouse
-    window.addEventListener('pointermove', (e)=>{
-      moveGlow(e.clientX, e.clientY);
-      showGlow();
+    // Desktop/laptop mouse & trackpad
+    window.addEventListener('mousemove', e => {
+      setGlow(e.clientX, e.clientY);
+      nudgeOpacity();
     }, { passive:true });
 
-    // Touch (iOS): follow finger while moving; fade after lift
-    window.addEventListener('touchmove', (e)=>{
+    // Touch (iOS/Android)
+    window.addEventListener('touchmove', e => {
       const t = e.touches && e.touches[0];
       if (!t) return;
-      moveGlow(t.clientX, t.clientY);
-      showGlow();
+      setGlow(t.clientX, t.clientY);
+      nudgeOpacity();
     }, { passive:true });
-    window.addEventListener('touchend', ()=>{ glow.style.opacity = '0.45'; }, { passive:true });
-    window.addEventListener('mouseleave', ()=>{ glow.style.opacity = '0.45'; });
+
+    window.addEventListener('touchend', () => { glow.style.opacity = '0.5'; }, { passive:true });
+    window.addEventListener('mouseleave', () => { glow.style.opacity = '0.5'; });
   }
 }
