@@ -108,5 +108,3 @@ a{color:var(--accent);text-decoration:none}
 @media (pointer: coarse), (prefers-reduced-motion: reduce){
   #cursor-glow{ display:none; }
 }
-
-}
