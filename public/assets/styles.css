@@ -89,4 +89,24 @@ a{color:var(--accent);text-decoration:none}
 @media (max-width:940px){
   .hero-inner{grid-template-columns:1fr}
   .hero-embed{order:-1}
+
+  /* ===== Cursor glow (site-wide) ===== */
+#cursor-glow{
+  position: fixed;
+  left: 0; top: 0;
+  width: 320px; height: 320px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(160px circle at center,
+              rgba(255,209,102,.25),
+              rgba(255,90,60,.10) 50%,
+              rgba(0,0,0,0) 65%);
+  mix-blend-mode: screen; /* soft additive glow */
+  filter: blur(30px);
+  z-index: 40; /* under sticky header (50), over background */
+}
+@media (pointer: coarse), (prefers-reduced-motion: reduce){
+  #cursor-glow{ display:none; }
+}
+
 }
