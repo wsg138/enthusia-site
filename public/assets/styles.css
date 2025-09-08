@@ -106,22 +106,31 @@ a{color:var(--accent);text-decoration:none}
 .callout strong{color:#ffe39e}
 
 /* ===== Cursor glow (site-wide) — BIGGER & STRONGER ===== */
+/* ===== Cursor glow (fullscreen, desktop + iOS) ===== */
 #cursor-glow{
-  position: fixed; left:0; top:0; pointer-events:none; z-index:40; /* under sticky header (50) */
-  width:clamp(420px, 40vw, 900px); height:clamp(420px, 40vw, 900px);
-  transform:translate(-50%, -50%);
-  background: radial-gradient(closest-side,
-              rgba(255,209,102,.38) 0%,
-              rgba(255,140,60,.22) 42%,
-              rgba(255,59,59,.14) 62%,
-              rgba(0,0,0,0) 72%);
-  filter: blur(60px);
-  mix-blend-mode: screen;
-  opacity:.9; transition: opacity .25s ease;
+  position: fixed;
+  inset: 0;                /* cover the whole viewport */
+  pointer-events: none;
+  z-index: 9999;           /* above everything; still clickable because of pointer-events:none */
+  /* big, bright glow that follows CSS vars --mx/--my */
+  background:
+    radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255,209,102,0.55) 0%,
+      rgba(255,160,60,0.32) 18%,
+      rgba(255,59,59,0.22) 32%,
+      rgba(0,0,0,0) 46%
+    );
+  filter: blur(50px);
+  mix-blend-mode: screen;   /* nice additive feel on dark BG */
+  opacity: 0.9;
+  transition: opacity .25s ease;
+  will-change: background-position, opacity, filter;
 }
 @media (prefers-reduced-motion: reduce){
   #cursor-glow{ display:none; }
 }
+
 
 /* ===== Responsive tweaks (phones & tablets) ===== */
 @media (max-width:940px){
