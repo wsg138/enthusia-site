@@ -5,143 +5,143 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Enthusia SMP — Rules</title>
 
-  <!-- Match Public.html font + theme -->
+  <!-- Match site theme -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
   <meta name="color-scheme" content="dark light"/>
 
-  <!-- Slim page-specific styles that lean on your existing theme tokens -->
   <style>
-    /* Layout shells (use your theme vars from assets/styles.css) */
-    .page-hero {
-      padding: clamp(20px, 4vw, 36px) 0 8px;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg); /* rely on your theme background */
+    /* ====== Page-specific polish (uses your theme vars) ====== */
+    :root{
+      /* Safe fallbacks if not present in assets/styles.css */
+      --brand-start:#ff3b3b;
+      --brand-mid:#ff9a1a;
+      --brand-end:#ffd93d;
+      --grad: linear-gradient(90deg,var(--brand-start),var(--brand-mid),var(--brand-end));
     }
-    .page-hero h1 {
+
+    .page-hero{
+      padding: clamp(20px,4vw,36px) 0 8px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .page-hero h1{
       font-weight: 900;
       margin: 0 0 8px;
       line-height: 1.15;
-      font-size: clamp(1.4rem, 2.8vw, 2rem);
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
     }
-    .page-hero .subtle { color: var(--muted); }
+    .page-hero .subtle{ color: var(--muted); }
 
-    .badge {
-      display: inline-block;
-      font-size: .8rem;
-      padding: 2px 10px;
-      border-radius: 999px;
-      background: var(--grad, linear-gradient(90deg, var(--brand-start), var(--brand-mid), var(--brand-end)));
-      color: #111;
-      margin-left: 8px;
-      font-weight: 800;
-    }
-
-    /* Content cards use your site card look */
-    .rules-wrap {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-      padding: 16px 0 36px;
+    .badge{
+      display:inline-block;
+      font-size:.8rem;
+      padding:2px 10px;
+      border-radius:999px;
+      background: var(--grad);
+      color:#111;
+      margin-left:8px;
+      font-weight:800;
     }
 
-    .card.toc {
-      position: relative;
-    }
-    .toc-inner {
-      position: sticky;
-      top: 80px; /* below your fixed header height */
-    }
-    .toc .toc-title {
-      font-weight: 800;
-      margin-bottom: 8px;
-      background: var(--grad, linear-gradient(90deg, var(--brand-start), var(--brand-mid), var(--brand-end)));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .toc ol {
-      list-style: none;
-      padding-left: 0;
-      margin: 0;
-      display: grid;
-      gap: 6px;
-    }
-    .toc a {
-      text-decoration: none;
-      color: var(--text);
-      padding: 6px 8px;
-      border-radius: 10px;
-    }
-    .toc a:hover { background: var(--card-2); }
-
-    /* Mobile TOC (uses native <details>) */
-    .toc-mobile {
-      display: block;
-    }
-    .toc-mobile summary {
-      cursor: pointer;
-      font-weight: 800;
-      padding: 10px 12px;
-    }
-    .toc-mobile nav ol {
-      margin: 8px 0 0;
-      padding-left: 18px;
-    }
-    .toc-mobile a { color: var(--text); text-decoration: none; }
-
-    /* Main article uses your .card shell */
-    .prose.card {
-      padding: clamp(14px, 2vw, 26px);
-    }
-    .prose h2 {
-      font-size: clamp(1.1rem, 2.2vw, 1.4rem);
-      margin: 8px 0 10px;
-      line-height: 1.25;
-      font-weight: 900;
-    }
-    .prose h3 {
-      font-size: clamp(1rem, 2vw, 1.15rem);
-      margin: 12px 0 6px;
-      font-weight: 800;
-    }
-    .prose p { margin: 8px 0 10px; }
-    .prose ul { margin: 8px 0 10px; padding-left: 20px; }
-    .prose li { margin: 6px 0; }
-    .prose hr {
-      border: none;
-      border-top: 1px dashed var(--border);
-      margin: 14px 0;
-      opacity: .75;
-    }
-    .muted { color: var(--muted); }
-
-    .back-top {
-      margin-top: 18px;
-      text-align: right;
-    }
-    .back-top a {
-      color: var(--text);
-      text-decoration: none;
-      padding: 6px 8px;
-      border-radius: 8px;
-      background: var(--card-2);
-      font-weight: 600;
+    .rules-wrap{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
+      padding:16px 0 36px;
     }
 
-    /* Desktop: show sticky TOC column */
-    @media (min-width: 980px) {
-      .rules-wrap {
-        grid-template-columns: 280px 1fr;
-        gap: 22px;
-      }
-      .toc-mobile { display: none; }
+    /* Sidebar TOC */
+    .card.toc{ position:relative; }
+    .toc-inner{ position:sticky; top:80px; }
+    .toc .toc-title{
+      font-weight:800; margin-bottom:8px;
+      background: var(--grad);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
     }
+    .toc ol{ list-style:none; padding-left:0; margin:0; display:grid; gap:6px; }
+    .toc a{
+      text-decoration:none; color:var(--text);
+      padding:6px 8px; border-radius:10px; font-weight:600;
+    }
+    .toc a:hover{ background: var(--card-2); }
+    /* Keep items on one line where possible */
+    .toc a{ white-space:nowrap; font-size:0.95rem; }
+    /* Extra space between sidebar CTA and main content end */
+    #discordCTA{ margin-top:24px; }
+
+    /* Mobile TOC */
+    .toc-mobile{ display:block; }
+    .toc-mobile summary{ cursor:pointer; font-weight:800; padding:10px 12px; }
+    .toc-mobile nav ol{ margin:8px 0 0; padding-left:18px; }
+    .toc-mobile a{ color:var(--text); text-decoration:none; }
+
+    /* Main article card */
+    .prose.card{ padding: clamp(14px,2vw,26px); position:relative; overflow:hidden; }
+    /* Colorful, subtle section accent */
+    .prose section{
+      border-left: 3px solid transparent;
+      border-image: linear-gradient(180deg,var(--brand-start),var(--brand-mid),var(--brand-end)) 1;
+      padding-left: 14px; border-radius:8px;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--brand-start) 5%, transparent) 0%, transparent 100%);
+      margin-bottom: 10px;
+    }
+    .prose h2{
+      font-size: clamp(1.15rem, 2.3vw, 1.5rem);
+      margin: 8px 0 10px; line-height:1.25; font-weight:900;
+    }
+    .prose h2::after{
+      content:""; display:block; height:3px; width:72px; border-radius:999px;
+      background: var(--grad); margin-top:6px; opacity:.9;
+    }
+    .prose h3{ font-size: clamp(1rem,2vw,1.15rem); margin:12px 0 6px; font-weight:800; }
+    .prose p{ margin:8px 0 10px; }
+    .prose ul{ margin:8px 0 10px; padding-left:20px; }
+    .prose li{ margin:6px 0; }
+    .prose hr{ border:none; border-top:1px dashed var(--border); margin:14px 0; opacity:.75; }
+    .muted{ color:var(--muted); }
+
+    /* Bottom Line emphasis + spacing */
+    #bottom-line{ margin-top:28px; }
+    #bottom-line h2{
+      font-size: clamp(1.35rem, 3vw, 1.8rem);
+    }
+    /* Add gradient headline for the Bottom Line */
+    #bottom-line h2 .grad-text{ background: var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+    .back-top{ margin-top:22px; text-align:right; }
+    .back-top a{
+      color:var(--text); text-decoration:none; padding:6px 8px; border-radius:8px;
+      background: var(--card-2); font-weight:600;
+    }
+
+    /* Desktop layout: sticky TOC column */
+    @media (min-width:980px){
+      .rules-wrap{ grid-template-columns:280px 1fr; gap:22px; }
+      .toc-mobile{ display:none; }
+    }
+
+    /* ====== Mouse-follow glow ====== */
+    #glow{
+      position: fixed; inset: 0; pointer-events: none;
+      z-index: 999; /* above content, doesn't block clicks */
+      background:
+        radial-gradient(240px 240px at var(--x,-100px) var(--y,-100px),
+          color-mix(in srgb, var(--brand-mid) 40%, transparent) 0%,
+          color-mix(in srgb, var(--brand-end) 15%, transparent) 40%,
+          transparent 65%);
+      opacity: .25; transition: opacity .25s ease;
+      mix-blend-mode: screen; /* nice on dark themes */
+    }
+    @media (hover:none){ #glow{ display:none; } } /* disable on touch */
   </style>
 </head>
 <body>
+
+<!-- cursor glow overlay -->
+<div id="glow" aria-hidden="true"></div>
 
 <header class="site-header">
   <div class="container">
@@ -160,10 +160,10 @@
 </header>
 
 <main>
-  <!-- Page header, styled like your site -->
+  <!-- Page header -->
   <section class="page-hero">
     <div class="container">
-      <h1>Community Content & Conduct Rules — Speech + Builds Only <span class="badge">v1.1</span></h1>
+      <h1 class="grad-text">Community Content & Conduct Rules — Speech + Builds Only <span class="badge">v1.1</span></h1>
       <p class="subtle">By using the Minecraft server or Discord, you agree to these rules. These govern what you can say, post, display, or build.</p>
     </div>
   </section>
@@ -189,12 +189,13 @@
           <li><a href="#nsfw">2) Sexual Content &amp; NSFW</a></li>
           <li><a href="#zero">3) Zero-Tolerance</a></li>
           <li><a href="#extremism">4) Hate Symbols &amp; Extremism</a></li>
-          <li><a href="#names">5) Names, Avatars, Skins, Items</a></li>
-          <li><a href="#builds">6) Builds &amp; Visual Content</a></li>
+          <!-- Shortened labels so they fit on one line -->
+          <li><a href="#names">5) Names &amp; Cosmetics</a></li>
+          <li><a href="#builds">6) Builds &amp; Visuals</a></li>
           <li><a href="#media">7) Images, Links, Media</a></li>
-          <li><a href="#impersonation">8) Impersonation &amp; Advertising</a></li>
+          <li><a href="#impersonation">8) Impersonation &amp; Ads</a></li>
           <li><a href="#spam">9) Spam &amp; Disruption</a></li>
-          <li><a href="#privacy">10) Privacy, Doxxing &amp; Threats</a></li>
+          <li><a href="#privacy">10) Privacy &amp; Threats</a></li>
           <li><a href="#enforcement">12) Enforcement &amp; Appeals</a></li>
           <li><a href="#glossary">13) Quick Glossary</a></li>
           <li><a href="#updates">14) Updates</a></li>
@@ -268,7 +269,7 @@
 
         <h3 id="numbers">1.4 Simple Numbers We Use As Guides (Not hard law)</h3>
         <ul>
-          <li><strong>Spam threshold:</strong> ~6+ hostile messages at one person in <strong>10 minutes</strong> → likely harassment.</li>
+          <li><strong>Spam threshold:</strong> \~6+ hostile messages at one person in <strong>10 minutes</strong> → likely harassment.</li>
           <li><strong>“Stop” rule:</strong> once someone says <strong>“stop/leave me alone”</strong>, continuing within the next <strong>60 minutes</strong> → likely harassment.</li>
           <li><strong>Pile-on rule:</strong> <strong>3+ people</strong> aiming hostile messages at <strong>1 person</strong> within <strong>5 minutes</strong> → staff may step in/mute.</li>
           <li>Context matters. Apologies, cooling down, or switching to game talk helps.</li>
@@ -417,7 +418,7 @@
       </section>
 
       <section id="bottom-line">
-        <h2>🌟 Bottom Line</h2>
+        <h2><span class="grad-text">🌟 Bottom Line</span></h2>
         <p>This is a community, not just a server. The goal is simple: create a space where people can play, build, and hang out without being harassed or disrespected. You don’t have to like everyone, but you do have to treat people decently.</p>
         <p>If you’re angry, trash talk a bit, or joke around, that’s fine — but once it crosses into hate, sexual harassment, threats, doxxing, or nonstop targeting, staff will step in. Staff are trusted to make judgment calls; if you push boundaries, expect action.</p>
         <p>Respect others, keep things fun, and don’t try to bend loopholes. If your behavior makes the community worse for others, it’s a problem — and we’ll fix it.</p>
@@ -436,21 +437,20 @@
 
 <script src="assets/script.js"></script>
 <script>
-  // Use your existing init if present (keeps Store/Discord links consistent)
+  // Init (keeps Store link etc.)
   if (typeof initSite === "function") initSite(window.ENTHUSIA || {});
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  // Wire Discord buttons to the same href as the nav link
-  (function wireDiscord(){
-    const nav = document.getElementById("discordLink");
-    const href = nav && nav.getAttribute("href");
-    ["discordCTA","discordInline"].forEach(id=>{
-      const el = document.getElementById(id);
-      if (el && href) { el.href = href; el.target = "_blank"; el.rel = "noopener"; }
-    });
-  })();
+  // Force the Discord link you provided everywhere
+  const DISCORD = "https://discord.gg/5ccgDCmNSc";
+  const navDiscord = document.getElementById("discordLink");
+  if (navDiscord) { navDiscord.href = DISCORD; navDiscord.target = "_blank"; navDiscord.rel = "noopener"; }
+  ["discordCTA","discordInline"].forEach(id=>{
+    const el = document.getElementById(id);
+    if (el) { el.href = DISCORD; el.target = "_blank"; el.rel = "noopener"; }
+  });
 
-  // Smooth anchor scroll with slight offset below the header
+  // Smooth anchor scroll with slight header offset
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
     a.addEventListener("click", e=>{
       const id = a.getAttribute("href").slice(1);
@@ -462,6 +462,25 @@
       history.replaceState(null, "", "#" + id);
     });
   });
+
+  // Mouse-follow glow (throttled rAF, disabled on touch)
+  (function(){
+    const glow = document.getElementById("glow");
+    if (!glow || !matchMedia("(hover:hover)").matches) return;
+    let raf = null;
+    window.addEventListener("mousemove", (e)=>{
+      const x = e.clientX + "px";
+      const y = e.clientY + "px";
+      if (raf) return;
+      raf = requestAnimationFrame(()=>{
+        glow.style.setProperty("--x", x);
+        glow.style.setProperty("--y", y);
+        raf = null;
+      });
+    });
+    window.addEventListener("mouseleave", ()=> glow.style.opacity = ".0");
+    window.addEventListener("mouseenter", ()=> glow.style.opacity = ".25");
+  })();
 </script>
 </body>
 </html>
