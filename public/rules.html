@@ -65,12 +65,9 @@
     .toc a{
       text-decoration:none; color:var(--text);
       padding:6px 8px; border-radius:10px; font-weight:600;
+      white-space:nowrap; font-size:0.95rem; /* keep on one line */
     }
     .toc a:hover{ background: var(--card-2); }
-    /* Keep items on one line where possible */
-    .toc a{ white-space:nowrap; font-size:0.95rem; }
-    /* Extra space between sidebar CTA and main content end */
-    #discordCTA{ margin-top:24px; }
 
     /* Mobile TOC */
     .toc-mobile{ display:block; }
@@ -80,13 +77,18 @@
 
     /* Main article card */
     .prose.card{ padding: clamp(14px,2vw,26px); position:relative; overflow:hidden; }
-    /* Colorful, subtle section accent */
+    /* Stronger, colorful section accents */
     .prose section{
-      border-left: 3px solid transparent;
+      border-left: 4px solid transparent;
       border-image: linear-gradient(180deg,var(--brand-start),var(--brand-mid),var(--brand-end)) 1;
       padding-left: 14px; border-radius:8px;
-      background: linear-gradient(180deg, color-mix(in srgb, var(--brand-start) 5%, transparent) 0%, transparent 100%);
-      margin-bottom: 10px;
+      background:
+        linear-gradient(180deg,
+          color-mix(in srgb, var(--brand-start) 14%, transparent) 0%,
+          color-mix(in srgb, var(--brand-mid) 10%, transparent) 38%,
+          color-mix(in srgb, var(--brand-end) 8%, transparent) 64%,
+          transparent 100%);
+      margin-bottom: 12px;
     }
     .prose h2{
       font-size: clamp(1.15rem, 2.3vw, 1.5rem);
@@ -94,24 +96,23 @@
     }
     .prose h2::after{
       content:""; display:block; height:3px; width:72px; border-radius:999px;
-      background: var(--grad); margin-top:6px; opacity:.9;
+      background: var(--grad); margin-top:6px; opacity:.95;
     }
     .prose h3{ font-size: clamp(1rem,2vw,1.15rem); margin:12px 0 6px; font-weight:800; }
     .prose p{ margin:8px 0 10px; }
     .prose ul{ margin:8px 0 10px; padding-left:20px; }
     .prose li{ margin:6px 0; }
-    .prose hr{ border:none; border-top:1px dashed var(--border); margin:14px 0; opacity:.75; }
+    .prose hr{ border:none; border-top:1px dashed var(--border); margin:14px 0; opacity:.8; }
     .muted{ color:var(--muted); }
 
-    /* Bottom Line emphasis + spacing */
-    #bottom-line{ margin-top:28px; }
+    /* Bottom Line emphasis + extra spacing */
+    #bottom-line{ margin-top:32px; }
     #bottom-line h2{
-      font-size: clamp(1.35rem, 3vw, 1.8rem);
+      font-size: clamp(1.45rem, 3.2vw, 1.9rem);
     }
-    /* Add gradient headline for the Bottom Line */
     #bottom-line h2 .grad-text{ background: var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
 
-    .back-top{ margin-top:22px; text-align:right; }
+    .back-top{ margin-top:24px; text-align:right; }
     .back-top a{
       color:var(--text); text-decoration:none; padding:6px 8px; border-radius:8px;
       background: var(--card-2); font-weight:600;
@@ -123,17 +124,20 @@
       .toc-mobile{ display:none; }
     }
 
-    /* ====== Mouse-follow glow ====== */
+    /* ====== Mouse-follow glow (smaller, whiter, more faded) ====== */
     #glow{
+      --r: 110px; /* smaller radius */
       position: fixed; inset: 0; pointer-events: none;
-      z-index: 999; /* above content, doesn't block clicks */
+      z-index: 999;
       background:
-        radial-gradient(240px 240px at var(--x,-100px) var(--y,-100px),
-          color-mix(in srgb, var(--brand-mid) 40%, transparent) 0%,
-          color-mix(in srgb, var(--brand-end) 15%, transparent) 40%,
-          transparent 65%);
-      opacity: .25; transition: opacity .25s ease;
-      mix-blend-mode: screen; /* nice on dark themes */
+        radial-gradient(var(--r) var(--r) at var(--x,-100px) var(--y,-100px),
+          rgba(255,255,255,.18) 0%,
+          rgba(255,255,255,.10) 28%,
+          rgba(255,255,255,.05) 48%,
+          transparent 70%);
+      opacity: .10;               /* more faded overall */
+      transition: opacity .25s ease;
+      mix-blend-mode: screen;     /* nice on dark themes; subtle on light */
     }
     @media (hover:none){ #glow{ display:none; } } /* disable on touch */
   </style>
@@ -163,8 +167,8 @@
   <!-- Page header -->
   <section class="page-hero">
     <div class="container">
-      <h1 class="grad-text">Community Content & Conduct Rules — Speech + Builds Only <span class="badge">v1.1</span></h1>
-      <p class="subtle">By using the Minecraft server or Discord, you agree to these rules. These govern what you can say, post, display, or build.</p>
+      <h1 class="grad-text">Community Content & Conduct Rules<span class="badge">v1.1</span></h1>
+      <p class="subtle">By playing on the server or participating in the Discord, you agree to follow all rules below as well as in the discord. The rules below govern what you can say, post, display, or build.</p>
     </div>
   </section>
 
@@ -201,7 +205,7 @@
           <li><a href="#updates">14) Updates</a></li>
           <li><a href="#bottom-line">🌟 Bottom Line</a></li>
         </ol>
-        <a class="btn" id="discordCTA" target="_blank" rel="noopener">Open Discord</a>
+        <!-- (Removed the sidebar Open Discord button per your request) -->
       </div>
     </aside>
 
@@ -265,31 +269,6 @@
           <li>You try to <strong>pile on</strong> by getting others to target one person.</li>
           <li>You <strong>spam</strong> insults (copy-pastes, walls of insults), or you keep dragging them day after day.</li>
           <li>You mix insults with <strong>hate, sexual comments, threats, or doxxing</strong>.</li>
-        </ul>
-
-        <h3 id="numbers">1.4 Simple Numbers We Use As Guides (Not hard law)</h3>
-        <ul>
-          <li><strong>Spam threshold:</strong> \~6+ hostile messages at one person in <strong>10 minutes</strong> → likely harassment.</li>
-          <li><strong>“Stop” rule:</strong> once someone says <strong>“stop/leave me alone”</strong>, continuing within the next <strong>60 minutes</strong> → likely harassment.</li>
-          <li><strong>Pile-on rule:</strong> <strong>3+ people</strong> aiming hostile messages at <strong>1 person</strong> within <strong>5 minutes</strong> → staff may step in/mute.</li>
-          <li>Context matters. Apologies, cooling down, or switching to game talk helps.</li>
-        </ul>
-
-        <h3 id="channels">1.5 Channel &amp; VC Basics</h3>
-        <ul>
-          <li>Use the right channel. No floods, copypasta walls, or mass pings.</li>
-          <li>VC: no ear-rape or loud soundboard looping.</li>
-        </ul>
-
-        <h3 id="neg-examples">1.6 Negative Examples (Not Allowed)</h3>
-        <ul>
-          <li>Any slur (even censored or partially completed).</li>
-          <li>“kys” or telling someone to harm themselves in any way.</li>
-          <li>Sexual comments about someone.</li>
-          <li>“I’ll find you” or <strong>any</strong> threats of IRL harm.</li>
-          <li>Posting their school, address, phone, IP, or images with the goal to embarrass or leak information about a person(s).</li>
-          <li>Spamming hostile lines repeatedly.</li>
-          <li>Sending many hostile DMs after they said “stop.”</li>
         </ul>
         <hr>
       </section>
@@ -441,14 +420,12 @@
   if (typeof initSite === "function") initSite(window.ENTHUSIA || {});
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  // Force the Discord link you provided everywhere
+  // Force the Discord link everywhere you use it
   const DISCORD = "https://discord.gg/5ccgDCmNSc";
   const navDiscord = document.getElementById("discordLink");
   if (navDiscord) { navDiscord.href = DISCORD; navDiscord.target = "_blank"; navDiscord.rel = "noopener"; }
-  ["discordCTA","discordInline"].forEach(id=>{
-    const el = document.getElementById(id);
-    if (el) { el.href = DISCORD; el.target = "_blank"; el.rel = "noopener"; }
-  });
+  const inline = document.getElementById("discordInline");
+  if (inline) { inline.href = DISCORD; inline.target = "_blank"; inline.rel = "noopener"; }
 
   // Smooth anchor scroll with slight header offset
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
@@ -463,7 +440,7 @@
     });
   });
 
-  // Mouse-follow glow (throttled rAF, disabled on touch)
+  // Mouse-follow glow (smaller, whiter, more faded, throttled rAF)
   (function(){
     const glow = document.getElementById("glow");
     if (!glow || !matchMedia("(hover:hover)").matches) return;
@@ -478,8 +455,8 @@
         raf = null;
       });
     });
-    window.addEventListener("mouseleave", ()=> glow.style.opacity = ".0");
-    window.addEventListener("mouseenter", ()=> glow.style.opacity = ".25");
+    window.addEventListener("mouseleave", ()=> glow.style.opacity = "0");
+    window.addEventListener("mouseenter", ()=> glow.style.opacity = ".10");
   })();
 </script>
 </body>
