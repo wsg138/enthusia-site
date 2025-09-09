@@ -77,19 +77,23 @@
 
     /* Main article card */
     .prose.card{ padding: clamp(14px,2vw,26px); position:relative; overflow:hidden; }
-    /* Stronger, colorful section accents */
+    /* Colorful section accent — medium strength */
     .prose section{
-      border-left: 4px solid transparent;
+      border-left: 3px solid transparent; /* was 4px */
       border-image: linear-gradient(180deg,var(--brand-start),var(--brand-mid),var(--brand-end)) 1;
-      padding-left: 14px; border-radius:8px;
+      padding-left: 14px;
+      border-radius: 8px;
       background:
-        linear-gradient(180deg,
-          color-mix(in srgb, var(--brand-start) 14%, transparent) 0%,
-          color-mix(in srgb, var(--brand-mid) 10%, transparent) 38%,
-          color-mix(in srgb, var(--brand-end) 8%, transparent) 64%,
-          transparent 100%);
+        linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--brand-start) 9%, transparent) 0%,
+          color-mix(in srgb, var(--brand-mid) 7%, transparent) 38%,
+          color-mix(in srgb, var(--brand-end) 5%, transparent) 64%,
+          transparent 100%
+        );
       margin-bottom: 12px;
     }
+
     .prose h2{
       font-size: clamp(1.15rem, 2.3vw, 1.5rem);
       margin: 8px 0 10px; line-height:1.25; font-weight:900;
@@ -124,20 +128,22 @@
       .toc-mobile{ display:none; }
     }
 
-    /* ====== Mouse-follow glow (smaller, whiter, more faded) ====== */
+    /* Mouse-follow glow (smaller, smoother falloff, brighter center) */
     #glow{
-      --r: 110px; /* smaller radius */
+      --r: 90px; /* was 110px → a little smaller */
       position: fixed; inset: 0; pointer-events: none;
       z-index: 999;
       background:
-        radial-gradient(var(--r) var(--r) at var(--x,-100px) var(--y,-100px),
-          rgba(255,255,255,.18) 0%,
-          rgba(255,255,255,.10) 28%,
-          rgba(255,255,255,.05) 48%,
-          transparent 70%);
-      opacity: .10;               /* more faded overall */
+        radial-gradient(
+          circle var(--r) at var(--x,-100px) var(--y,-100px),
+          rgba(255,255,255,.34) 0%,
+          rgba(255,255,255,.20) 28%,
+          rgba(255,255,255,.10) 55%,
+          rgba(255,255,255,.00) 85%
+        );
+      opacity: .12;             /* slightly brighter overall */
       transition: opacity .25s ease;
-      mix-blend-mode: screen;     /* nice on dark themes; subtle on light */
+      mix-blend-mode: screen;
     }
     @media (hover:none){ #glow{ display:none; } } /* disable on touch */
   </style>
