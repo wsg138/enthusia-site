@@ -5,102 +5,149 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Enthusia SMP — Rules</title>
 
-  <!-- Keep your site-wide theme if you have it -->
+  <!-- Match Public.html font + theme -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
   <meta name="color-scheme" content="dark light"/>
 
+  <!-- Slim page-specific styles that lean on your existing theme tokens -->
   <style>
-  /* Rules page styles — scoped and mobile-first
-     Keeps things consistent across iOS and desktop. */
+    /* Layout shells (use your theme vars from assets/styles.css) */
+    .page-hero {
+      padding: clamp(20px, 4vw, 36px) 0 8px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg); /* rely on your theme background */
+    }
+    .page-hero h1 {
+      font-weight: 900;
+      margin: 0 0 8px;
+      line-height: 1.15;
+      font-size: clamp(1.4rem, 2.8vw, 2rem);
+    }
+    .page-hero .subtle { color: var(--muted); }
 
-  :root{
-    --bg:#0b0e13;
-    --card:#10151f;
-    --card-2:#0e131c;
-    --text:#eaf0ff;
-    --muted:#9fb0c2;
-    --border:#1c2432;
+    .badge {
+      display: inline-block;
+      font-size: .8rem;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: var(--grad, linear-gradient(90deg, var(--brand-start), var(--brand-mid), var(--brand-end)));
+      color: #111;
+      margin-left: 8px;
+      font-weight: 800;
+    }
 
-    --brand-start:#ff3b3b; /* red */
-    --brand-mid:#ff9a1a;   /* orange */
-    --brand-end:#ffd93d;   /* yellow */
+    /* Content cards use your site card look */
+    .rules-wrap {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      padding: 16px 0 36px;
+    }
 
-    --accent: linear-gradient(90deg,var(--brand-start),var(--brand-mid),var(--brand-end));
-  }
+    .card.toc {
+      position: relative;
+    }
+    .toc-inner {
+      position: sticky;
+      top: 80px; /* below your fixed header height */
+    }
+    .toc .toc-title {
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: var(--grad, linear-gradient(90deg, var(--brand-start), var(--brand-mid), var(--brand-end)));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .toc ol {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      display: grid;
+      gap: 6px;
+    }
+    .toc a {
+      text-decoration: none;
+      color: var(--text);
+      padding: 6px 8px;
+      border-radius: 10px;
+    }
+    .toc a:hover { background: var(--card-2); }
 
-  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-    line-height:1.55;letter-spacing:.2px;
-  }
+    /* Mobile TOC (uses native <details>) */
+    .toc-mobile {
+      display: block;
+    }
+    .toc-mobile summary {
+      cursor: pointer;
+      font-weight: 800;
+      padding: 10px 12px;
+    }
+    .toc-mobile nav ol {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+    .toc-mobile a { color: var(--text); text-decoration: none; }
 
-  .container{max-width:1100px;margin-inline:auto;padding-inline:16px}
-  .site-header .container{align-items:center}
+    /* Main article uses your .card shell */
+    .prose.card {
+      padding: clamp(14px, 2vw, 26px);
+    }
+    .prose h2 {
+      font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+      margin: 8px 0 10px;
+      line-height: 1.25;
+      font-weight: 900;
+    }
+    .prose h3 {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      margin: 12px 0 6px;
+      font-weight: 800;
+    }
+    .prose p { margin: 8px 0 10px; }
+    .prose ul { margin: 8px 0 10px; padding-left: 20px; }
+    .prose li { margin: 6px 0; }
+    .prose hr {
+      border: none;
+      border-top: 1px dashed var(--border);
+      margin: 14px 0;
+      opacity: .75;
+    }
+    .muted { color: var(--muted); }
 
-  .rules-page{padding-block:clamp(16px,2vw,28px)}
-  .rules-header h1{font-size:clamp(1.35rem,2.8vw,2rem);line-height:1.2;margin:0 0 6px;letter-spacing:.2px}
-  .rules-header .subtle{color:var(--muted);margin:0 0 18px}
-  .badge{font-size:.8rem;padding:2px 8px;border-radius:999px;background:var(--accent);color:#111;margin-left:8px}
+    .back-top {
+      margin-top: 18px;
+      text-align: right;
+    }
+    .back-top a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: var(--card-2);
+      font-weight: 600;
+    }
 
-  .rules-layout{display:grid;grid-template-columns:1fr;gap:18px}
-  .toc{display:none}
-  .toc .toc-inner{
-    position:sticky;top:84px;
-    background:#0d1420;background:linear-gradient(180deg, rgba(8,12,18,.9), var(--card) 100%);
-    border:1px solid var(--border);border-radius:16px;padding:14px
-  }
-  .toc-title{font-weight:700;font-size:.9rem;letter-spacing:.3px;margin-bottom:8px;background:var(--accent);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .toc ol{list-style:none;margin:0;padding-left:0}
-  .toc ol li{margin:4px 0}
-  .toc a{display:inline-block;text-decoration:none;color:var(--text);font-size:.94rem;padding:4px 6px;border-radius:8px}
-  .toc a:hover{background:rgba(255,255,255,.05)}
-  .toc .btn.discord-cta{display:inline-block;margin-top:10px;padding:8px 10px;border-radius:10px;background:var(--accent);color:#111;font-weight:700;text-align:center;text-decoration:none}
-
-  .toc-mobile{border:1px solid var(--border);border-radius:12px;background:var(--card);padding:10px 12px}
-  .toc-mobile summary{cursor:pointer;font-weight:700}
-  .toc-mobile nav ol{margin:8px 0 0;padding-left:18px}
-  .toc-mobile a{color:var(--text);text-decoration:none}
-
-  @media (min-width:980px){.rules-layout{grid-template-columns:280px 1fr;gap:22px}.toc{display:block}.toc-mobile{display:none}}
-
-  .prose{
-    background:linear-gradient(180deg,var(--card) 0%,var(--card-2) 100%);
-    border:1px solid var(--border);border-radius:16px;
-    padding:clamp(14px,2vw,26px);box-shadow:0 8px 24px rgba(0,0,0,.25)
-  }
-  .prose h2{font-size:clamp(1.05rem,2.2vw,1.4rem);margin:8px 0 10px;line-height:1.25}
-  .prose h3{font-size:clamp(.98rem,2vw,1.15rem);margin:10px 0 6px}
-  .prose p{margin:8px 0 10px}
-  .prose hr{border:none;border-top:1px dashed var(--border);margin:14px 0;opacity:.7}
-
-  .prose ul{margin:8px 0 10px;padding-left:20px}
-  .prose ul li{margin:6px 0}
-  .muted{color:var(--muted)}
-
-  a.link{color:var(--text);text-decoration:underline;text-underline-offset:3px}
-  .back-top{margin-top:18px;text-align:right}
-  .back-top a{color:var(--text);text-decoration:none;font-size:.95rem;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.04)}
-
-  a,button{-webkit-tap-highlight-color:transparent}
-  *{-webkit-font-smoothing:antialiased}
-
-  a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--brand-end);outline-offset:2px;border-radius:6px}
-  @media (max-width:380px){.rules-header h1{word-break:break-word}}
-
-  @media (prefers-color-scheme:light){
-    :root{--bg:#f7f8fc;--card:#ffffff;--card-2:#f9fafc;--text:#0b1220;--muted:#566477;--border:#e6e8ee}
-    .badge{color:#111}
-  }
+    /* Desktop: show sticky TOC column */
+    @media (min-width: 980px) {
+      .rules-wrap {
+        grid-template-columns: 280px 1fr;
+        gap: 22px;
+      }
+      .toc-mobile { display: none; }
+    }
   </style>
 </head>
 <body>
+
 <header class="site-header">
   <div class="container">
     <div class="brand">
       <span class="logo">🛡️</span>
-      <span class="name">Enthusia SMP</span>
+      <span class="name grad-text">Enthusia SMP</span>
     </div>
     <nav class="nav">
       <a href="index.html">Home</a>
@@ -112,20 +159,24 @@
   </div>
 </header>
 
-<main class="container pad rules-page">
-  <div class="rules-header">
-    <h1>🌍 Community Content & Conduct Rules — Speech + Builds Only <span class="badge">v1.1</span></h1>
-    <p class="subtle">By using the Minecraft server or Discord, you agree to these rules. These govern what you can say, post, display, or build.</p>
-  </div>
+<main>
+  <!-- Page header, styled like your site -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Community Content & Conduct Rules — Speech + Builds Only <span class="badge">v1.1</span></h1>
+      <p class="subtle">By using the Minecraft server or Discord, you agree to these rules. These govern what you can say, post, display, or build.</p>
+    </div>
+  </section>
 
-  <div class="rules-layout">
-    <!-- Sticky TOC (desktop) -->
-    <aside class="toc" aria-label="Table of contents">
+  <section class="container rules-wrap">
+    <!-- Desktop sticky TOC -->
+    <aside class="card toc" aria-label="Table of contents">
       <div class="toc-inner">
         <div class="toc-title">Jump to</div>
         <ol>
           <li><a href="#scope">0) Scope &amp; Definitions</a></li>
-          <li><a href="#speech">1) Speech &amp; Behavior</a>
+          <li>
+            <a href="#speech">1) Speech &amp; Behavior</a>
             <ol>
               <li><a href="#allowed">1.1 Allowed</a></li>
               <li><a href="#not-allowed">1.2 Not Allowed</a></li>
@@ -149,12 +200,12 @@
           <li><a href="#updates">14) Updates</a></li>
           <li><a href="#bottom-line">🌟 Bottom Line</a></li>
         </ol>
-        <a class="btn discord-cta" id="discordCTA">Open Discord</a>
+        <a class="btn" id="discordCTA" target="_blank" rel="noopener">Open Discord</a>
       </div>
     </aside>
 
     <!-- Mobile TOC -->
-    <details class="toc-mobile">
+    <details class="card toc-mobile">
       <summary>Jump to a section</summary>
       <nav aria-label="Table of contents (mobile)">
         <ol>
@@ -177,8 +228,8 @@
       </nav>
     </details>
 
-    <!-- Rules content -->
-    <article class="rules prose">
+    <!-- Rules content (exact text you provided) -->
+    <article class="prose card">
       <section id="scope">
         <h2>0) Scope &amp; Definitions</h2>
         <ul>
@@ -353,7 +404,7 @@
       <section id="glossary">
         <h2>13) Quick Glossary (Plain Language)</h2>
         <p>for a shorter list/version of rules as well as rules about in game visit the discord</p>
-        <p><a id="discordInline" class="link">Open Discord</a></p>
+        <p><a id="discordInline" class="btn ghost" target="_blank" rel="noopener">Open Discord</a></p>
         <hr>
       </section>
 
@@ -374,7 +425,7 @@
 
       <p class="back-top"><a href="#top">Back to top ↑</a></p>
     </article>
-  </div>
+  </section>
 </main>
 
 <footer class="site-footer">
@@ -385,21 +436,21 @@
 
 <script src="assets/script.js"></script>
 <script>
-  // Use your existing init if present
+  // Use your existing init if present (keeps Store/Discord links consistent)
   if (typeof initSite === "function") initSite(window.ENTHUSIA || {});
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  // Make the "Open Discord" buttons match the top nav Discord link
-  (function wireDiscordLinks(){
+  // Wire Discord buttons to the same href as the nav link
+  (function wireDiscord(){
     const nav = document.getElementById("discordLink");
     const href = nav && nav.getAttribute("href");
     ["discordCTA","discordInline"].forEach(id=>{
       const el = document.getElementById(id);
-      if (el && href) { el.setAttribute("href", href); el.target="_blank"; el.rel="noopener"; }
+      if (el && href) { el.href = href; el.target = "_blank"; el.rel = "noopener"; }
     });
   })();
 
-  // Smooth anchor scroll with small offset for sticky headers
+  // Smooth anchor scroll with slight offset below the header
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
     a.addEventListener("click", e=>{
       const id = a.getAttribute("href").slice(1);
