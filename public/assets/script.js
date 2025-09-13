@@ -1,4 +1,4 @@
-// Site init + server status via mcstatus.io + BIG cursor glow (mouse & touch)
+// Site init + server status via mcstatus.io (no cursor JS needed)
 function initSite(cfg){
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -6,7 +6,6 @@ function initSite(cfg){
   const ip = (cfg.serverIp || '').trim();
   const tebex = cfg.tebexUrl || 'https://example.tebex.io';
   const invite = cfg.discordInvite || 'https://discord.gg/yourInvite';
-  const discordId = cfg.discordServerId || '';
 
   // Header links
   const storeLink = document.getElementById('storeLink');
@@ -34,8 +33,6 @@ function initSite(cfg){
   const ipEl = document.getElementById('serverIp');
   if (ipEl) ipEl.textContent = ip || 'Unavailable';
 
-  // Discord widget/banner: you’re using the banner <img>, so no iframe logic needed here
-
   // Server status via mcstatus.io (skip if IP unavailable)
   const validIp = ip && ip.toLowerCase() !== 'unavailable';
   const statusEl = document.getElementById('serverStatus');
@@ -62,42 +59,4 @@ function initSite(cfg){
   }
   fetchStatus();
   setInterval(fetchStatus, 60000);
-
-  // === BIG cursor glow (mouse & touch) using CSS vars ===
-  const glow = document.getElementById('cursor-glow');
-  if (glow && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const root = document.documentElement;
-    let raf = null, fadeTimer = null;
-
-    function setGlow(x, y){
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        root.style.setProperty('--mx', x + 'px');
-        root.style.setProperty('--my', y + 'px');
-        raf = null;
-      });
-    }
-    function nudgeOpacity(){
-      glow.style.opacity = '0.9';
-      if (fadeTimer) clearTimeout(fadeTimer);
-      fadeTimer = setTimeout(() => { glow.style.opacity = '0.6'; }, 800);
-    }
-
-    // Desktop/laptop mouse & trackpad
-    window.addEventListener('mousemove', e => {
-      setGlow(e.clientX, e.clientY);
-      nudgeOpacity();
-    }, { passive:true });
-
-    // Touch (iOS/Android)
-    window.addEventListener('touchmove', e => {
-      const t = e.touches && e.touches[0];
-      if (!t) return;
-      setGlow(t.clientX, t.clientY);
-      nudgeOpacity();
-    }, { passive:true });
-
-    window.addEventListener('touchend', () => { glow.style.opacity = '0.5'; }, { passive:true });
-    window.addEventListener('mouseleave', () => { glow.style.opacity = '0.5'; });
-  }
 }
