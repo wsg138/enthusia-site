@@ -101,10 +101,19 @@ img{max-width:100%;height:auto;display:block}
 }
 .nav a:hover{ background:#202a3a; box-shadow:0 0 0 2px rgba(255,138,0,.25) inset }
 .nav a:active{ transform:translateY(1px) }
+/* Fix gradient seam on active pill tabs */
 .nav a.active{
-  background:var(--brand-grad); color:#181b20; border-color:transparent;
-  box-shadow:0 6px 18px rgba(255,138,0,.25);
+  color:#181b20;
+  border:1px solid transparent;                 /* keep pill edges crisp */
+  background-image: var(--brand-grad), var(--brand-grad);
+  background-origin: padding-box, border-box;   /* draw once for padding, once for border */
+  background-clip: padding-box, border-box;     /* prevents the tiny edge seam */
+  box-shadow: 0 6px 18px rgba(255,138,0,.25);
 }
+
+/* If a hairline still appears on some displays, add: */
+/* .nav a.active{ background-size:102% 102%; background-position:center; } */
+
 
 /* ===== HERO ===== */
 .hero{
