@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=aurora1">
+  <link rel="stylesheet" href="assets/styles.css?v=aurora3">
   <meta name="description" content="Enthusia SMP — Mostly-vanilla SMP with balanced PvP and a player-driven item economy.">
 </head>
 <body>
@@ -66,20 +66,9 @@
         <small class="status-note">Status will appear after launch.</small>
       </div>
 
+      <!-- Custom Discord mini widget (no bots, no channels) -->
       <div class="hero-embed">
-        <a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">
-          <div class="hero-embed">
-            <iframe
-              src="https://discord.com/widget?id=1410303324745371709&theme=dark"
-              width="100%" height="420"
-              allowtransparency="true" frameborder="0"
-              style="border:1px solid var(--border); border-radius:12px;"
-              sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
-            </iframe>
-          </div>
-
-
-        </a>
+        <div id="discordCard"></div>
       </div>
     </div>
   </section>
@@ -108,7 +97,7 @@
   </div>
 </footer>
 
-<script src="assets/script.js?v=aurora1"></script>
+<script src="assets/script.js?v=aurora3"></script>
 <script>
   window.ENTHUSIA = {
     serverIp: "Unavailable",
