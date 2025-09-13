@@ -4,9 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Enthusia SMP — About & Plugins</title>
-  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/styles.css?v=aurora1">
 </head>
 <body>
+
+<!-- Background layers -->
+<div class="bg" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
 
 <header class="site-header">
   <div class="container">
@@ -25,22 +33,23 @@
 </header>
 
 <main class="container pad">
-  <h1>About the Server</h1>
+  <h1 class="grad-text" style="margin:0">About the Server</h1>
+  <div class="shine-line" style="margin:10px 0 12px"></div>
   <p>Enthusia SMP is a mostly-vanilla survival world with PvP, exploration, and a player-run item economy. Build, fight, trade, and make stories with friends.</p>
 
   <div class="features" style="padding-top:12px">
     <div class="grid-3">
       <div class="card">
         <h3>PvP Balance</h3>
-        <p>Zones that change how fights feel: <strong>no-cPvP areas</strong>, <strong>nerfed-mace zones</strong>, and <strong>vanilla zones</strong> for pure survival. Pick your battles.</p>
+        <p>Zones that change how fights feel: <strong>no-cPvP areas</strong>, <strong>nerfed-mace zones</strong>, and <strong>vanilla zones</strong>. Pick your battles.</p>
       </div>
       <div class="card">
         <h3>Base-Finding Protections</h3>
-        <p>We limit the pie chart for base-hunting so common blocks (signs, barrels, etc.) aren’t a dead giveaway. Hide smarter, explore longer.</p>
+        <p>We reduce easy “pie chart” base hunting so common blocks (signs, barrels, etc.) aren’t a dead giveaway.</p>
       </div>
       <div class="card">
         <h3>Huge World Border</h3>
-        <p>Border is <strong>100k x 100k</strong> (that’s <strong>200k total!</strong>). Plenty of space to build, roam, fight, and disappear.</p>
+        <p>Border is <strong>100k × 100k</strong> (that’s <strong>200k total</strong>). Plenty of space to build, roam, and disappear.</p>
       </div>
       <div class="card">
         <h3>Player Shops</h3>
@@ -48,11 +57,11 @@
       </div>
       <div class="card">
         <h3>Guilds</h3>
-        <p>Start or join a guild for guild homes, events, and more. Team up for events, protection, and shared projects.</p>
+        <p>Start or join a guild with homes and ranks. Team up for events, protection, and shared projects.</p>
       </div>
       <div class="card">
         <h3>Travel & Utility</h3>
-        <p><code>/tpa</code> for meeting up fast, simple quality-of-life tweaks that keep things fun without going modpack-crazy.</p>
+        <p><code>/tpa</code> for meeting up fast, plus simple tweaks that keep things fun without going modpack-crazy.</p>
       </div>
       <div class="card">
         <h3>Events</h3>
@@ -70,7 +79,14 @@
   </div>
 </footer>
 
-<script src="assets/script.js"></script>
-<script>initSite(window.ENTHUSIA || {});</script>
+<script src="assets/script.js?v=aurora1"></script>
+<script>
+  initSite(window.ENTHUSIA || {
+    serverIp: "Unavailable",
+    tebexUrl: "https://yourstore.tebex.io",
+    discordInvite: "https://discord.gg/5ccgDCmNSc",
+    discordServerId: "1410303324745371709"
+  });
+</script>
 </body>
 </html>
