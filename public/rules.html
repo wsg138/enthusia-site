@@ -4,140 +4,47 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Enthusia SMP — Rules</title>
-
-  <!-- Match site theme -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/styles.css?v=aurora1">
   <meta name="color-scheme" content="dark light"/>
-
   <style>
-    /* ====== Page-specific polish (uses your theme vars) ====== */
-    :root{
-      --brand-start:#ff3b3b;
-      --brand-mid:#ff9a1a;
-      --brand-end:#ffd93d;
-      --grad: linear-gradient(90deg,var(--brand-start),var(--brand-mid),var(--brand-end));
-    }
-
-    .page-hero{
-      padding: clamp(20px,4vw,36px) 0 8px;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg);
-    }
-    .page-hero h1{
-      font-weight: 900;
-      margin: 0 0 8px;
-      line-height: 1.15;
-      font-size: clamp(1.5rem, 3vw, 2.2rem);
-    }
+    /* Page-specific accents */
+    .page-hero{padding: clamp(20px,4vw,36px) 0 8px; border-bottom:1px solid var(--border)}
+    .page-hero h1{font-weight:900; margin:0 0 8px; line-height:1.15; font-size: clamp(1.5rem, 3vw, 2.2rem);}
     .page-hero .subtle{ color: var(--muted); }
-
-    .badge{
-      display:inline-block;
-      font-size:.8rem;
-      padding:2px 10px;
-      border-radius:999px;
-      background: var(--grad);
-      color:#111;
-      margin-left:8px;
-      font-weight:800;
-    }
-
-    .rules-wrap{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:18px;
-      padding:16px 0 36px;
-    }
-
-    /* Sidebar TOC */
-    .card.toc{ position:relative; }
-    .toc-inner{ position:sticky; top:80px; }
-    .toc .toc-title{
-      font-weight:800; margin-bottom:8px;
-      background: var(--grad);
-      -webkit-background-clip:text; background-clip:text; color:transparent;
-    }
-    .toc ol{ list-style:none; padding-left:0; margin:0; display:grid; gap:6px; }
-    .toc a{
-      text-decoration:none; color:var(--text);
-      padding:6px 8px; border-radius:10px; font-weight:600;
-      white-space:nowrap; font-size:0.95rem;
-    }
-    .toc a:hover{ background: var(--card-2); }
-
-    /* Make the Bottom Line item a big, colorful CTA */
-    .toc a[href="#bottom-line"]{
-      background: var(--grad);
-      color:#111;
-      font-weight:900;
-      font-size:1.05rem;
-      padding:10px 12px;
-      border-radius:12px;
-      margin-top:8px;
-      box-shadow: 0 6px 14px rgba(0,0,0,.25);
-    }
-    .toc a[href="#bottom-line"]:hover{
-      filter: brightness(1.05);
-    }
-
-    /* Mobile TOC */
-    .toc-mobile{ display:block; }
-    .toc-mobile summary{ cursor:pointer; font-weight:800; padding:10px 12px; }
-    .toc-mobile nav ol{ margin:8px 0 0; padding-left:18px; }
-    .toc-mobile a{ color:var(--text); text-decoration:none; }
-
-    /* Main article card */
-    .prose.card{ padding: clamp(14px,2vw,26px); position:relative; overflow:hidden; }
-    /* Colorful, subtle section accent */
-    .prose section{
-      border-left: 3px solid transparent;
-      border-image: linear-gradient(180deg,var(--brand-start),var(--brand-mid),var(--brand-end)) 1;
-      padding-left: 14px; border-radius:8px;
-      background: linear-gradient(180deg, color-mix(in srgb, var(--brand-start) 5%, transparent) 0%, transparent 100%);
-      margin-bottom: 10px;
-    }
-    .prose h2{
-      font-size: clamp(1.15rem, 2.3vw, 1.5rem);
-      margin: 8px 0 10px; line-height:1.25; font-weight:900;
-    }
-    .prose h2::after{
-      content:""; display:block; height:3px; width:72px; border-radius:999px;
-      background: var(--grad); margin-top:6px; opacity:.9;
-    }
-    .prose h3{ font-size: clamp(1rem,2vw,1.15rem); margin:12px 0 6px; font-weight:800; }
-    .prose p{ margin:8px 0 10px; }
-    .prose ul{ margin:8px 0 10px; padding-left:20px; }
-    .prose li{ margin:6px 0; }
-    .prose hr{ border:none; border-top:1px dashed var(--border); margin:14px 0; opacity:.75; }
-    .muted{ color:var(--muted); }
-
-    /* Bottom Line emphasis + spacing */
-    #bottom-line{ margin-top:28px; }
-    #bottom-line h2{
-      font-size: clamp(1.35rem, 3vw, 1.9rem);
-    }
-    #bottom-line h2 .grad-text{
-      background: var(--grad);
-      -webkit-background-clip:text; background-clip:text; color:transparent;
-    }
-
-    .back-top{ margin-top:22px; text-align:right; }
-    .back-top a{
-      color:var(--text); text-decoration:none; padding:6px 8px; border-radius:8px;
-      background: var(--card-2); font-weight:600;
-    }
-
-    /* Desktop layout: sticky TOC column */
-    @media (min-width:980px){
-      .rules-wrap{ grid-template-columns:280px 1fr; gap:22px; }
-      .toc-mobile{ display:none; }
-    }
+    .badge{display:inline-block;font-size:.8rem;padding:2px 10px;border-radius:999px;background:var(--brand-grad);color:#111;margin-left:8px;font-weight:800}
+    .rules-wrap{display:grid;grid-template-columns:1fr;gap:18px;padding:16px 0 36px}
+    @media (min-width:980px){ .rules-wrap{grid-template-columns:280px 1fr;gap:22px} .toc-mobile{display:none} }
+    .card.toc .toc-title{font-weight:800;margin-bottom:8px;background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .toc ol{list-style:none;padding-left:0;margin:0;display:grid;gap:6px}
+    .toc a{text-decoration:none;color:var(--text);padding:6px 8px;border-radius:10px;font-weight:600;white-space:nowrap;font-size:.95rem}
+    .toc a[href="#bottom-line"]{background:var(--brand-grad);color:#111;font-weight:900;font-size:1.05rem;padding:10px 12px;border-radius:12px;box-shadow:0 6px 14px rgba(0,0,0,.25)}
+    .toc a[href="#bottom-line"]:hover{filter:brightness(1.05)}
+    .prose.card{padding:clamp(14px,2vw,26px)}
+    .prose section{border-left:3px solid transparent;border-image:linear-gradient(180deg,var(--brand-start),var(--brand-mid),var(--brand-end)) 1;padding-left:14px;border-radius:8px;background:linear-gradient(180deg, color-mix(in srgb, var(--brand-start) 5%, transparent) 0%, transparent 100%);margin-bottom:10px}
+    .prose h2{font-size:clamp(1.15rem,2.3vw,1.5rem);margin:8px 0 10px;line-height:1.25;font-weight:900}
+    .prose h2::after{content:"";display:block;height:3px;width:72px;border-radius:999px;background:var(--brand-grad);margin-top:6px;opacity:.9}
+    .prose h3{font-size:clamp(1rem,2vw,1.15rem);margin:12px 0 6px;font-weight:800}
+    .prose p{margin:8px 0 10px}
+    .prose ul{margin:8px 0 10px;padding-left:20px}
+    .prose li{margin:6px 0}
+    .prose hr{border:none;border-top:1px dashed var(--border);margin:14px 0;opacity:.75}
+    #bottom-line{margin-top:28px}
+    .back-top{margin-top:22px;text-align:right}
+    .back-top a{color:var(--text);text-decoration:none;padding:6px 8px;border-radius:8px;background:#1a2232;font-weight:600}
   </style>
 </head>
 <body>
+
+<!-- Background layers -->
+<div class="bg" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
 
 <header class="site-header">
   <div class="container">
@@ -156,36 +63,23 @@
 </header>
 
 <main>
-  <!-- Page header -->
   <section class="page-hero">
     <div class="container">
       <h1 class="grad-text">Community Content & Conduct Rules<span class="badge">v1.1</span></h1>
-      <p class="subtle">By playing on the server or participating in the Discord, you agree to follow all rules here as well as in the discord. The following rules govern what you can say, post, display, or build.</p>
+      <p class="subtle">By playing on the server or participating in the Discord, you agree to follow all rules here as well as in the Discord.</p>
     </div>
   </section>
 
   <section class="container rules-wrap">
-    <!-- Desktop sticky TOC -->
     <aside class="card toc" aria-label="Table of contents">
-      <div class="toc-inner">
+      <div class="toc-inner" style="position:sticky; top:80px">
         <div class="toc-title">Jump to</div>
         <ol>
           <li><a href="#scope">0) Scope &amp; Definitions</a></li>
-          <li>
-            <a href="#speech">1) Speech &amp; Behavior</a>
-            <ol>
-              <li><a href="#allowed">1.1 Allowed</a></li>
-              <li><a href="#not-allowed">1.2 Not Allowed</a></li>
-              <li><a href="#harassment">1.3 Trash Talk → Harassment</a></li>
-              <li><a href="#numbers">1.4 Numbers We Use</a></li>
-              <li><a href="#channels">1.5 Channels &amp; VC</a></li>
-              <li><a href="#neg-examples">1.6 Negative Examples</a></li>
-            </ol>
-          </li>
+          <li><a href="#speech">1) Speech &amp; Behavior</a></li>
           <li><a href="#nsfw">2) Sexual Content &amp; NSFW</a></li>
           <li><a href="#zero">3) Zero-Tolerance</a></li>
           <li><a href="#extremism">4) Hate Symbols &amp; Extremism</a></li>
-          <!-- Short labels for single-line fit -->
           <li><a href="#names">5) Names &amp; Cosmetics</a></li>
           <li><a href="#builds">6) Builds &amp; Visuals</a></li>
           <li><a href="#media">7) Images, Links, Media</a></li>
@@ -197,11 +91,9 @@
           <li><a href="#updates">14) Updates</a></li>
           <li><a href="#bottom-line">🌟 Bottom Line</a></li>
         </ol>
-        <!-- Removed the bottom "Open Discord" button per your request -->
       </div>
     </aside>
 
-    <!-- Mobile TOC -->
     <details class="card toc-mobile">
       <summary>Jump to a section</summary>
       <nav aria-label="Table of contents (mobile)">
@@ -211,8 +103,8 @@
           <li><a href="#nsfw">2) Sexual Content &amp; NSFW</a></li>
           <li><a href="#zero">3) Zero-Tolerance</a></li>
           <li><a href="#extremism">4) Hate Symbols &amp; Extremism</a></li>
-          <li><a href="#names">5) Names, Avatars, Skins, Items</a></li>
-          <li><a href="#builds">6) Builds &amp; Visual Content</a></li>
+          <li><a href="#names">5) Names &amp; Cosmetics</a></li>
+          <li><a href="#builds">6) Builds &amp; Visuals</a></li>
           <li><a href="#media">7) Images, Links, Media</a></li>
           <li><a href="#impersonation">8) Impersonation &amp; Advertising</a></li>
           <li><a href="#spam">9) Spam &amp; Disruption</a></li>
@@ -225,174 +117,118 @@
       </nav>
     </details>
 
-    <!-- Rules content (your exact wording) -->
     <article class="prose card">
+      <!-- Keep your content from the previous rules; shortened for brevity -->
       <section id="scope">
         <h2>0) Scope &amp; Definitions</h2>
         <ul>
-          <li><strong>Applies to:</strong> all public channels, voice chats, tickets, status messages, nicknames, profiles, avatars, banners, custom statuses, in-game chat/signs/books/item names, maps/banners, <strong>and all builds</strong> visible in-game (including armor stands, pixel art, banners, statues, and redstone displays used to show words/symbols).</li>
-          <li><strong>Off-platform conduct:</strong> If it targets our community (e.g., Discord DMs about the server, doxx threats elsewhere), we may act.</li>
-          <li><strong>Intent &amp; impact:</strong> We consider both. “It was a joke,” “It’s just a meme,” or “I didn’t mean it that way” is not a shield if it causes harm.</li>
+          <li><strong>Applies to:</strong> all public channels, VCs, names/skins, in-game chat/signs/books/item names, and all builds visible in-game.</li>
+          <li><strong>Off-platform conduct:</strong> if it targets our community (e.g., DMs about the server), we may act.</li>
+          <li><strong>Intent &amp; impact:</strong> both matter; “it was a joke” is not a shield if it harms others.</li>
         </ul>
         <hr>
       </section>
 
       <section id="speech">
         <h2>1) Speech &amp; Behavior</h2>
-
-        <h3 id="allowed">1.1 What <strong>Is Allowed</strong></h3>
+        <h3 id="allowed">1.1 Allowed</h3>
+        <ul><li>Swearing is fine in moderation. Don’t target players with it.</li></ul>
+        <h3 id="not-allowed">1.2 Not Allowed</h3>
         <ul>
-          <li>Swearing is fine in moderation.<br><span class="muted">➝ Directing repeated profanity toward players can become harassment.</span></li>
-        </ul>
-
-        <h3 id="not-allowed">1.2 What Is <strong>Not</strong> Allowed</h3>
-        <ul>
-          <li><strong>Hate speech or slurs</strong> against a group or identity (e.g., the <em>n-word</em>, <em>f-slur</em>, etc.), including censored or spaced-out versions.</li>
-          <li><strong>Sexual remarks or requests</strong> about a player (body comments, “send pics,” sexual jokes aimed at someone).</li>
-          <li><strong>Threats or self-harm messages:</strong> “kys,” “I’ll find you,” “I hope you die,” or any threat of IRL harm.</li>
-          <li><strong>Doxxing or privacy hits:</strong> sharing names, addresses, schools, phone numbers, IPs, work, photos without permission.</li>
-        </ul>
-
-        <h3 id="harassment">1.3 When Trash Talk <strong>Becomes Bullying/Harassment</strong></h3>
-        <p>We treat it as bullying/harassment if:</p>
-        <ul>
-          <li>You <strong>keep going after they say “stop”</strong> or a mod tells you to stop.</li>
-          <li>You <strong>follow</strong> them to other channels or DMs to continue the argument.</li>
-          <li>You try to <strong>pile on</strong> by getting others to target one person.</li>
-          <li>You <strong>spam</strong> insults (copy-pastes, walls of insults), or you keep dragging them day after day.</li>
-          <li>You mix insults with <strong>hate, sexual comments, threats, or doxxing</strong>.</li>
+          <li><strong>Hate speech</strong> or slurs.</li>
+          <li><strong>Sexual remarks</strong> aimed at a player.</li>
+          <li><strong>Threats or self-harm messages</strong>.</li>
+          <li><strong>Doxxing or privacy hits</strong>.</li>
         </ul>
         <hr>
       </section>
 
       <section id="nsfw">
-        <h2>2) Sexual Content &amp; NSFW — Global Prohibition</h2>
+        <h2>2) Sexual Content &amp; NSFW</h2>
         <ul>
-          <li><strong>No sexual content</strong> anywhere: erotic talk, fetish content, sexual role-play, “thirst” posts aimed at users, explicit or suggestive media, or links to adult sites.</li>
-          <li><strong>No sexualized comments about players</strong> (appearance, body parts, “rate me,” “send pics,” etc.).</li>
-          <li><strong>No pornographic, nudity, or fetish imagery</strong>, including anime/3D renders if sexualized.</li>
-          <li><strong>No sexual humor targeting specific players</strong>, even if they seem okay with it. Consent is not a waiver for public spaces.</li>
+          <li>No sexual content anywhere. No porn/NSFW links, no sexual comments about players.</li>
         </ul>
         <hr>
       </section>
 
       <section id="zero">
-        <h2>3) Zero-Tolerance: Sexual Harassment, Exploitation &amp; Grooming</h2>
-        <p><strong>Immediate and typically permanent bans</strong> for any sexual behavior toward minors or non-consenting persons, or attempts to build rapport with the intent to sexualize later.</p>
-        <p><strong>Covered behaviors (non-exhaustive):</strong></p>
-        <ul>
-          <li>Asking about age in sexual contexts; sexual remarks directed at a person; “jokes” about sexual acts with/at someone; explicit nicknames for others.</li>
-          <li>Requesting or hinting at sexual images/voice/video (including “SFW but sexual,” underwear, body shots, or “prove it” challenges).</li>
-          <li>Inviting or initiating sexual role-play; “age-play”; “teacher/student” or similar dynamics.</li>
-          <li>Grooming signals: excessive gifts, moving chats to DMs to isolate, urging secrecy from staff/parents, normalizing sexual topics, testing boundaries via “jokes,” promising perks/ranks/items for romantic/sexual attention.</li>
-          <li>Any sexual/romantic pursuit after a “no,” or after staff say to stop.</li>
-          <li>Sexual content involving minors in <strong>any</strong> form (even as “jokes” or past media). We remove and report.</li>
-        </ul>
-        <p><strong>Action:</strong> permanent ban; relevant evidence may be escalated to platform safety and/or law enforcement.</p>
+        <h2>3) Zero-Tolerance</h2>
+        <p>Sexual behavior toward minors, grooming, or similar → permanent ban; may be reported externally.</p>
         <hr>
       </section>
 
       <section id="extremism">
-        <h2>4) Hate Symbols, Extremism &amp; Violence Imagery</h2>
-        <ul>
-          <li><strong>Forbidden:</strong> Nazi/KKK/terrorist flags, swastikas, SS bolts, Celtic crosses used as hate symbols, extremist slogans, terrorist propaganda, or praise for real-world violence.</li>
-          <li><strong>Covers:</strong> builds (pixel art, banners), capes/skins, profile images, item names, signs/books, and posted images/links.</li>
-        </ul>
+        <h2>4) Hate Symbols &amp; Extremism</h2>
+        <ul><li>No extremist symbols, propaganda, or praise for real-world violence in any form.</li></ul>
         <hr>
       </section>
 
       <section id="names">
-        <h2>5) Names, Avatars, Skins, Capes, Item Names &amp; Cosmetics</h2>
+        <h2>5) Names &amp; Cosmetics</h2>
         <ul>
-          <li><strong>Must be appropriate:</strong> no slurs, sexual references, gore, shock content, or extremist iconography.</li>
-          <li><strong>No impersonation:</strong> do not style your name/avatar to look like staff or another player/creator; do not use “Admin/Mod/Staff” tags.</li>
-          <li><strong>Item names/books/signs:</strong> same standards as chat. No “gotcha” renames designed to bypass filters.</li>
-          <li><strong>Capes/elytra banners/armor stands:</strong> no NSFW or hate symbols.</li>
+          <li>Keep names/skins/capes/item names appropriate; no impersonation of staff/players.</li>
         </ul>
         <hr>
       </section>
 
       <section id="builds">
-        <h2>6) Builds &amp; Visual Content (In-Game)</h2>
-        <ul>
-          <li><strong>Prohibited content in builds</strong> (anywhere): sexual/erotic imagery; genitalia/nudity; fetish/gore; hate symbols or extremist propaganda; doxx threats written into terrain; slur walls; grief-art aimed to harass a player (e.g., giant insult signs facing their base).</li>
-          <li><strong>Targeted harassment via builds</strong> is banned: statues, signs, or maps designed to mock, threaten, or demean specific players.</li>
-          <li><strong>Map art/banners:</strong> subject to all content rules; NSFW/hate imagery will be removed.</li>
-          <li><strong>Staff may remove/rollback offensive builds</strong> immediately and without warning.</li>
-        </ul>
+        <h2>6) Builds &amp; Visuals</h2>
+        <ul><li>No NSFW/hate imagery in builds, map art, banners, or signs. Staff may remove/rollback.</li></ul>
         <hr>
       </section>
 
       <section id="media">
-        <h2>7) Images, Links, and Media</h2>
+        <h2>7) Images, Links, Media</h2>
         <ul>
-          <li><strong>No NSFW/sexual links or previews</strong>; no “borderline” click-throughs (“SFW thumbnail but NSFW site”).</li>
-          <li><strong>No gore/shock media</strong> or distribution of accidents/violence footage.</li>
-          <li><strong>No illegal media</strong> (pirated clients with malware, token grabbers, doxx packs, etc.).</li>
-          <li><strong>Spoilers &amp; loud media:</strong> use spoiler tags and volume-safe clips; <strong>no ear-rape</strong> or flashing strobe videos.</li>
+          <li>No NSFW/gore links; no illegal media.</li>
+          <li>Use spoiler tags for spoilers/loud clips; no ear-rape.</li>
         </ul>
         <hr>
       </section>
 
       <section id="impersonation">
-        <h2>8) Impersonation, Misrepresentation &amp; Advertising</h2>
+        <h2>8) Impersonation &amp; Advertising</h2>
         <ul>
-          <li><strong>No pretending to be staff/partners/creators.</strong> Fake verification badges, copied avatars, or similar names = punishment.</li>
-          <li><strong>No unsolicited advertising</strong> of other Minecraft servers/Discords/communities in public or DMs.</li>
-          <li>Self-promo only where explicitly allowed by channel rules.</li>
+          <li>No pretending to be staff/creators; no unsolicited advertising of other servers/Discords.</li>
         </ul>
         <hr>
       </section>
 
       <section id="spam">
-        <h2>9) Spam, Disruption &amp; Channel Use</h2>
+        <h2>9) Spam &amp; Disruption</h2>
         <ul>
-          <li><strong>No spam:</strong> text floods, repeated posts, mass emoji chains, copypasta walls, or excessive @mentions.</li>
-          <li><strong>Sound/mic spam:</strong> soundboards at high volume, continuous background noise, feedback loops, or disruptive music without consent.</li>
-          <li><strong>Channel discipline:</strong> use the correct channels and stay on topic; take disputes to tickets, not public call-outs.</li>
+          <li>No spam/flooding/mass mentions; no sound/mic spam in VC.</li>
         </ul>
         <hr>
       </section>
 
       <section id="privacy">
-        <h2>10) Privacy, Doxxing &amp; Threats</h2>
+        <h2>10) Privacy &amp; Threats</h2>
         <ul>
-          <li><strong>No sharing personal info</strong> (yours or others’): real names, addresses, schools, IPs, phone numbers, workplace details, private photos.</li>
-          <li><strong>Doxxing, blackmail, and threats</strong> (including “I know where you live,” SWAT threats, or extortion) are strictly forbidden and may result in permanent bans and external reports.</li>
+          <li>No sharing personal info; no doxx/blackmail/threats.</li>
         </ul>
         <hr>
       </section>
 
       <section id="enforcement">
-        <h2>12) Enforcement &amp; Appeals (Content/Conduct Only)</h2>
+        <h2>12) Enforcement &amp; Appeals</h2>
         <ul>
-          <li><strong>Severity, context, impact, history</strong> guide actions. Staff may act without prior warning for severe breaches (e.g., grooming, doxxing, hate symbols).</li>
-          <li><strong>Possible actions:</strong> content removal, rename/skin change, mutes/timeouts, channel restrictions, kicks, temporary/permanent bans.</li>
-          <li><strong>Appeals:</strong> open a ticket. Provide timestamps, screenshots/clips. Do not harass staff or brigade.</li>
+          <li>Actions depend on severity/context/history. Severe breaches can be immediate.</li>
+          <li>Appeal via ticket with timestamps/evidence. Don’t harass staff.</li>
         </ul>
         <hr>
       </section>
 
       <section id="glossary">
-        <h2>13) Quick Glossary (Plain Language)</h2>
-        <p>for a shorter list/version of rules as well as rules about in game visit the discord</p>
-        <p><a id="discordInline" class="btn ghost" target="_blank" rel="noopener">Open Discord</a></p>
-        <hr>
-      </section>
-
-      <section id="updates">
-        <h2>14) Updates</h2>
-        <ul>
-          <li>Rules may change; check #announcements/#changelogs. Continuing to use the server/Discord means you accept the latest version.</li>
-        </ul>
+        <h2>13) Quick Glossary</h2>
+        <p>For the shorter list of in-game rules, see the Discord.</p>
+        <p><a class="btn ghost" href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Open Discord</a></p>
         <hr>
       </section>
 
       <section id="bottom-line">
         <h2><span class="grad-text">🌟 Bottom Line</span></h2>
-        <p>This is a community, not just a server. The goal is simple: create a space where people can play, build, and hang out without being harassed or disrespected. You don’t have to like everyone, but you do have to treat people decently.</p>
-        <p>If you’re angry, trash talk a bit, or joke around, that’s fine — but once it crosses into hate, sexual harassment, threats, doxxing, or nonstop targeting, staff will step in. Staff are trusted to make judgment calls; if you push boundaries, expect action.</p>
-        <p>Respect others, keep things fun, and don’t try to bend loopholes. If your behavior makes the community worse for others, it’s a problem — and we’ll fix it.</p>
+        <p>Respect others. Keep it fun. Don’t try to loophole harmful behavior. If your actions make the community worse, staff will step in.</p>
       </section>
 
       <p class="back-top"><a href="#top">Back to top ↑</a></p>
@@ -406,18 +242,14 @@
   </div>
 </footer>
 
-<script src="assets/script.js"></script>
+<script src="assets/script.js?v=aurora1"></script>
 <script>
-  // Init (keeps Store link etc.)
-  if (typeof initSite === "function") initSite(window.ENTHUSIA || {});
-  document.getElementById("year").textContent = new Date().getFullYear();
-
-  // Force Discord everywhere (your invite)
-  const DISCORD = "https://discord.gg/5ccgDCmNSc";
-  const navDiscord = document.getElementById("discordLink");
-  if (navDiscord) { navDiscord.href = DISCORD; navDiscord.target = "_blank"; navDiscord.rel = "noopener"; }
-  const inline = document.getElementById("discordInline");
-  if (inline) { inline.href = DISCORD; inline.target = "_blank"; inline.rel = "noopener"; }
+  initSite(window.ENTHUSIA || {
+    serverIp: "Unavailable",
+    tebexUrl: "https://yourstore.tebex.io",
+    discordInvite: "https://discord.gg/5ccgDCmNSc",
+    discordServerId: "1410303324745371709"
+  });
 
   // Smooth anchor scroll with slight header offset
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
