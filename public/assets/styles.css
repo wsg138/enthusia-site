@@ -34,10 +34,10 @@ img{max-width:100%;height:auto;display:block}
   padding-right:max(16px, env(safe-area-inset-right));
 }
 
-/* ===== BACKGROUND FX (no JS, pure CSS) ===== */
+/* ===== BACKGROUND FX (no JS) ===== */
 .bg{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
 
-/* Subtle grid overlay (adds structure = less “scammy”) */
+/* Subtle grid overlay (adds structure) */
 .bg-grid{
   position:absolute; inset:-1px;
   background-image:
@@ -53,30 +53,19 @@ img{max-width:100%;height:auto;display:block}
 .blob.b2{width:60vw;height:60vw;right:-20vw;top:-5vw;background:radial-gradient(circle at 70% 30%, rgba(255,138,0,.48), rgba(255,138,0,0) 60%); animation:float2 22s ease-in-out infinite}
 .blob.b3{width:65vw;height:65vw;left:10vw;bottom:-20vw;background:radial-gradient(circle at 50% 60%, rgba(255,209,102,.45), rgba(255,209,102,0) 60%); animation:float3 24s ease-in-out infinite}
 
-@keyframes float1{
-  0%,100%{transform:translate3d(0,0,0) scale(1)}
-  50%{transform:translate3d(4vw,2vw,0) scale(1.05)}
-}
-@keyframes float2{
-  0%,100%{transform:translate3d(0,0,0) scale(1)}
-  50%{transform:translate3d(-3vw,3vw,0) scale(1.08)}
-}
-@keyframes float3{
-  0%,100%{transform:translate3d(0,0,0) scale(1)}
-  50%{transform:translate3d(2vw,-2vw,0) scale(1.07)}
-}
+@keyframes float1{ 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(4vw,2vw,0) scale(1.05)} }
+@keyframes float2{ 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(-3vw,3vw,0) scale(1.08)} }
+@keyframes float3{ 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(2vw,-2vw,0) scale(1.07)} }
 
-/* ===== UTILITIES ===== */
+/* Utilities */
 .grad-text{
   background:var(--brand-grad);
   -webkit-background-clip:text; background-clip:text;
   color:transparent;
 }
-.shine-line{
-  height:3px; width:84px; border-radius:999px; background:var(--brand-grad); opacity:.9;
-}
+.shine-line{ height:3px; width:84px; border-radius:999px; background:var(--brand-grad); opacity:.9; }
 
-/* ===== HEADER / NAV (pill tabs; centered on mobile) ===== */
+/* ===== HEADER / NAV ===== */
 .site-header{
   position:sticky;top:0;z-index:10;
   background:linear-gradient(180deg, rgba(12,16,24,.9), rgba(12,16,24,.75));
@@ -101,25 +90,19 @@ img{max-width:100%;height:auto;display:block}
 }
 .nav a:hover{ background:#202a3a; box-shadow:0 0 0 2px rgba(255,138,0,.25) inset }
 .nav a:active{ transform:translateY(1px) }
-/* Fix gradient seam on active pill tabs */
+
+/* ✨ Seam-proof gradient for active pill tabs */
 .nav a.active{
   color:#181b20;
-  border:1px solid transparent;                 /* keep pill edges crisp */
+  border:1px solid transparent;
   background-image: var(--brand-grad), var(--brand-grad);
-  background-origin: padding-box, border-box;   /* draw once for padding, once for border */
-  background-clip: padding-box, border-box;     /* prevents the tiny edge seam */
-  box-shadow: 0 6px 18px rgba(255,138,0,.25);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  box-shadow:0 6px 18px rgba(255,138,0,.25);
 }
-
-/* If a hairline still appears on some displays, add: */
-/* .nav a.active{ background-size:102% 102%; background-position:center; } */
-
 
 /* ===== HERO ===== */
-.hero{
-  position:relative; z-index:1;
-  padding:56px 0 40px;
-}
+.hero{ position:relative; z-index:1; padding:56px 0 40px; }
 .hero::before{
   content:""; position:absolute; inset:0; z-index:-1;
   background:
@@ -142,6 +125,13 @@ img{max-width:100%;height:auto;display:block}
 .btn.ghost{
   background:#1b2230;color:var(--text);border:1px solid var(--border);
   box-shadow:none;
+}
+/* ✨ Seam-proof gradient for solid buttons as well */
+.btn:not(.ghost){
+  border:1px solid transparent;
+  background-image: var(--brand-grad), var(--brand-grad);
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
 }
 
 /* ===== CARDS / SECTIONS ===== */
@@ -171,6 +161,25 @@ img{max-width:100%;height:auto;display:block}
 .status-badge{display:inline-block;background:#2b3447;color:#fff;border:1px solid #3b4a66;padding:4px 8px;border-radius:999px}
 .status-note{display:block;color:var(--muted);margin-top:8px}
 
+/* ===== Discord mini widget ===== */
+.discord-card{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.10)),
+    var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25), 0 0 0 1px rgba(255,200,120,.06) inset;
+}
+.discord-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.discord-title{font-weight:900}
+.discord-counts{display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#1a2232;border-radius:999px;padding:6px 10px;font-weight:700}
+.pill .dot{width:8px;height:8px;border-radius:999px;background:#47d16c;display:inline-block}
+.discord-avatars{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.discord-avatars img{width:28px;height:28px;border-radius:999px;border:1px solid var(--border);background:#0f141d}
+.discord-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
 /* Footer */
 .site-footer{border-top:1px solid #1b2230;margin-top:40px; position:relative; z-index:1}
 .site-footer .container{min-height:60px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
@@ -178,17 +187,15 @@ img{max-width:100%;height:auto;display:block}
 /* Content pages */
 .container.pad{padding:24px 16px}
 
-/* Rules “pretty” helpers (used by rules.html) */
+/* Rules helpers */
 .rules-grid{display:grid;grid-template-columns:1fr;gap:16px}
 .rule-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px}
 .rule-card h2{margin:0 0 8px;font-size:20px}
 .rule-card h2 .grad-text{font-weight:900}
 .rule-card ul{margin:8px 0 0 18px}
 
-.callout{
-  border:1px solid var(--border);border-radius:14px;padding:12px 14px;
-  background:linear-gradient(0deg, rgba(255,209,102,.06), rgba(255,209,102,.06));
-}
+.callout{ border:1px solid var(--border);border-radius:14px;padding:12px 14px;
+  background:linear-gradient(0deg, rgba(255,209,102,.06), rgba(255,209,102,.06)); }
 .callout strong{color:#ffe39e}
 
 /* Gallery/FAQ (if you add later) */
