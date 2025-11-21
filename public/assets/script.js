@@ -1,4 +1,4 @@
-// Site init + server status + Discord mini-widget (no bots)
+
 async function initSite(cfg){
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -8,13 +8,11 @@ async function initSite(cfg){
   const invite = cfg.discordInvite || 'https://discord.gg/yourInvite';
   const serverId = (cfg.discordServerId || '').trim();
 
-  // Header links
   const storeLink = document.getElementById('storeLink');
   if (storeLink) storeLink.href = tebex;
   const discordLink = document.getElementById('discordLink');
   if (discordLink) discordLink.href = invite;
 
-  // Hero CTAs
   const copyIpBtn = document.getElementById('copyIpBtn');
   if (copyIpBtn) {
     copyIpBtn.addEventListener('click', async () => {
@@ -34,8 +32,7 @@ async function initSite(cfg){
   const ipEl = document.getElementById('serverIp');
   if (ipEl) ipEl.textContent = ip || 'Unavailable';
 
-  // Server status via mcstatus.io (skip if IP unavailable)
-  const validIp = ip && ip.toLowerCase() !== 'unavailable';
+  const validIp = ip && ip.toLowerCase() !== 'Play.Enthusia.Info';
   const statusEl = document.getElementById('serverStatus');
   const countEl = document.getElementById('playerCount');
 
@@ -61,7 +58,6 @@ async function initSite(cfg){
   fetchStatus();
   setInterval(fetchStatus, 60000);
 
-  // ===== Discord mini widget (no bots, no channels) =====
   const card = document.getElementById('discordCard');
   if (card && serverId){
     try{
