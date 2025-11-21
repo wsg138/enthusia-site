@@ -1,4 +1,3 @@
-/* === Enthusia "Aurora" Theme (red → orange → yellow) === */
 :root{
   --bg:#0b0e13;
   --bg-2:#0e121a;
@@ -34,10 +33,8 @@ img{max-width:100%;height:auto;display:block}
   padding-right:max(16px, env(safe-area-inset-right));
 }
 
-/* ===== BACKGROUND FX (no JS) ===== */
 .bg{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
 
-/* Subtle grid overlay (adds structure) */
 .bg-grid{
   position:absolute; inset:-1px;
   background-image:
@@ -47,7 +44,6 @@ img{max-width:100%;height:auto;display:block}
   opacity:.15; mix-blend-mode:overlay;
 }
 
-/* Aurora blobs */
 .blob{position:absolute; border-radius:50%; filter:blur(80px); mix-blend-mode:screen; opacity:.65}
 .blob.b1{width:55vw;height:55vw;left:-10vw;top:-10vw;background:radial-gradient(circle at 30% 30%, rgba(255,59,59,.55), rgba(255,59,59,0) 60%); animation:float1 18s ease-in-out infinite}
 .blob.b2{width:60vw;height:60vw;right:-20vw;top:-5vw;background:radial-gradient(circle at 70% 30%, rgba(255,138,0,.48), rgba(255,138,0,0) 60%); animation:float2 22s ease-in-out infinite}
@@ -57,7 +53,6 @@ img{max-width:100%;height:auto;display:block}
 @keyframes float2{ 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(-3vw,3vw,0) scale(1.08)} }
 @keyframes float3{ 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(2vw,-2vw,0) scale(1.07)} }
 
-/* Utilities */
 .grad-text{
   background:var(--brand-grad);
   -webkit-background-clip:text; background-clip:text;
@@ -65,7 +60,6 @@ img{max-width:100%;height:auto;display:block}
 }
 .shine-line{ height:3px; width:84px; border-radius:999px; background:var(--brand-grad); opacity:.9; }
 
-/* ===== HEADER / NAV ===== */
 .site-header{
   position:sticky;top:0;z-index:10;
   background:linear-gradient(180deg, rgba(12,16,24,.9), rgba(12,16,24,.75));
@@ -91,7 +85,6 @@ img{max-width:100%;height:auto;display:block}
 .nav a:hover{ background:#202a3a; box-shadow:0 0 0 2px rgba(255,138,0,.25) inset }
 .nav a:active{ transform:translateY(1px) }
 
-/* ✨ Seam-proof gradient for active pill tabs */
 .nav a.active{
   color:#181b20;
   border:1px solid transparent;
@@ -101,7 +94,6 @@ img{max-width:100%;height:auto;display:block}
   box-shadow:0 6px 18px rgba(255,138,0,.25);
 }
 
-/* ===== HERO ===== */
 .hero{ position:relative; z-index:1; padding:56px 0 40px; }
 .hero::before{
   content:""; position:absolute; inset:0; z-index:-1;
@@ -115,7 +107,6 @@ img{max-width:100%;height:auto;display:block}
 .lead{color:var(--muted);margin-bottom:16px}
 .cta-row{display:flex;gap:10px;flex-wrap:wrap}
 
-/* Buttons */
 .btn{
   border:0;padding:12px 18px;border-radius:12px;font-weight:800;cursor:pointer;
   background:var(--brand-grad); color:#181b20; display:inline-flex; align-items:center; gap:8px;
@@ -126,7 +117,6 @@ img{max-width:100%;height:auto;display:block}
   background:#1b2230;color:var(--text);border:1px solid var(--border);
   box-shadow:none;
 }
-/* ✨ Seam-proof gradient for solid buttons as well */
 .btn:not(.ghost){
   border:1px solid transparent;
   background-image: var(--brand-grad), var(--brand-grad);
@@ -134,7 +124,6 @@ img{max-width:100%;height:auto;display:block}
   background-clip: padding-box, border-box;
 }
 
-/* ===== CARDS / SECTIONS ===== */
 .features{padding:36px 0; position:relative; z-index:1}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .card{
@@ -153,7 +142,6 @@ img{max-width:100%;height:auto;display:block}
   box-shadow:0 16px 40px rgba(255,138,0,.18), 0 0 0 1px rgba(255,200,120,.08) inset;
 }
 
-/* Status chips */
 .status{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
 .status-card{background:var(--card);padding:12px 14px;border-radius:14px;border:1px solid var(--border);min-width:140px}
 .status-label{font-size:12px;color:var(--muted)}
@@ -161,7 +149,6 @@ img{max-width:100%;height:auto;display:block}
 .status-badge{display:inline-block;background:#2b3447;color:#fff;border:1px solid #3b4a66;padding:4px 8px;border-radius:999px}
 .status-note{display:block;color:var(--muted);margin-top:8px}
 
-/* ===== Discord mini widget ===== */
 .discord-card{
   background:
     linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.10)),
@@ -180,14 +167,11 @@ img{max-width:100%;height:auto;display:block}
 .discord-avatars img{width:28px;height:28px;border-radius:999px;border:1px solid var(--border);background:#0f141d}
 .discord-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 
-/* Footer */
 .site-footer{border-top:1px solid #1b2230;margin-top:40px; position:relative; z-index:1}
 .site-footer .container{min-height:60px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
 
-/* Content pages */
 .container.pad{padding:24px 16px}
 
-/* Rules helpers */
 .rules-grid{display:grid;grid-template-columns:1fr;gap:16px}
 .rule-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px}
 .rule-card h2{margin:0 0 8px;font-size:20px}
@@ -198,7 +182,6 @@ img{max-width:100%;height:auto;display:block}
   background:linear-gradient(0deg, rgba(255,209,102,.06), rgba(255,209,102,.06)); }
 .callout strong{color:#ffe39e}
 
-/* Gallery/FAQ (if you add later) */
 .faq { display:grid; gap:12px; }
 .faq details.card summary { cursor:pointer; outline:none; }
 .faq details.card[open] { border-color:#344767; }
@@ -215,7 +198,6 @@ img{max-width:100%;height:auto;display:block}
   color:var(--muted); font-weight:600;
 }
 
-/* ===== Responsive ===== */
 @media (max-width:940px){
   .hero-inner{grid-template-columns:1fr}
   .hero-copy h1{font-size:38px}
