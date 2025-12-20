@@ -97,12 +97,57 @@
 
 <script src="assets/script.js?v=aurora3"></script>
 <script>
+  // Set these values to your server info / links.
   window.ENTHUSIA = {
-    serverIp: "Unavailable",
+    // Replace this string with your real IP or domain (include port if non-standard), e.g. "play.example.com:25565"
+    serverIp: "play.enthusia.info",
     tebexUrl: "https://enthusia-shop.tebex.io/",
     discordInvite: "https://discord.gg/5ccgDCmNSc",
     discordServerId: "1410303324745371709"
   };
+
+  // --- Simple automatic updater: writes the IP into the page and attempts to fetch live player count/status.
+  (function updateServerStatus() {
+    const ip = window.ENTHUSIA.serverIp || "Unavailable";
+    // Show the IP in the UI and on the copy button
+    const ipEl = document.getElementById('serverIp');
+    if (ipEl) ipEl.textContent = ip;
+    const copyBtn = document.getElementById('copyIpBtn');
+    if (copyBtn) copyBtn.dataset.ip = ip;
+
+    // If you want a STATIC value (no external API), you can set these DOM nodes directly here:
+    // document.getElementById('playerCount').textContent = "3";
+    // document.getElementById('serverStatus').textContent = "Online";
+
+    // For a dynamic player count/status, use a public Minecraft server status API.
+    // This example uses mcsrvstat.us. It supports hostname[:port].
+    // NOTE: if you have CORS issues, you may need to proxy the request or add server-side code.
+    if (!ip || ip === "Unavailable") return;
+
+    // Build API URL (mcsrvstat)
+    const apiUrl = 'https://api.mcsrvstat.us/2/' + encodeURIComponent(ip);
+
+    fetch(apiUrl)
+      .then(res => res.json())
+      .then(data => {
+        const playersEl = document.getElementById('playerCount');
+        const statusEl = document.getElementById('serverStatus');
+
+        if (data && data.online) {
+          if (playersEl) playersEl.textContent = (data.players && typeof data.players.online === 'number') ? data.players.online : '—';
+          if (statusEl) statusEl.textContent = 'Online';
+        } else {
+          if (playersEl) playersEl.textContent = '—';
+          if (statusEl) statusEl.textContent = 'Offline';
+        }
+      })
+      .catch(err => {
+        // If the API fails, leave the UI as-is (or set fallback)
+        console.warn('Could not fetch server status:', err);
+      });
+  })();
+
+  // Call site initializer (existing)
   initSite(window.ENTHUSIA);
 </script>
 </body>
