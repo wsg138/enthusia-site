@@ -9,6 +9,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css?v=aurora3">
   <meta name="description" content="Enthusia SMP — Mostly-vanilla SMP with balanced PvP and a player-driven item economy.">
+  <style>
+    .status-badge {
+      display: inline-block;
+      padding: 6px 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #fff;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(10,10,10,0.08);
+      min-width: 82px;
+      text-align: center;
+    }
+    .status-badge.online {
+      background: linear-gradient(180deg,#34c77a 0%, #10a66a 100%);
+    }
+    .status-badge.offline {
+      background: linear-gradient(180deg,#f06b6b 0%, #e04343 100%);
+    }
+    .status-badge.unknown {
+      background: linear-gradient(180deg,#9aa0a6 0%, #7b8288 100%);
+    }
+  </style>
 </head>
 <body>
 
@@ -43,7 +65,7 @@
         <div class="shine-line"></div>
         <p class="lead">Semi-Anarchy • Balanced PvP • Player-Driven Economy</p>
         <div class="cta-row">
-          <button class="btn" id="copyIpBtn" data-ip="Unavailable">Copy IP</button>
+          <button class="btn" id="copyIpBtn" data-ip="play.enthusia.info">Copy IP</button>
           <a id="joinDiscordBtn" class="btn ghost" target="_blank" rel="noopener">Join Discord</a>
           <a id="openStoreBtn" class="btn ghost" target="_blank" rel="noopener">Open Store</a>
         </div>
@@ -51,7 +73,7 @@
         <div class="status">
           <div class="status-card">
             <div class="status-label">Server</div>
-            <div class="status-value" id="serverIp">Unavailable</div>
+            <div class="status-value" id="serverIp">play.enthusia.info</div>
           </div>
           <div class="status-card">
             <div class="status-label">Players Online</div>
@@ -59,10 +81,9 @@
           </div>
           <div class="status-card">
             <div class="status-label">Status</div>
-            <div class="status-badge" id="serverStatus">TBA</div>
+            <div class="status-badge unknown" id="serverStatus">TBA</div>
           </div>
         </div>
-        <small class="status-note">Status will appear after launch.</small>
       </div>
 
       <div class="hero-embed">
@@ -97,57 +118,50 @@
 
 <script src="assets/script.js?v=aurora3"></script>
 <script>
-  // Set these values to your server info / links.
   window.ENTHUSIA = {
-    // Replace this string with your real IP or domain (include port if non-standard), e.g. "play.example.com:25565"
     serverIp: "play.enthusia.info",
     tebexUrl: "https://enthusia-shop.tebex.io/",
     discordInvite: "https://discord.gg/5ccgDCmNSc",
     discordServerId: "1410303324745371709"
   };
 
-  // --- Simple automatic updater: writes the IP into the page and attempts to fetch live player count/status.
   (function updateServerStatus() {
     const ip = window.ENTHUSIA.serverIp || "Unavailable";
-    // Show the IP in the UI and on the copy button
     const ipEl = document.getElementById('serverIp');
     if (ipEl) ipEl.textContent = ip;
     const copyBtn = document.getElementById('copyIpBtn');
     if (copyBtn) copyBtn.dataset.ip = ip;
-
-    // If you want a STATIC value (no external API), you can set these DOM nodes directly here:
-    // document.getElementById('playerCount').textContent = "3";
-    // document.getElementById('serverStatus').textContent = "Online";
-
-    // For a dynamic player count/status, use a public Minecraft server status API.
-    // This example uses mcsrvstat.us. It supports hostname[:port].
-    // NOTE: if you have CORS issues, you may need to proxy the request or add server-side code.
-    if (!ip || ip === "Unavailable") return;
-
-    // Build API URL (mcsrvstat)
+    const playersEl = document.getElementById('playerCount');
+    const statusEl = document.getElementById('serverStatus');
+    function setStatus(text, cls) {
+      if (!statusEl) return;
+      statusEl.textContent = text;
+      statusEl.classList.remove('online','offline','unknown');
+      statusEl.classList.add(cls);
+    }
+    if (!ip || ip === "Unavailable") {
+      if (playersEl) playersEl.textContent = "—";
+      setStatus('TBA', 'unknown');
+      return;
+    }
     const apiUrl = 'https://api.mcsrvstat.us/2/' + encodeURIComponent(ip);
-
     fetch(apiUrl)
       .then(res => res.json())
       .then(data => {
-        const playersEl = document.getElementById('playerCount');
-        const statusEl = document.getElementById('serverStatus');
-
         if (data && data.online) {
           if (playersEl) playersEl.textContent = (data.players && typeof data.players.online === 'number') ? data.players.online : '—';
-          if (statusEl) statusEl.textContent = 'Online';
+          setStatus('Online', 'online');
         } else {
           if (playersEl) playersEl.textContent = '—';
-          if (statusEl) statusEl.textContent = 'Offline';
+          setStatus('Offline', 'offline');
         }
       })
       .catch(err => {
-        // If the API fails, leave the UI as-is (or set fallback)
-        console.warn('Could not fetch server status:', err);
+        setStatus('TBA', 'unknown');
+        if (playersEl) playersEl.textContent = '—';
       });
   })();
 
-  // Call site initializer (existing)
   initSite(window.ENTHUSIA);
 </script>
 </body>
