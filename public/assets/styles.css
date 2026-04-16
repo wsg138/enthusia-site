@@ -133,11 +133,11 @@ summary:focus-visible{
 
 .brand{display:flex;align-items:center;gap:10px;font-weight:900;z-index:1}
 .brand-logo{
-  width:28px;
-  height:28px;
-  min-width:28px;
-  max-width:28px;
-  max-height:28px;
+  width:34px;
+  height:34px;
+  min-width:34px;
+  max-width:34px;
+  max-height:34px;
   object-fit:contain;
   flex:0 0 auto;
   display:block;
