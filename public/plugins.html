@@ -2,11 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Enthusia SMP — About & Plugins</title>
-  <link rel="stylesheet" href="assets/styles.css?v=aurora1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enthusia SMP | About</title>
+  <meta name="description" content="Learn how Enthusia SMP works, from protected areas and player market rules to mod policy, tickets, and core survival mechanics." />
+  <meta name="theme-color" content="#0b0e13" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css?v=refactor1" />
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 
 <div class="bg" aria-hidden="true">
   <div class="bg-grid"></div>
@@ -18,58 +24,64 @@
 <header class="site-header">
   <div class="container">
     <div class="brand">
-      <span class="logo">🛡️</span>
+      <img class="logo" src="assets/enthusia-logo.png" alt="" />
       <span class="name grad-text">Enthusia SMP</span>
     </div>
-    <nav class="nav">
+    <nav class="nav" aria-label="Primary navigation">
       <a href="index.html">Home</a>
-      <a href="plugins.html" class="active">About & Plugins</a>
+      <a href="plugins.html" class="active" aria-current="page">About</a>
       <a href="rules.html">Rules</a>
-      <a id="storeLink" target="_blank" rel="noopener">Store</a>
-      <a id="discordLink" target="_blank" rel="noopener">Discord</a>
+      <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+      <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
     </nav>
   </div>
 </header>
 
-<main class="container pad">
-  <h1 class="grad-text" style="margin:0">About the Server</h1>
-  <div class="shine-line" style="margin:10px 0 12px"></div>
-  <p>Enthusia SMP is a mostly-vanilla survival world with PvP, exploration, and a player-run item economy. Build, fight, trade, and make stories with friends.</p>
-
-  <div class="features" style="padding-top:12px">
-    <div class="grid-3">
-      <div class="card">
-        <h3>PvP Balance</h3>
-        <p>Zones that change how fights feel: <strong>no-cPvP areas</strong>, <strong>nerfed-mace zones</strong>, and <strong>vanilla zones</strong>. Pick your battles.</p>
-      </div>
-      <div class="card">
-        <h3>Base-Finding Protections</h3>
-        <p>We reduce easy “pie chart” base hunting so common blocks (signs, barrels, etc.) aren’t a dead giveaway.</p>
-      </div>
-      <div class="card">
-        <h3>Huge World Border</h3>
-        <p>Border is <strong>100k × 100k</strong> (that’s <strong>200k total</strong>). Plenty of space to build, roam, and disappear.</p>
-      </div>
-      <div class="card">
-        <h3>Player Shops</h3>
-        <p>Item-for-item trading. Claim a stall, set your trades, and run a market the way you like.</p>
-      </div>
-      <div class="card">
-        <h3>Guilds</h3>
-        <p>Start or join a guild with homes and ranks. Team up for events, protection, and shared projects.</p>
-      </div>
-      <div class="card">
-        <h3>Travel & Utility</h3>
-        <p><code>/tpa</code> for meeting up fast, plus simple tweaks that keep things fun without going modpack-crazy.</p>
-      </div>
-      <div class="card">
-        <h3>Events</h3>
-        <p>Jump into rotating events for glory and rewards. Expect variety and chaos—bring friends.</p>
-      </div>
+<main id="main-content" class="page-main">
+  <section class="page-section">
+    <div class="container section-intro">
+      <h1 class="grad-text">About the Server</h1>
+      <div class="shine-line" aria-hidden="true"></div>
+      <p class="page-lead">Enthusia SMP is a semi-anarchy survival server built around open wilderness gameplay, a protected Spawn and Market, and a player-run item economy.</p>
     </div>
-  </div>
+  </section>
 
-  <p style="margin-top:18px">Follow <strong>#changelogs</strong> in the Discord for updates, tweaks, and announcements.</p>
+  <section class="features page-section" aria-labelledby="about-highlights-title">
+    <div class="container">
+      <h2 id="about-highlights-title" class="sr-only">Server features</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Wilderness Rules</h3>
+          <p>PvP, raiding, stealing, griefing, and even spawn camping are allowed outside Spawn and Market.</p>
+        </div>
+        <div class="card">
+          <h3>Protected Areas</h3>
+          <p>Spawn and Market are the only protected zones. The rest of the world is fair game.</p>
+        </div>
+        <div class="card">
+          <h3>Duping &amp; Exploits</h3>
+          <p>TNT duping is allowed. Other dupes are banned, and bugs or exploits must be reported through a ticket immediately.</p>
+        </div>
+        <div class="card">
+          <h3>Player Market</h3>
+          <p>Each player gets one stall plus one restock chest or barrel. Unreal pricing to dodge the storage rules is not allowed.</p>
+        </div>
+        <div class="card">
+          <h3>Mods &amp; Fair Play</h3>
+          <p>Common performance tools are fine, but hacked clients, X-Ray, Freecam, Baritone, Easy Place, world maps, and unfair PvP indicators are banned.</p>
+        </div>
+        <div class="card">
+          <h3>Account Integrity</h3>
+          <p>No account sharing, no headless alts, no unapproved VPN use, and no helping cheaters, dupers, or ban evaders.</p>
+        </div>
+        <div class="card">
+          <h3>Tickets &amp; Staff</h3>
+          <p>Report bugs and handle disputes through tickets, not DMs. Follow staff instructions and do not falsify evidence.</p>
+        </div>
+      </div>
+      <p>Public chat must stay in English, and the rules can change over time. Continued play means acceptance of current and future rule updates.</p>
+    </div>
+  </section>
 </main>
 
 <footer class="site-footer">
@@ -78,14 +90,7 @@
   </div>
 </footer>
 
-<script src="assets/script.js?v=aurora1"></script>
-<script>
-  initSite(window.ENTHUSIA || {
-    serverIp: "Unavailable",
-    tebexUrl: "https://yourstore.tebex.io",
-    discordInvite: "https://discord.gg/5ccgDCmNSc",
-    discordServerId: "1410303324745371709"
-  });
-</script>
+<script src="assets/site-config.js?v=refactor1" defer></script>
+<script src="assets/script.js?v=refactor1" defer></script>
 </body>
 </html>

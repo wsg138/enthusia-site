@@ -1,44 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" id="top">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Enthusia SMP — Rules</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=aurora1">
-  <meta name="color-scheme" content="dark light"/>
-  <style>
-    /* Page-specific accents */
-    .page-hero{padding: clamp(20px,4vw,36px) 0 8px; border-bottom:1px solid var(--border)}
-    .page-hero h1{font-weight:900; margin:0 0 8px; line-height:1.15; font-size: clamp(1.5rem, 3vw, 2.2rem);}
-    .page-hero .subtle{ color: var(--muted); }
-    .badge{display:inline-block;font-size:.8rem;padding:2px 10px;border-radius:999px;background:var(--brand-grad);color:#111;margin-left:8px;font-weight:800}
-    .rules-wrap{display:grid;grid-template-columns:1fr;gap:18px;padding:16px 0 36px}
-    @media (min-width:980px){ .rules-wrap{grid-template-columns:280px 1fr;gap:22px} .toc-mobile{display:none} }
-    .card.toc .toc-title{font-weight:800;margin-bottom:8px;background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-    .toc ol{list-style:none;padding-left:0;margin:0;display:grid;gap:6px}
-    .toc a{text-decoration:none;color:var(--text);padding:6px 8px;border-radius:10px;font-weight:600;white-space:nowrap;font-size:.95rem}
-    .toc a[href="#bottom-line"]{background:var(--brand-grad);color:#111;font-weight:900;font-size:1.05rem;padding:10px 12px;border-radius:12px;box-shadow:0 6px 14px rgba(0,0,0,.25)}
-    .toc a[href="#bottom-line"]:hover{filter:brightness(1.05)}
-    .prose.card{padding:clamp(14px,2vw,26px)}
-    .prose section{border-left:3px solid transparent;border-image:linear-gradient(180deg,var(--brand-start),var(--brand-mid),var(--brand-end)) 1;padding-left:14px;border-radius:8px;background:linear-gradient(180deg, color-mix(in srgb, var(--brand-start) 5%, transparent) 0%, transparent 100%);margin-bottom:10px}
-    .prose h2{font-size:clamp(1.15rem,2.3vw,1.5rem);margin:8px 0 10px;line-height:1.25;font-weight:900}
-    .prose h2::after{content:"";display:block;height:3px;width:72px;border-radius:999px;background:var(--brand-grad);margin-top:6px;opacity:.9}
-    .prose h3{font-size:clamp(1rem,2vw,1.15rem);margin:12px 0 6px;font-weight:800}
-    .prose p{margin:8px 0 10px}
-    .prose ul{margin:8px 0 10px;padding-left:20px}
-    .prose li{margin:6px 0}
-    .prose hr{border:none;border-top:1px dashed var(--border);margin:14px 0;opacity:.75}
-    #bottom-line{margin-top:28px}
-    .back-top{margin-top:22px;text-align:right}
-    .back-top a{color:var(--text);text-decoration:none;padding:6px 8px;border-radius:8px;background:#1a2232;font-weight:600}
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enthusia SMP | Community Rules</title>
+  <meta name="description" content="Read the current Enthusia SMP rules covering conduct, account security, gameplay, market use, reputation, allowed mods, and ticket handling." />
+  <meta name="theme-color" content="#0b0e13" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css?v=refactor1" />
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 
-<!-- Background layers -->
 <div class="bg" aria-hidden="true">
   <div class="bg-grid"></div>
   <div class="blob b1"></div>
@@ -49,185 +25,136 @@
 <header class="site-header">
   <div class="container">
     <div class="brand">
-      <span class="logo">🛡️</span>
+      <img class="logo" src="assets/enthusia-logo.png" alt="" />
       <span class="name grad-text">Enthusia SMP</span>
     </div>
-    <nav class="nav">
+    <nav class="nav" aria-label="Primary navigation">
       <a href="index.html">Home</a>
-      <a href="plugins.html">About & Plugins</a>
-      <a href="rules.html" class="active">Rules</a>
-      <a id="storeLink" target="_blank" rel="noopener">Store</a>
-      <a id="discordLink" target="_blank" rel="noopener">Discord</a>
+      <a href="plugins.html">About</a>
+      <a href="rules.html" class="active" aria-current="page">Rules</a>
+      <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+      <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
     </nav>
   </div>
 </header>
 
-<main>
+<main id="main-content" class="page-main">
   <section class="page-hero">
     <div class="container">
-      <h1 class="grad-text">Community Content & Conduct Rules<span class="badge">v1.1</span></h1>
-      <p class="subtle">By playing on the server or participating in the Discord, you agree to follow all rules here as well as in the Discord.</p>
+      <h1 class="grad-text">Enthusia Rules</h1>
+      <p class="page-lead">By playing on the server or participating in the Discord, you agree to adhere to the following rules. Continued play means acceptance of current and future rule updates.</p>
     </div>
   </section>
 
-  <section class="container rules-wrap">
-    <aside class="card toc" aria-label="Table of contents">
-      <div class="toc-inner" style="position:sticky; top:80px">
-        <div class="toc-title">Jump to</div>
-        <ol>
-          <li><a href="#scope">0) Scope &amp; Definitions</a></li>
-          <li><a href="#speech">1) Speech &amp; Behavior</a></li>
-          <li><a href="#nsfw">2) Sexual Content &amp; NSFW</a></li>
-          <li><a href="#zero">3) Zero-Tolerance</a></li>
-          <li><a href="#extremism">4) Hate Symbols &amp; Extremism</a></li>
-          <li><a href="#names">5) Names &amp; Cosmetics</a></li>
-          <li><a href="#builds">6) Builds &amp; Visuals</a></li>
-          <li><a href="#media">7) Images, Links, Media</a></li>
-          <li><a href="#impersonation">8) Impersonation &amp; Ads</a></li>
-          <li><a href="#spam">9) Spam &amp; Disruption</a></li>
-          <li><a href="#privacy">10) Privacy &amp; Threats</a></li>
-          <li><a href="#enforcement">12) Enforcement &amp; Appeals</a></li>
-          <li><a href="#glossary">13) Quick Glossary</a></li>
-          <li><a href="#updates">14) Updates</a></li>
-          <li><a href="#bottom-line">🌟 Bottom Line</a></li>
+  <section class="container rules-layout">
+    <aside class="card rules-toc" aria-labelledby="toc-title">
+      <div class="toc-inner">
+        <h2 id="toc-title" class="rules-toc-title">Jump to</h2>
+        <ol class="toc-list">
+          <li><a href="#general-conduct">Section I: General Conduct</a></li>
+          <li><a href="#account-security">Section II: Account Security</a></li>
+          <li><a href="#gameplay">Section III: Gameplay &amp; Mechanics</a></li>
+          <li><a href="#market-rules">Section IV: Player Market</a></li>
+          <li><a href="#reputation">Section V: Reputation System</a></li>
+          <li><a href="#mods-clients">Section VI: Mods &amp; Clients</a></li>
+          <li><a href="#enforcement">Enforcement &amp; Tickets</a></li>
+          <li><a href="#bottom-line" class="toc-highlight">Bottom Line</a></li>
         </ol>
       </div>
     </aside>
 
-    <details class="card toc-mobile">
-      <summary>Jump to a section</summary>
-      <nav aria-label="Table of contents (mobile)">
-        <ol>
-          <li><a href="#scope">0) Scope &amp; Definitions</a></li>
-          <li><a href="#speech">1) Speech &amp; Behavior</a></li>
-          <li><a href="#nsfw">2) Sexual Content &amp; NSFW</a></li>
-          <li><a href="#zero">3) Zero-Tolerance</a></li>
-          <li><a href="#extremism">4) Hate Symbols &amp; Extremism</a></li>
-          <li><a href="#names">5) Names &amp; Cosmetics</a></li>
-          <li><a href="#builds">6) Builds &amp; Visuals</a></li>
-          <li><a href="#media">7) Images, Links, Media</a></li>
-          <li><a href="#impersonation">8) Impersonation &amp; Advertising</a></li>
-          <li><a href="#spam">9) Spam &amp; Disruption</a></li>
-          <li><a href="#privacy">10) Privacy, Doxxing &amp; Threats</a></li>
-          <li><a href="#enforcement">12) Enforcement &amp; Appeals</a></li>
-          <li><a href="#glossary">13) Quick Glossary</a></li>
-          <li><a href="#updates">14) Updates</a></li>
-          <li><a href="#bottom-line">🌟 Bottom Line</a></li>
-        </ol>
-      </nav>
-    </details>
-
-    <article class="prose card">
-      <section id="scope">
-        <h2>0) Scope &amp; Definitions</h2>
+    <article class="rules-prose card">
+      <section id="general-conduct">
+        <h2>Section I: General Conduct (Chat &amp; Voice)</h2>
         <ul>
-          <li><strong>Applies to:</strong> all public channels, VCs, names/skins, in-game chat/signs/books/item names, and all builds visible in-game.</li>
-          <li><strong>Off-platform conduct:</strong> if it targets our community (e.g., DMs about the server), we may act.</li>
-          <li><strong>Intent &amp; impact:</strong> both matter; “it was a joke” is not a shield if it harms others.</li>
+          <li><strong>1.1 Respect &amp; Toxicity:</strong> No hate speech, racism, sexism, general bigotry, or targeted harassment, including DMs. Swearing is allowed in moderation.</li>
+          <li><strong>1.2 Spamming:</strong> No excessive caps, flood, or in-game sound spam from things like note blocks or portals. No mic spam in voice chat.</li>
+          <li><strong>1.3 Staff Impersonation:</strong> Impersonating a staff member by nickname, skin, or false claims of authority is strictly prohibited.</li>
+          <li><strong>1.4 Advertising:</strong> No promoting other servers or unrelated media.</li>
+          <li><strong>1.5 Inappropriate Content:</strong> Skins, names, and builds must not contain nudity, hate symbols, offensive caricatures, slurs, sexual references, filter bypasses, sexual acts, or offensive text or imagery.</li>
+          <li><strong>1.6 IRL Topics &amp; Politics:</strong> Politics, controversial world events, and heavy personal issues are prohibited so the server can stay an escape from real-world stress.</li>
+          <li><strong>1.7 Language:</strong> Public chat must remain in English so staff can moderate it properly.</li>
+          <li><strong>1.8 Begging:</strong> Do not ask staff or other players for free ranks, items, creative mode, or permissions.</li>
         </ul>
-        <hr>
+        <hr />
       </section>
 
-      <section id="speech">
-        <h2>1) Speech &amp; Behavior</h2>
-        <h3 id="allowed">1.1 Allowed</h3>
-        <ul><li>Swearing is fine in moderation. Don’t target players with it.</li></ul>
-        <h3 id="not-allowed">1.2 Not Allowed</h3>
+      <section id="account-security">
+        <h2>Section II: Account Security &amp; Integrity</h2>
         <ul>
-          <li><strong>Hate speech</strong> or slurs.</li>
-          <li><strong>Sexual remarks</strong> aimed at a player.</li>
-          <li><strong>Threats or self-harm messages</strong>.</li>
-          <li><strong>Doxxing or privacy hits</strong>.</li>
+          <li><strong>2.1 VPN Policy:</strong> VPNs are prohibited unless approved by an Admin or higher with a vouch.</li>
+          <li><strong>2.2 Zero Tolerance:</strong> Grooming, doxxing, blackmail, threats, or illegal content result in an immediate permanent ban.</li>
+          <li><strong>2.3 Account Sharing:</strong> You are responsible for your account. No account sharing and no headless alts.</li>
+          <li><strong>2.4 Complicity:</strong> Knowingly helping a rule breaker, such as storing dupe items, riding with a hacker, or profiting from cheating, is bannable.</li>
+          <li><strong>2.5 Harboring Ban Evaders:</strong> Knowingly inviting, gearing, or housing a player who is evading a ban is prohibited.</li>
+          <li><strong>2.6 Rule Encouragement:</strong> Encouraging others to break rules, hack, or exploit bugs is punishable.</li>
+          <li><strong>2.7 Falsifying Evidence:</strong> Forging screenshots, videos, or chat logs to frame another player or mislead staff results in an immediate ban.</li>
+          <li><strong>2.8 Unsafe Downloads:</strong> Do not share downloads or documents from unknown or questionable sources, since they may contain dangerous software.</li>
+          <li><strong>2.9 Personal Safety:</strong> Be careful with what you share, especially anything tied to private accounts or identifying info. Content from presumed underage members that exposes personal details may be removed for safety.</li>
         </ul>
-        <hr>
+        <hr />
       </section>
 
-      <section id="nsfw">
-        <h2>2) Sexual Content &amp; NSFW</h2>
+      <section id="gameplay">
+        <h2>Section III: Gameplay &amp; Mechanics</h2>
         <ul>
-          <li>No sexual content anywhere. No porn/NSFW links, no sexual comments about players.</li>
+          <li><strong>3.1 PvP &amp; Killing:</strong> PvP is enabled everywhere except Spawn and Market. Spawn killing and camping players is allowed.</li>
+          <li><strong>3.2 Griefing:</strong> Griefing, stealing, and raiding are allowed in the wilderness. The only protected areas are Spawn and Market.</li>
+          <li><strong>3.3 Duping:</strong> TNT duping is allowed. All other dupes, including item and rail dupes, are banned.</li>
+          <li><strong>3.4 Farms &amp; Lag:</strong> No chunk loaders, including keeping chunks loaded while offline. Staff may remove unreasonably laggy farms.</li>
+          <li><strong>3.5 The End:</strong> Camping the End Portal frame is allowed. TNT duping or dropping falling blocks into the End Portal to trap or block entry is prohibited.</li>
+          <li><strong>3.6 Bug Abuse:</strong> Any discovered bug or exploit must be reported immediately through a ticket. Withholding or abusing bugs for personal or guild advantage can result in a ban and economy wipe.</li>
         </ul>
-        <hr>
+        <hr />
       </section>
 
-      <section id="zero">
-        <h2>3) Zero-Tolerance</h2>
-        <p>Sexual behavior toward minors, grooming, or similar → permanent ban; may be reported externally.</p>
-        <hr>
-      </section>
-
-      <section id="extremism">
-        <h2>4) Hate Symbols &amp; Extremism</h2>
-        <ul><li>No extremist symbols, propaganda, or praise for real-world violence in any form.</li></ul>
-        <hr>
-      </section>
-
-      <section id="names">
-        <h2>5) Names &amp; Cosmetics</h2>
+      <section id="market-rules">
+        <h2>Section IV: Player Market Rules</h2>
         <ul>
-          <li>Keep names/skins/capes/item names appropriate; no impersonation of staff/players.</li>
+          <li><strong>4.1 One Stall Limit:</strong> Players are limited to one market stall each. Using alts to buy extra stalls is prohibited.</li>
+          <li><strong>4.2 Restock Limit:</strong> You may keep one single chest or barrel only for restocking shop supplies. General personal storage in stalls is not allowed.</li>
+          <li><strong>4.3 Anti-Loophole Pricing:</strong> Listing items at absurd prices to use shop slots as safe storage is strictly banned.</li>
+          <li><strong>4.4 Aesthetics &amp; Obstructions:</strong> Keep your shop presentable. Do not leave shulker boxes placed on the floor after restocking.</li>
+          <li><strong>4.5 Market Violations:</strong> Repeated violations can lead to an immediate stall wipe and a stall ban until staff lifts it.</li>
         </ul>
-        <hr>
+        <hr />
       </section>
 
-      <section id="builds">
-        <h2>6) Builds &amp; Visuals</h2>
-        <ul><li>No NSFW/hate imagery in builds, map art, banners, or signs. Staff may remove/rollback.</li></ul>
-        <hr>
-      </section>
-
-      <section id="media">
-        <h2>7) Images, Links, Media</h2>
+      <section id="reputation">
+        <h2>Section V: Reputation System</h2>
         <ul>
-          <li>No NSFW/gore links; no illegal media.</li>
-          <li>Use spoiler tags for spoilers/loud clips; no ear-rape.</li>
+          <li><strong>5.1 False Rep:</strong> Reputation must reflect real trades or interactions. False positive or negative rep without a valid reason is prohibited.</li>
+          <li><strong>5.2 Manipulation &amp; Mass Rep:</strong> Organizing groups to mass rep or review-bomb a player is strictly banned.</li>
+          <li><strong>5.3 Penalties:</strong> Repeated abuse of the reputation system can permanently remove your reputation privileges.</li>
         </ul>
-        <hr>
+        <hr />
       </section>
 
-      <section id="impersonation">
-        <h2>8) Impersonation &amp; Advertising</h2>
+      <section id="mods-clients">
+        <h2>Section VI: Mods &amp; Clients</h2>
         <ul>
-          <li>No pretending to be staff/creators; no unsolicited advertising of other servers/Discords.</li>
+          <li><strong>6.1 Allowed:</strong> Performance mods like Sodium and Iris, Simple Voice Chat, Replay Mod, Litematica for holograms and schematics only, and Xaero’s Minimap Fair Play Edition.</li>
+          <li><strong>6.2 Prohibited:</strong> Hacked clients, X-Ray, ESP, Freecam, Baritone, auto-clickers, and Easy Place or Printer Mode at all times.</li>
+          <li><strong>6.3 Visual Unfair Advantages:</strong> Removing lava fog to locate Ancient Debris or other ores in lava lakes is prohibited.</li>
+          <li><strong>6.4 PvP Indicators:</strong> Mods or resource packs that show player health, damage indicators, hearts, or other players’ armor durability are prohibited.</li>
+          <li><strong>6.5 Map Restrictions:</strong> Minimap entity and cave displays are prohibited. All world map mods that save terrain chunks are strictly prohibited, including Xaero’s World Map, JourneyMap, VoxelMap, MapWriter, and Antique Atlas.</li>
         </ul>
-        <hr>
-      </section>
-
-      <section id="spam">
-        <h2>9) Spam &amp; Disruption</h2>
-        <ul>
-          <li>No spam/flooding/mass mentions; no sound/mic spam in VC.</li>
-        </ul>
-        <hr>
-      </section>
-
-      <section id="privacy">
-        <h2>10) Privacy &amp; Threats</h2>
-        <ul>
-          <li>No sharing personal info; no doxx/blackmail/threats.</li>
-        </ul>
-        <hr>
+        <hr />
       </section>
 
       <section id="enforcement">
-        <h2>12) Enforcement &amp; Appeals</h2>
+        <h2>Enforcement &amp; Tickets</h2>
         <ul>
-          <li>Actions depend on severity/context/history. Severe breaches can be immediate.</li>
-          <li>Appeal via ticket with timestamps/evidence. Don’t harass staff.</li>
+          <li><strong>Staff Protocol:</strong> Follow staff instructions immediately. Do not lie or provide fake evidence.</li>
+          <li><strong>Ticket System:</strong> All disputes go through tickets, not DMs or public chat.</li>
+          <li><strong>Punishments:</strong> Punishments range from warnings to permanent bans. Inventory rollbacks are granted only for major server-side issues with solid evidence.</li>
         </ul>
-        <hr>
-      </section>
-
-      <section id="glossary">
-        <h2>13) Quick Glossary</h2>
-        <p>For the shorter list of in-game rules, see the Discord.</p>
-        <p><a class="btn ghost" href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Open Discord</a></p>
-        <hr>
+        <hr />
       </section>
 
       <section id="bottom-line">
-        <h2><span class="grad-text">🌟 Bottom Line</span></h2>
-        <p>Respect others. Keep it fun. Don’t try to loophole harmful behavior. If your actions make the community worse, staff will step in.</p>
+        <h2><span class="grad-text">Bottom Line</span></h2>
+        <p>Trust and fairness keep the community alive.</p>
       </section>
 
       <p class="back-top"><a href="#top">Back to top ↑</a></p>
@@ -241,26 +168,7 @@
   </div>
 </footer>
 
-<script src="assets/script.js?v=aurora1"></script>
-<script>
-  initSite(window.ENTHUSIA || {
-    serverIp: "Unavailable",
-    tebexUrl: "https://yourstore.tebex.io",
-    discordInvite: "https://discord.gg/5ccgDCmNSc",
-    discordServerId: "1410303324745371709"
-  });
-
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener("click", e=>{
-      const id = a.getAttribute("href").slice(1);
-      const target = document.getElementById(id);
-      if (!target) return;
-      e.preventDefault();
-      const y = target.getBoundingClientRect().top + window.pageYOffset - 24;
-      window.scrollTo({ top: y, behavior: "smooth" });
-      history.replaceState(null, "", "#" + id);
-    });
-  });
-</script>
+<script src="assets/site-config.js?v=refactor1" defer></script>
+<script src="assets/script.js?v=refactor1" defer></script>
 </body>
 </html>

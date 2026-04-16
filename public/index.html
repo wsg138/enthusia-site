@@ -2,37 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Enthusia SMP — Home</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=aurora3">
-  <meta name="description" content="Enthusia SMP — Mostly-vanilla SMP with balanced PvP and a player-driven item economy.">
-  <style>
-    .status-badge {
-      display: inline-block;
-      padding: 6px 10px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: #fff;
-      border-radius: 999px;
-      box-shadow: 0 2px 6px rgba(10,10,10,0.08);
-      min-width: 82px;
-      text-align: center;
-    }
-    .status-badge.online {
-      background: linear-gradient(180deg,#34c77a 0%, #10a66a 100%);
-    }
-    .status-badge.offline {
-      background: linear-gradient(180deg,#f06b6b 0%, #e04343 100%);
-    }
-    .status-badge.unknown {
-      background: linear-gradient(180deg,#9aa0a6 0%, #7b8288 100%);
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enthusia SMP | Semi-Anarchy Survival Server</title>
+  <meta name="description" content="Enthusia SMP is a semi-anarchy survival server with protected Spawn and Market areas, open wilderness gameplay, and a player-driven item economy." />
+  <meta name="theme-color" content="#0b0e13" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css?v=refactor1" />
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 
 <div class="bg" aria-hidden="true">
   <div class="bg-grid"></div>
@@ -44,67 +24,70 @@
 <header class="site-header">
   <div class="container">
     <div class="brand">
-      <span class="logo">🛡️</span>
+      <img class="logo" src="assets/enthusia-logo.png" alt="" />
       <span class="name grad-text">Enthusia SMP</span>
     </div>
-    <nav class="nav">
-      <a href="index.html" class="active">Home</a>
-      <a href="plugins.html">About & Plugins</a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html" class="active" aria-current="page">Home</a>
+      <a href="plugins.html">About</a>
       <a href="rules.html">Rules</a>
-      <a id="storeLink" target="_blank" rel="noopener">Store</a>
-      <a id="discordLink" target="_blank" rel="noopener">Discord</a>
+      <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+      <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
     </nav>
   </div>
 </header>
 
-<main>
-  <section class="hero">
+<main id="main-content" class="page-main">
+  <section class="hero" aria-labelledby="hero-title">
     <div class="container hero-inner">
       <div class="hero-copy">
-        <h1>Welcome to <span class="grad-text">Enthusia SMP</span></h1>
-        <div class="shine-line"></div>
-        <p class="lead">Semi-Anarchy • Balanced PvP • Player-Driven Economy</p>
+        <h1 id="hero-title">Welcome to <span class="grad-text">Enthusia SMP</span></h1>
+        <div class="shine-line" aria-hidden="true"></div>
+        <p class="lead">Semi-Anarchy • PvP Outside Spawn &amp; Market • Player-Driven Economy</p>
         <div class="cta-row">
-          <button class="btn" id="copyIpBtn" data-ip="play.enthusia.info">Copy IP</button>
-          <a id="joinDiscordBtn" class="btn ghost" target="_blank" rel="noopener">Join Discord</a>
-          <a id="openStoreBtn" class="btn ghost" target="_blank" rel="noopener">Open Store</a>
+          <button class="btn" id="copyIpBtn" type="button" data-label="Copy IP">Copy IP</button>
+          <a class="btn ghost" href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Join Discord</a>
+          <a class="btn ghost" href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Open Store</a>
         </div>
 
-        <div class="status">
+        <div class="status" aria-label="Server status">
           <div class="status-card">
             <div class="status-label">Server</div>
             <div class="status-value" id="serverIp">play.enthusia.info</div>
           </div>
           <div class="status-card">
             <div class="status-label">Players Online</div>
-            <div class="status-value" id="playerCount">—</div>
+            <div class="status-value" id="playerCount" aria-live="polite">—</div>
           </div>
           <div class="status-card">
             <div class="status-label">Status</div>
-            <div class="status-badge unknown" id="serverStatus">TBA</div>
+            <div class="status-badge unknown" id="serverStatus" role="status" aria-live="polite">TBA</div>
           </div>
         </div>
       </div>
 
-      <div class="hero-embed">
+      <aside class="hero-embed" aria-label="Discord server overview">
         <div id="discordCard"></div>
-      </div>
+      </aside>
     </div>
   </section>
 
-  <section class="features">
-    <div class="container grid-3">
-      <div class="card">
-        <h3>Protected Spawn & Market</h3>
-        <p>Safe zones for trading, building, and meeting.</p>
-      </div>
-      <div class="card">
-        <h3>Item-for-Item Economy</h3>
-        <p>No virtual money. Trade with real in-game items.</p>
-      </div>
-      <div class="card">
-        <h3>Balanced PvP</h3>
-        <p>Crystal-free zones and nerfed mace zones for fair, skill-based gameplay.</p>
+  <section class="features" aria-labelledby="features-title">
+    <div class="container">
+      <h2 id="features-title" class="sr-only">Server highlights</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Protected Spawn &amp; Market</h3>
+          <p>Spawn and Market are the only protected areas. Everywhere else is wilderness.</p>
+        </div>
+        <div class="card">
+          <h3>Player-Run Market</h3>
+          <p>Run one stall, trade item-for-item, and keep pricing honest instead of using shops as storage.</p>
+        </div>
+        <div class="card">
+          <h3>Open Wilderness Gameplay</h3>
+          <p>PvP, raiding, griefing, and spawn camping are allowed outside the protected safe zones.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -116,53 +99,7 @@
   </div>
 </footer>
 
-<script src="assets/script.js?v=aurora3"></script>
-<script>
-  window.ENTHUSIA = {
-    serverIp: "play.enthusia.info",
-    tebexUrl: "https://enthusia-shop.tebex.io/",
-    discordInvite: "https://discord.gg/5ccgDCmNSc",
-    discordServerId: "1410303324745371709"
-  };
-
-  (function updateServerStatus() {
-    const ip = window.ENTHUSIA.serverIp || "Unavailable";
-    const ipEl = document.getElementById('serverIp');
-    if (ipEl) ipEl.textContent = ip;
-    const copyBtn = document.getElementById('copyIpBtn');
-    if (copyBtn) copyBtn.dataset.ip = ip;
-    const playersEl = document.getElementById('playerCount');
-    const statusEl = document.getElementById('serverStatus');
-    function setStatus(text, cls) {
-      if (!statusEl) return;
-      statusEl.textContent = text;
-      statusEl.classList.remove('online','offline','unknown');
-      statusEl.classList.add(cls);
-    }
-    if (!ip || ip === "Unavailable") {
-      if (playersEl) playersEl.textContent = "—";
-      setStatus('TBA', 'unknown');
-      return;
-    }
-    const apiUrl = 'https://api.mcsrvstat.us/2/' + encodeURIComponent(ip);
-    fetch(apiUrl)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.online) {
-          if (playersEl) playersEl.textContent = (data.players && typeof data.players.online === 'number') ? data.players.online : '—';
-          setStatus('Online', 'online');
-        } else {
-          if (playersEl) playersEl.textContent = '—';
-          setStatus('Offline', 'offline');
-        }
-      })
-      .catch(err => {
-        setStatus('TBA', 'unknown');
-        if (playersEl) playersEl.textContent = '—';
-      });
-  })();
-
-  initSite(window.ENTHUSIA);
-</script>
+<script src="assets/site-config.js?v=refactor1" defer></script>
+<script src="assets/script.js?v=refactor1" defer></script>
 </body>
 </html>
