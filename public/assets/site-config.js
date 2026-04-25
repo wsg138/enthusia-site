@@ -106,8 +106,8 @@ window.ENTHUSIA = Object.freeze({
       Object.freeze({
         src: "assets/screenshots/slide-17.webp",
         thumb: "assets/screenshots/slide-17-thumb.webp",
-        alt: "Screenshot showing the ScarEye Guild base in the Open Beta.",
-        label: "ScarEye Guild base in Open Beta",
+        alt: "Screenshot showing Aster Centre from the Open Beta.",
+        label: "Aster Centre from the Open Beta",
       }),
       Object.freeze({
         src: "assets/screenshots/slide-18.webp",
