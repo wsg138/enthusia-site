@@ -340,8 +340,8 @@ summary:focus-visible{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:12px;
-  padding:10px 14px;
+  gap:8px;
+  padding:7px 10px;
   border-radius:14px;
   background:rgba(10,14,20,.78);
   border:1px solid rgba(255,255,255,.08);
@@ -351,6 +351,7 @@ summary:focus-visible{
 .slideshow-label,
 .slideshow-count{
   font-weight:700;
+  font-size:.82rem;
 }
 
 .slideshow-controls{
@@ -379,9 +380,9 @@ summary:focus-visible{
 
 .slideshow-thumbs{
   display:grid;
-  grid-template-columns:repeat(6, minmax(120px, 150px));
+  grid-template-columns:repeat(6, minmax(72px, 1fr));
   grid-template-rows:repeat(2, auto);
-  gap:8px;
+  gap:6px;
   justify-content:start;
   width:100%;
   max-width:100%;
@@ -390,9 +391,9 @@ summary:focus-visible{
 
 .slideshow-thumb{
   display:grid;
-  gap:5px;
-  padding:5px;
-  border-radius:12px;
+  gap:2px;
+  padding:4px;
+  border-radius:10px;
   background:#161d2a;
   border:1px solid var(--border);
   color:var(--text);
@@ -416,20 +417,18 @@ summary:focus-visible{
 
 .slideshow-thumb img{
   width:100%;
-  aspect-ratio:16 / 8;
+  aspect-ratio:16 / 9;
   object-fit:cover;
-  border-radius:7px;
+  border-radius:6px;
   background:#0f141d;
 }
 
 .slideshow-thumb-label{
-  font-size:.78rem;
-  font-weight:700;
+  display:none;
 }
 
 .staff-shell{
   overflow:hidden;
-  mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   min-height:110px;
 }
 
@@ -443,7 +442,7 @@ summary:focus-visible{
 .staff-track{
   display:flex;
   width:max-content;
-  gap:18px;
+  gap:14px;
   animation:staff-scroll 46s linear infinite;
 }
 
@@ -455,7 +454,7 @@ summary:focus-visible{
 
 .staff-group{
   display:flex;
-  gap:18px;
+  gap:14px;
 }
 
 .staff-card{
@@ -774,7 +773,7 @@ summary:focus-visible{
   }
   .slideshow-thumbs{
     grid-column:1 / -1;
-    grid-template-columns:repeat(4, minmax(90px, 1fr));
+    grid-template-columns:repeat(6, minmax(56px, 1fr));
   }
   .footer-inner{justify-content:center;text-align:center}
 }
@@ -793,14 +792,14 @@ summary:focus-visible{
     padding:10px 12px;
     flex-direction:column;
     align-items:flex-start;
-  }
-  .slideshow-controls{
-    grid-template-columns:1fr 1fr;
-  }
-  .slideshow-thumbs{grid-template-columns:repeat(2, minmax(100px, 1fr))}
-  .staff-card{
-    min-width:170px;
-    gap:10px;
+    }
+    .slideshow-controls{
+      grid-template-columns:1fr 1fr;
+    }
+    .slideshow-thumbs{grid-template-columns:repeat(4, minmax(56px, 1fr))}
+    .staff-card{
+      min-width:170px;
+      gap:10px;
     padding:12px;
     align-items:center;
   }
@@ -814,6 +813,7 @@ summary:focus-visible{
 }
 
 @media (max-width:420px){
+  .slideshow-thumbs{grid-template-columns:repeat(3, minmax(56px, 1fr))}
   .staff-card{
     min-width:156px;
     padding:10px;
@@ -842,7 +842,6 @@ summary:focus-visible{
   }
   .staff-shell{
     overflow-x:auto;
-    mask-image:none;
   }
   .staff-track{
     animation:none;
