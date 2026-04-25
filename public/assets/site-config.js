@@ -112,26 +112,26 @@ window.ENTHUSIA = Object.freeze({
       Object.freeze({
         src: "assets/screenshots/slide-18.webp",
         thumb: "assets/screenshots/slide-18-thumb.webp",
-        alt: "Screenshot showing the ScarEye Guild base in the Open Beta from another angle.",
-        label: "ScarEye Guild base overview",
+        alt: "Screenshot showing the ScarEye Guild base in the Open Beta.",
+        label: "ScarEye Guild base",
       }),
       Object.freeze({
         src: "assets/screenshots/slide-19.webp",
         thumb: "assets/screenshots/slide-19-thumb.webp",
         alt: "Screenshot showing the ScarEye Guild base in the Open Beta.",
-        label: "ScarEye Guild base interior",
+        label: "ScarEye Guild base",
       }),
       Object.freeze({
         src: "assets/screenshots/slide-20.webp",
         thumb: "assets/screenshots/slide-20-thumb.webp",
         alt: "Screenshot showing the ScarEye Guild base in the Open Beta.",
-        label: "ScarEye Guild base defenses",
+        label: "ScarEye Guild base",
       }),
       Object.freeze({
         src: "assets/screenshots/slide-21.webp",
         thumb: "assets/screenshots/slide-21-thumb.webp",
         alt: "Screenshot showing the ScarEye Guild base in the Open Beta.",
-        label: "ScarEye Guild base details",
+        label: "ScarEye Guild base",
       }),
       Object.freeze({
         src: "assets/screenshots/slide-22.webp",
