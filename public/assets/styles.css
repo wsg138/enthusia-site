@@ -383,11 +383,13 @@ summary:focus-visible{
   display:grid;
   grid-template-columns:repeat(6, minmax(72px, 1fr));
   grid-template-rows:repeat(2, auto);
+  align-content:start;
   gap:6px;
   justify-content:start;
   width:100%;
   max-width:100%;
   margin:0;
+  min-height:132px;
 }
 
 .slideshow-thumb{
@@ -770,6 +772,7 @@ summary:focus-visible{
       grid-area:thumbs;
       grid-template-columns:repeat(6, minmax(48px, 1fr));
       gap:5px;
+      min-height:95px;
     }
     .footer-inner{justify-content:center;text-align:center}
   }
@@ -813,6 +816,7 @@ summary:focus-visible{
       grid-area:thumbs;
       grid-template-columns:repeat(4, minmax(44px, 1fr));
       gap:4px;
+      min-height:116px;
     }
     .slideshow-thumb{
       padding:3px;
@@ -853,6 +857,7 @@ summary:focus-visible{
       font-size:1rem;
     }
     .slideshow-thumbs{grid-template-columns:repeat(3, minmax(42px, 1fr))}
+    .slideshow-thumbs{min-height:158px}
     .staff-card{
       min-width:156px;
       padding:10px;
