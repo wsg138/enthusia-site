@@ -6,10 +6,11 @@
   <title>Enthusia SMP | Semi-Anarchy Survival Server</title>
   <meta name="description" content="Enthusia SMP is a semi-anarchy survival server with protected Spawn and Market areas, open wilderness gameplay, and a player-driven item economy." />
   <meta name="theme-color" content="#0b0e13" />
+  <meta name="color-scheme" content="dark light" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/styles.css?v=refactor4" />
+  <link rel="stylesheet" href="assets/styles.css?v=refactor7" />
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -24,7 +25,7 @@
 <header class="site-header">
   <div class="container">
     <div class="brand">
-      <img class="brand-logo" src="assets/enthusia-logo.png" alt="" width="44" height="44" />
+      <img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="44" height="44" />
       <span class="name grad-text">Enthusia SMP</span>
     </div>
     <nav class="nav" aria-label="Primary navigation">
@@ -43,7 +44,7 @@
       <div class="hero-copy">
         <h1 id="hero-title">Welcome to <span class="grad-text">Enthusia SMP</span></h1>
         <div class="shine-line" aria-hidden="true"></div>
-        <p class="lead">Semi-Anarchy • PvP Outside Spawn &amp; Market • Player-Driven Economy</p>
+        <p class="lead">Semi-anarchy survival, open-world raiding outside protected areas, and a player-driven economy.</p>
         <div class="cta-row">
           <button class="btn" id="copyIpBtn" type="button" data-label="Copy IP">Copy IP</button>
           <a class="btn ghost" href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Join Discord</a>
@@ -57,7 +58,7 @@
           </div>
           <div class="status-card">
             <div class="status-label">Players Online</div>
-            <div class="status-value" id="playerCount" aria-live="polite">—</div>
+            <div class="status-value" id="playerCount" aria-live="polite">--</div>
           </div>
           <div class="status-card">
             <div class="status-label">Status</div>
@@ -77,7 +78,7 @@
       <h2 id="features-title" class="sr-only">Server highlights</h2>
       <div class="grid-3">
         <div class="card">
-          <h3>Protected Spawn &amp; Market</h3>
+          <h3>Protected Spawn and Market</h3>
           <p>Spawn and Market are the only protected areas. Everywhere else is wilderness.</p>
         </div>
         <div class="card">
@@ -91,15 +92,48 @@
       </div>
     </div>
   </section>
+
+  <section class="home-extra page-section" aria-labelledby="screenshots-title">
+    <div class="container stack-lg">
+      <div class="section-heading">
+        <h2 id="screenshots-title" class="grad-text">Screenshots</h2>
+      </div>
+      <div id="screenshotSlideshow" class="slideshow-shell card"></div>
+    </div>
+  </section>
+
+  <section class="home-extra page-section" aria-labelledby="staff-title">
+    <div class="container stack-lg">
+      <div class="section-heading">
+        <h2 id="staff-title" class="grad-text">Staff Team</h2>
+      </div>
+      <div class="staff-shell card" aria-label="Current staff members">
+        <div id="staffTrack" class="staff-track"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-extra page-section" aria-labelledby="faq-title">
+    <div class="container faq-shell">
+      <div class="section-heading">
+        <h2 id="faq-title" class="grad-text">FAQ</h2>
+      </div>
+      <div id="wikiNote" class="wiki-note card"></div>
+      <div id="faqList" class="faq-list" aria-label="Frequently asked questions"></div>
+    </div>
+  </section>
 </main>
 
 <footer class="site-footer">
   <div class="container">
-    <p>© <span id="year"></span> Enthusia SMP</p>
+    <div class="footer-inner">
+      <p class="footer-copy">&copy; <span id="year"></span> Enthusia SMP</p>
+      <p class="footer-contact">Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p>
+    </div>
   </div>
 </footer>
 
-<script src="assets/site-config.js?v=refactor4" defer></script>
-<script src="assets/script.js?v=refactor4" defer></script>
+<script src="assets/site-config.js?v=refactor7" defer></script>
+<script src="assets/script.js?v=refactor7" defer></script>
 </body>
 </html>
