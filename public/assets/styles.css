@@ -443,13 +443,7 @@ summary:focus-visible{
   display:flex;
   width:max-content;
   gap:14px;
-  animation:staff-scroll 46s linear infinite;
-}
-
-@media (hover:hover) and (pointer:fine){
-  .staff-shell:hover .staff-track{
-    animation-play-state:paused;
-  }
+  will-change:transform;
 }
 
 .staff-group{
@@ -616,11 +610,6 @@ summary:focus-visible{
 .footer-contact{
   margin:0;
   color:var(--muted);
-}
-
-@keyframes staff-scroll{
-  from{transform:translateX(0)}
-  to{transform:translateX(calc(-50% - 9px))}
 }
 
 .page-hero{padding:clamp(20px,4vw,36px) 0 8px;border-bottom:1px solid var(--border)}
@@ -842,8 +831,5 @@ summary:focus-visible{
   }
   .staff-shell{
     overflow-x:auto;
-  }
-  .staff-track{
-    animation:none;
   }
 }

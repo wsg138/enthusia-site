@@ -1,6 +1,9 @@
 const STATUS_REFRESH_INTERVAL_MS = 60000;
 const SCREENSHOT_AUTOPLAY_MS = 1500;
 const SCREENSHOT_MANUAL_PAUSE_MS = 5000;
+const STAFF_SCROLL_SPEED_PX_PER_SECOND = 28;
+
+let stopStaffCarouselMotion = null;
 
 function normalizeText(value) {
   return typeof value === "string" ? value.trim() : "";
@@ -386,6 +389,74 @@ function createStaffCard(member, hidden = false) {
   return article;
 }
 
+function initStaffCarouselMotion(shell, track) {
+  stopStaffCarouselMotion?.();
+
+  const primaryGroup = track.querySelector(".staff-group");
+  if (!shell || !track || !primaryGroup) {
+    return;
+  }
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReducedMotion) {
+    track.style.transform = "translate3d(0, 0, 0)";
+    stopStaffCarouselMotion = null;
+    return;
+  }
+
+  const trackGap = Number.parseFloat(window.getComputedStyle(track).gap || "0") || 0;
+  let offset = 0;
+  let paused = false;
+  let lastTimestamp = 0;
+  let animationFrameId = 0;
+
+  const resetDistance = () => primaryGroup.getBoundingClientRect().width + trackGap;
+
+  const step = (timestamp) => {
+    if (!lastTimestamp) {
+      lastTimestamp = timestamp;
+    }
+
+    const deltaSeconds = (timestamp - lastTimestamp) / 1000;
+    lastTimestamp = timestamp;
+
+    if (!paused) {
+      offset -= STAFF_SCROLL_SPEED_PX_PER_SECOND * deltaSeconds;
+      const distance = resetDistance();
+      if (distance > 0 && Math.abs(offset) >= distance) {
+        offset += distance;
+      }
+      track.style.transform = `translate3d(${offset}px, 0, 0)`;
+    }
+
+    animationFrameId = window.requestAnimationFrame(step);
+  };
+
+  const canHover = window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+  const onMouseEnter = () => {
+    paused = true;
+  };
+  const onMouseLeave = () => {
+    paused = false;
+  };
+
+  if (canHover) {
+    shell.addEventListener("mouseenter", onMouseEnter);
+    shell.addEventListener("mouseleave", onMouseLeave);
+  }
+
+  animationFrameId = window.requestAnimationFrame(step);
+
+  stopStaffCarouselMotion = () => {
+    window.cancelAnimationFrame(animationFrameId);
+    if (canHover) {
+      shell.removeEventListener("mouseenter", onMouseEnter);
+      shell.removeEventListener("mouseleave", onMouseLeave);
+    }
+    track.style.transform = "translate3d(0, 0, 0)";
+  };
+}
+
 function renderStaffCarousel(staff) {
   const shell = document.querySelector(".staff-shell");
   const track = document.getElementById("staffTrack");
@@ -416,6 +487,7 @@ function renderStaffCarousel(staff) {
 
   track.append(primaryGroup, duplicateGroup);
   shell?.classList.add("is-ready");
+  initStaffCarouselMotion(shell, track);
 }
 
 function renderWikiCallout(cfg) {
