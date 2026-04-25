@@ -447,8 +447,10 @@ summary:focus-visible{
   animation:staff-scroll 46s linear infinite;
 }
 
-.staff-shell:hover .staff-track{
-  animation-play-state:paused;
+@media (hover:hover) and (pointer:fine){
+  .staff-shell:hover .staff-track{
+    animation-play-state:paused;
+  }
 }
 
 .staff-group{
@@ -797,13 +799,36 @@ summary:focus-visible{
   }
   .slideshow-thumbs{grid-template-columns:repeat(2, minmax(100px, 1fr))}
   .staff-card{
-    min-width:190px;
-    align-items:flex-start;
+    min-width:170px;
+    gap:10px;
+    padding:12px;
+    align-items:center;
   }
   .staff-avatar{
-    width:60px;
-    height:60px;
+    width:54px;
+    height:54px;
   }
+  .staff-visual{min-width:54px}
+  .staff-name{font-size:.95rem}
+  .staff-role{font-size:.76rem;padding:4px 8px}
+}
+
+@media (max-width:420px){
+  .staff-card{
+    min-width:156px;
+    padding:10px;
+    gap:8px;
+  }
+  .staff-track,
+  .staff-group{gap:12px}
+  .staff-avatar{
+    width:48px;
+    height:48px;
+    border-radius:12px;
+  }
+  .staff-visual{min-width:48px}
+  .staff-name{font-size:.9rem}
+  .staff-role{font-size:.72rem}
 }
 
 @media (prefers-reduced-motion:reduce){

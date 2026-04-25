@@ -518,7 +518,7 @@ function renderScreenshotSlideshow(slides) {
     button.setAttribute("aria-controls", "screenshot-slide-frame");
 
     const thumb = document.createElement("img");
-    thumb.src = slide.src;
+    thumb.src = normalizeText(slide.thumb) || slide.src;
     thumb.alt = "";
     thumb.loading = "lazy";
     thumb.decoding = "async";

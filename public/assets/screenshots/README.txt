@@ -2,17 +2,20 @@ Home page screenshots are controlled by:
 `public/assets/site-config.js`
 
 To add or change screenshots later:
-1. Put your image file in this folder.
+1. Put your original image file in this folder.
 2. Open `public/assets/site-config.js`.
-3. Edit the `home.screenshots` list.
+3. Create an optimized main image and thumbnail version if you want the best load speed.
+4. Edit the `home.screenshots` list.
 4. For each image, set:
-   - `src`: file path, for example `assets/screenshots/spawn-01.png`
+   - `src`: main slideshow image, for example `assets/screenshots/spawn-01.webp`
+   - `thumb`: thumbnail image, for example `assets/screenshots/spawn-01-thumb.webp`
    - `alt`: short description of the image
    - `label`: short caption shown in the slideshow
 
 Example:
 {
-  src: "assets/screenshots/spawn-01.png",
+  src: "assets/screenshots/spawn-01.webp",
+  thumb: "assets/screenshots/spawn-01-thumb.webp",
   alt: "Screenshot of the server spawn.",
   label: "Spawn"
 }
