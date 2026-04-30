@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enthusia SMP | Vanilla-Based Semi-Anarchy Survival</title>
+  <meta name="description" content="Enthusia SMP is a vanilla-based semi-anarchy survival server built for PvP, trading, guilds, events, duels, building, farming, and community feedback." />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="theme-color" content="#100d0a" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css?v=vision26" />
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<div class="bg" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="bg-vignette"></div>
+  <div class="bg-heat"></div>
+</div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Enthusia SMP home">
+      <img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="46" height="46" />
+      <span class="brand-name">Enthusia SMP</span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html" class="active" aria-current="page">Home</a>
+      <a href="plugins.html">About</a>
+      <a href="rules.html">Rules</a>
+      <div class="nav-dropdown">
+        <button class="nav-drop-trigger" type="button">Community</button>
+        <div class="nav-menu" aria-label="Community links">
+          <a href="leaderboards.html">Leaderboards</a>
+          <a href="staff.html">Staff</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="vote.html">Vote</a>
+          <a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+        </div>
+      </div>
+      <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+      <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">Vanilla-based semi-anarchy survival</p>
+        <h1 id="hero-title">Enthusia SMP</h1>
+        <p class="lead">A survival server for players who like risk, trade, PvP, long-term bases, and a world that keeps its history.</p>
+        <div class="cta-row">
+          <button class="btn" id="copyIpBtn" type="button" data-label="Copy IP">Copy IP</button>
+          <a class="btn ghost" href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Join Discord</a>
+          <a class="btn quiet" href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+        </div>
+
+        <div class="status live-status" aria-label="Server status">
+          <div class="status-card status-card-wide live-ip-card">
+            <div class="status-topline">
+              <div class="status-label">Java &amp; Bedrock</div>
+              <button class="mini-copy" id="copyIpMiniBtn" type="button" aria-label="Copy server IP">Copy</button>
+            </div>
+            <div class="status-value status-ip" id="serverIp">enthusia.info</div>
+            <div class="status-note">Bedrock port 19132</div>
+          </div>
+          <div class="status-card live-count-card">
+            <div class="status-label">Players Online</div>
+            <div class="status-value" id="playerCount" aria-live="polite">--</div>
+            <div class="status-note" id="serverCapacity">Checking live status</div>
+          </div>
+          <div class="status-card live-state-card">
+            <div class="status-topline">
+              <div class="status-label">Status</div>
+              <span class="live-dot" aria-hidden="true"></span>
+            </div>
+            <div class="status-badge unknown" id="serverStatus" role="status" aria-live="polite">Checking</div>
+          </div>
+          <div class="status-card version-card">
+            <div class="status-label">Version</div>
+            <div class="status-value">1.21.11</div>
+            <div class="status-note">1.8+ can join</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-panel" aria-label="Server quick facts">
+        <img class="hero-logo" src="assets/enthusia-logo-v2.png" alt="" width="360" height="360" />
+        <div class="fact-strip">
+          <span>1.21.11 main version</span>
+          <span>1.8+ can join</span>
+          <span>No world reset</span>
+        </div>
+        <div id="discordCard"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-section live-layer-section" aria-label="Server layers">
+    <div class="container">
+      <div class="live-layer-grid">
+        <article class="live-layer-card">
+          <div><strong>Spawn</strong><p>Protected entry point</p></div>
+        </article>
+        <article class="live-layer-card">
+          <div><strong>Market</strong><p>Safe player trade</p></div>
+        </article>
+        <article class="live-layer-card">
+          <div><strong>Warzone</strong><p>PvP area</p></div>
+        </article>
+        <article class="live-layer-card">
+          <div><strong>Wilderness</strong><p>Open survival</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section compact" aria-labelledby="identity-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">The shape of the server</p>
+          <h2 id="identity-title">Survival</h2>
+        </div>
+      </div>
+      <div class="feature-grid">
+        <article class="card feature-card">
+          <span class="card-kicker">Wilderness</span>
+          <h3>Wilderness</h3>
+          <p>Build where you want, hide what matters, and expect other players to go looking.</p>
+        </article>
+        <article class="card feature-card">
+          <span class="card-kicker">Market</span>
+          <h3>Market</h3>
+          <p>Trade with other players, rent a stall, and turn raw gold into something useful.</p>
+        </article>
+        <article class="card feature-card">
+          <span class="card-kicker">PvP</span>
+          <h3>Warzone</h3>
+          <p>Fight in a dedicated PvP area, or take your chances in the wider world.</p>
+        </article>
+        <article class="card feature-card">
+          <span class="card-kicker">Guilds</span>
+          <h3>Guilds</h3>
+          <p>Team up, build a reputation, compete for KOTH, and make your group known.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section band" aria-labelledby="systems-title">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Always something moving</p>
+        <h2 id="systems-title">Server Rhythm</h2>
+      </div>
+      <div class="timeline-grid">
+        <article class="timeline-item">
+          <span class="timeline-time">Every 8 hours</span>
+          <h3>KOTH</h3>
+          <p>Solo players and guilds fight over rotating capture points with public stats.</p>
+        </article>
+        <article class="timeline-item">
+          <span class="timeline-time">Hourly</span>
+          <h3>Events</h3>
+          <p>Events give players a break from survival without messing with their SMP gear.</p>
+        </article>
+        <article class="timeline-item">
+          <span class="timeline-time">Casual</span>
+          <h3>Duels</h3>
+          <p>Challenge another player, agree on the settings, and settle it in front of everyone.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" aria-labelledby="community-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Community</p>
+          <h2 id="community-title">Community</h2>
+        </div>
+      </div>
+      <div class="community-grid">
+        <a class="card link-card raised-card" href="leaderboards.html">
+          <span>Leaderboards</span>
+          <strong>Player heads, rankings, and server stats.</strong>
+        </a>
+        <a class="card link-card raised-card" href="vote.html">
+          <span>Vote</span>
+          <strong>Reserved for vote sites once voting is active.</strong>
+        </a>
+        <a class="card link-card raised-card" href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">
+          <span>Wiki</span>
+          <strong>Mechanics, guides, and deeper server info.</strong>
+        </a>
+        <a class="card link-card raised-card" href="#staff-title">
+          <span>Staff</span>
+          <strong>Meet the staff team.</strong>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" aria-labelledby="screenshots-title">
+    <div class="container stack-lg">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Gallery</p>
+          <h2 id="screenshots-title">Gallery</h2>
+        </div>
+      </div>
+      <div id="screenshotSlideshow" class="slideshow-shell card"></div>
+    </div>
+  </section>
+
+  <section class="page-section compact" aria-labelledby="staff-title">
+    <div class="container stack-lg">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Staff</p>
+          <h2 id="staff-title">Staff</h2>
+        </div>
+      </div>
+      <div class="staff-shell" aria-label="Current staff members">
+        <div id="staffTrack" class="staff-track"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" aria-labelledby="faq-title">
+    <div class="container faq-shell">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-title">FAQ</h2>
+        </div>
+      </div>
+      <div id="wikiNote" class="wiki-note card"></div>
+      <div id="faqList" class="faq-list" aria-label="Frequently asked questions"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>&copy; <span id="year"></span> Enthusia SMP</p>
+    <p>Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p>
+  </div>
+</footer>
+
+<script src="assets/site-config.js?v=vision26" defer></script>
+<script src="assets/script.js?v=vision26" defer></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
