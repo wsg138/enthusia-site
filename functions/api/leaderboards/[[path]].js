@@ -6,10 +6,9 @@ const BOARD_CONFIG = Object.freeze({
     source: "playtime-r2",
     key: `${PLAYTIME_PREFIX}/playtime-active-all.json`,
   }),
-  balance: Object.freeze({
-    source: "upstream",
-    upstreamPath: "/api/leaderboards/balance",
-    limit: 3,
+  "balance-active-all": Object.freeze({
+    source: "balance-r2",
+    key: `${PLAYTIME_PREFIX}/balance-active-all.json`,
   }),
   guilds: Object.freeze({
     source: "protected-upstream",
@@ -47,13 +46,13 @@ function getPlaytimeKey(path) {
   return `${PLAYTIME_PREFIX}/${file}`;
 }
 
-async function readPlaytimeR2Object(env, key) {
-  const bucket = env.PLAYTIME_LEADERBOARDS;
+async function readR2LeaderboardObject(env, bindingName, key, cacheSeconds) {
+  const bucket = env[bindingName];
   if (!bucket || typeof bucket.get !== "function") {
     return json({
       ok: false,
-      error: "Playtime leaderboard R2 binding is not configured.",
-      binding: "PLAYTIME_LEADERBOARDS",
+      error: "Leaderboard R2 binding is not configured.",
+      binding: bindingName,
     }, 500);
   }
 
@@ -69,7 +68,7 @@ async function readPlaytimeR2Object(env, key) {
   return new Response(object.body, {
     headers: {
       "content-type": object.httpMetadata?.contentType || "application/json; charset=utf-8",
-      "cache-control": "public, max-age=60",
+      "cache-control": `public, max-age=${cacheSeconds}`,
       "access-control-allow-origin": "*",
     },
   });
@@ -152,7 +151,7 @@ export async function onRequestGet(context) {
   const board = normalizeBoardPath(path);
 
   if (!board) {
-    return readPlaytimeR2Object(context.env, getPlaytimeKey(""));
+    return readR2LeaderboardObject(context.env, "PLAYTIME_LEADERBOARDS", getPlaytimeKey(""), 60);
   }
 
   const config = BOARD_CONFIG[board];
@@ -161,7 +160,11 @@ export async function onRequestGet(context) {
   }
 
   if (config.source === "playtime-r2") {
-    return readPlaytimeR2Object(context.env, config.key);
+    return readR2LeaderboardObject(context.env, "PLAYTIME_LEADERBOARDS", config.key, 60);
+  }
+
+  if (config.source === "balance-r2") {
+    return readR2LeaderboardObject(context.env, "BALANCE_LEADERBOARDS", config.key, 30);
   }
 
   if (config.source === "upstream") {
