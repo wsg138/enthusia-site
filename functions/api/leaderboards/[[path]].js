@@ -29,7 +29,7 @@ function json(data, status = 200) {
 }
 
 function getRequestedPath(params) {
-  const rawPath = params?.path;
+  const rawPath = params?.path ?? params?.["path"] ?? params?.["path*"];
   if (Array.isArray(rawPath)) {
     return rawPath.join("/");
   }
