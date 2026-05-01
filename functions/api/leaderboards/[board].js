@@ -2,20 +2,21 @@ const DEFAULT_UPSTREAM_ORIGIN = "https://api.enthusia.info";
 
 const BOARD_CONFIG = Object.freeze({
   "playtime-active-all": Object.freeze({
-    upstreamPath: "/api/leaderboards/playtime-active-all",
+    assetPath: "/leaderboards/playtime-active-all.json",
     limit: 10,
-    protected: false,
+    source: "asset",
   }),
   balance: Object.freeze({
     upstreamPath: "/api/leaderboards/balance",
     limit: 3,
-    protected: false,
+    source: "upstream",
   }),
   guilds: Object.freeze({
     upstreamPath: "",
     limit: 5,
     upstreamLimit: 10,
     protected: true,
+    source: "protected-upstream",
     defaultQuery: Object.freeze({
       period: "ALL_TIME",
     }),
@@ -49,6 +50,40 @@ function buildPublicLeaderboardUrl(board, env) {
   const url = new URL(config.upstreamPath, getUpstreamOrigin(env));
   url.searchParams.set("limit", String(config.limit));
   return url;
+}
+
+async function readStaticLeaderboardAsset(request, path) {
+  const assets = request?.env?.ASSETS;
+  if (!assets || typeof assets.fetch !== "function") {
+    return json({
+      ok: false,
+      error: "Static leaderboard assets are not available in this environment.",
+    }, 500);
+  }
+
+  const url = new URL(path, request.request.url);
+  const response = await assets.fetch(new Request(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  }));
+
+  if (!response.ok) {
+    return json({
+      ok: false,
+      status: response.status,
+      error: "Static leaderboard export was not found.",
+    }, response.status);
+  }
+
+  return new Response(await response.text(), {
+    status: 200,
+    headers: {
+      "content-type": response.headers.get("content-type") || "application/json; charset=utf-8",
+      "cache-control": "max-age=60, s-maxage=60",
+    },
+  });
 }
 
 function buildGuildsUrl(env) {
@@ -112,7 +147,11 @@ export async function onRequestGet(context) {
     return json({ ok: false, error: "Unknown leaderboard board." }, 404);
   }
 
-  if (!config.protected) {
+  if (config.source === "asset") {
+    return readStaticLeaderboardAsset(context, config.assetPath);
+  }
+
+  if (config.source === "upstream") {
     const url = buildPublicLeaderboardUrl(board, context.env);
     return proxyJson(url, { Accept: "application/json" });
   }
