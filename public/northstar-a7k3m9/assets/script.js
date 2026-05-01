@@ -822,17 +822,16 @@ function normalizeLeaderboardEntries(payload, board) {
       }
 
       return {
-        name: normalizeText(entry.name || entry.username || entry.displayName || entry.guild_name),
-        displayName: normalizeText(entry.displayName || entry.name || entry.username || entry.guild_name),
-        username: normalizeText(entry.username || entry.player || ""),
+        name: normalizeText(entry.username || entry.displayName || entry.name || entry.guild_name),
+        displayName: normalizeText(entry.displayName) || normalizeText(entry.username) || normalizeText(entry.name || entry.guild_name),
+        username: normalizeText(entry.username || entry.player || entry.uuid || ""),
         tag: normalizeText(entry.tag || entry.guildTag || entry.guild_tag || ""),
         subtext: normalizeText(entry.subtext || entry.subtitle || entry.description || ""),
         value: normalizeText(
-          entry.value
+          entry.formattedValue
+          || entry.formatted
           || entry.stat
           || entry.score
-          || entry.formatted
-          || entry.formattedValue
           || entry.amount
           || entry.hours
           || entry.balance
