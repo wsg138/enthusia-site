@@ -24,7 +24,7 @@ window.ENTHUSIA = Object.freeze({
         title: "Balance",
         statLabel: "Dollars",
         summary: "Top players by stored balance.",
-        limit: 3,
+        limit: 10,
         source: "balance-active-all",
         endpoint: "/api/leaderboards/balance-active-all",
         mode: "player",
