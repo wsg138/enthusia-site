@@ -107,7 +107,6 @@ async function updateServerStatus(ip) {
   const ipEl = document.getElementById("serverIp");
   const statusEl = document.getElementById("serverStatus");
   const countEl = document.getElementById("playerCount");
-  const capacityEl = document.getElementById("serverCapacity");
 
   if (ipEl) {
     ipEl.textContent = isConfiguredValue(ip) ? ip : "Unavailable";
@@ -119,7 +118,6 @@ async function updateServerStatus(ip) {
 
   if (!isConfiguredValue(ip)) {
     countEl.textContent = "--";
-    if (capacityEl) capacityEl.textContent = "Server IP unavailable";
     setStatusBadge(statusEl, "TBA", "unknown");
     return;
   }
@@ -133,19 +131,15 @@ async function updateServerStatus(ip) {
     const data = await response.json();
     if (data?.online) {
       const online = typeof data.players?.online === "number" ? data.players.online : null;
-      const max = typeof data.players?.max === "number" ? data.players.max : null;
       countEl.textContent = online === null ? "--" : String(online);
-      if (capacityEl) capacityEl.textContent = max === null ? "Live player count" : `${max} slots listed`;
       setStatusBadge(statusEl, "Online", "online");
       return;
     }
 
     countEl.textContent = "--";
-    if (capacityEl) capacityEl.textContent = "Player count unavailable";
     setStatusBadge(statusEl, "Offline", "offline");
   } catch {
     countEl.textContent = "--";
-    if (capacityEl) capacityEl.textContent = "Could not reach status API";
     setStatusBadge(statusEl, "TBA", "unknown");
   }
 }
