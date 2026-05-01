@@ -1,22 +1,19 @@
 const DEFAULT_UPSTREAM_ORIGIN = "https://api.enthusia.info";
+const PLAYTIME_PREFIX = "leaderboards";
 
 const BOARD_CONFIG = Object.freeze({
   "playtime-active-all": Object.freeze({
-    assetPath: "/leaderboards/playtime-active-all.json",
-    limit: 10,
-    source: "asset",
+    source: "playtime-r2",
+    key: `${PLAYTIME_PREFIX}/playtime-active-all.json`,
   }),
   balance: Object.freeze({
+    source: "upstream",
     upstreamPath: "/api/leaderboards/balance",
     limit: 3,
-    source: "upstream",
   }),
   guilds: Object.freeze({
-    upstreamPath: "",
-    limit: 5,
-    upstreamLimit: 10,
-    protected: true,
     source: "protected-upstream",
+    upstreamLimit: 10,
     defaultQuery: Object.freeze({
       period: "ALL_TIME",
     }),
@@ -24,11 +21,56 @@ const BOARD_CONFIG = Object.freeze({
 });
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
+  return Response.json(data, {
     status,
     headers: {
-      "content-type": "application/json; charset=utf-8",
       "cache-control": "no-store",
+    },
+  });
+}
+
+function getRequestedPath(params) {
+  const rawPath = params?.path;
+  if (Array.isArray(rawPath)) {
+    return rawPath.join("/");
+  }
+  return typeof rawPath === "string" ? rawPath : "";
+}
+
+function normalizeBoardPath(path) {
+  return String(path || "").replace(/^\/+|\/+$/g, "").replace(/\.json$/i, "");
+}
+
+function getPlaytimeKey(path) {
+  const boardPath = normalizeBoardPath(path);
+  const file = boardPath ? `${boardPath}.json` : "index.json";
+  return `${PLAYTIME_PREFIX}/${file}`;
+}
+
+async function readPlaytimeR2Object(env, key) {
+  const bucket = env.PLAYTIME_LEADERBOARDS;
+  if (!bucket || typeof bucket.get !== "function") {
+    return json({
+      ok: false,
+      error: "Playtime leaderboard R2 binding is not configured.",
+      binding: "PLAYTIME_LEADERBOARDS",
+    }, 500);
+  }
+
+  const object = await bucket.get(key);
+  if (!object) {
+    return json({
+      ok: false,
+      error: "Leaderboard not found.",
+      key,
+    }, 404);
+  }
+
+  return new Response(object.body, {
+    headers: {
+      "content-type": object.httpMetadata?.contentType || "application/json; charset=utf-8",
+      "cache-control": "public, max-age=60",
+      "access-control-allow-origin": "*",
     },
   });
 }
@@ -52,40 +94,6 @@ function buildPublicLeaderboardUrl(board, env) {
   return url;
 }
 
-async function readStaticLeaderboardAsset(request, path) {
-  const assets = request?.env?.ASSETS;
-  if (!assets || typeof assets.fetch !== "function") {
-    return json({
-      ok: false,
-      error: "Static leaderboard assets are not available in this environment.",
-    }, 500);
-  }
-
-  const url = new URL(path, request.request.url);
-  const response = await assets.fetch(new Request(url, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-    },
-  }));
-
-  if (!response.ok) {
-    return json({
-      ok: false,
-      status: response.status,
-      error: "Static leaderboard export was not found.",
-    }, response.status);
-  }
-
-  return new Response(await response.text(), {
-    status: 200,
-    headers: {
-      "content-type": response.headers.get("content-type") || "application/json; charset=utf-8",
-      "cache-control": "max-age=60, s-maxage=60",
-    },
-  });
-}
-
 function buildGuildsUrl(env) {
   if (!env.GUILDS_API_URL) {
     return null;
@@ -93,7 +101,7 @@ function buildGuildsUrl(env) {
 
   const url = new URL(env.GUILDS_API_URL);
   url.searchParams.set("period", BOARD_CONFIG.guilds.defaultQuery.period);
-  url.searchParams.set("limit", String(BOARD_CONFIG.guilds.upstreamLimit || BOARD_CONFIG.guilds.limit));
+  url.searchParams.set("limit", String(BOARD_CONFIG.guilds.upstreamLimit));
   return url;
 }
 
@@ -140,15 +148,20 @@ async function proxyJson(url, headers) {
 }
 
 export async function onRequestGet(context) {
-  const board = String(context.params.board || "");
-  const config = BOARD_CONFIG[board];
+  const path = getRequestedPath(context.params);
+  const board = normalizeBoardPath(path);
 
+  if (!board) {
+    return readPlaytimeR2Object(context.env, getPlaytimeKey(""));
+  }
+
+  const config = BOARD_CONFIG[board];
   if (!config) {
     return json({ ok: false, error: "Unknown leaderboard board." }, 404);
   }
 
-  if (config.source === "asset") {
-    return readStaticLeaderboardAsset(context, config.assetPath);
+  if (config.source === "playtime-r2") {
+    return readPlaytimeR2Object(context.env, config.key);
   }
 
   if (config.source === "upstream") {

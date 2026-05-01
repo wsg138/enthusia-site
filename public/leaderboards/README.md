@@ -1,7 +1,15 @@
-Place public leaderboard JSON exports in this directory before deploying.
+This directory is reserved for fallback/static leaderboard files.
 
-The playtime plugin currently exports:
+Live playtime leaderboards are read from the Cloudflare R2 binding named:
 
-- `playtime-active-all.json`
+- `PLAYTIME_LEADERBOARDS`
 
-The website endpoint `/api/leaderboards/playtime-active-all` reads that static asset through the Cloudflare Pages Function and returns it to the frontend.
+That binding should point to the `playtime-leaderboard` bucket. The active objects are:
+
+- `leaderboards/index.json`
+- `leaderboards/playtime-active-all.json`
+
+The website endpoints are:
+
+- `/api/leaderboards`
+- `/api/leaderboards/playtime-active-all`
