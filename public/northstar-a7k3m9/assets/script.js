@@ -13,6 +13,42 @@ function formatNumber(value) {
   return new Intl.NumberFormat("en-US").format(value);
 }
 
+function pickText(...values) {
+  for (const value of values) {
+    const text = normalizeText(value);
+    if (text) {
+      return text;
+    }
+  }
+
+  return "";
+}
+
+function pickNumber(...values) {
+  for (const value of values) {
+    if (value === null || value === undefined || value === "") {
+      continue;
+    }
+
+    const number = Number(value);
+    if (Number.isFinite(number)) {
+      return number;
+    }
+  }
+
+  return null;
+}
+
+function pickArray(...values) {
+  for (const value of values) {
+    if (Array.isArray(value)) {
+      return value;
+    }
+  }
+
+  return [];
+}
+
 function isConfiguredValue(value) {
   return Boolean(value) && value.toLowerCase() !== "unavailable";
 }
@@ -796,22 +832,33 @@ function normalizeLeaderboardEntries(payload, board) {
       }
 
       if (board.mode === "guild") {
-        const level = Number(entry.level);
-        const totalExperience = Number(entry.totalExperience);
-        const memberCount = Number(entry.memberCount);
+        const level = pickNumber(entry.level, entry.currentLevel, entry.current_level);
+        const totalExperience = pickNumber(entry.totalExperience, entry.total_xp, entry.totalExperiencePoints, entry.total_experience);
+        const memberCount = pickNumber(entry.memberCount, entry.members, entry.member_count, entry.activeMembers, entry.active_members);
+        const score = pickNumber(entry.value, entry.score);
+        const name = pickText(entry.name, entry.guildName, entry.guild_name, entry.displayName, entry.display_name, entry.tagPlain, entry.tag, entry.entityName, entry.entity_name, entry.entityId, entry.entity_id);
+        const tag = pickText(entry.tagPlain, entry.tag, entry.guildTag, entry.guild_tag);
+        const topMemberUuids = pickArray(entry.topMemberUuids, entry.top_member_uuids, entry.memberUuids, entry.member_uuids);
+        const visibleValue = level !== null
+          ? `Lv ${formatNumber(level)}`
+          : totalExperience !== null
+            ? `${formatNumber(totalExperience)} XP`
+            : score !== null
+              ? formatNumber(score)
+              : "";
 
         return {
-          name: normalizeText(entry.name || entry.guild_name || entry.tagPlain || entry.tag),
-          displayName: normalizeText(entry.name || entry.guild_name || entry.tagPlain || entry.tag),
-          tag: normalizeText(entry.tagPlain || entry.tag || ""),
+          name,
+          displayName: name,
+          tag,
           subtext: [
-            Number.isFinite(memberCount) ? `${formatNumber(memberCount)} members` : "",
-            Number.isFinite(totalExperience) ? `${formatNumber(totalExperience)} XP` : "",
+            memberCount !== null ? `${formatNumber(memberCount)} members` : "",
+            totalExperience !== null ? `${formatNumber(totalExperience)} XP` : "",
           ].filter(Boolean).join(" | "),
-          value: Number.isFinite(level) ? `Lv ${formatNumber(level)}` : (Number.isFinite(totalExperience) ? `${formatNumber(totalExperience)} XP` : ""),
+          value: visibleValue,
           banner: entry.banner,
-          topMemberUuids: Array.isArray(entry.topMemberUuids) ? entry.topMemberUuids : [],
-          rank: Number.isFinite(entry.rank) ? entry.rank : index + 1,
+          topMemberUuids,
+          rank: pickNumber(entry.rank) || index + 1,
         };
       }
 
