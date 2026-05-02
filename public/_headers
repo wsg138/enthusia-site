@@ -1,3 +1,11 @@
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://minotar.net https://cdn.discordapp.com https://media.discordapp.net https://images-ext-1.discordapp.net; connect-src 'self' https://discord.com https://api.mcstatus.io; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://enthusia-shop.tebex.io; upgrade-insecure-requests
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+
 /northstar-a7k3m9/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-store

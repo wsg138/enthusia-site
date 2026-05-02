@@ -220,7 +220,7 @@ window.ENTHUSIA = Object.freeze({
         answer: Object.freeze([
           Object.freeze({
             type: "text",
-            value: "The main server version is 1.21.11, and any version 1.7 or above can join. The server updates toward the newest Minecraft version over time.",
+            value: "The main server version is 1.21.11, and any version 1.17 or above can join. The server updates toward the newest Minecraft version over time.",
           }),
         ]),
       }),
