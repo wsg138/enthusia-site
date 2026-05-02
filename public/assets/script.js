@@ -9,6 +9,46 @@ function normalizeText(value) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function formatNumber(value) {
+  return new Intl.NumberFormat("en-US").format(value);
+}
+
+function pickText(...values) {
+  for (const value of values) {
+    const text = normalizeText(value);
+    if (text) {
+      return text;
+    }
+  }
+
+  return "";
+}
+
+function pickNumber(...values) {
+  for (const value of values) {
+    if (value === null || value === undefined || value === "") {
+      continue;
+    }
+
+    const number = Number(value);
+    if (Number.isFinite(number)) {
+      return number;
+    }
+  }
+
+  return null;
+}
+
+function pickArray(...values) {
+  for (const value of values) {
+    if (Array.isArray(value)) {
+      return value;
+    }
+  }
+
+  return [];
+}
+
 function isConfiguredValue(value) {
   return Boolean(value) && value.toLowerCase() !== "unavailable";
 }
@@ -73,27 +113,29 @@ async function copyText(text) {
 }
 
 function initCopyIpButton(ip) {
-  const copyIpBtn = document.getElementById("copyIpBtn");
-  if (!copyIpBtn) {
+  const copyButtons = [document.getElementById("copyIpBtn"), document.getElementById("copyIpMiniBtn")].filter(Boolean);
+  if (!copyButtons.length) {
     return;
   }
 
-  const buttonLabel = copyIpBtn.dataset.label || copyIpBtn.textContent || "Copy IP";
-  copyIpBtn.dataset.label = buttonLabel;
+  copyButtons.forEach((copyIpBtn) => {
+    const buttonLabel = copyIpBtn.dataset.label || copyIpBtn.textContent || "Copy IP";
+    copyIpBtn.dataset.label = buttonLabel;
 
-  copyIpBtn.addEventListener("click", async () => {
-    const copyValue = isConfiguredValue(ip) ? ip : "Server IP is currently unavailable";
+    copyIpBtn.addEventListener("click", async () => {
+      const copyValue = isConfiguredValue(ip) ? ip : "Server IP is currently unavailable";
 
-    try {
-      await copyText(copyValue);
-      copyIpBtn.textContent = "Copied!";
-    } catch {
-      copyIpBtn.textContent = "Copy failed";
-    }
+      try {
+        await copyText(copyValue);
+        copyIpBtn.textContent = "Copied";
+      } catch {
+        copyIpBtn.textContent = "Copy failed";
+      }
 
-    window.setTimeout(() => {
-      copyIpBtn.textContent = buttonLabel;
-    }, 1500);
+      window.setTimeout(() => {
+        copyIpBtn.textContent = buttonLabel;
+      }, 1500);
+    });
   });
 }
 
@@ -124,7 +166,8 @@ async function updateServerStatus(ip) {
 
     const data = await response.json();
     if (data?.online) {
-      countEl.textContent = typeof data.players?.online === "number" ? String(data.players.online) : "--";
+      const online = typeof data.players?.online === "number" ? data.players.online : null;
+      countEl.textContent = online === null ? "--" : String(online);
       setStatusBadge(statusEl, "Online", "online");
       return;
     }
@@ -517,6 +560,418 @@ function renderWikiCallout(cfg) {
   wikiNote.append(text);
 }
 
+const BANNER_COLORS = Object.freeze({
+  white: "#f9fffe",
+  orange: "#f9801d",
+  magenta: "#c74ebd",
+  light_blue: "#3ab3da",
+  yellow: "#fed83d",
+  lime: "#80c71f",
+  pink: "#f38baa",
+  gray: "#474f52",
+  light_gray: "#9d9d97",
+  cyan: "#169c9c",
+  purple: "#8932b8",
+  blue: "#3c44aa",
+  brown: "#835432",
+  green: "#5e7c16",
+  red: "#b02e26",
+  black: "#1d1d21",
+});
+
+function createSvgNode(tagName, attributes = {}) {
+  const node = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+  Object.entries(attributes).forEach(([name, value]) => {
+    node.setAttribute(name, String(value));
+  });
+  return node;
+}
+
+function normalizeBannerColor(color) {
+  const normalized = normalizeText(color).toLowerCase().replace(/[\s-]+/g, "_");
+  return BANNER_COLORS[normalized] || "#d1b37b";
+}
+
+function getPatternCode(pattern) {
+  return normalizeText(pattern?.pattern || pattern?.code || pattern?.type || pattern?.key).toLowerCase();
+}
+
+function getPatternColor(pattern) {
+  return normalizeBannerColor(pattern?.color || pattern?.dyeColor || pattern?.shade);
+}
+
+function appendBannerPattern(group, code, color) {
+  const fill = color;
+  switch (code) {
+    case "bs":
+    case "stripe_bottom":
+      group.append(createSvgNode("rect", { x: 0, y: 26, width: 20, height: 8, fill }));
+      break;
+    case "ts":
+    case "stripe_top":
+      group.append(createSvgNode("rect", { x: 0, y: 0, width: 20, height: 8, fill }));
+      break;
+    case "ls":
+    case "stripe_left":
+      group.append(createSvgNode("rect", { x: 0, y: 0, width: 6, height: 40, fill }));
+      break;
+    case "rs":
+    case "stripe_right":
+      group.append(createSvgNode("rect", { x: 14, y: 0, width: 6, height: 40, fill }));
+      break;
+    case "cs":
+    case "stripe_center":
+      group.append(createSvgNode("rect", { x: 7, y: 0, width: 6, height: 40, fill }));
+      break;
+    case "ms":
+    case "stripe_middle":
+      group.append(createSvgNode("rect", { x: 0, y: 16, width: 20, height: 8, fill }));
+      break;
+    case "bo":
+    case "border":
+      group.append(createSvgNode("rect", { x: 0, y: 0, width: 20, height: 4, fill }));
+      group.append(createSvgNode("rect", { x: 0, y: 0, width: 4, height: 40, fill }));
+      group.append(createSvgNode("rect", { x: 16, y: 0, width: 4, height: 40, fill }));
+      group.append(createSvgNode("rect", { x: 0, y: 30, width: 20, height: 10, fill }));
+      break;
+    case "cr":
+    case "cross":
+      group.append(createSvgNode("rect", { x: 7, y: 0, width: 6, height: 40, fill }));
+      group.append(createSvgNode("rect", { x: 0, y: 16, width: 20, height: 8, fill }));
+      break;
+    case "sc":
+    case "straight_cross":
+    case "saltire":
+      group.append(createSvgNode("path", { d: "M-4 4 L4 -4 L24 28 L16 36 Z", fill }));
+      group.append(createSvgNode("path", { d: "M24 4 L16 -4 L-4 28 L4 36 Z", fill }));
+      break;
+    case "dls":
+    case "diagonal_left":
+      group.append(createSvgNode("path", { d: "M-4 30 L6 40 L24 8 L14 -2 Z", fill }));
+      break;
+    case "drs":
+    case "diagonal_right":
+      group.append(createSvgNode("path", { d: "M24 30 L14 40 L-4 8 L6 -2 Z", fill }));
+      break;
+    case "mc":
+    case "circle":
+      group.append(createSvgNode("circle", { cx: 10, cy: 16, r: 6, fill }));
+      break;
+    case "mr":
+    case "rhombus":
+      group.append(createSvgNode("path", { d: "M10 6 L16 16 L10 26 L4 16 Z", fill }));
+      break;
+    case "tt":
+    case "triangle_top":
+      group.append(createSvgNode("path", { d: "M10 0 L20 12 L0 12 Z", fill }));
+      break;
+    case "bt":
+    case "triangle_bottom":
+      group.append(createSvgNode("path", { d: "M0 26 L20 26 L10 40 Z", fill }));
+      break;
+    default:
+      break;
+  }
+}
+
+function createGuildBannerVisual(banner) {
+  if (!banner || typeof banner !== "object") {
+    return null;
+  }
+
+  const clipId = `guild-banner-clip-${Math.random().toString(36).slice(2, 9)}`;
+  const svg = createSvgNode("svg", {
+    viewBox: "0 0 20 40",
+    class: "guild-banner",
+    role: "img",
+    "aria-hidden": "true",
+  });
+
+  const defs = createSvgNode("defs");
+  const clipPath = createSvgNode("clipPath", { id: clipId });
+  clipPath.append(createSvgNode("path", { d: "M2 2 H18 V30 L10 38 L2 30 Z" }));
+  defs.append(clipPath);
+  svg.append(defs);
+
+  const group = createSvgNode("g", { "clip-path": `url(#${clipId})` });
+  group.append(createSvgNode("rect", {
+    x: 0,
+    y: 0,
+    width: 20,
+    height: 40,
+    fill: normalizeBannerColor(banner.baseColor || banner.base || banner.color || banner.base_color || "black"),
+  }));
+
+  const patterns = Array.isArray(banner.patterns) ? banner.patterns : [];
+  patterns.forEach((pattern) => appendBannerPattern(group, getPatternCode(pattern), getPatternColor(pattern)));
+  svg.append(group);
+  svg.append(createSvgNode("path", {
+    d: "M2 2 H18 V30 L10 38 L2 30 Z",
+    fill: "none",
+    stroke: "rgba(255,241,199,0.26)",
+    "stroke-width": 1,
+  }));
+
+  return svg;
+}
+
+function createLeaderboardEntry(board, entry, rank) {
+  const item = document.createElement("li");
+
+  const rankEl = document.createElement("span");
+  rankEl.className = "rank";
+  rankEl.textContent = String(rank);
+
+  let visual;
+  if (board.mode === "guild") {
+    visual = createGuildBannerVisual(entry?.banner);
+    if (!visual) {
+      const topMemberUuid = Array.isArray(entry?.topMemberUuids) ? normalizeText(entry.topMemberUuids[0]) : "";
+      if (topMemberUuid) {
+        visual = document.createElement("img");
+        visual.src = `https://minotar.net/helm/${encodeURIComponent(topMemberUuid)}/64`;
+        visual.alt = "";
+        visual.width = 40;
+        visual.height = 40;
+        visual.loading = "lazy";
+        visual.decoding = "async";
+        visual.className = "guild-fallback-head";
+      } else {
+        visual = document.createElement("span");
+        visual.className = "guild-mark";
+        visual.textContent = normalizeText(entry?.iconText || entry?.tag || entry?.name || "G").slice(0, 3).toUpperCase();
+      }
+    }
+  } else {
+    visual = document.createElement("img");
+    const username = normalizeText(entry?.username || entry?.displayName || entry?.name || "Steve");
+    visual.src = `https://minotar.net/helm/${encodeURIComponent(username)}/64`;
+    visual.alt = "";
+    visual.width = 40;
+    visual.height = 40;
+    visual.loading = "lazy";
+    visual.decoding = "async";
+  }
+
+  const identity = document.createElement("span");
+  identity.className = "leader-name";
+
+  const name = document.createElement("strong");
+  name.textContent = normalizeText(entry?.displayName || entry?.name || entry?.username || entry?.tag || `Rank ${rank}`);
+  identity.append(name);
+
+  const detail = normalizeText(entry?.subtext || entry?.subtitle || entry?.tag || "");
+  if (detail) {
+    const detailEl = document.createElement("small");
+    detailEl.textContent = detail;
+    identity.append(detailEl);
+  }
+
+  const value = document.createElement("span");
+  value.textContent = normalizeText(entry?.value || entry?.stat || entry?.score || "--");
+
+  item.append(rankEl, visual, identity, value);
+  return item;
+}
+
+function createLeaderboardBoardCard(board, active = true) {
+  const article = document.createElement("article");
+  article.className = "card board-card";
+  article.id = `board-${board.id}`;
+  if (!active) {
+    article.classList.add("board-card-muted");
+  }
+
+  const head = document.createElement("div");
+  head.className = "board-head";
+
+  const headBody = document.createElement("div");
+  const kicker = document.createElement("span");
+  kicker.className = "card-kicker";
+  kicker.textContent = board.label;
+
+  const title = document.createElement("h3");
+  title.textContent = board.title;
+
+  const summary = document.createElement("p");
+  summary.textContent = board.summary;
+
+  headBody.append(kicker, title, summary);
+
+  const status = document.createElement("strong");
+  status.textContent = active ? "Live" : "Soon";
+
+  head.append(headBody, status);
+
+  const entries = document.createElement("ol");
+  entries.className = "leader-list";
+  entries.setAttribute("data-board-entries", board.id);
+
+  const emptyState = document.createElement("p");
+  emptyState.className = "board-empty";
+  emptyState.textContent = active
+    ? "Leaderboard data is unavailable right now."
+    : board.summary;
+
+  article.append(head, entries, emptyState);
+  return { article, entries, emptyState };
+}
+
+function normalizeLeaderboardEntries(payload, board) {
+  const collection = Array.isArray(payload)
+    ? payload
+    : payload?.players || payload?.guilds || payload?.entries || payload?.data || [];
+
+  if (!Array.isArray(collection)) {
+    return [];
+  }
+
+  return collection
+    .map((entry, index) => {
+      if (!entry || typeof entry !== "object") {
+        return null;
+      }
+
+      if (board.mode === "guild") {
+        const level = pickNumber(entry.level, entry.currentLevel, entry.current_level);
+        const totalExperience = pickNumber(entry.totalExperience, entry.total_xp, entry.totalExperiencePoints, entry.total_experience);
+        const memberCount = pickNumber(entry.memberCount, entry.members, entry.member_count, entry.activeMembers, entry.active_members);
+        const score = pickNumber(entry.value, entry.score);
+        const name = pickText(entry.name, entry.guildName, entry.guild_name, entry.displayName, entry.display_name, entry.tagPlain, entry.tag, entry.entityName, entry.entity_name, entry.entityId, entry.entity_id);
+        const tag = pickText(entry.tagPlain, entry.tag, entry.guildTag, entry.guild_tag);
+        const topMemberUuids = pickArray(entry.topMemberUuids, entry.top_member_uuids, entry.memberUuids, entry.member_uuids);
+        const visibleValue = level !== null
+          ? `Lv ${formatNumber(level)}`
+          : totalExperience !== null
+            ? `${formatNumber(totalExperience)} XP`
+            : score !== null
+              ? formatNumber(score)
+              : "";
+
+        return {
+          name,
+          displayName: name,
+          tag,
+          subtext: [
+            memberCount !== null ? `${formatNumber(memberCount)} members` : "",
+            totalExperience !== null ? `${formatNumber(totalExperience)} XP` : "",
+          ].filter(Boolean).join(" | "),
+          value: visibleValue,
+          banner: entry.banner,
+          topMemberUuids,
+          rank: pickNumber(entry.rank) || index + 1,
+        };
+      }
+
+      return {
+        name: normalizeText(entry.username || entry.displayName || entry.name || entry.guild_name),
+        displayName: normalizeText(entry.displayName) || normalizeText(entry.username) || normalizeText(entry.name || entry.guild_name),
+        username: normalizeText(entry.username || entry.player || entry.uuid || ""),
+        tag: normalizeText(entry.tag || entry.guildTag || entry.guild_tag || ""),
+        subtext: normalizeText(entry.subtext || entry.subtitle || entry.description || ""),
+        value: normalizeText(
+          entry.formattedValue
+          || entry.formatted
+          || entry.stat
+          || entry.score
+          || entry.amount
+          || entry.hours
+          || entry.balance
+          || entry.experience
+          || entry.level
+          || ""
+        ),
+        rank: Number.isFinite(entry.rank) ? entry.rank : index + 1,
+      };
+    })
+    .filter(Boolean)
+    .filter((entry) => entry.displayName && entry.value)
+    .slice(0, Number.isFinite(board.limit) ? board.limit : collection.length);
+}
+
+async function fetchLeaderboardEntries(board) {
+  const endpoint = normalizeText(board?.endpoint) || (normalizeText(board?.source) ? `/api/leaderboards/${normalizeText(board.source)}` : "");
+  if (!endpoint) {
+    return [];
+  }
+
+  try {
+    const response = await fetch(endpoint, { headers: { Accept: "application/json" } });
+    if (!response.ok) {
+      return [];
+    }
+
+    const payload = await response.json();
+    return normalizeLeaderboardEntries(payload, board);
+  } catch {
+    return [];
+  }
+}
+
+async function populateLeaderboardBoard(board, card, active) {
+  if (!active) {
+    return;
+  }
+
+  const entries = await fetchLeaderboardEntries(board);
+  if (!entries.length) {
+    return;
+  }
+
+  card.entries.replaceChildren();
+  entries.forEach((entry, index) => {
+    card.entries.append(createLeaderboardEntry(board, entry, entry.rank || index + 1));
+  });
+  card.emptyState.hidden = true;
+}
+
+function renderLeaderboardPage(cfg) {
+  const config = cfg?.leaderboards;
+  const activeRoot = document.getElementById("activeLeaderboardBoards");
+  const upcomingRoot = document.getElementById("upcomingLeaderboardBoards");
+  const upcomingSection = document.getElementById("leaderboardUpcomingSection");
+  const summaryLive = document.getElementById("leaderboardLiveCount");
+  const summarySpots = document.getElementById("leaderboardSpotCount");
+  const summaryUpcoming = document.getElementById("leaderboardUpcomingCount");
+
+  if (!config || !activeRoot || !upcomingRoot) {
+    return;
+  }
+
+  const activeBoards = Array.isArray(config.active) ? config.active : [];
+  const upcomingBoards = Array.isArray(config.upcoming) ? config.upcoming : [];
+
+  activeRoot.replaceChildren();
+  upcomingRoot.replaceChildren();
+
+  activeBoards.forEach((board) => {
+    const card = createLeaderboardBoardCard(board, true);
+    activeRoot.append(card.article);
+    void populateLeaderboardBoard(board, card, true);
+  });
+
+  upcomingBoards.forEach((board) => {
+    const card = createLeaderboardBoardCard(board, false);
+    upcomingRoot.append(card.article);
+  });
+
+  if (upcomingSection) {
+    upcomingSection.hidden = upcomingBoards.length === 0;
+  }
+
+  if (summaryLive) {
+    summaryLive.textContent = String(activeBoards.length);
+  }
+
+  if (summarySpots) {
+    summarySpots.textContent = "18";
+  }
+
+  if (summaryUpcoming) {
+    summaryUpcoming.textContent = String(upcomingBoards.length);
+  }
+}
+
 function renderScreenshotSlideshow(slides) {
   const root = document.getElementById("screenshotSlideshow");
   if (!root || !Array.isArray(slides) || slides.length === 0) {
@@ -672,6 +1127,55 @@ function renderScreenshotSlideshow(slides) {
   }, SCREENSHOT_AUTOPLAY_MS);
 }
 
+function initInteractiveGlow() {
+  const targets = document.querySelectorAll(
+    ".card, .status-card, .timeline-item, .rules-prose section, .live-layer-card, .showcase-panel"
+  );
+
+  targets.forEach((target) => {
+    target.addEventListener("pointermove", (event) => {
+      const rect = target.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+      target.style.setProperty("--mx", `${x.toFixed(1)}%`);
+      target.style.setProperty("--my", `${y.toFixed(1)}%`);
+    });
+  });
+}
+
+function initScrollReveal() {
+  if (document.querySelector(".staff-page-grid") || document.getElementById("activeLeaderboardBoards")) {
+    return;
+  }
+
+  const revealTargets = document.querySelectorAll(
+    ".hero-copy, .hero-panel, .live-layer-card, .feature-card, .timeline-item, .link-card, .showcase-panel, .content-panel, .rules-prose section, .board-card, .staff-full-card, .vote-card, .slideshow-shell"
+  );
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    revealTargets.forEach((target) => target.classList.add("is-visible"));
+    return;
+  }
+
+  revealTargets.forEach((target, index) => {
+    target.classList.add("reveal");
+    target.style.animationDelay = `${Math.min(index % 8, 7) * 45}ms`;
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) {
+        return;
+      }
+
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+
+  revealTargets.forEach((target) => observer.observe(target));
+}
+
 async function initSite(cfg) {
   const yearEl = document.getElementById("year");
   if (yearEl) {
@@ -690,7 +1194,14 @@ async function initSite(cfg) {
   setExternalLinkTargets(normalizedConfig);
   setContactEmail(normalizedConfig);
   initCopyIpButton(normalizedConfig.serverIp);
-  await updateServerStatus(normalizedConfig.serverIp);
+  renderScreenshotSlideshow(cfg?.home?.screenshots);
+  renderStaffCarousel(cfg?.home?.staff);
+  renderFaqItems(cfg?.home?.faq);
+  renderWikiCallout(normalizedConfig);
+  renderLeaderboardPage(cfg);
+  initInteractiveGlow();
+  initScrollReveal();
+  void updateServerStatus(normalizedConfig.serverIp);
 
   if (document.getElementById("serverStatus") && isConfiguredValue(normalizedConfig.serverIp)) {
     window.setInterval(() => {
@@ -698,11 +1209,7 @@ async function initSite(cfg) {
     }, STATUS_REFRESH_INTERVAL_MS);
   }
 
-  await renderDiscordWidget(normalizedConfig);
-  renderScreenshotSlideshow(cfg?.home?.screenshots);
-  renderStaffCarousel(cfg?.home?.staff);
-  renderFaqItems(cfg?.home?.faq);
-  renderWikiCallout(normalizedConfig);
+  void renderDiscordWidget(normalizedConfig);
 }
 
 document.addEventListener("DOMContentLoaded", () => {

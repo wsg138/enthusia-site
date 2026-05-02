@@ -1,36 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="top">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Enthusia SMP | About</title>
-  <meta name="description" content="Learn how Enthusia SMP works, from protected areas and player market rules to mod policy, tickets, and core survival mechanics." />
-  <meta name="theme-color" content="#0b0e13" />
+  <title>Enthusia SMP | About the Server</title>
+  <meta name="description" content="Learn what Enthusia SMP is: a vanilla-based semi-anarchy survival server built around risk, trade, PvP, guilds, KOTH, duels, and community events." />
+  <meta name="theme-color" content="#100d0a" />
+  <meta name="color-scheme" content="dark light" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/styles.css?v=refactor17" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css?v=vision41" />
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 
 <div class="bg" aria-hidden="true">
   <div class="bg-grid"></div>
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="blob b3"></div>
+  <div class="bg-vignette"></div>
+  <div class="bg-heat"></div>
 </div>
 
 <header class="site-header">
-  <div class="container">
-    <div class="brand">
-      <img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="44" height="44" />
-      <span class="name grad-text">Enthusia SMP</span>
-    </div>
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Enthusia SMP home">
+      <img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="46" height="46" />
+      <span class="brand-name">Enthusia SMP</span>
+    </a>
     <nav class="nav" aria-label="Primary navigation">
       <a href="index.html">Home</a>
       <a href="plugins.html" class="active" aria-current="page">About</a>
       <a href="rules.html">Rules</a>
+      <div class="nav-dropdown">
+        <button class="nav-drop-trigger" type="button">Community</button>
+        <div class="nav-menu" aria-label="Community links">
+          <a href="leaderboards.html">Leaderboards</a>
+          <a href="staff.html">Staff</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="vote.html">Vote</a>
+          <a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+        </div>
+      </div>
       <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
       <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
     </nav>
@@ -38,62 +48,159 @@
 </header>
 
 <main id="main-content" class="page-main">
-  <section class="page-section">
-    <div class="container section-intro">
-      <h1 class="grad-text">About the Server</h1>
-      <div class="shine-line" aria-hidden="true"></div>
-      <p class="page-lead">Enthusia SMP is a semi-anarchy survival server built around open wilderness gameplay, a protected Spawn and Market, and a player-run item economy.</p>
+  <section class="subhero" aria-labelledby="about-title">
+    <div class="container subhero-inner">
+      <div>
+        <p class="eyebrow">About Enthusia</p>
+        <h1 id="about-title">About Enthusia</h1>
+        <p class="page-lead">Enthusia is built around regular survival with more reasons to stay involved. Build a base, hunt for others, trade, fight, join a guild, or just play at your own pace.</p>
+      </div>
+      <div class="subhero-card card">
+        <img class="subhero-logo" src="assets/enthusia-logo-v2.png" alt="" width="220" height="220" />
+        <dl class="quick-list">
+          <div><dt>Java</dt><dd>enthusia.net</dd></div>
+          <div><dt>Bedrock</dt><dd>enthusia.net : 19132</dd></div>
+          <div><dt>World</dt><dd>Permanent, no reset plan</dd></div>
+          <div><dt>Border</dt><dd>-100k to +100k Overworld</dd></div>
+        </dl>
+      </div>
     </div>
   </section>
 
-  <section class="features page-section" aria-labelledby="about-highlights-title">
-    <div class="container">
-      <h2 id="about-highlights-title" class="sr-only">Server features</h2>
-      <div class="grid-3">
-        <div class="card">
-          <h3>Wilderness Rules</h3>
-          <p>PvP, raiding, stealing, griefing, and even spawn camping are allowed outside Spawn and Market.</p>
-        </div>
-        <div class="card">
-          <h3>Protected Areas</h3>
-          <p>Spawn and Market are the only protected zones. The rest of the world is fair game.</p>
-        </div>
-        <div class="card">
-          <h3>Duping &amp; Exploits</h3>
-          <p>TNT duping is allowed. Other dupes are banned, and bugs or exploits must be reported through a ticket immediately.</p>
-        </div>
-        <div class="card">
-          <h3>Player Market</h3>
-          <p>Each player gets one stall plus one restock chest or barrel. Unreal pricing to dodge the storage rules is not allowed.</p>
-        </div>
-        <div class="card">
-          <h3>Mods &amp; Fair Play</h3>
-          <p>Common performance tools are fine, but hacked clients, X-Ray, Freecam, Baritone, Easy Place, world maps, and unfair PvP indicators are banned.</p>
-        </div>
-        <div class="card">
-          <h3>Account Integrity</h3>
-          <p>No account sharing, no headless alts, no unapproved VPN use, and no helping cheaters, dupers, or ban evaders.</p>
-        </div>
-        <div class="card">
-          <h3>Tickets &amp; Staff</h3>
-          <p>Report bugs and handle disputes through tickets, not DMs. Follow staff instructions and do not falsify evidence.</p>
-        </div>
+  <section class="page-section about-showcase-section" aria-label="Server identity highlights">
+    <div class="container about-showcase">
+      <article class="showcase-panel">
+        <span class="showcase-number">01</span>
+        <h2>Player Trade</h2>
+        <p>The Market gives players a reason to move items, make deals, and recognize regular names.</p>
+      </article>
+      <article class="showcase-panel is-raised">
+        <span class="showcase-number">02</span>
+        <h2>Open Survival</h2>
+        <p>The world is large enough for builders, base hunters, PvPers, farmers, and traders to all matter.</p>
+      </article>
+      <article class="showcase-panel">
+        <span class="showcase-number">03</span>
+        <h2>Custom Systems</h2>
+        <p>Guilds, duels, KOTH, events, and Market systems give the server more to do without changing what survival is.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-section compact" aria-labelledby="about-survival-title">
+    <div class="container article-layout">
+      <aside class="side-rail" aria-label="About page sections">
+        <a href="#survival">Survival</a>
+        <a href="#pvp">PvP</a>
+        <a href="#economy">Market</a>
+        <a href="#guilds">Guilds</a>
+        <a href="#events">Events</a>
+      </aside>
+
+      <div class="article-stack">
+        <section id="survival" class="content-panel card">
+          <p class="eyebrow">World &amp; survival</p>
+          <h2 id="about-survival-title">Permanent World</h2>
+          <p>The world is permanent. Bases, farms, tunnels, ruins, trade routes, and old fights can build up over time instead of disappearing on a season timer.</p>
+          <div class="detail-grid">
+            <div><strong>No land claims</strong><span>Players can build anywhere, but they are responsible for hiding, defending, or rebuilding what they make.</span></div>
+            <div><strong>Mostly vanilla wilderness</strong><span>The main survival world stays close to vanilla.</span></div>
+            <div><strong>Large Overworld</strong><span>The -100k to +100k border gives players enough distance for travel, base hunting, and long-term projects.</span></div>
+          </div>
+        </section>
+
+        <section id="pvp" class="content-panel card">
+          <p class="eyebrow">PvP &amp; danger</p>
+          <h2>PvP Areas</h2>
+          <p>PvP is part of the server, but it is not only one thing. Some areas are built for cleaner fights, while the wilderness keeps the risk that makes survival interesting.</p>
+          <div class="zone-grid">
+            <article>
+              <h3>Main Warzone</h3>
+              <p>Sword, mace, spear, and regular combat. No building or breaking.</p>
+            </article>
+            <article>
+              <h3>Cobweb Box</h3>
+              <p>Utility PvP with limited placed items such as cobwebs, water, buttons, and pressure plates.</p>
+            </article>
+            <article>
+              <h3>Warpit</h3>
+              <p>Building, breaking, carts, explosives, traps, digging, and hole fighting. Resets every few hours.</p>
+            </article>
+            <article>
+              <h3>Wilderness</h3>
+              <p>Full vanilla PvP outside the Warzone, including crystals, anchors, TNT, pearls, and normal combat.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="economy" class="content-panel card">
+          <p class="eyebrow">Economy &amp; Market</p>
+          <h2>Raw Gold Economy</h2>
+          <p>The economy runs on raw gold. Players can keep gold in balance, withdraw it, rent Market stalls, and set up trades with other players.</p>
+          <ul class="clean-list">
+            <li>Trading is mainly player-run and item-for-item.</li>
+            <li>Guild stalls are part of the long-term social economy.</li>
+            <li>No taxes.</li>
+          </ul>
+        </section>
+
+        <section id="guilds" class="content-panel card">
+          <p class="eyebrow">Guilds</p>
+          <h2>Guilds</h2>
+          <p>Guilds give teams a real identity without turning Enthusia into factions. A good guild should feel like a known group on the server, not just a tag before a name.</p>
+          <div class="detail-grid">
+            <div><strong>Player-made teams</strong><span>Guilds help groups build a name that other players recognize.</span></div>
+            <div><strong>Custom progression</strong><span>Groups can grow over time instead of being just a chat tag.</span></div>
+            <div><strong>Market presence</strong><span>Guilds can become part of trade, KOTH, and server lore.</span></div>
+          </div>
+        </section>
+
+        <section id="events" class="content-panel card">
+          <p class="eyebrow">Events, KOTH &amp; duels</p>
+          <h2>Events &amp; Duels</h2>
+          <p>Events, KOTH, and duels give players more ways to compete when they want a break from normal survival.</p>
+          <div class="stat-row">
+            <div><span>Every hour</span><strong>Events</strong></div>
+            <div><span>Every 8 hours</span><strong>KOTH</strong></div>
+            <div><span>Whenever you want</span><strong>Duels</strong></div>
+          </div>
+        </section>
       </div>
     </div>
   </section>
 </main>
 
 <footer class="site-footer">
-  <div class="container">
-    <div class="footer-inner">
-      <p class="footer-copy">&copy; <span id="year"></span> Enthusia SMP</p>
-      <p class="footer-contact">Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p>
-    </div>
+  <div class="container footer-inner">
+    <p>&copy; <span id="year"></span> Enthusia SMP</p>
+    <p>Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p>
   </div>
 </footer>
 
-<script src="assets/site-config.js?v=refactor17" defer></script>
-<script src="assets/script.js?v=refactor17" defer></script>
+<script src="assets/site-config.js?v=vision41" defer></script>
+<script src="assets/script.js?v=vision41" defer></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

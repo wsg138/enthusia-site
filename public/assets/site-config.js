@@ -5,6 +5,55 @@ window.ENTHUSIA = Object.freeze({
   discordServerId: "1410303324745371709",
   contactEmail: "glorytoenthusia@gmail.com",
   wikiUrl: "https://enthusia.miraheze.org/wiki/Main_Page",
+  leaderboards: Object.freeze({
+    active: Object.freeze([
+      Object.freeze({
+        id: "playtime-active-all",
+        label: "Playtime",
+        title: "Playtime",
+        statLabel: "Hours",
+        summary: "Top players by active playtime.",
+        limit: 10,
+        source: "playtime-active-all",
+        endpoint: "/api/leaderboards/playtime-active-all",
+        mode: "player",
+      }),
+      Object.freeze({
+        id: "balance-active-all",
+        label: "Balance",
+        title: "Balance",
+        statLabel: "Dollars",
+        summary: "Richest players on the server.",
+        limit: 10,
+        source: "balance-active-all",
+        endpoint: "/api/leaderboards/balance-active-all",
+        mode: "player",
+      }),
+      Object.freeze({
+        id: "guilds",
+        label: "Guilds",
+        title: "Top Guilds",
+        statLabel: "Level",
+        summary: "Top guilds by level.",
+        limit: 5,
+        source: "guilds",
+        endpoint: "/api/leaderboards/guilds",
+        mode: "guild",
+      }),
+      Object.freeze({
+        id: "donators-all-time",
+        label: "Donors",
+        title: "Top Donors",
+        statLabel: "Support",
+        summary: "Top supporters.",
+        limit: 5,
+        source: "donators-all-time",
+        endpoint: "/api/leaderboards/donators-all-time",
+        mode: "player",
+      }),
+    ]),
+    upcoming: Object.freeze([]),
+  }),
   home: Object.freeze({
     screenshots: Object.freeze([
       Object.freeze({
@@ -94,8 +143,8 @@ window.ENTHUSIA = Object.freeze({
       Object.freeze({
         src: "assets/screenshots/slide-15.webp",
         thumb: "assets/screenshots/slide-15-thumb.webp",
-        alt: "Screenshot showing the shop plugin and market plugin being tested for the first time.",
-        label: "First shop and market plugin test",
+        alt: "Screenshot showing early shop and market systems being tested.",
+        label: "First shop and market systems test",
       }),
       Object.freeze({
         src: "assets/screenshots/slide-16.webp",
@@ -171,7 +220,7 @@ window.ENTHUSIA = Object.freeze({
         answer: Object.freeze([
           Object.freeze({
             type: "text",
-            value: "We keep the server updated to the latest release, but you can join from any version 1.18 and up.",
+            value: "The main server version is 1.21.11, and any version 1.7 or above can join. The server updates toward the newest Minecraft version over time.",
           }),
         ]),
       }),
@@ -180,7 +229,7 @@ window.ENTHUSIA = Object.freeze({
         answer: Object.freeze([
           Object.freeze({
             type: "text",
-            value: "No. We try to keep the experience fair for everyone, regardless of how much money they spend.",
+            value: "No. The store has two non-P2W ranks: a $5 permanent rank and a $10 monthly rank. Ranked players can also spend in-game gold or money to start events.",
           }),
         ]),
       }),
@@ -189,7 +238,7 @@ window.ENTHUSIA = Object.freeze({
         answer: Object.freeze([
           Object.freeze({
             type: "text",
-            value: "Yes. Enthusia is semi-anarchy, so raiding and griefing are allowed anywhere outside the protected areas.",
+            value: "Yes. Raiding, griefing, and base hunting are part of the server. Build with that risk in mind.",
           }),
         ]),
       }),
@@ -198,7 +247,7 @@ window.ENTHUSIA = Object.freeze({
         answer: Object.freeze([
           Object.freeze({
             type: "text",
-            value: "Yes. The SMP runs hourly minigames, scheduled King of the Hill events every eight hours, and other events hosted by staff.",
+            value: "Yes. Events run about every hour, chat trivia appears between events, and KOTH runs about every eight hours. Event inventories stay separate from SMP survival.",
           }),
         ]),
       }),

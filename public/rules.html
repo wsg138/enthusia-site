@@ -5,33 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Enthusia SMP | Community Rules</title>
   <meta name="description" content="Read the current Enthusia SMP rules covering conduct, account security, gameplay, market use, reputation, allowed mods, and ticket handling." />
-  <meta name="theme-color" content="#0b0e13" />
+  <meta name="theme-color" content="#100d0a" />
   <meta name="color-scheme" content="dark light" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/styles.css?v=refactor17" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css?v=vision41" />
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 
 <div class="bg" aria-hidden="true">
   <div class="bg-grid"></div>
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="blob b3"></div>
+  <div class="bg-vignette"></div>
+  <div class="bg-heat"></div>
 </div>
 
 <header class="site-header">
-  <div class="container">
-    <div class="brand">
-      <img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="44" height="44" />
-      <span class="name grad-text">Enthusia SMP</span>
-    </div>
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Enthusia SMP home">
+      <img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="46" height="46" />
+      <span class="brand-name">Enthusia SMP</span>
+    </a>
     <nav class="nav" aria-label="Primary navigation">
       <a href="index.html">Home</a>
       <a href="plugins.html">About</a>
       <a href="rules.html" class="active" aria-current="page">Rules</a>
+      <div class="nav-dropdown">
+        <button class="nav-drop-trigger" type="button">Community</button>
+        <div class="nav-menu" aria-label="Community links">
+          <a href="leaderboards.html">Leaderboards</a>
+          <a href="staff.html">Staff</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="vote.html">Vote</a>
+          <a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+        </div>
+      </div>
       <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
       <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
     </nav>
@@ -39,9 +48,10 @@
 </header>
 
 <main id="main-content" class="page-main">
-  <section class="page-hero">
+  <section class="subhero rules-hero" aria-labelledby="rules-title">
     <div class="container">
-      <h1 class="grad-text">Enthusia Rules</h1>
+      <p class="eyebrow">Rules</p>
+      <h1 id="rules-title">Enthusia Rules</h1>
       <p class="page-lead">By playing on the server or participating in the Discord, you agree to adhere to the following rules. Continued play means acceptance of current and future rule updates.</p>
     </div>
   </section>
@@ -49,14 +59,14 @@
   <section class="container rules-layout">
     <aside class="card rules-toc" aria-labelledby="toc-title">
       <div class="toc-inner">
-        <h2 id="toc-title" class="rules-toc-title">Jump to</h2>
+        <h2 id="toc-title">Jump to</h2>
         <ol class="toc-list">
-          <li><a href="#general-conduct">Section I: General Conduct</a></li>
-          <li><a href="#account-security">Section II: Account Security</a></li>
-          <li><a href="#gameplay">Section III: Gameplay &amp; Mechanics</a></li>
-          <li><a href="#market-rules">Section IV: Player Market</a></li>
-          <li><a href="#reputation">Section V: Reputation System</a></li>
-          <li><a href="#mods-clients">Section VI: Mods &amp; Clients</a></li>
+          <li><a href="#general-conduct">General Conduct</a></li>
+          <li><a href="#account-security">Account Security</a></li>
+          <li><a href="#gameplay">Gameplay &amp; Mechanics</a></li>
+          <li><a href="#market-rules">Player Market</a></li>
+          <li><a href="#reputation">Reputation System</a></li>
+          <li><a href="#mods-clients">Mods &amp; Clients</a></li>
           <li><a href="#enforcement">Enforcement &amp; Tickets</a></li>
           <li><a href="#bottom-line" class="toc-highlight">Bottom Line</a></li>
         </ol>
@@ -65,95 +75,97 @@
 
     <article class="rules-prose card">
       <section id="general-conduct">
-        <h2>Section I: General Conduct (Chat &amp; Voice)</h2>
+        <p class="rule-label">Section I</p>
+        <h2>General Conduct</h2>
         <ul>
-          <li><strong>1.1 Respect &amp; Toxicity:</strong> No hate speech, racism, sexism, general bigotry, or targeted harassment, including DMs. Swearing is allowed in moderation.</li>
-          <li><strong>1.2 Spamming:</strong> No excessive caps, flood, or in-game sound spam from things like note blocks or portals. No mic spam in voice chat.</li>
-          <li><strong>1.3 Staff Impersonation:</strong> Impersonating a staff member by nickname, skin, or false claims of authority is strictly prohibited.</li>
-          <li><strong>1.4 Advertising:</strong> No promoting other servers or unrelated media.</li>
-          <li><strong>1.5 Inappropriate Content:</strong> Skins, names, and builds must not contain nudity, hate symbols, offensive caricatures, slurs, sexual references, filter bypasses, sexual acts, or offensive text or imagery.</li>
-          <li><strong>1.6 IRL Topics &amp; Politics:</strong> Politics, controversial world events, and heavy personal issues are prohibited so the server can stay an escape from real-world stress.</li>
-          <li><strong>1.7 Language:</strong> Public chat must remain in English so staff can moderate it properly.</li>
-          <li><strong>1.8 Begging:</strong> Do not ask staff or other players for free ranks, items, creative mode, or permissions.</li>
+          <li><strong>Respect &amp; toxicity:</strong> No hate speech, racism, sexism, general bigotry, or targeted harassment, including DMs. Swearing is allowed in moderation.</li>
+          <li><strong>Spamming:</strong> No excessive caps, flood, or in-game sound spam from things like note blocks or portals. No mic spam in voice chat.</li>
+          <li><strong>Staff impersonation:</strong> Do not impersonate staff through nicknames, skins, or false claims of authority.</li>
+          <li><strong>Advertising:</strong> Do not promote other servers or unrelated media.</li>
+          <li><strong>Inappropriate content:</strong> Skins, names, and builds must not contain nudity, hate symbols, offensive caricatures, slurs, sexual references, filter bypasses, sexual acts, or offensive text or imagery.</li>
+          <li><strong>IRL topics &amp; politics:</strong> Politics, controversial world events, and heavy personal issues are prohibited so the server can stay an escape from real-world stress.</li>
+          <li><strong>Language:</strong> Public chat must remain in English so staff can moderate it properly.</li>
+          <li><strong>Begging:</strong> Do not ask staff or other players for free ranks, items, creative mode, or permissions.</li>
         </ul>
-        <hr />
       </section>
 
       <section id="account-security">
-        <h2>Section II: Account Security &amp; Integrity</h2>
+        <p class="rule-label">Section II</p>
+        <h2>Account Security</h2>
         <ul>
-          <li><strong>2.1 VPN Policy:</strong> VPNs are prohibited unless approved by an Admin or higher with a vouch.</li>
-          <li><strong>2.2 Zero Tolerance:</strong> Grooming, doxxing, blackmail, threats, or illegal content result in an immediate permanent ban.</li>
-          <li><strong>2.3 Account Sharing:</strong> You are responsible for your account. No account sharing and no headless alts.</li>
-          <li><strong>2.4 Complicity:</strong> Knowingly helping a rule breaker, such as storing dupe items, riding with a hacker, or profiting from cheating, is bannable.</li>
-          <li><strong>2.5 Harboring Ban Evaders:</strong> Knowingly inviting, gearing, or housing a player who is evading a ban is prohibited.</li>
-          <li><strong>2.6 Rule Encouragement:</strong> Encouraging others to break rules, hack, or exploit bugs is punishable.</li>
-          <li><strong>2.7 Falsifying Evidence:</strong> Forging screenshots, videos, or chat logs to frame another player or mislead staff results in an immediate ban.</li>
-          <li><strong>2.8 Unsafe Downloads:</strong> Do not share downloads or documents from unknown or questionable sources, since they may contain dangerous software.</li>
-          <li><strong>2.9 Personal Safety:</strong> Be careful with what you share, especially anything tied to private accounts or identifying info. Content from presumed underage members that exposes personal details may be removed for safety.</li>
+          <li><strong>VPN policy:</strong> VPNs are prohibited unless approved by an Admin or higher with a vouch.</li>
+          <li><strong>Zero tolerance:</strong> Grooming, doxxing, blackmail, threats, or illegal content result in an immediate permanent ban.</li>
+          <li><strong>Account sharing:</strong> You are responsible for your account. No account sharing and no headless alts.</li>
+          <li><strong>Complicity:</strong> Knowingly helping a rule breaker, such as storing dupe items, riding with a hacker, or profiting from cheating, is bannable.</li>
+          <li><strong>Harboring ban evaders:</strong> Knowingly inviting, gearing, or housing a player who is evading a ban is prohibited.</li>
+          <li><strong>Rule encouragement:</strong> Encouraging others to break rules, hack, or exploit bugs is punishable.</li>
+          <li><strong>Falsifying evidence:</strong> Forging screenshots, videos, or chat logs to frame another player or mislead staff results in an immediate ban.</li>
+          <li><strong>Unsafe downloads:</strong> Do not share downloads or documents from unknown or questionable sources.</li>
+          <li><strong>Personal safety:</strong> Be careful with what you share, especially anything tied to private accounts or identifying info. Content from presumed underage members that exposes personal details may be removed for safety.</li>
         </ul>
-        <hr />
       </section>
 
       <section id="gameplay">
-        <h2>Section III: Gameplay &amp; Mechanics</h2>
+        <p class="rule-label">Section III</p>
+        <h2>Gameplay &amp; Mechanics</h2>
         <ul>
-          <li><strong>3.1 PvP &amp; Killing:</strong> PvP is enabled everywhere except Spawn and Market. Spawn killing and camping players is allowed.</li>
-          <li><strong>3.2 Griefing:</strong> Griefing, stealing, and raiding are allowed in the wilderness. The only protected areas are Spawn and Market.</li>
-          <li><strong>3.3 Duping:</strong> TNT duping is allowed. All other dupes, including item and rail dupes, are banned.</li>
-          <li><strong>3.4 Farms &amp; Lag:</strong> No chunk loaders, including keeping chunks loaded while offline. Staff may remove unreasonably laggy farms.</li>
-          <li><strong>3.5 The End:</strong> Camping the End Portal frame is allowed. TNT duping or dropping falling blocks into the End Portal to trap or block entry is prohibited.</li>
-          <li><strong>3.6 Bug Abuse:</strong> Any discovered bug or exploit must be reported immediately through a ticket. Withholding or abusing bugs for personal or guild advantage can result in a ban and economy wipe.</li>
+          <li><strong>PvP &amp; killing:</strong> PvP is enabled everywhere except Spawn and Market. Spawn killing and camping players is allowed.</li>
+          <li><strong>Griefing:</strong> Griefing, stealing, and raiding are allowed in the wilderness. The only protected areas are Spawn and Market.</li>
+          <li><strong>Duping:</strong> TNT duping is allowed. Rail and carpet duping are allowed. Other dupes are banned.</li>
+          <li><strong>Farms &amp; lag:</strong> No chunk loaders, including keeping chunks loaded while offline. Staff may remove unreasonably laggy farms.</li>
+          <li><strong>The End:</strong> Camping the End Portal frame is allowed. TNT duping or dropping falling blocks into the End Portal to trap or block entry is prohibited.</li>
+          <li><strong>Bug abuse:</strong> Any discovered bug or exploit must be reported immediately through a ticket. Withholding or abusing bugs for personal or guild advantage can result in a ban and economy wipe.</li>
         </ul>
-        <hr />
       </section>
 
       <section id="market-rules">
-        <h2>Section IV: Player Market Rules</h2>
+        <p class="rule-label">Section IV</p>
+        <h2>Player Market</h2>
         <ul>
-          <li><strong>4.1 One Stall Limit:</strong> Players are limited to one market stall each. Using alts to buy extra stalls is prohibited.</li>
-          <li><strong>4.2 Restock Limit:</strong> You may keep one single chest or barrel only for restocking shop supplies. General personal storage in stalls is not allowed.</li>
-          <li><strong>4.3 Anti-Loophole Pricing:</strong> Listing items at absurd prices to use shop slots as safe storage is strictly banned.</li>
-          <li><strong>4.4 Aesthetics &amp; Obstructions:</strong> Keep your shop presentable. Do not leave shulker boxes placed on the floor after restocking.</li>
-          <li><strong>4.5 Market Violations:</strong> Repeated violations can lead to an immediate stall wipe and a stall ban until staff lifts it.</li>
+          <li><strong>One stall limit:</strong> Players are limited to one market stall each. Using alts to buy extra stalls is prohibited.</li>
+          <li><strong>Restock limit:</strong> You may keep one single chest or barrel only for restocking shop supplies. General personal storage in stalls is not allowed.</li>
+          <li><strong>Anti-loophole pricing:</strong> Listing items at absurd prices to use shop slots as safe storage is strictly banned.</li>
+          <li><strong>Aesthetics &amp; obstructions:</strong> Keep your shop presentable. Do not leave shulker boxes placed on the floor after restocking.</li>
+          <li><strong>Market violations:</strong> Repeated violations can lead to an immediate stall wipe and a stall ban until staff lifts it.</li>
         </ul>
-        <hr />
       </section>
 
       <section id="reputation">
-        <h2>Section V: Reputation System</h2>
+        <p class="rule-label">Section V</p>
+        <h2>Reputation System</h2>
         <ul>
-          <li><strong>5.1 False Rep:</strong> Reputation must reflect real trades or interactions. False positive or negative rep without a valid reason is prohibited.</li>
-          <li><strong>5.2 Manipulation &amp; Mass Rep:</strong> Organizing groups to mass rep or review-bomb a player is strictly banned.</li>
-          <li><strong>5.3 Penalties:</strong> Repeated abuse of the reputation system can permanently remove your reputation privileges.</li>
+          <li><strong>False rep:</strong> Reputation must reflect real trades or interactions. False positive or negative rep without a valid reason is prohibited.</li>
+          <li><strong>Manipulation &amp; mass rep:</strong> Organizing groups to mass rep or review-bomb a player is strictly banned.</li>
+          <li><strong>Penalties:</strong> Repeated abuse of the reputation system can permanently remove your reputation privileges.</li>
         </ul>
-        <hr />
       </section>
 
       <section id="mods-clients">
-        <h2>Section VI: Mods &amp; Clients</h2>
+        <p class="rule-label">Section VI</p>
+        <h2>Mods &amp; Clients</h2>
         <ul>
-          <li><strong>6.1 Allowed:</strong> Performance mods like Sodium and Iris, Simple Voice Chat, Replay Mod, Litematica for holograms and schematics only, and Xaero's Minimap Fair Play Edition.</li>
-          <li><strong>6.2 Prohibited:</strong> Hacked clients, X-Ray, ESP, Freecam, Baritone, auto-clickers, and Easy Place or Printer Mode at all times.</li>
-          <li><strong>6.3 Visual Unfair Advantages:</strong> Removing lava fog to locate Ancient Debris or other ores in lava lakes is prohibited.</li>
-          <li><strong>6.4 PvP Indicators:</strong> Mods or resource packs that show player health, damage indicators, hearts, or other players' armor durability are prohibited.</li>
-          <li><strong>6.5 Map Restrictions:</strong> Minimap entity and cave displays are prohibited. All world map mods that save terrain chunks are strictly prohibited, including Xaero's World Map, JourneyMap, VoxelMap, MapWriter, and Antique Atlas.</li>
+          <li><strong>Allowed:</strong> Performance mods like Sodium and Iris, Simple Voice Chat, Replay Mod, Litematica for holograms and schematics only, and Xaero's Minimap Fair Play Edition.</li>
+          <li><strong>Prohibited:</strong> Hacked clients, X-Ray, ESP, Freecam, Baritone, and Easy Place or Printer Mode at all times.</li>
+          <li><strong>Autoclickers:</strong> Allowed for non-combat use, but not during combat.</li>
+          <li><strong>Visual unfair advantages:</strong> Removing lava fog to locate Ancient Debris or other ores in lava lakes is prohibited.</li>
+          <li><strong>PvP indicators:</strong> Mods or resource packs that show player health, damage indicators, hearts, or other players' armor durability are prohibited.</li>
+          <li><strong>Map tools:</strong> World map mods are allowed. Minimap entity and cave displays are still prohibited.</li>
         </ul>
-        <hr />
       </section>
 
       <section id="enforcement">
+        <p class="rule-label">Enforcement</p>
         <h2>Enforcement &amp; Tickets</h2>
         <ul>
-          <li><strong>Staff Protocol:</strong> Follow staff instructions immediately. Do not lie or provide fake evidence.</li>
-          <li><strong>Ticket System:</strong> All disputes go through tickets, not DMs or public chat.</li>
+          <li><strong>Staff protocol:</strong> Follow staff instructions immediately. Do not lie or provide fake evidence.</li>
+          <li><strong>Ticket system:</strong> All disputes go through tickets, not DMs or public chat.</li>
           <li><strong>Punishments:</strong> Punishments range from warnings to permanent bans. Inventory rollbacks are granted only for major server-side issues with solid evidence.</li>
         </ul>
-        <hr />
       </section>
 
-      <section id="bottom-line">
-        <h2><span class="grad-text">Bottom Line</span></h2>
+      <section id="bottom-line" class="bottom-line">
+        <p class="rule-label">Bottom line</p>
+        <h2>Bottom Line</h2>
         <p>Trust and fairness keep the community alive.</p>
       </section>
 
@@ -163,16 +175,36 @@
 </main>
 
 <footer class="site-footer">
-  <div class="container">
-    <div class="footer-inner">
-      <p class="footer-copy">&copy; <span id="year"></span> Enthusia SMP</p>
-      <p class="footer-contact">Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p>
-    </div>
+  <div class="container footer-inner">
+    <p>&copy; <span id="year"></span> Enthusia SMP</p>
+    <p>Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p>
   </div>
 </footer>
 
-<script src="assets/site-config.js?v=refactor17" defer></script>
-<script src="assets/script.js?v=refactor17" defer></script>
+<script src="assets/site-config.js?v=vision41" defer></script>
+<script src="assets/script.js?v=vision41" defer></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
