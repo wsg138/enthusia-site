@@ -777,6 +777,7 @@ function createLeaderboardEntry(board, entry, rank) {
 function createLeaderboardBoardCard(board, active = true) {
   const article = document.createElement("article");
   article.className = "card board-card";
+  article.id = `board-${board.id}`;
   if (!active) {
     article.classList.add("board-card-muted");
   }
