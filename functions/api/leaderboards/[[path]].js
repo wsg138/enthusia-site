@@ -10,6 +10,10 @@ const BOARD_CONFIG = Object.freeze({
     source: "balance-r2",
     key: `${PLAYTIME_PREFIX}/balance-active-all.json`,
   }),
+  "donators-all-time": Object.freeze({
+    source: "donator-r2",
+    key: `${PLAYTIME_PREFIX}/donators-all-time.json`,
+  }),
   guilds: Object.freeze({
     source: "protected-upstream",
     upstreamLimit: 10,
@@ -165,6 +169,10 @@ export async function onRequestGet(context) {
 
   if (config.source === "balance-r2") {
     return readR2LeaderboardObject(context.env, "BALANCE_LEADERBOARDS", config.key, 30);
+  }
+
+  if (config.source === "donator-r2") {
+    return readR2LeaderboardObject(context.env, "DONATOR_LEADERBOARDS", config.key, 60);
   }
 
   if (config.source === "upstream") {
