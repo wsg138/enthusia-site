@@ -2280,7 +2280,7 @@ summary:focus-visible{
 }
 
 @media (max-width:780px){
-  :root{--header-offset:132px}
+  :root{--header-offset:126px}
 
   .header-inner{
     min-height:auto;
@@ -2293,16 +2293,52 @@ summary:focus-visible{
   .nav{
     justify-content:center;
     width:100%;
+    gap:5px;
   }
 
   .nav a,
   .nav button{
     min-height:36px;
-    padding:8px 10px;
+    padding:8px 9px;
+    font-size:.9rem;
   }
 
   .hero{
-    padding-top:46px;
+    padding:28px 0 36px;
+  }
+
+  .hero-inner{
+    gap:22px;
+  }
+
+  .hero-panel{
+    order:-1;
+    width:min(100%,520px);
+    justify-self:center;
+    gap:12px;
+  }
+
+  .hero-logo{
+    width:min(220px,64%);
+  }
+
+  .fact-strip span{
+    font-size:.74rem;
+  }
+
+  .discord-card{
+    padding:12px;
+  }
+
+  .discord-head{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .discord-actions .btn{
+    width:100%;
+    justify-content:center;
   }
 
   .status,
@@ -2340,7 +2376,7 @@ summary:focus-visible{
 }
 
 @media (max-width:560px){
-  :root{--header-offset:160px}
+  :root{--header-offset:138px}
 
   .container{
     padding-left:14px;
@@ -2354,8 +2390,17 @@ summary:focus-visible{
 
   .hero-copy h1,
   .subhero h1{
-    font-size:2.45rem;
+    font-size:2.3rem;
     line-height:1;
+  }
+
+  .lead,
+  .page-lead{
+    font-size:1rem;
+  }
+
+  .cta-row{
+    gap:8px;
   }
 
   .cta-row .btn{
@@ -2363,7 +2408,34 @@ summary:focus-visible{
   }
 
   .hero-panel{
-    padding:14px;
+    padding:12px;
+  }
+
+  .hero-logo{
+    width:min(185px,58%);
+  }
+
+  .fact-strip{
+    gap:6px;
+  }
+
+  .fact-strip span{
+    flex:1 1 120px;
+    text-align:center;
+  }
+
+  .discord-avatars{
+    max-height:64px;
+    overflow:hidden;
+  }
+
+  .discord-avatars img{
+    width:27px;
+    height:27px;
+  }
+
+  .status-card{
+    padding:12px;
   }
 
   .feature-grid,
