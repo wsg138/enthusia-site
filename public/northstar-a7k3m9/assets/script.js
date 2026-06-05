@@ -173,25 +173,32 @@ async function updateServerStatus(ip) {
   }
 
   try {
-    const response = await fetch(`https://api.mcstatus.io/v2/status/java/${encodeURIComponent(ip)}`);
-    if (!response.ok) {
-      throw new Error("Status API returned a non-success response.");
-    }
-
-    const data = await response.json();
-    if (data?.online) {
-      const online = typeof data.players?.online === "number" ? data.players.online : null;
-      countEl.textContent = online === null ? "--" : String(online);
-      setStatusBadge(statusEl, "Online", "online");
-      return;
-    }
-
-    countEl.textContent = "--";
-    setStatusBadge(statusEl, "Offline", "offline");
+    applyServerStatus(await fetchServerStatus(ip), statusEl, countEl);
   } catch {
     countEl.textContent = "--";
     setStatusBadge(statusEl, "TBA", "unknown");
   }
+}
+
+async function fetchServerStatus(ip) {
+  const response = await fetch(`https://api.mcstatus.io/v2/status/java/${encodeURIComponent(ip)}`);
+  if (!response.ok) {
+    throw new Error("Status API returned a non-success response.");
+  }
+
+  return response.json();
+}
+
+function applyServerStatus(data, statusEl, countEl) {
+  if (!data?.online) {
+    countEl.textContent = "--";
+    setStatusBadge(statusEl, "Offline", "offline");
+    return;
+  }
+
+  const online = typeof data.players?.online === "number" ? data.players.online : null;
+  countEl.textContent = online === null ? "--" : String(online);
+  setStatusBadge(statusEl, "Online", "online");
 }
 
 function createDiscordCard(titleText) {
@@ -399,17 +406,15 @@ function getRoleClassName(role) {
   return "role-default";
 }
 
-function createStaffCard(member, hidden = false) {
-  const article = document.createElement("article");
-  article.className = "staff-card";
-
-  if (hidden) {
-    article.setAttribute("aria-hidden", "true");
-  }
-
+function getStaffIdentity(member) {
   const username = normalizeText(member?.username);
   const displayName = normalizeText(member?.name) || username || "Staff";
   const role = normalizeText(member?.role) || "Staff";
+  return { username, displayName, role };
+}
+
+function createStaffVisual(identity, hidden) {
+  const { username, displayName } = identity;
   const profileUrl = username ? `https://laby.net/@${encodeURIComponent(username)}` : "";
 
   const visual = document.createElement(profileUrl ? "a" : "div");
@@ -431,13 +436,16 @@ function createStaffCard(member, hidden = false) {
   avatar.decoding = "async";
 
   visual.append(avatar);
+  return { visual, profileUrl };
+}
 
+function createStaffMeta(identity, profileUrl) {
   const meta = document.createElement("div");
   meta.className = "staff-meta";
 
   const name = document.createElement(profileUrl ? "a" : "div");
   name.className = "staff-name";
-  name.textContent = displayName;
+  name.textContent = identity.displayName;
   if (name instanceof HTMLAnchorElement) {
     name.href = profileUrl;
     name.target = "_blank";
@@ -446,10 +454,24 @@ function createStaffCard(member, hidden = false) {
 
   const roleBadge = document.createElement("div");
   roleBadge.className = "staff-role";
-  roleBadge.classList.add(getRoleClassName(role));
-  roleBadge.textContent = role;
+  roleBadge.classList.add(getRoleClassName(identity.role));
+  roleBadge.textContent = identity.role;
 
   meta.append(name, roleBadge);
+  return meta;
+}
+
+function createStaffCard(member, hidden = false) {
+  const article = document.createElement("article");
+  article.className = "staff-card";
+
+  if (hidden) {
+    article.setAttribute("aria-hidden", "true");
+  }
+
+  const identity = getStaffIdentity(member);
+  const { visual, profileUrl } = createStaffVisual(identity, hidden);
+  const meta = createStaffMeta(identity, profileUrl);
   article.append(visual, meta);
   return article;
 }
@@ -622,110 +644,74 @@ function getPatternColor(pattern) {
   return normalizeBannerColor(pattern?.color || pattern?.dyeColor || pattern?.shade);
 }
 
-function appendBottomStripe(group, fill) {
-  group.append(createSvgNode("rect", { x: 0, y: 26, width: 20, height: 8, fill }));
-}
-
-function appendTopStripe(group, fill) {
-  group.append(createSvgNode("rect", { x: 0, y: 0, width: 20, height: 8, fill }));
-}
-
-function appendLeftStripe(group, fill) {
-  group.append(createSvgNode("rect", { x: 0, y: 0, width: 6, height: 40, fill }));
-}
-
-function appendRightStripe(group, fill) {
-  group.append(createSvgNode("rect", { x: 14, y: 0, width: 6, height: 40, fill }));
-}
-
-function appendCenterStripe(group, fill) {
-  group.append(createSvgNode("rect", { x: 7, y: 0, width: 6, height: 40, fill }));
-}
-
-function appendMiddleStripe(group, fill) {
-  group.append(createSvgNode("rect", { x: 0, y: 16, width: 20, height: 8, fill }));
-}
-
-function appendBorderPattern(group, fill) {
-  group.append(createSvgNode("rect", { x: 0, y: 0, width: 20, height: 4, fill }));
-  group.append(createSvgNode("rect", { x: 0, y: 0, width: 4, height: 40, fill }));
-  group.append(createSvgNode("rect", { x: 16, y: 0, width: 4, height: 40, fill }));
-  group.append(createSvgNode("rect", { x: 0, y: 30, width: 20, height: 10, fill }));
-}
-
-function appendCrossPattern(group, fill) {
-  group.append(createSvgNode("rect", { x: 7, y: 0, width: 6, height: 40, fill }));
-  group.append(createSvgNode("rect", { x: 0, y: 16, width: 20, height: 8, fill }));
-}
-
-function appendSaltirePattern(group, fill) {
-  group.append(createSvgNode("path", { d: "M-4 4 L4 -4 L24 28 L16 36 Z", fill }));
-  group.append(createSvgNode("path", { d: "M24 4 L16 -4 L-4 28 L4 36 Z", fill }));
-}
-
-function appendDiagonalLeftPattern(group, fill) {
-  group.append(createSvgNode("path", { d: "M-4 30 L6 40 L24 8 L14 -2 Z", fill }));
-}
-
-function appendDiagonalRightPattern(group, fill) {
-  group.append(createSvgNode("path", { d: "M24 30 L14 40 L-4 8 L6 -2 Z", fill }));
-}
-
-function appendCirclePattern(group, fill) {
-  group.append(createSvgNode("circle", { cx: 10, cy: 16, r: 6, fill }));
-}
-
-function appendRhombusPattern(group, fill) {
-  group.append(createSvgNode("path", { d: "M10 6 L16 16 L10 26 L4 16 Z", fill }));
-}
-
-function appendTopTrianglePattern(group, fill) {
-  group.append(createSvgNode("path", { d: "M10 0 L20 12 L0 12 Z", fill }));
-}
-
-function appendBottomTrianglePattern(group, fill) {
-  group.append(createSvgNode("path", { d: "M0 26 L20 26 L10 40 Z", fill }));
-}
-
-const BANNER_PATTERN_RENDERERS = {
-  bs: appendBottomStripe,
-  stripe_bottom: appendBottomStripe,
-  ts: appendTopStripe,
-  stripe_top: appendTopStripe,
-  ls: appendLeftStripe,
-  stripe_left: appendLeftStripe,
-  rs: appendRightStripe,
-  stripe_right: appendRightStripe,
-  cs: appendCenterStripe,
-  stripe_center: appendCenterStripe,
-  ms: appendMiddleStripe,
-  stripe_middle: appendMiddleStripe,
-  bo: appendBorderPattern,
-  border: appendBorderPattern,
-  cr: appendCrossPattern,
-  cross: appendCrossPattern,
-  sc: appendSaltirePattern,
-  straight_cross: appendSaltirePattern,
-  saltire: appendSaltirePattern,
-  dls: appendDiagonalLeftPattern,
-  diagonal_left: appendDiagonalLeftPattern,
-  drs: appendDiagonalRightPattern,
-  diagonal_right: appendDiagonalRightPattern,
-  mc: appendCirclePattern,
-  circle: appendCirclePattern,
-  mr: appendRhombusPattern,
-  rhombus: appendRhombusPattern,
-  tt: appendTopTrianglePattern,
-  triangle_top: appendTopTrianglePattern,
-  bt: appendBottomTrianglePattern,
-  triangle_bottom: appendBottomTrianglePattern
+const BANNER_PATTERN_SHAPES = {
+  bs: [["rect", { x: 0, y: 26, width: 20, height: 8 }]],
+  stripe_bottom: [["rect", { x: 0, y: 26, width: 20, height: 8 }]],
+  ts: [["rect", { x: 0, y: 0, width: 20, height: 8 }]],
+  stripe_top: [["rect", { x: 0, y: 0, width: 20, height: 8 }]],
+  ls: [["rect", { x: 0, y: 0, width: 6, height: 40 }]],
+  stripe_left: [["rect", { x: 0, y: 0, width: 6, height: 40 }]],
+  rs: [["rect", { x: 14, y: 0, width: 6, height: 40 }]],
+  stripe_right: [["rect", { x: 14, y: 0, width: 6, height: 40 }]],
+  cs: [["rect", { x: 7, y: 0, width: 6, height: 40 }]],
+  stripe_center: [["rect", { x: 7, y: 0, width: 6, height: 40 }]],
+  ms: [["rect", { x: 0, y: 16, width: 20, height: 8 }]],
+  stripe_middle: [["rect", { x: 0, y: 16, width: 20, height: 8 }]],
+  bo: [
+    ["rect", { x: 0, y: 0, width: 20, height: 4 }],
+    ["rect", { x: 0, y: 0, width: 4, height: 40 }],
+    ["rect", { x: 16, y: 0, width: 4, height: 40 }],
+    ["rect", { x: 0, y: 30, width: 20, height: 10 }]
+  ],
+  border: [
+    ["rect", { x: 0, y: 0, width: 20, height: 4 }],
+    ["rect", { x: 0, y: 0, width: 4, height: 40 }],
+    ["rect", { x: 16, y: 0, width: 4, height: 40 }],
+    ["rect", { x: 0, y: 30, width: 20, height: 10 }]
+  ],
+  cr: [
+    ["rect", { x: 7, y: 0, width: 6, height: 40 }],
+    ["rect", { x: 0, y: 16, width: 20, height: 8 }]
+  ],
+  cross: [
+    ["rect", { x: 7, y: 0, width: 6, height: 40 }],
+    ["rect", { x: 0, y: 16, width: 20, height: 8 }]
+  ],
+  sc: [
+    ["path", { d: "M-4 4 L4 -4 L24 28 L16 36 Z" }],
+    ["path", { d: "M24 4 L16 -4 L-4 28 L4 36 Z" }]
+  ],
+  straight_cross: [
+    ["path", { d: "M-4 4 L4 -4 L24 28 L16 36 Z" }],
+    ["path", { d: "M24 4 L16 -4 L-4 28 L4 36 Z" }]
+  ],
+  saltire: [
+    ["path", { d: "M-4 4 L4 -4 L24 28 L16 36 Z" }],
+    ["path", { d: "M24 4 L16 -4 L-4 28 L4 36 Z" }]
+  ],
+  dls: [["path", { d: "M-4 30 L6 40 L24 8 L14 -2 Z" }]],
+  diagonal_left: [["path", { d: "M-4 30 L6 40 L24 8 L14 -2 Z" }]],
+  drs: [["path", { d: "M24 30 L14 40 L-4 8 L6 -2 Z" }]],
+  diagonal_right: [["path", { d: "M24 30 L14 40 L-4 8 L6 -2 Z" }]],
+  mc: [["circle", { cx: 10, cy: 16, r: 6 }]],
+  circle: [["circle", { cx: 10, cy: 16, r: 6 }]],
+  mr: [["path", { d: "M10 6 L16 16 L10 26 L4 16 Z" }]],
+  rhombus: [["path", { d: "M10 6 L16 16 L10 26 L4 16 Z" }]],
+  tt: [["path", { d: "M10 0 L20 12 L0 12 Z" }]],
+  triangle_top: [["path", { d: "M10 0 L20 12 L0 12 Z" }]],
+  bt: [["path", { d: "M0 26 L20 26 L10 40 Z" }]],
+  triangle_bottom: [["path", { d: "M0 26 L20 26 L10 40 Z" }]]
 };
 
 function appendBannerPattern(group, code, color) {
-  const renderPattern = BANNER_PATTERN_RENDERERS[code];
-  if (renderPattern) {
-    renderPattern(group, color);
+  const shapes = BANNER_PATTERN_SHAPES[code];
+  if (!Array.isArray(shapes)) {
+    return;
   }
+
+  shapes.forEach(([tagName, attributes]) => {
+    group.append(createSvgNode(tagName, { ...attributes, fill: color }));
+  });
 }
 
 function createGuildBannerVisual(banner) {
@@ -823,10 +809,10 @@ function createLeaderboardIdentity(entry, rank) {
   identity.className = "leader-name";
 
   const name = document.createElement("strong");
-  name.textContent = normalizeText(entry?.displayName || entry?.name || entry?.username || entry?.tag || `Rank ${rank}`);
+  name.textContent = getLeaderboardDisplayName(entry, rank);
   identity.append(name);
 
-  const detail = normalizeText(entry?.subtext || entry?.subtitle || entry?.tag || "");
+  const detail = getLeaderboardDetail(entry);
   if (detail) {
     const detailEl = document.createElement("small");
     detailEl.textContent = detail;
@@ -834,6 +820,14 @@ function createLeaderboardIdentity(entry, rank) {
   }
 
   return identity;
+}
+
+function getLeaderboardDisplayName(entry, rank) {
+  return normalizeText(entry?.displayName || entry?.name || entry?.username || entry?.tag || `Rank ${rank}`);
+}
+
+function getLeaderboardDetail(entry) {
+  return normalizeText(entry?.subtext || entry?.subtitle || entry?.tag || "");
 }
 
 function createLeaderboardEntry(board, entry, rank) {
@@ -931,25 +925,39 @@ function normalizeGuildLeaderboardEntry(entry, index) {
   };
 }
 
+function firstTruthyText() {
+  const values = Array.prototype.slice.call(arguments);
+  for (const value of values) {
+    if (value) {
+      return normalizeText(value);
+    }
+  }
+
+  return "";
+}
+
+function getPlayerLeaderboardValue(entry) {
+  return firstTruthyText(
+    entry.formattedValue,
+    entry.formatted,
+    entry.stat,
+    entry.score,
+    entry.amount,
+    entry.hours,
+    entry.balance,
+    entry.experience,
+    entry.level
+  );
+}
+
 function normalizePlayerLeaderboardEntry(entry, index) {
   return {
-    name: normalizeText(entry.username || entry.displayName || entry.name || entry.guild_name),
-    displayName: normalizeText(entry.displayName) || normalizeText(entry.username) || normalizeText(entry.name || entry.guild_name),
-    username: normalizeText(entry.username || entry.player || entry.uuid || ""),
-    tag: normalizeText(entry.tag || entry.guildTag || entry.guild_tag || ""),
-    subtext: normalizeText(entry.subtext || entry.subtitle || entry.description || ""),
-    value: normalizeText(
-      entry.formattedValue
-      || entry.formatted
-      || entry.stat
-      || entry.score
-      || entry.amount
-      || entry.hours
-      || entry.balance
-      || entry.experience
-      || entry.level
-      || ""
-    ),
+    name: firstTruthyText(entry.username, entry.displayName, entry.name, entry.guild_name),
+    displayName: firstTruthyText(entry.displayName) || firstTruthyText(entry.username) || firstTruthyText(entry.name, entry.guild_name),
+    username: firstTruthyText(entry.username, entry.player, entry.uuid),
+    tag: firstTruthyText(entry.tag, entry.guildTag, entry.guild_tag),
+    subtext: firstTruthyText(entry.subtext, entry.subtitle, entry.description),
+    value: getPlayerLeaderboardValue(entry),
     rank: Number.isFinite(entry.rank) ? entry.rank : index + 1
   };
 }
@@ -1049,23 +1057,34 @@ function renderLeaderboardPage(cfg) {
   activeRoot.replaceChildren();
   upcomingRoot.replaceChildren();
 
-  activeBoards.forEach((board) => {
-    const card = createLeaderboardBoardCard(board, true);
-    activeRoot.append(card.article);
-    void populateLeaderboardBoard(board, card, true);
-  });
-
-  upcomingBoards.forEach((board) => {
-    const card = createLeaderboardBoardCard(board, false);
-    upcomingRoot.append(card.article);
-  });
+  renderActiveLeaderboardBoards(activeBoards, activeRoot);
+  renderUpcomingLeaderboardBoards(upcomingBoards, upcomingRoot);
 
   if (upcomingSection) {
     upcomingSection.hidden = upcomingBoards.length === 0;
   }
 
+  updateLeaderboardSummary(summaryLive, summarySpots, summaryUpcoming, activeBoards.length, upcomingBoards.length);
+}
+
+function renderActiveLeaderboardBoards(activeBoards, activeRoot) {
+  activeBoards.forEach((board) => {
+    const card = createLeaderboardBoardCard(board, true);
+    activeRoot.append(card.article);
+    void populateLeaderboardBoard(board, card, true);
+  });
+}
+
+function renderUpcomingLeaderboardBoards(upcomingBoards, upcomingRoot) {
+  upcomingBoards.forEach((board) => {
+    const card = createLeaderboardBoardCard(board, false);
+    upcomingRoot.append(card.article);
+  });
+}
+
+function updateLeaderboardSummary(summaryLive, summarySpots, summaryUpcoming, activeCount, upcomingCount) {
   if (summaryLive) {
-    summaryLive.textContent = String(activeBoards.length);
+    summaryLive.textContent = String(activeCount);
   }
 
   if (summarySpots) {
@@ -1073,7 +1092,7 @@ function renderLeaderboardPage(cfg) {
   }
 
   if (summaryUpcoming) {
-    summaryUpcoming.textContent = String(upcomingBoards.length);
+    summaryUpcoming.textContent = String(upcomingCount);
   }
 }
 
