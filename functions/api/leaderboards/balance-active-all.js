@@ -1,10 +1,18 @@
-function json(data, status = 200) {
-  return Response.json(data, {
-    status,
+function json(data, status) {
+  return new Response(JSON.stringify(data), {
+    status: status || 200,
     headers: {
-      "cache-control": "no-store",
-    },
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store"
+    }
   });
+}
+
+function contentTypeOf(object) {
+  if (object.httpMetadata && object.httpMetadata.contentType) {
+    return object.httpMetadata.contentType;
+  }
+  return "application/json; charset=utf-8";
 }
 
 export async function onRequestGet(context) {
@@ -13,7 +21,7 @@ export async function onRequestGet(context) {
     return json({
       ok: false,
       error: "Leaderboard R2 binding is not configured.",
-      binding: "BALANCE_LEADERBOARDS",
+      binding: "BALANCE_LEADERBOARDS"
     }, 500);
   }
 
@@ -23,15 +31,15 @@ export async function onRequestGet(context) {
     return json({
       ok: false,
       error: "Leaderboard not found.",
-      key,
+      key: key
     }, 404);
   }
 
   return new Response(object.body, {
     headers: {
-      "content-type": object.httpMetadata?.contentType || "application/json; charset=utf-8",
+      "content-type": contentTypeOf(object),
       "cache-control": "public, max-age=30",
-      "access-control-allow-origin": "*",
-    },
+      "access-control-allow-origin": "*"
+    }
   });
 }

@@ -1,9 +1,10 @@
-function json(data, status = 200) {
-  return Response.json(data, {
-    status,
+function json(data, status) {
+  return new Response(JSON.stringify(data), {
+    status: status || 200,
     headers: {
-      "cache-control": "no-store",
-    },
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store"
+    }
   });
 }
 
@@ -27,7 +28,7 @@ function getGuildHeaders(env) {
     Accept: "application/json",
     Authorization: `Bearer ${env.GUILDS_API_BEARER}`,
     "CF-Access-Client-Id": env.CF_ACCESS_CLIENT_ID,
-    "CF-Access-Client-Secret": env.CF_ACCESS_CLIENT_SECRET,
+    "CF-Access-Client-Secret": env.CF_ACCESS_CLIENT_SECRET
   };
 }
 
@@ -47,8 +48,8 @@ export async function onRequestGet(context) {
     headers,
     cf: {
       cacheTtl: 0,
-      cacheEverything: false,
-    },
+      cacheEverything: false
+    }
   });
 
   const text = await response.text();
@@ -57,7 +58,7 @@ export async function onRequestGet(context) {
     return json({
       ok: false,
       status: response.status,
-      error: "Leaderboard upstream request failed.",
+      error: "Leaderboard upstream request failed."
     }, response.status);
   }
 
@@ -65,7 +66,7 @@ export async function onRequestGet(context) {
     status: 200,
     headers: {
       "content-type": response.headers.get("content-type") || "application/json; charset=utf-8",
-      "cache-control": "max-age=15, s-maxage=15",
-    },
+      "cache-control": "max-age=15, s-maxage=15"
+    }
   });
 }

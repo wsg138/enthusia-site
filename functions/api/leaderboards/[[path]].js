@@ -1,39 +1,40 @@
 const DEFAULT_UPSTREAM_ORIGIN = "https://api.enthusia.info";
 const PLAYTIME_PREFIX = "leaderboards";
 
-const BOARD_CONFIG = Object.freeze({
-  "playtime-active-all": Object.freeze({
+const BOARD_CONFIG = {
+  "playtime-active-all": {
     source: "playtime-r2",
-    key: `${PLAYTIME_PREFIX}/playtime-active-all.json`,
-  }),
-  "balance-active-all": Object.freeze({
+    key: `${PLAYTIME_PREFIX}/playtime-active-all.json`
+  },
+  "balance-active-all": {
     source: "balance-r2",
-    key: `${PLAYTIME_PREFIX}/balance-active-all.json`,
-  }),
-  "donators-all-time": Object.freeze({
+    key: `${PLAYTIME_PREFIX}/balance-active-all.json`
+  },
+  "donators-all-time": {
     source: "donator-r2",
-    key: `${PLAYTIME_PREFIX}/donators-all-time.json`,
-  }),
-  guilds: Object.freeze({
+    key: `${PLAYTIME_PREFIX}/donators-all-time.json`
+  },
+  guilds: {
     source: "protected-upstream",
     upstreamLimit: 10,
-    defaultQuery: Object.freeze({
-      period: "ALL_TIME",
-    }),
-  }),
-});
+    defaultQuery: {
+      period: "ALL_TIME"
+    }
+  }
+};
 
-function json(data, status = 200) {
-  return Response.json(data, {
-    status,
+function json(data, status) {
+  return new Response(JSON.stringify(data), {
+    status: status || 200,
     headers: {
-      "cache-control": "no-store",
-    },
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store"
+    }
   });
 }
 
 function getRequestedPath(params) {
-  const rawPath = params?.path ?? params?.["path"] ?? params?.["path*"];
+  const rawPath = params && (params.path || params["path"] || params["path*"]);
   if (Array.isArray(rawPath)) {
     return rawPath.join("/");
   }
@@ -41,7 +42,17 @@ function getRequestedPath(params) {
 }
 
 function normalizeBoardPath(path) {
-  return String(path || "").replace(/^\/+|\/+$/g, "").replace(/\.json$/i, "");
+  let value = String(path || "");
+  while (value.startsWith("/")) {
+    value = value.slice(1);
+  }
+  while (value.endsWith("/")) {
+    value = value.slice(0, -1);
+  }
+  if (value.toLowerCase().endsWith(".json")) {
+    value = value.slice(0, -5);
+  }
+  return value;
 }
 
 function getPlaytimeKey(path) {
@@ -51,12 +62,12 @@ function getPlaytimeKey(path) {
 }
 
 async function readR2LeaderboardObject(env, bindingName, key, cacheSeconds) {
-  const bucket = env[bindingName];
+  const bucket = getR2Bucket(env, bindingName);
   if (!bucket || typeof bucket.get !== "function") {
     return json({
       ok: false,
       error: "Leaderboard R2 binding is not configured.",
-      binding: bindingName,
+      binding: bindingName
     }, 500);
   }
 
@@ -65,17 +76,37 @@ async function readR2LeaderboardObject(env, bindingName, key, cacheSeconds) {
     return json({
       ok: false,
       error: "Leaderboard not found.",
-      key,
+      key: key
     }, 404);
   }
 
   return new Response(object.body, {
     headers: {
-      "content-type": object.httpMetadata?.contentType || "application/json; charset=utf-8",
+      "content-type": contentTypeOf(object),
       "cache-control": `public, max-age=${cacheSeconds}`,
-      "access-control-allow-origin": "*",
-    },
+      "access-control-allow-origin": "*"
+    }
   });
+}
+
+function getR2Bucket(env, bindingName) {
+  switch (bindingName) {
+    case "PLAYTIME_LEADERBOARDS":
+      return env.PLAYTIME_LEADERBOARDS;
+    case "BALANCE_LEADERBOARDS":
+      return env.BALANCE_LEADERBOARDS;
+    case "DONATOR_LEADERBOARDS":
+      return env.DONATOR_LEADERBOARDS;
+    default:
+      return false;
+  }
+}
+
+function contentTypeOf(object) {
+  if (object.httpMetadata && object.httpMetadata.contentType) {
+    return object.httpMetadata.contentType;
+  }
+  return "application/json; charset=utf-8";
 }
 
 function getUpstreamOrigin(env) {
@@ -117,7 +148,7 @@ function getGuildHeaders(env) {
     Accept: "application/json",
     Authorization: `Bearer ${env.GUILDS_API_BEARER}`,
     "CF-Access-Client-Id": env.CF_ACCESS_CLIENT_ID,
-    "CF-Access-Client-Secret": env.CF_ACCESS_CLIENT_SECRET,
+    "CF-Access-Client-Secret": env.CF_ACCESS_CLIENT_SECRET
   };
 }
 
@@ -127,8 +158,8 @@ async function proxyJson(url, headers) {
     headers,
     cf: {
       cacheTtl: 0,
-      cacheEverything: false,
-    },
+      cacheEverything: false
+    }
   });
 
   const text = await response.text();
@@ -137,7 +168,7 @@ async function proxyJson(url, headers) {
     return json({
       ok: false,
       status: response.status,
-      error: "Leaderboard upstream request failed.",
+      error: "Leaderboard upstream request failed."
     }, response.status);
   }
 
@@ -145,8 +176,8 @@ async function proxyJson(url, headers) {
     status: 200,
     headers: {
       "content-type": response.headers.get("content-type") || "application/json; charset=utf-8",
-      "cache-control": "max-age=15, s-maxage=15",
-    },
+      "cache-control": "max-age=15, s-maxage=15"
+    }
   });
 }
 

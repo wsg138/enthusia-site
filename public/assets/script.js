@@ -13,7 +13,8 @@ function formatNumber(value) {
   return new Intl.NumberFormat("en-US").format(value);
 }
 
-function pickText(...values) {
+function pickText() {
+  const values = Array.prototype.slice.call(arguments);
   for (const value of values) {
     const text = normalizeText(value);
     if (text) {
@@ -24,14 +25,15 @@ function pickText(...values) {
   return "";
 }
 
-function pickNumber(...values) {
+function pickNumber() {
+  const values = Array.prototype.slice.call(arguments);
   for (const value of values) {
     if (value === null || value === undefined || value === "") {
       continue;
     }
 
     const number = Number(value);
-    if (Number.isFinite(number)) {
+    if (isFinite(number)) {
       return number;
     }
   }
@@ -39,7 +41,8 @@ function pickNumber(...values) {
   return null;
 }
 
-function pickArray(...values) {
+function pickArray() {
+  const values = Array.prototype.slice.call(arguments);
   for (const value of values) {
     if (Array.isArray(value)) {
       return value;
@@ -58,11 +61,15 @@ function setExternalLinkTargets(cfg) {
     store: cfg.tebexUrl,
     discord: cfg.discordInvite,
     wiki: cfg.wikiUrl,
-    email: cfg.contactEmail ? `mailto:${cfg.contactEmail}` : "",
+    email: cfg.contactEmail ? `mailto:${cfg.contactEmail}` : ""
   };
 
   document.querySelectorAll("[data-link-target]").forEach((element) => {
     const targetKey = element.getAttribute("data-link-target");
+    if (!Object.prototype.hasOwnProperty.call(linkMap, targetKey)) {
+      return;
+    }
+
     const href = linkMap[targetKey];
     if (!href || !(element instanceof HTMLAnchorElement)) {
       return;
@@ -70,6 +77,7 @@ function setExternalLinkTargets(cfg) {
 
     element.href = href;
   });
+  return true;
 }
 
 function setContactEmail(cfg) {
@@ -83,6 +91,7 @@ function setContactEmail(cfg) {
     element.href = `mailto:${email}`;
     element.textContent = email;
   });
+  return true;
 }
 
 function setStatusBadge(statusEl, text, variant) {
