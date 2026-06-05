@@ -14,9 +14,17 @@ function buildGuildsUrl(env) {
   }
 
   const url = new URL(env.GUILDS_API_URL);
+  if (!isAllowedUpstreamUrl(url)) {
+    return null;
+  }
+
   url.searchParams.set("period", "ALL_TIME");
   url.searchParams.set("limit", "10");
   return url;
+}
+
+function isAllowedUpstreamUrl(url) {
+  return url.protocol === "https:" && !url.username && !url.password;
 }
 
 function getGuildHeaders(env) {

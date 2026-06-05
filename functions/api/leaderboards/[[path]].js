@@ -112,7 +112,8 @@ function contentTypeOf(object) {
 function getUpstreamOrigin(env) {
   try {
     if (env.GUILDS_API_URL) {
-      return new URL(env.GUILDS_API_URL).origin;
+      const url = new URL(env.GUILDS_API_URL);
+      return isAllowedUpstreamUrl(url) ? url.origin : DEFAULT_UPSTREAM_ORIGIN;
     }
   } catch {
     return DEFAULT_UPSTREAM_ORIGIN;
@@ -121,8 +122,23 @@ function getUpstreamOrigin(env) {
   return DEFAULT_UPSTREAM_ORIGIN;
 }
 
+function getBoardConfig(board) {
+  switch (board) {
+    case "playtime-active-all":
+      return BOARD_CONFIG["playtime-active-all"];
+    case "balance-active-all":
+      return BOARD_CONFIG["balance-active-all"];
+    case "donators-all-time":
+      return BOARD_CONFIG["donators-all-time"];
+    case "guilds":
+      return BOARD_CONFIG.guilds;
+    default:
+      return null;
+  }
+}
+
 function buildPublicLeaderboardUrl(board, env) {
-  const config = BOARD_CONFIG[board];
+  const config = getBoardConfig(board);
   const url = new URL(config.upstreamPath, getUpstreamOrigin(env));
   url.searchParams.set("limit", String(config.limit));
   return url;
@@ -134,9 +150,18 @@ function buildGuildsUrl(env) {
   }
 
   const url = new URL(env.GUILDS_API_URL);
-  url.searchParams.set("period", BOARD_CONFIG.guilds.defaultQuery.period);
-  url.searchParams.set("limit", String(BOARD_CONFIG.guilds.upstreamLimit));
+  if (!isAllowedUpstreamUrl(url)) {
+    return null;
+  }
+
+  const config = getBoardConfig("guilds");
+  url.searchParams.set("period", config.defaultQuery.period);
+  url.searchParams.set("limit", String(config.upstreamLimit));
   return url;
+}
+
+function isAllowedUpstreamUrl(url) {
+  return url.protocol === "https:" && !url.username && !url.password;
 }
 
 function getGuildHeaders(env) {
@@ -189,7 +214,7 @@ export async function onRequestGet(context) {
     return readR2LeaderboardObject(context.env, "PLAYTIME_LEADERBOARDS", getPlaytimeKey(""), 60);
   }
 
-  const config = BOARD_CONFIG[board];
+  const config = getBoardConfig(board);
   if (!config) {
     return json({ ok: false, error: "Unknown leaderboard board." }, 404);
   }

@@ -4,6 +4,7 @@ const SCREENSHOT_MANUAL_PAUSE_MS = 5000;
 const STAFF_SCROLL_SPEED_PX_PER_SECOND = 28;
 
 let stopStaffCarouselMotion = null;
+let guildBannerClipSequence = 0;
 
 function normalizeText(value) {
   return typeof value === "string" ? value.trim() : "";
@@ -57,20 +58,9 @@ function isConfiguredValue(value) {
 }
 
 function setExternalLinkTargets(cfg) {
-  const linkMap = {
-    store: cfg.tebexUrl,
-    discord: cfg.discordInvite,
-    wiki: cfg.wikiUrl,
-    email: cfg.contactEmail ? `mailto:${cfg.contactEmail}` : ""
-  };
-
   document.querySelectorAll("[data-link-target]").forEach((element) => {
     const targetKey = element.getAttribute("data-link-target");
-    if (!Object.prototype.hasOwnProperty.call(linkMap, targetKey)) {
-      return;
-    }
-
-    const href = linkMap[targetKey];
+    const href = getConfiguredLinkHref(cfg, targetKey);
     if (!href || !(element instanceof HTMLAnchorElement)) {
       return;
     }
@@ -78,6 +68,21 @@ function setExternalLinkTargets(cfg) {
     element.href = href;
   });
   return true;
+}
+
+function getConfiguredLinkHref(cfg, targetKey) {
+  switch (targetKey) {
+    case "store":
+      return cfg.tebexUrl;
+    case "discord":
+      return cfg.discordInvite;
+    case "wiki":
+      return cfg.wikiUrl;
+    case "email":
+      return cfg.contactEmail ? `mailto:${cfg.contactEmail}` : "";
+    default:
+      return "";
+  }
 }
 
 function setContactEmail(cfg) {
@@ -247,7 +252,7 @@ async function renderDiscordWidget(cfg) {
 
   try {
     const response = await fetch(`https://discord.com/api/guilds/${encodeURIComponent(serverId)}/widget.json`, {
-      mode: "cors",
+      mode: "cors"
     });
     if (!response.ok) {
       throw new Error("Discord widget unavailable.");
@@ -569,7 +574,7 @@ function renderWikiCallout(cfg) {
   wikiNote.append(text);
 }
 
-const BANNER_COLORS = Object.freeze({
+const BANNER_COLORS = {
   white: "#f9fffe",
   orange: "#f9801d",
   magenta: "#c74ebd",
@@ -585,8 +590,8 @@ const BANNER_COLORS = Object.freeze({
   brown: "#835432",
   green: "#5e7c16",
   red: "#b02e26",
-  black: "#1d1d21",
-});
+  black: "#1d1d21"
+};
 
 function createSvgNode(tagName, attributes = {}) {
   const node = document.createElementNS("http://www.w3.org/2000/svg", tagName);
@@ -688,12 +693,13 @@ function createGuildBannerVisual(banner) {
     return null;
   }
 
-  const clipId = `guild-banner-clip-${Math.random().toString(36).slice(2, 9)}`;
+  guildBannerClipSequence += 1;
+  const clipId = `guild-banner-clip-${guildBannerClipSequence}`;
   const svg = createSvgNode("svg", {
     viewBox: "0 0 20 40",
     class: "guild-banner",
     role: "img",
-    "aria-hidden": "true",
+    "aria-hidden": "true"
   });
 
   const defs = createSvgNode("defs");
@@ -708,7 +714,7 @@ function createGuildBannerVisual(banner) {
     y: 0,
     width: 20,
     height: 40,
-    fill: normalizeBannerColor(banner.baseColor || banner.base || banner.color || banner.base_color || "black"),
+    fill: normalizeBannerColor(banner.baseColor || banner.base || banner.color || banner.base_color || "black")
   }));
 
   const patterns = Array.isArray(banner.patterns) ? banner.patterns : [];
@@ -718,7 +724,7 @@ function createGuildBannerVisual(banner) {
     d: "M2 2 H18 V30 L10 38 L2 30 Z",
     fill: "none",
     stroke: "rgba(255,241,199,0.26)",
-    "stroke-width": 1,
+    "stroke-width": 1
   }));
 
   return svg;
@@ -863,12 +869,12 @@ function normalizeLeaderboardEntries(payload, board) {
           tag,
           subtext: [
             memberCount !== null ? `${formatNumber(memberCount)} members` : "",
-            totalExperience !== null ? `${formatNumber(totalExperience)} XP` : "",
+            totalExperience !== null ? `${formatNumber(totalExperience)} XP` : ""
           ].filter(Boolean).join(" | "),
           value: visibleValue,
           banner: entry.banner,
           topMemberUuids,
-          rank: pickNumber(entry.rank) || index + 1,
+          rank: pickNumber(entry.rank) || index + 1
         };
       }
 
@@ -890,7 +896,7 @@ function normalizeLeaderboardEntries(payload, board) {
           || entry.level
           || ""
         ),
-        rank: Number.isFinite(entry.rank) ? entry.rank : index + 1,
+        rank: Number.isFinite(entry.rank) ? entry.rank : index + 1
       };
     })
     .filter(Boolean)
@@ -899,7 +905,7 @@ function normalizeLeaderboardEntries(payload, board) {
 }
 
 async function fetchLeaderboardEntries(board) {
-  const endpoint = normalizeText(board?.endpoint) || (normalizeText(board?.source) ? `/api/leaderboards/${normalizeText(board.source)}` : "");
+  const endpoint = getLeaderboardEndpoint(board);
   if (!endpoint) {
     return [];
   }
@@ -915,6 +921,22 @@ async function fetchLeaderboardEntries(board) {
   } catch {
     return [];
   }
+}
+
+function getLeaderboardEndpoint(board) {
+  const configuredEndpoint = normalizeText(board?.endpoint);
+  const source = normalizeText(board?.source);
+  const endpoint = configuredEndpoint || (source ? `/api/leaderboards/${source}` : "");
+
+  if (!endpoint.startsWith("/api/leaderboards/")) {
+    return "";
+  }
+
+  if (endpoint.startsWith("//") || endpoint.indexOf("://") !== -1) {
+    return "";
+  }
+
+  return endpoint;
 }
 
 async function populateLeaderboardBoard(board, card, active) {
@@ -1197,7 +1219,7 @@ async function initSite(cfg) {
     discordInvite: normalizeText(cfg?.discordInvite),
     discordServerId: normalizeText(cfg?.discordServerId),
     contactEmail: normalizeText(cfg?.contactEmail),
-    wikiUrl: normalizeText(cfg?.wikiUrl),
+    wikiUrl: normalizeText(cfg?.wikiUrl)
   };
 
   setExternalLinkTargets(normalizedConfig);
