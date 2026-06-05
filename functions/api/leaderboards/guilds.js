@@ -47,7 +47,7 @@ export async function onRequestGet(context) {
   if (!url || !headers) {
     return json({
       ok: false,
-      error: "Guild leaderboard proxy is not configured.",
+      error: "Guild leaderboard proxy is not configured."
     }, 500);
   }
 

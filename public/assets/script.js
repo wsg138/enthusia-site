@@ -220,6 +220,67 @@ function createDiscordLinkButton(href, text) {
   return link;
 }
 
+function renderDiscordFallback(cardRoot, invite) {
+  cardRoot.replaceChildren();
+
+  const card = createDiscordCard("Discord");
+  const message = document.createElement("p");
+  message.className = "muted";
+  message.textContent = "Live member info is unavailable right now.";
+
+  const actions = document.createElement("div");
+  actions.className = "discord-actions";
+  actions.append(createDiscordLinkButton(invite, "Open Discord"));
+
+  card.append(message, actions);
+  cardRoot.append(card);
+}
+
+function appendDiscordAvatars(card, members) {
+  const avatars = document.createElement("div");
+  avatars.className = "discord-avatars";
+
+  members.slice(0, 20).forEach((member) => {
+    const avatarUrl = member.avatar_url || member.avatarURL;
+    if (!avatarUrl) {
+      return;
+    }
+
+    const avatar = document.createElement("img");
+    avatar.src = avatarUrl;
+    avatar.alt = `${member.nick || member.username || "Discord member"} avatar`;
+    avatar.loading = "lazy";
+    avatar.decoding = "async";
+    avatars.append(avatar);
+  });
+
+  if (avatars.childElementCount > 0) {
+    card.append(avatars);
+    return;
+  }
+
+  const emptyState = document.createElement("p");
+  emptyState.className = "muted";
+  emptyState.textContent = "No visible members are listed right now.";
+  card.append(emptyState);
+}
+
+function createDiscordCountPill(onlineCount) {
+  const counts = document.createElement("div");
+  counts.className = "discord-counts";
+
+  const countPill = document.createElement("span");
+  countPill.className = "pill";
+
+  const dot = document.createElement("span");
+  dot.className = "dot";
+  dot.setAttribute("aria-hidden", "true");
+
+  countPill.append(dot, document.createTextNode(`${onlineCount} online`));
+  counts.append(countPill);
+  return counts;
+}
+
 async function renderDiscordWidget(cfg) {
   const cardRoot = document.getElementById("discordCard");
   const invite = normalizeText(cfg.discordInvite);
@@ -229,24 +290,8 @@ async function renderDiscordWidget(cfg) {
     return;
   }
 
-  const renderFallback = () => {
-    cardRoot.replaceChildren();
-
-    const card = createDiscordCard("Discord");
-    const message = document.createElement("p");
-    message.className = "muted";
-    message.textContent = "Live member info is unavailable right now.";
-
-    const actions = document.createElement("div");
-    actions.className = "discord-actions";
-    actions.append(createDiscordLinkButton(invite, "Open Discord"));
-
-    card.append(message, actions);
-    cardRoot.append(card);
-  };
-
   if (!invite) {
-    renderFallback();
+    renderDiscordFallback(cardRoot, invite);
     return;
   }
 
@@ -268,45 +313,8 @@ async function renderDiscordWidget(cfg) {
     cardRoot.replaceChildren();
 
     const card = createDiscordCard("Discord");
-    const counts = document.createElement("div");
-    counts.className = "discord-counts";
-
-    const countPill = document.createElement("span");
-    countPill.className = "pill";
-
-    const dot = document.createElement("span");
-    dot.className = "dot";
-    dot.setAttribute("aria-hidden", "true");
-
-    countPill.append(dot, document.createTextNode(`${onlineCount} online`));
-    counts.append(countPill);
-    card.querySelector(".discord-head")?.append(counts);
-
-    const avatars = document.createElement("div");
-    avatars.className = "discord-avatars";
-
-    members.slice(0, 20).forEach((member) => {
-      const avatarUrl = member.avatar_url || member.avatarURL;
-      if (!avatarUrl) {
-        return;
-      }
-
-      const avatar = document.createElement("img");
-      avatar.src = avatarUrl;
-      avatar.alt = `${member.nick || member.username || "Discord member"} avatar`;
-      avatar.loading = "lazy";
-      avatar.decoding = "async";
-      avatars.append(avatar);
-    });
-
-    if (avatars.childElementCount > 0) {
-      card.append(avatars);
-    } else {
-      const emptyState = document.createElement("p");
-      emptyState.className = "muted";
-      emptyState.textContent = "No visible members are listed right now.";
-      card.append(emptyState);
-    }
+    card.querySelector(".discord-head")?.append(createDiscordCountPill(onlineCount));
+    appendDiscordAvatars(card, members);
 
     const actions = document.createElement("div");
     actions.className = "discord-actions";
@@ -315,7 +323,7 @@ async function renderDiscordWidget(cfg) {
 
     cardRoot.append(card);
   } catch {
-    renderFallback();
+    renderDiscordFallback(cardRoot, invite);
   }
 }
 
@@ -614,77 +622,109 @@ function getPatternColor(pattern) {
   return normalizeBannerColor(pattern?.color || pattern?.dyeColor || pattern?.shade);
 }
 
+function appendBottomStripe(group, fill) {
+  group.append(createSvgNode("rect", { x: 0, y: 26, width: 20, height: 8, fill }));
+}
+
+function appendTopStripe(group, fill) {
+  group.append(createSvgNode("rect", { x: 0, y: 0, width: 20, height: 8, fill }));
+}
+
+function appendLeftStripe(group, fill) {
+  group.append(createSvgNode("rect", { x: 0, y: 0, width: 6, height: 40, fill }));
+}
+
+function appendRightStripe(group, fill) {
+  group.append(createSvgNode("rect", { x: 14, y: 0, width: 6, height: 40, fill }));
+}
+
+function appendCenterStripe(group, fill) {
+  group.append(createSvgNode("rect", { x: 7, y: 0, width: 6, height: 40, fill }));
+}
+
+function appendMiddleStripe(group, fill) {
+  group.append(createSvgNode("rect", { x: 0, y: 16, width: 20, height: 8, fill }));
+}
+
+function appendBorderPattern(group, fill) {
+  group.append(createSvgNode("rect", { x: 0, y: 0, width: 20, height: 4, fill }));
+  group.append(createSvgNode("rect", { x: 0, y: 0, width: 4, height: 40, fill }));
+  group.append(createSvgNode("rect", { x: 16, y: 0, width: 4, height: 40, fill }));
+  group.append(createSvgNode("rect", { x: 0, y: 30, width: 20, height: 10, fill }));
+}
+
+function appendCrossPattern(group, fill) {
+  group.append(createSvgNode("rect", { x: 7, y: 0, width: 6, height: 40, fill }));
+  group.append(createSvgNode("rect", { x: 0, y: 16, width: 20, height: 8, fill }));
+}
+
+function appendSaltirePattern(group, fill) {
+  group.append(createSvgNode("path", { d: "M-4 4 L4 -4 L24 28 L16 36 Z", fill }));
+  group.append(createSvgNode("path", { d: "M24 4 L16 -4 L-4 28 L4 36 Z", fill }));
+}
+
+function appendDiagonalLeftPattern(group, fill) {
+  group.append(createSvgNode("path", { d: "M-4 30 L6 40 L24 8 L14 -2 Z", fill }));
+}
+
+function appendDiagonalRightPattern(group, fill) {
+  group.append(createSvgNode("path", { d: "M24 30 L14 40 L-4 8 L6 -2 Z", fill }));
+}
+
+function appendCirclePattern(group, fill) {
+  group.append(createSvgNode("circle", { cx: 10, cy: 16, r: 6, fill }));
+}
+
+function appendRhombusPattern(group, fill) {
+  group.append(createSvgNode("path", { d: "M10 6 L16 16 L10 26 L4 16 Z", fill }));
+}
+
+function appendTopTrianglePattern(group, fill) {
+  group.append(createSvgNode("path", { d: "M10 0 L20 12 L0 12 Z", fill }));
+}
+
+function appendBottomTrianglePattern(group, fill) {
+  group.append(createSvgNode("path", { d: "M0 26 L20 26 L10 40 Z", fill }));
+}
+
+const BANNER_PATTERN_RENDERERS = {
+  bs: appendBottomStripe,
+  stripe_bottom: appendBottomStripe,
+  ts: appendTopStripe,
+  stripe_top: appendTopStripe,
+  ls: appendLeftStripe,
+  stripe_left: appendLeftStripe,
+  rs: appendRightStripe,
+  stripe_right: appendRightStripe,
+  cs: appendCenterStripe,
+  stripe_center: appendCenterStripe,
+  ms: appendMiddleStripe,
+  stripe_middle: appendMiddleStripe,
+  bo: appendBorderPattern,
+  border: appendBorderPattern,
+  cr: appendCrossPattern,
+  cross: appendCrossPattern,
+  sc: appendSaltirePattern,
+  straight_cross: appendSaltirePattern,
+  saltire: appendSaltirePattern,
+  dls: appendDiagonalLeftPattern,
+  diagonal_left: appendDiagonalLeftPattern,
+  drs: appendDiagonalRightPattern,
+  diagonal_right: appendDiagonalRightPattern,
+  mc: appendCirclePattern,
+  circle: appendCirclePattern,
+  mr: appendRhombusPattern,
+  rhombus: appendRhombusPattern,
+  tt: appendTopTrianglePattern,
+  triangle_top: appendTopTrianglePattern,
+  bt: appendBottomTrianglePattern,
+  triangle_bottom: appendBottomTrianglePattern
+};
+
 function appendBannerPattern(group, code, color) {
-  const fill = color;
-  switch (code) {
-    case "bs":
-    case "stripe_bottom":
-      group.append(createSvgNode("rect", { x: 0, y: 26, width: 20, height: 8, fill }));
-      break;
-    case "ts":
-    case "stripe_top":
-      group.append(createSvgNode("rect", { x: 0, y: 0, width: 20, height: 8, fill }));
-      break;
-    case "ls":
-    case "stripe_left":
-      group.append(createSvgNode("rect", { x: 0, y: 0, width: 6, height: 40, fill }));
-      break;
-    case "rs":
-    case "stripe_right":
-      group.append(createSvgNode("rect", { x: 14, y: 0, width: 6, height: 40, fill }));
-      break;
-    case "cs":
-    case "stripe_center":
-      group.append(createSvgNode("rect", { x: 7, y: 0, width: 6, height: 40, fill }));
-      break;
-    case "ms":
-    case "stripe_middle":
-      group.append(createSvgNode("rect", { x: 0, y: 16, width: 20, height: 8, fill }));
-      break;
-    case "bo":
-    case "border":
-      group.append(createSvgNode("rect", { x: 0, y: 0, width: 20, height: 4, fill }));
-      group.append(createSvgNode("rect", { x: 0, y: 0, width: 4, height: 40, fill }));
-      group.append(createSvgNode("rect", { x: 16, y: 0, width: 4, height: 40, fill }));
-      group.append(createSvgNode("rect", { x: 0, y: 30, width: 20, height: 10, fill }));
-      break;
-    case "cr":
-    case "cross":
-      group.append(createSvgNode("rect", { x: 7, y: 0, width: 6, height: 40, fill }));
-      group.append(createSvgNode("rect", { x: 0, y: 16, width: 20, height: 8, fill }));
-      break;
-    case "sc":
-    case "straight_cross":
-    case "saltire":
-      group.append(createSvgNode("path", { d: "M-4 4 L4 -4 L24 28 L16 36 Z", fill }));
-      group.append(createSvgNode("path", { d: "M24 4 L16 -4 L-4 28 L4 36 Z", fill }));
-      break;
-    case "dls":
-    case "diagonal_left":
-      group.append(createSvgNode("path", { d: "M-4 30 L6 40 L24 8 L14 -2 Z", fill }));
-      break;
-    case "drs":
-    case "diagonal_right":
-      group.append(createSvgNode("path", { d: "M24 30 L14 40 L-4 8 L6 -2 Z", fill }));
-      break;
-    case "mc":
-    case "circle":
-      group.append(createSvgNode("circle", { cx: 10, cy: 16, r: 6, fill }));
-      break;
-    case "mr":
-    case "rhombus":
-      group.append(createSvgNode("path", { d: "M10 6 L16 16 L10 26 L4 16 Z", fill }));
-      break;
-    case "tt":
-    case "triangle_top":
-      group.append(createSvgNode("path", { d: "M10 0 L20 12 L0 12 Z", fill }));
-      break;
-    case "bt":
-    case "triangle_bottom":
-      group.append(createSvgNode("path", { d: "M0 26 L20 26 L10 40 Z", fill }));
-      break;
-    default:
-      break;
+  const renderPattern = BANNER_PATTERN_RENDERERS[code];
+  if (renderPattern) {
+    renderPattern(group, color);
   }
 }
 
@@ -730,44 +770,55 @@ function createGuildBannerVisual(banner) {
   return svg;
 }
 
-function createLeaderboardEntry(board, entry, rank) {
-  const item = document.createElement("li");
-
+function createRankElement(rank) {
   const rankEl = document.createElement("span");
   rankEl.className = "rank";
   rankEl.textContent = String(rank);
+  return rankEl;
+}
 
-  let visual;
-  if (board.mode === "guild") {
-    visual = createGuildBannerVisual(entry?.banner);
-    if (!visual) {
-      const topMemberUuid = Array.isArray(entry?.topMemberUuids) ? normalizeText(entry.topMemberUuids[0]) : "";
-      if (topMemberUuid) {
-        visual = document.createElement("img");
-        visual.src = `https://minotar.net/helm/${encodeURIComponent(topMemberUuid)}/64`;
-        visual.alt = "";
-        visual.width = 40;
-        visual.height = 40;
-        visual.loading = "lazy";
-        visual.decoding = "async";
-        visual.className = "guild-fallback-head";
-      } else {
-        visual = document.createElement("span");
-        visual.className = "guild-mark";
-        visual.textContent = normalizeText(entry?.iconText || entry?.tag || entry?.name || "G").slice(0, 3).toUpperCase();
-      }
-    }
-  } else {
-    visual = document.createElement("img");
-    const username = normalizeText(entry?.username || entry?.displayName || entry?.name || "Steve");
-    visual.src = `https://minotar.net/helm/${encodeURIComponent(username)}/64`;
-    visual.alt = "";
-    visual.width = 40;
-    visual.height = 40;
-    visual.loading = "lazy";
-    visual.decoding = "async";
+function createGuildFallbackHead(uuid) {
+  const visual = document.createElement("img");
+  visual.src = `https://minotar.net/helm/${encodeURIComponent(uuid)}/64`;
+  visual.alt = "";
+  visual.width = 40;
+  visual.height = 40;
+  visual.loading = "lazy";
+  visual.decoding = "async";
+  visual.className = "guild-fallback-head";
+  return visual;
+}
+
+function createGuildMark(entry) {
+  const visual = document.createElement("span");
+  visual.className = "guild-mark";
+  visual.textContent = normalizeText(entry?.iconText || entry?.tag || entry?.name || "G").slice(0, 3).toUpperCase();
+  return visual;
+}
+
+function createGuildLeaderboardVisual(entry) {
+  const bannerVisual = createGuildBannerVisual(entry?.banner);
+  if (bannerVisual) {
+    return bannerVisual;
   }
 
+  const topMemberUuid = Array.isArray(entry?.topMemberUuids) ? normalizeText(entry.topMemberUuids[0]) : "";
+  return topMemberUuid ? createGuildFallbackHead(topMemberUuid) : createGuildMark(entry);
+}
+
+function createPlayerLeaderboardVisual(entry) {
+  const visual = document.createElement("img");
+  const username = normalizeText(entry?.username || entry?.displayName || entry?.name || "Steve");
+  visual.src = `https://minotar.net/helm/${encodeURIComponent(username)}/64`;
+  visual.alt = "";
+  visual.width = 40;
+  visual.height = 40;
+  visual.loading = "lazy";
+  visual.decoding = "async";
+  return visual;
+}
+
+function createLeaderboardIdentity(entry, rank) {
   const identity = document.createElement("span");
   identity.className = "leader-name";
 
@@ -782,10 +833,17 @@ function createLeaderboardEntry(board, entry, rank) {
     identity.append(detailEl);
   }
 
+  return identity;
+}
+
+function createLeaderboardEntry(board, entry, rank) {
+  const item = document.createElement("li");
+  const visual = board.mode === "guild" ? createGuildLeaderboardVisual(entry) : createPlayerLeaderboardVisual(entry);
+
   const value = document.createElement("span");
   value.textContent = normalizeText(entry?.value || entry?.stat || entry?.score || "--");
 
-  item.append(rankEl, visual, identity, value);
+  item.append(createRankElement(rank), visual, createLeaderboardIdentity(entry, rank), value);
   return item;
 }
 
@@ -832,73 +890,89 @@ function createLeaderboardBoardCard(board, active = true) {
   return { article, entries, emptyState };
 }
 
-function normalizeLeaderboardEntries(payload, board) {
-  const collection = Array.isArray(payload)
+function getLeaderboardCollection(payload) {
+  return Array.isArray(payload)
     ? payload
     : payload?.players || payload?.guilds || payload?.entries || payload?.data || [];
+}
+
+function formatGuildValue(level, totalExperience, score) {
+  if (level !== null) {
+    return `Lv ${formatNumber(level)}`;
+  }
+
+  if (totalExperience !== null) {
+    return `${formatNumber(totalExperience)} XP`;
+  }
+
+  return score !== null ? formatNumber(score) : "";
+}
+
+function normalizeGuildLeaderboardEntry(entry, index) {
+  const level = pickNumber(entry.level, entry.currentLevel, entry.current_level);
+  const totalExperience = pickNumber(entry.totalExperience, entry.total_xp, entry.totalExperiencePoints, entry.total_experience);
+  const memberCount = pickNumber(entry.memberCount, entry.members, entry.member_count, entry.activeMembers, entry.active_members);
+  const score = pickNumber(entry.value, entry.score);
+  const name = pickText(entry.name, entry.guildName, entry.guild_name, entry.displayName, entry.display_name, entry.tagPlain, entry.tag, entry.entityName, entry.entity_name, entry.entityId, entry.entity_id);
+  const tag = pickText(entry.tagPlain, entry.tag, entry.guildTag, entry.guild_tag);
+
+  return {
+    name,
+    displayName: name,
+    tag,
+    subtext: [
+      memberCount !== null ? `${formatNumber(memberCount)} members` : "",
+      totalExperience !== null ? `${formatNumber(totalExperience)} XP` : ""
+    ].filter(Boolean).join(" | "),
+    value: formatGuildValue(level, totalExperience, score),
+    banner: entry.banner,
+    topMemberUuids: pickArray(entry.topMemberUuids, entry.top_member_uuids, entry.memberUuids, entry.member_uuids),
+    rank: pickNumber(entry.rank) || index + 1
+  };
+}
+
+function normalizePlayerLeaderboardEntry(entry, index) {
+  return {
+    name: normalizeText(entry.username || entry.displayName || entry.name || entry.guild_name),
+    displayName: normalizeText(entry.displayName) || normalizeText(entry.username) || normalizeText(entry.name || entry.guild_name),
+    username: normalizeText(entry.username || entry.player || entry.uuid || ""),
+    tag: normalizeText(entry.tag || entry.guildTag || entry.guild_tag || ""),
+    subtext: normalizeText(entry.subtext || entry.subtitle || entry.description || ""),
+    value: normalizeText(
+      entry.formattedValue
+      || entry.formatted
+      || entry.stat
+      || entry.score
+      || entry.amount
+      || entry.hours
+      || entry.balance
+      || entry.experience
+      || entry.level
+      || ""
+    ),
+    rank: Number.isFinite(entry.rank) ? entry.rank : index + 1
+  };
+}
+
+function normalizeLeaderboardEntry(entry, index, board) {
+  if (!entry || typeof entry !== "object") {
+    return null;
+  }
+
+  return board.mode === "guild"
+    ? normalizeGuildLeaderboardEntry(entry, index)
+    : normalizePlayerLeaderboardEntry(entry, index);
+}
+
+function normalizeLeaderboardEntries(payload, board) {
+  const collection = getLeaderboardCollection(payload);
 
   if (!Array.isArray(collection)) {
     return [];
   }
 
   return collection
-    .map((entry, index) => {
-      if (!entry || typeof entry !== "object") {
-        return null;
-      }
-
-      if (board.mode === "guild") {
-        const level = pickNumber(entry.level, entry.currentLevel, entry.current_level);
-        const totalExperience = pickNumber(entry.totalExperience, entry.total_xp, entry.totalExperiencePoints, entry.total_experience);
-        const memberCount = pickNumber(entry.memberCount, entry.members, entry.member_count, entry.activeMembers, entry.active_members);
-        const score = pickNumber(entry.value, entry.score);
-        const name = pickText(entry.name, entry.guildName, entry.guild_name, entry.displayName, entry.display_name, entry.tagPlain, entry.tag, entry.entityName, entry.entity_name, entry.entityId, entry.entity_id);
-        const tag = pickText(entry.tagPlain, entry.tag, entry.guildTag, entry.guild_tag);
-        const topMemberUuids = pickArray(entry.topMemberUuids, entry.top_member_uuids, entry.memberUuids, entry.member_uuids);
-        const visibleValue = level !== null
-          ? `Lv ${formatNumber(level)}`
-          : totalExperience !== null
-            ? `${formatNumber(totalExperience)} XP`
-            : score !== null
-              ? formatNumber(score)
-              : "";
-
-        return {
-          name,
-          displayName: name,
-          tag,
-          subtext: [
-            memberCount !== null ? `${formatNumber(memberCount)} members` : "",
-            totalExperience !== null ? `${formatNumber(totalExperience)} XP` : ""
-          ].filter(Boolean).join(" | "),
-          value: visibleValue,
-          banner: entry.banner,
-          topMemberUuids,
-          rank: pickNumber(entry.rank) || index + 1
-        };
-      }
-
-      return {
-        name: normalizeText(entry.username || entry.displayName || entry.name || entry.guild_name),
-        displayName: normalizeText(entry.displayName) || normalizeText(entry.username) || normalizeText(entry.name || entry.guild_name),
-        username: normalizeText(entry.username || entry.player || entry.uuid || ""),
-        tag: normalizeText(entry.tag || entry.guildTag || entry.guild_tag || ""),
-        subtext: normalizeText(entry.subtext || entry.subtitle || entry.description || ""),
-        value: normalizeText(
-          entry.formattedValue
-          || entry.formatted
-          || entry.stat
-          || entry.score
-          || entry.amount
-          || entry.hours
-          || entry.balance
-          || entry.experience
-          || entry.level
-          || ""
-        ),
-        rank: Number.isFinite(entry.rank) ? entry.rank : index + 1
-      };
-    })
+    .map((entry, index) => normalizeLeaderboardEntry(entry, index, board))
     .filter(Boolean)
     .filter((entry) => entry.displayName && entry.value)
     .slice(0, Number.isFinite(board.limit) ? board.limit : collection.length);

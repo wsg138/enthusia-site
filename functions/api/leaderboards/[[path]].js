@@ -206,19 +206,7 @@ async function proxyJson(url, headers) {
   });
 }
 
-export async function onRequestGet(context) {
-  const path = getRequestedPath(context.params);
-  const board = normalizeBoardPath(path);
-
-  if (!board) {
-    return readR2LeaderboardObject(context.env, "PLAYTIME_LEADERBOARDS", getPlaytimeKey(""), 60);
-  }
-
-  const config = getBoardConfig(board);
-  if (!config) {
-    return json({ ok: false, error: "Unknown leaderboard board." }, 404);
-  }
-
+function readConfiguredLeaderboard(board, config, context) {
   if (config.source === "playtime-r2") {
     return readR2LeaderboardObject(context.env, "PLAYTIME_LEADERBOARDS", config.key, 60);
   }
@@ -242,9 +230,25 @@ export async function onRequestGet(context) {
   if (!url || !headers) {
     return json({
       ok: false,
-      error: "Guild leaderboard proxy is not configured.",
+      error: "Guild leaderboard proxy is not configured."
     }, 500);
   }
 
   return proxyJson(url, headers);
+}
+
+export async function onRequestGet(context) {
+  const path = getRequestedPath(context.params);
+  const board = normalizeBoardPath(path);
+
+  if (!board) {
+    return readR2LeaderboardObject(context.env, "PLAYTIME_LEADERBOARDS", getPlaytimeKey(""), 60);
+  }
+
+  const config = getBoardConfig(board);
+  if (!config) {
+    return json({ ok: false, error: "Unknown leaderboard board." }, 404);
+  }
+
+  return readConfiguredLeaderboard(board, config, context);
 }
