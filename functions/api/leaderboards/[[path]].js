@@ -1,53 +1,6 @@
 const DEFAULT_GUILDS_API_URL = "https://api.enthusia.info/api/leaderboards/guilds";
 
-interface R2Object {
-  body: BodyInit;
-  httpMetadata?: {
-    contentType?: string;
-  };
-}
-
-interface R2Bucket {
-  get(key: string): Promise<R2Object | null>;
-}
-
-interface Env {
-  PLAYTIME_LEADERBOARDS?: R2Bucket;
-  BALANCE_LEADERBOARDS?: R2Bucket;
-  DONATOR_LEADERBOARDS?: R2Bucket;
-  GUILDS_API_URL?: string;
-  GUILDS_API_BEARER?: string;
-  CF_ACCESS_CLIENT_ID?: string;
-  CF_ACCESS_CLIENT_SECRET?: string;
-}
-
-interface RequestContext {
-  env: Env;
-  params: Record<string, string | string[] | undefined>;
-}
-
-interface R2BoardConfig {
-  binding: keyof Pick<
-    Env,
-    "PLAYTIME_LEADERBOARDS" | "BALANCE_LEADERBOARDS" | "DONATOR_LEADERBOARDS"
-  >;
-  key: string;
-  cacheSeconds: number;
-}
-
-interface GuildRequest {
-  url: URL;
-  headers: Record<string, string>;
-}
-
-interface CloudflareRequestInit extends RequestInit {
-  cf: {
-    cacheTtl: number;
-    cacheEverything: boolean;
-  };
-}
-
-const R2_BOARDS: Record<string, R2BoardConfig> = {
+const R2_BOARDS = {
   "playtime-active-all": {
     binding: "PLAYTIME_LEADERBOARDS",
     key: "leaderboards/playtime-active-all.json",
@@ -65,7 +18,7 @@ const R2_BOARDS: Record<string, R2BoardConfig> = {
   }
 };
 
-function json(data: unknown, status?: number): Response {
+function json(data, status) {
   return new Response(JSON.stringify(data), {
     status: status || 200,
     headers: {
@@ -75,9 +28,7 @@ function json(data: unknown, status?: number): Response {
   });
 }
 
-function getRequestedBoard(
-  params: Record<string, string | string[] | undefined>
-): string {
+function getRequestedBoard(params) {
   const rawPath = params && (params.path || params["path"] || params["path*"]);
   const path = Array.isArray(rawPath) ? rawPath.join("/") : rawPath;
   let board = String(path || "");
@@ -93,7 +44,7 @@ function getRequestedBoard(
   return board;
 }
 
-function getR2BoardConfig(board: string): R2BoardConfig | null {
+function getR2BoardConfig(board) {
   if (board === "playtime-active-all") {
     return R2_BOARDS["playtime-active-all"];
   }
@@ -103,13 +54,10 @@ function getR2BoardConfig(board: string): R2BoardConfig | null {
   if (board === "donators-all-time") {
     return R2_BOARDS["donators-all-time"];
   }
-  return null;
+  return false;
 }
 
-function getR2Bucket(
-  env: Env,
-  bindingName: R2BoardConfig["binding"]
-): R2Bucket | undefined {
+function getR2Bucket(env, bindingName) {
   if (bindingName === "PLAYTIME_LEADERBOARDS") {
     return env.PLAYTIME_LEADERBOARDS;
   }
@@ -119,13 +67,10 @@ function getR2Bucket(
   if (bindingName === "DONATOR_LEADERBOARDS") {
     return env.DONATOR_LEADERBOARDS;
   }
-  return undefined;
+  return false;
 }
 
-async function readR2Leaderboard(
-  env: Env,
-  config: R2BoardConfig
-): Promise<Response> {
+async function readR2Leaderboard(env, config) {
   const bucket = getR2Bucket(env, config.binding);
   if (!bucket || typeof bucket.get !== "function") {
     return json({
@@ -157,23 +102,23 @@ async function readR2Leaderboard(
   });
 }
 
-function buildGuildRequest(env: Env): GuildRequest | null {
-  let url: URL;
+function buildGuildRequest(env) {
+  let url = false;
   try {
     url = new URL(env.GUILDS_API_URL || DEFAULT_GUILDS_API_URL);
   } catch {
-    return null;
+    return false;
   }
 
   const supportedProtocol = url.protocol === "https:" || url.protocol === "http:";
   if (!supportedProtocol || url.username || url.password) {
-    return null;
+    return false;
   }
 
   url.searchParams.set("period", "ALL_TIME");
   url.searchParams.set("limit", "10");
 
-  const headers: Record<string, string> = { Accept: "application/json" };
+  const headers = { Accept: "application/json" };
   if (env.GUILDS_API_BEARER) {
     headers.Authorization = `Bearer ${env.GUILDS_API_BEARER}`;
   }
@@ -185,7 +130,7 @@ function buildGuildRequest(env: Env): GuildRequest | null {
   return { url, headers };
 }
 
-async function readGuildLeaderboard(env: Env): Promise<Response> {
+async function readGuildLeaderboard(env) {
   const request = buildGuildRequest(env);
   if (!request) {
     return json({
@@ -194,15 +139,14 @@ async function readGuildLeaderboard(env: Env): Promise<Response> {
     }, 500);
   }
 
-  const fetchOptions: CloudflareRequestInit = {
+  const response = await fetch(request.url, {
     method: "GET",
     headers: request.headers,
     cf: {
       cacheTtl: 0,
       cacheEverything: false
     }
-  };
-  const response = await fetch(request.url, fetchOptions);
+  });
   const text = await response.text();
 
   if (!response.ok) {
@@ -222,7 +166,7 @@ async function readGuildLeaderboard(env: Env): Promise<Response> {
   });
 }
 
-export function onRequestGet(context: RequestContext): Response | Promise<Response> {
+export function onRequestGet(context) {
   const board = getRequestedBoard(context.params);
   if (!board) {
     return readR2Leaderboard(context.env, {
