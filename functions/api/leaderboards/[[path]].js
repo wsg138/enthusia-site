@@ -31,9 +31,30 @@ function json(data, status) {
 function getRequestedBoard(params) {
   const rawPath = params && (params.path || params["path"] || params["path*"]);
   const path = Array.isArray(rawPath) ? rawPath.join("/") : rawPath;
-  return String(path || "")
-    .replace(/^\/+|\/+$/g, "")
-    .replace(/\.json$/i, "");
+  let board = String(path || "");
+  while (board.startsWith("/")) {
+    board = board.slice(1);
+  }
+  while (board.endsWith("/")) {
+    board = board.slice(0, -1);
+  }
+  if (board.toLowerCase().endsWith(".json")) {
+    board = board.slice(0, -5);
+  }
+  return board;
+}
+
+function getR2BoardConfig(board) {
+  if (board === "playtime-active-all") {
+    return R2_BOARDS["playtime-active-all"];
+  }
+  if (board === "balance-active-all") {
+    return R2_BOARDS["balance-active-all"];
+  }
+  if (board === "donators-all-time") {
+    return R2_BOARDS["donators-all-time"];
+  }
+  return false;
 }
 
 function getR2Bucket(env, bindingName) {
@@ -82,7 +103,7 @@ async function readR2Leaderboard(env, config) {
 }
 
 function buildGuildRequest(env) {
-  let url;
+  let url = false;
   try {
     url = new URL(env.GUILDS_API_URL || DEFAULT_GUILDS_API_URL);
   } catch {
@@ -159,7 +180,7 @@ export function onRequestGet(context) {
     return readGuildLeaderboard(context.env);
   }
 
-  const config = R2_BOARDS[board];
+  const config = getR2BoardConfig(board);
   if (!config) {
     return json({ ok: false, error: "Unknown leaderboard board." }, 404);
   }
