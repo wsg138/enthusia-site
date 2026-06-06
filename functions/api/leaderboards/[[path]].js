@@ -1,26 +1,20 @@
-const DEFAULT_UPSTREAM_ORIGIN = "https://api.enthusia.info";
-const DEFAULT_GUILDS_API_URL = `${DEFAULT_UPSTREAM_ORIGIN}/api/leaderboards/guilds`;
-const PLAYTIME_PREFIX = "leaderboards";
+const DEFAULT_GUILDS_API_URL = "https://api.enthusia.info/api/leaderboards/guilds";
 
-const BOARD_CONFIG = {
+const R2_BOARDS = {
   "playtime-active-all": {
-    source: "playtime-r2",
-    key: `${PLAYTIME_PREFIX}/playtime-active-all.json`
+    binding: "PLAYTIME_LEADERBOARDS",
+    key: "leaderboards/playtime-active-all.json",
+    cacheSeconds: 60
   },
   "balance-active-all": {
-    source: "balance-r2",
-    key: `${PLAYTIME_PREFIX}/balance-active-all.json`
+    binding: "BALANCE_LEADERBOARDS",
+    key: "leaderboards/balance-active-all.json",
+    cacheSeconds: 30
   },
   "donators-all-time": {
-    source: "donator-r2",
-    key: `${PLAYTIME_PREFIX}/donators-all-time.json`
-  },
-  guilds: {
-    source: "protected-upstream",
-    upstreamLimit: 10,
-    defaultQuery: {
-      period: "ALL_TIME"
-    }
+    binding: "DONATOR_LEADERBOARDS",
+    key: "leaderboards/donators-all-time.json",
+    cacheSeconds: 60
   }
 };
 
@@ -34,159 +28,104 @@ function json(data, status) {
   });
 }
 
-function getRequestedPath(params) {
+function getRequestedBoard(params) {
   const rawPath = params && (params.path || params["path"] || params["path*"]);
-  if (Array.isArray(rawPath)) {
-    return rawPath.join("/");
-  }
-  return typeof rawPath === "string" ? rawPath : "";
+  const path = Array.isArray(rawPath) ? rawPath.join("/") : rawPath;
+  return String(path || "")
+    .replace(/^\/+|\/+$/g, "")
+    .replace(/\.json$/i, "");
 }
 
-function normalizeBoardPath(path) {
-  let value = String(path || "");
-  while (value.startsWith("/")) {
-    value = value.slice(1);
+function getR2Bucket(env, bindingName) {
+  if (bindingName === "PLAYTIME_LEADERBOARDS") {
+    return env.PLAYTIME_LEADERBOARDS;
   }
-  while (value.endsWith("/")) {
-    value = value.slice(0, -1);
+  if (bindingName === "BALANCE_LEADERBOARDS") {
+    return env.BALANCE_LEADERBOARDS;
   }
-  if (value.toLowerCase().endsWith(".json")) {
-    value = value.slice(0, -5);
+  if (bindingName === "DONATOR_LEADERBOARDS") {
+    return env.DONATOR_LEADERBOARDS;
   }
-  return value;
+  return false;
 }
 
-function getPlaytimeKey(path) {
-  const boardPath = normalizeBoardPath(path);
-  const file = boardPath ? `${boardPath}.json` : "index.json";
-  return `${PLAYTIME_PREFIX}/${file}`;
-}
-
-async function readR2LeaderboardObject(env, bindingName, key, cacheSeconds) {
-  const bucket = getR2Bucket(env, bindingName);
+async function readR2Leaderboard(env, config) {
+  const bucket = getR2Bucket(env, config.binding);
   if (!bucket || typeof bucket.get !== "function") {
     return json({
       ok: false,
       error: "Leaderboard R2 binding is not configured.",
-      binding: bindingName
+      binding: config.binding
     }, 500);
   }
 
-  const object = await bucket.get(key);
+  const object = await bucket.get(config.key);
   if (!object) {
     return json({
       ok: false,
       error: "Leaderboard not found.",
-      key: key
+      key: config.key
     }, 404);
   }
 
+  const contentType = object.httpMetadata && object.httpMetadata.contentType
+    ? object.httpMetadata.contentType
+    : "application/json; charset=utf-8";
+
   return new Response(object.body, {
     headers: {
-      "content-type": contentTypeOf(object),
-      "cache-control": `public, max-age=${cacheSeconds}`,
+      "content-type": contentType,
+      "cache-control": `public, max-age=${config.cacheSeconds}`,
       "access-control-allow-origin": "*"
     }
   });
 }
 
-function getR2Bucket(env, bindingName) {
-  switch (bindingName) {
-    case "PLAYTIME_LEADERBOARDS":
-      return env.PLAYTIME_LEADERBOARDS;
-    case "BALANCE_LEADERBOARDS":
-      return env.BALANCE_LEADERBOARDS;
-    case "DONATOR_LEADERBOARDS":
-      return env.DONATOR_LEADERBOARDS;
-    default:
-      return false;
-  }
-}
-
-function contentTypeOf(object) {
-  if (object.httpMetadata && object.httpMetadata.contentType) {
-    return object.httpMetadata.contentType;
-  }
-  return "application/json; charset=utf-8";
-}
-
-function getUpstreamOrigin(env) {
+function buildGuildRequest(env) {
+  let url;
   try {
-    if (env.GUILDS_API_URL) {
-      const url = new URL(env.GUILDS_API_URL);
-      return isAllowedUpstreamUrl(url) ? url.origin : DEFAULT_UPSTREAM_ORIGIN;
-    }
+    url = new URL(env.GUILDS_API_URL || DEFAULT_GUILDS_API_URL);
   } catch {
-    return DEFAULT_UPSTREAM_ORIGIN;
+    return false;
   }
 
-  return DEFAULT_UPSTREAM_ORIGIN;
-}
-
-function getBoardConfig(board) {
-  switch (board) {
-    case "playtime-active-all":
-      return BOARD_CONFIG["playtime-active-all"];
-    case "balance-active-all":
-      return BOARD_CONFIG["balance-active-all"];
-    case "donators-all-time":
-      return BOARD_CONFIG["donators-all-time"];
-    case "guilds":
-      return BOARD_CONFIG.guilds;
-    default:
-      return null;
-  }
-}
-
-function buildPublicLeaderboardUrl(board, env) {
-  const config = getBoardConfig(board);
-  const url = new URL(config.upstreamPath, getUpstreamOrigin(env));
-  url.searchParams.set("limit", String(config.limit));
-  return url;
-}
-
-function buildGuildsUrl(env) {
-  const url = new URL(env.GUILDS_API_URL || DEFAULT_GUILDS_API_URL);
-  if (!isAllowedUpstreamUrl(url)) {
-    return null;
-  }
-
-  const config = getBoardConfig("guilds");
-  url.searchParams.set("period", config.defaultQuery.period);
-  url.searchParams.set("limit", String(config.upstreamLimit));
-  return url;
-}
-
-function isAllowedUpstreamUrl(url) {
   const supportedProtocol = url.protocol === "https:" || url.protocol === "http:";
-  return supportedProtocol && !url.username && !url.password;
-}
+  if (!supportedProtocol || url.username || url.password) {
+    return false;
+  }
 
-function getGuildHeaders(env) {
-  const hasAccessId = Boolean(env.CF_ACCESS_CLIENT_ID);
-  const hasAccessSecret = Boolean(env.CF_ACCESS_CLIENT_SECRET);
+  url.searchParams.set("period", "ALL_TIME");
+  url.searchParams.set("limit", "10");
 
   const headers = { Accept: "application/json" };
   if (env.GUILDS_API_BEARER) {
     headers.Authorization = `Bearer ${env.GUILDS_API_BEARER}`;
   }
-  if (hasAccessId && hasAccessSecret) {
+  if (env.CF_ACCESS_CLIENT_ID && env.CF_ACCESS_CLIENT_SECRET) {
     headers["CF-Access-Client-Id"] = env.CF_ACCESS_CLIENT_ID;
     headers["CF-Access-Client-Secret"] = env.CF_ACCESS_CLIENT_SECRET;
   }
-  return headers;
+
+  return { url, headers };
 }
 
-async function proxyJson(url, headers) {
-  const response = await fetch(url, {
+async function readGuildLeaderboard(env) {
+  const request = buildGuildRequest(env);
+  if (!request) {
+    return json({
+      ok: false,
+      error: "Guild leaderboard proxy URL is invalid."
+    }, 500);
+  }
+
+  const response = await fetch(request.url, {
     method: "GET",
-    headers,
+    headers: request.headers,
     cf: {
       cacheTtl: 0,
       cacheEverything: false
     }
   });
-
   const text = await response.text();
 
   if (!response.ok) {
@@ -206,49 +145,24 @@ async function proxyJson(url, headers) {
   });
 }
 
-function readConfiguredLeaderboard(board, config, context) {
-  if (config.source === "playtime-r2") {
-    return readR2LeaderboardObject(context.env, "PLAYTIME_LEADERBOARDS", config.key, 60);
-  }
-
-  if (config.source === "balance-r2") {
-    return readR2LeaderboardObject(context.env, "BALANCE_LEADERBOARDS", config.key, 30);
-  }
-
-  if (config.source === "donator-r2") {
-    return readR2LeaderboardObject(context.env, "DONATOR_LEADERBOARDS", config.key, 60);
-  }
-
-  if (config.source === "upstream") {
-    const url = buildPublicLeaderboardUrl(board, context.env);
-    return proxyJson(url, { Accept: "application/json" });
-  }
-
-  const url = buildGuildsUrl(context.env);
-  const headers = getGuildHeaders(context.env);
-
-  if (!url || !headers) {
-    return json({
-      ok: false,
-      error: "Guild leaderboard proxy URL is invalid."
-    }, 500);
-  }
-
-  return proxyJson(url, headers);
-}
-
-export async function onRequestGet(context) {
-  const path = getRequestedPath(context.params);
-  const board = normalizeBoardPath(path);
-
+export function onRequestGet(context) {
+  const board = getRequestedBoard(context.params);
   if (!board) {
-    return readR2LeaderboardObject(context.env, "PLAYTIME_LEADERBOARDS", getPlaytimeKey(""), 60);
+    return readR2Leaderboard(context.env, {
+      binding: "PLAYTIME_LEADERBOARDS",
+      key: "leaderboards/index.json",
+      cacheSeconds: 60
+    });
   }
 
-  const config = getBoardConfig(board);
+  if (board === "guilds") {
+    return readGuildLeaderboard(context.env);
+  }
+
+  const config = R2_BOARDS[board];
   if (!config) {
     return json({ ok: false, error: "Unknown leaderboard board." }, 404);
   }
 
-  return readConfiguredLeaderboard(board, config, context);
+  return readR2Leaderboard(context.env, config);
 }
