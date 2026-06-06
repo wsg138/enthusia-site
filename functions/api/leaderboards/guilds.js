@@ -1,3 +1,5 @@
+const DEFAULT_GUILDS_API_URL = "https://api.enthusia.info/api/leaderboards/guilds";
+
 function json(data, status) {
   return new Response(JSON.stringify(data), {
     status: status || 200,
@@ -9,11 +11,7 @@ function json(data, status) {
 }
 
 function buildGuildsUrl(env) {
-  if (!env.GUILDS_API_URL) {
-    return null;
-  }
-
-  const url = new URL(env.GUILDS_API_URL);
+  const url = new URL(env.GUILDS_API_URL || DEFAULT_GUILDS_API_URL);
   if (!isAllowedUpstreamUrl(url)) {
     return null;
   }
@@ -28,16 +26,21 @@ function isAllowedUpstreamUrl(url) {
 }
 
 function getGuildHeaders(env) {
-  if (!env.GUILDS_API_BEARER || !env.CF_ACCESS_CLIENT_ID || !env.CF_ACCESS_CLIENT_SECRET) {
+  const hasAccessId = Boolean(env.CF_ACCESS_CLIENT_ID);
+  const hasAccessSecret = Boolean(env.CF_ACCESS_CLIENT_SECRET);
+  if (hasAccessId !== hasAccessSecret) {
     return null;
   }
 
-  return {
-    Accept: "application/json",
-    Authorization: `Bearer ${env.GUILDS_API_BEARER}`,
-    "CF-Access-Client-Id": env.CF_ACCESS_CLIENT_ID,
-    "CF-Access-Client-Secret": env.CF_ACCESS_CLIENT_SECRET
-  };
+  const headers = { Accept: "application/json" };
+  if (env.GUILDS_API_BEARER) {
+    headers.Authorization = `Bearer ${env.GUILDS_API_BEARER}`;
+  }
+  if (hasAccessId) {
+    headers["CF-Access-Client-Id"] = env.CF_ACCESS_CLIENT_ID;
+    headers["CF-Access-Client-Secret"] = env.CF_ACCESS_CLIENT_SECRET;
+  }
+  return headers;
 }
 
 export async function onRequestGet(context) {
@@ -47,7 +50,7 @@ export async function onRequestGet(context) {
   if (!url || !headers) {
     return json({
       ok: false,
-      error: "Guild leaderboard proxy is not configured."
+      error: "Guild leaderboard proxy configuration is invalid."
     }, 500);
   }
 

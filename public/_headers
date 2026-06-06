@@ -1,5 +1,5 @@
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://minotar.net https://cdn.discordapp.com https://media.discordapp.net https://images-ext-1.discordapp.net; connect-src 'self' https://discord.com https://api.mcstatus.io; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://enthusia-shop.tebex.io; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://mc-heads.net https://www.mc-heads.net https://minotar.net https://cdn.discordapp.com https://media.discordapp.net https://images-ext-1.discordapp.net; connect-src 'self' https://discord.com https://api.mcstatus.io; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://enthusia-shop.tebex.io; upgrade-insecure-requests
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Referrer-Policy: strict-origin-when-cross-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
