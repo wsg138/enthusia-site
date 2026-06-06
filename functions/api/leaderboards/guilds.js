@@ -22,7 +22,8 @@ function buildGuildsUrl(env) {
 }
 
 function isAllowedUpstreamUrl(url) {
-  return url.protocol === "https:" && !url.username && !url.password;
+  const supportedProtocol = url.protocol === "https:" || url.protocol === "http:";
+  return supportedProtocol && !url.username && !url.password;
 }
 
 function getGuildHeaders(env) {
