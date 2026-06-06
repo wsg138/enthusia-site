@@ -644,63 +644,65 @@ function getPatternColor(pattern) {
   return normalizeBannerColor(pattern?.color || pattern?.dyeColor || pattern?.shade);
 }
 
+const STRIPE_BOTTOM_SHAPES = [["rect", { x: 0, y: 26, width: 20, height: 8 }]];
+const STRIPE_TOP_SHAPES = [["rect", { x: 0, y: 0, width: 20, height: 8 }]];
+const STRIPE_LEFT_SHAPES = [["rect", { x: 0, y: 0, width: 6, height: 40 }]];
+const STRIPE_RIGHT_SHAPES = [["rect", { x: 14, y: 0, width: 6, height: 40 }]];
+const STRIPE_CENTER_SHAPES = [["rect", { x: 7, y: 0, width: 6, height: 40 }]];
+const STRIPE_MIDDLE_SHAPES = [["rect", { x: 0, y: 16, width: 20, height: 8 }]];
+const BORDER_SHAPES = [
+  ["rect", { x: 0, y: 0, width: 20, height: 4 }],
+  ["rect", { x: 0, y: 0, width: 4, height: 40 }],
+  ["rect", { x: 16, y: 0, width: 4, height: 40 }],
+  ["rect", { x: 0, y: 30, width: 20, height: 10 }]
+];
+const CROSS_SHAPES = [
+  ["rect", { x: 7, y: 0, width: 6, height: 40 }],
+  ["rect", { x: 0, y: 16, width: 20, height: 8 }]
+];
+const SALTIRE_SHAPES = [
+  ["path", { d: "M-4 4 L4 -4 L24 28 L16 36 Z" }],
+  ["path", { d: "M24 4 L16 -4 L-4 28 L4 36 Z" }]
+];
+const DIAGONAL_LEFT_SHAPES = [["path", { d: "M-4 30 L6 40 L24 8 L14 -2 Z" }]];
+const DIAGONAL_RIGHT_SHAPES = [["path", { d: "M24 30 L14 40 L-4 8 L6 -2 Z" }]];
+const CIRCLE_SHAPES = [["circle", { cx: 10, cy: 16, r: 6 }]];
+const RHOMBUS_SHAPES = [["path", { d: "M10 6 L16 16 L10 26 L4 16 Z" }]];
+const TRIANGLE_TOP_SHAPES = [["path", { d: "M10 0 L20 12 L0 12 Z" }]];
+const TRIANGLE_BOTTOM_SHAPES = [["path", { d: "M0 26 L20 26 L10 40 Z" }]];
+
 const BANNER_PATTERN_SHAPES = {
-  bs: [["rect", { x: 0, y: 26, width: 20, height: 8 }]],
-  stripe_bottom: [["rect", { x: 0, y: 26, width: 20, height: 8 }]],
-  ts: [["rect", { x: 0, y: 0, width: 20, height: 8 }]],
-  stripe_top: [["rect", { x: 0, y: 0, width: 20, height: 8 }]],
-  ls: [["rect", { x: 0, y: 0, width: 6, height: 40 }]],
-  stripe_left: [["rect", { x: 0, y: 0, width: 6, height: 40 }]],
-  rs: [["rect", { x: 14, y: 0, width: 6, height: 40 }]],
-  stripe_right: [["rect", { x: 14, y: 0, width: 6, height: 40 }]],
-  cs: [["rect", { x: 7, y: 0, width: 6, height: 40 }]],
-  stripe_center: [["rect", { x: 7, y: 0, width: 6, height: 40 }]],
-  ms: [["rect", { x: 0, y: 16, width: 20, height: 8 }]],
-  stripe_middle: [["rect", { x: 0, y: 16, width: 20, height: 8 }]],
-  bo: [
-    ["rect", { x: 0, y: 0, width: 20, height: 4 }],
-    ["rect", { x: 0, y: 0, width: 4, height: 40 }],
-    ["rect", { x: 16, y: 0, width: 4, height: 40 }],
-    ["rect", { x: 0, y: 30, width: 20, height: 10 }]
-  ],
-  border: [
-    ["rect", { x: 0, y: 0, width: 20, height: 4 }],
-    ["rect", { x: 0, y: 0, width: 4, height: 40 }],
-    ["rect", { x: 16, y: 0, width: 4, height: 40 }],
-    ["rect", { x: 0, y: 30, width: 20, height: 10 }]
-  ],
-  cr: [
-    ["rect", { x: 7, y: 0, width: 6, height: 40 }],
-    ["rect", { x: 0, y: 16, width: 20, height: 8 }]
-  ],
-  cross: [
-    ["rect", { x: 7, y: 0, width: 6, height: 40 }],
-    ["rect", { x: 0, y: 16, width: 20, height: 8 }]
-  ],
-  sc: [
-    ["path", { d: "M-4 4 L4 -4 L24 28 L16 36 Z" }],
-    ["path", { d: "M24 4 L16 -4 L-4 28 L4 36 Z" }]
-  ],
-  straight_cross: [
-    ["path", { d: "M-4 4 L4 -4 L24 28 L16 36 Z" }],
-    ["path", { d: "M24 4 L16 -4 L-4 28 L4 36 Z" }]
-  ],
-  saltire: [
-    ["path", { d: "M-4 4 L4 -4 L24 28 L16 36 Z" }],
-    ["path", { d: "M24 4 L16 -4 L-4 28 L4 36 Z" }]
-  ],
-  dls: [["path", { d: "M-4 30 L6 40 L24 8 L14 -2 Z" }]],
-  diagonal_left: [["path", { d: "M-4 30 L6 40 L24 8 L14 -2 Z" }]],
-  drs: [["path", { d: "M24 30 L14 40 L-4 8 L6 -2 Z" }]],
-  diagonal_right: [["path", { d: "M24 30 L14 40 L-4 8 L6 -2 Z" }]],
-  mc: [["circle", { cx: 10, cy: 16, r: 6 }]],
-  circle: [["circle", { cx: 10, cy: 16, r: 6 }]],
-  mr: [["path", { d: "M10 6 L16 16 L10 26 L4 16 Z" }]],
-  rhombus: [["path", { d: "M10 6 L16 16 L10 26 L4 16 Z" }]],
-  tt: [["path", { d: "M10 0 L20 12 L0 12 Z" }]],
-  triangle_top: [["path", { d: "M10 0 L20 12 L0 12 Z" }]],
-  bt: [["path", { d: "M0 26 L20 26 L10 40 Z" }]],
-  triangle_bottom: [["path", { d: "M0 26 L20 26 L10 40 Z" }]]
+  bs: STRIPE_BOTTOM_SHAPES,
+  stripe_bottom: STRIPE_BOTTOM_SHAPES,
+  ts: STRIPE_TOP_SHAPES,
+  stripe_top: STRIPE_TOP_SHAPES,
+  ls: STRIPE_LEFT_SHAPES,
+  stripe_left: STRIPE_LEFT_SHAPES,
+  rs: STRIPE_RIGHT_SHAPES,
+  stripe_right: STRIPE_RIGHT_SHAPES,
+  cs: STRIPE_CENTER_SHAPES,
+  stripe_center: STRIPE_CENTER_SHAPES,
+  ms: STRIPE_MIDDLE_SHAPES,
+  stripe_middle: STRIPE_MIDDLE_SHAPES,
+  bo: BORDER_SHAPES,
+  border: BORDER_SHAPES,
+  cr: CROSS_SHAPES,
+  cross: CROSS_SHAPES,
+  sc: SALTIRE_SHAPES,
+  straight_cross: SALTIRE_SHAPES,
+  saltire: SALTIRE_SHAPES,
+  dls: DIAGONAL_LEFT_SHAPES,
+  diagonal_left: DIAGONAL_LEFT_SHAPES,
+  drs: DIAGONAL_RIGHT_SHAPES,
+  diagonal_right: DIAGONAL_RIGHT_SHAPES,
+  mc: CIRCLE_SHAPES,
+  circle: CIRCLE_SHAPES,
+  mr: RHOMBUS_SHAPES,
+  rhombus: RHOMBUS_SHAPES,
+  tt: TRIANGLE_TOP_SHAPES,
+  triangle_top: TRIANGLE_TOP_SHAPES,
+  bt: TRIANGLE_BOTTOM_SHAPES,
+  triangle_bottom: TRIANGLE_BOTTOM_SHAPES
 };
 
 function appendBannerPattern(group, code, color) {
