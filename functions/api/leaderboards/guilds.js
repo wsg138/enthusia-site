@@ -28,15 +28,12 @@ function isAllowedUpstreamUrl(url) {
 function getGuildHeaders(env) {
   const hasAccessId = Boolean(env.CF_ACCESS_CLIENT_ID);
   const hasAccessSecret = Boolean(env.CF_ACCESS_CLIENT_SECRET);
-  if (hasAccessId !== hasAccessSecret) {
-    return null;
-  }
 
   const headers = { Accept: "application/json" };
   if (env.GUILDS_API_BEARER) {
     headers.Authorization = `Bearer ${env.GUILDS_API_BEARER}`;
   }
-  if (hasAccessId) {
+  if (hasAccessId && hasAccessSecret) {
     headers["CF-Access-Client-Id"] = env.CF_ACCESS_CLIENT_ID;
     headers["CF-Access-Client-Secret"] = env.CF_ACCESS_CLIENT_SECRET;
   }
@@ -50,7 +47,7 @@ export async function onRequestGet(context) {
   if (!url || !headers) {
     return json({
       ok: false,
-      error: "Guild leaderboard proxy configuration is invalid."
+      error: "Guild leaderboard proxy URL is invalid."
     }, 500);
   }
 
