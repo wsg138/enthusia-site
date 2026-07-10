@@ -2900,3 +2900,193 @@ summary:focus-visible{
   max-width:600px;
   color:var(--muted);
 }
+
+/* Polished card alignment and compact resource links */
+.join-card{
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  align-items:start;
+}
+
+.join-card .step-number{
+  margin:0 0 24px;
+}
+
+.join-card > div:not(.join-links){
+  display:grid;
+  grid-template-rows:auto minmax(58px,auto) 1fr;
+  align-self:stretch;
+}
+
+.join-card > div:not(.join-links) h3{
+  align-self:start;
+}
+
+.join-card .mini-copy,
+.join-card .join-links{
+  align-self:end;
+  margin-top:18px;
+}
+
+.join-card .join-links{
+  min-height:38px;
+  align-items:center;
+}
+
+.link-card{
+  min-height:112px;
+  padding:15px;
+}
+
+.link-card strong{
+  margin-top:14px;
+  font-size:.96rem;
+  line-height:1.3;
+}
+
+/* Rules page */
+.rules-principles{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  padding-top:22px;
+}
+
+.rules-principles article{
+  display:grid;
+  grid-template-columns:38px minmax(0,1fr);
+  gap:12px;
+  padding:17px;
+  border:1px solid rgba(255,211,106,.14);
+  border-radius:8px;
+  background:rgba(27,23,19,.94);
+}
+
+.rules-principles article > span{
+  color:var(--gold);
+  font-size:.78rem;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+.rules-principles strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.rules-principles p{
+  margin:0;
+  color:var(--muted);
+  font-size:.9rem;
+}
+
+.rules-layout{
+  grid-template-columns:240px minmax(0,1fr);
+  gap:22px;
+}
+
+.rules-toc{
+  padding:14px;
+  background:rgba(22,18,14,.96);
+}
+
+.toc-list a{
+  padding:9px 10px;
+  font-size:.9rem;
+}
+
+.rules-prose section{
+  padding:28px;
+  transition:none;
+}
+
+.rules-prose section:hover{
+  background:transparent;
+  transform:none;
+}
+
+.rules-prose section::before{
+  top:28px;
+  bottom:28px;
+  width:2px;
+  opacity:.42;
+  transition:none;
+}
+
+.rules-prose section:hover::before{
+  width:2px;
+  opacity:.42;
+}
+
+.rules-prose h2{
+  margin-bottom:16px;
+}
+
+.rules-prose section > p:not(.rule-label){
+  max-width:790px;
+  color:var(--muted);
+}
+
+.rules-prose ul{
+  display:grid;
+  gap:8px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+.rules-prose li{
+  margin:0;
+  padding:12px 14px;
+  border:1px solid rgba(255,211,106,.09);
+  border-radius:7px;
+  color:var(--muted);
+  background:rgba(255,255,255,.022);
+}
+
+.rules-prose li strong{
+  color:var(--text);
+}
+
+.rule-standard{
+  background:linear-gradient(90deg,rgba(255,138,0,.08),transparent 72%);
+}
+
+.rule-callout{
+  margin:18px 0 0;
+  padding:14px 16px;
+  border-left:3px solid var(--orange);
+  border-radius:6px;
+  background:rgba(255,138,0,.075);
+}
+
+.rule-callout strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.rule-callout p{
+  margin:0;
+  color:var(--muted);
+}
+
+.allowed-callout{
+  margin:0 0 14px;
+  border-left-color:var(--green);
+  background:rgba(68,209,122,.065);
+}
+
+@media (max-width:1000px){
+  .rules-principles{grid-template-columns:1fr}
+  .rules-layout{grid-template-columns:1fr}
+  .toc-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media (max-width:560px){
+  .join-card > div:not(.join-links){grid-template-rows:auto auto 1fr}
+  .join-card > div:not(.join-links) h3{min-height:0}
+  .rules-principles{padding-top:14px}
+  .toc-list{grid-template-columns:1fr}
+  .rules-prose section{padding:21px 18px}
+  .rules-prose section::before{top:21px;bottom:21px}
+}
