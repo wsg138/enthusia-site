@@ -26,8 +26,7 @@ await writeFile(path.join(output, "server", "index.js"), `export default {
       const response = await env.ASSETS.fetch(request);
       if (response.status !== 404) return response;
       url.pathname = "/branded-not-found.html";
-      const notFound = await env.ASSETS.fetch(new Request(url, request));
-      return new Response(notFound.body, { status: 404, headers: notFound.headers });
+      return env.ASSETS.fetch(new Request(url, request));
     }
     return new Response("Static asset binding is unavailable.", { status: 503 });
   }
