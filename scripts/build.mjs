@@ -10,6 +10,7 @@ await rm(output, { recursive: true, force: true });
 await mkdir(client, { recursive: true });
 await cp(source, client, { recursive: true });
 await cp(path.join(source, "plugins.html"), path.join(client, "about.html"));
+await cp(path.join(source, "404.html"), path.join(client, "branded-not-found.html"));
 await rm(path.join(client, "northstar-a7k3m9"), { recursive: true, force: true });
 await mkdir(path.join(output, ".openai"), { recursive: true });
 await cp(path.join(root, ".openai", "hosting.json"), path.join(output, ".openai", "hosting.json"));
@@ -24,7 +25,7 @@ await writeFile(path.join(output, "server", "index.js"), `export default {
       }
       const response = await env.ASSETS.fetch(request);
       if (response.status !== 404) return response;
-      url.pathname = "/404.html";
+      url.pathname = "/branded-not-found.html";
       const notFound = await env.ASSETS.fetch(new Request(url, request));
       return new Response(notFound.body, { status: 404, headers: notFound.headers });
     }
