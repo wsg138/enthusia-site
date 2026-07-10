@@ -1,0 +1,16 @@
+{
+  "name": "Enthusia SMP",
+  "short_name": "Enthusia",
+  "description": "Server status, connection details, rules, leaderboards, and community links for Enthusia SMP.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#100d0a",
+  "theme_color": "#ff8a00",
+  "icons": [
+    {
+      "src": "/assets/enthusia-logo-v2.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

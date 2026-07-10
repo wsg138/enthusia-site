@@ -1,6 +1,6 @@
 const STATUS_REFRESH_INTERVAL_MS = 60000;
-const SCREENSHOT_AUTOPLAY_MS = 1500;
-const SCREENSHOT_MANUAL_PAUSE_MS = 5000;
+const SCREENSHOT_AUTOPLAY_MS = 5000;
+const SCREENSHOT_MANUAL_PAUSE_MS = 10000;
 const STAFF_SCROLL_SPEED_PX_PER_SECOND = 28;
 
 let stopStaffCarouselMotion = null;
@@ -127,7 +127,7 @@ async function copyText(text) {
 }
 
 function initCopyIpButton(ip) {
-  const copyButtons = [document.getElementById("copyIpBtn"), document.getElementById("copyIpMiniBtn")].filter(Boolean);
+  const copyButtons = [...document.querySelectorAll("#copyIpBtn, #copyIpMiniBtn, [data-copy-server-ip]")];
   if (!copyButtons.length) {
     return;
   }
@@ -157,6 +157,7 @@ async function updateServerStatus(ip) {
   const ipEl = document.getElementById("serverIp");
   const statusEl = document.getElementById("serverStatus");
   const countEl = document.getElementById("playerCount");
+  const updatedEl = document.getElementById("statusUpdated");
 
   if (ipEl) {
     ipEl.textContent = isConfiguredValue(ip) ? ip : "Unavailable";
@@ -169,15 +170,90 @@ async function updateServerStatus(ip) {
   if (!isConfiguredValue(ip)) {
     countEl.textContent = "--";
     setStatusBadge(statusEl, "TBA", "unknown");
+    if (updatedEl) updatedEl.textContent = "Server address is unavailable";
     return;
   }
 
   try {
+    const startedAt = performance.now();
     applyServerStatus(await fetchServerStatus(ip), statusEl, countEl);
+    const latency = Math.max(1, Math.round(performance.now() - startedAt));
+    if (updatedEl) updatedEl.textContent = `Updated just now · ${latency} ms status check`;
   } catch {
     countEl.textContent = "--";
     setStatusBadge(statusEl, "TBA", "unknown");
+    if (updatedEl) updatedEl.textContent = "Live status is temporarily unavailable";
   }
+}
+
+function initStatusRefresh(ip) {
+  const refreshButton = document.getElementById("refreshStatusBtn");
+  if (!refreshButton) return;
+
+  refreshButton.addEventListener("click", async () => {
+    refreshButton.disabled = true;
+    refreshButton.textContent = "Refreshing…";
+    await updateServerStatus(ip);
+    refreshButton.disabled = false;
+    refreshButton.textContent = "Refresh";
+  });
+}
+
+function initShareButton(cfg) {
+  const shareButton = document.getElementById("shareServerBtn");
+  if (!shareButton) return;
+
+  shareButton.addEventListener("click", async () => {
+    const originalLabel = shareButton.textContent;
+    const shareData = {
+      title: "Enthusia SMP",
+      text: `Join Enthusia SMP on ${cfg.serverIp}`,
+      url: window.location.href
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await copyText(`${shareData.text} — ${shareData.url}`);
+        shareButton.textContent = "Link copied";
+      }
+    } catch (error) {
+      if (error?.name !== "AbortError") shareButton.textContent = "Share failed";
+    }
+
+    window.setTimeout(() => { shareButton.textContent = originalLabel; }, 1800);
+  });
+}
+
+function initMobileNavigation() {
+  const header = document.querySelector(".header-inner");
+  const nav = header?.querySelector(".nav");
+  const brand = header?.querySelector(".brand");
+  if (!header || !nav || !brand) return;
+
+  const toggle = document.createElement("button");
+  toggle.className = "nav-toggle";
+  toggle.type = "button";
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.setAttribute("aria-label", "Open navigation");
+  toggle.innerHTML = "<span></span><span></span><span></span>";
+  brand.after(toggle);
+  header.classList.add("nav-enhanced");
+
+  const setOpen = (open) => {
+    header.classList.toggle("nav-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+  };
+
+  toggle.addEventListener("click", () => setOpen(!header.classList.contains("nav-open")));
+  nav.addEventListener("click", (event) => {
+    if (event.target.closest("a")) setOpen(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setOpen(false);
+  });
 }
 
 async function fetchServerStatus(ip) {
@@ -1319,7 +1395,10 @@ async function initSite(cfg) {
 
   setExternalLinkTargets(normalizedConfig);
   setContactEmail(normalizedConfig);
+  initMobileNavigation();
   initCopyIpButton(normalizedConfig.serverIp);
+  initShareButton(normalizedConfig);
+  initStatusRefresh(normalizedConfig.serverIp);
   renderScreenshotSlideshow(cfg?.home?.screenshots);
   renderStaffCarousel(cfg?.home?.staff);
   renderFaqItems(cfg?.home?.faq);
