@@ -439,6 +439,14 @@ summary:focus-visible{
   color:var(--gold);
 }
 
+#copyIpBtn{
+  min-height:40px;
+  padding:8px 14px;
+  background-color:#ff8a00;
+  background-image:none;
+  border-color:#ff8a00;
+}
+
 .status{
   display:grid;
   grid-template-columns:1.45fr .72fr .72fr .72fr;
@@ -3089,4 +3097,104 @@ summary:focus-visible{
   .toc-list{grid-template-columns:1fr}
   .rules-prose section{padding:21px 18px}
   .rules-prose section::before{top:21px;bottom:21px}
+}
+
+/* Balanced three-step connection flow */
+.join-card{
+  min-height:300px;
+}
+
+.join-card > div:not(.join-links){
+  grid-template-rows:auto minmax(58px,auto) 1fr;
+}
+
+.inline-copy{
+  display:inline;
+  padding:0;
+  border:0;
+  border-bottom:1px dashed rgba(255,211,106,.65);
+  color:var(--gold);
+  background:transparent;
+  font:inherit;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.inline-copy:hover{
+  color:var(--cream);
+  border-bottom-style:solid;
+}
+
+.join-action{
+  position:relative;
+  z-index:1;
+  display:inline-flex;
+  width:max-content;
+  min-height:38px;
+  align-items:center;
+  justify-content:center;
+  padding:8px 14px;
+  border:1px solid rgba(255,138,0,.65);
+  border-radius:7px;
+  color:#1a1008;
+  background:#ff8a00;
+  font:inherit;
+  font-size:.8rem;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:none;
+}
+
+.join-action:hover{
+  text-decoration:none;
+  filter:brightness(1.06);
+}
+
+.join-action.secondary{
+  color:var(--gold);
+  border-color:rgba(255,211,106,.25);
+  background:rgba(255,255,255,.045);
+}
+
+.join-links{
+  width:100%;
+  gap:8px;
+  align-items:center;
+}
+
+.join-links .join-action{
+  flex:1 1 0;
+  width:auto;
+}
+
+.status-meta.is-refreshing::before{
+  content:"";
+  width:13px;
+  height:13px;
+  flex:0 0 auto;
+  border:2px solid rgba(255,211,106,.25);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:status-refresh-spin .65s linear infinite;
+}
+
+.status-meta.is-refreshed{
+  animation:status-refresh-flash .45s ease-out;
+}
+
+@keyframes status-refresh-spin{to{transform:rotate(360deg)}}
+@keyframes status-refresh-flash{
+  0%{color:var(--gold)}
+  100%{color:var(--soft)}
+}
+
+.stat-row span{
+  min-height:1.6rem;
+  font-size:clamp(1.15rem,2.2vw,1.6rem);
+  white-space:nowrap;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .status-meta.is-refreshing::before{animation:none}
+  .status-meta.is-refreshed{animation:none}
 }

@@ -210,6 +210,7 @@ window.ENTHUSIA = {
       { name: "Badger", username: "badgersmc", role: "Developer" },
       { name: "Demimeow", username: "demimeow", role: "Developer" },
       { name: "Orbitz", username: "orbitzx", role: "Developer" },
+      { name: "BoggersTheFish", username: "BoggersTheFish", role: "Developer" },
       { name: "Toxic", username: "toxikflame11", role: "Mod" },
       { name: "Bob", username: "sirbobertt", role: "Mod" },
       { name: "Rafffff", username: "rafffff3282", role: "Mod" }

@@ -188,14 +188,20 @@ async function updateServerStatus(ip) {
 
 function initStatusRefresh(ip) {
   const refreshButton = document.getElementById("refreshStatusBtn");
+  const statusMeta = refreshButton?.closest(".status-meta");
   if (!refreshButton) return;
 
   refreshButton.addEventListener("click", async () => {
     refreshButton.disabled = true;
     refreshButton.textContent = "Refreshing…";
+    statusMeta?.classList.remove("is-refreshed");
+    statusMeta?.classList.add("is-refreshing");
     await updateServerStatus(ip);
+    statusMeta?.classList.remove("is-refreshing");
+    statusMeta?.classList.add("is-refreshed");
     refreshButton.disabled = false;
     refreshButton.textContent = "Refresh";
+    window.setTimeout(() => statusMeta?.classList.remove("is-refreshed"), 500);
   });
 }
 
