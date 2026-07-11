@@ -1542,12 +1542,12 @@ function initWorldEffects() {
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(width, 0);
-    context.lineTo(width, height * 0.19);
-    context.bezierCurveTo(width * 0.93, height * 0.24, width * 0.86, height * 0.32, width * 0.8, height * 0.43);
-    context.bezierCurveTo(width * 0.72, height * 0.55, width * 0.63, height * 0.61, width * 0.52, height * 0.66);
-    context.bezierCurveTo(width * 0.45, height * 0.64, width * 0.38, height * 0.56, width * 0.32, height * 0.47);
-    context.bezierCurveTo(width * 0.29, height * 0.4, width * 0.26, height * 0.26, width * 0.22, height * 0.25);
-    context.bezierCurveTo(width * 0.16, height * 0.3, width * 0.08, height * 0.27, 0, height * 0.24);
+    context.lineTo(width, height * 0.14);
+    context.bezierCurveTo(width * 0.93, height * 0.19, width * 0.86, height * 0.27, width * 0.8, height * 0.36);
+    context.bezierCurveTo(width * 0.72, height * 0.47, width * 0.63, height * 0.53, width * 0.52, height * 0.57);
+    context.bezierCurveTo(width * 0.45, height * 0.55, width * 0.38, height * 0.48, width * 0.32, height * 0.4);
+    context.bezierCurveTo(width * 0.29, height * 0.34, width * 0.26, height * 0.21, width * 0.22, height * 0.18);
+    context.bezierCurveTo(width * 0.16, height * 0.24, width * 0.08, height * 0.22, 0, height * 0.19);
     context.closePath();
     context.clip();
   };
@@ -1652,21 +1652,20 @@ function initWorldEffects() {
     }
 
     if (progress >= 0.08 && progress <= 0.92) {
-      const phase = (progress - 0.08) / 0.84;
+      const phase = progress;
       const atTop = window.scrollY < 14;
       const bob = atTop && !reducedMotion ? Math.sin(timestamp / 920) * 5 : 0;
-      const sunX = interpolate(width * 0.16, width * 0.84, phase) - (atTop ? width * 0.028 : 0);
-      const sunY = height * 0.68 - Math.sin(phase * Math.PI) * height * 0.53 + bob;
-      const opacity = smooth(clamp((progress - 0.08) / 0.12, 0, 1)) * smooth(clamp((0.92 - progress) / 0.12, 0, 1));
+      const sunX = interpolate(width * 0.12, width * 0.88, phase) - (atTop ? width * 0.028 : 0);
+      const sunY = height * 0.64 - Math.sin(phase * Math.PI) * height * 0.5 + bob;
+      const opacity = smooth(clamp(progress / 0.12, 0, 1)) * smooth(clamp((0.94 - progress) / 0.12, 0, 1));
       drawSun(sunX, sunY, opacity);
     }
 
-    if (progress < 0.2) {
-      const phase = progress / 0.2;
-      drawMoon(interpolate(width * 0.7, width * 0.93, smooth(phase)), interpolate(height * 0.29, height * 0.13, smooth(phase)), 1 - smooth(phase));
-    } else if (progress > 0.82) {
-      const phase = (progress - 0.82) / 0.18;
-      drawMoon(interpolate(width * 0.1, width * 0.7, smooth(phase)), interpolate(height * 0.45, height * 0.29, smooth(phase)), smooth(phase));
+    if (nightOpacity > 0.01) {
+      const moonPhase = (progress + 0.2) % 1;
+      const moonX = interpolate(width * 0.12, width * 0.88, moonPhase);
+      const moonY = height * 0.64 - Math.sin(moonPhase * Math.PI) * height * 0.5;
+      drawMoon(moonX, moonY, nightOpacity);
     }
 
     const brightness = interpolateStop(colorStops.brightness, progress);
