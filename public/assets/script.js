@@ -1394,6 +1394,38 @@ function initScrollReveal() {
   revealTargets.forEach((target) => observer.observe(target));
 }
 
+function initWorldEffects() {
+  if (document.querySelector(".world-effects")) return;
+
+  const effects = document.createElement("div");
+  effects.className = "world-effects";
+  effects.setAttribute("aria-hidden", "true");
+
+  const water = document.createElement("div");
+  water.className = "world-water";
+  effects.append(water);
+
+  const meadow = document.createElement("div");
+  meadow.className = "world-meadow";
+  for (let index = 0; index < 18; index += 1) {
+    const stem = document.createElement("i");
+    stem.style.setProperty("--i", String(index));
+    stem.style.setProperty("--x", `${index * 6}%`);
+    stem.style.setProperty("--sway", `${2.8 + (index % 5) * 0.24}s`);
+    meadow.append(stem);
+  }
+  effects.append(meadow);
+
+  for (let index = 0; index < 3; index += 1) {
+    const bee = document.createElement("div");
+    bee.className = `voxel-bee bee-${index + 1}`;
+    bee.innerHTML = '<span class="bee-wing wing-left"></span><span class="bee-body"></span><span class="bee-wing wing-right"></span>';
+    effects.append(bee);
+  }
+
+  document.body.prepend(effects);
+}
+
 async function initSite(cfg) {
   const yearEl = document.getElementById("year");
   if (yearEl) {
@@ -1411,6 +1443,7 @@ async function initSite(cfg) {
 
   setExternalLinkTargets(normalizedConfig);
   setContactEmail(normalizedConfig);
+  initWorldEffects();
   initMobileNavigation();
   initCopyIpButton(normalizedConfig.serverIp);
   initShareButton(normalizedConfig);

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Pixelify+Sans:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root{
   --bg:#100d0a;
@@ -2838,6 +2838,265 @@ h1,h2,h3,.brand-name,.status-value,.showcase-number,.step-number,.timeline-time{
 
 @media(prefers-reduced-motion:reduce){
   .hero::after,.bg::before,.bg::after{animation:none}
+}
+
+/* Authentic Minecraft world layer */
+:root{
+  --bg:#160b07;
+  --bg-2:#241008;
+  --panel:rgba(25,13,9,.88);
+  --panel-2:rgba(41,20,11,.9);
+  --text:#fff5df;
+  --muted:#d4c0a6;
+  --soft:#a68b70;
+  --line:#754027;
+  --line-strong:#bd6b30;
+  --ember:#ff4b12;
+  --orange:#ff8a00;
+  --gold:#ffd36a;
+  --green:#73c74f;
+  --brand-grad:linear-gradient(180deg,#fff2a2 0%,#ffad32 58%,#e44f13 100%);
+  --action-grad:linear-gradient(180deg,#ffd260 0%,#ff8715 62%,#e95012 100%);
+}
+
+body{
+  font-family:Manrope,system-ui,sans-serif;
+  background:#120805;
+  overflow-x:clip;
+}
+
+h1,h2,h3,.brand-name{
+  font-family:Bungee,Manrope,sans-serif;
+  font-weight:400;
+  letter-spacing:-.025em;
+}
+
+.status-value,.showcase-number,.step-number,.timeline-time{
+  font-family:Manrope,system-ui,sans-serif;
+  font-weight:800;
+  letter-spacing:0;
+}
+
+.world-effects{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+  background:
+    linear-gradient(180deg,rgba(24,8,4,.18),rgba(20,7,3,.48) 60%,rgba(12,5,2,.84)),
+    url("screenshots/slide-01.webp") center/cover no-repeat;
+  transform:translateZ(0);
+}
+
+.world-effects::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 74% 25%,rgba(255,193,81,.18),transparent 27%),
+    linear-gradient(90deg,rgba(18,6,3,.36),transparent 45%,rgba(18,6,3,.08));
+}
+
+.world-water{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:34%;
+  opacity:.22;
+  background:
+    repeating-linear-gradient(176deg,transparent 0 18px,rgba(255,223,149,.34) 19px,transparent 21px 38px);
+  mask-image:linear-gradient(transparent,#000 45%);
+  animation:water-glimmer 9s ease-in-out infinite alternate;
+}
+
+@keyframes water-glimmer{
+  0%{transform:translateX(-3%) skewY(-1deg);opacity:.13}
+  100%{transform:translateX(3%) skewY(1deg);opacity:.28}
+}
+
+.world-meadow{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-4px;
+  height:82px;
+  opacity:.82;
+}
+
+.world-meadow i{
+  position:absolute;
+  left:var(--x);
+  bottom:0;
+  width:8px;
+  height:34px;
+  background:linear-gradient(90deg,#552714 0 25%,#9d5a1e 25% 55%,#d0912d 55%);
+  transform-origin:bottom;
+  box-shadow:8px -10px 0 #a85f1c,-7px -17px 0 #6d3717;
+  animation:grass-sway var(--sway) ease-in-out infinite alternate;
+}
+
+.world-meadow i:nth-child(3n){height:48px}
+.world-meadow i:nth-child(4n){height:27px}
+
+@keyframes grass-sway{to{transform:skewX(8deg) translateX(3px)}}
+
+.voxel-bee{
+  position:absolute;
+  width:52px;
+  height:30px;
+  filter:drop-shadow(5px 6px 2px rgba(0,0,0,.32));
+  animation:bee-flight 21s linear infinite;
+}
+
+.bee-body{
+  position:absolute;
+  left:10px;
+  top:9px;
+  width:34px;
+  height:22px;
+  background:repeating-linear-gradient(90deg,#f8bc27 0 9px,#3a2516 9px 15px);
+  box-shadow:inset -5px -5px 0 rgba(99,48,10,.25),5px 0 0 #422818;
+}
+
+.bee-body::before{content:"";position:absolute;left:-7px;top:6px;width:7px;height:9px;background:#2b1c12}
+.bee-body::after{content:"";position:absolute;right:-8px;top:7px;border-left:8px solid #6a3516;border-top:4px solid transparent;border-bottom:4px solid transparent}
+
+.bee-wing{
+  position:absolute;
+  top:0;
+  width:18px;
+  height:12px;
+  border:2px solid rgba(255,247,205,.88);
+  background:rgba(214,245,255,.58);
+  transform-origin:bottom;
+  animation:wing-flap .18s ease-in-out infinite alternate;
+}
+
+.wing-left{left:11px;transform:rotate(-18deg)}
+.wing-right{left:30px;transform:rotate(18deg);animation-direction:alternate-reverse}
+@keyframes wing-flap{to{transform:rotateX(65deg) translateY(4px)}}
+
+.bee-1{top:22%;left:-80px;animation-delay:-3s}
+.bee-2{top:48%;left:-100px;transform:scale(.7);animation-duration:27s;animation-delay:-15s}
+.bee-3{top:68%;left:-120px;transform:scale(.5);animation-duration:34s;animation-delay:-24s}
+
+@keyframes bee-flight{
+  0%{translate:-100px 0;rotate:-3deg}
+  20%{translate:calc(20vw + 100px) 32px;rotate:3deg}
+  45%{translate:calc(48vw + 100px) -24px;rotate:-2deg}
+  70%{translate:calc(75vw + 100px) 26px;rotate:3deg}
+  100%{translate:calc(100vw + 180px) -12px;rotate:0deg}
+}
+
+.bg{display:none}
+.page-main,.site-header,.site-footer{position:relative;z-index:2}
+
+.site-header{
+  background:rgba(24,9,5,.78);
+  border-bottom:1px solid rgba(255,177,65,.38);
+  backdrop-filter:blur(14px) saturate(1.2);
+}
+
+.brand-logo{filter:drop-shadow(0 0 15px rgba(255,102,13,.55));animation:soft-pulse 4.8s ease-in-out infinite}
+.brand-name{text-shadow:0 2px 14px rgba(255,99,17,.32)}
+
+.hero{
+  min-height:100vh;
+  padding:160px 0 90px;
+  background:none;
+  border-bottom:0;
+}
+
+.hero::before{
+  background:linear-gradient(90deg,rgba(18,6,3,.48),transparent 64%);
+}
+
+.hero::after{
+  background-image:radial-gradient(circle,rgba(255,166,54,.9) 0 1px,transparent 2px);
+  opacity:.18;
+}
+
+.hero-copy,.hero-panel,.card,.status-card,.content-panel,.timeline-item,.link-card,.rules-principles article,.rules-prose section,.rules-toc,.staff-card,.staff-full-card,.slideshow-shell{
+  background:
+    linear-gradient(135deg,rgba(255,127,24,.055),transparent 38%),
+    rgba(24,12,8,.82);
+  border-color:rgba(255,154,54,.34);
+  backdrop-filter:blur(12px) saturate(1.08);
+  box-shadow:0 18px 44px rgba(8,2,0,.32);
+}
+
+.hero-copy{
+  border-left:5px solid #ff7a16;
+  box-shadow:0 22px 60px rgba(8,2,0,.36);
+}
+
+.hero h1{
+  font-size:clamp(3.6rem,8vw,7rem);
+  line-height:.9;
+  color:#fff1cf;
+  text-shadow:0 5px 0 #7d2b10,0 12px 32px rgba(0,0,0,.48);
+}
+
+.hero-panel{border-color:rgba(255,179,71,.4)}
+.hero-logo{width:min(280px,78%);filter:drop-shadow(0 0 32px rgba(255,84,12,.42))}
+.fact-strip{background:rgba(35,14,7,.72);border-color:rgba(255,160,52,.28)}
+
+.page-section,.page-section:nth-of-type(even),.join-section{
+  position:relative;
+  z-index:2;
+  background:transparent;
+  border-color:rgba(255,150,48,.2);
+}
+
+.page-section::before{
+  content:"";
+  position:absolute;
+  inset:24px 0;
+  z-index:-1;
+  background:linear-gradient(90deg,rgba(18,7,4,.68),rgba(30,12,6,.5),rgba(18,7,4,.68));
+  backdrop-filter:blur(3px);
+  border-block:1px solid rgba(255,145,39,.12);
+}
+
+.subhero{
+  min-height:66vh;
+  display:flex;
+  align-items:flex-end;
+  background:none;
+  border-bottom:0;
+}
+.subhero::after{background:linear-gradient(0deg,rgba(18,7,4,.78),transparent 65%)}
+
+.btn,.join-action{border-color:#ffd36a;box-shadow:0 7px 22px rgba(242,91,15,.24)}
+.btn.ghost,.btn.quiet,.join-action.secondary{border-color:rgba(255,178,70,.36);background:rgba(53,22,10,.78);box-shadow:none}
+.card-kicker{border-color:rgba(255,153,43,.3);background:rgba(255,100,16,.1);color:#ffd36a}
+.join-card:hover{border-color:#ff9d32;box-shadow:0 22px 48px rgba(7,2,0,.4),0 0 30px rgba(255,96,15,.18)}
+.timeline-item{border-left-color:#ff7717;background:rgba(27,12,7,.8)}
+.live-layer-grid{border-color:rgba(255,153,49,.3);box-shadow:0 20px 45px rgba(7,2,0,.3)}
+.live-layer-card{background:rgba(26,12,7,.82);border-color:rgba(255,153,49,.2)}
+.side-rail{background:rgba(24,11,7,.88);border-color:rgba(255,153,49,.3)}
+.detail-grid>div,.zone-grid article,.stat-row div,.rule-items>li{background:rgba(28,13,8,.78);border-color:rgba(255,153,49,.22)}
+.staff-shell{background:rgba(20,9,6,.82);border-color:rgba(255,153,49,.3)}
+.site-footer{background:rgba(15,5,3,.9);border-color:rgba(255,145,39,.28);backdrop-filter:blur(10px)}
+
+@media(max-width:820px){
+  .hero{background:none;min-height:auto;padding-top:128px}
+  .hero::before{background:linear-gradient(180deg,rgba(18,6,3,.16),rgba(18,6,3,.55))}
+  .world-effects{background-position:58% center}
+  .voxel-bee{opacity:.72}
+}
+
+@media(max-width:560px){
+  .world-effects{background-position:64% center}
+  .world-meadow{opacity:.5}
+  .hero h1{font-size:clamp(3rem,15vw,5rem)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .world-water,.world-meadow i,.voxel-bee,.bee-wing{animation:none}
+  .voxel-bee{display:none}
 }
 
 /* Conversion and navigation enhancements */
