@@ -3493,6 +3493,76 @@ h1,h2,h3{
   color:var(--muted);
 }
 
+/* Preserve the original interface type, with a dedicated home wordmark. */
+body,
+h1,h2,h3,
+.brand-name,
+.status-value,
+.showcase-number,
+.step-number,
+.timeline-time{
+  font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  letter-spacing:normal;
+}
+
+.brand-name{
+  background:var(--brand-grad);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+  text-shadow:none;
+}
+
+.hero h1{
+  font-family:Rye,Georgia,serif;
+  font-weight:400;
+  letter-spacing:.005em;
+}
+
+/* Give the Discord panel enough room for the live community preview. */
+.hero-inner{
+  grid-template-columns:minmax(0,1.15fr) minmax(370px,.85fr);
+}
+
+.hero-panel{
+  min-width:370px;
+  padding:24px;
+  gap:18px;
+  background:
+    linear-gradient(135deg,rgba(255,127,24,.06),transparent 38%),
+    rgba(24,12,8,.9);
+}
+
+.hero-logo{width:min(270px,72%)}
+
+.discord-card{
+  padding:18px;
+  min-height:226px;
+  border-color:rgba(255,169,62,.32);
+  background:rgba(35,15,8,.82);
+}
+
+.discord-head{margin-bottom:14px}
+.discord-avatars{gap:8px;margin:14px 0}
+.discord-avatars img{width:35px;height:35px;border-radius:6px}
+.discord-actions .btn{min-height:44px;padding:10px 15px}
+
+.status{grid-template-columns:1.32fr .78fr .8fr .88fr}
+.status-ip{font-size:clamp(1.2rem,1.7vw,1.65rem);white-space:nowrap}
+.version-card .status-value{font-size:1.45rem;white-space:nowrap}
+
+@media(max-width:1000px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-panel{min-width:0;width:min(100%,620px);justify-self:start}
+}
+
+@media(max-width:560px){
+  .hero-panel{padding:16px}
+  .discord-card{padding:14px;min-height:0}
+  .discord-avatars img{width:30px;height:30px}
+}
+
 /* Polished card alignment and compact resource links */
 .join-card{
   display:grid;
@@ -3833,4 +3903,67 @@ h1,h2,h3{
   .live-status.is-refreshing .status-card,
   .live-status.is-refreshing .status-card::before,
   .live-status.is-refreshed .status-card{animation:none}
+}
+
+/* Final experimental typography and Discord-panel sizing overrides. */
+body,
+h1,h2,h3,
+.brand-name,
+.status-value,
+.showcase-number,
+.step-number,
+.timeline-time{
+  font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  letter-spacing:normal;
+}
+
+.brand-name{
+  background:var(--brand-grad);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+  text-shadow:none;
+}
+
+.hero h1{
+  font-family:Rye,Georgia,serif;
+  font-weight:400;
+  letter-spacing:.005em;
+}
+
+.hero-inner{grid-template-columns:minmax(0,1.15fr) minmax(370px,.85fr)}
+
+.hero-panel{
+  min-width:370px;
+  padding:24px;
+  gap:18px;
+  background:
+    linear-gradient(135deg,rgba(255,127,24,.06),transparent 38%),
+    rgba(24,12,8,.9);
+}
+
+.hero-logo{width:min(270px,72%)}
+
+.discord-card{
+  padding:18px;
+  min-height:226px;
+  border-color:rgba(255,169,62,.32);
+  background:rgba(35,15,8,.82);
+}
+
+.discord-head{margin-bottom:14px}
+.discord-avatars{gap:8px;margin:14px 0}
+.discord-avatars img{width:35px;height:35px;border-radius:6px}
+.discord-actions .btn{min-height:44px;padding:10px 15px}
+
+@media(max-width:1000px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-panel{min-width:0;width:min(100%,620px);justify-self:start}
+}
+
+@media(max-width:560px){
+  .hero-panel{padding:16px}
+  .discord-card{padding:14px;min-height:0}
+  .discord-avatars img{width:30px;height:30px}
 }
