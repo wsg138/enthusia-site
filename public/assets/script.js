@@ -263,12 +263,34 @@ function initMobileNavigation() {
     toggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
   };
 
+  nav.querySelectorAll(".nav-dropdown").forEach((dropdown) => {
+    const trigger = dropdown.querySelector(".nav-drop-trigger");
+    if (!trigger) return;
+    trigger.setAttribute("aria-expanded", "false");
+    trigger.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const willOpen = !dropdown.classList.contains("is-open");
+      nav.querySelectorAll(".nav-dropdown.is-open").forEach((openDropdown) => {
+        openDropdown.classList.remove("is-open");
+        openDropdown.querySelector(".nav-drop-trigger")?.setAttribute("aria-expanded", "false");
+      });
+      dropdown.classList.toggle("is-open", willOpen);
+      trigger.setAttribute("aria-expanded", String(willOpen));
+    });
+  });
+
   toggle.addEventListener("click", () => setOpen(!header.classList.contains("nav-open")));
   nav.addEventListener("click", (event) => {
     if (event.target.closest("a")) setOpen(false);
   });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") setOpen(false);
+  });
+  document.addEventListener("click", () => {
+    nav.querySelectorAll(".nav-dropdown.is-open").forEach((dropdown) => {
+      dropdown.classList.remove("is-open");
+      dropdown.querySelector(".nav-drop-trigger")?.setAttribute("aria-expanded", "false");
+    });
   });
 }
 
@@ -1415,13 +1437,6 @@ function initWorldEffects() {
     meadow.append(stem);
   }
   effects.append(meadow);
-
-  for (let index = 0; index < 3; index += 1) {
-    const bee = document.createElement("div");
-    bee.className = `voxel-bee bee-${index + 1}`;
-    bee.innerHTML = '<span class="bee-wing wing-left"></span><span class="bee-body"></span><span class="bee-wing wing-right"></span>';
-    effects.append(bee);
-  }
 
   document.body.prepend(effects);
 }
