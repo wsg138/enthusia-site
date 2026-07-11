@@ -1655,7 +1655,7 @@ function initWorldEffects() {
       const phase = (progress - 0.08) / 0.84;
       const atTop = window.scrollY < 14;
       const bob = atTop && !reducedMotion ? Math.sin(timestamp / 920) * 5 : 0;
-      const sunX = interpolate(width * 0.16, width * 0.84, phase) - (atTop ? width * 0.012 : 0);
+      const sunX = interpolate(width * 0.16, width * 0.84, phase) - (atTop ? width * 0.028 : 0);
       const sunY = height * 0.68 - Math.sin(phase * Math.PI) * height * 0.53 + bob;
       const opacity = smooth(clamp((progress - 0.08) / 0.12, 0, 1)) * smooth(clamp((0.92 - progress) / 0.12, 0, 1));
       drawSun(sunX, sunY, opacity);
@@ -1699,7 +1699,7 @@ function initCinematicHeader() {
 
   const deck = document.getElementById("server-deck");
   const updateHeader = () => {
-    const deckExit = deck ? deck.offsetTop + deck.offsetHeight - 90 : window.innerHeight;
+    const deckExit = deck ? deck.offsetTop + deck.offsetHeight * 0.72 : window.innerHeight;
     document.body.classList.toggle("is-past-deck", window.scrollY > deckExit);
   };
 
