@@ -1433,9 +1433,9 @@ function initWorldEffects() {
   effects.className = "world-effects cinematic-world";
   effects.setAttribute("aria-hidden", "true");
   const sceneDefinitions = [
-    ["night", "cinematic-night-terrain", "assets/minecraft-night-valley-v2.png"],
+    ["night", "cinematic-night-terrain", "assets/minecraft-night-valley-v3.png"],
     ["sunrise", "cinematic-sunrise-terrain", "assets/minecraft-sunrise-sun-v1.png"],
-    ["day", "cinematic-terrain", "assets/minecraft-day-sun-v1.png"],
+    ["day", "cinematic-terrain", "assets/minecraft-day-valley-v1.png"],
     ["sunset", "cinematic-sunset-terrain", "assets/minecraft-sunset-sun-v1.png"]
   ];
   const scenes = Object.fromEntries(sceneDefinitions.map(([name, className, source]) => {
@@ -1447,13 +1447,27 @@ function initWorldEffects() {
     effects.append(image);
     return [name, image];
   }));
+  const sun = document.createElement("div");
+  sun.className = "cinematic-orb cinematic-sun";
+  const moon = document.createElement("div");
+  moon.className = "cinematic-orb cinematic-moon";
+  const celestial = document.createElement("div");
+  celestial.className = "cinematic-celestial";
+  celestial.append(sun, moon);
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
-  effects.append(vignette);
+  effects.append(celestial, vignette);
 
   document.body.prepend(effects);
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const smooth = (value) => value * value * (3 - 2 * value);
+  const positionOrb = (orb, phase, opacity) => {
+    const x = 20 + phase * 54;
+    const y = 14 + Math.pow(Math.abs(phase - 0.5) * 2, 2) * 30;
+    orb.style.setProperty("--orb-x", `${x.toFixed(3)}%`);
+    orb.style.setProperty("--orb-y", `${y.toFixed(3)}%`);
+    orb.style.opacity = clamp(opacity, 0, 1).toFixed(3);
+  };
   const render = () => {
     const maximum = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     const progress = (clamp(window.scrollY / maximum, 0, 1) + 0.5) % 1;
@@ -1478,6 +1492,15 @@ function initWorldEffects() {
     to.style.opacity = amount.toFixed(3);
     to.style.zIndex = "2";
     const nightLevel = progress <= 0.2 ? 1 - amount : progress >= 0.8 ? amount : 0;
+    const sunPhase = clamp((progress - 0.2) / 0.6, 0, 1);
+    const sunRise = smooth(clamp((sunPhase - 0.12) / 0.15, 0, 1));
+    const sunSet = smooth(clamp((0.94 - sunPhase) / 0.16, 0, 1));
+    positionOrb(sun, sunPhase, sunRise * sunSet);
+
+    const moonPhase = progress >= 0.8 ? (progress - 0.8) / 0.4 : (progress + 0.2) / 0.4;
+    const moonRise = smooth(clamp((moonPhase - 0.12) / 0.15, 0, 1));
+    const moonSet = smooth(clamp((0.94 - moonPhase) / 0.16, 0, 1));
+    positionOrb(moon, moonPhase, moonRise * moonSet * nightLevel);
     effects.style.setProperty("--night", nightLevel.toFixed(3));
     document.documentElement.style.setProperty("--cinematic-night", nightLevel.toFixed(3));
     document.documentElement.style.setProperty("--panel-alpha", (0.18 + nightLevel * 0.4).toFixed(3));
@@ -1493,8 +1516,8 @@ function initCinematicHeader() {
 
   const deck = document.getElementById("server-deck");
   const updateHeader = () => {
-    const deckExit = deck ? deck.offsetTop + deck.offsetHeight * 0.72 : window.innerHeight;
-    document.body.classList.toggle("is-past-deck", window.scrollY > deckExit);
+    const deckBottom = deck ? deck.getBoundingClientRect().bottom : 0;
+    document.body.classList.toggle("is-past-deck", deckBottom <= 96);
   };
 
   updateHeader();

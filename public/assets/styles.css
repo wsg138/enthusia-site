@@ -2827,6 +2827,7 @@ h1,h2,h3,.brand-name,.status-value,.showcase-number,.step-number,.timeline-time{
 }
 
 @media(max-width:560px){
+  .cinematic-orb{width:clamp(64px,18vw,92px)}
   .page-section{padding-top:68px;padding-bottom:68px}
   .hero{background-position:70% center}
   .hero-copy{background:rgba(5,14,10,.84)}
@@ -2837,6 +2838,7 @@ h1,h2,h3,.brand-name,.status-value,.showcase-number,.step-number,.timeline-time{
 }
 
 @media(prefers-reduced-motion:reduce){
+  .cinematic-sun{animation:none}
   .hero::after,.bg::before,.bg::after{animation:none}
 }
 
@@ -3614,8 +3616,9 @@ body:not(.home-page)::before{
 
 .rules-page::before{
   background:
-    repeating-linear-gradient(0deg,rgba(255,194,111,.022) 0 1px,transparent 1px 5px),
-    linear-gradient(135deg,#17100f,#22130d 52%,#100d12);
+    linear-gradient(90deg,rgba(9,7,6,.9),rgba(11,8,6,.64) 52%,rgba(8,6,5,.86)),
+    linear-gradient(0deg,rgba(9,6,5,.92),transparent 54%),
+    url("rules-council-hall-v1.png") center/cover no-repeat;
 }
 
 body:not(.home-page) .subhero{
@@ -3633,7 +3636,9 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
 }
 
 .cinematic-celestial{
-  z-index:2;
+  z-index:4;
+  pointer-events:none;
+  clip-path:polygon(0 0,100% 0,100% 7%,93% 12%,86% 20%,80% 29%,72% 40%,63% 46%,52% 50%,40% 41%,32% 33%,26% 14%,22% 11%,16% 17%,8% 15%,0 12%);
 }
 
 .cinematic-terrain{
@@ -3671,6 +3676,36 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
   background:linear-gradient(180deg,rgba(2,3,9,.02),transparent 52%,rgba(2,3,8,.16));
 }
 
+.cinematic-orb{
+  position:absolute;
+  left:var(--orb-x,50%);
+  top:var(--orb-y,14%);
+  z-index:4;
+  width:clamp(82px,8.2vw,148px);
+  aspect-ratio:1;
+  translate:-50% -50%;
+  pointer-events:none;
+  will-change:left,top,opacity;
+  transition:opacity .08s linear;
+}
+
+.cinematic-sun{
+  background:linear-gradient(135deg,rgba(255,255,235,.9) 0 24%,transparent 25%),linear-gradient(315deg,rgba(255,169,40,.72) 0 23%,transparent 24%),#ffe073;
+  border:clamp(7px,.55vw,11px) solid #fff0a7;
+  box-shadow:0 0 24px 10px rgba(255,229,131,.72),0 0 90px 38px rgba(255,139,36,.34);
+  animation:cinematic-sun-glow 3.8s ease-in-out infinite alternate;
+}
+
+.cinematic-moon{
+  background:linear-gradient(90deg,transparent 0 18%,rgba(150,165,192,.52) 19% 36%,transparent 37%),linear-gradient(0deg,transparent 0 56%,rgba(173,188,210,.58) 57% 74%,transparent 75%),#e8eef8;
+  border:clamp(7px,.55vw,11px) solid #f8fbff;
+  box-shadow:0 0 22px 9px rgba(215,229,255,.58),0 0 78px 32px rgba(118,151,226,.26);
+}
+
+@keyframes cinematic-sun-glow{
+  to{filter:brightness(1.08);box-shadow:0 0 31px 13px rgba(255,234,151,.82),0 0 108px 46px rgba(255,139,36,.4)}
+}
+
 .world-water,
 .world-meadow{display:none}
 
@@ -3687,11 +3722,12 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
   transition:opacity .28s ease,background .28s ease;
 }
 
-.home-page .site-header .nav{display:none}
+.home-page .site-header .nav{visibility:hidden;opacity:0;pointer-events:none}
 .home-page .brand-name{color:#fff;-webkit-text-fill-color:currentColor;background:none}
 .home-page.is-past-deck .site-header{opacity:1;pointer-events:auto}
-.home-page.is-past-deck .site-header .nav{display:flex}
-.home-page.is-past-deck .home-page-links{display:none}
+.home-page.is-past-deck .site-header .nav{visibility:visible;opacity:1;pointer-events:auto}
+.home-page .home-page-links{transition:opacity .18s ease}
+.home-page.is-past-deck .home-page-links{visibility:hidden;opacity:0;pointer-events:none}
 
 .home-page .hero{
   min-height:100vh;
