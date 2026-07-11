@@ -3585,7 +3585,23 @@ h1,h2,h3,
   z-index:3;
   opacity:1;
   mix-blend-mode:normal;
-  display:none;
+  display:block;
+}
+
+body:not(.home-page){
+  background:#100b09;
+}
+body:not(.home-page)::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(900px 560px at 14% 8%,rgba(134,55,18,.2),transparent 68%),
+    radial-gradient(760px 500px at 90% 30%,rgba(96,29,18,.13),transparent 70%),
+    repeating-linear-gradient(0deg,rgba(255,186,93,.025) 0 1px,transparent 1px 5px),
+    linear-gradient(135deg,#130a08,#201008 48%,#0c090a);
 }
 
 .cinematic-celestial{
@@ -3643,6 +3659,7 @@ h1,h2,h3,
 .home-page .site-header .nav{display:none}
 .home-page .brand-name{color:#fff;-webkit-text-fill-color:currentColor;background:none}
 .home-page.is-past-hero .site-header{opacity:1;pointer-events:auto}
+.home-page.is-past-hero .site-header .nav{display:flex}
 
 .home-page .hero{
   min-height:100vh;
@@ -3764,7 +3781,7 @@ h1,h2,h3,
   position:relative;
   z-index:4;
   padding:0 0 72px;
-  background:linear-gradient(180deg,rgba(4,6,12,.94),rgba(16,8,5,.88));
+  background:rgba(7,10,17,var(--panel-alpha,.4));
   border-block:1px solid rgba(255,151,66,.18);
   backdrop-filter:blur(16px);
 }
@@ -3793,16 +3810,22 @@ h1,h2,h3,
   display:grid;
   grid-template-columns:minmax(0,1.25fr) minmax(360px,.75fr);
   gap:20px;
-  padding-top:28px;
+  padding-top:26px;
+  align-items:stretch;
 }
 
 .home-live-panel,
 .home-community-panel{
-  padding:20px;
+  padding:26px;
   border:1px solid rgba(255,154,67,.22);
-  background:rgba(18,10,8,.54);
-  box-shadow:0 18px 42px rgba(0,0,0,.22);
+  background:rgba(12,16,27,var(--panel-alpha,.4));
+  box-shadow:none;
 }
+
+.home-live-panel{display:flex;flex-direction:column;justify-content:center;min-height:286px}
+.home-panel-heading{margin-bottom:20px}
+.home-panel-heading .eyebrow{margin-bottom:7px}
+.home-panel-heading h2{margin:0;font-size:clamp(1.45rem,2vw,2rem)}
 
 .home-community-panel{min-width:0;width:auto}
 .home-community-panel .discord-card{
@@ -3822,6 +3845,23 @@ h1,h2,h3,
 .home-community-panel .discord-actions{margin-top:0}
 .home-community-panel .discord-join{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:9px;background:#5865f2;color:#fff;font-weight:800;letter-spacing:.02em;box-shadow:0 10px 24px rgba(56,65,194,.28)}
 .home-community-panel .discord-join:hover{background:#6b78ff;color:#fff;text-decoration:none;transform:translateY(-1px)}
+
+.home-page .page-section,
+.home-page .page-section:nth-of-type(even),
+.home-page .join-section{
+  background:rgba(7,10,17,var(--panel-alpha,.4));
+  border-color:rgba(255,170,86,.16);
+}
+.home-page .page-section::before{display:none}
+.home-page .card,
+.home-page .status-card,
+.home-page .live-layer-card,
+.home-page .timeline-item,
+.home-page .link-card,
+.home-page .staff-shell{
+  background:rgba(14,18,30,var(--panel-alpha,.4));
+  box-shadow:none;
+}
 
 @media(max-width:900px){
   .home-deck-grid{grid-template-columns:1fr}

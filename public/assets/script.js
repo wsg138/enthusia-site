@@ -1427,7 +1427,7 @@ function initScrollReveal() {
 }
 
 function initWorldEffects() {
-  if (document.querySelector(".world-effects")) return;
+  if (!document.body.classList.contains("home-page") || document.querySelector(".world-effects")) return;
 
   const effects = document.createElement("div");
   effects.className = "world-effects cinematic-world";
@@ -1441,11 +1441,11 @@ function initWorldEffects() {
   terrain.alt = "";
   const nightTerrain = document.createElement("img");
   nightTerrain.className = "cinematic-night-terrain";
-  nightTerrain.src = "assets/minecraft-night-valley-v2.png";
+  nightTerrain.src = "assets/minecraft-night-valley-v3.png";
   nightTerrain.alt = "";
   const goldenTerrain = document.createElement("img");
   goldenTerrain.className = "cinematic-golden-terrain";
-  goldenTerrain.src = "assets/minecraft-golden-valley-v2.png";
+  goldenTerrain.src = "assets/minecraft-golden-valley-v3.png";
   goldenTerrain.alt = "";
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
@@ -1615,16 +1615,16 @@ function initWorldEffects() {
 
   const render = (timestamp) => {
     currentProgress = reducedMotion ? targetProgress : interpolate(currentProgress, targetProgress, 0.055);
-    const progress = currentProgress;
+    const progress = (currentProgress + 0.5) % 1;
     context.clearRect(0, 0, width, height);
     const top = interpolateColor(colorStops.top, progress);
     const bottom = interpolateColor(colorStops.bottom, progress);
     const haze = interpolateColor(colorStops.haze, progress);
 
     const sky = context.createLinearGradient(0, 0, 0, height);
-    sky.addColorStop(0, color(top, 0.18));
-    sky.addColorStop(0.45, color(bottom, 0.14));
-    sky.addColorStop(0.68, color(haze, 0.05));
+    sky.addColorStop(0, color(top, 0));
+    sky.addColorStop(0.45, color(bottom, 0));
+    sky.addColorStop(0.68, color(haze, 0));
     sky.addColorStop(0.88, color(haze, 0));
     context.fillStyle = sky;
     context.fillRect(0, 0, width, height);
@@ -1635,7 +1635,7 @@ function initWorldEffects() {
     const goldenOpacity = progress < 0.4
       ? Math.sin((progress / 0.4) * Math.PI)
       : progress > 0.6 ? Math.sin(((progress - 0.6) / 0.4) * Math.PI) : 0;
-    if (nightOpacity > 0.01) {
+    if (false && nightOpacity > 0.01) {
       const band = context.createLinearGradient(0, 0, width, height * 0.34);
       band.addColorStop(0, `rgba(156,176,255,${nightOpacity * 0.02})`);
       band.addColorStop(0.5, `rgba(216,224,255,${nightOpacity * 0.13})`);
@@ -1662,11 +1662,6 @@ function initWorldEffects() {
       context.globalAlpha = 1;
     }
 
-    const cloudOffset = reducedMotion ? 0 : (timestamp / 180) % (width + 300);
-    const cloudAlpha = 0.12 + (1 - nightOpacity) * 0.28;
-    drawCloud((80 + cloudOffset * 0.18) % (width + 180) - 180, height * 0.16, 1.15, cloudAlpha);
-    drawCloud((width * 0.56 + cloudOffset * 0.1) % (width + 220) - 110, height * 0.25, 0.8, cloudAlpha * 0.8);
-
     if (progress >= 0.08 && progress <= 0.92) {
       const phase = (progress - 0.08) / 0.84;
       const sunX = interpolate(width * 0.16, width * 0.84, phase);
@@ -1677,10 +1672,10 @@ function initWorldEffects() {
 
     if (progress < 0.2) {
       const phase = progress / 0.2;
-      drawMoon(interpolate(width * 0.56, width * 0.82, phase), height * 0.48 - Math.sin(phase * Math.PI * 0.58) * height * 0.34, 1 - smooth(phase));
+      drawMoon(interpolate(width * 0.7, width * 0.93, phase), height * 0.29 - Math.sin(phase * Math.PI * 0.58) * height * 0.16, 1 - smooth(phase));
     } else if (progress > 0.82) {
       const phase = (progress - 0.82) / 0.18;
-      drawMoon(interpolate(width * 0.2, width * 0.56, phase), height * 0.62 - Math.sin(phase * Math.PI * 0.75) * height * 0.36, smooth(phase));
+      drawMoon(interpolate(width * 0.1, width * 0.7, phase), height * 0.45 - Math.sin(phase * Math.PI * 0.75) * height * 0.16, smooth(phase));
     }
 
     const brightness = interpolateStop(colorStops.brightness, progress);
@@ -1691,6 +1686,8 @@ function initWorldEffects() {
     goldenTerrain.style.opacity = goldenOpacity.toFixed(3);
     goldenTerrain.style.filter = `brightness(${brightness.toFixed(3)}) saturate(${saturation.toFixed(3)})`;
     effects.style.setProperty("--night", nightOpacity.toFixed(3));
+    document.documentElement.style.setProperty("--cinematic-night", nightOpacity.toFixed(3));
+    document.documentElement.style.setProperty("--panel-alpha", (0.18 + nightOpacity * 0.4).toFixed(3));
 
     animationFrame = window.requestAnimationFrame(render);
   };
