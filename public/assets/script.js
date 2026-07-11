@@ -1655,7 +1655,7 @@ function initWorldEffects() {
       const phase = progress;
       const atTop = window.scrollY < 14;
       const bob = atTop && !reducedMotion ? Math.sin(timestamp / 920) * 5 : 0;
-      const sunX = interpolate(width * 0.12, width * 0.88, phase) - (atTop ? width * 0.028 : 0);
+      const sunX = interpolate(width * 0.12, width * 0.88, phase) + (atTop ? width * 0.01 : 0);
       const sunY = height * 0.64 - Math.sin(phase * Math.PI) * height * 0.5 + bob;
       const opacity = smooth(clamp(progress / 0.12, 0, 1)) * smooth(clamp((0.94 - progress) / 0.12, 0, 1));
       drawSun(sunX, sunY, opacity);
