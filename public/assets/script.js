@@ -1552,6 +1552,27 @@ function initWorldEffects() {
     context.clip();
   };
 
+  const skylinePoints = [
+    [0, 0.19], [0.08, 0.22], [0.16, 0.24], [0.22, 0.18], [0.26, 0.21],
+    [0.32, 0.4], [0.4, 0.48], [0.52, 0.57], [0.63, 0.53], [0.72, 0.47],
+    [0.8, 0.36], [0.86, 0.27], [0.93, 0.19], [1, 0.14]
+  ];
+  const skylineAt = (x) => {
+    const normalizedX = clamp(x, 0, 1);
+    for (let index = 1; index < skylinePoints.length; index += 1) {
+      const [rightX, rightY] = skylinePoints[index];
+      const [leftX, leftY] = skylinePoints[index - 1];
+      if (normalizedX <= rightX) {
+        return interpolate(leftY, rightY, (normalizedX - leftX) / (rightX - leftX));
+      }
+    }
+    return skylinePoints[skylinePoints.length - 1][1];
+  };
+  const celestialClearance = (x, y, radius) => {
+    const horizon = skylineAt(x / width) * height;
+    return smooth(clamp((horizon - (y + radius)) / 84, 0, 1));
+  };
+
   const drawSun = (x, y, opacity) => {
     context.save();
     clipCelestialToSky();
@@ -1604,7 +1625,7 @@ function initWorldEffects() {
   };
 
   const render = (timestamp) => {
-    currentProgress = reducedMotion ? targetProgress : interpolate(currentProgress, targetProgress, 0.055);
+    currentProgress = targetProgress;
     const progress = (currentProgress + 0.5) % 1;
     context.clearRect(0, 0, width, height);
     const top = interpolateColor(colorStops.top, progress);
@@ -1658,14 +1679,14 @@ function initWorldEffects() {
       const sunX = interpolate(width * 0.12, width * 0.88, phase) + (atTop ? width * 0.01 : 0);
       const sunY = height * 0.64 - Math.sin(phase * Math.PI) * height * 0.5 + bob;
       const opacity = smooth(clamp(progress / 0.12, 0, 1)) * smooth(clamp((0.94 - progress) / 0.12, 0, 1));
-      drawSun(sunX, sunY, opacity);
+      drawSun(sunX, sunY, opacity * celestialClearance(sunX, sunY, 126));
     }
 
     if (nightOpacity > 0.01) {
       const moonPhase = (progress + 0.2) % 1;
       const moonX = interpolate(width * 0.12, width * 0.88, moonPhase);
       const moonY = height * 0.64 - Math.sin(moonPhase * Math.PI) * height * 0.5;
-      drawMoon(moonX, moonY, nightOpacity);
+      drawMoon(moonX, moonY, nightOpacity * celestialClearance(moonX, moonY, 118));
     }
 
     const brightness = interpolateStop(colorStops.brightness, progress);
