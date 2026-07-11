@@ -3572,6 +3572,7 @@ h1,h2,h3,
 .cinematic-sky,
 .cinematic-celestial,
 .cinematic-terrain,
+.cinematic-night-terrain,
 .cinematic-vignette{
   position:absolute;
   inset:0;
@@ -3580,7 +3581,7 @@ h1,h2,h3,
 }
 
 .cinematic-sky{
-  z-index:1;
+  z-index:2;
   opacity:.28;
   mix-blend-mode:normal;
 }
@@ -3596,6 +3597,15 @@ h1,h2,h3,
   transform:scale(1.012);
   transform-origin:center;
   transition:filter .08s linear;
+}
+
+.cinematic-night-terrain{
+  z-index:1;
+  object-fit:cover;
+  object-position:center center;
+  transform:scale(1.012);
+  transform-origin:center;
+  transition:opacity .08s linear,filter .08s linear;
 }
 
 .cinematic-vignette{
@@ -3808,7 +3818,7 @@ h1,h2,h3,
 }
 
 @media(max-width:620px){
-  .cinematic-terrain{object-position:42% center}
+  .cinematic-terrain,.cinematic-night-terrain{object-position:42% center}
   .cinematic-logo{width:78px;height:78px}
   .cinematic-hero-copy h1{font-size:clamp(3.2rem,17vw,5rem)}
   .cinematic-ip{gap:10px;padding-inline:16px}
@@ -3819,7 +3829,7 @@ h1,h2,h3,
 }
 
 @media(prefers-reduced-motion:reduce){
-  .cinematic-terrain{transition:none}
+  .cinematic-terrain,.cinematic-night-terrain{transition:none}
 }
 
 /* Polished card alignment and compact resource links */

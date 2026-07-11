@@ -1437,11 +1437,15 @@ function initWorldEffects() {
   canvas.className = "cinematic-sky";
   const terrain = document.createElement("img");
   terrain.className = "cinematic-terrain";
-  terrain.src = "assets/minecraft-night-valley-v1.png";
+  terrain.src = "assets/minecraft-day-valley-v1.png";
   terrain.alt = "";
+  const nightTerrain = document.createElement("img");
+  nightTerrain.className = "cinematic-night-terrain";
+  nightTerrain.src = "assets/minecraft-night-valley-v1.png";
+  nightTerrain.alt = "";
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
-  effects.append(terrain, canvas, vignette);
+  effects.append(terrain, nightTerrain, canvas, vignette);
 
   document.body.prepend(effects);
 
@@ -1663,6 +1667,8 @@ function initWorldEffects() {
     const brightness = interpolateStop(colorStops.brightness, progress);
     const saturation = interpolateStop(colorStops.saturation, progress);
     terrain.style.filter = `brightness(${brightness.toFixed(3)}) saturate(${saturation.toFixed(3)})`;
+    nightTerrain.style.opacity = nightOpacity.toFixed(3);
+    nightTerrain.style.filter = `brightness(${brightness.toFixed(3)}) saturate(${saturation.toFixed(3)})`;
     effects.style.setProperty("--night", nightOpacity.toFixed(3));
 
     animationFrame = window.requestAnimationFrame(render);
