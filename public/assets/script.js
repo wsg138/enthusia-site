@@ -1441,11 +1441,15 @@ function initWorldEffects() {
   terrain.alt = "";
   const nightTerrain = document.createElement("img");
   nightTerrain.className = "cinematic-night-terrain";
-  nightTerrain.src = "assets/minecraft-night-valley-v1.png";
+  nightTerrain.src = "assets/minecraft-night-valley-v2.png";
   nightTerrain.alt = "";
+  const goldenTerrain = document.createElement("img");
+  goldenTerrain.className = "cinematic-golden-terrain";
+  goldenTerrain.src = "assets/minecraft-golden-valley-v2.png";
+  goldenTerrain.alt = "";
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
-  effects.append(terrain, nightTerrain, canvas, vignette);
+  effects.append(terrain, goldenTerrain, nightTerrain, canvas, vignette);
 
   document.body.prepend(effects);
 
@@ -1534,25 +1538,26 @@ function initWorldEffects() {
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(width, 0);
-    context.lineTo(width, height * 0.24);
-    context.lineTo(width * 0.94, height * 0.28);
-    context.lineTo(width * 0.88, height * 0.33);
-    context.lineTo(width * 0.82, height * 0.37);
-    context.lineTo(width * 0.76, height * 0.38);
-    context.lineTo(width * 0.7, height * 0.41);
-    context.lineTo(width * 0.64, height * 0.45);
-    context.lineTo(width * 0.58, height * 0.49);
-    context.lineTo(width * 0.52, height * 0.48);
-    context.lineTo(width * 0.47, height * 0.42);
-    context.lineTo(width * 0.42, height * 0.3);
-    context.lineTo(width * 0.37, height * 0.15);
-    context.lineTo(width * 0.33, height * 0.02);
-    context.lineTo(width * 0.29, 0);
-    context.lineTo(width * 0.24, height * 0.09);
-    context.lineTo(width * 0.2, height * 0.16);
-    context.lineTo(width * 0.15, height * 0.12);
-    context.lineTo(width * 0.1, height * 0.05);
-    context.lineTo(width * 0.07, 0);
+    context.lineTo(width, height * 0.2);
+    context.lineTo(width * 0.94, height * 0.25);
+    context.lineTo(width * 0.88, height * 0.31);
+    context.lineTo(width * 0.82, height * 0.42);
+    context.lineTo(width * 0.76, height * 0.5);
+    context.lineTo(width * 0.7, height * 0.56);
+    context.lineTo(width * 0.63, height * 0.61);
+    context.lineTo(width * 0.56, height * 0.66);
+    context.lineTo(width * 0.5, height * 0.7);
+    context.lineTo(width * 0.44, height * 0.66);
+    context.lineTo(width * 0.38, height * 0.58);
+    context.lineTo(width * 0.33, height * 0.5);
+    context.lineTo(width * 0.29, height * 0.41);
+    context.lineTo(width * 0.25, height * 0.31);
+    context.lineTo(width * 0.22, height * 0.28);
+    context.lineTo(width * 0.19, height * 0.31);
+    context.lineTo(width * 0.14, height * 0.34);
+    context.lineTo(width * 0.08, height * 0.31);
+    context.lineTo(width * 0.03, height * 0.27);
+    context.lineTo(0, height * 0.26);
     context.closePath();
     context.clip();
   };
@@ -1561,39 +1566,50 @@ function initWorldEffects() {
     context.save();
     clipCelestialToSky();
     context.globalCompositeOperation = "screen";
-    const glow = context.createRadialGradient(x, y, 8, x, y, 118);
-    glow.addColorStop(0, `rgba(255,245,188,${0.5 * opacity})`);
-    glow.addColorStop(0.35, `rgba(255,167,54,${0.28 * opacity})`);
+    const glow = context.createRadialGradient(x, y, 12, x, y, 210);
+    glow.addColorStop(0, `rgba(255,249,206,${0.72 * opacity})`);
+    glow.addColorStop(0.35, `rgba(255,178,58,${0.38 * opacity})`);
     glow.addColorStop(1, "rgba(255,105,20,0)");
     context.fillStyle = glow;
-    context.fillRect(x - 120, y - 120, 240, 240);
+    context.fillRect(x - 215, y - 215, 430, 430);
     context.globalCompositeOperation = "source-over";
     context.globalAlpha = opacity;
-    context.fillStyle = "#fff5b8";
-    context.fillRect(Math.round(x - 25), Math.round(y - 25), 50, 50);
-    context.fillStyle = "#ffd45d";
-    context.fillRect(Math.round(x - 20), Math.round(y - 20), 40, 40);
-    context.fillStyle = "rgba(255,255,225,.7)";
-    context.fillRect(Math.round(x - 15), Math.round(y - 15), 16, 16);
+    const tile = 14;
+    for (let row = 0; row < 9; row += 1) {
+      for (let column = 0; column < 9; column += 1) {
+        const distance = Math.abs(column - 4) + Math.abs(row - 4);
+        context.fillStyle = distance < 3 ? "#fff8bf" : distance < 6 ? "#ffe079" : "#ffbb38";
+        context.fillRect(Math.round(x + (column - 4) * tile), Math.round(y + (row - 4) * tile), tile, tile);
+      }
+    }
+    context.fillStyle = "rgba(255,255,224,.72)";
+    context.fillRect(Math.round(x - 42), Math.round(y - 42), 42, 28);
+    context.fillStyle = "rgba(255,175,34,.72)";
+    context.fillRect(Math.round(x + 28), Math.round(y + 28), 28, 28);
     context.restore();
   };
 
   const drawMoon = (x, y, opacity) => {
     context.save();
     clipCelestialToSky();
-    const glow = context.createRadialGradient(x, y, 5, x, y, 92);
-    glow.addColorStop(0, `rgba(205,220,255,${0.32 * opacity})`);
+    const glow = context.createRadialGradient(x, y, 8, x, y, 205);
+    glow.addColorStop(0, `rgba(217,229,255,${0.52 * opacity})`);
     glow.addColorStop(1, "rgba(140,170,255,0)");
     context.fillStyle = glow;
-    context.fillRect(x - 95, y - 95, 190, 190);
+    context.fillRect(x - 210, y - 210, 420, 420);
     context.globalAlpha = opacity;
-    context.fillStyle = "#e9eef4";
-    context.fillRect(Math.round(x - 24), Math.round(y - 24), 48, 48);
-    context.fillStyle = "#c4ccd8";
-    context.fillRect(Math.round(x - 17), Math.round(y - 15), 10, 9);
-    context.fillRect(Math.round(x + 5), Math.round(y - 4), 13, 11);
-    context.fillStyle = "rgba(255,255,255,.62)";
-    context.fillRect(Math.round(x - 18), Math.round(y - 20), 18, 7);
+    const moon = ["001111100", "011111110", "111111111", "111111111", "111111111", "111111111", "111111111", "011111110", "001111100"];
+    const craters = new Set(["2,2", "3,2", "5,3", "6,3", "2,5", "3,6", "5,6", "6,5"]);
+    const tile = 15;
+    moon.forEach((line, row) => {
+      [...line].forEach((cell, column) => {
+        if (cell !== "1") return;
+        context.fillStyle = craters.has(`${column},${row}`) ? "#b4c0d2" : (row < 3 ? "#f5f8ff" : "#dce5f1");
+        context.fillRect(Math.round(x + (column - 4) * tile), Math.round(y + (row - 4) * tile), tile, tile);
+      });
+    });
+    context.fillStyle = "rgba(255,255,255,.6)";
+    context.fillRect(Math.round(x - 30), Math.round(y - 45), 45, 15);
     context.restore();
   };
 
@@ -1606,16 +1622,19 @@ function initWorldEffects() {
     const haze = interpolateColor(colorStops.haze, progress);
 
     const sky = context.createLinearGradient(0, 0, 0, height);
-    sky.addColorStop(0, color(top, 0.96));
-    sky.addColorStop(0.45, color(bottom, 0.93));
-    sky.addColorStop(0.68, color(haze, 0.42));
+    sky.addColorStop(0, color(top, 0.18));
+    sky.addColorStop(0.45, color(bottom, 0.14));
+    sky.addColorStop(0.68, color(haze, 0.05));
     sky.addColorStop(0.88, color(haze, 0));
     context.fillStyle = sky;
     context.fillRect(0, 0, width, height);
 
-    const nightOpacity = progress < 0.25
-      ? 1 - smooth(progress / 0.25)
-      : progress > 0.75 ? smooth((progress - 0.75) / 0.25) : 0;
+    const nightOpacity = progress < 0.2
+      ? 1 - smooth(progress / 0.2)
+      : progress > 0.8 ? smooth((progress - 0.8) / 0.2) : 0;
+    const goldenOpacity = progress < 0.4
+      ? Math.sin((progress / 0.4) * Math.PI)
+      : progress > 0.6 ? Math.sin(((progress - 0.6) / 0.4) * Math.PI) : 0;
     if (nightOpacity > 0.01) {
       const band = context.createLinearGradient(0, 0, width, height * 0.34);
       band.addColorStop(0, `rgba(156,176,255,${nightOpacity * 0.02})`);
@@ -1648,20 +1667,20 @@ function initWorldEffects() {
     drawCloud((80 + cloudOffset * 0.18) % (width + 180) - 180, height * 0.16, 1.15, cloudAlpha);
     drawCloud((width * 0.56 + cloudOffset * 0.1) % (width + 220) - 110, height * 0.25, 0.8, cloudAlpha * 0.8);
 
-    if (progress >= 0.12 && progress <= 0.83) {
-      const phase = (progress - 0.12) / 0.71;
-      const sunX = interpolate(width * 0.12, width * 0.88, phase);
-      const sunY = height * 0.48 - Math.sin(phase * Math.PI) * height * 0.37;
-      const opacity = smooth(clamp((progress - 0.12) / 0.08, 0, 1)) * smooth(clamp((0.83 - progress) / 0.08, 0, 1));
+    if (progress >= 0.08 && progress <= 0.92) {
+      const phase = (progress - 0.08) / 0.84;
+      const sunX = interpolate(width * 0.16, width * 0.84, phase);
+      const sunY = height * 0.68 - Math.sin(phase * Math.PI) * height * 0.53;
+      const opacity = smooth(clamp((progress - 0.08) / 0.12, 0, 1)) * smooth(clamp((0.92 - progress) / 0.12, 0, 1));
       drawSun(sunX, sunY, opacity);
     }
 
     if (progress < 0.2) {
       const phase = progress / 0.2;
-      drawMoon(interpolate(width * 0.12, width * 0.54, phase), height * 0.52 - Math.sin(phase * Math.PI * 0.58) * height * 0.34, 1 - smooth(phase));
+      drawMoon(interpolate(width * 0.56, width * 0.82, phase), height * 0.48 - Math.sin(phase * Math.PI * 0.58) * height * 0.34, 1 - smooth(phase));
     } else if (progress > 0.82) {
       const phase = (progress - 0.82) / 0.18;
-      drawMoon(interpolate(width * 0.18, width * 0.84, phase), height * 0.53 - Math.sin(phase * Math.PI) * height * 0.36, smooth(phase));
+      drawMoon(interpolate(width * 0.2, width * 0.56, phase), height * 0.62 - Math.sin(phase * Math.PI * 0.75) * height * 0.36, smooth(phase));
     }
 
     const brightness = interpolateStop(colorStops.brightness, progress);
@@ -1669,6 +1688,8 @@ function initWorldEffects() {
     terrain.style.filter = `brightness(${brightness.toFixed(3)}) saturate(${saturation.toFixed(3)})`;
     nightTerrain.style.opacity = nightOpacity.toFixed(3);
     nightTerrain.style.filter = `brightness(${brightness.toFixed(3)}) saturate(${saturation.toFixed(3)})`;
+    goldenTerrain.style.opacity = goldenOpacity.toFixed(3);
+    goldenTerrain.style.filter = `brightness(${brightness.toFixed(3)}) saturate(${saturation.toFixed(3)})`;
     effects.style.setProperty("--night", nightOpacity.toFixed(3));
 
     animationFrame = window.requestAnimationFrame(render);
