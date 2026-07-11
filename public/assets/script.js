@@ -1432,283 +1432,60 @@ function initWorldEffects() {
   const effects = document.createElement("div");
   effects.className = "world-effects cinematic-world";
   effects.setAttribute("aria-hidden", "true");
-
-  const canvas = document.createElement("canvas");
-  canvas.className = "cinematic-sky";
-  const terrain = document.createElement("img");
-  terrain.className = "cinematic-terrain";
-  terrain.src = "assets/minecraft-day-valley-v1.png";
-  terrain.alt = "";
-  const nightTerrain = document.createElement("img");
-  nightTerrain.className = "cinematic-night-terrain";
-  nightTerrain.src = "assets/minecraft-night-valley-v3.png";
-  nightTerrain.alt = "";
-  const goldenTerrain = document.createElement("img");
-  goldenTerrain.className = "cinematic-sunrise-terrain";
-  goldenTerrain.src = "assets/minecraft-sunrise-left-v1.png";
-  goldenTerrain.alt = "";
-  const sunsetTerrain = document.createElement("img");
-  sunsetTerrain.className = "cinematic-sunset-terrain";
-  sunsetTerrain.src = "assets/minecraft-sunset-right-v1.png";
-  sunsetTerrain.alt = "";
+  const sceneDefinitions = [
+    ["night", "cinematic-night-terrain", "assets/minecraft-night-valley-v2.png"],
+    ["sunrise", "cinematic-sunrise-terrain", "assets/minecraft-sunrise-sun-v1.png"],
+    ["day", "cinematic-terrain", "assets/minecraft-day-sun-v1.png"],
+    ["sunset", "cinematic-sunset-terrain", "assets/minecraft-sunset-sun-v1.png"]
+  ];
+  const scenes = Object.fromEntries(sceneDefinitions.map(([name, className, source]) => {
+    const image = document.createElement("img");
+    image.className = className;
+    image.src = source;
+    image.alt = "";
+    image.decoding = "async";
+    effects.append(image);
+    return [name, image];
+  }));
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
-  effects.append(terrain, goldenTerrain, sunsetTerrain, nightTerrain, canvas, vignette);
+  effects.append(vignette);
 
   document.body.prepend(effects);
-
-  const context = canvas.getContext("2d");
-  if (!context) return;
-
-  const colorStops = {
-    top: [[4, 6, 20], [70, 28, 52], [55, 130, 195], [78, 18, 42], [4, 6, 20]],
-    bottom: [[18, 24, 53], [255, 137, 65], [190, 222, 242], [255, 91, 34], [18, 24, 53]],
-    haze: [[36, 45, 82], [255, 178, 92], [218, 235, 244], [255, 126, 55], [36, 45, 82]],
-    brightness: [0.86, 0.92, 1, 0.94, 0.86],
-    saturation: [0.72, 0.96, 1, 1.04, 0.72]
-  };
-
-  let seed = 7281;
-  const random = () => {
-    seed = (seed * 1664525 + 1013904223) >>> 0;
-    return seed / 4294967296;
-  };
-  const stars = Array.from({ length: 150 }, () => ({
-    x: random(),
-    y: random() * 0.48,
-    size: random() > 0.88 ? 2 : 1,
-    alpha: 0.4 + random() * 0.6,
-    phase: random() * Math.PI * 2
-  }));
-  const milkyWay = Array.from({ length: 280 }, (_, index) => ({
-    x: random(),
-    spread: (random() - 0.5) * 0.13,
-    size: random() > 0.9 ? 1.8 : random() > 0.55 ? 1.1 : 0.7,
-    alpha: 0.12 + random() * 0.4,
-    phase: index * 0.41
-  }));
-
-  let width = 0;
-  let height = 0;
-  let targetProgress = 0;
-  let currentProgress = 0;
-  let animationFrame = 0;
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const smooth = (value) => value * value * (3 - 2 * value);
-  const interpolate = (a, b, amount) => a + (b - a) * amount;
-  const interpolateStop = (stops, progress) => {
-    const scaled = clamp(progress, 0, 1) * (stops.length - 1);
-    const index = Math.min(Math.floor(scaled), stops.length - 2);
-    return interpolate(stops[index], stops[index + 1], smooth(scaled - index));
-  };
-  const interpolateColor = (stops, progress) => {
-    const scaled = clamp(progress, 0, 1) * (stops.length - 1);
-    const index = Math.min(Math.floor(scaled), stops.length - 2);
-    const amount = smooth(scaled - index);
-    return stops[index].map((channel, channelIndex) => Math.round(interpolate(channel, stops[index + 1][channelIndex], amount)));
-  };
-  const color = (rgb, alpha = 1) => `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`;
-
-  const resize = () => {
-    const ratio = Math.min(window.devicePixelRatio || 1, 2);
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = Math.round(width * ratio);
-    canvas.height = Math.round(height * ratio);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    context.setTransform(ratio, 0, 0, ratio, 0, 0);
-  };
-
-  const updateScrollTarget = () => {
+  const render = () => {
     const maximum = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    targetProgress = clamp(window.scrollY / maximum, 0, 1);
-    render(0);
-  };
-
-  const drawCloud = (x, y, scale, alpha) => {
-    context.save();
-    context.globalAlpha = alpha;
-    context.fillStyle = "#f4eee4";
-    const block = 12 * scale;
-    [[0, 1, 5, 1], [1, 0, 2, 1], [4, 0, 2, 1]].forEach(([bx, by, bw, bh]) => {
-      context.fillRect(x + bx * block, y + by * block, bw * block, bh * block);
+    const progress = (clamp(window.scrollY / maximum, 0, 1) + 0.5) % 1;
+    let from;
+    let to;
+    let amount;
+    if (progress <= 0.2) {
+      from = scenes.night; to = scenes.sunrise; amount = smooth(progress / 0.2);
+    } else if (progress <= 0.5) {
+      from = scenes.sunrise; to = scenes.day; amount = smooth((progress - 0.2) / 0.3);
+    } else if (progress <= 0.8) {
+      from = scenes.day; to = scenes.sunset; amount = smooth((progress - 0.5) / 0.3);
+    } else {
+      from = scenes.sunset; to = scenes.night; amount = smooth((progress - 0.8) / 0.2);
+    }
+    Object.values(scenes).forEach((scene) => {
+      scene.style.opacity = "0";
+      scene.style.zIndex = "0";
     });
-    context.restore();
+    from.style.opacity = "1";
+    from.style.zIndex = "1";
+    to.style.opacity = amount.toFixed(3);
+    to.style.zIndex = "2";
+    const nightLevel = progress <= 0.2 ? 1 - amount : progress >= 0.8 ? amount : 0;
+    effects.style.setProperty("--night", nightLevel.toFixed(3));
+    document.documentElement.style.setProperty("--cinematic-night", nightLevel.toFixed(3));
+    document.documentElement.style.setProperty("--panel-alpha", (0.18 + nightLevel * 0.4).toFixed(3));
   };
 
-  const clipCelestialToSky = () => {
-    context.beginPath();
-    context.moveTo(0, 0);
-    context.lineTo(width, 0);
-    context.lineTo(width, height * 0.14);
-    context.bezierCurveTo(width * 0.93, height * 0.19, width * 0.86, height * 0.27, width * 0.8, height * 0.36);
-    context.bezierCurveTo(width * 0.72, height * 0.47, width * 0.63, height * 0.53, width * 0.52, height * 0.57);
-    context.bezierCurveTo(width * 0.45, height * 0.55, width * 0.38, height * 0.48, width * 0.32, height * 0.4);
-    context.bezierCurveTo(width * 0.29, height * 0.34, width * 0.26, height * 0.21, width * 0.22, height * 0.18);
-    context.bezierCurveTo(width * 0.16, height * 0.24, width * 0.08, height * 0.22, 0, height * 0.19);
-    context.closePath();
-    context.clip();
-  };
-
-  const skylinePoints = [
-    [0, 0.19], [0.08, 0.22], [0.16, 0.24], [0.22, 0.18], [0.26, 0.21],
-    [0.32, 0.4], [0.4, 0.48], [0.52, 0.57], [0.63, 0.53], [0.72, 0.47],
-    [0.8, 0.36], [0.86, 0.27], [0.93, 0.19], [1, 0.14]
-  ];
-  const skylineAt = (x) => {
-    const normalizedX = clamp(x, 0, 1);
-    for (let index = 1; index < skylinePoints.length; index += 1) {
-      const [rightX, rightY] = skylinePoints[index];
-      const [leftX, leftY] = skylinePoints[index - 1];
-      if (normalizedX <= rightX) {
-        return interpolate(leftY, rightY, (normalizedX - leftX) / (rightX - leftX));
-      }
-    }
-    return skylinePoints[skylinePoints.length - 1][1];
-  };
-  const celestialClearance = (x, y, radius) => {
-    const horizon = skylineAt(x / width) * height;
-    return smooth(clamp((horizon - (y + radius)) / 84, 0, 1));
-  };
-
-  const drawSun = (x, y, opacity) => {
-    context.save();
-    clipCelestialToSky();
-    context.globalCompositeOperation = "screen";
-    const glow = context.createRadialGradient(x, y, 12, x, y, 210);
-    glow.addColorStop(0, `rgba(255,249,206,${0.72 * opacity})`);
-    glow.addColorStop(0.35, `rgba(255,178,58,${0.38 * opacity})`);
-    glow.addColorStop(1, "rgba(255,105,20,0)");
-    context.fillStyle = glow;
-    context.fillRect(x - 215, y - 215, 430, 430);
-    context.globalCompositeOperation = "source-over";
-    context.globalAlpha = opacity;
-    const tile = 14;
-    for (let row = 0; row < 9; row += 1) {
-      for (let column = 0; column < 9; column += 1) {
-        const distance = Math.abs(column - 4) + Math.abs(row - 4);
-        context.fillStyle = distance < 3 ? "#fff8bf" : distance < 6 ? "#ffe079" : "#ffbb38";
-        context.fillRect(Math.round(x + (column - 4) * tile), Math.round(y + (row - 4) * tile), tile, tile);
-      }
-    }
-    context.fillStyle = "rgba(255,255,224,.72)";
-    context.fillRect(Math.round(x - 42), Math.round(y - 42), 42, 28);
-    context.fillStyle = "rgba(255,175,34,.72)";
-    context.fillRect(Math.round(x + 28), Math.round(y + 28), 28, 28);
-    context.restore();
-  };
-
-  const drawMoon = (x, y, opacity) => {
-    context.save();
-    clipCelestialToSky();
-    const glow = context.createRadialGradient(x, y, 8, x, y, 205);
-    glow.addColorStop(0, `rgba(217,229,255,${0.52 * opacity})`);
-    glow.addColorStop(1, "rgba(140,170,255,0)");
-    context.fillStyle = glow;
-    context.fillRect(x - 210, y - 210, 420, 420);
-    context.globalAlpha = opacity;
-    const moon = ["001111100", "011111110", "111111111", "111111111", "111111111", "111111111", "111111111", "011111110", "001111100"];
-    const craters = new Set(["2,2", "3,2", "5,3", "6,3", "2,5", "3,6", "5,6", "6,5"]);
-    const tile = 15;
-    moon.forEach((line, row) => {
-      [...line].forEach((cell, column) => {
-        if (cell !== "1") return;
-        context.fillStyle = craters.has(`${column},${row}`) ? "#b4c0d2" : (row < 3 ? "#f5f8ff" : "#dce5f1");
-        context.fillRect(Math.round(x + (column - 4) * tile), Math.round(y + (row - 4) * tile), tile, tile);
-      });
-    });
-    context.fillStyle = "rgba(255,255,255,.6)";
-    context.fillRect(Math.round(x - 30), Math.round(y - 45), 45, 15);
-    context.restore();
-  };
-
-  const render = (timestamp) => {
-    currentProgress = targetProgress;
-    const progress = (currentProgress + 0.5) % 1;
-    context.clearRect(0, 0, width, height);
-    const top = interpolateColor(colorStops.top, progress);
-    const bottom = interpolateColor(colorStops.bottom, progress);
-    const haze = interpolateColor(colorStops.haze, progress);
-
-    const sky = context.createLinearGradient(0, 0, 0, height);
-    sky.addColorStop(0, color(top, 0));
-    sky.addColorStop(0.45, color(bottom, 0));
-    sky.addColorStop(0.68, color(haze, 0));
-    sky.addColorStop(0.88, color(haze, 0));
-    context.fillStyle = sky;
-    context.fillRect(0, 0, width, height);
-
-    const nightOpacity = progress < 0.2
-      ? 1 - smooth(progress / 0.2)
-      : progress > 0.8 ? smooth((progress - 0.8) / 0.2) : 0;
-    const sunriseOpacity = progress < 0.4 ? Math.sin((progress / 0.4) * Math.PI) : 0;
-    const sunsetOpacity = progress > 0.6 ? Math.sin(((progress - 0.6) / 0.4) * Math.PI) : 0;
-    if (false && nightOpacity > 0.01) {
-      const band = context.createLinearGradient(0, 0, width, height * 0.34);
-      band.addColorStop(0, `rgba(156,176,255,${nightOpacity * 0.02})`);
-      band.addColorStop(0.5, `rgba(216,224,255,${nightOpacity * 0.13})`);
-      band.addColorStop(1, `rgba(156,176,255,0)`);
-      context.save();
-      context.rotate(-0.15);
-      context.fillStyle = band;
-      context.fillRect(-width * 0.08, -height * 0.02, width * 1.18, height * 0.32);
-      context.restore();
-      milkyWay.forEach((star) => {
-        const x = star.x * width;
-        const y = height * (0.04 + star.x * 0.3 + star.spread);
-        const twinkle = reducedMotion ? 1 : 0.76 + Math.sin(timestamp / 1200 + star.phase) * 0.24;
-        context.globalAlpha = nightOpacity * star.alpha * twinkle;
-        context.fillStyle = "#e7edff";
-        context.fillRect(Math.round(x), Math.round(y), star.size, star.size);
-      });
-      stars.forEach((star) => {
-        const twinkle = reducedMotion ? 1 : 0.72 + Math.sin(timestamp / 900 + star.phase) * 0.28;
-        context.globalAlpha = nightOpacity * star.alpha * twinkle;
-        context.fillStyle = "#f7f6ed";
-        context.fillRect(Math.round(star.x * width), Math.round(star.y * height), star.size, star.size);
-      });
-      context.globalAlpha = 1;
-    }
-
-    if (progress >= 0.08 && progress <= 0.92) {
-      const phase = progress;
-      const atTop = window.scrollY < 14;
-      const bob = atTop && !reducedMotion ? Math.sin(timestamp / 920) * 5 : 0;
-      const sunX = interpolate(width * 0.12, width * 0.88, phase) + (atTop ? width * 0.01 : 0);
-      const sunY = height * 0.64 - Math.sin(phase * Math.PI) * height * 0.5 + bob;
-      const opacity = smooth(clamp(progress / 0.12, 0, 1)) * smooth(clamp((0.94 - progress) / 0.12, 0, 1));
-      drawSun(sunX, sunY, opacity * celestialClearance(sunX, sunY, 126));
-    }
-
-    if (nightOpacity > 0.01) {
-      const moonPhase = (progress + 0.2) % 1;
-      const moonX = interpolate(width * 0.12, width * 0.88, moonPhase);
-      const moonY = height * 0.64 - Math.sin(moonPhase * Math.PI) * height * 0.5;
-      drawMoon(moonX, moonY, nightOpacity * celestialClearance(moonX, moonY, 118));
-    }
-
-    const brightness = interpolateStop(colorStops.brightness, progress);
-    const saturation = interpolateStop(colorStops.saturation, progress);
-    terrain.style.filter = `brightness(${brightness.toFixed(3)}) saturate(${saturation.toFixed(3)})`;
-    nightTerrain.style.opacity = nightOpacity.toFixed(3);
-    nightTerrain.style.filter = `brightness(${brightness.toFixed(3)}) saturate(${saturation.toFixed(3)})`;
-    goldenTerrain.style.opacity = sunriseOpacity.toFixed(3);
-    goldenTerrain.style.filter = `brightness(${brightness.toFixed(3)}) saturate(${saturation.toFixed(3)})`;
-    sunsetTerrain.style.opacity = sunsetOpacity.toFixed(3);
-    sunsetTerrain.style.filter = `brightness(${brightness.toFixed(3)}) saturate(${saturation.toFixed(3)})`;
-    effects.style.setProperty("--night", nightOpacity.toFixed(3));
-    document.documentElement.style.setProperty("--cinematic-night", nightOpacity.toFixed(3));
-    document.documentElement.style.setProperty("--panel-alpha", (0.18 + nightOpacity * 0.4).toFixed(3));
-
-  };
-
-  resize();
-  updateScrollTarget();
-  window.addEventListener("resize", resize);
-  window.addEventListener("scroll", updateScrollTarget, { passive: true });
+  render();
+  window.addEventListener("resize", render, { passive: true });
+  window.addEventListener("scroll", render, { passive: true });
 }
 
 function initCinematicHeader() {
