@@ -3572,7 +3572,8 @@ h1,h2,h3,
 .cinematic-sky,
 .cinematic-celestial,
 .cinematic-terrain,
-.cinematic-golden-terrain,
+.cinematic-sunrise-terrain,
+.cinematic-sunset-terrain,
 .cinematic-night-terrain,
 .cinematic-vignette{
   position:absolute;
@@ -3582,7 +3583,7 @@ h1,h2,h3,
 }
 
 .cinematic-sky{
-  z-index:3;
+  z-index:4;
   opacity:1;
   mix-blend-mode:normal;
   display:block;
@@ -3604,6 +3605,33 @@ body:not(.home-page)::before{
     linear-gradient(135deg,#130a08,#201008 48%,#0c090a);
 }
 
+.about-page::before{
+  background:
+    linear-gradient(90deg,rgba(10,8,12,.76),rgba(10,8,12,.24) 62%,rgba(10,8,12,.12)),
+    linear-gradient(0deg,rgba(10,8,12,.7),transparent 58%),
+    url("season-one-spawn-about-v1.png") center/cover no-repeat;
+}
+
+.rules-page::before{
+  background:
+    repeating-linear-gradient(0deg,rgba(255,194,111,.022) 0 1px,transparent 1px 5px),
+    linear-gradient(135deg,#17100f,#22130d 52%,#100d12);
+}
+
+body:not(.home-page) .subhero{
+  min-height:0;
+  padding:108px 0 48px;
+  background:linear-gradient(90deg,rgba(15,9,8,.68),rgba(15,9,8,.28));
+  border-bottom:1px solid rgba(255,175,82,.2);
+}
+body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8,.48),transparent 66%)}
+.about-page .subhero{
+  background:
+    linear-gradient(90deg,rgba(12,8,10,.72),rgba(12,8,10,.2) 68%),
+    linear-gradient(0deg,rgba(12,8,10,.7),transparent 60%),
+    url("season-one-spawn-about-v1.png") center/cover no-repeat !important;
+}
+
 .cinematic-celestial{
   z-index:2;
 }
@@ -3618,7 +3646,7 @@ body:not(.home-page)::before{
 }
 
 .cinematic-night-terrain{
-  z-index:2;
+  z-index:3;
   object-fit:cover;
   object-position:center center;
   transform:scale(1.012);
@@ -3626,7 +3654,8 @@ body:not(.home-page)::before{
   transition:opacity .08s linear,filter .08s linear;
 }
 
-.cinematic-golden-terrain{
+.cinematic-sunrise-terrain,
+.cinematic-sunset-terrain{
   z-index:1;
   object-fit:cover;
   object-position:center center;
@@ -3635,8 +3664,10 @@ body:not(.home-page)::before{
   transition:opacity .08s linear,filter .08s linear;
 }
 
+.cinematic-sunset-terrain{z-index:2}
+
 .cinematic-vignette{
-  z-index:3;
+  z-index:5;
   background:linear-gradient(180deg,rgba(2,3,9,.02),transparent 52%,rgba(2,3,8,.16));
 }
 
@@ -3658,8 +3689,9 @@ body:not(.home-page)::before{
 
 .home-page .site-header .nav{display:none}
 .home-page .brand-name{color:#fff;-webkit-text-fill-color:currentColor;background:none}
-.home-page.is-past-hero .site-header{opacity:1;pointer-events:auto}
-.home-page.is-past-hero .site-header .nav{display:flex}
+.home-page.is-past-deck .site-header{opacity:1;pointer-events:auto}
+.home-page.is-past-deck .site-header .nav{display:flex}
+.home-page.is-past-deck .home-page-links{display:none}
 
 .home-page .hero{
   min-height:100vh;
@@ -3844,6 +3876,7 @@ body:not(.home-page)::before{
 .home-community-panel .discord-avatars img{width:38px;height:38px;border:2px solid rgba(16,11,18,.75);border-radius:50%}
 .home-community-panel .discord-actions{margin-top:0}
 .home-community-panel .discord-join{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:9px;background:#5865f2;color:#fff;font-weight:800;letter-spacing:.02em;box-shadow:0 10px 24px rgba(56,65,194,.28)}
+.home-community-panel .discord-join{font-size:.82rem}
 .home-community-panel .discord-join:hover{background:#6b78ff;color:#fff;text-decoration:none;transform:translateY(-1px)}
 
 .home-page .page-section,
@@ -3869,9 +3902,13 @@ body:not(.home-page)::before{
 }
 
 @media(max-width:620px){
-  .cinematic-terrain,.cinematic-golden-terrain,.cinematic-night-terrain{object-position:42% center}
+  .cinematic-terrain,.cinematic-sunrise-terrain,.cinematic-sunset-terrain,.cinematic-night-terrain{object-position:42% center}
   .cinematic-logo{width:78px;height:78px}
-  .cinematic-hero-copy h1{font-size:clamp(3.2rem,17vw,5rem)}
+  .cinematic-hero-copy h1{font-size:clamp(2.8rem,13vw,3.25rem);line-height:.9}
+  .cinematic-hero-copy h1 strong{margin-top:12px}
+  .cinematic-hero-copy{padding-inline:16px;max-width:100%}
+  .cinematic-hero-copy .lead{font-size:.95rem;line-height:1.55;max-width:33ch}
+  .cinematic-hero-inner{padding-top:72px;padding-bottom:44px}
   .cinematic-ip{gap:10px;padding-inline:16px}
   .cinematic-ip span{font-size:.6rem}
   .home-page-links{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}
@@ -3880,7 +3917,7 @@ body:not(.home-page)::before{
 }
 
 @media(prefers-reduced-motion:reduce){
-  .cinematic-terrain,.cinematic-golden-terrain,.cinematic-night-terrain{transition:none}
+  .cinematic-terrain,.cinematic-sunrise-terrain,.cinematic-sunset-terrain,.cinematic-night-terrain{transition:none}
 }
 
 /* Polished card alignment and compact resource links */
