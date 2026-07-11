@@ -3581,7 +3581,7 @@ h1,h2,h3,
 
 .cinematic-sky{
   z-index:1;
-  opacity:1;
+  opacity:.28;
   mix-blend-mode:normal;
 }
 
@@ -3600,24 +3600,28 @@ h1,h2,h3,
 
 .cinematic-vignette{
   z-index:3;
-  background:linear-gradient(180deg,rgba(2,3,9,.05),transparent 45%,rgba(2,3,8,.32));
+  background:linear-gradient(180deg,rgba(2,3,9,.02),transparent 52%,rgba(2,3,8,.16));
 }
 
 .world-water,
 .world-meadow{display:none}
 
 .home-page .site-header{
-  position:absolute;
+  position:fixed;
   inset:0 0 auto;
   z-index:100;
   border:0;
-  background:linear-gradient(180deg,rgba(2,4,10,.52),transparent);
+  opacity:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(2,4,10,.78),rgba(2,4,10,.18) 80%,transparent);
   box-shadow:none;
   backdrop-filter:none;
+  transition:opacity .28s ease,background .28s ease;
 }
 
 .home-page .site-header .nav{display:none}
 .home-page .brand-name{color:#fff;-webkit-text-fill-color:currentColor;background:none}
+.home-page.is-past-hero .site-header{opacity:1;pointer-events:auto}
 
 .home-page .hero{
   min-height:100vh;

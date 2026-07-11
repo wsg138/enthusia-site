@@ -1437,7 +1437,7 @@ function initWorldEffects() {
   canvas.className = "cinematic-sky";
   const terrain = document.createElement("img");
   terrain.className = "cinematic-terrain";
-  terrain.src = "assets/minecraft-valley-v2.png";
+  terrain.src = "assets/minecraft-night-valley-v1.png";
   terrain.alt = "";
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
@@ -1452,7 +1452,7 @@ function initWorldEffects() {
     top: [[4, 6, 20], [70, 28, 52], [55, 130, 195], [78, 18, 42], [4, 6, 20]],
     bottom: [[18, 24, 53], [255, 137, 65], [190, 222, 242], [255, 91, 34], [18, 24, 53]],
     haze: [[36, 45, 82], [255, 178, 92], [218, 235, 244], [255, 126, 55], [36, 45, 82]],
-    brightness: [0.42, 0.72, 1, 0.8, 0.42],
+    brightness: [0.86, 0.92, 1, 0.94, 0.86],
     saturation: [0.72, 0.96, 1, 1.04, 0.72]
   };
 
@@ -1677,6 +1677,18 @@ function initWorldEffects() {
   window.addEventListener("pagehide", () => window.cancelAnimationFrame(animationFrame), { once: true });
 }
 
+function initCinematicHeader() {
+  if (!document.body.classList.contains("home-page")) return;
+
+  const updateHeader = () => {
+    document.body.classList.toggle("is-past-hero", window.scrollY > window.innerHeight * 0.8);
+  };
+
+  updateHeader();
+  window.addEventListener("scroll", updateHeader, { passive: true });
+  window.addEventListener("resize", updateHeader);
+}
+
 async function initSite(cfg) {
   const yearEl = document.getElementById("year");
   if (yearEl) {
@@ -1695,6 +1707,7 @@ async function initSite(cfg) {
   setExternalLinkTargets(normalizedConfig);
   setContactEmail(normalizedConfig);
   initWorldEffects();
+  initCinematicHeader();
   initMobileNavigation();
   initCopyIpButton(normalizedConfig.serverIp);
   initShareButton(normalizedConfig);
