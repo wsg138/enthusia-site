@@ -189,6 +189,7 @@ async function updateServerStatus(ip) {
 function initStatusRefresh(ip) {
   const refreshButton = document.getElementById("refreshStatusBtn");
   const statusMeta = refreshButton?.closest(".status-meta");
+  const statusGrid = document.querySelector(".live-status");
   if (!refreshButton) return;
 
   refreshButton.addEventListener("click", async () => {
@@ -196,12 +197,21 @@ function initStatusRefresh(ip) {
     refreshButton.textContent = "Refreshing…";
     statusMeta?.classList.remove("is-refreshed");
     statusMeta?.classList.add("is-refreshing");
-    await updateServerStatus(ip);
+    statusGrid?.classList.add("is-refreshing");
+    await Promise.all([
+      updateServerStatus(ip),
+      new Promise((resolve) => window.setTimeout(resolve, 700))
+    ]);
     statusMeta?.classList.remove("is-refreshing");
     statusMeta?.classList.add("is-refreshed");
+    statusGrid?.classList.remove("is-refreshing");
+    statusGrid?.classList.add("is-refreshed");
     refreshButton.disabled = false;
     refreshButton.textContent = "Refresh";
-    window.setTimeout(() => statusMeta?.classList.remove("is-refreshed"), 500);
+    window.setTimeout(() => {
+      statusMeta?.classList.remove("is-refreshed");
+      statusGrid?.classList.remove("is-refreshed");
+    }, 650);
   });
 }
 
