@@ -3621,6 +3621,13 @@ body:not(.home-page)::before{
     url("rules-council-hall-v1.png") center/cover no-repeat;
 }
 
+.rules-page .subhero{
+  background:
+    linear-gradient(90deg,rgba(9,7,6,.84),rgba(11,8,6,.42) 60%,rgba(8,6,5,.7)),
+    linear-gradient(0deg,rgba(9,6,5,.88),transparent 58%),
+    url("rules-council-hall-v1.png") center 46%/cover no-repeat !important;
+}
+
 body:not(.home-page) .subhero{
   min-height:0;
   padding:108px 0 48px;
@@ -3638,7 +3645,28 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
 .cinematic-celestial{
   z-index:4;
   pointer-events:none;
-  clip-path:polygon(0 0,100% 0,100% 7%,93% 12%,86% 20%,80% 29%,72% 40%,63% 46%,52% 50%,40% 41%,32% 33%,26% 14%,22% 11%,16% 17%,8% 15%,0 12%);
+}
+
+.cinematic-foreground{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  transform:scale(1.012);
+  transform-origin:center;
+  pointer-events:none;
+  -webkit-mask-image:url("minecraft-terrain-mask-v1.png");
+  -webkit-mask-position:center;
+  -webkit-mask-size:cover;
+  -webkit-mask-repeat:no-repeat;
+  mask-image:url("minecraft-terrain-mask-v1.png");
+  mask-position:center;
+  mask-size:cover;
+  mask-repeat:no-repeat;
+  transition:filter .08s linear;
 }
 
 .cinematic-terrain{
@@ -3672,7 +3700,7 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
 .cinematic-sunset-terrain{z-index:2}
 
 .cinematic-vignette{
-  z-index:5;
+  z-index:6;
   background:linear-gradient(180deg,rgba(2,3,9,.02),transparent 52%,rgba(2,3,8,.16));
 }
 

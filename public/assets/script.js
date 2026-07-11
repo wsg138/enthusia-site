@@ -1434,9 +1434,9 @@ function initWorldEffects() {
   effects.setAttribute("aria-hidden", "true");
   const sceneDefinitions = [
     ["night", "cinematic-night-terrain", "assets/minecraft-night-valley-v3.png"],
-    ["sunrise", "cinematic-sunrise-terrain", "assets/minecraft-sunrise-sun-v1.png"],
+    ["sunrise", "cinematic-sunrise-terrain", "assets/minecraft-sunrise-left-v1.png"],
     ["day", "cinematic-terrain", "assets/minecraft-day-valley-v1.png"],
-    ["sunset", "cinematic-sunset-terrain", "assets/minecraft-sunset-sun-v1.png"]
+    ["sunset", "cinematic-sunset-terrain", "assets/minecraft-sunset-right-v1.png"]
   ];
   const scenes = Object.fromEntries(sceneDefinitions.map(([name, className, source]) => {
     const image = document.createElement("img");
@@ -1454,9 +1454,14 @@ function initWorldEffects() {
   const celestial = document.createElement("div");
   celestial.className = "cinematic-celestial";
   celestial.append(sun, moon);
+  const foreground = document.createElement("img");
+  foreground.className = "cinematic-foreground";
+  foreground.src = "assets/minecraft-day-valley-v1.png";
+  foreground.alt = "";
+  foreground.decoding = "async";
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
-  effects.append(celestial, vignette);
+  effects.append(celestial, foreground, vignette);
 
   document.body.prepend(effects);
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -1470,7 +1475,9 @@ function initWorldEffects() {
   };
   const render = () => {
     const maximum = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    const progress = (clamp(window.scrollY / maximum, 0, 1) + 0.5) % 1;
+    const testProgress = Number.parseFloat(document.body.dataset.celestialProgress || "");
+    const scrollProgress = Number.isFinite(testProgress) ? clamp(testProgress, 0, 1) : clamp(window.scrollY / maximum, 0, 1);
+    const progress = (scrollProgress + 0.5) % 1;
     let from;
     let to;
     let amount;
@@ -1501,6 +1508,11 @@ function initWorldEffects() {
     const moonRise = smooth(clamp((moonPhase - 0.12) / 0.15, 0, 1));
     const moonSet = smooth(clamp((0.94 - moonPhase) / 0.16, 0, 1));
     positionOrb(moon, moonPhase, moonRise * moonSet * nightLevel);
+    const warmth = Math.max(
+      progress < 0.35 ? 1 - Math.abs(progress - 0.2) / 0.15 : 0,
+      progress > 0.65 ? 1 - Math.abs(progress - 0.8) / 0.15 : 0
+    );
+    foreground.style.filter = `brightness(${(1 - nightLevel * 0.62).toFixed(3)}) saturate(${(1 - nightLevel * 0.24 + warmth * 0.22).toFixed(3)}) sepia(${(warmth * 0.2).toFixed(3)}) hue-rotate(${(-warmth * 8).toFixed(2)}deg)`;
     effects.style.setProperty("--night", nightLevel.toFixed(3));
     document.documentElement.style.setProperty("--cinematic-night", nightLevel.toFixed(3));
     document.documentElement.style.setProperty("--panel-alpha", (0.18 + nightLevel * 0.4).toFixed(3));
