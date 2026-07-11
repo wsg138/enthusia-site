@@ -1525,6 +1525,7 @@ function initWorldEffects() {
   const updateScrollTarget = () => {
     const maximum = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     targetProgress = clamp(window.scrollY / maximum, 0, 1);
+    render(0);
   };
 
   const drawCloud = (x, y, scale, alpha) => {
@@ -1702,16 +1703,12 @@ function initWorldEffects() {
     document.documentElement.style.setProperty("--cinematic-night", nightOpacity.toFixed(3));
     document.documentElement.style.setProperty("--panel-alpha", (0.18 + nightOpacity * 0.4).toFixed(3));
 
-    animationFrame = window.requestAnimationFrame(render);
   };
 
   resize();
   updateScrollTarget();
   window.addEventListener("resize", resize);
   window.addEventListener("scroll", updateScrollTarget, { passive: true });
-  animationFrame = window.requestAnimationFrame(render);
-
-  window.addEventListener("pagehide", () => window.cancelAnimationFrame(animationFrame), { once: true });
 }
 
 function initCinematicHeader() {

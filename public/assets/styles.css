@@ -3586,7 +3586,7 @@ h1,h2,h3,
   z-index:4;
   opacity:1;
   mix-blend-mode:normal;
-  display:block;
+  display:none;
 }
 
 body:not(.home-page){
