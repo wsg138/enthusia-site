@@ -21,7 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/styles.css?v=vision43" />
 </head>
-<body>
+<body class="home-page">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 
 <div class="bg" aria-hidden="true">
@@ -58,18 +58,32 @@
 
 <main id="main-content" class="page-main">
   <section class="hero" aria-labelledby="hero-title">
-    <div class="container hero-inner">
-      <div class="hero-copy">
-        <p class="eyebrow">Semi-anarchy survival · Java &amp; Bedrock</p>
-        <h1 id="hero-title">Enthusia SMP</h1>
-        <p class="lead">A permanent survival world with open PvP, player trading, guilds, and regular events. Build far out, run a market stall, or fight at KOTH&mdash;your progress stays.</p>
-        <div class="cta-row">
-          <button class="btn" id="copyIpBtn" type="button" data-label="Copy IP">Copy IP</button>
-          <a class="btn ghost" href="#join">How to join</a>
-          <a class="btn ghost" href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Join Discord</a>
-          <button class="btn quiet" id="shareServerBtn" type="button">Share server</button>
-        </div>
+    <div class="container cinematic-hero-inner">
+      <div class="cinematic-hero-copy">
+        <img class="cinematic-logo" src="assets/enthusia-logo-v2.png" alt="" width="118" height="118" />
+        <p class="eyebrow">Est. 2025 &nbsp;·&nbsp; Java &amp; Bedrock</p>
+        <h1 id="hero-title"><span>Minecraft</span><strong>Server</strong></h1>
+        <p class="lead">A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+        <button class="cinematic-ip" id="copyIpBtn" type="button" data-label="enthusia.net · Click to copy">enthusia.net <span>Click to copy</span></button>
+        <a class="scroll-cue" href="#server-deck">Scroll to explore <span aria-hidden="true">↓</span></a>
+      </div>
+    </div>
+  </section>
 
+  <section class="home-control-deck" id="server-deck" aria-label="Server navigation and live information">
+    <nav class="home-page-links container" aria-label="Explore Enthusia">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="about.html">About</a>
+      <a href="rules.html">Rules</a>
+      <a href="leaderboards.html">Leaderboards</a>
+      <a href="staff.html">Staff</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+      <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+      <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+    </nav>
+    <div class="container home-deck-grid">
+      <div class="home-live-panel">
         <div class="status live-status" aria-label="Server status">
           <div class="status-card status-card-wide live-ip-card">
             <div class="status-topline">
@@ -101,9 +115,7 @@
           <button class="text-button" id="refreshStatusBtn" type="button">Refresh</button>
         </div>
       </div>
-
-      <aside class="hero-panel" aria-label="Server quick facts">
-        <img class="hero-logo" src="assets/enthusia-logo-v2.png" alt="" width="360" height="360" />
+      <aside class="hero-panel home-community-panel" aria-label="Server community">
         <div class="fact-strip">
           <span>Java &amp; Bedrock</span>
           <span>100k world border</span>
