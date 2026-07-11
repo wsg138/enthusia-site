@@ -3581,18 +3581,12 @@ h1,h2,h3,
 
 .cinematic-sky{
   z-index:1;
-  opacity:.68;
-  mix-blend-mode:color;
+  opacity:1;
+  mix-blend-mode:normal;
 }
 
 .cinematic-celestial{
   z-index:2;
-  /* Keep the changing sky and celestial bodies behind the actual skyline. */
-  clip-path:polygon(
-    0 0,100% 0,100% 27%,93% 31%,87% 36%,81% 40%,75% 41%,
-    69% 44%,63% 48%,57% 52%,51% 51%,46% 45%,41% 34%,
-    36% 18%,32% 4%,29% 0,24% 12%,20% 19%,15% 15%,10% 8%,7% 0
-  );
 }
 
 .cinematic-terrain{
@@ -3606,9 +3600,7 @@ h1,h2,h3,
 
 .cinematic-vignette{
   z-index:3;
-  background:
-    radial-gradient(ellipse 82% 74% at 50% 43%,transparent 15%,rgba(2,4,10,.18) 68%,rgba(1,2,7,.72) 100%),
-    linear-gradient(180deg,rgba(2,3,9,.08),transparent 45%,rgba(2,3,8,.32));
+  background:linear-gradient(180deg,rgba(2,3,9,.05),transparent 45%,rgba(2,3,8,.32));
 }
 
 .world-water,
@@ -3708,7 +3700,7 @@ h1,h2,h3,
   border:1px solid rgba(255,255,255,.28);
   border-radius:11px;
   color:#fff8ec;
-  background:rgba(3,6,14,.55);
+  background:rgba(3,6,14,.29);
   backdrop-filter:blur(14px);
   font:800 1rem/1 Inter,system-ui,sans-serif;
   letter-spacing:.08em;
@@ -3757,17 +3749,17 @@ h1,h2,h3,
   align-items:center;
   justify-content:center;
   flex-wrap:wrap;
-  gap:4px;
+  gap:8px;
   padding-top:20px;
   padding-bottom:20px;
   border-bottom:1px solid rgba(255,255,255,.08);
 }
 
 .home-page-links a{
-  padding:10px 13px;
+  padding:13px 18px;
   border-radius:7px;
   color:rgba(255,248,238,.68);
-  font-size:.8rem;
+  font-size:.9rem;
   font-weight:800;
 }
 .home-page-links a:hover,.home-page-links a[aria-current="page"]{color:#fff;background:rgba(255,109,26,.12);text-decoration:none}
@@ -3783,12 +3775,28 @@ h1,h2,h3,
 .home-community-panel{
   padding:20px;
   border:1px solid rgba(255,154,67,.22);
-  background:rgba(18,10,8,.72);
+  background:rgba(18,10,8,.54);
   box-shadow:0 18px 42px rgba(0,0,0,.22);
 }
 
 .home-community-panel{min-width:0;width:auto}
-.home-community-panel .discord-card{min-height:0}
+.home-community-panel .discord-card{
+  min-height:0;
+  padding:22px;
+  border:1px solid rgba(137,148,255,.3);
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(94,104,205,.19),rgba(26,16,20,.36));
+}
+.home-community-panel .discord-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:8px}
+.home-community-panel .discord-kicker{margin:0 0 5px;color:#afb8ff;font-size:.68rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+.home-community-panel .discord-title{margin:0;color:#fff;font-size:1.35rem}
+.home-community-panel .discord-summary{max-width:42ch;margin:0;color:rgba(244,245,255,.7);font-size:.9rem;line-height:1.55}
+.home-community-panel .discord-counts{margin:0}
+.home-community-panel .discord-avatars{margin:18px 0 16px}
+.home-community-panel .discord-avatars img{width:38px;height:38px;border:2px solid rgba(16,11,18,.75);border-radius:50%}
+.home-community-panel .discord-actions{margin-top:0}
+.home-community-panel .discord-join{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:9px;background:#5865f2;color:#fff;font-weight:800;letter-spacing:.02em;box-shadow:0 10px 24px rgba(56,65,194,.28)}
+.home-community-panel .discord-join:hover{background:#6b78ff;color:#fff;text-decoration:none;transform:translateY(-1px)}
 
 @media(max-width:900px){
   .home-deck-grid{grid-template-columns:1fr}

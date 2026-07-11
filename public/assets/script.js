@@ -322,18 +322,28 @@ function createDiscordCard(titleText) {
   const heading = document.createElement("div");
   heading.className = "discord-head";
 
+  const headingCopy = document.createElement("div");
+  const kicker = document.createElement("p");
+  kicker.className = "discord-kicker";
+  kicker.textContent = "Community hub";
+
   const title = document.createElement("h2");
   title.className = "discord-title";
   title.textContent = titleText;
 
-  heading.append(title);
-  card.append(heading);
+  headingCopy.append(kicker, title);
+  heading.append(headingCopy);
+  const summary = document.createElement("p");
+  summary.className = "discord-summary";
+  summary.textContent = "Announcements, conversation, and a quick way to find people playing.";
+
+  card.append(heading, summary);
   return card;
 }
 
 function createDiscordLinkButton(href, text) {
   const link = document.createElement("a");
-  link.className = "btn ghost";
+  link.className = "discord-join";
   link.href = href;
   link.target = "_blank";
   link.rel = "noopener";
@@ -351,7 +361,7 @@ function renderDiscordFallback(cardRoot, invite) {
 
   const actions = document.createElement("div");
   actions.className = "discord-actions";
-  actions.append(createDiscordLinkButton(invite, "Open Discord"));
+    actions.append(createDiscordLinkButton(invite, "Join Discord"));
 
   card.append(message, actions);
   cardRoot.append(card);
@@ -382,7 +392,7 @@ function appendDiscordAvatars(card, members) {
 
   const emptyState = document.createElement("p");
   emptyState.className = "muted";
-  emptyState.textContent = "No visible members are listed right now.";
+  emptyState.textContent = "Members are not visible right now.";
   card.append(emptyState);
 }
 
@@ -439,7 +449,7 @@ async function renderDiscordWidget(cfg) {
 
     const actions = document.createElement("div");
     actions.className = "discord-actions";
-    actions.append(createDiscordLinkButton(activeInvite, "Open Discord"));
+    actions.append(createDiscordLinkButton(activeInvite, "Join Discord"));
     card.append(actions);
 
     cardRoot.append(card);
@@ -1425,28 +1435,25 @@ function initWorldEffects() {
 
   const canvas = document.createElement("canvas");
   canvas.className = "cinematic-sky";
-  const celestialCanvas = document.createElement("canvas");
-  celestialCanvas.className = "cinematic-celestial";
   const terrain = document.createElement("img");
   terrain.className = "cinematic-terrain";
   terrain.src = "assets/minecraft-valley-v2.png";
   terrain.alt = "";
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
-  effects.append(terrain, canvas, celestialCanvas, vignette);
+  effects.append(terrain, canvas, vignette);
 
   document.body.prepend(effects);
 
   const context = canvas.getContext("2d");
-  const celestialContext = celestialCanvas.getContext("2d");
-  if (!context || !celestialContext) return;
+  if (!context) return;
 
   const colorStops = {
     top: [[4, 6, 20], [70, 28, 52], [55, 130, 195], [78, 18, 42], [4, 6, 20]],
     bottom: [[18, 24, 53], [255, 137, 65], [190, 222, 242], [255, 91, 34], [18, 24, 53]],
     haze: [[36, 45, 82], [255, 178, 92], [218, 235, 244], [255, 126, 55], [36, 45, 82]],
-    brightness: [0.22, 0.58, 1, 0.64, 0.22],
-    saturation: [0.58, 0.95, 1, 1.08, 0.58]
+    brightness: [0.42, 0.72, 1, 0.8, 0.42],
+    saturation: [0.72, 0.96, 1, 1.04, 0.72]
   };
 
   let seed = 7281;
@@ -1460,6 +1467,13 @@ function initWorldEffects() {
     size: random() > 0.88 ? 2 : 1,
     alpha: 0.4 + random() * 0.6,
     phase: random() * Math.PI * 2
+  }));
+  const milkyWay = Array.from({ length: 280 }, (_, index) => ({
+    x: random(),
+    spread: (random() - 0.5) * 0.13,
+    size: random() > 0.9 ? 1.8 : random() > 0.55 ? 1.1 : 0.7,
+    alpha: 0.12 + random() * 0.4,
+    phase: index * 0.41
   }));
 
   let width = 0;
@@ -1491,14 +1505,9 @@ function initWorldEffects() {
     height = window.innerHeight;
     canvas.width = Math.round(width * ratio);
     canvas.height = Math.round(height * ratio);
-    celestialCanvas.width = Math.round(width * ratio);
-    celestialCanvas.height = Math.round(height * ratio);
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
-    celestialCanvas.style.width = `${width}px`;
-    celestialCanvas.style.height = `${height}px`;
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
-    celestialContext.setTransform(ratio, 0, 0, ratio, 0, 0);
   };
 
   const updateScrollTarget = () => {
@@ -1517,57 +1526,86 @@ function initWorldEffects() {
     context.restore();
   };
 
+  const clipCelestialToSky = () => {
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(width, 0);
+    context.lineTo(width, height * 0.24);
+    context.lineTo(width * 0.94, height * 0.28);
+    context.lineTo(width * 0.88, height * 0.33);
+    context.lineTo(width * 0.82, height * 0.37);
+    context.lineTo(width * 0.76, height * 0.38);
+    context.lineTo(width * 0.7, height * 0.41);
+    context.lineTo(width * 0.64, height * 0.45);
+    context.lineTo(width * 0.58, height * 0.49);
+    context.lineTo(width * 0.52, height * 0.48);
+    context.lineTo(width * 0.47, height * 0.42);
+    context.lineTo(width * 0.42, height * 0.3);
+    context.lineTo(width * 0.37, height * 0.15);
+    context.lineTo(width * 0.33, height * 0.02);
+    context.lineTo(width * 0.29, 0);
+    context.lineTo(width * 0.24, height * 0.09);
+    context.lineTo(width * 0.2, height * 0.16);
+    context.lineTo(width * 0.15, height * 0.12);
+    context.lineTo(width * 0.1, height * 0.05);
+    context.lineTo(width * 0.07, 0);
+    context.closePath();
+    context.clip();
+  };
+
   const drawSun = (x, y, opacity) => {
-    celestialContext.save();
-    celestialContext.globalCompositeOperation = "screen";
-    const glow = celestialContext.createRadialGradient(x, y, 8, x, y, 118);
+    context.save();
+    clipCelestialToSky();
+    context.globalCompositeOperation = "screen";
+    const glow = context.createRadialGradient(x, y, 8, x, y, 118);
     glow.addColorStop(0, `rgba(255,245,188,${0.5 * opacity})`);
     glow.addColorStop(0.35, `rgba(255,167,54,${0.28 * opacity})`);
     glow.addColorStop(1, "rgba(255,105,20,0)");
-    celestialContext.fillStyle = glow;
-    celestialContext.fillRect(x - 120, y - 120, 240, 240);
-    celestialContext.globalCompositeOperation = "source-over";
-    celestialContext.globalAlpha = opacity;
-    celestialContext.fillStyle = "#fff5b8";
-    celestialContext.fillRect(Math.round(x - 25), Math.round(y - 25), 50, 50);
-    celestialContext.fillStyle = "#ffd45d";
-    celestialContext.fillRect(Math.round(x - 20), Math.round(y - 20), 40, 40);
-    celestialContext.fillStyle = "rgba(255,255,225,.7)";
-    celestialContext.fillRect(Math.round(x - 15), Math.round(y - 15), 16, 16);
-    celestialContext.restore();
+    context.fillStyle = glow;
+    context.fillRect(x - 120, y - 120, 240, 240);
+    context.globalCompositeOperation = "source-over";
+    context.globalAlpha = opacity;
+    context.fillStyle = "#fff5b8";
+    context.fillRect(Math.round(x - 25), Math.round(y - 25), 50, 50);
+    context.fillStyle = "#ffd45d";
+    context.fillRect(Math.round(x - 20), Math.round(y - 20), 40, 40);
+    context.fillStyle = "rgba(255,255,225,.7)";
+    context.fillRect(Math.round(x - 15), Math.round(y - 15), 16, 16);
+    context.restore();
   };
 
   const drawMoon = (x, y, opacity) => {
-    celestialContext.save();
-    const glow = celestialContext.createRadialGradient(x, y, 5, x, y, 92);
+    context.save();
+    clipCelestialToSky();
+    const glow = context.createRadialGradient(x, y, 5, x, y, 92);
     glow.addColorStop(0, `rgba(205,220,255,${0.32 * opacity})`);
     glow.addColorStop(1, "rgba(140,170,255,0)");
-    celestialContext.fillStyle = glow;
-    celestialContext.fillRect(x - 95, y - 95, 190, 190);
-    celestialContext.globalAlpha = opacity;
-    celestialContext.fillStyle = "#e9eef4";
-    celestialContext.fillRect(Math.round(x - 24), Math.round(y - 24), 48, 48);
-    celestialContext.fillStyle = "#c4ccd8";
-    celestialContext.fillRect(Math.round(x - 17), Math.round(y - 15), 10, 9);
-    celestialContext.fillRect(Math.round(x + 5), Math.round(y - 4), 13, 11);
-    celestialContext.fillRect(Math.round(x - 8), Math.round(y + 10), 12, 8);
-    celestialContext.fillStyle = "rgba(255,255,255,.62)";
-    celestialContext.fillRect(Math.round(x - 18), Math.round(y - 20), 18, 7);
-    celestialContext.restore();
+    context.fillStyle = glow;
+    context.fillRect(x - 95, y - 95, 190, 190);
+    context.globalAlpha = opacity;
+    context.fillStyle = "#e9eef4";
+    context.fillRect(Math.round(x - 24), Math.round(y - 24), 48, 48);
+    context.fillStyle = "#c4ccd8";
+    context.fillRect(Math.round(x - 17), Math.round(y - 15), 10, 9);
+    context.fillRect(Math.round(x + 5), Math.round(y - 4), 13, 11);
+    context.fillStyle = "rgba(255,255,255,.62)";
+    context.fillRect(Math.round(x - 18), Math.round(y - 20), 18, 7);
+    context.restore();
   };
 
   const render = (timestamp) => {
     currentProgress = reducedMotion ? targetProgress : interpolate(currentProgress, targetProgress, 0.055);
     const progress = currentProgress;
-    celestialContext.clearRect(0, 0, width, height);
+    context.clearRect(0, 0, width, height);
     const top = interpolateColor(colorStops.top, progress);
     const bottom = interpolateColor(colorStops.bottom, progress);
     const haze = interpolateColor(colorStops.haze, progress);
 
     const sky = context.createLinearGradient(0, 0, 0, height);
-    sky.addColorStop(0, color(top));
-    sky.addColorStop(0.56, color(bottom));
-    sky.addColorStop(1, color(haze));
+    sky.addColorStop(0, color(top, 0.96));
+    sky.addColorStop(0.45, color(bottom, 0.93));
+    sky.addColorStop(0.68, color(haze, 0.42));
+    sky.addColorStop(0.88, color(haze, 0));
     context.fillStyle = sky;
     context.fillRect(0, 0, width, height);
 
@@ -1575,6 +1613,23 @@ function initWorldEffects() {
       ? 1 - smooth(progress / 0.25)
       : progress > 0.75 ? smooth((progress - 0.75) / 0.25) : 0;
     if (nightOpacity > 0.01) {
+      const band = context.createLinearGradient(0, 0, width, height * 0.34);
+      band.addColorStop(0, `rgba(156,176,255,${nightOpacity * 0.02})`);
+      band.addColorStop(0.5, `rgba(216,224,255,${nightOpacity * 0.13})`);
+      band.addColorStop(1, `rgba(156,176,255,0)`);
+      context.save();
+      context.rotate(-0.15);
+      context.fillStyle = band;
+      context.fillRect(-width * 0.08, -height * 0.02, width * 1.18, height * 0.32);
+      context.restore();
+      milkyWay.forEach((star) => {
+        const x = star.x * width;
+        const y = height * (0.04 + star.x * 0.3 + star.spread);
+        const twinkle = reducedMotion ? 1 : 0.76 + Math.sin(timestamp / 1200 + star.phase) * 0.24;
+        context.globalAlpha = nightOpacity * star.alpha * twinkle;
+        context.fillStyle = "#e7edff";
+        context.fillRect(Math.round(x), Math.round(y), star.size, star.size);
+      });
       stars.forEach((star) => {
         const twinkle = reducedMotion ? 1 : 0.72 + Math.sin(timestamp / 900 + star.phase) * 0.28;
         context.globalAlpha = nightOpacity * star.alpha * twinkle;
@@ -1599,10 +1654,10 @@ function initWorldEffects() {
 
     if (progress < 0.2) {
       const phase = progress / 0.2;
-      drawMoon(interpolate(width * 0.7, width * 0.14, phase), height * 0.21 + phase * height * 0.3, 1 - smooth(phase));
+      drawMoon(interpolate(width * 0.12, width * 0.54, phase), height * 0.52 - Math.sin(phase * Math.PI * 0.58) * height * 0.34, 1 - smooth(phase));
     } else if (progress > 0.82) {
       const phase = (progress - 0.82) / 0.18;
-      drawMoon(interpolate(width * 0.86, width * 0.32, phase), height * 0.5 - Math.sin(phase * Math.PI * 0.5) * height * 0.31, smooth(phase));
+      drawMoon(interpolate(width * 0.18, width * 0.84, phase), height * 0.53 - Math.sin(phase * Math.PI) * height * 0.36, smooth(phase));
     }
 
     const brightness = interpolateStop(colorStops.brightness, progress);
