@@ -3102,6 +3102,27 @@ summary:focus-visible{
 /* Balanced three-step connection flow */
 .join-card{
   min-height:300px;
+  isolation:isolate;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease,background .2s ease;
+}
+
+.join-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(255,162,42,.48);
+  background:
+    radial-gradient(380px 190px at var(--mx,50%) var(--my,35%),rgba(255,138,0,.14),transparent 72%),
+    linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
+  box-shadow:0 20px 46px rgba(0,0,0,.38),0 0 28px rgba(255,112,18,.11);
+}
+
+.join-card .step-number{
+  transition:color .2s ease,text-shadow .2s ease,transform .2s ease;
+}
+
+.join-card:hover .step-number{
+  color:rgba(255,211,106,.72);
+  text-shadow:0 0 20px rgba(255,138,0,.3);
+  transform:translateX(3px);
 }
 
 .join-card > div:not(.join-links){
@@ -3182,10 +3203,38 @@ summary:focus-visible{
   animation:status-refresh-flash .45s ease-out;
 }
 
+.live-status.is-refreshing .status-card{
+  overflow:hidden;
+  animation:status-card-breathe .7s ease-in-out infinite alternate;
+}
+
+.live-status.is-refreshing .status-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  background:linear-gradient(105deg,transparent 28%,rgba(255,211,106,.15) 48%,transparent 68%);
+  transform:translateX(-120%);
+  animation:status-card-sweep .7s ease-in-out infinite;
+}
+
+.live-status.is-refreshed .status-card{
+  animation:status-card-complete .55s ease-out;
+}
+
 @keyframes status-refresh-spin{to{transform:rotate(360deg)}}
 @keyframes status-refresh-flash{
   0%{color:var(--gold)}
   100%{color:var(--soft)}
+}
+
+@keyframes status-card-sweep{to{transform:translateX(120%)}}
+@keyframes status-card-breathe{to{border-color:rgba(255,211,106,.38)}}
+@keyframes status-card-complete{
+  0%{box-shadow:0 0 0 rgba(68,209,122,0)}
+  45%{box-shadow:0 0 24px rgba(68,209,122,.18)}
+  100%{box-shadow:0 0 0 rgba(68,209,122,0)}
 }
 
 .stat-row span{
@@ -3197,4 +3246,7 @@ summary:focus-visible{
 @media (prefers-reduced-motion:reduce){
   .status-meta.is-refreshing::before{animation:none}
   .status-meta.is-refreshed{animation:none}
+  .live-status.is-refreshing .status-card,
+  .live-status.is-refreshing .status-card::before,
+  .live-status.is-refreshed .status-card{animation:none}
 }
