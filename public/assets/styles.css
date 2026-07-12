@@ -4034,6 +4034,151 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
   .cinematic-terrain,.cinematic-sunrise-terrain,.cinematic-sunset-terrain,.cinematic-night-terrain{transition:none}
 }
 
+/* Stable mobile navigation and informational-page header */
+.mobile-nav-overlay{display:none}
+
+@media(max-width:780px){
+  body.about-page .site-header,
+  body.rules-page .site-header{
+    position:fixed;
+    inset:0 0 auto;
+    z-index:300;
+    padding-top:env(safe-area-inset-top);
+    background:rgba(18,8,5,.92);
+    border-bottom:1px solid rgba(255,177,65,.38);
+    box-shadow:0 10px 28px rgba(0,0,0,.3);
+    backdrop-filter:blur(16px) saturate(1.12);
+  }
+
+  body.about-page .page-main,
+  body.rules-page .page-main{
+    padding-top:calc(74px + env(safe-area-inset-top));
+  }
+
+  body.rules-page [id]{
+    scroll-margin-top:calc(92px + env(safe-area-inset-top));
+  }
+
+  .header-inner.nav-enhanced.nav-open > .nav{display:none}
+
+  .mobile-nav-overlay{
+    position:fixed;
+    inset:0;
+    z-index:200;
+    display:grid;
+    place-items:start center;
+    height:100dvh;
+    padding:
+      calc(86px + env(safe-area-inset-top))
+      max(14px,env(safe-area-inset-right))
+      max(14px,env(safe-area-inset-bottom))
+      max(14px,env(safe-area-inset-left));
+    background:rgba(3,5,8,.74);
+    opacity:0;
+    pointer-events:none;
+    overscroll-behavior:contain;
+    transition:opacity .16s ease;
+  }
+
+  .mobile-nav-overlay[hidden]{display:none}
+  .mobile-nav-overlay.is-open{opacity:1;pointer-events:auto}
+
+  .mobile-nav-panel{
+    position:relative;
+    width:min(100%,420px);
+    max-height:calc(100dvh - 104px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    padding:20px;
+    overflow:hidden;
+    border:1px solid rgba(255,177,65,.34);
+    border-radius:18px;
+    background:linear-gradient(145deg,rgba(31,16,10,.98),rgba(10,13,12,.98));
+    box-shadow:0 28px 80px rgba(0,0,0,.6),0 0 0 1px rgba(116,158,87,.12) inset;
+    transform:scale(.985);
+    transition:transform .16s ease;
+  }
+
+  .mobile-nav-overlay.is-open .mobile-nav-panel{transform:scale(1)}
+
+  .mobile-nav-close{
+    position:absolute;
+    top:14px;
+    right:14px;
+    min-height:34px;
+    padding:7px 11px;
+    border:1px solid rgba(255,211,106,.22);
+    border-radius:9px;
+    color:var(--text);
+    background:rgba(255,255,255,.05);
+    font-weight:800;
+    cursor:pointer;
+  }
+
+  .mobile-nav-view{animation:mobile-nav-panel-in .14s ease both}
+  .mobile-nav-kicker{
+    margin:0 70px 15px 0;
+    color:#91bd70;
+    font-size:.76rem;
+    font-weight:900;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+
+  .mobile-nav-links{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .mobile-nav-links a,
+  .mobile-nav-community-trigger,
+  .mobile-nav-community-grid a,
+  .mobile-nav-back{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:48px;
+    padding:11px 12px;
+    border:1px solid rgba(255,177,65,.2);
+    border-radius:11px;
+    color:#fff4dd;
+    background:rgba(255,255,255,.045);
+    font-weight:850;
+    line-height:1.15;
+    text-align:center;
+    cursor:pointer;
+  }
+
+  .mobile-nav-links a.active{border-color:#ff8a20;background:rgba(255,113,24,.15)}
+  .mobile-nav-community-trigger{color:#b8dd9d;border-color:rgba(126,177,91,.38)}
+  .mobile-nav-community-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .mobile-nav-community-grid a:last-child:nth-child(odd){grid-column:1/-1}
+  .mobile-nav-back{
+    justify-content:flex-start;
+    width:max-content;
+    min-height:36px;
+    margin:0 72px 14px 0;
+    padding:7px 10px;
+    color:#b8dd9d;
+  }
+
+  .mobile-nav-locked{overflow:hidden;overscroll-behavior:none}
+  .mobile-nav-locked body{overflow:hidden;overscroll-behavior:none}
+  .mobile-nav-locked .site-header{z-index:300}
+  .mobile-nav-locked .site-header .brand{pointer-events:none}
+  .mobile-nav-locked .site-header .nav-toggle{position:relative;z-index:1;pointer-events:auto}
+}
+
+@media(max-width:620px) and (orientation:portrait){
+  .cinematic-sun,
+  .cinematic-world.is-mobile-camera .cinematic-sun{display:none!important}
+}
+
+@keyframes mobile-nav-panel-in{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .mobile-nav-overlay,
+  .mobile-nav-panel,
+  .mobile-nav-view{transition:none;animation:none}
+}
+
 /* Polished card alignment and compact resource links */
 .join-card{
   display:grid;

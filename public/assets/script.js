@@ -248,49 +248,190 @@ function initMobileNavigation() {
   const brand = header?.querySelector(".brand");
   if (!header || !nav || !brand) return;
 
+  const mobileQuery = window.matchMedia("(max-width: 780px)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   const toggle = document.createElement("button");
   toggle.className = "nav-toggle";
   toggle.type = "button";
   toggle.setAttribute("aria-expanded", "false");
+  toggle.setAttribute("aria-controls", "mobile-navigation");
   toggle.setAttribute("aria-label", "Open navigation");
   toggle.innerHTML = "<span></span><span></span><span></span>";
   brand.after(toggle);
   header.classList.add("nav-enhanced");
 
-  const setOpen = (open) => {
-    header.classList.toggle("nav-open", open);
-    toggle.setAttribute("aria-expanded", String(open));
-    toggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+  const overlay = document.createElement("div");
+  overlay.id = "mobile-navigation";
+  overlay.className = "mobile-nav-overlay";
+  overlay.hidden = true;
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-label", "Site navigation");
+
+  const panel = document.createElement("div");
+  panel.className = "mobile-nav-panel";
+  const closeButton = document.createElement("button");
+  closeButton.className = "mobile-nav-close";
+  closeButton.type = "button";
+  closeButton.setAttribute("aria-label", "Close navigation");
+  closeButton.textContent = "Close";
+
+  const mainPanel = document.createElement("div");
+  mainPanel.className = "mobile-nav-view mobile-nav-main";
+  mainPanel.setAttribute("aria-label", "Main menu");
+  const mainTitle = document.createElement("p");
+  mainTitle.className = "mobile-nav-kicker";
+  mainTitle.textContent = "Menu";
+  const mainLinks = document.createElement("div");
+  mainLinks.className = "mobile-nav-links";
+
+  const communityPanel = document.createElement("div");
+  communityPanel.className = "mobile-nav-view mobile-nav-community";
+  communityPanel.setAttribute("aria-label", "Community menu");
+  communityPanel.hidden = true;
+  const backButton = document.createElement("button");
+  backButton.className = "mobile-nav-back";
+  backButton.type = "button";
+  backButton.textContent = "← Menu";
+  const communityTitle = document.createElement("p");
+  communityTitle.className = "mobile-nav-kicker";
+  communityTitle.textContent = "Community";
+  const communityLinks = document.createElement("div");
+  communityLinks.className = "mobile-nav-community-grid";
+
+  const cloneLink = (link) => {
+    const clone = link.cloneNode(true);
+    clone.removeAttribute("id");
+    return clone;
   };
 
-  nav.querySelectorAll(".nav-dropdown").forEach((dropdown) => {
-    const trigger = dropdown.querySelector(".nav-drop-trigger");
-    if (!trigger) return;
-    trigger.setAttribute("aria-expanded", "false");
-    trigger.addEventListener("click", (event) => {
-      event.stopPropagation();
-      const willOpen = !dropdown.classList.contains("is-open");
-      nav.querySelectorAll(".nav-dropdown.is-open").forEach((openDropdown) => {
-        openDropdown.classList.remove("is-open");
-        openDropdown.querySelector(".nav-drop-trigger")?.setAttribute("aria-expanded", "false");
-      });
-      dropdown.classList.toggle("is-open", willOpen);
-      trigger.setAttribute("aria-expanded", String(willOpen));
-    });
+  [...nav.children].forEach((item) => {
+    if (item.matches("a")) {
+      mainLinks.append(cloneLink(item));
+      return;
+    }
+    if (!item.matches(".nav-dropdown")) return;
+    const communityButton = document.createElement("button");
+    communityButton.className = "mobile-nav-community-trigger";
+    communityButton.type = "button";
+    communityButton.setAttribute("aria-expanded", "false");
+    communityButton.textContent = "Community";
+    mainLinks.append(communityButton);
+    item.querySelectorAll(".nav-menu a").forEach((link) => communityLinks.append(cloneLink(link)));
   });
 
-  toggle.addEventListener("click", () => setOpen(!header.classList.contains("nav-open")));
-  nav.addEventListener("click", (event) => {
-    if (event.target.closest("a")) setOpen(false);
+  mainPanel.append(mainTitle, mainLinks);
+  communityPanel.append(backButton, communityTitle, communityLinks);
+  panel.append(closeButton, mainPanel, communityPanel);
+  overlay.append(panel);
+  document.body.append(overlay);
+
+  const communityButton = mainLinks.querySelector(".mobile-nav-community-trigger");
+  let lockedScrollY = 0;
+  let closeTimer = 0;
+  let isOpen = false;
+  const backgroundTargets = [
+    document.querySelector("main"),
+    document.querySelector(".site-footer"),
+    document.querySelector(".mobile-join-bar"),
+    brand,
+    nav
+  ].filter(Boolean);
+
+  const activePanel = () => communityPanel.hidden ? mainPanel : communityPanel;
+  const focusableItems = () => [...activePanel().querySelectorAll("a[href],button:not([disabled])")].filter((item) => !item.hidden);
+  const showMainPanel = (focus = false) => {
+    communityPanel.hidden = true;
+    mainPanel.hidden = false;
+    communityButton?.setAttribute("aria-expanded", "false");
+    if (focus) communityButton?.focus();
+  };
+  const showCommunityPanel = () => {
+    mainPanel.hidden = true;
+    communityPanel.hidden = false;
+    communityButton?.setAttribute("aria-expanded", "true");
+    backButton.focus();
+  };
+
+  const unlockPage = () => {
+    backgroundTargets.forEach((target) => { target.inert = false; });
+    document.documentElement.classList.remove("mobile-nav-locked");
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.left = "";
+    document.body.style.right = "";
+    document.body.style.width = "";
+    window.scrollTo(0, lockedScrollY);
+  };
+
+  const closeMenu = ({ restoreFocus = true, immediate = false } = {}) => {
+    if (!isOpen) return;
+    isOpen = false;
+    window.clearTimeout(closeTimer);
+    overlay.classList.remove("is-open");
+    header.classList.remove("nav-open");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "Open navigation");
+    unlockPage();
+    showMainPanel();
+    const finish = () => {
+      overlay.hidden = true;
+      if (restoreFocus && document.contains(toggle)) toggle.focus();
+    };
+    if (immediate || reducedMotion) finish();
+    else closeTimer = window.setTimeout(finish, 160);
+  };
+
+  const openMenu = () => {
+    if (isOpen || !mobileQuery.matches) return;
+    isOpen = true;
+    window.clearTimeout(closeTimer);
+    lockedScrollY = window.scrollY;
+    backgroundTargets.forEach((target) => { target.inert = true; });
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${lockedScrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
+    document.documentElement.classList.add("mobile-nav-locked");
+    overlay.hidden = false;
+    header.classList.add("nav-open");
+    toggle.setAttribute("aria-expanded", "true");
+    toggle.setAttribute("aria-label", "Close navigation");
+    requestAnimationFrame(() => overlay.classList.add("is-open"));
+    const firstItem = focusableItems()[0];
+    firstItem?.focus();
+  };
+
+  toggle.addEventListener("click", () => isOpen ? closeMenu() : openMenu());
+  closeButton.addEventListener("click", () => closeMenu());
+  communityButton?.addEventListener("click", showCommunityPanel);
+  backButton.addEventListener("click", () => showMainPanel(true));
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) closeMenu();
+    if (event.target.closest("a")) closeMenu({ restoreFocus: false, immediate: true });
+  });
+  overlay.addEventListener("keydown", (event) => {
+    if (event.key !== "Tab") return;
+    const items = [closeButton, ...focusableItems()];
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") setOpen(false);
+    if (event.key === "Escape" && isOpen) closeMenu();
   });
-  document.addEventListener("click", () => {
-    nav.querySelectorAll(".nav-dropdown.is-open").forEach((dropdown) => {
-      dropdown.classList.remove("is-open");
-      dropdown.querySelector(".nav-drop-trigger")?.setAttribute("aria-expanded", "false");
-    });
+  window.addEventListener("popstate", () => closeMenu({ restoreFocus: false, immediate: true }));
+  window.addEventListener("pagehide", () => closeMenu({ restoreFocus: false, immediate: true }));
+  mobileQuery.addEventListener("change", (event) => {
+    if (!event.matches) closeMenu({ restoreFocus: false, immediate: true });
   });
 }
 
@@ -1556,6 +1697,7 @@ function initWorldEffects() {
 
   const measureScene = () => {
     mobileCamera = window.innerWidth <= 620 && window.innerHeight > window.innerWidth;
+    effects.classList.toggle("is-mobile-camera", mobileCamera);
     sceneScale = mobileCamera
       ? clamp((window.innerWidth / SCENE_WIDTH) * 2.05, 0.43, 0.56)
       : window.innerHeight / SCENE_HEIGHT;
@@ -1629,12 +1771,21 @@ function initWorldEffects() {
     }
 
     const screenToScene = (x, y) => ({ x: (x - sceneOrigin.x) / sceneScale, y: (y - sceneOrigin.y) / sceneScale });
-    const sunEnd = mobileCamera ? { x: 1190, y: 575 } : { x: SCENE_WIDTH * 0.88, y: SCENE_HEIGHT * 0.69 };
-    const sunControlA = mobileCamera ? screenToScene(window.innerWidth * 0.55, window.innerHeight * 0.07) : { x: Math.max(logoStart.x + 210, SCENE_WIDTH * 0.52), y: Math.max(68, logoStart.y - 190) };
-    const sunControlB = mobileCamera ? screenToScene(window.innerWidth * 0.72, window.innerHeight * 0.2) : { x: SCENE_WIDTH * 0.73, y: SCENE_HEIGHT * 0.08 };
-    const sunPhase = smooth(clamp(currentProgress / 0.34, 0, 1));
-    const sunPoint = cubicPoint(logoStart, sunControlA, sunControlB, sunEnd, sunPhase);
-    placeOrb(sun, sunPoint, currentProgress <= 0.38);
+    let sunEnd = logoStart;
+    let sunControlA = logoStart;
+    let sunControlB = logoStart;
+    let sunPoint = logoStart;
+    if (mobileCamera) {
+      sun.hidden = true;
+      sun.style.transform = "";
+    } else {
+      sunEnd = { x: SCENE_WIDTH * 0.88, y: SCENE_HEIGHT * 0.69 };
+      sunControlA = { x: Math.max(logoStart.x + 210, SCENE_WIDTH * 0.52), y: Math.max(68, logoStart.y - 190) };
+      sunControlB = { x: SCENE_WIDTH * 0.73, y: SCENE_HEIGHT * 0.08 };
+      const sunPhase = smooth(clamp(currentProgress / 0.34, 0, 1));
+      sunPoint = cubicPoint(logoStart, sunControlA, sunControlB, sunEnd, sunPhase);
+      placeOrb(sun, sunPoint, currentProgress <= 0.38);
+    }
 
     const moonStart = mobileCamera ? { x: 470, y: 610 } : { x: SCENE_WIDTH * 0.08, y: SCENE_HEIGHT * 0.66 };
     const moonEnd = mobileCamera ? { x: 1200, y: 585 } : { x: SCENE_WIDTH * 0.92, y: SCENE_HEIGHT * 0.69 };
