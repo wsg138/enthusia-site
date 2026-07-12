@@ -1714,7 +1714,7 @@ function initWorldEffects() {
       const bounds = logo.getBoundingClientRect();
       logoStart = {
         x: (bounds.left + bounds.width / 2 + 6 - sceneOrigin.x) / sceneScale,
-        y: (bounds.top + bounds.height / 2 - 28 - sceneOrigin.y) / sceneScale
+        y: (bounds.top + bounds.height / 2 - sceneOrigin.y) / sceneScale
       };
     }
     render();
