@@ -64,6 +64,23 @@ terrain_image = Image.fromarray(terrain.astype(np.uint8) * 255, mode="L")
 # Close small classification holes in stone, snow, and shadowed terrain while
 # preserving the much larger true sky openings around tree trunks and branches.
 terrain_image = terrain_image.filter(ImageFilter.MaxFilter(15)).filter(ImageFilter.MinFilter(15))
+
+
+def close_region(image, box, size):
+    """Close classification pinholes only inside a known solid subject."""
+    region = image.crop(box)
+    region = region.filter(ImageFilter.MaxFilter(size)).filter(ImageFilter.MinFilter(size))
+    image.paste(region, box[:2])
+
+
+# The snowy northwest ridge contains pale blue shadow blocks that sit very close
+# to the sky colour. A slightly stronger local close keeps its stepped outline
+# intact without widening unrelated clouds or distant terrain.
+close_region(terrain_image, (190, 230, 690, 670), 25)
+
+# Retain the real sunset visible between the large branch tiers, while closing
+# tiny false-transparent flecks inside the dense leaves of the foreground pine.
+close_region(terrain_image, (1410, 245, 1605, 545), 23)
 alpha = np.asarray(terrain_image)
 
 rgba = np.full((height, width, 4), 255, dtype=np.uint8)

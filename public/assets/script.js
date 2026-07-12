@@ -1468,7 +1468,7 @@ function initWorldEffects() {
   celestial.append(sun, moon);
   const foreground = document.createElement("img");
   foreground.className = "cinematic-foreground";
-  foreground.src = "assets/minecraft-terrain-foreground-v1.png?v=2";
+  foreground.src = "assets/minecraft-terrain-foreground-v1.png?v=3";
   foreground.alt = "";
   foreground.decoding = "async";
   const vignette = document.createElement("div");
