@@ -3568,7 +3568,26 @@ h1,h2,h3,
 .world-effects.cinematic-world{
   background-image:linear-gradient(180deg,var(--scene-edge-top,#429dd6),var(--scene-edge-mid,#66b5db) 52%,var(--scene-edge-bottom,#18372f));
 }
-.world-effects.cinematic-world::before{display:none}
+.world-effects.cinematic-world::before{
+  display:block;
+  content:"";
+  position:absolute;
+  inset:-24px;
+  background-image:var(--scene-edge-image,url("minecraft-day-valley-v1.png"));
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  filter:blur(18px) brightness(.82) saturate(.92);
+  opacity:.88;
+  transform:scale(1.035);
+}
+
+@media(min-aspect-ratio:2/1){
+  .cinematic-scene{
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 4%,#000 96%,transparent 100%);
+    mask-image:linear-gradient(90deg,transparent 0,#000 4%,#000 96%,transparent 100%);
+  }
+}
 
 .cinematic-sky,
 .cinematic-terrain,
@@ -3628,10 +3647,14 @@ body:not(.home-page)::before{
 }
 
 .rules-page .subhero{
+  min-height:clamp(440px,42vw,620px);
+  display:flex;
+  align-items:flex-end;
+  padding-bottom:58px;
   background:
     linear-gradient(90deg,rgba(9,7,6,.84),rgba(11,8,6,.42) 60%,rgba(8,6,5,.7)),
     linear-gradient(0deg,rgba(9,6,5,.88),transparent 58%),
-    url("rules-council-hall-v1.png") center 46%/cover no-repeat !important;
+    url("rules-council-hall-v1.png") center/cover no-repeat !important;
 }
 
 body:not(.home-page) .subhero{
@@ -3639,6 +3662,10 @@ body:not(.home-page) .subhero{
   padding:108px 0 48px;
   background:linear-gradient(90deg,rgba(15,9,8,.68),rgba(15,9,8,.28));
   border-bottom:1px solid rgba(255,175,82,.2);
+}
+body.rules-page .subhero{
+  min-height:clamp(440px,42vw,620px);
+  padding-bottom:58px;
 }
 body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8,.48),transparent 66%)}
 .about-page .subhero{
