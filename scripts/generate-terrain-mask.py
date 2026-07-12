@@ -3,11 +3,13 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image
+from PIL import ImageFilter
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "public" / "assets" / "minecraft-day-valley-v1.png"
 OUTPUT = ROOT / "public" / "assets" / "minecraft-terrain-mask-v1.png"
+FOREGROUND_OUTPUT = ROOT / "public" / "assets" / "minecraft-terrain-foreground-v1.png"
 
 rgb = np.asarray(Image.open(SOURCE).convert("RGB"), dtype=np.int16)
 height, width, _ = rgb.shape
@@ -41,6 +43,12 @@ for x in range(width):
         alpha[rows[0]:, x] = 255
 
 rgba = np.full((height, width, 4), 255, dtype=np.uint8)
-rgba[..., 3] = alpha
+soft_alpha = np.asarray(Image.fromarray(alpha, mode="L").filter(ImageFilter.GaussianBlur(0.65)))
+rgba[..., 3] = soft_alpha
 Image.fromarray(rgba, mode="RGBA").save(OUTPUT, optimize=True)
+
+foreground = np.asarray(Image.open(SOURCE).convert("RGBA")).copy()
+foreground[..., 3] = soft_alpha
+Image.fromarray(foreground, mode="RGBA").save(FOREGROUND_OUTPUT, optimize=True)
 print(OUTPUT)
+print(FOREGROUND_OUTPUT)

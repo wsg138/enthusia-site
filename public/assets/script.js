@@ -1429,9 +1429,15 @@ function initScrollReveal() {
 function initWorldEffects() {
   if (!document.body.classList.contains("home-page") || document.querySelector(".world-effects")) return;
 
+  const SCENE_WIDTH = 1672;
+  const SCENE_HEIGHT = 941;
   const effects = document.createElement("div");
   effects.className = "world-effects cinematic-world";
   effects.setAttribute("aria-hidden", "true");
+  const scene = document.createElement("div");
+  scene.className = "cinematic-scene";
+  scene.style.width = `${SCENE_WIDTH}px`;
+  scene.style.height = `${SCENE_HEIGHT}px`;
   const sceneDefinitions = [
     ["night", "cinematic-night-terrain", "assets/minecraft-night-valley-v3.png"],
     ["sunrise", "cinematic-sunrise-terrain", "assets/minecraft-sunrise-left-v1.png"],
@@ -1444,83 +1450,168 @@ function initWorldEffects() {
     image.src = source;
     image.alt = "";
     image.decoding = "async";
-    effects.append(image);
+    scene.append(image);
     return [name, image];
   }));
-  const sun = document.createElement("div");
-  sun.className = "cinematic-orb cinematic-sun";
-  const moon = document.createElement("div");
-  moon.className = "cinematic-orb cinematic-moon";
+  const createOrb = (name) => {
+    const orb = document.createElement("div");
+    orb.className = `cinematic-orb cinematic-${name}`;
+    const disc = document.createElement("div");
+    disc.className = "cinematic-orb-disc";
+    orb.append(disc);
+    return orb;
+  };
+  const sun = createOrb("sun");
+  const moon = createOrb("moon");
   const celestial = document.createElement("div");
   celestial.className = "cinematic-celestial";
   celestial.append(sun, moon);
   const foreground = document.createElement("img");
   foreground.className = "cinematic-foreground";
-  foreground.src = "assets/minecraft-day-valley-v1.png";
+  foreground.src = "assets/minecraft-terrain-foreground-v1.png";
   foreground.alt = "";
   foreground.decoding = "async";
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
-  effects.append(celestial, foreground, vignette);
+  scene.append(celestial, foreground, vignette);
+  effects.append(scene);
 
   document.body.prepend(effects);
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const smooth = (value) => value * value * (3 - 2 * value);
-  const positionOrb = (orb, phase, opacity) => {
-    const x = 20 + phase * 54;
-    const y = 14 + Math.pow(Math.abs(phase - 0.5) * 2, 2) * 30;
-    orb.style.setProperty("--orb-x", `${x.toFixed(3)}%`);
-    orb.style.setProperty("--orb-y", `${y.toFixed(3)}%`);
-    orb.style.opacity = clamp(opacity, 0, 1).toFixed(3);
+  const cubicPoint = (start, controlA, controlB, end, progress) => {
+    const inverse = 1 - progress;
+    return {
+      x: inverse ** 3 * start.x + 3 * inverse ** 2 * progress * controlA.x + 3 * inverse * progress ** 2 * controlB.x + progress ** 3 * end.x,
+      y: inverse ** 3 * start.y + 3 * inverse ** 2 * progress * controlA.y + 3 * inverse * progress ** 2 * controlB.y + progress ** 3 * end.y
+    };
   };
-  const render = () => {
-    const maximum = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    const testProgress = Number.parseFloat(document.body.dataset.celestialProgress || "");
-    const scrollProgress = Number.isFinite(testProgress) ? clamp(testProgress, 0, 1) : clamp(window.scrollY / maximum, 0, 1);
-    const progress = (scrollProgress + 0.5) % 1;
-    let from;
-    let to;
-    let amount;
-    if (progress <= 0.2) {
-      from = scenes.night; to = scenes.sunrise; amount = smooth(progress / 0.2);
-    } else if (progress <= 0.5) {
-      from = scenes.sunrise; to = scenes.day; amount = smooth((progress - 0.2) / 0.3);
-    } else if (progress <= 0.8) {
-      from = scenes.day; to = scenes.sunset; amount = smooth((progress - 0.5) / 0.3);
-    } else {
-      from = scenes.sunset; to = scenes.night; amount = smooth((progress - 0.8) / 0.2);
-    }
-    Object.values(scenes).forEach((scene) => {
-      scene.style.opacity = "0";
-      scene.style.zIndex = "0";
+  const placeOrb = (orb, point, visible) => {
+    orb.style.transform = `translate3d(${point.x.toFixed(2)}px,${point.y.toFixed(2)}px,0)`;
+    orb.hidden = !visible;
+  };
+  const setTransition = (from, to, amount) => {
+    Object.values(scenes).forEach((image) => {
+      image.style.opacity = "0";
+      image.style.zIndex = "0";
     });
     from.style.opacity = "1";
     from.style.zIndex = "1";
+    if (from === to) return;
     to.style.opacity = amount.toFixed(3);
     to.style.zIndex = "2";
-    const nightLevel = progress <= 0.2 ? 1 - amount : progress >= 0.8 ? amount : 0;
-    const sunPhase = clamp((progress - 0.2) / 0.6, 0, 1);
-    const sunRise = smooth(clamp((sunPhase - 0.12) / 0.15, 0, 1));
-    const sunSet = smooth(clamp((0.94 - sunPhase) / 0.16, 0, 1));
-    positionOrb(sun, sunPhase, sunRise * sunSet);
+  };
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const debugEnabled = new URLSearchParams(window.location.search).get("sceneDebug") === "1";
+  let sceneScale = 1;
+  let logoStart = { x: SCENE_WIDTH * 0.5, y: SCENE_HEIGHT * 0.2 };
+  let idleTimer = 0;
+  let currentProgress = 0;
 
-    const moonPhase = progress >= 0.8 ? (progress - 0.8) / 0.4 : (progress + 0.2) / 0.4;
-    const moonRise = smooth(clamp((moonPhase - 0.12) / 0.15, 0, 1));
-    const moonSet = smooth(clamp((0.94 - moonPhase) / 0.16, 0, 1));
-    positionOrb(moon, moonPhase, moonRise * moonSet * nightLevel);
-    const warmth = Math.max(
-      progress < 0.35 ? 1 - Math.abs(progress - 0.2) / 0.15 : 0,
-      progress > 0.65 ? 1 - Math.abs(progress - 0.8) / 0.15 : 0
-    );
+  let debugHud = null;
+  let debugSunPath = null;
+  if (debugEnabled) {
+    effects.classList.add("is-scene-debug");
+    const debugTerrain = document.createElement("div");
+    debugTerrain.className = "scene-debug-terrain";
+    const debugSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    debugSvg.classList.add("scene-debug-svg");
+    debugSvg.setAttribute("viewBox", `0 0 ${SCENE_WIDTH} ${SCENE_HEIGHT}`);
+    debugSvg.innerHTML = `<path class="debug-sun-path"/><path class="debug-moon-path" d="M 134 620 C 330 65 1110 65 1538 650"/><circle class="debug-sun-center" r="8"/><circle class="debug-moon-center" r="8"/>`;
+    debugSunPath = debugSvg.querySelector(".debug-sun-path");
+    scene.append(debugTerrain, debugSvg);
+    debugHud = document.createElement("pre");
+    debugHud.className = "scene-debug-hud";
+    effects.append(debugHud);
+  }
+
+  const measureScene = () => {
+    sceneScale = Math.max(window.innerWidth / SCENE_WIDTH, window.innerHeight / SCENE_HEIGHT);
+    scene.style.transform = `translate(-50%,-50%) scale(${sceneScale})`;
+    const logo = document.querySelector(".cinematic-logo");
+    if (logo) {
+      const bounds = logo.getBoundingClientRect();
+      logoStart = {
+        x: (bounds.left + bounds.width / 2 + 6 - window.innerWidth / 2) / sceneScale + SCENE_WIDTH / 2,
+        y: (bounds.top + bounds.height / 2 - 28 - window.innerHeight / 2) / sceneScale + SCENE_HEIGHT / 2
+      };
+    }
+    render();
+  };
+
+  const render = () => {
+    const maximum = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const testProgress = Number.parseFloat(document.body.dataset.celestialProgress || "");
+    currentProgress = Number.isFinite(testProgress) ? clamp(testProgress, 0, 1) : clamp(window.scrollY / maximum, 0, 1);
+    let nightLevel = 0;
+    let warmth = 0;
+    if (currentProgress < 0.28) {
+      const amount = smooth(clamp((currentProgress - 0.06) / 0.22, 0, 1));
+      setTransition(scenes.day, scenes.sunset, amount);
+      warmth = amount;
+    } else if (currentProgress < 0.4) {
+      const amount = smooth((currentProgress - 0.28) / 0.12);
+      setTransition(scenes.sunset, scenes.night, amount);
+      warmth = 1 - amount;
+      nightLevel = amount;
+    } else if (currentProgress < 0.66) {
+      setTransition(scenes.night, scenes.night, 0);
+      nightLevel = 1;
+    } else if (currentProgress < 0.82) {
+      const amount = smooth((currentProgress - 0.66) / 0.16);
+      setTransition(scenes.night, scenes.sunrise, amount);
+      warmth = amount;
+      nightLevel = 1 - amount;
+    } else {
+      const amount = smooth((currentProgress - 0.82) / 0.18);
+      setTransition(scenes.sunrise, scenes.day, amount);
+      warmth = 1 - amount;
+    }
+
+    const sunEnd = { x: SCENE_WIDTH * 0.88, y: SCENE_HEIGHT * 0.69 };
+    const sunControlA = { x: Math.max(logoStart.x + 210, SCENE_WIDTH * 0.52), y: Math.max(68, logoStart.y - 190) };
+    const sunControlB = { x: SCENE_WIDTH * 0.73, y: SCENE_HEIGHT * 0.08 };
+    const sunPhase = smooth(clamp(currentProgress / 0.34, 0, 1));
+    const sunPoint = cubicPoint(logoStart, sunControlA, sunControlB, sunEnd, sunPhase);
+    placeOrb(sun, sunPoint, currentProgress <= 0.38);
+
+    const moonStart = { x: SCENE_WIDTH * 0.08, y: SCENE_HEIGHT * 0.66 };
+    const moonEnd = { x: SCENE_WIDTH * 0.92, y: SCENE_HEIGHT * 0.69 };
+    const moonPhase = smooth(clamp((currentProgress - 0.29) / 0.47, 0, 1));
+    const moonPoint = cubicPoint(moonStart, { x: SCENE_WIDTH * 0.24, y: SCENE_HEIGHT * 0.06 }, { x: SCENE_WIDTH * 0.68, y: SCENE_HEIGHT * 0.06 }, moonEnd, moonPhase);
+    placeOrb(moon, moonPoint, currentProgress >= 0.27 && currentProgress <= 0.78);
+
     foreground.style.filter = `brightness(${(1 - nightLevel * 0.62).toFixed(3)}) saturate(${(1 - nightLevel * 0.24 + warmth * 0.22).toFixed(3)}) sepia(${(warmth * 0.2).toFixed(3)}) hue-rotate(${(-warmth * 8).toFixed(2)}deg)`;
     effects.style.setProperty("--night", nightLevel.toFixed(3));
     document.documentElement.style.setProperty("--cinematic-night", nightLevel.toFixed(3));
     document.documentElement.style.setProperty("--panel-alpha", (0.18 + nightLevel * 0.4).toFixed(3));
+    if (debugEnabled) {
+      debugSunPath?.setAttribute("d", `M ${logoStart.x.toFixed(1)} ${logoStart.y.toFixed(1)} C ${sunControlA.x.toFixed(1)} ${sunControlA.y.toFixed(1)} ${sunControlB.x.toFixed(1)} ${sunControlB.y.toFixed(1)} ${sunEnd.x.toFixed(1)} ${sunEnd.y.toFixed(1)}`);
+      scene.querySelector(".debug-sun-center")?.setAttribute("transform", `translate(${sunPoint.x} ${sunPoint.y})`);
+      scene.querySelector(".debug-moon-center")?.setAttribute("transform", `translate(${moonPoint.x} ${moonPoint.y})`);
+      const cropX = (SCENE_WIDTH * sceneScale - window.innerWidth) / 2;
+      const cropY = (SCENE_HEIGHT * sceneScale - window.innerHeight) / 2;
+      debugHud.textContent = `progress ${currentProgress.toFixed(4)}\nscene ${SCENE_WIDTH}x${SCENE_HEIGHT}\nscale ${sceneScale.toFixed(5)}\ncrop ${cropX.toFixed(1)}, ${cropY.toFixed(1)}\nlogo ${logoStart.x.toFixed(1)}, ${logoStart.y.toFixed(1)}\nsun ${sunPoint.x.toFixed(1)}, ${sunPoint.y.toFixed(1)}\nmoon ${moonPoint.x.toFixed(1)}, ${moonPoint.y.toFixed(1)}`;
+    }
   };
 
-  render();
-  window.addEventListener("resize", render, { passive: true });
-  window.addEventListener("scroll", render, { passive: true });
+  const stopIdle = () => {
+    effects.classList.remove("is-sun-idle");
+    window.clearTimeout(idleTimer);
+    if (!reducedMotion && window.scrollY < 2) {
+      idleTimer = window.setTimeout(() => effects.classList.add("is-sun-idle"), 220);
+    }
+  };
+  window.addEventListener("scroll", () => {
+    stopIdle();
+    render();
+  }, { passive: true });
+  window.addEventListener("resize", measureScene, { passive: true });
+  window.addEventListener("load", measureScene, { once: true });
+  document.querySelector(".cinematic-logo")?.addEventListener("load", measureScene, { once: true });
+  Promise.all(Object.values(scenes).concat(foreground).map((image) => image.decode?.().catch(() => undefined))).then(measureScene);
+  measureScene();
+  stopIdle();
 }
 
 function initCinematicHeader() {

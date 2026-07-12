@@ -2827,7 +2827,6 @@ h1,h2,h3,.brand-name,.status-value,.showcase-number,.step-number,.timeline-time{
 }
 
 @media(max-width:560px){
-  .cinematic-orb{width:clamp(64px,18vw,92px)}
   .page-section{padding-top:68px;padding-bottom:68px}
   .hero{background-position:70% center}
   .hero-copy{background:rgba(5,14,10,.84)}
@@ -2838,7 +2837,7 @@ h1,h2,h3,.brand-name,.status-value,.showcase-number,.step-number,.timeline-time{
 }
 
 @media(prefers-reduced-motion:reduce){
-  .cinematic-sun{animation:none}
+  .cinematic-sun .cinematic-orb-disc{animation:none!important}
   .hero::after,.bg::before,.bg::after{animation:none}
 }
 
@@ -3572,7 +3571,6 @@ h1,h2,h3,
 .world-effects.cinematic-world::before{display:none}
 
 .cinematic-sky,
-.cinematic-celestial,
 .cinematic-terrain,
 .cinematic-sunrise-terrain,
 .cinematic-sunset-terrain,
@@ -3582,6 +3580,14 @@ h1,h2,h3,
   inset:0;
   width:100%;
   height:100%;
+}
+
+.cinematic-scene{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform-origin:center center;
+  will-change:transform;
 }
 
 .cinematic-sky{
@@ -3643,6 +3649,10 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
 }
 
 .cinematic-celestial{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
   z-index:4;
   pointer-events:none;
 }
@@ -3653,47 +3663,23 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
   z-index:5;
   width:100%;
   height:100%;
-  object-fit:cover;
-  object-position:center center;
-  transform:scale(1.012);
-  transform-origin:center;
   pointer-events:none;
-  -webkit-mask-image:url("minecraft-terrain-mask-v1.png");
-  -webkit-mask-position:center;
-  -webkit-mask-size:cover;
-  -webkit-mask-repeat:no-repeat;
-  mask-image:url("minecraft-terrain-mask-v1.png");
-  mask-position:center;
-  mask-size:cover;
-  mask-repeat:no-repeat;
   transition:filter .08s linear;
 }
 
 .cinematic-terrain{
   z-index:0;
-  object-fit:cover;
-  object-position:center center;
-  transform:scale(1.012);
-  transform-origin:center;
   transition:filter .08s linear;
 }
 
 .cinematic-night-terrain{
   z-index:3;
-  object-fit:cover;
-  object-position:center center;
-  transform:scale(1.012);
-  transform-origin:center;
   transition:opacity .08s linear,filter .08s linear;
 }
 
 .cinematic-sunrise-terrain,
 .cinematic-sunset-terrain{
   z-index:1;
-  object-fit:cover;
-  object-position:center center;
-  transform:scale(1.012);
-  transform-origin:center;
   transition:opacity .08s linear,filter .08s linear;
 }
 
@@ -3706,33 +3692,51 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
 
 .cinematic-orb{
   position:absolute;
-  left:var(--orb-x,50%);
-  top:var(--orb-y,14%);
+  left:0;
+  top:0;
   z-index:4;
-  width:clamp(82px,8.2vw,148px);
+  width:132px;
+  height:132px;
   aspect-ratio:1;
-  translate:-50% -50%;
   pointer-events:none;
-  will-change:left,top,opacity;
-  transition:opacity .08s linear;
+  will-change:transform;
 }
 
-.cinematic-sun{
+.cinematic-orb[hidden]{display:none}
+
+.cinematic-orb-disc{
+  width:100%;
+  height:100%;
+  translate:-50% -50%;
+  transform-origin:center;
+}
+
+.cinematic-sun .cinematic-orb-disc{
   background:linear-gradient(135deg,rgba(255,255,235,.9) 0 24%,transparent 25%),linear-gradient(315deg,rgba(255,169,40,.72) 0 23%,transparent 24%),#ffe073;
-  border:clamp(7px,.55vw,11px) solid #fff0a7;
+  border:10px solid #fff0a7;
   box-shadow:0 0 24px 10px rgba(255,229,131,.72),0 0 90px 38px rgba(255,139,36,.34);
-  animation:cinematic-sun-glow 3.8s ease-in-out infinite alternate;
 }
 
-.cinematic-moon{
+.cinematic-moon .cinematic-orb-disc{
   background:linear-gradient(90deg,transparent 0 18%,rgba(150,165,192,.52) 19% 36%,transparent 37%),linear-gradient(0deg,transparent 0 56%,rgba(173,188,210,.58) 57% 74%,transparent 75%),#e8eef8;
-  border:clamp(7px,.55vw,11px) solid #f8fbff;
+  border:10px solid #f8fbff;
   box-shadow:0 0 22px 9px rgba(215,229,255,.58),0 0 78px 32px rgba(118,151,226,.26);
 }
 
-@keyframes cinematic-sun-glow{
-  to{filter:brightness(1.08);box-shadow:0 0 31px 13px rgba(255,234,151,.82),0 0 108px 46px rgba(255,139,36,.4)}
+@keyframes cinematic-sun-idle{
+  0%,100%{transform:translateY(0) rotate(-1deg);filter:brightness(1)}
+  50%{transform:translateY(-5px) rotate(1deg);filter:brightness(1.07)}
 }
+
+.is-sun-idle .cinematic-sun .cinematic-orb-disc{animation:cinematic-sun-idle 6.5s ease-in-out infinite}
+
+.scene-debug-svg,.scene-debug-terrain{position:absolute;inset:0;width:100%;height:100%;z-index:8;pointer-events:none}
+.scene-debug-terrain{background:rgba(255,0,170,.24);-webkit-mask:url("minecraft-terrain-mask-v1.png") center/100% 100% no-repeat;mask:url("minecraft-terrain-mask-v1.png") center/100% 100% no-repeat}
+.scene-debug-svg{overflow:visible;border:3px solid #00ffbb}
+.scene-debug-svg path{fill:none;stroke-width:5;stroke-dasharray:14 9}
+.debug-sun-path{stroke:#ffdf42}.debug-moon-path{stroke:#8fe5ff}
+.debug-sun-center{fill:#ffdf42}.debug-moon-center{fill:#8fe5ff}
+.scene-debug-hud{position:fixed;top:12px;right:12px;z-index:9999;margin:0;padding:12px 14px;color:#dff;background:rgba(0,0,0,.82);border:1px solid #00ffbb;font:12px/1.45 ui-monospace,monospace;pointer-events:none}
 
 .world-water,
 .world-meadow{display:none}
@@ -3966,7 +3970,6 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
 }
 
 @media(max-width:620px){
-  .cinematic-terrain,.cinematic-sunrise-terrain,.cinematic-sunset-terrain,.cinematic-night-terrain{object-position:42% center}
   .cinematic-logo{width:78px;height:78px}
   .cinematic-hero-copy h1{font-size:clamp(2.8rem,13vw,3.25rem);line-height:.9}
   .cinematic-hero-copy h1 strong{margin-top:12px}
