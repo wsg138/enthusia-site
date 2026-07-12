@@ -271,11 +271,6 @@ function initMobileNavigation() {
 
   const panel = document.createElement("div");
   panel.className = "mobile-nav-panel";
-  const closeButton = document.createElement("button");
-  closeButton.className = "mobile-nav-close";
-  closeButton.type = "button";
-  closeButton.setAttribute("aria-label", "Close navigation");
-  closeButton.textContent = "Close";
 
   const mainPanel = document.createElement("div");
   mainPanel.className = "mobile-nav-view mobile-nav-main";
@@ -336,7 +331,7 @@ function initMobileNavigation() {
 
   mainPanel.append(mainTitle, mainLinks, externalActions);
   communityPanel.append(backButton, communityTitle, communityLinks);
-  panel.append(closeButton, mainPanel, communityPanel);
+  panel.append(mainPanel, communityPanel);
   overlay.append(panel);
   document.body.append(overlay);
 
@@ -418,16 +413,20 @@ function initMobileNavigation() {
   };
 
   toggle.addEventListener("click", () => isOpen ? closeMenu() : openMenu());
-  closeButton.addEventListener("click", () => closeMenu());
   communityButton?.addEventListener("click", showCommunityPanel);
   backButton.addEventListener("click", () => showMainPanel(true));
   overlay.addEventListener("click", (event) => {
     if (event.target === overlay) closeMenu();
     if (event.target.closest("a")) closeMenu({ restoreFocus: false, immediate: true });
   });
-  overlay.addEventListener("keydown", (event) => {
+  document.addEventListener("keydown", (event) => {
+    if (!isOpen) return;
+    if (event.key === "Escape") {
+      closeMenu();
+      return;
+    }
     if (event.key !== "Tab") return;
-    const items = [closeButton, ...focusableItems()];
+    const items = [toggle, ...focusableItems()];
     const first = items[0];
     const last = items[items.length - 1];
     if (event.shiftKey && document.activeElement === first) {
@@ -437,9 +436,6 @@ function initMobileNavigation() {
       event.preventDefault();
       first.focus();
     }
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && isOpen) closeMenu();
   });
   window.addEventListener("popstate", () => closeMenu({ restoreFocus: false, immediate: true }));
   window.addEventListener("pagehide", () => closeMenu({ restoreFocus: false, immediate: true }));

@@ -3569,13 +3569,6 @@ h1,h2,h3,
     --mobile-nav-panel-space:22px;
     padding:var(--mobile-nav-panel-space);
   }
-  .mobile-nav-panel .mobile-nav-close{
-    top:var(--mobile-nav-panel-space);
-    right:var(--mobile-nav-panel-space);
-    min-height:38px;
-    padding:7px 11px;
-  }
-  .mobile-nav-panel .mobile-nav-kicker{margin-right:92px}
 }
 
 @media(max-width:380px){.mobile-nav-panel{--mobile-nav-panel-space:18px}}
@@ -4147,14 +4140,6 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
     padding:var(--mobile-nav-panel-space);
   }
 
-  .mobile-nav-close{
-    top:var(--mobile-nav-panel-space);
-    right:var(--mobile-nav-panel-space);
-    min-height:38px;
-    padding:7px 11px;
-  }
-
-  .mobile-nav-kicker{margin-right:92px}
   .mobile-nav-external-actions{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -4180,7 +4165,8 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
   }
 
   .mobile-nav-external-actions small{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;opacity:.67}
-  .mobile-nav-external-actions .mobile-nav-store{border-color:rgba(255,138,32,.42);background:rgba(255,112,24,.14)}
+  .mobile-nav-external-actions .mobile-nav-store{border-color:rgba(190,164,108,.5);background:rgba(12,13,15,.92);box-shadow:none}
+  .mobile-nav-external-actions .mobile-nav-store small{color:#cdb47a;opacity:.9}
   .mobile-nav-external-actions .mobile-nav-discord{border-color:rgba(126,139,255,.42);background:rgba(88,101,242,.16)}
 
   .home-page .site-footer{
@@ -4274,23 +4260,9 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
 
   .mobile-nav-overlay.is-open .mobile-nav-panel{transform:scale(1)}
 
-  .mobile-nav-close{
-    position:absolute;
-    top:14px;
-    right:14px;
-    min-height:34px;
-    padding:7px 11px;
-    border:1px solid rgba(255,211,106,.22);
-    border-radius:9px;
-    color:var(--text);
-    background:rgba(255,255,255,.05);
-    font-weight:800;
-    cursor:pointer;
-  }
-
   .mobile-nav-view{animation:mobile-nav-panel-in .14s ease both}
   .mobile-nav-kicker{
-    margin:0 70px 15px 0;
+    margin:0 0 15px;
     color:#91bd70;
     font-size:.76rem;
     font-weight:900;
