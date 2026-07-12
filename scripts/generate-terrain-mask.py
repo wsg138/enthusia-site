@@ -29,18 +29,42 @@ for x in range(width):
 
 while queue:
     y, x = queue.popleft()
-    for next_y, next_x in ((y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1)):
+    for next_y, next_x in (
+        (y - 1, x - 1), (y - 1, x), (y - 1, x + 1),
+        (y, x - 1), (y, x + 1),
+        (y + 1, x - 1), (y + 1, x), (y + 1, x + 1),
+    ):
         if 0 <= next_y < height and 0 <= next_x < width and solid[next_y, next_x] and not connected[next_y, next_x]:
             connected[next_y, next_x] = True
             queue.append((next_y, next_x))
 
-# Collapse the connected terrain to one exact skyline per source-image column.
-# Filling below that skyline produces a stable occlusion matte even over water.
-alpha = np.zeros((height, width), dtype=np.uint8)
+# Preserve blue-toned pixels enclosed inside terrain while leaving real sky gaps
+# connected to the top edge transparent. This avoids holes in snowy/shadowed
+# mountain faces without filling the open spaces around tree branches.
+exterior_sky = np.zeros((height, width), dtype=bool)
+queue.clear()
 for x in range(width):
-    rows = np.flatnonzero(connected[:, x])
-    if rows.size:
-        alpha[rows[0]:, x] = 255
+    if sky[0, x]:
+        exterior_sky[0, x] = True
+        queue.append((0, x))
+
+while queue:
+    y, x = queue.popleft()
+    for next_y, next_x in (
+        (y - 1, x - 1), (y - 1, x), (y - 1, x + 1),
+        (y, x - 1), (y, x + 1),
+        (y + 1, x - 1), (y + 1, x), (y + 1, x + 1),
+    ):
+        if 0 <= next_y < height and 0 <= next_x < width and sky[next_y, next_x] and not exterior_sky[next_y, next_x]:
+            exterior_sky[next_y, next_x] = True
+            queue.append((next_y, next_x))
+
+terrain = connected | (sky & ~exterior_sky)
+terrain_image = Image.fromarray(terrain.astype(np.uint8) * 255, mode="L")
+# Close small classification holes in stone, snow, and shadowed terrain while
+# preserving the much larger true sky openings around tree trunks and branches.
+terrain_image = terrain_image.filter(ImageFilter.MaxFilter(15)).filter(ImageFilter.MinFilter(15))
+alpha = np.asarray(terrain_image)
 
 rgba = np.full((height, width, 4), 255, dtype=np.uint8)
 soft_alpha = np.asarray(Image.fromarray(alpha, mode="L").filter(ImageFilter.GaussianBlur(0.65)))

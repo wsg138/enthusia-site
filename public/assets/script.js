@@ -1468,7 +1468,7 @@ function initWorldEffects() {
   celestial.append(sun, moon);
   const foreground = document.createElement("img");
   foreground.className = "cinematic-foreground";
-  foreground.src = "assets/minecraft-terrain-foreground-v1.png";
+  foreground.src = "assets/minecraft-terrain-foreground-v1.png?v=2";
   foreground.alt = "";
   foreground.decoding = "async";
   const vignette = document.createElement("div");
@@ -1479,6 +1479,18 @@ function initWorldEffects() {
   document.body.prepend(effects);
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const smooth = (value) => value * value * (3 - 2 * value);
+  const mixColor = (from, to, amount) => `rgb(${from.map((channel, index) => Math.round(channel + (to[index] - channel) * amount)).join(",")})`;
+  const ambientPalettes = {
+    day: [[66, 157, 214], [102, 181, 219], [24, 55, 47]],
+    sunset: [[43, 31, 72], [171, 77, 76], [38, 31, 28]],
+    night: [[3, 9, 27], [8, 27, 55], [8, 22, 22]],
+    sunrise: [[68, 45, 78], [186, 100, 87], [42, 34, 29]]
+  };
+  const setAmbient = (from, to, amount) => {
+    effects.style.setProperty("--scene-edge-top", mixColor(from[0], to[0], amount));
+    effects.style.setProperty("--scene-edge-mid", mixColor(from[1], to[1], amount));
+    effects.style.setProperty("--scene-edge-bottom", mixColor(from[2], to[2], amount));
+  };
   const cubicPoint = (start, controlA, controlB, end, progress) => {
     const inverse = 1 - progress;
     return {
@@ -1526,7 +1538,7 @@ function initWorldEffects() {
   }
 
   const measureScene = () => {
-    sceneScale = Math.max(window.innerWidth / SCENE_WIDTH, window.innerHeight / SCENE_HEIGHT);
+    sceneScale = window.innerHeight / SCENE_HEIGHT;
     scene.style.transform = `translate(-50%,-50%) scale(${sceneScale})`;
     const logo = document.querySelector(".cinematic-logo");
     if (logo) {
@@ -1548,23 +1560,28 @@ function initWorldEffects() {
     if (currentProgress < 0.28) {
       const amount = smooth(clamp((currentProgress - 0.06) / 0.22, 0, 1));
       setTransition(scenes.day, scenes.sunset, amount);
+      setAmbient(ambientPalettes.day, ambientPalettes.sunset, amount);
       warmth = amount;
     } else if (currentProgress < 0.4) {
       const amount = smooth((currentProgress - 0.28) / 0.12);
       setTransition(scenes.sunset, scenes.night, amount);
+      setAmbient(ambientPalettes.sunset, ambientPalettes.night, amount);
       warmth = 1 - amount;
       nightLevel = amount;
     } else if (currentProgress < 0.66) {
       setTransition(scenes.night, scenes.night, 0);
+      setAmbient(ambientPalettes.night, ambientPalettes.night, 0);
       nightLevel = 1;
     } else if (currentProgress < 0.82) {
       const amount = smooth((currentProgress - 0.66) / 0.16);
       setTransition(scenes.night, scenes.sunrise, amount);
+      setAmbient(ambientPalettes.night, ambientPalettes.sunrise, amount);
       warmth = amount;
       nightLevel = 1 - amount;
     } else {
       const amount = smooth((currentProgress - 0.82) / 0.18);
       setTransition(scenes.sunrise, scenes.day, amount);
+      setAmbient(ambientPalettes.sunrise, ambientPalettes.day, amount);
       warmth = 1 - amount;
     }
 
