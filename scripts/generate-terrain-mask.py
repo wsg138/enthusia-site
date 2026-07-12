@@ -26,6 +26,7 @@ red, green, blue = rgb[..., 0], rgb[..., 1], rgb[..., 2]
 # silhouette as the base for this pass instead of broadly re-segmenting it.
 sky = (blue > red * 1.04) & (blue > green * 0.88) & (blue - red > 12)
 terrain_image = Image.open(BASE_FOREGROUND).convert("RGBA").getchannel("A")
+source_alpha = np.asarray(terrain_image).copy()
 
 
 def close_region(image, box, size):
@@ -45,9 +46,9 @@ close_region(terrain_image, (1070, 430, 1672, 941), 61)
 
 alpha = np.asarray(terrain_image).copy()
 
-# Re-open true blue/cyan sky pixels inside the three foreground canopies after
-# morphology. This targeted subtraction preserves solid leaves and branches but
-# prevents enclosed daytime sky from being baked into the foreground cutout.
+# Re-open only gaps that were already transparent in the established foreground.
+# Colour alone cannot determine alpha here: cyan leaf highlights are still solid
+# foliage, especially when the moon makes small classification errors obvious.
 for left, top, right, bottom in (
     (0, 330, 245, 650),
     (1180, 360, 1435, 570),
@@ -55,7 +56,8 @@ for left, top, right, bottom in (
 ):
     region_sky = sky[top:bottom, left:right]
     alpha_region = alpha[top:bottom, left:right]
-    alpha_region[region_sky] = 0
+    source_region = source_alpha[top:bottom, left:right]
+    alpha_region[region_sky & (source_region == 0)] = 0
 
 rgba = np.full((height, width, 4), 255, dtype=np.uint8)
 soft_alpha = np.asarray(Image.fromarray(alpha, mode="L").filter(ImageFilter.GaussianBlur(0.65)))

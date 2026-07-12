@@ -285,6 +285,9 @@ function initMobileNavigation() {
   mainTitle.textContent = "Menu";
   const mainLinks = document.createElement("div");
   mainLinks.className = "mobile-nav-links";
+  const externalActions = document.createElement("div");
+  externalActions.className = "mobile-nav-external-actions";
+  externalActions.setAttribute("aria-label", "External links");
 
   const communityPanel = document.createElement("div");
   communityPanel.className = "mobile-nav-view mobile-nav-community";
@@ -308,7 +311,17 @@ function initMobileNavigation() {
 
   [...nav.children].forEach((item) => {
     if (item.matches("a")) {
-      mainLinks.append(cloneLink(item));
+      const clonedLink = cloneLink(item);
+      const target = item.dataset.linkTarget;
+      if (target === "store" || target === "discord") {
+        clonedLink.classList.add(`mobile-nav-${target}`);
+        const externalLabel = document.createElement("small");
+        externalLabel.textContent = "External ↗";
+        clonedLink.append(externalLabel);
+        externalActions.append(clonedLink);
+      } else {
+        mainLinks.append(clonedLink);
+      }
       return;
     }
     if (!item.matches(".nav-dropdown")) return;
@@ -321,7 +334,7 @@ function initMobileNavigation() {
     item.querySelectorAll(".nav-menu a").forEach((link) => communityLinks.append(cloneLink(link)));
   });
 
-  mainPanel.append(mainTitle, mainLinks);
+  mainPanel.append(mainTitle, mainLinks, externalActions);
   communityPanel.append(backButton, communityTitle, communityLinks);
   panel.append(closeButton, mainPanel, communityPanel);
   overlay.append(panel);
@@ -1597,7 +1610,7 @@ function initWorldEffects() {
   const foregrounds = Object.fromEntries(sceneDefinitions.map(([name]) => {
     const image = document.createElement("img");
     image.className = `cinematic-foreground cinematic-foreground-${name}`;
-    image.src = `assets/minecraft-terrain-foreground-${name}-v1.png?v=6`;
+    image.src = `assets/minecraft-terrain-foreground-${name}-v1.png?v=7`;
     image.alt = "";
     image.decoding = "async";
     return [name, image];
