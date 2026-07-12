@@ -3706,7 +3706,7 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
   width:100%;
   height:100%;
   pointer-events:none;
-  transition:filter .08s linear;
+  transition:opacity .08s linear;
 }
 
 .cinematic-terrain{
@@ -3772,8 +3772,9 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
 
 .is-sun-idle .cinematic-sun .cinematic-orb-disc{animation:cinematic-sun-idle 6.5s ease-in-out infinite}
 
-.scene-debug-svg,.scene-debug-terrain{position:absolute;inset:0;width:100%;height:100%;z-index:8;pointer-events:none}
-.scene-debug-terrain{background:rgba(255,0,170,.24);-webkit-mask:url("minecraft-terrain-mask-v1.png?v=3") center/100% 100% no-repeat;mask:url("minecraft-terrain-mask-v1.png?v=3") center/100% 100% no-repeat}
+.scene-debug-svg,.scene-debug-terrain,.scene-debug-sky{position:absolute;inset:0;width:100%;height:100%;z-index:8;pointer-events:none}
+.scene-debug-terrain{background:rgba(255,0,170,.24);-webkit-mask:url("minecraft-terrain-mask-v1.png?v=6") center/100% 100% no-repeat;mask:url("minecraft-terrain-mask-v1.png?v=6") center/100% 100% no-repeat}
+.scene-debug-sky{background:rgba(0,255,255,.28);-webkit-mask:url("minecraft-sky-mask-v1.png?v=6") center/100% 100% no-repeat;mask:url("minecraft-sky-mask-v1.png?v=6") center/100% 100% no-repeat}
 .scene-debug-svg{overflow:visible;border:3px solid #00ffbb}
 .scene-debug-svg path{fill:none;stroke-width:5;stroke-dasharray:14 9}
 .debug-sun-path{stroke:#ffdf42}.debug-moon-path{stroke:#8fe5ff}
@@ -4012,6 +4013,10 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
 }
 
 @media(max-width:620px){
+  .cinematic-terrain,.cinematic-sunrise-terrain,.cinematic-sunset-terrain,.cinematic-night-terrain{
+    -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 24%,#000 100%);
+    mask-image:linear-gradient(180deg,transparent 0,#000 24%,#000 100%);
+  }
   .cinematic-logo{width:78px;height:78px}
   .cinematic-hero-copy h1{font-size:clamp(2.8rem,13vw,3.25rem);line-height:.9}
   .cinematic-hero-copy h1 strong{margin-top:12px}

@@ -1453,6 +1453,14 @@ function initWorldEffects() {
     scene.append(image);
     return [name, image];
   }));
+  const foregrounds = Object.fromEntries(sceneDefinitions.map(([name]) => {
+    const image = document.createElement("img");
+    image.className = `cinematic-foreground cinematic-foreground-${name}`;
+    image.src = `assets/minecraft-terrain-foreground-${name}-v1.png?v=6`;
+    image.alt = "";
+    image.decoding = "async";
+    return [name, image];
+  }));
   const createOrb = (name) => {
     const orb = document.createElement("div");
     orb.className = `cinematic-orb cinematic-${name}`;
@@ -1466,14 +1474,9 @@ function initWorldEffects() {
   const celestial = document.createElement("div");
   celestial.className = "cinematic-celestial";
   celestial.append(sun, moon);
-  const foreground = document.createElement("img");
-  foreground.className = "cinematic-foreground";
-  foreground.src = "assets/minecraft-terrain-foreground-v1.png?v=3";
-  foreground.alt = "";
-  foreground.decoding = "async";
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
-  scene.append(celestial, foreground, vignette);
+  scene.append(celestial, ...Object.values(foregrounds), vignette);
   effects.append(scene);
 
   document.body.prepend(effects);
@@ -1507,20 +1510,25 @@ function initWorldEffects() {
     orb.style.transform = `translate3d(${point.x.toFixed(2)}px,${point.y.toFixed(2)}px,0)`;
     orb.hidden = !visible;
   };
-  const setTransition = (from, to, amount) => {
-    Object.values(scenes).forEach((image) => {
+  const setTransition = (layers, fromName, toName, amount, baseZ = 0) => {
+    Object.values(layers).forEach((image) => {
       image.style.opacity = "0";
-      image.style.zIndex = "0";
+      image.style.zIndex = `${baseZ}`;
     });
+    const from = layers[fromName];
+    const to = layers[toName];
     from.style.opacity = "1";
-    from.style.zIndex = "1";
+    from.style.zIndex = `${baseZ + 1}`;
     if (from === to) return;
     to.style.opacity = amount.toFixed(3);
-    to.style.zIndex = "2";
+    to.style.zIndex = `${baseZ + 2}`;
   };
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const debugEnabled = new URLSearchParams(window.location.search).get("sceneDebug") === "1";
+  const debugLayer = new URLSearchParams(window.location.search).get("debugLayer") || "all";
   let sceneScale = 1;
+  let sceneOrigin = { x: 0, y: 0 };
+  let mobileCamera = false;
   let logoStart = { x: SCENE_WIDTH * 0.5, y: SCENE_HEIGHT * 0.2 };
   let idleTimer = 0;
   let currentProgress = 0;
@@ -1531,26 +1539,40 @@ function initWorldEffects() {
     effects.classList.add("is-scene-debug");
     const debugTerrain = document.createElement("div");
     debugTerrain.className = "scene-debug-terrain";
+    const debugSky = document.createElement("div");
+    debugSky.className = "scene-debug-sky";
     const debugSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     debugSvg.classList.add("scene-debug-svg");
     debugSvg.setAttribute("viewBox", `0 0 ${SCENE_WIDTH} ${SCENE_HEIGHT}`);
     debugSvg.innerHTML = `<path class="debug-sun-path"/><path class="debug-moon-path" d="M 134 620 C 330 65 1110 65 1538 650"/><circle class="debug-sun-center" r="8"/><circle class="debug-moon-center" r="8"/>`;
     debugSunPath = debugSvg.querySelector(".debug-sun-path");
-    scene.append(debugTerrain, debugSvg);
+    scene.append(debugTerrain, debugSky, debugSvg);
+    debugTerrain.hidden = debugLayer === "sky";
+    debugSky.hidden = debugLayer !== "sky";
     debugHud = document.createElement("pre");
     debugHud.className = "scene-debug-hud";
     effects.append(debugHud);
   }
 
   const measureScene = () => {
-    sceneScale = window.innerHeight / SCENE_HEIGHT;
-    scene.style.transform = `translate(-50%,-50%) scale(${sceneScale})`;
+    mobileCamera = window.innerWidth <= 620 && window.innerHeight > window.innerWidth;
+    sceneScale = mobileCamera
+      ? clamp((window.innerWidth / SCENE_WIDTH) * 2.05, 0.43, 0.56)
+      : window.innerHeight / SCENE_HEIGHT;
+    sceneOrigin = mobileCamera
+      ? { x: (window.innerWidth - SCENE_WIDTH * sceneScale) / 2, y: window.innerHeight - SCENE_HEIGHT * sceneScale }
+      : { x: (window.innerWidth - SCENE_WIDTH * sceneScale) / 2, y: (window.innerHeight - SCENE_HEIGHT * sceneScale) / 2 };
+    scene.style.left = `${sceneOrigin.x}px`;
+    scene.style.top = `${sceneOrigin.y}px`;
+    scene.style.bottom = "auto";
+    scene.style.transformOrigin = "top left";
+    scene.style.transform = `scale(${sceneScale})`;
     const logo = document.querySelector(".cinematic-logo");
     if (logo) {
       const bounds = logo.getBoundingClientRect();
       logoStart = {
-        x: (bounds.left + bounds.width / 2 + 6 - window.innerWidth / 2) / sceneScale + SCENE_WIDTH / 2,
-        y: (bounds.top + bounds.height / 2 - 28 - window.innerHeight / 2) / sceneScale + SCENE_HEIGHT / 2
+        x: (bounds.left + bounds.width / 2 + 6 - sceneOrigin.x) / sceneScale,
+        y: (bounds.top + bounds.height / 2 - 28 - sceneOrigin.y) / sceneScale
       };
     }
     render();
@@ -1562,53 +1584,71 @@ function initWorldEffects() {
     currentProgress = Number.isFinite(testProgress) ? clamp(testProgress, 0, 1) : clamp(window.scrollY / maximum, 0, 1);
     let nightLevel = 0;
     let warmth = 0;
+    let phaseBlend = { from: "day", to: "day", amount: 0 };
     if (currentProgress < 0.28) {
       const amount = smooth(clamp((currentProgress - 0.06) / 0.22, 0, 1));
-      setTransition(scenes.day, scenes.sunset, amount);
+      setTransition(scenes, "day", "sunset", amount);
+      setTransition(foregrounds, "day", "sunset", amount, 5);
+      phaseBlend = { from: "day", to: "sunset", amount };
       setAmbient(ambientPalettes.day, ambientPalettes.sunset, amount);
       setEdgeScene("minecraft-day-valley-v1.png", "minecraft-sunset-right-v1.png", amount);
       warmth = amount;
     } else if (currentProgress < 0.4) {
       const amount = smooth((currentProgress - 0.28) / 0.12);
-      setTransition(scenes.sunset, scenes.night, amount);
+      setTransition(scenes, "sunset", "night", amount);
+      setTransition(foregrounds, "sunset", "night", amount, 5);
+      phaseBlend = { from: "sunset", to: "night", amount };
       setAmbient(ambientPalettes.sunset, ambientPalettes.night, amount);
       setEdgeScene("minecraft-sunset-right-v1.png", "minecraft-night-valley-v3.png", amount);
       warmth = 1 - amount;
       nightLevel = amount;
     } else if (currentProgress < 0.66) {
-      setTransition(scenes.night, scenes.night, 0);
+      setTransition(scenes, "night", "night", 0);
+      setTransition(foregrounds, "night", "night", 0, 5);
+      phaseBlend = { from: "night", to: "night", amount: 0 };
       setAmbient(ambientPalettes.night, ambientPalettes.night, 0);
       setEdgeScene("minecraft-night-valley-v3.png");
       nightLevel = 1;
     } else if (currentProgress < 0.82) {
       const amount = smooth((currentProgress - 0.66) / 0.16);
-      setTransition(scenes.night, scenes.sunrise, amount);
+      setTransition(scenes, "night", "sunrise", amount);
+      setTransition(foregrounds, "night", "sunrise", amount, 5);
+      phaseBlend = { from: "night", to: "sunrise", amount };
       setAmbient(ambientPalettes.night, ambientPalettes.sunrise, amount);
       setEdgeScene("minecraft-night-valley-v3.png", "minecraft-sunrise-left-v1.png", amount);
       warmth = amount;
       nightLevel = 1 - amount;
     } else {
       const amount = smooth((currentProgress - 0.82) / 0.18);
-      setTransition(scenes.sunrise, scenes.day, amount);
+      setTransition(scenes, "sunrise", "day", amount);
+      setTransition(foregrounds, "sunrise", "day", amount, 5);
+      phaseBlend = { from: "sunrise", to: "day", amount };
       setAmbient(ambientPalettes.sunrise, ambientPalettes.day, amount);
       setEdgeScene("minecraft-sunrise-left-v1.png", "minecraft-day-valley-v1.png", amount);
       warmth = 1 - amount;
     }
 
-    const sunEnd = { x: SCENE_WIDTH * 0.88, y: SCENE_HEIGHT * 0.69 };
-    const sunControlA = { x: Math.max(logoStart.x + 210, SCENE_WIDTH * 0.52), y: Math.max(68, logoStart.y - 190) };
-    const sunControlB = { x: SCENE_WIDTH * 0.73, y: SCENE_HEIGHT * 0.08 };
+    const screenToScene = (x, y) => ({ x: (x - sceneOrigin.x) / sceneScale, y: (y - sceneOrigin.y) / sceneScale });
+    const sunEnd = mobileCamera ? { x: 1190, y: 575 } : { x: SCENE_WIDTH * 0.88, y: SCENE_HEIGHT * 0.69 };
+    const sunControlA = mobileCamera ? screenToScene(window.innerWidth * 0.55, window.innerHeight * 0.07) : { x: Math.max(logoStart.x + 210, SCENE_WIDTH * 0.52), y: Math.max(68, logoStart.y - 190) };
+    const sunControlB = mobileCamera ? screenToScene(window.innerWidth * 0.72, window.innerHeight * 0.2) : { x: SCENE_WIDTH * 0.73, y: SCENE_HEIGHT * 0.08 };
     const sunPhase = smooth(clamp(currentProgress / 0.34, 0, 1));
     const sunPoint = cubicPoint(logoStart, sunControlA, sunControlB, sunEnd, sunPhase);
     placeOrb(sun, sunPoint, currentProgress <= 0.38);
 
-    const moonStart = { x: SCENE_WIDTH * 0.08, y: SCENE_HEIGHT * 0.66 };
-    const moonEnd = { x: SCENE_WIDTH * 0.92, y: SCENE_HEIGHT * 0.69 };
+    const moonStart = mobileCamera ? { x: 470, y: 610 } : { x: SCENE_WIDTH * 0.08, y: SCENE_HEIGHT * 0.66 };
+    const moonEnd = mobileCamera ? { x: 1200, y: 585 } : { x: SCENE_WIDTH * 0.92, y: SCENE_HEIGHT * 0.69 };
     const moonPhase = smooth(clamp((currentProgress - 0.29) / 0.47, 0, 1));
-    const moonPoint = cubicPoint(moonStart, { x: SCENE_WIDTH * 0.24, y: SCENE_HEIGHT * 0.06 }, { x: SCENE_WIDTH * 0.68, y: SCENE_HEIGHT * 0.06 }, moonEnd, moonPhase);
+    const moonControlA = mobileCamera ? screenToScene(window.innerWidth * 0.24, window.innerHeight * 0.16) : { x: SCENE_WIDTH * 0.24, y: SCENE_HEIGHT * 0.06 };
+    const moonControlB = mobileCamera ? screenToScene(window.innerWidth * 0.7, window.innerHeight * 0.12) : { x: SCENE_WIDTH * 0.68, y: SCENE_HEIGHT * 0.06 };
+    const moonPoint = cubicPoint(moonStart, moonControlA, moonControlB, moonEnd, moonPhase);
     placeOrb(moon, moonPoint, currentProgress >= 0.27 && currentProgress <= 0.78);
 
-    foreground.style.filter = `brightness(${(1 - nightLevel * 0.62).toFixed(3)}) saturate(${(1 - nightLevel * 0.24 + warmth * 0.22).toFixed(3)}) sepia(${(warmth * 0.2).toFixed(3)}) hue-rotate(${(-warmth * 8).toFixed(2)}deg)`;
+    if (debugEnabled && Object.hasOwn(foregrounds, debugLayer)) {
+      Object.entries(foregrounds).forEach(([name, image]) => {
+        image.style.opacity = name === debugLayer ? "1" : "0";
+      });
+    }
     effects.style.setProperty("--night", nightLevel.toFixed(3));
     document.documentElement.style.setProperty("--cinematic-night", nightLevel.toFixed(3));
     document.documentElement.style.setProperty("--panel-alpha", (0.18 + nightLevel * 0.4).toFixed(3));
@@ -1616,9 +1656,9 @@ function initWorldEffects() {
       debugSunPath?.setAttribute("d", `M ${logoStart.x.toFixed(1)} ${logoStart.y.toFixed(1)} C ${sunControlA.x.toFixed(1)} ${sunControlA.y.toFixed(1)} ${sunControlB.x.toFixed(1)} ${sunControlB.y.toFixed(1)} ${sunEnd.x.toFixed(1)} ${sunEnd.y.toFixed(1)}`);
       scene.querySelector(".debug-sun-center")?.setAttribute("transform", `translate(${sunPoint.x} ${sunPoint.y})`);
       scene.querySelector(".debug-moon-center")?.setAttribute("transform", `translate(${moonPoint.x} ${moonPoint.y})`);
-      const cropX = (SCENE_WIDTH * sceneScale - window.innerWidth) / 2;
-      const cropY = (SCENE_HEIGHT * sceneScale - window.innerHeight) / 2;
-      debugHud.textContent = `progress ${currentProgress.toFixed(4)}\nscene ${SCENE_WIDTH}x${SCENE_HEIGHT}\nscale ${sceneScale.toFixed(5)}\ncrop ${cropX.toFixed(1)}, ${cropY.toFixed(1)}\nlogo ${logoStart.x.toFixed(1)}, ${logoStart.y.toFixed(1)}\nsun ${sunPoint.x.toFixed(1)}, ${sunPoint.y.toFixed(1)}\nmoon ${moonPoint.x.toFixed(1)}, ${moonPoint.y.toFixed(1)}`;
+      const cropX = -sceneOrigin.x;
+      const cropY = -sceneOrigin.y;
+      debugHud.textContent = `progress ${currentProgress.toFixed(4)}\nphase ${phaseBlend.from}->${phaseBlend.to} ${phaseBlend.amount.toFixed(3)}\ncamera ${mobileCamera ? "mobile" : "desktop"}\nscene ${SCENE_WIDTH}x${SCENE_HEIGHT}\nscale ${sceneScale.toFixed(5)}\norigin ${sceneOrigin.x.toFixed(1)}, ${sceneOrigin.y.toFixed(1)}\ncrop ${cropX.toFixed(1)}, ${cropY.toFixed(1)}\nlogo ${logoStart.x.toFixed(1)}, ${logoStart.y.toFixed(1)}\nsun ${sunPoint.x.toFixed(1)}, ${sunPoint.y.toFixed(1)}\nmoon ${moonPoint.x.toFixed(1)}, ${moonPoint.y.toFixed(1)}`;
     }
   };
 
@@ -1636,7 +1676,7 @@ function initWorldEffects() {
   window.addEventListener("resize", measureScene, { passive: true });
   window.addEventListener("load", measureScene, { once: true });
   document.querySelector(".cinematic-logo")?.addEventListener("load", measureScene, { once: true });
-  Promise.all(Object.values(scenes).concat(foreground).map((image) => image.decode?.().catch(() => undefined))).then(measureScene);
+  Promise.all([...Object.values(scenes), ...Object.values(foregrounds)].map((image) => image.decode?.().catch(() => undefined))).then(measureScene);
   measureScene();
   stopIdle();
 }

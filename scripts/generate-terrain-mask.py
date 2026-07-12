@@ -1,4 +1,3 @@
-from collections import deque
 from pathlib import Path
 
 import numpy as np
@@ -8,62 +7,25 @@ from PIL import ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "public" / "assets" / "minecraft-day-valley-v1.png"
+BASE_FOREGROUND = ROOT / "public" / "assets" / "minecraft-terrain-foreground-v1.png"
 OUTPUT = ROOT / "public" / "assets" / "minecraft-terrain-mask-v1.png"
-FOREGROUND_OUTPUT = ROOT / "public" / "assets" / "minecraft-terrain-foreground-v1.png"
+SKY_OUTPUT = ROOT / "public" / "assets" / "minecraft-sky-mask-v1.png"
+PHASE_SOURCES = {
+    "day": SOURCE,
+    "sunset": ROOT / "public" / "assets" / "minecraft-sunset-right-v1.png",
+    "night": ROOT / "public" / "assets" / "minecraft-night-valley-v3.png",
+    "sunrise": ROOT / "public" / "assets" / "minecraft-sunrise-left-v1.png",
+}
 
 rgb = np.asarray(Image.open(SOURCE).convert("RGB"), dtype=np.int16)
 height, width, _ = rgb.shape
 red, green, blue = rgb[..., 0], rgb[..., 1], rgb[..., 2]
 
-# The generated scene's sky is blue/cyan. Terrain, snow, trees, and stone are
-# deliberately treated as solid; disconnected white clouds are removed later.
+# The original base mask was produced with bottom-connected solid-pixel flood
+# filling, then repaired around the mountain and tree. Keep that established
+# silhouette as the base for this pass instead of broadly re-segmenting it.
 sky = (blue > red * 1.04) & (blue > green * 0.88) & (blue - red > 12)
-solid = ~sky
-connected = np.zeros((height, width), dtype=bool)
-queue = deque()
-
-for x in range(width):
-    if solid[-1, x]:
-        connected[-1, x] = True
-        queue.append((height - 1, x))
-
-while queue:
-    y, x = queue.popleft()
-    for next_y, next_x in (
-        (y - 1, x - 1), (y - 1, x), (y - 1, x + 1),
-        (y, x - 1), (y, x + 1),
-        (y + 1, x - 1), (y + 1, x), (y + 1, x + 1),
-    ):
-        if 0 <= next_y < height and 0 <= next_x < width and solid[next_y, next_x] and not connected[next_y, next_x]:
-            connected[next_y, next_x] = True
-            queue.append((next_y, next_x))
-
-# Preserve blue-toned pixels enclosed inside terrain while leaving real sky gaps
-# connected to the top edge transparent. This avoids holes in snowy/shadowed
-# mountain faces without filling the open spaces around tree branches.
-exterior_sky = np.zeros((height, width), dtype=bool)
-queue.clear()
-for x in range(width):
-    if sky[0, x]:
-        exterior_sky[0, x] = True
-        queue.append((0, x))
-
-while queue:
-    y, x = queue.popleft()
-    for next_y, next_x in (
-        (y - 1, x - 1), (y - 1, x), (y - 1, x + 1),
-        (y, x - 1), (y, x + 1),
-        (y + 1, x - 1), (y + 1, x), (y + 1, x + 1),
-    ):
-        if 0 <= next_y < height and 0 <= next_x < width and sky[next_y, next_x] and not exterior_sky[next_y, next_x]:
-            exterior_sky[next_y, next_x] = True
-            queue.append((next_y, next_x))
-
-terrain = connected | (sky & ~exterior_sky)
-terrain_image = Image.fromarray(terrain.astype(np.uint8) * 255, mode="L")
-# Close small classification holes in stone, snow, and shadowed terrain while
-# preserving the much larger true sky openings around tree trunks and branches.
-terrain_image = terrain_image.filter(ImageFilter.MaxFilter(15)).filter(ImageFilter.MinFilter(15))
+terrain_image = Image.open(BASE_FOREGROUND).convert("RGBA").getchannel("A")
 
 
 def close_region(image, box, size):
@@ -76,20 +38,40 @@ def close_region(image, box, size):
 # The snowy northwest ridge contains pale blue shadow blocks that sit very close
 # to the sky colour. A slightly stronger local close keeps its stepped outline
 # intact without widening unrelated clouds or distant terrain.
-close_region(terrain_image, (190, 230, 690, 670), 25)
+close_region(terrain_image, (180, 220, 710, 690), 31)
+# Blue-gray stone on the right hillside was mistaken for sky by the original
+# segmentation. Close those local holes without extending the outer ridge.
+close_region(terrain_image, (1070, 430, 1672, 941), 61)
 
-# Retain the real sunset visible between the large branch tiers, while closing
-# tiny false-transparent flecks inside the dense leaves of the foreground pine.
-close_region(terrain_image, (1410, 245, 1605, 545), 23)
-alpha = np.asarray(terrain_image)
+alpha = np.asarray(terrain_image).copy()
+
+# Re-open true blue/cyan sky pixels inside the three foreground canopies after
+# morphology. This targeted subtraction preserves solid leaves and branches but
+# prevents enclosed daytime sky from being baked into the foreground cutout.
+for left, top, right, bottom in (
+    (0, 330, 245, 650),
+    (1180, 360, 1435, 570),
+    (1400, 235, 1672, 505),
+):
+    region_sky = sky[top:bottom, left:right]
+    alpha_region = alpha[top:bottom, left:right]
+    alpha_region[region_sky] = 0
 
 rgba = np.full((height, width, 4), 255, dtype=np.uint8)
 soft_alpha = np.asarray(Image.fromarray(alpha, mode="L").filter(ImageFilter.GaussianBlur(0.65)))
 rgba[..., 3] = soft_alpha
 Image.fromarray(rgba, mode="RGBA").save(OUTPUT, optimize=True)
 
-foreground = np.asarray(Image.open(SOURCE).convert("RGBA")).copy()
-foreground[..., 3] = soft_alpha
-Image.fromarray(foreground, mode="RGBA").save(FOREGROUND_OUTPUT, optimize=True)
+sky_rgba = np.full((height, width, 4), 255, dtype=np.uint8)
+sky_rgba[..., 3] = 255 - soft_alpha
+Image.fromarray(sky_rgba, mode="RGBA").save(SKY_OUTPUT, optimize=True)
+
+for phase, source in PHASE_SOURCES.items():
+    foreground = np.asarray(Image.open(source).convert("RGBA")).copy()
+    foreground[..., 3] = soft_alpha
+    phase_output = ROOT / "public" / "assets" / f"minecraft-terrain-foreground-{phase}-v1.png"
+    Image.fromarray(foreground, mode="RGBA").save(phase_output, optimize=True)
+    print(phase_output)
+
 print(OUTPUT)
-print(FOREGROUND_OUTPUT)
+print(SKY_OUTPUT)
