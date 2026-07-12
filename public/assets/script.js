@@ -324,7 +324,7 @@ function initMobileNavigation() {
     communityButton.className = "mobile-nav-community-trigger";
     communityButton.type = "button";
     communityButton.setAttribute("aria-expanded", "false");
-    communityButton.textContent = "Community";
+    communityButton.innerHTML = "Community <small>More pages ›</small>";
     mainLinks.append(communityButton);
     item.querySelectorAll(".nav-menu a").forEach((link) => communityLinks.append(cloneLink(link)));
   });
