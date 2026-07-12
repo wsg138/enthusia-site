@@ -275,13 +275,53 @@ summary:focus-visible{
 
 .nav-drop-trigger::after{
   content:"";
-  width:0;
-  height:0;
+  width:7px;
+  height:7px;
   margin-left:7px;
-  border-left:4px solid transparent;
-  border-right:4px solid transparent;
-  border-top:5px solid currentColor;
-  opacity:.72;
+  border-right:2px solid #cdb47a;
+  border-bottom:2px solid #cdb47a;
+  transform:translateY(-2px) rotate(45deg);
+  opacity:.9;
+  transition:transform .16s ease,border-color .16s ease;
+}
+
+.nav-dropdown:hover .nav-drop-trigger::after,
+.nav-dropdown:focus-within .nav-drop-trigger::after{
+  border-color:#fff1d5;
+  transform:translateY(2px) rotate(225deg);
+}
+
+.nav > .desktop-external-link{
+  flex-direction:column;
+  justify-content:center;
+  gap:2px;
+  color:#f4ecd8;
+  border-color:rgba(149,139,92,.34);
+  background:rgba(24,29,20,.62);
+}
+
+.nav > .desktop-external-link:hover{
+  color:#fff9e9;
+  border-color:rgba(181,169,108,.7);
+  background:rgba(34,41,28,.78);
+}
+
+.desktop-external-label{
+  color:#c5bd8b;
+  font-size:.48rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  line-height:1;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+
+.nav .nav-menu .desktop-wiki-external{
+  align-items:center;
+}
+
+.nav .nav-menu .desktop-wiki-external .desktop-external-label{
+  margin-left:10px;
 }
 
 .nav-menu{
@@ -4020,7 +4060,26 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
 .home-community-panel .discord-actions{margin-top:0}
 .home-community-panel .discord-join{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:9px;background:#5865f2;color:#fff;font-weight:800;letter-spacing:.02em;box-shadow:0 10px 24px rgba(56,65,194,.28)}
 .home-community-panel .discord-join{font-size:.82rem}
+.home-community-panel .discord-join{
+  width:max-content;
+  min-width:142px;
+  max-width:100%;
+  padding:11px 20px;
+  font-size:clamp(.76rem,.72rem + .12vw,.82rem);
+  line-height:1.15;
+  white-space:nowrap;
+}
 .home-community-panel .discord-join:hover{background:#6b78ff;color:#fff;text-decoration:none;transform:translateY(-1px)}
+
+@media(min-width:901px){
+  .home-live-panel .status-meta{
+    display:grid;
+    grid-template-columns:1.32fr .78fr .8fr .88fr;
+    gap:8px;
+  }
+  .home-live-panel .status-meta > span{grid-column:1/4}
+  .home-live-panel .status-meta > button{grid-column:4;justify-self:end}
+}
 
 .home-page .page-section,
 .home-page .page-section:nth-of-type(even),
@@ -4795,4 +4854,9 @@ h1,h2,h3,
   .hero-panel{padding:16px}
   .discord-card{padding:14px;min-height:0}
   .discord-avatars img{width:30px;height:30px}
+  .home-community-panel .discord-join{min-width:136px;padding-inline:18px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .nav-drop-trigger::after{transition:none}
 }

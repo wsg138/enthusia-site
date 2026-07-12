@@ -301,6 +301,8 @@ function initMobileNavigation() {
   const cloneLink = (link) => {
     const clone = link.cloneNode(true);
     clone.removeAttribute("id");
+    clone.classList.remove("desktop-external-link", "desktop-wiki-external");
+    clone.querySelector(".desktop-external-label")?.remove();
     return clone;
   };
 
@@ -451,6 +453,30 @@ function initMobileNavigation() {
   mobileQuery.addEventListener("change", (event) => {
     if (!event.matches) closeMenu({ restoreFocus: false, immediate: true });
   });
+}
+
+function initDesktopExternalNavigation() {
+  const nav = document.querySelector(".site-header .nav");
+  if (!nav) return;
+
+  nav.querySelectorAll(":scope > a[data-link-target='store'], :scope > a[data-link-target='discord']").forEach((link) => {
+    link.classList.add("desktop-external-link");
+    if (!link.querySelector(".desktop-external-label")) {
+      const label = document.createElement("small");
+      label.className = "desktop-external-label";
+      label.textContent = "External ↗";
+      link.append(label);
+    }
+  });
+
+  const wiki = nav.querySelector(".nav-menu a[data-link-target='wiki']");
+  if (wiki && !wiki.querySelector(".desktop-external-label")) {
+    wiki.classList.add("desktop-wiki-external");
+    const label = document.createElement("small");
+    label.className = "desktop-external-label";
+    label.textContent = "External ↗";
+    wiki.append(label);
+  }
 }
 
 async function fetchServerStatus(ip) {
@@ -1944,6 +1970,7 @@ async function initSite(cfg) {
   setContactEmail(normalizedConfig);
   initWorldEffects();
   initCinematicHeader();
+  initDesktopExternalNavigation();
   initMobileNavigation();
   initReturnToTop();
   initCopyIpButton(normalizedConfig.serverIp);

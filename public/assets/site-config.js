@@ -204,8 +204,8 @@ window.ENTHUSIA = {
     staff: [
       { name: "Fain", username: "FainNeito", role: "Founder" },
       { name: "P2wn", username: "P2wn", role: "Founder" },
-      { name: "Borlyn", username: "Borlyn", role: "Admin" },
       { name: "Sharpmatt", username: "Sharpmatt", role: "Founder" },
+      { name: "Borlyn", username: "Borlyn", role: "Admin" },
       { name: "SarahNova", username: "SarahNovaSpring", role: "Admin" },
       { name: "Badger", username: "BadgersMC", role: "Developer" },
       { name: "Demimeow", username: "Demimeow", role: "Developer" },
