@@ -3573,12 +3573,26 @@ h1,h2,h3,
   content:"";
   position:absolute;
   inset:-24px;
-  background-image:var(--scene-edge-image,url("minecraft-day-valley-v1.png"));
+  z-index:0;
+  background-image:var(--scene-edge-from,url("minecraft-day-valley-v1.png"));
   background-position:center;
   background-size:cover;
   background-repeat:no-repeat;
   filter:blur(18px) brightness(.82) saturate(.92);
   opacity:.88;
+  transform:scale(1.035);
+}
+.world-effects.cinematic-world::after{
+  content:"";
+  position:absolute;
+  inset:-24px;
+  z-index:0;
+  background-image:var(--scene-edge-to,url("minecraft-day-valley-v1.png"));
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  filter:blur(18px) brightness(.82) saturate(.92);
+  opacity:calc(var(--scene-edge-mix,0) * .88);
   transform:scale(1.035);
 }
 
@@ -3605,6 +3619,7 @@ h1,h2,h3,
   position:absolute;
   left:50%;
   top:50%;
+  z-index:1;
   transform-origin:center center;
   will-change:transform;
 }

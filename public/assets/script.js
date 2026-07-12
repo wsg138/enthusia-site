@@ -1491,8 +1491,10 @@ function initWorldEffects() {
     effects.style.setProperty("--scene-edge-mid", mixColor(from[1], to[1], amount));
     effects.style.setProperty("--scene-edge-bottom", mixColor(from[2], to[2], amount));
   };
-  const setEdgeScene = (source) => {
-    effects.style.setProperty("--scene-edge-image", `url("${source}")`);
+  const setEdgeScene = (from, to = from, amount = 0) => {
+    effects.style.setProperty("--scene-edge-from", `url("${from}")`);
+    effects.style.setProperty("--scene-edge-to", `url("${to}")`);
+    effects.style.setProperty("--scene-edge-mix", amount.toFixed(3));
   };
   const cubicPoint = (start, controlA, controlB, end, progress) => {
     const inverse = 1 - progress;
@@ -1564,13 +1566,13 @@ function initWorldEffects() {
       const amount = smooth(clamp((currentProgress - 0.06) / 0.22, 0, 1));
       setTransition(scenes.day, scenes.sunset, amount);
       setAmbient(ambientPalettes.day, ambientPalettes.sunset, amount);
-      setEdgeScene(amount < 0.5 ? "minecraft-day-valley-v1.png" : "minecraft-sunset-right-v1.png");
+      setEdgeScene("minecraft-day-valley-v1.png", "minecraft-sunset-right-v1.png", amount);
       warmth = amount;
     } else if (currentProgress < 0.4) {
       const amount = smooth((currentProgress - 0.28) / 0.12);
       setTransition(scenes.sunset, scenes.night, amount);
       setAmbient(ambientPalettes.sunset, ambientPalettes.night, amount);
-      setEdgeScene(amount < 0.5 ? "minecraft-sunset-right-v1.png" : "minecraft-night-valley-v3.png");
+      setEdgeScene("minecraft-sunset-right-v1.png", "minecraft-night-valley-v3.png", amount);
       warmth = 1 - amount;
       nightLevel = amount;
     } else if (currentProgress < 0.66) {
@@ -1582,14 +1584,14 @@ function initWorldEffects() {
       const amount = smooth((currentProgress - 0.66) / 0.16);
       setTransition(scenes.night, scenes.sunrise, amount);
       setAmbient(ambientPalettes.night, ambientPalettes.sunrise, amount);
-      setEdgeScene(amount < 0.5 ? "minecraft-night-valley-v3.png" : "minecraft-sunrise-left-v1.png");
+      setEdgeScene("minecraft-night-valley-v3.png", "minecraft-sunrise-left-v1.png", amount);
       warmth = amount;
       nightLevel = 1 - amount;
     } else {
       const amount = smooth((currentProgress - 0.82) / 0.18);
       setTransition(scenes.sunrise, scenes.day, amount);
       setAmbient(ambientPalettes.sunrise, ambientPalettes.day, amount);
-      setEdgeScene(amount < 0.5 ? "minecraft-sunrise-left-v1.png" : "minecraft-day-valley-v1.png");
+      setEdgeScene("minecraft-sunrise-left-v1.png", "minecraft-day-valley-v1.png", amount);
       warmth = 1 - amount;
     }
 
