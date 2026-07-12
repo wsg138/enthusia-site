@@ -326,7 +326,16 @@ function initMobileNavigation() {
     communityButton.setAttribute("aria-expanded", "false");
     communityButton.innerHTML = "Community <small>More pages ›</small>";
     mainLinks.append(communityButton);
-    item.querySelectorAll(".nav-menu a").forEach((link) => communityLinks.append(cloneLink(link)));
+    item.querySelectorAll(".nav-menu a").forEach((link) => {
+      const clonedLink = cloneLink(link);
+      if (link.dataset.linkTarget === "wiki") {
+        clonedLink.classList.add("mobile-nav-wiki-external");
+        const externalLabel = document.createElement("small");
+        externalLabel.textContent = "External ↗";
+        clonedLink.append(externalLabel);
+      }
+      communityLinks.append(clonedLink);
+    });
   });
 
   mainPanel.append(mainTitle, mainLinks, externalActions);
@@ -1606,7 +1615,7 @@ function initWorldEffects() {
   const foregrounds = Object.fromEntries(sceneDefinitions.map(([name]) => {
     const image = document.createElement("img");
     image.className = `cinematic-foreground cinematic-foreground-${name}`;
-    image.src = `assets/minecraft-terrain-foreground-${name}-v1.png?v=7`;
+    image.src = `assets/minecraft-terrain-foreground-${name}-v1.png?v=8`;
     image.alt = "";
     image.decoding = "async";
     return [name, image];
@@ -1614,9 +1623,11 @@ function initWorldEffects() {
   const createOrb = (name) => {
     const orb = document.createElement("div");
     orb.className = `cinematic-orb cinematic-${name}`;
+    const glow = document.createElement("div");
+    glow.className = "cinematic-orb-glow";
     const disc = document.createElement("div");
     disc.className = "cinematic-orb-disc";
-    orb.append(disc);
+    orb.append(glow, disc);
     return orb;
   };
   const sun = createOrb("sun");
@@ -1626,7 +1637,9 @@ function initWorldEffects() {
   celestial.append(sun, moon);
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
-  scene.append(celestial, ...Object.values(foregrounds), vignette);
+  const foliageLight = document.createElement("div");
+  foliageLight.className = "cinematic-foliage-light";
+  scene.append(celestial, ...Object.values(foregrounds), foliageLight, vignette);
   effects.append(scene);
 
   document.body.prepend(effects);
@@ -1691,14 +1704,20 @@ function initWorldEffects() {
     debugTerrain.className = "scene-debug-terrain";
     const debugSky = document.createElement("div");
     debugSky.className = "scene-debug-sky";
+    const debugAdd = document.createElement("div");
+    debugAdd.className = "scene-debug-add";
+    const debugSubtract = document.createElement("div");
+    debugSubtract.className = "scene-debug-subtract";
     const debugSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     debugSvg.classList.add("scene-debug-svg");
     debugSvg.setAttribute("viewBox", `0 0 ${SCENE_WIDTH} ${SCENE_HEIGHT}`);
     debugSvg.innerHTML = `<path class="debug-sun-path"/><path class="debug-moon-path" d="M 134 620 C 330 65 1110 65 1538 650"/><circle class="debug-sun-center" r="8"/><circle class="debug-moon-center" r="8"/>`;
     debugSunPath = debugSvg.querySelector(".debug-sun-path");
-    scene.append(debugTerrain, debugSky, debugSvg);
-    debugTerrain.hidden = debugLayer === "sky";
+    scene.append(debugTerrain, debugSky, debugAdd, debugSubtract, debugSvg);
+    debugTerrain.hidden = !["all", "terrain"].includes(debugLayer);
     debugSky.hidden = debugLayer !== "sky";
+    debugAdd.hidden = debugLayer !== "add";
+    debugSubtract.hidden = debugLayer !== "subtract";
     debugHud = document.createElement("pre");
     debugHud.className = "scene-debug-hud";
     effects.append(debugHud);
@@ -1722,7 +1741,7 @@ function initWorldEffects() {
     if (logo) {
       const bounds = logo.getBoundingClientRect();
       logoStart = {
-        x: (bounds.left + bounds.width / 2 + 6 - sceneOrigin.x) / sceneScale,
+        x: (bounds.left + bounds.width / 2 - sceneOrigin.x) / sceneScale,
         y: (bounds.top + bounds.height / 2 - sceneOrigin.y) / sceneScale
       };
     }
@@ -1804,6 +1823,21 @@ function initWorldEffects() {
     const moonPoint = cubicPoint(moonStart, moonControlA, moonControlB, moonEnd, moonPhase);
     placeOrb(moon, moonPoint, currentProgress >= 0.27 && currentProgress <= 0.78);
 
+    foliageLight.style.setProperty("--sun-x", `${sunPoint.x.toFixed(2)}px`);
+    foliageLight.style.setProperty("--sun-y", `${sunPoint.y.toFixed(2)}px`);
+    foliageLight.style.opacity = (!mobileCamera && currentProgress <= 0.38)
+      ? Math.min(0.26, warmth * 0.22 + 0.04).toFixed(3)
+      : "0";
+
+    if (debugEnabled && ["sun-disk", "sun-glow", "foliage-light", "moon-disk", "moon-glow"].includes(debugLayer)) {
+      sun.querySelector(".cinematic-orb-disc").hidden = debugLayer !== "sun-disk";
+      sun.querySelector(".cinematic-orb-glow").hidden = debugLayer !== "sun-glow";
+      moon.querySelector(".cinematic-orb-disc").hidden = debugLayer !== "moon-disk";
+      moon.querySelector(".cinematic-orb-glow").hidden = debugLayer !== "moon-glow";
+      foliageLight.hidden = debugLayer !== "foliage-light";
+      if (debugLayer === "foliage-light") foliageLight.style.opacity = "1";
+    }
+
     if (debugEnabled && Object.hasOwn(foregrounds, debugLayer)) {
       Object.entries(foregrounds).forEach(([name, image]) => {
         image.style.opacity = name === debugLayer ? "1" : "0";
@@ -1818,7 +1852,7 @@ function initWorldEffects() {
       scene.querySelector(".debug-moon-center")?.setAttribute("transform", `translate(${moonPoint.x} ${moonPoint.y})`);
       const cropX = -sceneOrigin.x;
       const cropY = -sceneOrigin.y;
-      debugHud.textContent = `progress ${currentProgress.toFixed(4)}\nphase ${phaseBlend.from}->${phaseBlend.to} ${phaseBlend.amount.toFixed(3)}\ncamera ${mobileCamera ? "mobile" : "desktop"}\nscene ${SCENE_WIDTH}x${SCENE_HEIGHT}\nscale ${sceneScale.toFixed(5)}\norigin ${sceneOrigin.x.toFixed(1)}, ${sceneOrigin.y.toFixed(1)}\ncrop ${cropX.toFixed(1)}, ${cropY.toFixed(1)}\nlogo ${logoStart.x.toFixed(1)}, ${logoStart.y.toFixed(1)}\nsun ${sunPoint.x.toFixed(1)}, ${sunPoint.y.toFixed(1)}\nmoon ${moonPoint.x.toFixed(1)}, ${moonPoint.y.toFixed(1)}`;
+      debugHud.textContent = `progress ${currentProgress.toFixed(4)}\nphase ${phaseBlend.from}->${phaseBlend.to} ${phaseBlend.amount.toFixed(3)}\ncamera ${mobileCamera ? "mobile" : "desktop"}\nscene ${SCENE_WIDTH}x${SCENE_HEIGHT}\nscale ${sceneScale.toFixed(5)}\norigin ${sceneOrigin.x.toFixed(1)}, ${sceneOrigin.y.toFixed(1)}\ncrop ${cropX.toFixed(1)}, ${cropY.toFixed(1)}\nlogo ${logoStart.x.toFixed(1)}, ${logoStart.y.toFixed(1)}\nsun ${sunPoint.x.toFixed(1)}, ${sunPoint.y.toFixed(1)} bbox ${(sunPoint.x - 66).toFixed(1)},${(sunPoint.y - 66).toFixed(1)} ${(sunPoint.x + 66).toFixed(1)},${(sunPoint.y + 66).toFixed(1)}\nmoon ${moonPoint.x.toFixed(1)}, ${moonPoint.y.toFixed(1)} bbox ${(moonPoint.x - 66).toFixed(1)},${(moonPoint.y - 66).toFixed(1)} ${(moonPoint.x + 66).toFixed(1)},${(moonPoint.y + 66).toFixed(1)}`;
     }
   };
 
@@ -1855,6 +1889,42 @@ function initCinematicHeader() {
   window.addEventListener("resize", updateHeader);
 }
 
+function initReturnToTop() {
+  const desktopQuery = window.matchMedia("(min-width: 781px)");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const button = document.createElement("button");
+  button.className = "return-to-top";
+  button.type = "button";
+  button.setAttribute("aria-label", "Return to navigation");
+  button.innerHTML = '<span aria-hidden="true">↑</span>';
+  document.body.append(button);
+
+  const homeTarget = document.body.classList.contains("home-page")
+    ? document.querySelector(".home-page-links")
+    : null;
+  const destinationTop = () => homeTarget
+    ? window.scrollY + homeTarget.getBoundingClientRect().top
+    : 0;
+  const update = () => {
+    const threshold = destinationTop() + (homeTarget ? 180 : Math.max(420, window.innerHeight * 0.65));
+    const visible = desktopQuery.matches && window.scrollY > threshold;
+    button.classList.toggle("is-visible", visible);
+    button.tabIndex = visible ? 0 : -1;
+    button.setAttribute("aria-hidden", visible ? "false" : "true");
+  };
+
+  button.addEventListener("click", () => {
+    if (homeTarget) {
+      homeTarget.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+    } else {
+      window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+    }
+  });
+  update();
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update, { passive: true });
+}
+
 async function initSite(cfg) {
   const yearEl = document.getElementById("year");
   if (yearEl) {
@@ -1875,6 +1945,7 @@ async function initSite(cfg) {
   initWorldEffects();
   initCinematicHeader();
   initMobileNavigation();
+  initReturnToTop();
   initCopyIpButton(normalizedConfig.serverIp);
   initShareButton(normalizedConfig);
   initStatusRefresh(normalizedConfig.serverIp);
