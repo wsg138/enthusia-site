@@ -1641,7 +1641,7 @@ function initWorldEffects() {
   const foregrounds = Object.fromEntries(sceneDefinitions.map(([name]) => {
     const image = document.createElement("img");
     image.className = `cinematic-foreground cinematic-foreground-${name}`;
-    image.src = `assets/minecraft-terrain-foreground-${name}-v1.png?v=8`;
+    image.src = `assets/minecraft-terrain-foreground-${name}-v1.png?v=7`;
     image.alt = "";
     image.decoding = "async";
     return [name, image];
@@ -1649,11 +1649,9 @@ function initWorldEffects() {
   const createOrb = (name) => {
     const orb = document.createElement("div");
     orb.className = `cinematic-orb cinematic-${name}`;
-    const glow = document.createElement("div");
-    glow.className = "cinematic-orb-glow";
     const disc = document.createElement("div");
     disc.className = "cinematic-orb-disc";
-    orb.append(glow, disc);
+    orb.append(disc);
     return orb;
   };
   const sun = createOrb("sun");
@@ -1663,9 +1661,7 @@ function initWorldEffects() {
   celestial.append(sun, moon);
   const vignette = document.createElement("div");
   vignette.className = "cinematic-vignette";
-  const foliageLight = document.createElement("div");
-  foliageLight.className = "cinematic-foliage-light";
-  scene.append(celestial, ...Object.values(foregrounds), foliageLight, vignette);
+  scene.append(celestial, ...Object.values(foregrounds), vignette);
   effects.append(scene);
 
   document.body.prepend(effects);
@@ -1726,24 +1722,20 @@ function initWorldEffects() {
   let debugSunPath = null;
   if (debugEnabled) {
     effects.classList.add("is-scene-debug");
+    effects.classList.add(`scene-debug-layer-${debugLayer}`);
     const debugTerrain = document.createElement("div");
     debugTerrain.className = "scene-debug-terrain";
     const debugSky = document.createElement("div");
     debugSky.className = "scene-debug-sky";
-    const debugAdd = document.createElement("div");
-    debugAdd.className = "scene-debug-add";
-    const debugSubtract = document.createElement("div");
-    debugSubtract.className = "scene-debug-subtract";
     const debugSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     debugSvg.classList.add("scene-debug-svg");
     debugSvg.setAttribute("viewBox", `0 0 ${SCENE_WIDTH} ${SCENE_HEIGHT}`);
     debugSvg.innerHTML = `<path class="debug-sun-path"/><path class="debug-moon-path" d="M 134 620 C 330 65 1110 65 1538 650"/><circle class="debug-sun-center" r="8"/><circle class="debug-moon-center" r="8"/>`;
     debugSunPath = debugSvg.querySelector(".debug-sun-path");
-    scene.append(debugTerrain, debugSky, debugAdd, debugSubtract, debugSvg);
-    debugTerrain.hidden = !["all", "terrain"].includes(debugLayer);
+    scene.append(debugTerrain, debugSky, debugSvg);
+    debugTerrain.hidden = debugLayer === "sky";
     debugSky.hidden = debugLayer !== "sky";
-    debugAdd.hidden = debugLayer !== "add";
-    debugSubtract.hidden = debugLayer !== "subtract";
+    debugSvg.hidden = ["sun-disk", "moon-disk", "foreground"].includes(debugLayer);
     debugHud = document.createElement("pre");
     debugHud.className = "scene-debug-hud";
     effects.append(debugHud);
@@ -1849,19 +1841,20 @@ function initWorldEffects() {
     const moonPoint = cubicPoint(moonStart, moonControlA, moonControlB, moonEnd, moonPhase);
     placeOrb(moon, moonPoint, currentProgress >= 0.27 && currentProgress <= 0.78);
 
-    foliageLight.style.setProperty("--sun-x", `${sunPoint.x.toFixed(2)}px`);
-    foliageLight.style.setProperty("--sun-y", `${sunPoint.y.toFixed(2)}px`);
-    foliageLight.style.opacity = (!mobileCamera && currentProgress <= 0.38)
-      ? Math.min(0.26, warmth * 0.22 + 0.04).toFixed(3)
-      : "0";
+    if (debugEnabled && (debugLayer === "sun-disk" || debugLayer === "moon-disk")) {
+      Object.values(foregrounds).forEach((image) => { image.style.opacity = "0"; });
+      vignette.hidden = true;
+      const selectedOrb = debugLayer === "sun-disk" ? sun : moon;
+      const hiddenOrb = debugLayer === "sun-disk" ? moon : sun;
+      selectedOrb.hidden = false;
+      hiddenOrb.hidden = true;
+      selectedOrb.querySelector(".cinematic-orb-disc").style.boxShadow = "none";
+    }
 
-    if (debugEnabled && ["sun-disk", "sun-glow", "foliage-light", "moon-disk", "moon-glow"].includes(debugLayer)) {
-      sun.querySelector(".cinematic-orb-disc").hidden = debugLayer !== "sun-disk";
-      sun.querySelector(".cinematic-orb-glow").hidden = debugLayer !== "sun-glow";
-      moon.querySelector(".cinematic-orb-disc").hidden = debugLayer !== "moon-disk";
-      moon.querySelector(".cinematic-orb-glow").hidden = debugLayer !== "moon-glow";
-      foliageLight.hidden = debugLayer !== "foliage-light";
-      if (debugLayer === "foliage-light") foliageLight.style.opacity = "1";
+    if (debugEnabled && debugLayer === "foreground") {
+      Object.values(scenes).forEach((image) => { image.style.opacity = "0"; });
+      celestial.hidden = true;
+      vignette.hidden = true;
     }
 
     if (debugEnabled && Object.hasOwn(foregrounds, debugLayer)) {

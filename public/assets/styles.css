@@ -3795,43 +3795,23 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
 
 .cinematic-orb[hidden]{display:none}
 
-.cinematic-orb-disc,
-.cinematic-orb-glow{
-  position:absolute;
-  inset:0;
+.cinematic-orb-disc{
   width:100%;
   height:100%;
   translate:-50% -50%;
   transform-origin:center;
 }
 
-.cinematic-orb-glow{pointer-events:none}
-
 .cinematic-sun .cinematic-orb-disc{
   background:linear-gradient(135deg,rgba(255,255,235,.9) 0 24%,transparent 25%),linear-gradient(315deg,rgba(255,169,40,.72) 0 23%,transparent 24%),#ffe073;
   border:10px solid #fff0a7;
+  box-shadow:0 0 24px 10px rgba(255,229,131,.72),0 0 90px 38px rgba(255,139,36,.34);
 }
-
-.cinematic-sun .cinematic-orb-glow{background:rgba(255,224,115,.015);box-shadow:0 0 24px 10px rgba(255,229,131,.72),0 0 90px 38px rgba(255,139,36,.34)}
 
 .cinematic-moon .cinematic-orb-disc{
   background:linear-gradient(90deg,transparent 0 18%,rgba(150,165,192,.52) 19% 36%,transparent 37%),linear-gradient(0deg,transparent 0 56%,rgba(173,188,210,.58) 57% 74%,transparent 75%),#e8eef8;
   border:10px solid #f8fbff;
-}
-
-.cinematic-moon .cinematic-orb-glow{background:rgba(232,238,248,.012);box-shadow:0 0 22px 9px rgba(215,229,255,.58),0 0 78px 32px rgba(118,151,226,.26)}
-
-.cinematic-foliage-light{
-  position:absolute;
-  inset:0;
-  z-index:8;
-  pointer-events:none;
-  background:radial-gradient(190px 170px at var(--sun-x,1400px) var(--sun-y,450px),rgba(255,224,128,.72),rgba(255,145,42,.35) 34%,transparent 72%);
-  -webkit-mask:url("minecraft-foliage-light-mask-v1.png?v=1") center/100% 100% no-repeat;
-  mask:url("minecraft-foliage-light-mask-v1.png?v=1") center/100% 100% no-repeat;
-  mix-blend-mode:screen;
-  opacity:0;
-  transition:opacity .08s linear;
+  box-shadow:0 0 22px 9px rgba(215,229,255,.58),0 0 78px 32px rgba(118,151,226,.26);
 }
 
 @keyframes cinematic-sun-idle{
@@ -3839,19 +3819,19 @@ body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8
   50%{transform:translateY(-5px) rotate(1deg);filter:brightness(1.07)}
 }
 
-.is-sun-idle .cinematic-sun .cinematic-orb-disc,
-.is-sun-idle .cinematic-sun .cinematic-orb-glow{animation:cinematic-sun-idle 6.5s ease-in-out infinite}
+.is-sun-idle .cinematic-sun .cinematic-orb-disc{animation:cinematic-sun-idle 6.5s ease-in-out infinite}
 
-.scene-debug-svg,.scene-debug-terrain,.scene-debug-sky,.scene-debug-add,.scene-debug-subtract{position:absolute;inset:0;width:100%;height:100%;z-index:10;pointer-events:none}
-.scene-debug-terrain{background:rgba(255,0,170,.24);-webkit-mask:url("minecraft-terrain-mask-v1.png?v=8") center/100% 100% no-repeat;mask:url("minecraft-terrain-mask-v1.png?v=8") center/100% 100% no-repeat}
-.scene-debug-sky{background:rgba(0,255,255,.28);-webkit-mask:url("minecraft-sky-mask-v1.png?v=8") center/100% 100% no-repeat;mask:url("minecraft-sky-mask-v1.png?v=8") center/100% 100% no-repeat}
-.scene-debug-add{background:rgba(46,255,92,.64);-webkit-mask:url("minecraft-occlusion-add-v1.png?v=1") center/100% 100% no-repeat;mask:url("minecraft-occlusion-add-v1.png?v=1") center/100% 100% no-repeat}
-.scene-debug-subtract{background:rgba(255,40,40,.68);-webkit-mask:url("minecraft-occlusion-subtract-v1.png?v=1") center/100% 100% no-repeat;mask:url("minecraft-occlusion-subtract-v1.png?v=1") center/100% 100% no-repeat}
+.scene-debug-svg,.scene-debug-terrain,.scene-debug-sky{position:absolute;inset:0;width:100%;height:100%;z-index:8;pointer-events:none}
+.scene-debug-terrain{background:rgba(255,0,170,.24);-webkit-mask:url("minecraft-terrain-mask-v1.png?v=7") center/100% 100% no-repeat;mask:url("minecraft-terrain-mask-v1.png?v=7") center/100% 100% no-repeat}
+.scene-debug-sky{background:rgba(0,255,255,.28);-webkit-mask:url("minecraft-sky-mask-v1.png?v=7") center/100% 100% no-repeat;mask:url("minecraft-sky-mask-v1.png?v=7") center/100% 100% no-repeat}
 .scene-debug-svg{overflow:visible;border:3px solid #00ffbb}
 .scene-debug-svg path{fill:none;stroke-width:5;stroke-dasharray:14 9}
 .debug-sun-path{stroke:#ffdf42}.debug-moon-path{stroke:#8fe5ff}
 .debug-sun-center{fill:#ffdf42}.debug-moon-center{fill:#8fe5ff}
 .scene-debug-hud{position:fixed;top:12px;right:12px;z-index:9999;margin:0;padding:12px 14px;color:#dff;background:rgba(0,0,0,.82);border:1px solid #00ffbb;font:12px/1.45 ui-monospace,monospace;pointer-events:none}
+.world-effects.scene-debug-layer-foreground{background:#151515}
+.world-effects.scene-debug-layer-foreground::before,
+.world-effects.scene-debug-layer-foreground::after{display:none}
 
 .world-water,
 .world-meadow{display:none}
