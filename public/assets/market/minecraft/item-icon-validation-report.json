@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "minecraftVersion": "1.21.11",
+  "publicCatalogItems": 1487,
+  "successfullyResolvedIcons": 1487,
+  "intentionalSharedIcons": 165,
+  "remainingFallbackIcons": 0,
+  "resolutions": {
+    "directTexture": 1020,
+    "generatedModel": 280,
+    "intentionalShared": 165
+  },
+  "validatedModelItems": [
+    {
+      "material": "BARREL",
+      "resolution": "BLOCK_MODEL_RENDER"
+    },
+    {
+      "material": "CHEST",
+      "resolution": "INTENTIONAL_SHARED"
+    },
+    {
+      "material": "FURNACE",
+      "resolution": "BLOCK_MODEL_RENDER"
+    },
+    {
+      "material": "CRAFTING_TABLE",
+      "resolution": "BLOCK_MODEL_RENDER"
+    },
+    {
+      "material": "ANVIL",
+      "resolution": "DIRECT_TEXTURE"
+    },
+    {
+      "material": "HOPPER",
+      "resolution": "DIRECT_TEXTURE"
+    },
+    {
+      "material": "BEACON",
+      "resolution": "DIRECT_TEXTURE"
+    },
+    {
+      "material": "OAK_STAIRS",
+      "resolution": "BLOCK_MODEL_RENDER"
+    },
+    {
+      "material": "OAK_FENCE",
+      "resolution": "INTENTIONAL_SHARED"
+    },
+    {
+      "material": "OAK_DOOR",
+      "resolution": "DIRECT_TEXTURE"
+    },
+    {
+      "material": "OAK_SAPLING",
+      "resolution": "DIRECT_TEXTURE"
+    },
+    {
+      "material": "RED_SHULKER_BOX",
+      "resolution": "SPECIAL_OR_DIRECT"
+    }
+  ]
+}

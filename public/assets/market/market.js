@@ -34,7 +34,7 @@
     selectedBuilding: null, selectedStall: null, drawerMode: null, drawerBuilding: null, highlightShop: null,
     inspectorHistory: [], filters: { text: "", floor: "ALL", owner: "ALL", shop: "ALL", stock: "ALL" },
     matching: new Set(layout.stalls.map(stall => stall.id)), suggestionIndex: -1, mobileStack: [], mobileResultsOpen: false, searchReturn: false, lastSearch: null,
-    pinned: null, touchPointers: new Map(), touchTap: null, touchGesture: null,
+    pinned: null, touchPointers: new Map(), touchTap: null, touchGesture: null, collapsedContext: null,
     sheet: {type: null, state: "hidden", previous: "normal", surface: null, returnFocus: null, gesture: null}
   };
   const buildingElements = new Map();
@@ -280,12 +280,13 @@
   function iconDefinition(item) {
     const definition = iconManifest.materials[item.material] || iconManifest.fallback;
     const layers = [...definition.layers];
-    const trim = item.metadata?.armorTrim?.material;
+    const trim = item.metadata?.armorTrim?.material?.toUpperCase().replaceAll(" ", "_");
     if (trim && definition.variants?.armorTrim?.[trim]) layers.push(...definition.variants.armorTrim[trim]);
     return layers;
   }
   function itemIcon(item, extraClass = "") {
-    const layers = iconDefinition(item).map((layer, index) => {
+    const definitions = iconDefinition(item);
+    const layers = definitions.map((layer, index) => {
       const source = `${assetBase}${layer.src}`;
       if (layer.tint || layer.tintSource) {
         const tint = layer.tint || item.metadata?.potion?.color || layer.defaultTint;
@@ -293,7 +294,12 @@
       }
       return `<img class="item-texture layer-${index}" src="${source}" alt="" draggable="false">`;
     }).join("");
-    return `<span class="minecraft-item-icon ${extraClass}" role="img" aria-label="${esc(item.displayName)}">${layers}</span>`;
+    const metadata = item.metadata || {};
+    const enchanted = metadata.glintOverride !== false && (metadata.glintOverride === true || metadata.enchantments?.length || metadata.storedEnchantments?.length);
+    const silhouette = definitions.find(layer => !layer.tintSource)?.src || definitions[0]?.src;
+    const glintTexture = iconManifest.glint?.item || "minecraft/vanilla/textures/misc/enchanted_glint_item.png";
+    const glint = enchanted && silhouette ? `<span class="item-glint" style="--item-silhouette:url('${cssAssetBase}${silhouette}');--glint-texture:url('${cssAssetBase}${glintTexture}')" aria-hidden="true"></span>` : "";
+    return `<span class="minecraft-item-icon${enchanted ? " enchanted" : ""} ${extraClass}" role="img" aria-label="${esc(item.displayName)}">${layers}${glint}</span>`;
   }
   function minecraftText(value, className = "") {
     const text = String(value ?? "");
@@ -333,7 +339,8 @@
   }
   function itemPanel(item, label, shopId, side) {
     const presentation = itemPresentation(item);
-    return `<button class="transaction-side" data-inspect-shop="${shopId}" data-inspect-side="${side}" aria-label="Inspect ${esc(label.toLowerCase())}: ${esc(presentation.baseDisplayName)}"><span class="transaction-label">${label}</span><span class="transaction-item">${itemIcon(item)}<span class="item-copy"><strong>${item.amount}× ${esc(presentation.customDisplayName || presentation.baseDisplayName)}</strong>${presentation.variantSummary ? `<small>${esc(presentation.variantSummary)}</small>` : ""}</span></span></button>`;
+    const compactVariant = item.material === "ENCHANTED_BOOK" ? "" : presentation.variantSummary;
+    return `<button class="transaction-side" data-inspect-shop="${shopId}" data-inspect-side="${side}" aria-label="Inspect ${esc(label.toLowerCase())}: ${esc(presentation.baseDisplayName)}"><span class="transaction-label">${label}</span><span class="transaction-item">${itemIcon(item)}<span class="item-copy"><strong>${item.amount}× ${esc(presentation.baseDisplayName)}</strong>${compactVariant ? `<small>${esc(compactVariant)}</small>` : ""}</span></span></button>`;
   }
 
   const mobileSurfaces = [el.drawer, el.inspector, el.results, filterFields];
@@ -347,7 +354,7 @@
   function activateSheet(type, surface, label, nextState = "normal", returnFocus = null) {
     if (!isMobile()) return;
     hideSuggestions();
-    for (const candidate of mobileSurfaces) candidate.classList.toggle("sheet-suppressed", candidate !== surface);
+    for (const candidate of mobileSurfaces) candidate.classList.toggle("sheet-suppressed", candidate !== surface && candidate !== state.collapsedContext);
     surface.classList.add("mobile-sheet-active"); surface.dataset.sheetState = nextState;
     if (surface === el.results) surface.classList.add("mobile-sheet");
     if (surface === filterFields) surface.classList.add("open");
@@ -371,21 +378,24 @@
   function toggleSheet() { setSheetState(state.sheet.state === "collapsed" ? state.sheet.previous || "normal" : "collapsed"); }
   function bindSheetSurface(surface) {
     const handle = surface.querySelector(".mobile-sheet-handle"); if (!handle) return;
+    let handleGesture = null;
     handle.addEventListener("pointerdown", event => {
       if (event.pointerType === "mouse" && event.button !== 0) return;
-      state.sheet.gesture = {id: event.pointerId, startY: event.clientY, moved: false, started: state.sheet.state, time: performance.now()};
+      const started = state.collapsedContext === surface ? "collapsed" : state.sheet.state;
+      handleGesture = {id: event.pointerId, startY: event.clientY, moved: false, started, time: performance.now()};
       try { handle.setPointerCapture(event.pointerId); } catch {}
     });
-    handle.addEventListener("pointermove", event => { const gesture = state.sheet.gesture; if (gesture?.id === event.pointerId && Math.abs(event.clientY - gesture.startY) > 6) gesture.moved = true; });
+    handle.addEventListener("pointermove", event => { if (handleGesture?.id === event.pointerId && Math.abs(event.clientY - handleGesture.startY) > 6) handleGesture.moved = true; });
     handle.addEventListener("pointerup", event => {
-      const gesture = state.sheet.gesture; if (!gesture || gesture.id !== event.pointerId) return;
-      const delta = event.clientY - gesture.startY, velocity = delta / Math.max(1, performance.now() - gesture.time); state.sheet.gesture = null;
+      const gesture = handleGesture; handleGesture = null; if (!gesture || gesture.id !== event.pointerId) return;
+      const delta = event.clientY - gesture.startY, velocity = delta / Math.max(1, performance.now() - gesture.time);
+      if (state.collapsedContext === surface) { if (!gesture.moved || delta < -35) restoreCollapsedContext(); return; }
       if (!gesture.moved) toggleSheet();
       else if (delta < -45 && gesture.started === "collapsed") setSheetState(state.sheet.previous || "normal");
       else if (delta > 45 && gesture.started !== "collapsed") setSheetState("collapsed");
       else if (delta > 80 && gesture.started === "collapsed" && velocity > .35) setSheetState("hidden");
     });
-    handle.addEventListener("click", event => { if (event.detail === 0) toggleSheet(); });
+    handle.addEventListener("click", event => { if (event.detail === 0) state.collapsedContext === surface ? restoreCollapsedContext() : toggleSheet(); });
     surface.addEventListener("pointerdown", event => {
       if (event.pointerType !== "touch" || event.target.closest(".mobile-sheet-handle") || surface.scrollTop > 0) return;
       state.sheet.contentGesture = {id: event.pointerId, startY: event.clientY, startX: event.clientX};
@@ -399,6 +409,35 @@
     surface.addEventListener("pointercancel", () => { state.sheet.contentGesture = null; });
   }
   mobileSurfaces.forEach(bindSheetSurface);
+
+  function preserveDetailContext() {
+    if (!isMobile()) return;
+    const surface = !el.inspector.hidden ? el.inspector : !el.drawer.hidden ? el.drawer : null;
+    if (!surface) return;
+    state.collapsedContext = surface;
+    surface.hidden = false;
+    surface.classList.add("mobile-sheet-active", "mobile-context-tab");
+    surface.classList.remove("sheet-suppressed");
+    surface.dataset.sheetState = "collapsed";
+    updateSheetHandle(surface, "collapsed");
+    document.body.classList.toggle("inspector-open", surface === el.inspector);
+  }
+  function clearCollapsedContext(hide = true) {
+    const surface = state.collapsedContext;
+    if (!surface) return;
+    surface.classList.remove("mobile-context-tab", "mobile-sheet-active");
+    surface.dataset.sheetState = "hidden";
+    if (hide) surface.hidden = true;
+    state.collapsedContext = null;
+  }
+  function restoreCollapsedContext() {
+    const surface = state.collapsedContext;
+    if (!surface) return;
+    hideMobileResults();
+    state.collapsedContext = null;
+    surface.classList.remove("mobile-context-tab", "sheet-suppressed");
+    activateSheet("details", surface, sheetLabel(surface)?.textContent || "Market details", "normal", el.viewport);
+  }
 
   function openBuilding(building) {
     closeInspector(); hideMobileResults(); filterFields.classList.remove("open"); state.mobileStack = [{type: "building", id: building.id}]; selectMap(building.id);
@@ -516,7 +555,8 @@
     const presentation = itemPresentation(item);
     el.inspectorKicker.textContent = `${action} · ${entry.role}`; el.inspectorTitle.textContent = presentation.customDisplayName || presentation.baseDisplayName;
     const backLabel = state.inspectorHistory.length > 1 ? `Back to ${state.inspectorHistory.at(-2).item.displayName}` : state.searchReturn ? "Back to search results" : "Back to stall";
-    el.inspectorContent.innerHTML = `<button class="inspector-back mobile-navigation-back" type="button">← ${esc(backLabel)}</button><section class="inspector-shop-context"><span>Shop by <strong>${esc(shop.owner.name)}</strong></span>${locationMarkup(shop.interaction, true)}</section><div class="inspector-transaction-tabs"><button class="${entry.side === "sellItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="sellItem"><span class="transaction-tab-label">${labels[0]}</span>${itemIcon(shop.sellItem)}<strong>${shop.sellItem.amount}× ${esc(shop.sellItem.displayName)}</strong></button><button class="${entry.side === "costItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="costItem"><span class="transaction-tab-label">${labels[1]}</span>${itemIcon(shop.costItem)}<strong>${shop.costItem.amount}× ${esc(shop.costItem.displayName)}</strong></button></div>${inspectorItemDetails(item)}${containerMarkup(entry)}`;
+    const sellPresentation = itemPresentation(shop.sellItem), costPresentation = itemPresentation(shop.costItem);
+    el.inspectorContent.innerHTML = `<button class="inspector-back mobile-navigation-back" type="button">← ${esc(backLabel)}</button><section class="inspector-shop-context"><span>Shop by <strong>${esc(shop.owner.name)}</strong></span>${locationMarkup(shop.interaction, true)}</section><div class="inspector-transaction-tabs"><button class="${entry.side === "sellItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="sellItem"><span class="transaction-tab-label">${labels[0]}</span>${itemIcon(shop.sellItem)}<strong>${shop.sellItem.amount}× ${esc(sellPresentation.baseDisplayName)}</strong></button><button class="${entry.side === "costItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="costItem"><span class="transaction-tab-label">${labels[1]}</span>${itemIcon(shop.costItem)}<strong>${shop.costItem.amount}× ${esc(costPresentation.baseDisplayName)}</strong></button></div>${inspectorItemDetails(item)}${containerMarkup(entry)}`;
     bindCopy(el.inspectorContent);
     el.inspectorContent.querySelectorAll("[data-inspector-side]").forEach(button => button.onclick = () => selectInspectorSide(shop, button.dataset.inspectorSide));
     el.inspectorContent.querySelector(".inspector-back")?.addEventListener("click", () => {
@@ -589,7 +629,7 @@
     const value = query.trim(), shops = value ? adapter.searchItems(value) : [];
     $("#item-search").value = value;
     state.lastSearch = {query: value, shops}; state.searchReturn = false;
-    if (isMobile()) { closeInspector(); el.drawer.hidden = true; el.backdrop.hidden = true; filterFields.classList.remove("open"); }
+    if (isMobile()) { preserveDetailContext(); el.backdrop.hidden = true; filterFields.classList.remove("open"); }
     renderResults(value, shops); hideSuggestions(); $("#item-search").blur();
     if (isMobile()) showMobileResults();
     return shops;
@@ -602,12 +642,14 @@
     el.resultsContent.innerHTML = `<p class="eyebrow">Item results</p><h2>${heading}</h2>${shops.length ? `<div class="result-list">${shops.map((shop, index) => {
       const item = shop.match.item, containerPath = shop.match.containerPath || [], leadingItem = shop.match.contained ? containerPath[0] || shop.match.container : item;
       const inside = shop.match.contained ? `<small class="contained-match">Inside ${containerPath.map(container => esc(container.displayName)).join(" › ") || esc(shop.match.container.displayName)}</small>` : "";
-      const primary = shop.match.contained ? `${item.amount}× ${esc(item.displayName)}` : esc(item.displayName);
-      return `<article class="result-card"><button class="result-main" data-result-index="${index}">${itemIcon(leadingItem)}<span><strong>${primary}</strong>${inside}<small>${{ SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction]} · ${displayStall(shop.stall.id)} · ${C.floorName(shop.stall.floor)}</small></span></button>${locationMarkup(shop.interaction, true)}</article>`;
+      const presentation = itemPresentation(item);
+      const primary = shop.match.contained ? `${item.amount}× ${esc(presentation.baseDisplayName)}` : esc(presentation.baseDisplayName);
+      const secondary = presentation.variantSummary ? `<small class="variant-summary" title="${esc(presentation.variantSummary)}">${esc(presentation.variantSummary)}</small>` : "";
+      return `<article class="result-card"><button class="result-main" data-result-index="${index}">${itemIcon(leadingItem)}<span><strong>${primary}</strong>${secondary}${inside}<small>${{ SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction]} · ${displayStall(shop.stall.id)} · ${buildingNumber(shop.stall.buildingId)} · ${C.floorName(shop.stall.floor)}</small></span></button>${locationMarkup(shop.interaction, true)}</article>`;
     }).join("")}</div>` : `<p class="no-results-copy">Try another item, variant, or material name.</p>`}`;
     el.resultsContent.querySelectorAll("[data-result-index]").forEach(button => button.onclick = () => {
       const shop = shops[Number(button.dataset.resultIndex)], stall = shop.stall;
-      state.searchReturn = isMobile(); hideMobileResults(); clearFilters(); focusBuilding(stall.buildingId); openStall(stall, null, shop.id); openInspector(shop.id, shop.match.side, shop.match);
+      state.searchReturn = isMobile(); clearCollapsedContext(); hideMobileResults(); clearFilters(); focusBuilding(stall.buildingId); openStall(stall, null, shop.id); openInspector(shop.id, shop.match.side, shop.match);
     });
     bindCopy(el.resultsContent);
   }

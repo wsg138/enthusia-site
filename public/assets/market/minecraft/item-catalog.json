@@ -1,8 +1,10 @@
 {
   "schemaVersion": 1,
   "minecraftVersion": "1.21.11",
-  "source": "Official client item definitions and en_us translations",
-  "count": 1504,
+  "source": "Official client item definitions and en_us translations filtered by public-item-policy.json",
+  "registryCount": 1504,
+  "excludedCount": 17,
+  "count": 1487,
   "items": [
     {
       "id": "minecraft:acacia_boat",
@@ -350,11 +352,6 @@
       "displayName": "Barrel"
     },
     {
-      "id": "minecraft:barrier",
-      "material": "BARRIER",
-      "displayName": "Barrier"
-    },
-    {
       "id": "minecraft:basalt",
       "material": "BASALT",
       "displayName": "Basalt"
@@ -368,11 +365,6 @@
       "id": "minecraft:beacon",
       "material": "BEACON",
       "displayName": "Beacon"
-    },
-    {
-      "id": "minecraft:bedrock",
-      "material": "BEDROCK",
-      "displayName": "Bedrock"
     },
     {
       "id": "minecraft:bee_nest",
@@ -1165,11 +1157,6 @@
       "displayName": "Cave Spider Spawn Egg"
     },
     {
-      "id": "minecraft:chain_command_block",
-      "material": "CHAIN_COMMAND_BLOCK",
-      "displayName": "Chain Command Block"
-    },
-    {
       "id": "minecraft:chainmail_boots",
       "material": "CHAINMAIL_BOOTS",
       "displayName": "Chainmail Boots"
@@ -1463,11 +1450,6 @@
       "id": "minecraft:cod_spawn_egg",
       "material": "COD_SPAWN_EGG",
       "displayName": "Cod Spawn Egg"
-    },
-    {
-      "id": "minecraft:command_block",
-      "material": "COMMAND_BLOCK",
-      "displayName": "Command Block"
     },
     {
       "id": "minecraft:compass",
@@ -2123,11 +2105,6 @@
       "id": "minecraft:dead_tube_coral_fan",
       "material": "DEAD_TUBE_CORAL_FAN",
       "displayName": "Dead Tube Coral Fan"
-    },
-    {
-      "id": "minecraft:debug_stick",
-      "material": "DEBUG_STICK",
-      "displayName": "Debug Stick"
     },
     {
       "id": "minecraft:decorated_pot",
@@ -3340,11 +3317,6 @@
       "displayName": "Jack o'Lantern"
     },
     {
-      "id": "minecraft:jigsaw",
-      "material": "JIGSAW",
-      "displayName": "Jigsaw Block"
-    },
-    {
       "id": "minecraft:jukebox",
       "material": "JUKEBOX",
       "displayName": "Jukebox"
@@ -3445,11 +3417,6 @@
       "displayName": "Kelp"
     },
     {
-      "id": "minecraft:knowledge_book",
-      "material": "KNOWLEDGE_BOOK",
-      "displayName": "Knowledge Book"
-    },
-    {
       "id": "minecraft:ladder",
       "material": "LADDER",
       "displayName": "Ladder"
@@ -3533,11 +3500,6 @@
       "id": "minecraft:lever",
       "material": "LEVER",
       "displayName": "Lever"
-    },
-    {
-      "id": "minecraft:light",
-      "material": "LIGHT",
-      "displayName": "Light"
     },
     {
       "id": "minecraft:light_blue_banner",
@@ -4040,11 +4002,6 @@
       "displayName": "Minecart with Chest"
     },
     {
-      "id": "minecraft:command_block_minecart",
-      "material": "COMMAND_BLOCK_MINECART",
-      "displayName": "Minecart with Command Block"
-    },
-    {
       "id": "minecraft:furnace_minecart",
       "material": "FURNACE_MINECART",
       "displayName": "Minecart with Furnace"
@@ -4063,11 +4020,6 @@
       "id": "minecraft:miner_pottery_sherd",
       "material": "MINER_POTTERY_SHERD",
       "displayName": "Miner Pottery Sherd"
-    },
-    {
-      "id": "minecraft:spawner",
-      "material": "SPAWNER",
-      "displayName": "Monster Spawner"
     },
     {
       "id": "minecraft:mooshroom_spawn_egg",
@@ -5665,11 +5617,6 @@
       "displayName": "Reinforced Deepslate"
     },
     {
-      "id": "minecraft:repeating_command_block",
-      "material": "REPEATING_COMMAND_BLOCK",
-      "displayName": "Repeating Command Block"
-    },
-    {
       "id": "minecraft:resin_brick",
       "material": "RESIN_BRICK",
       "displayName": "Resin Brick"
@@ -6485,16 +6432,6 @@
       "displayName": "Stripped Warped Stem"
     },
     {
-      "id": "minecraft:structure_block",
-      "material": "STRUCTURE_BLOCK",
-      "displayName": "Structure Block"
-    },
-    {
-      "id": "minecraft:structure_void",
-      "material": "STRUCTURE_VOID",
-      "displayName": "Structure Void"
-    },
-    {
       "id": "minecraft:sugar",
       "material": "SUGAR",
       "displayName": "Sugar"
@@ -6555,16 +6492,6 @@
       "displayName": "Terracotta"
     },
     {
-      "id": "minecraft:test_block",
-      "material": "TEST_BLOCK",
-      "displayName": "Test Block"
-    },
-    {
-      "id": "minecraft:test_instance_block",
-      "material": "TEST_INSTANCE_BLOCK",
-      "displayName": "Test Instance Block"
-    },
-    {
       "id": "minecraft:tinted_glass",
       "material": "TINTED_GLASS",
       "displayName": "Tinted Glass"
@@ -6613,11 +6540,6 @@
       "id": "minecraft:trial_key",
       "material": "TRIAL_KEY",
       "displayName": "Trial Key"
-    },
-    {
-      "id": "minecraft:trial_spawner",
-      "material": "TRIAL_SPAWNER",
-      "displayName": "Trial Spawner"
     },
     {
       "id": "minecraft:trident",
@@ -6718,11 +6640,6 @@
       "id": "minecraft:twisting_vines",
       "material": "TWISTING_VINES",
       "displayName": "Twisting Vines"
-    },
-    {
-      "id": "minecraft:vault",
-      "material": "VAULT",
-      "displayName": "Vault"
     },
     {
       "id": "minecraft:verdant_froglight",

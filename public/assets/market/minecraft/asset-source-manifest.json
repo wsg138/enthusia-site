@@ -96,6 +96,26 @@
       "size": 132
     },
     {
+      "path": "vanilla/textures/misc/enchanted_glint_item.png",
+      "sha256": "23831803126a3b75e74deeb5a5e39df9a26c94872d20533f444eb5072b417fb5",
+      "size": 12310
+    },
+    {
+      "path": "vanilla/textures/misc/enchanted_glint_item.png.mcmeta",
+      "sha256": "a4f5e3c3235dd128ee6d2ce397217e8c77037dbcf641aaa5bef65824e3b4b168",
+      "size": 40
+    },
+    {
+      "path": "vanilla/textures/misc/enchanted_glint_armor.png",
+      "sha256": "591205347810d37b6d6070a502468bbb1f2686fc0ab38b826b06cbba6349b23c",
+      "size": 6984
+    },
+    {
+      "path": "vanilla/textures/misc/enchanted_glint_armor.png.mcmeta",
+      "sha256": "a4f5e3c3235dd128ee6d2ce397217e8c77037dbcf641aaa5bef65824e3b4b168",
+      "size": 40
+    },
+    {
       "path": "vanilla/textures/item/written_book.png",
       "sha256": "8de9612f80a0a0727a6167453087f66d4bec700b0e4c03d6b6b1817034c935ba",
       "size": 199
@@ -131,9 +151,24 @@
       "size": 201
     },
     {
+      "path": "vanilla/textures/trims/items/helmet_trim.png",
+      "sha256": "23479723453c6893b41c6a372e8418a78041517ce60965feae834b3a6c288caa",
+      "size": 98
+    },
+    {
       "path": "vanilla/textures/trims/items/chestplate_trim.png",
       "sha256": "541e132cbc58e17abc81ca69285abd2787fce37b76072159d65a74b36487d7f1",
       "size": 115
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim.png",
+      "sha256": "ed825e740e78001376ec6c991383c63432169ba55017dc330d63875608ca9ff4",
+      "size": 90
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim.png",
+      "sha256": "fc885b50bb668dffdc2740e728a2ce54cf4b612d4f667ca78cbcddff2383b551",
+      "size": 98
     },
     {
       "path": "vanilla/textures/gui/sprites/container/slot.png",
@@ -191,6 +226,11 @@
       "size": 260
     },
     {
+      "path": "vanilla/textures/block/acacia_planks.png",
+      "sha256": "3f84918024e190f2767e03631d8c35b31fa5cd9235d7b114738224297dca6797",
+      "size": 202
+    },
+    {
       "path": "vanilla/textures/item/acacia_door.png",
       "sha256": "abf4483d5ec9957a2f9d4be71b436ff903f1c08810b28333309be1318d49cdb5",
       "size": 118
@@ -209,11 +249,6 @@
       "path": "vanilla/textures/block/acacia_log.png",
       "sha256": "cdf7c1971c2bb95e4ddfdb6b53bd0be69a341415e43030629bb4c72b339b83c1",
       "size": 191
-    },
-    {
-      "path": "vanilla/textures/block/acacia_planks.png",
-      "sha256": "3f84918024e190f2767e03631d8c35b31fa5cd9235d7b114738224297dca6797",
-      "size": 202
     },
     {
       "path": "vanilla/textures/block/acacia_sapling.png",
@@ -259,6 +294,16 @@
       "path": "vanilla/textures/item/amethyst_shard.png",
       "sha256": "dc64feb12d553ec59b819534ae57b46e99ac95a3ab61cb71de317a5d7b857584",
       "size": 183
+    },
+    {
+      "path": "vanilla/textures/block/ancient_debris_top.png",
+      "sha256": "8f21c800a0517e16be7a5ff79d46366a5499463fa96e8beedd5d962b937c6eef",
+      "size": 207
+    },
+    {
+      "path": "vanilla/textures/block/ancient_debris_side.png",
+      "sha256": "413ee9be65cce2e401c0fba9e1d647b34757eb0fbe1050b03592641b49902d8e",
+      "size": 200
     },
     {
       "path": "vanilla/textures/block/andesite.png",
@@ -316,6 +361,16 @@
       "size": 200
     },
     {
+      "path": "vanilla/textures/block/azalea_top.png",
+      "sha256": "e41d6a29fe0f65a19cb3fcbfd248526bde1c04abdb4ae163621f064c1c44e395",
+      "size": 184
+    },
+    {
+      "path": "vanilla/textures/block/azalea_side.png",
+      "sha256": "dda7fa2de1ac92d112cf7df5fc0b82c544cb265d885c288c603abbda6c4cb497",
+      "size": 190
+    },
+    {
       "path": "vanilla/textures/block/azalea_leaves.png",
       "sha256": "fdfa370f1bc7460a0f51d70fd57c691a86ee9269bbaba5b7e46693bb2de09a2a",
       "size": 209
@@ -334,6 +389,11 @@
       "path": "vanilla/textures/item/bamboo.png",
       "sha256": "83252d1d0dbe5ac3912cd8be5add648dd0fa8ecddfb666f094dbf7fd03b8d055",
       "size": 166
+    },
+    {
+      "path": "vanilla/textures/block/bamboo_planks.png",
+      "sha256": "030e245c4bd4cd30e07b3195c2bd0593d8a123f4814b622a36ae060056b1c0cf",
+      "size": 215
     },
     {
       "path": "vanilla/textures/item/bamboo_door.png",
@@ -359,11 +419,6 @@
       "path": "vanilla/textures/block/bamboo_mosaic.png",
       "sha256": "fd1f84c51173cdbc46579e01cc67ff9df9bdbbcbac53e86662ec447865a44dfe",
       "size": 219
-    },
-    {
-      "path": "vanilla/textures/block/bamboo_planks.png",
-      "sha256": "030e245c4bd4cd30e07b3195c2bd0593d8a123f4814b622a36ae060056b1c0cf",
-      "size": 215
     },
     {
       "path": "vanilla/textures/item/bamboo_raft.png",
@@ -431,6 +486,26 @@
       "size": 200
     },
     {
+      "path": "vanilla/textures/block/barrel_top.png",
+      "sha256": "6b4cb64b1c34bd87225147479100bec9889ac69c7dcdb5694003248e3004fe1e",
+      "size": 182
+    },
+    {
+      "path": "vanilla/textures/block/barrel_side.png",
+      "sha256": "30f31d8cecfbd44412af13983eee56220bcffbf7ce8dd5a948f1ab73c98d8dc8",
+      "size": 204
+    },
+    {
+      "path": "vanilla/textures/block/basalt_top.png",
+      "sha256": "d31e1840ac2f25add0890516f3e2ae38bf1b686b2aca360adcf32c25b980cfe5",
+      "size": 211
+    },
+    {
+      "path": "vanilla/textures/block/basalt_side.png",
+      "sha256": "4d775e556719fd74851584fa9c53ddb5abb4969cefba8eb5ef73e35373423085",
+      "size": 187
+    },
+    {
       "path": "vanilla/textures/item/bat_spawn_egg.png",
       "sha256": "91010312974505425a7448a9533af2c273aa49976a838f983239e15d9000caa0",
       "size": 224
@@ -441,14 +516,39 @@
       "size": 186
     },
     {
-      "path": "vanilla/textures/block/bedrock.png",
-      "sha256": "a71e7dce773df8c797506296f58eca840e53ceb3319bc405af7e15e5c25551da",
-      "size": 166
+      "path": "vanilla/textures/block/bee_nest_top.png",
+      "sha256": "94307946a8c0d4b8545d1d785bb2223396e9db3709029118a9e2fcbd8ae6be5d",
+      "size": 171
+    },
+    {
+      "path": "vanilla/textures/block/bee_nest_front.png",
+      "sha256": "7997d770319c2633b0b1ee9ebd2d1faf3bc5cf6b2bffd6a7b026d5fd04d30dc7",
+      "size": 217
+    },
+    {
+      "path": "vanilla/textures/block/bee_nest_side.png",
+      "sha256": "1a8a7a167b619ab28547cafc10f57953fba76a7a1f75747ba205582774fced2a",
+      "size": 193
     },
     {
       "path": "vanilla/textures/item/bee_spawn_egg.png",
       "sha256": "743d789e3d979f057ab6c4e3058f570ca5533fb51e8a2ee495d87839023c03fd",
       "size": 221
+    },
+    {
+      "path": "vanilla/textures/block/beehive_end.png",
+      "sha256": "77597900866e30d111aa0cae909136d762a06c9d8284689c0c69e55df6fe7f55",
+      "size": 165
+    },
+    {
+      "path": "vanilla/textures/block/beehive_front.png",
+      "sha256": "3d3fa761ee64d179fa1d29344e3eebbbcae609e2a8053421908dc854181b1dfa",
+      "size": 192
+    },
+    {
+      "path": "vanilla/textures/block/beehive_side.png",
+      "sha256": "db5aea136601a620f92acbe52c567d716bc7262f4142a3b43e6e09736927ca5c",
+      "size": 187
     },
     {
       "path": "vanilla/textures/item/beetroot.png",
@@ -471,6 +571,16 @@
       "size": 203
     },
     {
+      "path": "vanilla/textures/block/big_dripleaf_top.png",
+      "sha256": "8f63aa6ce22e1e17427c625bf4cd3af3e3f06d05d739bb994a793a8aabe63125",
+      "size": 197
+    },
+    {
+      "path": "vanilla/textures/block/big_dripleaf_side.png",
+      "sha256": "2add89d89b9c3e6b8207d8d3d1b55b0c0c72a1bef54e404b465926a848cb2754",
+      "size": 84
+    },
+    {
       "path": "vanilla/textures/item/birch_boat.png",
       "sha256": "216b5f17363ee4680c5a49c6e3fa5dcee889eab8121cd2231ad94b6da2ca8b83",
       "size": 215
@@ -479,6 +589,11 @@
       "path": "vanilla/textures/item/birch_chest_boat.png",
       "sha256": "c4dfefab5f3f974d1a5cb19852a6eb898c751fa7c668441dd763c50c968a665f",
       "size": 260
+    },
+    {
+      "path": "vanilla/textures/block/birch_planks.png",
+      "sha256": "e1559eaabbee0c1ea0fca983e3bcba1a188e0a29b6c25ea7d725651cc2569216",
+      "size": 195
     },
     {
       "path": "vanilla/textures/item/birch_door.png",
@@ -501,11 +616,6 @@
       "size": 206
     },
     {
-      "path": "vanilla/textures/block/birch_planks.png",
-      "sha256": "e1559eaabbee0c1ea0fca983e3bcba1a188e0a29b6c25ea7d725651cc2569216",
-      "size": 195
-    },
-    {
       "path": "vanilla/textures/block/birch_sapling.png",
       "sha256": "53d5061fd3004d1578fb97c20fc91abf4be54961d09ff53709fc100fcda92578",
       "size": 185
@@ -524,6 +634,11 @@
       "path": "vanilla/textures/block/birch_trapdoor.png",
       "sha256": "48e96dc1f95daee99412dc0724411c3671ab529658f00ca0aa66227ae30a3092",
       "size": 221
+    },
+    {
+      "path": "vanilla/textures/block/black_wool.png",
+      "sha256": "8cefbc855a4ff04f6125ded6a69e8bd21144802fc466b179665c8c0203daffd9",
+      "size": 360
     },
     {
       "path": "vanilla/textures/item/black_bundle.png",
@@ -576,19 +691,34 @@
       "size": 327
     },
     {
-      "path": "vanilla/textures/block/black_wool.png",
-      "sha256": "8cefbc855a4ff04f6125ded6a69e8bd21144802fc466b179665c8c0203daffd9",
-      "size": 360
-    },
-    {
       "path": "vanilla/textures/block/blackstone.png",
       "sha256": "8104d381f680eeb7d71a023aa056b593ef0855821538e435949c94b58033e7cb",
       "size": 202
     },
     {
+      "path": "vanilla/textures/block/blackstone_top.png",
+      "sha256": "9eb9bce7a27defc49dd8a2b2dc74f4c7710dc3bbcaa5108a6c1193c82922935d",
+      "size": 193
+    },
+    {
       "path": "vanilla/textures/item/blade_pottery_sherd.png",
       "sha256": "2cabf98660e173d155a62052f974f5f153fffb5db4d96d0bb32c1bcfc1d51b65",
       "size": 201
+    },
+    {
+      "path": "vanilla/textures/block/blast_furnace_top.png",
+      "sha256": "003c4e4c615a20a7f0ba48baf0e9cf3bae55b6a2a387d34e0cff9958aa2420c0",
+      "size": 187
+    },
+    {
+      "path": "vanilla/textures/block/blast_furnace_front.png",
+      "sha256": "df580828cf9079059e167dc13b51713d8029cdcf0f0b20374367c71a805d7f62",
+      "size": 248
+    },
+    {
+      "path": "vanilla/textures/block/blast_furnace_side.png",
+      "sha256": "2254b141bca1943258f66bca2ce34d4c7fb5f777d27cb2d5d8d9a4f0ad6f3ab7",
+      "size": 238
     },
     {
       "path": "vanilla/textures/item/blaze_powder.png",
@@ -656,6 +786,16 @@
       "size": 217
     },
     {
+      "path": "vanilla/textures/block/quartz_block_top.png",
+      "sha256": "63d3d5c7184b3f83b269933b306ea587bc28792c9c5118227b218cd4e3a6bd8c",
+      "size": 165
+    },
+    {
+      "path": "vanilla/textures/block/quartz_block_side.png",
+      "sha256": "63d3d5c7184b3f83b269933b306ea587bc28792c9c5118227b218cd4e3a6bd8c",
+      "size": 165
+    },
+    {
       "path": "vanilla/textures/block/raw_copper_block.png",
       "sha256": "aed8352213c7f820c3cf0e09e63981d203538fa025201f28f35d046a2c375de7",
       "size": 265
@@ -684,6 +824,11 @@
       "path": "vanilla/textures/block/stripped_bamboo_block.png",
       "sha256": "fb65b3eb17407b34274ecf15b9fcf4cd1d6952bf49507a93e89214fdd51cb81b",
       "size": 211
+    },
+    {
+      "path": "vanilla/textures/block/blue_wool.png",
+      "sha256": "2ca85a3e25a3ea9b0d8209edab2ab93f64e458d8c6baf8215536912159a6e2db",
+      "size": 381
     },
     {
       "path": "vanilla/textures/item/blue_bundle.png",
@@ -751,11 +896,6 @@
       "size": 384
     },
     {
-      "path": "vanilla/textures/block/blue_wool.png",
-      "sha256": "2ca85a3e25a3ea9b0d8209edab2ab93f64e458d8c6baf8215536912159a6e2db",
-      "size": 381
-    },
-    {
       "path": "vanilla/textures/item/bogged_spawn_egg.png",
       "sha256": "f770c421598453842a424cfed6121264f63f8aa3718c6d5e6e541ca685fae511",
       "size": 272
@@ -764,6 +904,16 @@
       "path": "vanilla/textures/item/bone.png",
       "sha256": "acc1fb127f3f1139e51e748ee8b259eebac8f1ad369b33bd9643246ee96ae62d",
       "size": 159
+    },
+    {
+      "path": "vanilla/textures/block/bone_block_top.png",
+      "sha256": "a78957c52f57fb337035896e1fe7482df2cd9c7c45f2af54810bdc5a1b88b726",
+      "size": 175
+    },
+    {
+      "path": "vanilla/textures/block/bone_block_side.png",
+      "sha256": "548c772217b2dea162d70a604ada5352457da3d6b9d9b53762cc15e4ac2667b9",
+      "size": 139
     },
     {
       "path": "vanilla/textures/item/bone_meal.png",
@@ -856,6 +1006,11 @@
       "size": 206
     },
     {
+      "path": "vanilla/textures/block/brown_wool.png",
+      "sha256": "d6bfcd1e5a8ecef072201c73ba6b8e50dd4a6065cd504e8413da8413c6d0fd60",
+      "size": 381
+    },
+    {
       "path": "vanilla/textures/item/brown_bundle.png",
       "sha256": "0074f1501253e43cea261086144fe036ee9b9fbf966313252fa59b7878a70d84",
       "size": 203
@@ -919,11 +1074,6 @@
       "path": "vanilla/textures/block/brown_terracotta.png",
       "sha256": "e162788c4a41a06711dcef4572ca4f4dfee090463fdd0d523ff98d00458b1daf",
       "size": 353
-    },
-    {
-      "path": "vanilla/textures/block/brown_wool.png",
-      "sha256": "d6bfcd1e5a8ecef072201c73ba6b8e50dd4a6065cd504e8413da8413c6d0fd60",
-      "size": 381
     },
     {
       "path": "vanilla/textures/item/brush.png",
@@ -996,6 +1146,16 @@
       "size": 192
     },
     {
+      "path": "vanilla/textures/block/cactus_top.png",
+      "sha256": "3bdf4d5e07f160ce10b220826fc877b7336fc38c4b97cf435bff53ff9f651410",
+      "size": 210
+    },
+    {
+      "path": "vanilla/textures/block/cactus_side.png",
+      "sha256": "9d7c4aa01b420bee766d65adc75465296b89aff426e19b8aded310654352cd6d",
+      "size": 211
+    },
+    {
       "path": "vanilla/textures/block/cactus_flower.png",
       "sha256": "13c57e44a689ac82de92466d67f6ee0b8a2dca0fbb4159b46329d30b5084308d",
       "size": 176
@@ -1009,6 +1169,16 @@
       "path": "vanilla/textures/block/calcite.png",
       "sha256": "bf4d6a2d7e044fb5e17ba86b86e24df4f031e75df600bc0fa6aabb5377644cb9",
       "size": 197
+    },
+    {
+      "path": "vanilla/textures/block/calibrated_sculk_sensor_top.png",
+      "sha256": "0776390f44b5a5305a1bbc8232bcbba2e29aff0790c9e8f45baf79008efabb15",
+      "size": 188
+    },
+    {
+      "path": "vanilla/textures/block/sculk_sensor_side.png",
+      "sha256": "ee21e5e0a3d6ef610a59029e67c491d8961c3eb33897105d4f38ce7cccde533f",
+      "size": 182
     },
     {
       "path": "vanilla/textures/item/camel_husk_spawn_egg.png",
@@ -1039,6 +1209,16 @@
       "path": "vanilla/textures/item/carrot_on_a_stick.png",
       "sha256": "a1477ac3abf72fdd78f0940d20cf0700e23aaf987960f3cce2f47ceede043fcd",
       "size": 209
+    },
+    {
+      "path": "vanilla/textures/block/cartography_table_top.png",
+      "sha256": "5273a61b0f07d0c6f60937ebe3e1489836b1b4d0ecaace95a2e22fa243f6f3f0",
+      "size": 313
+    },
+    {
+      "path": "vanilla/textures/block/cartography_table_side3.png",
+      "sha256": "4b814b5b8c69b856ec4a0223a81976c41c104366d1f635f708666b254dc0d001",
+      "size": 206
     },
     {
       "path": "vanilla/textures/block/carved_pumpkin.png",
@@ -1096,6 +1276,11 @@
       "size": 264
     },
     {
+      "path": "vanilla/textures/block/cherry_planks.png",
+      "sha256": "46f93c17e9baae47e9a6b07b049255a94d72b2d4d74323384f9f72649f7be581",
+      "size": 195
+    },
+    {
       "path": "vanilla/textures/item/cherry_door.png",
       "sha256": "64175b065653327b27b86458d8e52d33860e09d41fe97e691c0fd8e98caf4941",
       "size": 214
@@ -1114,11 +1299,6 @@
       "path": "vanilla/textures/block/cherry_log.png",
       "sha256": "675b2bcd6bb6440bc768f47735e13446284c80e5c07e18177073bf3a75e4dd4d",
       "size": 181
-    },
-    {
-      "path": "vanilla/textures/block/cherry_planks.png",
-      "sha256": "46f93c17e9baae47e9a6b07b049255a94d72b2d4d74323384f9f72649f7be581",
-      "size": 195
     },
     {
       "path": "vanilla/textures/block/cherry_sapling.png",
@@ -1141,9 +1321,29 @@
       "size": 246
     },
     {
+      "path": "vanilla/textures/item/paper.png",
+      "sha256": "046228bbea6334f90e915ea62c6b4050016a6b1aa575734d630a10688d9b11e7",
+      "size": 173
+    },
+    {
       "path": "vanilla/textures/item/chicken_spawn_egg.png",
       "sha256": "97c478f0cc229dbdead7975785a54a20d532321c5789364c03c3b64a21fdc047",
       "size": 199
+    },
+    {
+      "path": "vanilla/textures/block/chipped_anvil_top.png",
+      "sha256": "e0def3d40af13091e54b3eaea7e18eb5deb62e8142365f32b689bc23ba34f5a9",
+      "size": 212
+    },
+    {
+      "path": "vanilla/textures/block/chiseled_bookshelf_top.png",
+      "sha256": "59f74e2c723f21f37ec0965975169aaf1d9c3e4f712c52e616c9064017b5ad0a",
+      "size": 187
+    },
+    {
+      "path": "vanilla/textures/block/chiseled_bookshelf_side.png",
+      "sha256": "254ffa60a5ed6bd0adb2e89dc09e8de2345c6c786ea58d92e1c400f168d2002d",
+      "size": 174
     },
     {
       "path": "vanilla/textures/block/chiseled_copper.png",
@@ -1226,6 +1426,11 @@
       "size": 184
     },
     {
+      "path": "vanilla/textures/item/clock_00.png",
+      "sha256": "b79cde84fe80cd376f3848efe3f98b5c187ae0c5e78cb222fd21207e11447fd3",
+      "size": 228
+    },
+    {
       "path": "vanilla/textures/block/closed_eyeblossom.png",
       "sha256": "54808a84618cfaa86a416fa5bb9d92a9320b7d0be724d41e6d42901ce1527c70",
       "size": 165
@@ -1269,6 +1474,21 @@
       "path": "vanilla/textures/item/cod_spawn_egg.png",
       "sha256": "3331026416fa3d5460fae3a3c47d02ee87a181a461e8547dfb2c701c544f735d",
       "size": 216
+    },
+    {
+      "path": "vanilla/textures/item/compass_16.png",
+      "sha256": "f0c1a41cc50cf5e2a3e2bc0477ab063c682cc8498e41ab0b643b4719e8d80ea8",
+      "size": 205
+    },
+    {
+      "path": "vanilla/textures/block/composter_top.png",
+      "sha256": "9a848d0d253e0c354e6961fdb4230dff8c6db8d668d4f5206893b0fbdca6c198",
+      "size": 167
+    },
+    {
+      "path": "vanilla/textures/block/composter_side.png",
+      "sha256": "de177e06f262bc3d1d2b506ec276ccf33459153ab868d55f0758736f7378038e",
+      "size": 206
     },
     {
       "path": "vanilla/textures/block/conduit.png",
@@ -1466,6 +1686,36 @@
       "size": 204
     },
     {
+      "path": "vanilla/textures/block/crafter_top.png",
+      "sha256": "aec36edfb538119742d251cee88902058c8b329d9b8a7180a05ef414ddad2e3c",
+      "size": 225
+    },
+    {
+      "path": "vanilla/textures/block/crafter_north.png",
+      "sha256": "1b015289076e08c3d8546c77dac989d81cb3ef70a0205f4f55330f73ae226232",
+      "size": 252
+    },
+    {
+      "path": "vanilla/textures/block/crafter_east.png",
+      "sha256": "61b9adce7595dfa399a1c162d5152aa3d35b86fee503ed13dd857a70249b3c32",
+      "size": 267
+    },
+    {
+      "path": "vanilla/textures/block/crafting_table_top.png",
+      "sha256": "251e8aa014e30d040261022895853db3204bba241b9b44c11762628550986f2d",
+      "size": 203
+    },
+    {
+      "path": "vanilla/textures/block/crafting_table_front.png",
+      "sha256": "1659c76a33039640e8bd5584af8db04bf626486432a389bcaf1567e1a45c6464",
+      "size": 265
+    },
+    {
+      "path": "vanilla/textures/block/crafting_table_side.png",
+      "sha256": "e9755fc6da763909b285342eae12c5f7d1cc8462fab695bb157504ea207cda8c",
+      "size": 260
+    },
+    {
       "path": "vanilla/textures/block/creaking_heart.png",
       "sha256": "7be6500bdd6334941dd51f013ad423e355471ad1243f796f9381f83299bb747c",
       "size": 230
@@ -1479,6 +1729,11 @@
       "path": "vanilla/textures/item/creeper_spawn_egg.png",
       "sha256": "2283799812c0b0931e5a566a09f805d4a041eb06fb3ed8d0580dd236e140c5a9",
       "size": 236
+    },
+    {
+      "path": "vanilla/textures/block/crimson_planks.png",
+      "sha256": "eba5d8f1fc24a284237178111e7f99a5c836ce89ab5c5013aff69b8298cb0f03",
+      "size": 195
     },
     {
       "path": "vanilla/textures/item/crimson_door.png",
@@ -1496,14 +1751,14 @@
       "size": 216
     },
     {
+      "path": "vanilla/textures/block/crimson_stem.png",
+      "sha256": "2b61f8e9d0cecb8790e01ee40c37b5ef6bdb386aa4bc7a7eae7ab5d182622031",
+      "size": 471
+    },
+    {
       "path": "vanilla/textures/block/crimson_nylium.png",
       "sha256": "3c09e4a15255d9d9e67adc946da2ad02a4b3ee983557ff4238e8ca9451d7963d",
       "size": 212
-    },
-    {
-      "path": "vanilla/textures/block/crimson_planks.png",
-      "sha256": "eba5d8f1fc24a284237178111e7f99a5c836ce89ab5c5013aff69b8298cb0f03",
-      "size": 195
     },
     {
       "path": "vanilla/textures/block/crimson_roots.png",
@@ -1521,14 +1776,14 @@
       "size": 202
     },
     {
-      "path": "vanilla/textures/block/crimson_stem.png",
-      "sha256": "2b61f8e9d0cecb8790e01ee40c37b5ef6bdb386aa4bc7a7eae7ab5d182622031",
-      "size": 471
-    },
-    {
       "path": "vanilla/textures/block/crimson_trapdoor.png",
       "sha256": "654f72862b0f2c7b84ad11ff53d4b0a7e85d538af1a4d4a568e1cbb34b2fd5cf",
       "size": 208
+    },
+    {
+      "path": "vanilla/textures/item/crossbow_standby.png",
+      "sha256": "6ea28ffcdf20314406cfaddcf9c1684523ff27211a482e6a709c2bd4543bb468",
+      "size": 228
     },
     {
       "path": "vanilla/textures/block/crying_obsidian.png",
@@ -1546,9 +1801,24 @@
       "size": 179
     },
     {
+      "path": "vanilla/textures/block/red_sandstone_top.png",
+      "sha256": "ce7a845cac6cd86204774f01a0f868cfbbf361f39def69f120b720a1066ecd2a",
+      "size": 180
+    },
+    {
       "path": "vanilla/textures/block/cut_sandstone.png",
       "sha256": "1d930274a3b36ea0753d6e6a61eebee4aa2b24ac257c958ce38adef19cf83302",
       "size": 179
+    },
+    {
+      "path": "vanilla/textures/block/sandstone_top.png",
+      "sha256": "41a5965dbf8a1505ab7ffd9984a16bad566c907c513d5638d5e8260cb5916646",
+      "size": 180
+    },
+    {
+      "path": "vanilla/textures/block/cyan_wool.png",
+      "sha256": "68706949a22ed0877a42ddca38e5ec428039d52ff23e6614f2900e33cb759303",
+      "size": 370
     },
     {
       "path": "vanilla/textures/item/cyan_bundle.png",
@@ -1601,9 +1871,9 @@
       "size": 395
     },
     {
-      "path": "vanilla/textures/block/cyan_wool.png",
-      "sha256": "68706949a22ed0877a42ddca38e5ec428039d52ff23e6614f2900e33cb759303",
-      "size": 370
+      "path": "vanilla/textures/block/damaged_anvil_top.png",
+      "sha256": "b174ff7109ffb2c97c2546b29f404ecf549799c41f57da01c041a0499d0d41c8",
+      "size": 213
     },
     {
       "path": "vanilla/textures/block/dandelion.png",
@@ -1626,6 +1896,11 @@
       "size": 260
     },
     {
+      "path": "vanilla/textures/block/dark_oak_planks.png",
+      "sha256": "665f44b119f5a21711c4cb83749d871635134c001cb0c14761c4f02a40dd8645",
+      "size": 195
+    },
+    {
       "path": "vanilla/textures/item/dark_oak_door.png",
       "sha256": "7ce5517ae862a4892fadadeef9b5b38fe1c800b364d4e72a883a8205b594fc9c",
       "size": 131
@@ -1644,11 +1919,6 @@
       "path": "vanilla/textures/block/dark_oak_log.png",
       "sha256": "b5d28ee7e1c88d8d1719468c9d798157159a82ab84209ec4236373de21496d0e",
       "size": 191
-    },
-    {
-      "path": "vanilla/textures/block/dark_oak_planks.png",
-      "sha256": "665f44b119f5a21711c4cb83749d871635134c001cb0c14761c4f02a40dd8645",
-      "size": 195
     },
     {
       "path": "vanilla/textures/block/dark_oak_sapling.png",
@@ -1674,6 +1944,16 @@
       "path": "vanilla/textures/block/dark_prismarine.png",
       "sha256": "f5055d900a645407ce199318d5c2471e403e283cff569125c5bc8185b8f47972",
       "size": 181
+    },
+    {
+      "path": "vanilla/textures/block/daylight_detector_top.png",
+      "sha256": "5db6251c3e677e4e7346462f13df6abaa8efe31a775b4d00d82b22df332e763e",
+      "size": 169
+    },
+    {
+      "path": "vanilla/textures/block/daylight_detector_side.png",
+      "sha256": "aa16c5baf4ee7e85164fdd5788dab19ea55943b566a10f1485cf4790e99d1b9e",
+      "size": 138
     },
     {
       "path": "vanilla/textures/block/dead_brain_coral.png",
@@ -1891,9 +2171,34 @@
       "size": 197
     },
     {
+      "path": "vanilla/textures/block/dirt_path_top.png",
+      "sha256": "653ab9be45372827da221f787435e2ad5adddc6257c29d45fe56947963784ac3",
+      "size": 170
+    },
+    {
+      "path": "vanilla/textures/block/dirt_path_side.png",
+      "sha256": "10a6c00835541537a0254f4210acc944b603ff7239dc1b458ddc5fae00686830",
+      "size": 241
+    },
+    {
       "path": "vanilla/textures/item/disc_fragment_5.png",
       "sha256": "93c61b57900abd821145efdf9150e328cbc4fb077a8a8c42dd462f1dd4da2c59",
       "size": 140
+    },
+    {
+      "path": "vanilla/textures/block/furnace_top.png",
+      "sha256": "59e26149cde8b86ea1d165c1a4ba5c44531a4b7be134b30c93120bba1cefb162",
+      "size": 208
+    },
+    {
+      "path": "vanilla/textures/block/dispenser_front.png",
+      "sha256": "b537b00654b8b6f7101d95a0a87a95fcad7f6d375236b437ab3b20e651c3d4a3",
+      "size": 252
+    },
+    {
+      "path": "vanilla/textures/block/furnace_side.png",
+      "sha256": "cada9065da8d26b3a7324a203edb42f2564975519e8504d520e10d530822bb5b",
+      "size": 228
     },
     {
       "path": "vanilla/textures/item/dolphin_spawn_egg.png",
@@ -1916,14 +2221,44 @@
       "size": 198
     },
     {
+      "path": "vanilla/textures/block/dried_ghast_hydration_0_top.png",
+      "sha256": "74e498a666b4c64bd9c2df66899fce2282263c31c45fc818c41f8cd8f338723c",
+      "size": 139
+    },
+    {
+      "path": "vanilla/textures/block/dried_ghast_hydration_0_north.png",
+      "sha256": "afe65f225c8ce6fa661399a1e8d2919ed2d5cb24ee15c7bde356e971eae368ec",
+      "size": 153
+    },
+    {
+      "path": "vanilla/textures/block/dried_ghast_hydration_0_east.png",
+      "sha256": "1299e0634d079d3d4e9a3b97c871a2eb31d2f13ba2689a98032ab0e4dd06ce44",
+      "size": 139
+    },
+    {
       "path": "vanilla/textures/item/dried_kelp.png",
       "sha256": "1c55c9ce599ad41b9682bb220ea7e025778eb76eb2ef0f74e2acccdc9b7d6729",
       "size": 188
     },
     {
+      "path": "vanilla/textures/block/dried_kelp_top.png",
+      "sha256": "5b6b36bca3362e9e2dfa747b5be2fd1e1da96f04e80b83e89242913f66e70c64",
+      "size": 222
+    },
+    {
+      "path": "vanilla/textures/block/dried_kelp_side.png",
+      "sha256": "f310c35b1fe8222bfb573a1bb007531eff848876ee5eea5c776aa5e27cf1c7c9",
+      "size": 223
+    },
+    {
       "path": "vanilla/textures/block/dripstone_block.png",
       "sha256": "a77c86b8f065524a926c50df322a1c0645ae5a9035fd2debdfbffafb5dc17d82",
       "size": 185
+    },
+    {
+      "path": "vanilla/textures/block/dropper_front.png",
+      "sha256": "4806cb730cec7141443f309306a01ae288d049f113cf75a996d9f8a1c9268c04",
+      "size": 253
     },
     {
       "path": "vanilla/textures/item/drowned_spawn_egg.png",
@@ -1961,9 +2296,34 @@
       "size": 173
     },
     {
+      "path": "vanilla/textures/item/golden_apple.png",
+      "sha256": "a5880840585b9e8bf3e50e8002500d81204028215e341500d30ac31c8f0e96d6",
+      "size": 200
+    },
+    {
+      "path": "vanilla/textures/block/enchanting_table_top.png",
+      "sha256": "778573d8e711b0b3be8784a581b74e0ff0fef01163dbef3a858f24cb534ce6cb",
+      "size": 175
+    },
+    {
+      "path": "vanilla/textures/block/enchanting_table_side.png",
+      "sha256": "fed6f599ec71ce4307f6e9d08985dc40bedec60d50033e32c6a3c80496939a6a",
+      "size": 228
+    },
+    {
       "path": "vanilla/textures/item/end_crystal.png",
       "sha256": "e91e697f2ec866835bf63fc4062bf69cc396c8048e1141b5c7dcb5de1a238d73",
       "size": 219
+    },
+    {
+      "path": "vanilla/textures/block/end_portal_frame_top.png",
+      "sha256": "9f2b9eeee9b8b6d4cf01e3c8ab60f52ccd492886e6832cd8ff5628703f31b134",
+      "size": 200
+    },
+    {
+      "path": "vanilla/textures/block/end_portal_frame_side.png",
+      "sha256": "32d21a1d65a184d20843670d9928464c73fa5a929663a79591f75fd56dc666e7",
+      "size": 237
     },
     {
       "path": "vanilla/textures/block/end_rod.png",
@@ -2131,6 +2491,21 @@
       "size": 184
     },
     {
+      "path": "vanilla/textures/block/fletching_table_top.png",
+      "sha256": "5287b6e5fbbf56e3d7ca28cb1094ef9dfb7656a435a25dc140dece576db79386",
+      "size": 236
+    },
+    {
+      "path": "vanilla/textures/block/fletching_table_front.png",
+      "sha256": "1fef8372dbf5790428505f20ab0679faa77543e75fae2f181da50b19799bb258",
+      "size": 286
+    },
+    {
+      "path": "vanilla/textures/block/fletching_table_side.png",
+      "sha256": "caf955475352ff9dac7296259bbf78044c45319caa79325528c3e388094ce39e",
+      "size": 365
+    },
+    {
       "path": "vanilla/textures/item/flint.png",
       "sha256": "6a37210c4ec517b2274f3a3bbdd6862fc0fa7b08c5c1d001e835b110408ff414",
       "size": 187
@@ -2149,6 +2524,16 @@
       "path": "vanilla/textures/item/flower_pot.png",
       "sha256": "5954b304bdaec6fdde257ef65e802e6bb66c3a01024fdce93aab28c32b22c39e",
       "size": 217
+    },
+    {
+      "path": "vanilla/textures/block/flowering_azalea_top.png",
+      "sha256": "cb276e1f266d770dd33fa89a95b87da96adf8935ea9573977433fb18c9cc6ece",
+      "size": 219
+    },
+    {
+      "path": "vanilla/textures/block/flowering_azalea_side.png",
+      "sha256": "6f620b0436cb72a7845f22046670aeccbc9bc63f6d594fd3e05c10639e76bdad",
+      "size": 214
     },
     {
       "path": "vanilla/textures/block/flowering_azalea_leaves.png",
@@ -2174,6 +2559,11 @@
       "path": "vanilla/textures/block/frogspawn.png",
       "sha256": "0a4a78ef05f9ddce1a634301f1a62cb87d5bfb6bc847353e40f27f434c2d4f42",
       "size": 153
+    },
+    {
+      "path": "vanilla/textures/block/furnace_front.png",
+      "sha256": "aae808f71f1bddf4a25592f7dd3d7f6e9b3adaa739502170766424f4eb6bf9c5",
+      "size": 224
     },
     {
       "path": "vanilla/textures/item/ghast_spawn_egg.png",
@@ -2256,11 +2646,6 @@
       "size": 225
     },
     {
-      "path": "vanilla/textures/item/golden_apple.png",
-      "sha256": "a5880840585b9e8bf3e50e8002500d81204028215e341500d30ac31c8f0e96d6",
-      "size": 200
-    },
-    {
       "path": "vanilla/textures/item/golden_axe.png",
       "sha256": "10fd193bd09d53ed497ccf3e60e3aa06c504dd580d40a03bacaa03ac71b2d80b",
       "size": 178
@@ -2331,9 +2716,24 @@
       "size": 223
     },
     {
+      "path": "vanilla/textures/block/grass_block_top.png",
+      "sha256": "52f44b64ce884a13dfe35e4b4da2e35898b790dd4d7a5ea536f1b0c0d56d29b4",
+      "size": 298
+    },
+    {
+      "path": "vanilla/textures/block/grass_block_side.png",
+      "sha256": "76a677640eb91d6a9aed844bc66e329b1894f89e241a0071333b6678c0854580",
+      "size": 329
+    },
+    {
       "path": "vanilla/textures/block/gravel.png",
       "sha256": "bc1558fa64b238fabca4cc957e61c232337d410495784b106676bf73e52e16e0",
       "size": 199
+    },
+    {
+      "path": "vanilla/textures/block/gray_wool.png",
+      "sha256": "0945d38cc78c67a8ba9f8cf0c2a86a0ba3487c9dfbafaed20e3259cf86806c54",
+      "size": 372
     },
     {
       "path": "vanilla/textures/item/gray_bundle.png",
@@ -2386,9 +2786,9 @@
       "size": 319
     },
     {
-      "path": "vanilla/textures/block/gray_wool.png",
-      "sha256": "0945d38cc78c67a8ba9f8cf0c2a86a0ba3487c9dfbafaed20e3259cf86806c54",
-      "size": 372
+      "path": "vanilla/textures/block/green_wool.png",
+      "sha256": "a2cd93d4bcead9b808d367fefa17081e12e5bd96ebff6993fc3d486422ecb9ad",
+      "size": 384
     },
     {
       "path": "vanilla/textures/item/green_bundle.png",
@@ -2441,9 +2841,9 @@
       "size": 362
     },
     {
-      "path": "vanilla/textures/block/green_wool.png",
-      "sha256": "a2cd93d4bcead9b808d367fefa17081e12e5bd96ebff6993fc3d486422ecb9ad",
-      "size": 384
+      "path": "vanilla/textures/block/grindstone_side.png",
+      "sha256": "bce35de490d1c22c5937abb5264f3bc1bd1629071010787b827b9bd0ddd5ead3",
+      "size": 167
     },
     {
       "path": "vanilla/textures/item/guardian_spawn_egg.png",
@@ -2471,6 +2871,16 @@
       "size": 199
     },
     {
+      "path": "vanilla/textures/block/hay_block_top.png",
+      "sha256": "99b8063611a6816b67c652f2f847048cd798a9b8858c84b9f597363007153693",
+      "size": 189
+    },
+    {
+      "path": "vanilla/textures/block/hay_block_side.png",
+      "sha256": "02ee6ed996363e25cf2ae47043f3af8b775ff788099ff00ebcde7c9ca9fa6cd5",
+      "size": 196
+    },
+    {
       "path": "vanilla/textures/item/heart_of_the_sea.png",
       "sha256": "70b8bb218671dad4d28a9ac91d310501741e5069dd14dac08bbab04f3f445b86",
       "size": 198
@@ -2494,6 +2904,16 @@
       "path": "vanilla/textures/item/hoglin_spawn_egg.png",
       "sha256": "e6c3ad682fbf4220578f58ec962238182853d729b9ee2e833e76992b32ea5a7c",
       "size": 269
+    },
+    {
+      "path": "vanilla/textures/block/honey_block_top.png",
+      "sha256": "ba036bec3694c130edb6d7382fd81f01348749b8efef7f3599ef5c5cc93f878e",
+      "size": 205
+    },
+    {
+      "path": "vanilla/textures/block/honey_block_side.png",
+      "sha256": "3dd769e70cff0d4900e9e1713d8a5ef2c50376687888779feafae3a98898e316",
+      "size": 211
     },
     {
       "path": "vanilla/textures/item/honey_bottle.png",
@@ -2549,6 +2969,26 @@
       "path": "vanilla/textures/block/ice.png",
       "sha256": "3049e6ae0c7d0625bb92238e69a520fa2e4f1067f234653b20dc91b1d84b07ad",
       "size": 196
+    },
+    {
+      "path": "vanilla/textures/block/deepslate_top.png",
+      "sha256": "9f2f5e0a67b4a007244cf7064e09da7e693322cfd21b1884190bcd6b26e91aec",
+      "size": 189
+    },
+    {
+      "path": "vanilla/textures/block/mossy_stone_bricks.png",
+      "sha256": "fe683558b728495db02c2d53160cdabd0bbf93170ec2b81d0ee5e82c8d97ec4c",
+      "size": 241
+    },
+    {
+      "path": "vanilla/textures/block/stone.png",
+      "sha256": "b5e10adc72442bfb257ce7ba0b9bbe36475a0c8cdfec89b80dc9517203ff3e9f",
+      "size": 151
+    },
+    {
+      "path": "vanilla/textures/block/stone_bricks.png",
+      "sha256": "24415444c9e4815aad4a3a349ecbfc0e027b96be25ac5b7c273c06f16c4fdd2f",
+      "size": 188
     },
     {
       "path": "vanilla/textures/item/ink_sac.png",
@@ -2661,6 +3101,16 @@
       "size": 221
     },
     {
+      "path": "vanilla/textures/block/jukebox_top.png",
+      "sha256": "e03e910eeac1f84a5694045902504a9cdd832a143374a2857f9e25a7f83f80a5",
+      "size": 169
+    },
+    {
+      "path": "vanilla/textures/block/jukebox_side.png",
+      "sha256": "ce5e56da299713779c49b55fcdb705fbdc1381d4f449615b932877ba13c9fabb",
+      "size": 172
+    },
+    {
       "path": "vanilla/textures/item/jungle_boat.png",
       "sha256": "1b07f4cad60900706e4f30388b05696cd9ec6e7e6251681cbc916dc7a33e7bc7",
       "size": 215
@@ -2669,6 +3119,11 @@
       "path": "vanilla/textures/item/jungle_chest_boat.png",
       "sha256": "b869d73a8bd82fcda5d348e85c5721c2f79724a201642c6821509b4d7bcf28d8",
       "size": 260
+    },
+    {
+      "path": "vanilla/textures/block/jungle_planks.png",
+      "sha256": "eef0710428abe05aa915dd7f8d3f2ae2b85aba719a85c6f3e5daf7c5b2aae2d3",
+      "size": 195
     },
     {
       "path": "vanilla/textures/item/jungle_door.png",
@@ -2689,11 +3144,6 @@
       "path": "vanilla/textures/block/jungle_log.png",
       "sha256": "811df91d6cc2999e236b1a4a3888807602f7368402c33fbb5cc3f757cb71f071",
       "size": 212
-    },
-    {
-      "path": "vanilla/textures/block/jungle_planks.png",
-      "sha256": "eef0710428abe05aa915dd7f8d3f2ae2b85aba719a85c6f3e5daf7c5b2aae2d3",
-      "size": 195
     },
     {
       "path": "vanilla/textures/block/jungle_sapling.png",
@@ -2721,11 +3171,6 @@
       "size": 178
     },
     {
-      "path": "vanilla/textures/item/knowledge_book.png",
-      "sha256": "3af4beb1037dfbbf3719b0d6a3f9e6d5b154bd790a1e0e1e01b44948a63931ea",
-      "size": 199
-    },
-    {
       "path": "vanilla/textures/block/ladder.png",
       "sha256": "04ee25413328caf2421a1f4e484b519a21c49827b18cd5fd46314ca00075f412",
       "size": 159
@@ -2749,6 +3194,11 @@
       "path": "vanilla/textures/block/large_amethyst_bud.png",
       "sha256": "0702416c10a0618ca2326226e3bf6d9669329b6ebd7a25bb48c9a958bffa2410",
       "size": 177
+    },
+    {
+      "path": "vanilla/textures/block/large_fern_top.png",
+      "sha256": "3fe952425a1033a0090d42d2df856a3241179d77ecf85a54183587cae5a84789",
+      "size": 173
     },
     {
       "path": "vanilla/textures/item/lava_bucket.png",
@@ -2796,14 +3246,24 @@
       "size": 166
     },
     {
+      "path": "vanilla/textures/block/lectern_top.png",
+      "sha256": "591388e68a0629affdc438e1031acb5b7d6b78b72535bf2c3de0a6ca1c73cb2e",
+      "size": 182
+    },
+    {
+      "path": "vanilla/textures/block/lectern_sides.png",
+      "sha256": "139d215c1d644dd22efc4c674de1e0a31d1db392b4106774497ee5b6685ada7b",
+      "size": 168
+    },
+    {
       "path": "vanilla/textures/block/lever.png",
       "sha256": "0ee6f47a1b5b86c8277dc2248d0a717b92e656f8f8d6d9cb89e6c2cb0f39d5c7",
       "size": 137
     },
     {
-      "path": "vanilla/textures/item/light.png",
-      "sha256": "a3a2b2bc7d9763629c5145c7557b7f9a2d8dd2b5fe69b18c1031df2aefc6bde8",
-      "size": 125
+      "path": "vanilla/textures/block/light_blue_wool.png",
+      "sha256": "f16b56ab1c5187b04fdd0048cd2f16bc57b1dcf738c68aa2523eaefbc5192c49",
+      "size": 406
     },
     {
       "path": "vanilla/textures/item/light_blue_bundle.png",
@@ -2846,9 +3306,9 @@
       "size": 366
     },
     {
-      "path": "vanilla/textures/block/light_blue_wool.png",
-      "sha256": "f16b56ab1c5187b04fdd0048cd2f16bc57b1dcf738c68aa2523eaefbc5192c49",
-      "size": 406
+      "path": "vanilla/textures/block/light_gray_wool.png",
+      "sha256": "127108dea091a93bf28f075e312021ed95cc19c3816ce7436c5cec1d65588c13",
+      "size": 392
     },
     {
       "path": "vanilla/textures/item/light_gray_bundle.png",
@@ -2901,14 +3361,14 @@
       "size": 411
     },
     {
-      "path": "vanilla/textures/block/light_gray_wool.png",
-      "sha256": "127108dea091a93bf28f075e312021ed95cc19c3816ce7436c5cec1d65588c13",
-      "size": 392
-    },
-    {
       "path": "vanilla/textures/block/lightning_rod.png",
       "sha256": "87690f8a45273383e0d4ba99fb8e5e6c55ab59fef5db05f69659089c74d762b6",
       "size": 146
+    },
+    {
+      "path": "vanilla/textures/block/lilac_top.png",
+      "sha256": "9ad01e980d151fa6508f5a0eabdb616bfdca6149c31cef45b30962be214bdbe0",
+      "size": 193
     },
     {
       "path": "vanilla/textures/block/lily_of_the_valley.png",
@@ -2919,6 +3379,11 @@
       "path": "vanilla/textures/block/lily_pad.png",
       "sha256": "481a8b576cc180f86a1060f73af1edfc3943b2f2f5a0a94e84864a942ffbb174",
       "size": 163
+    },
+    {
+      "path": "vanilla/textures/block/lime_wool.png",
+      "sha256": "e9b5aec9ce3ff89f3faf5161c4a07414c8006f0675560d7daaf5496df23c5143",
+      "size": 377
     },
     {
       "path": "vanilla/textures/item/lime_bundle.png",
@@ -2971,19 +3436,44 @@
       "size": 417
     },
     {
-      "path": "vanilla/textures/block/lime_wool.png",
-      "sha256": "e9b5aec9ce3ff89f3faf5161c4a07414c8006f0675560d7daaf5496df23c5143",
-      "size": 377
-    },
-    {
       "path": "vanilla/textures/item/llama_spawn_egg.png",
       "sha256": "1a95f6a4c577146dba8d0b6380e194595509d92d111608c06f70b7cfc47628b3",
       "size": 211
     },
     {
+      "path": "vanilla/textures/block/lodestone_top.png",
+      "sha256": "1ca424a8e6a6236234585387da1486dbebf9a7a1040862078959461d21ca536e",
+      "size": 172
+    },
+    {
+      "path": "vanilla/textures/block/lodestone_side.png",
+      "sha256": "62c423642a31cb509e8104e48b483564917dd8c15f0b9cb01f088c311a022cb4",
+      "size": 217
+    },
+    {
+      "path": "vanilla/textures/block/loom_top.png",
+      "sha256": "66dbdf1c6edcb5a68f20bc8279c5008ac4630c4476264730f2cf52f14cf47555",
+      "size": 209
+    },
+    {
+      "path": "vanilla/textures/block/loom_front.png",
+      "sha256": "1e3d24d6d7a05a8be4648afdc1c2c8f83558474b888da7a24a5f93a3f57a2505",
+      "size": 200
+    },
+    {
+      "path": "vanilla/textures/block/loom_side.png",
+      "sha256": "526372c59e91f10c1d690124d3f72a3938a154081cbc1a26a6151b924c8293f2",
+      "size": 184
+    },
+    {
       "path": "vanilla/textures/item/mace.png",
       "sha256": "389119cde42a517b1bb217a9baa216285babfa9f3d8718e05b8b98a5349a45b1",
       "size": 200
+    },
+    {
+      "path": "vanilla/textures/block/magenta_wool.png",
+      "sha256": "79699fdb73e565d67ef50a7a1d6492a279f2a2700fb38bdecbfd89b0b9ab759b",
+      "size": 390
     },
     {
       "path": "vanilla/textures/item/magenta_bundle.png",
@@ -3036,9 +3526,9 @@
       "size": 417
     },
     {
-      "path": "vanilla/textures/block/magenta_wool.png",
-      "sha256": "79699fdb73e565d67ef50a7a1d6492a279f2a2700fb38bdecbfd89b0b9ab759b",
-      "size": 390
+      "path": "vanilla/textures/block/magma.png",
+      "sha256": "c46011d6d4672eca674e8d0073842d5d59f980e6b39a873f3d364c71ed547b54",
+      "size": 416
     },
     {
       "path": "vanilla/textures/item/magma_cream.png",
@@ -3061,6 +3551,11 @@
       "size": 260
     },
     {
+      "path": "vanilla/textures/block/mangrove_planks.png",
+      "sha256": "8a23e913f39c14c050df721a775b2e2bd0dd7b9b0a74cab1056070e3d781119f",
+      "size": 195
+    },
+    {
       "path": "vanilla/textures/item/mangrove_door.png",
       "sha256": "610d2a26da4ba82014cd11381f941fbfbe81c038292a5155d2bd8e658746d223",
       "size": 194
@@ -3081,14 +3576,19 @@
       "size": 179
     },
     {
-      "path": "vanilla/textures/block/mangrove_planks.png",
-      "sha256": "8a23e913f39c14c050df721a775b2e2bd0dd7b9b0a74cab1056070e3d781119f",
-      "size": 195
-    },
-    {
       "path": "vanilla/textures/item/mangrove_propagule.png",
       "sha256": "dca0e729e47a549199dc26f062378ba4873037639109947e3a6173f481e9913c",
       "size": 172
+    },
+    {
+      "path": "vanilla/textures/block/mangrove_roots_top.png",
+      "sha256": "d198f0e38810b978895a06fdaa6a43b1d6af1602cb6735aa123750e59d3edc8e",
+      "size": 212
+    },
+    {
+      "path": "vanilla/textures/block/mangrove_roots_side.png",
+      "sha256": "4268751c29c70745f276aec002644a0411c491d39116d447f97773df71baadcf",
+      "size": 200
     },
     {
       "path": "vanilla/textures/block/mangrove_shelf.png",
@@ -3116,6 +3616,16 @@
       "size": 145
     },
     {
+      "path": "vanilla/textures/block/melon_top.png",
+      "sha256": "3f5e8b09c3dae6880aa451427350aced66c62c6deac1a1321352bf91dada6673",
+      "size": 185
+    },
+    {
+      "path": "vanilla/textures/block/melon_side.png",
+      "sha256": "f8609c25b72f81d0449667ad922eca0f2a10ae1721b20b0472c92aa2a0fc2fdc",
+      "size": 162
+    },
+    {
       "path": "vanilla/textures/item/melon_seeds.png",
       "sha256": "139f68219db8fc91343179813e93ff056fcccb70038a33c6efa874547c18f7e6",
       "size": 140
@@ -3141,11 +3651,6 @@
       "size": 265
     },
     {
-      "path": "vanilla/textures/item/command_block_minecart.png",
-      "sha256": "733066e0b0ad92950bb9a89b417f2618e18f8a245383ccf50b14ddd06b3f0b7b",
-      "size": 265
-    },
-    {
       "path": "vanilla/textures/item/furnace_minecart.png",
       "sha256": "ca754830266bb6bee5dad9ef4e9e2677661aa3ad22583b1bb1e9149a3ce0ee73",
       "size": 260
@@ -3166,11 +3671,6 @@
       "size": 205
     },
     {
-      "path": "vanilla/textures/block/spawner.png",
-      "sha256": "e228d0554328a65f62d2f11054e9b9307a09616ab8b31b70e2483e77bb68b0b4",
-      "size": 207
-    },
-    {
       "path": "vanilla/textures/item/mooshroom_spawn_egg.png",
       "sha256": "d33e63c84de7a91df984a5cd41862a68a8be0d0c1ff7df4787f3615eb0eab153",
       "size": 237
@@ -3186,11 +3686,6 @@
       "size": 231
     },
     {
-      "path": "vanilla/textures/block/mossy_stone_bricks.png",
-      "sha256": "fe683558b728495db02c2d53160cdabd0bbf93170ec2b81d0ee5e82c8d97ec4c",
-      "size": 241
-    },
-    {
       "path": "vanilla/textures/item/mourner_pottery_sherd.png",
       "sha256": "d4218e4693351432fb61aae15d223842938ca8ef759fa63d4f2de2721b29fabb",
       "size": 208
@@ -3204,6 +3699,16 @@
       "path": "vanilla/textures/block/mud_bricks.png",
       "sha256": "b9d94455caf0651b7ff777f2f85a92f4d67d04ae669cd4f65c308595ec9d38fa",
       "size": 200
+    },
+    {
+      "path": "vanilla/textures/block/muddy_mangrove_roots_top.png",
+      "sha256": "98993bc94bb7fd8a264d40035babed4686de814597bdc63a6cc57e317721169a",
+      "size": 236
+    },
+    {
+      "path": "vanilla/textures/block/muddy_mangrove_roots_side.png",
+      "sha256": "5d851f6ec2924111417b85ab4e3ca01af0360740ffdb5b2214d5942b0c19918e",
+      "size": 236
     },
     {
       "path": "vanilla/textures/item/mule_spawn_egg.png",
@@ -3324,6 +3829,16 @@
       "path": "vanilla/textures/item/music_disc_ward.png",
       "sha256": "a31f029e83770a912b719f7b19592bd6aa3b65e3e8086fa709655e8329784bd4",
       "size": 184
+    },
+    {
+      "path": "vanilla/textures/block/mycelium_top.png",
+      "sha256": "46e638ba8ca9fd17c47447d991da3f40ddac238129920863cb72bdbf129055c6",
+      "size": 213
+    },
+    {
+      "path": "vanilla/textures/block/mycelium_side.png",
+      "sha256": "74b0c4fa6c6b8d32bf42f8cbaa97eb6ec8fabc1f4f049bc8b22023c3b49032c7",
+      "size": 268
     },
     {
       "path": "vanilla/textures/item/name_tag.png",
@@ -3471,6 +3986,11 @@
       "size": 260
     },
     {
+      "path": "vanilla/textures/block/oak_planks.png",
+      "sha256": "65665943ef9c8bcf63fc67d2083ed0c50243f724106d0e4bb1abea5d921b16d3",
+      "size": 195
+    },
+    {
       "path": "vanilla/textures/item/oak_door.png",
       "sha256": "db0b4f8a456b2ead1b9d029c0db7546ba20ec68b665b0b9e7b8b5a3b1d43a1ea",
       "size": 136
@@ -3484,11 +4004,6 @@
       "path": "vanilla/textures/block/oak_leaves.png",
       "sha256": "69c9c7048695e014aee6b8a2c4cb080607bd7a2a5291c06218b8134cbfcdc04f",
       "size": 202
-    },
-    {
-      "path": "vanilla/textures/block/oak_planks.png",
-      "sha256": "65665943ef9c8bcf63fc67d2083ed0c50243f724106d0e4bb1abea5d921b16d3",
-      "size": 195
     },
     {
       "path": "vanilla/textures/block/oak_sapling.png",
@@ -3511,6 +4026,16 @@
       "size": 198
     },
     {
+      "path": "vanilla/textures/block/observer_top.png",
+      "sha256": "58916b14e87610499cacdb5d2ee5f1bb8cdac2bb658309a6dc03f6263ff4ad06",
+      "size": 286
+    },
+    {
+      "path": "vanilla/textures/block/observer_side.png",
+      "sha256": "fc989d0b6d95672094e1b096f4d298b9ebbd04c0b0c47ffc1cd752948fb54448",
+      "size": 214
+    },
+    {
       "path": "vanilla/textures/block/obsidian.png",
       "sha256": "d9c7dc812d8e8b995e22caff2b10c1fc663b5e127a94c20a7476cfd88af2cd82",
       "size": 189
@@ -3519,6 +4044,16 @@
       "path": "vanilla/textures/item/ocelot_spawn_egg.png",
       "sha256": "89b52eb8feec7bbe1244115ef3db70f85cc01ca751b8013a6974555ee94e27d0",
       "size": 199
+    },
+    {
+      "path": "vanilla/textures/block/ochre_froglight_top.png",
+      "sha256": "67c50f8bbc67959446c2d1fb421a107381068b515bcb237f09dc0c2b2d73e470",
+      "size": 167
+    },
+    {
+      "path": "vanilla/textures/block/ochre_froglight_side.png",
+      "sha256": "afa9189ced6451f2aeffac559fc15f71d10bf0fa19e26c1322ee1a71260bbdd7",
+      "size": 184
     },
     {
       "path": "vanilla/textures/item/ominous_bottle.png",
@@ -3534,6 +4069,11 @@
       "path": "vanilla/textures/block/open_eyeblossom.png",
       "sha256": "ef39a61a2c6e31c27a522fae8512ff6d1242318f8cf4c0036964bf83f5d26243",
       "size": 175
+    },
+    {
+      "path": "vanilla/textures/block/orange_wool.png",
+      "sha256": "de3ec43fe8ca99026bdda3c036a964990e7d9b08c8b67690e2f975ddbdc5ff68",
+      "size": 398
     },
     {
       "path": "vanilla/textures/item/orange_bundle.png",
@@ -3589,11 +4129,6 @@
       "path": "vanilla/textures/block/orange_tulip.png",
       "sha256": "aad64a9caf497332bc1233b270fd8742663b8d29379aa442688858f789437b7c",
       "size": 164
-    },
-    {
-      "path": "vanilla/textures/block/orange_wool.png",
-      "sha256": "de3ec43fe8ca99026bdda3c036a964990e7d9b08c8b67690e2f975ddbdc5ff68",
-      "size": 398
     },
     {
       "path": "vanilla/textures/block/oxeye_daisy.png",
@@ -3696,6 +4231,11 @@
       "size": 260
     },
     {
+      "path": "vanilla/textures/block/pale_oak_planks.png",
+      "sha256": "d478269d770f5bbefc0373a597155329d2f8d089ab76376c14c7eec8e79ea66f",
+      "size": 195
+    },
+    {
       "path": "vanilla/textures/item/pale_oak_door.png",
       "sha256": "db895c8e022123bc82f92ecfa4cef880d5572c8c109f90caef402095e386ae13",
       "size": 180
@@ -3714,11 +4254,6 @@
       "path": "vanilla/textures/block/pale_oak_log.png",
       "sha256": "dca4fd9a79731135eba9993cd304a2702fed04fa2191df0a1a7f022c0597b344",
       "size": 196
-    },
-    {
-      "path": "vanilla/textures/block/pale_oak_planks.png",
-      "sha256": "d478269d770f5bbefc0373a597155329d2f8d089ab76376c14c7eec8e79ea66f",
-      "size": 195
     },
     {
       "path": "vanilla/textures/block/pale_oak_sapling.png",
@@ -3746,11 +4281,6 @@
       "size": 238
     },
     {
-      "path": "vanilla/textures/item/paper.png",
-      "sha256": "046228bbea6334f90e915ea62c6b4050016a6b1aa575734d630a10688d9b11e7",
-      "size": 173
-    },
-    {
       "path": "vanilla/textures/item/parched_spawn_egg.png",
       "sha256": "32b7eff1e102f321e330eccc9ccf9c4d23d322e6a5e6d02d6cc465fac1714185",
       "size": 235
@@ -3759,6 +4289,21 @@
       "path": "vanilla/textures/item/parrot_spawn_egg.png",
       "sha256": "7d4c9e57d9a8d801937a0539652c8ee2544e70ac8f4d2bf7c4b345cd8749ebd7",
       "size": 231
+    },
+    {
+      "path": "vanilla/textures/block/pearlescent_froglight_top.png",
+      "sha256": "184c6440e2adc27fa112f59decc05410330e6dd9d0ed9d830c0fea054b1dc139",
+      "size": 167
+    },
+    {
+      "path": "vanilla/textures/block/pearlescent_froglight_side.png",
+      "sha256": "702d2996a235e5bfe964acf32a8692a281e44ef4dadbbe5d7ab7b557e6b66e97",
+      "size": 184
+    },
+    {
+      "path": "vanilla/textures/block/peony_top.png",
+      "sha256": "87d001fac3725b1c238bffb6b35fdbfcf134005169db20829e4c185f8b7f84f4",
+      "size": 205
     },
     {
       "path": "vanilla/textures/item/phantom_membrane.png",
@@ -3789,6 +4334,11 @@
       "path": "vanilla/textures/item/pillager_spawn_egg.png",
       "sha256": "e570952d3aa129e37d9a9e0964fea9b63ce37de31e04cb04d2c49354a1a47ca0",
       "size": 262
+    },
+    {
+      "path": "vanilla/textures/block/pink_wool.png",
+      "sha256": "fd0fb51c2865b3fa69d086277ca8d2b0a7e35a64dea73b90c594b548bb692453",
+      "size": 410
     },
     {
       "path": "vanilla/textures/item/pink_bundle.png",
@@ -3851,9 +4401,14 @@
       "size": 163
     },
     {
-      "path": "vanilla/textures/block/pink_wool.png",
-      "sha256": "fd0fb51c2865b3fa69d086277ca8d2b0a7e35a64dea73b90c594b548bb692453",
-      "size": 410
+      "path": "vanilla/textures/block/piston_top.png",
+      "sha256": "582677eed9633f9c71a3b4b44050bb5a2290b31a073fc7061d165e614a2acb9d",
+      "size": 198
+    },
+    {
+      "path": "vanilla/textures/block/piston_side.png",
+      "sha256": "e0582688ee63cc695434c0f0e90b3750046ead23a00242e9c18b74c105bd34e1",
+      "size": 269
     },
     {
       "path": "vanilla/textures/item/pitcher_plant.png",
@@ -3869,6 +4424,16 @@
       "path": "vanilla/textures/item/plenty_pottery_sherd.png",
       "sha256": "fd3d72ee34c9bdd5f7691922bfbb0c881ca7679b853c7134f4eb129a9c3d5e00",
       "size": 204
+    },
+    {
+      "path": "vanilla/textures/block/podzol_top.png",
+      "sha256": "598072d5a4db38ec4ea081a584a2de6b5960785bc2287e18e93427c7433c5d56",
+      "size": 196
+    },
+    {
+      "path": "vanilla/textures/block/podzol_side.png",
+      "sha256": "dacef78790b567396241e3d1453cdc5cd63eb79484f77fe8bd9311281805e283",
+      "size": 395
     },
     {
       "path": "vanilla/textures/item/pointed_dripstone.png",
@@ -3889,6 +4454,16 @@
       "path": "vanilla/textures/block/polished_andesite.png",
       "sha256": "1faaa8bacab00d23de46321801e7147a02e388febc43b6c7b31f0ae364e8137e",
       "size": 205
+    },
+    {
+      "path": "vanilla/textures/block/polished_basalt_top.png",
+      "sha256": "66fc06d382a3dc75807970e4e4d88e2300d0e4894bc6a83727bf67f5f2114fab",
+      "size": 209
+    },
+    {
+      "path": "vanilla/textures/block/polished_basalt_side.png",
+      "sha256": "69a4a98f9ddd56b58fa37cf1e0fb2fa04ce4e34768dc44cc270e9b033f1b8a1f",
+      "size": 170
     },
     {
       "path": "vanilla/textures/block/polished_blackstone.png",
@@ -3981,6 +4556,16 @@
       "size": 272
     },
     {
+      "path": "vanilla/textures/block/pumpkin_top.png",
+      "sha256": "d56a36f0fea290d79d9a23122255627181ca54541d0599791fdf23b617b160c6",
+      "size": 199
+    },
+    {
+      "path": "vanilla/textures/block/pumpkin_side.png",
+      "sha256": "8f67ee060dd5c1ecc66913caed4294937e3cda8a11d0e0866ec8f558c157c30d",
+      "size": 178
+    },
+    {
       "path": "vanilla/textures/item/pumpkin_pie.png",
       "sha256": "0824fa8edbeb5466f55a770cc7e45b7b4e599298fd9017e46b25ecd88c78cb72",
       "size": 211
@@ -3989,6 +4574,11 @@
       "path": "vanilla/textures/item/pumpkin_seeds.png",
       "sha256": "49bdf20eb2bc2944ac5105c62aec590aed6b4186d5df9b78928617e55fd5f99f",
       "size": 128
+    },
+    {
+      "path": "vanilla/textures/block/purple_wool.png",
+      "sha256": "f8f5d7eb9145633d27d80c4c06a9a71e21eaea522c277f81a4d6d9e8fd60f0d9",
+      "size": 399
     },
     {
       "path": "vanilla/textures/item/purple_bundle.png",
@@ -4034,11 +4624,6 @@
       "path": "vanilla/textures/block/purple_terracotta.png",
       "sha256": "f267c2238056f8d1787e3904ff2cb4c16ff562956d3e7ecbbbfe1088a696f839",
       "size": 423
-    },
-    {
-      "path": "vanilla/textures/block/purple_wool.png",
-      "sha256": "f8f5d7eb9145633d27d80c4c06a9a71e21eaea522c277f81a4d6d9e8fd60f0d9",
-      "size": 399
     },
     {
       "path": "vanilla/textures/block/purpur_block.png",
@@ -4141,6 +4726,16 @@
       "size": 215
     },
     {
+      "path": "vanilla/textures/item/recovery_compass_16.png",
+      "sha256": "21a2e477bfa1174d64365b9027caf85fa55473a9b68951af5397bd99280ab35d",
+      "size": 238
+    },
+    {
+      "path": "vanilla/textures/block/red_wool.png",
+      "sha256": "07b48cec9b4610e908025807fb85fa686dd50f17918fa677ce655d28b3ba3464",
+      "size": 372
+    },
+    {
       "path": "vanilla/textures/item/red_bundle.png",
       "sha256": "2d8a2d48a3dbb4206d9f17e9b89ce09e7104cf44b24ff60029fadf3141ac5b52",
       "size": 203
@@ -4216,11 +4811,6 @@
       "size": 175
     },
     {
-      "path": "vanilla/textures/block/red_wool.png",
-      "sha256": "07b48cec9b4610e908025807fb85fa686dd50f17918fa677ce655d28b3ba3464",
-      "size": 372
-    },
-    {
       "path": "vanilla/textures/item/comparator.png",
       "sha256": "5451596b2a880a8e37777c2bd9f7080049c4c15b8fed9dca2e9e1acb87522e76",
       "size": 189
@@ -4251,6 +4841,16 @@
       "size": 150
     },
     {
+      "path": "vanilla/textures/block/reinforced_deepslate_top.png",
+      "sha256": "17ba9375b52fb0ad97be73ad09b9ca0d274931cd98e4bf5933c6fa5e350e2106",
+      "size": 222
+    },
+    {
+      "path": "vanilla/textures/block/reinforced_deepslate_side.png",
+      "sha256": "3021e5b9b098ffba1877267a944b9c97043417ac5bca187d3d35719b90bb2791",
+      "size": 244
+    },
+    {
       "path": "vanilla/textures/item/resin_brick.png",
       "sha256": "e7d73d5495b3357a0efd5971c932ac5f9e9aa369339190b8b14c6cac9ddbff3c",
       "size": 198
@@ -4266,9 +4866,24 @@
       "size": 196
     },
     {
+      "path": "vanilla/textures/block/respawn_anchor_top_off.png",
+      "sha256": "aaa94e5139a64115f0041a6a9753975c869bc444ad92a988913223250a4df5fe",
+      "size": 173
+    },
+    {
+      "path": "vanilla/textures/block/respawn_anchor_side0.png",
+      "sha256": "5e5c307d492ad92085769d68e50bd01b3cbd7156a9ad94dc801722e2d506ab7f",
+      "size": 243
+    },
+    {
       "path": "vanilla/textures/block/rooted_dirt.png",
       "sha256": "3c59420f80c58794b49f822fb9b251779250b759f5c12111fa29f772a635f42b",
       "size": 210
+    },
+    {
+      "path": "vanilla/textures/block/rose_bush_top.png",
+      "sha256": "07b97a1e84394a3d38bc199bb39c61c179c06b0e64bf71e61eff277b03184814",
+      "size": 213
     },
     {
       "path": "vanilla/textures/item/rotten_flesh.png",
@@ -4296,6 +4911,16 @@
       "size": 199
     },
     {
+      "path": "vanilla/textures/block/scaffolding_top.png",
+      "sha256": "f122ecdd7cb1ba88104ec19d999c70e853279f5369c0f28133d566390b4bbd55",
+      "size": 253
+    },
+    {
+      "path": "vanilla/textures/block/scaffolding_side.png",
+      "sha256": "4e668a9d420ec32b39ccd26709c7de35efcc2db305c8f619cfc20c6ad7cb2e89",
+      "size": 195
+    },
+    {
       "path": "vanilla/textures/item/scrape_pottery_sherd.png",
       "sha256": "d5406f16a152c8ef4f131f89900104fc639443aa50498e94d99b63601358a2c4",
       "size": 208
@@ -4304,6 +4929,31 @@
       "path": "vanilla/textures/block/sculk.png",
       "sha256": "cab823d096effc1185d982c4bf1f4e994cc17c22a9df00d5af8adeabc1bc5fcc",
       "size": 262
+    },
+    {
+      "path": "vanilla/textures/block/sculk_catalyst_top.png",
+      "sha256": "a283f79f0200dfe18f60bd28141d7d0d74c0e4936ad2893195e5a8c955470e13",
+      "size": 179
+    },
+    {
+      "path": "vanilla/textures/block/sculk_catalyst_side.png",
+      "sha256": "302da1ccc07fceef4ca8402dc452978c33e7bf155091c36b0f769c20c14afd68",
+      "size": 234
+    },
+    {
+      "path": "vanilla/textures/block/sculk_sensor_top.png",
+      "sha256": "9bcf408a474ff8013f9163c07c247ff9a11ca9292fe4d315a66131267e98eadc",
+      "size": 160
+    },
+    {
+      "path": "vanilla/textures/block/sculk_shrieker_top.png",
+      "sha256": "9b175ebf1ffee1a9367f1b91fb59d1fae83d4dac5637c5f74c7539e23cc735d9",
+      "size": 124
+    },
+    {
+      "path": "vanilla/textures/block/sculk_shrieker_side.png",
+      "sha256": "5845cffd70a7722bc5cb15d295d50239767912f93dee8b3d11e3816dbb1f8965",
+      "size": 234
     },
     {
       "path": "vanilla/textures/block/sculk_vein.png",
@@ -4416,6 +5066,31 @@
       "size": 125
     },
     {
+      "path": "vanilla/textures/block/small_dripleaf_top.png",
+      "sha256": "4db648738205b241e18dfd143d4323ba45e9acda86691167a09894f44fd54c70",
+      "size": 146
+    },
+    {
+      "path": "vanilla/textures/block/small_dripleaf_side.png",
+      "sha256": "ff5a76aba71f53dca1528a776d8eaac19d5188e81481babbbdd1177e15dd7508",
+      "size": 80
+    },
+    {
+      "path": "vanilla/textures/block/smithing_table_top.png",
+      "sha256": "eb33e51c12200f6af3095d4e039c0692568011b7f5160e35aecd81a598d5e6da",
+      "size": 188
+    },
+    {
+      "path": "vanilla/textures/block/smithing_table_front.png",
+      "sha256": "f7a5479a3e1d3e3f604ec1b22634736ea952b676fef20e954a9607f15fb13ba0",
+      "size": 246
+    },
+    {
+      "path": "vanilla/textures/block/smithing_table_side.png",
+      "sha256": "de6b8a0f0da0b27b275371a4fec5f2fbb2aa473ef104a1c5abcc41db4dda5f73",
+      "size": 237
+    },
+    {
       "path": "vanilla/textures/item/bolt_armor_trim_smithing_template.png",
       "sha256": "3be9d06528ecac6ca211895a0a06225bcd8dd9e144f443b8d8906751fade31b8",
       "size": 225
@@ -4501,14 +5176,39 @@
       "size": 252
     },
     {
+      "path": "vanilla/textures/block/smoker_top.png",
+      "sha256": "73a8671ab27cbf6e25f4074e508126da16c8754ff415316787f5dd02150e6e89",
+      "size": 216
+    },
+    {
+      "path": "vanilla/textures/block/smoker_front.png",
+      "sha256": "ce2bec2d026b954529024c4ead234a39932335cf5367ac0a71c380b055150795",
+      "size": 256
+    },
+    {
+      "path": "vanilla/textures/block/smoker_side.png",
+      "sha256": "ee07afd0ac7ffa45358d3303a870a8e4db90af1e19c4fdccdefb92890aa9747d",
+      "size": 234
+    },
+    {
       "path": "vanilla/textures/block/smooth_basalt.png",
       "sha256": "f550b8cc280f6cd17fd5c2c060bc8f5d67ccb20a4bf07b4c2c5a35f0ade3e62b",
       "size": 195
     },
     {
+      "path": "vanilla/textures/block/quartz_block_bottom.png",
+      "sha256": "99da01fae2c0a8980730fcb30d3881a94649ec51445cb9c8283ad35851ac5ebd",
+      "size": 151
+    },
+    {
       "path": "vanilla/textures/block/smooth_stone.png",
       "sha256": "95e15063a305df75491527a9bb7cbad6e4d98c9d974881f26752ee7f1ef15a9e",
       "size": 180
+    },
+    {
+      "path": "vanilla/textures/block/smooth_stone_slab_side.png",
+      "sha256": "eea1c55068b287920815c1e7c5493f8a64a9213b37144c1bfece0e634a5502a7",
+      "size": 186
     },
     {
       "path": "vanilla/textures/item/sniffer_egg.png",
@@ -4601,6 +5301,11 @@
       "size": 256
     },
     {
+      "path": "vanilla/textures/block/spruce_planks.png",
+      "sha256": "a1e4cd5b1eb20bc03e8d1f3fdae59034363c3b2dde7f505694e4323222e00e21",
+      "size": 195
+    },
+    {
       "path": "vanilla/textures/item/spruce_door.png",
       "sha256": "d8b67cfb500c581f2b2aef184037e027457c76a82b7ad38c3818bb5f72d85eb4",
       "size": 129
@@ -4619,11 +5324,6 @@
       "path": "vanilla/textures/block/spruce_log.png",
       "sha256": "a87a55ec454cb682934666bdf864dbd7fab4a561415f76834f3c53bb75bf0ba9",
       "size": 191
-    },
-    {
-      "path": "vanilla/textures/block/spruce_planks.png",
-      "sha256": "a1e4cd5b1eb20bc03e8d1f3fdae59034363c3b2dde7f505694e4323222e00e21",
-      "size": 195
     },
     {
       "path": "vanilla/textures/block/spruce_sapling.png",
@@ -4666,19 +5366,14 @@
       "size": 105
     },
     {
-      "path": "vanilla/textures/block/stone.png",
-      "sha256": "b5e10adc72442bfb257ce7ba0b9bbe36475a0c8cdfec89b80dc9517203ff3e9f",
-      "size": 151
+      "path": "vanilla/textures/block/piston_top_sticky.png",
+      "sha256": "6a00ae4c73fae0a1b5ab57f2adab460459ee80342e16b60ec4eb4b98fd098445",
+      "size": 251
     },
     {
       "path": "vanilla/textures/item/stone_axe.png",
       "sha256": "907180316ed8fce73d54a42d915fb68e094dbff21a1790404925f3d3f15ef408",
       "size": 178
-    },
-    {
-      "path": "vanilla/textures/block/stone_bricks.png",
-      "sha256": "24415444c9e4815aad4a3a349ecbfc0e027b96be25ac5b7c273c06f16c4fdd2f",
-      "size": 188
     },
     {
       "path": "vanilla/textures/item/stone_hoe.png",
@@ -4704,6 +5399,16 @@
       "path": "vanilla/textures/item/stone_sword.png",
       "sha256": "44fe7d80120c30eb678ea605bdc4b1bf8b6475e287703a0403d9a5bd7bedf982",
       "size": 190
+    },
+    {
+      "path": "vanilla/textures/block/stonecutter_top.png",
+      "sha256": "43c826a5b52ef53c1c1d0d8eba01e53ffaafbf81c98a11cf408c5eba03027a65",
+      "size": 205
+    },
+    {
+      "path": "vanilla/textures/block/stonecutter_side.png",
+      "sha256": "a11cd17d695871f14c199011a94202d0308ab213e5e0c1462469b0ad1f220f2c",
+      "size": 193
     },
     {
       "path": "vanilla/textures/item/stray_spawn_egg.png",
@@ -4776,16 +5481,6 @@
       "size": 209
     },
     {
-      "path": "vanilla/textures/block/structure_block.png",
-      "sha256": "04feab78c625f0edb46e0ee4ac4919bb1a8cdab7e680a5dd439f0ba9625a7a7d",
-      "size": 197
-    },
-    {
-      "path": "vanilla/textures/item/structure_void.png",
-      "sha256": "aea08f14c16e0c35382eab5b660c51e6cac42a38d62aaa0a6754103d0c131550",
-      "size": 180
-    },
-    {
       "path": "vanilla/textures/item/sugar.png",
       "sha256": "8fd584956fcf4b3252706051f7f0c93e808cdb0e391b42dff130c6ae4e5d18ae",
       "size": 167
@@ -4794,6 +5489,21 @@
       "path": "vanilla/textures/item/sugar_cane.png",
       "sha256": "c4d268c910568b900e8fb961041dce056e6f9fe1d2e4fab99764579c38a1f966",
       "size": 184
+    },
+    {
+      "path": "vanilla/textures/block/sunflower_front.png",
+      "sha256": "5c68bb4999d1f3763fe19a495006629ab712b94ab2f196d36f33f27695d63b07",
+      "size": 150
+    },
+    {
+      "path": "vanilla/textures/block/suspicious_gravel_0.png",
+      "sha256": "444ae2ad0970b23814f6425a9758df85f34df1a88c3606022b0a0794be141e4f",
+      "size": 222
+    },
+    {
+      "path": "vanilla/textures/block/suspicious_sand_0.png",
+      "sha256": "2320976198b0ff461bc5f4ae03f58e854d7647912733ee52b9a26d7bcdd14ead",
+      "size": 208
     },
     {
       "path": "vanilla/textures/item/suspicious_stew.png",
@@ -4816,19 +5526,39 @@
       "size": 179
     },
     {
+      "path": "vanilla/textures/block/tall_grass_top.png",
+      "sha256": "16cfd90e32fb04756fd0cfbd652ae358d545a069a9ed22cbb390ec5bf3f17f1a",
+      "size": 184
+    },
+    {
+      "path": "vanilla/textures/block/target_top.png",
+      "sha256": "c37931d2c3b5bacecc74d83b1440c9a65fe1dbbdcdb091e921716cb0fe984c9c",
+      "size": 235
+    },
+    {
+      "path": "vanilla/textures/block/target_side.png",
+      "sha256": "58e9e93f74111c7fbfdb4ef0e8aa4cdf44dd2f4db59ac9347a98d14983ad98bb",
+      "size": 226
+    },
+    {
       "path": "vanilla/textures/block/terracotta.png",
       "sha256": "b2458267eac6b6f35d02990ee3244edf1f43fbe258bd6dfe15189cf2eaf42ae8",
       "size": 181
     },
     {
-      "path": "vanilla/textures/block/test_instance_block.png",
-      "sha256": "90fc353ea906b168005ee60fecc603da9d7d94b325a5e690dbcf3d424284ab03",
-      "size": 217
-    },
-    {
       "path": "vanilla/textures/block/tinted_glass.png",
       "sha256": "f6d7b83baf3a8773338af8089cac7ccf91c66594c2efd472bce541fb9c0cf7c5",
       "size": 167
+    },
+    {
+      "path": "vanilla/textures/block/tnt_top.png",
+      "sha256": "e5779ad2c41d1b72cc7f8baea7b5c65f920f97a83b808ee3c643f8c45f31ca41",
+      "size": 189
+    },
+    {
+      "path": "vanilla/textures/block/tnt_side.png",
+      "sha256": "e895862292492528e8e55d675acb886245485639fd16a4c075f6e64c06404541",
+      "size": 175
     },
     {
       "path": "vanilla/textures/block/torch.png",
@@ -4931,6 +5661,16 @@
       "size": 157
     },
     {
+      "path": "vanilla/textures/block/verdant_froglight_top.png",
+      "sha256": "795b5ae88fc8741cf997824d8a782ce23492d579f60838911c782624927f1bed",
+      "size": 167
+    },
+    {
+      "path": "vanilla/textures/block/verdant_froglight_side.png",
+      "sha256": "12b395af9a70e38f47b5657143f18859b51c4db7362900569b68ef0eb1a62da3",
+      "size": 184
+    },
+    {
       "path": "vanilla/textures/item/vex_spawn_egg.png",
       "sha256": "6e46640f7bb125e03c3d85b2bd0373d1be9718f3d7327e02fbcd0c041f7f0309",
       "size": 229
@@ -4961,6 +5701,11 @@
       "size": 272
     },
     {
+      "path": "vanilla/textures/block/warped_planks.png",
+      "sha256": "3a7da9c4a54eafaec07b50e474de8695a321401f5e5c1c3b435148056e94c2ea",
+      "size": 195
+    },
+    {
       "path": "vanilla/textures/item/warped_door.png",
       "sha256": "697e00387793ed81ea95f25ebb74d94913c6151948e98b08fc6b968b130b466c",
       "size": 192
@@ -4981,14 +5726,14 @@
       "size": 216
     },
     {
+      "path": "vanilla/textures/block/warped_stem.png",
+      "sha256": "a2443a9ef982057935ea2943c67ce24160074cc65788713d6ec35474cbbc1e4a",
+      "size": 471
+    },
+    {
       "path": "vanilla/textures/block/warped_nylium.png",
       "sha256": "4c946c51c7f4459caf0525f1cf1077782caa204322aea33894ceca7043439ad7",
       "size": 212
-    },
-    {
-      "path": "vanilla/textures/block/warped_planks.png",
-      "sha256": "3a7da9c4a54eafaec07b50e474de8695a321401f5e5c1c3b435148056e94c2ea",
-      "size": 195
     },
     {
       "path": "vanilla/textures/block/warped_roots.png",
@@ -5004,11 +5749,6 @@
       "path": "vanilla/textures/item/warped_sign.png",
       "sha256": "943e5b0b01d7b2bee7ccdd854b054ef679b2019014f3405650117f4fc3496e6e",
       "size": 216
-    },
-    {
-      "path": "vanilla/textures/block/warped_stem.png",
-      "sha256": "a2443a9ef982057935ea2943c67ce24160074cc65788713d6ec35474cbbc1e4a",
-      "size": 471
     },
     {
       "path": "vanilla/textures/block/warped_trapdoor.png",
@@ -5096,6 +5836,11 @@
       "size": 138
     },
     {
+      "path": "vanilla/textures/block/white_wool.png",
+      "sha256": "70c9c9a9901d71ef9a5a89ea2cc4bc0d99ff5e65f733d1467da8b92f746107a5",
+      "size": 390
+    },
+    {
       "path": "vanilla/textures/item/white_bundle.png",
       "sha256": "4d796b37aace6bb84ae8eb3d4eb2ff86ef4caa27782a5b6c336426b5e7524e0b",
       "size": 203
@@ -5149,11 +5894,6 @@
       "path": "vanilla/textures/block/white_tulip.png",
       "sha256": "128c49e84a5a486aa79206d04423f7393c4934c0b80447e022ed5c89a03ffd04",
       "size": 168
-    },
-    {
-      "path": "vanilla/textures/block/white_wool.png",
-      "sha256": "70c9c9a9901d71ef9a5a89ea2cc4bc0d99ff5e65f733d1467da8b92f746107a5",
-      "size": 390
     },
     {
       "path": "vanilla/textures/item/wildflowers.png",
@@ -5226,6 +5966,11 @@
       "size": 190
     },
     {
+      "path": "vanilla/textures/block/yellow_wool.png",
+      "sha256": "cc77805bdc4ccb24d210ec65e304f1c367ae9e9ee0fed404ec99143bf62a2ef2",
+      "size": 398
+    },
+    {
       "path": "vanilla/textures/item/yellow_bundle.png",
       "sha256": "233ad401d1ba8f4b8aaf627a2c37935bb2119e242f7c3409dacb710a1799f983",
       "size": 203
@@ -5276,11 +6021,6 @@
       "size": 418
     },
     {
-      "path": "vanilla/textures/block/yellow_wool.png",
-      "sha256": "cc77805bdc4ccb24d210ec65e304f1c367ae9e9ee0fed404ec99143bf62a2ef2",
-      "size": 398
-    },
-    {
       "path": "vanilla/textures/item/zoglin_spawn_egg.png",
       "sha256": "c64a209c644f540987c1581c7e41343c90ea5ad76e08075ea7d5bdcea224dd9c",
       "size": 335
@@ -5309,6 +6049,1411 @@
       "path": "vanilla/textures/item/zombified_piglin_spawn_egg.png",
       "sha256": "513a7b61259a40b806757f8ec163d5c24be5e3f0fdabf6cf941bd61fb16bbf12",
       "size": 297
+    },
+    {
+      "path": "vanilla/textures/trims/items/helmet_trim_amethyst.png",
+      "sha256": "d969e746cb1db623f70bcd5bd0cbde69fcb30ac2d93577fcd2f9195341664cce",
+      "size": 115
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim_amethyst.png",
+      "sha256": "c27c22c2204fa4fd0f76e17cc33ef72163797e02d65e3cc1fc1243b793246480",
+      "size": 150
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim_amethyst.png",
+      "sha256": "eef3fb246f31297cba23e9a452e756f8b3fb24f87352f67704d33ad94de4f8e2",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim_amethyst.png",
+      "sha256": "2c89e19221670150f9b6099ff24078380fc8c8f7675e65f397c9b04989a0604e",
+      "size": 147
+    },
+    {
+      "path": "vanilla/textures/trims/items/helmet_trim_copper.png",
+      "sha256": "fec9095e36aec8c0d35aafc5a25748ecf85bad528ba25798d8567b43a2d1d9ef",
+      "size": 115
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim_copper.png",
+      "sha256": "7803f2e55407a04fbab545d5c4e62c4111a8d9167cb1073fb6a6aa97ffece27b",
+      "size": 171
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim_copper.png",
+      "sha256": "575966f3b7f3e09eab010a878fa4b60d1bfaf18417fe4987c24aa5fe4d59a465",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim_copper.png",
+      "sha256": "d529154b148c8a050ed87c4c84833b33e299c1f485711dbfef71615a1dff6c39",
+      "size": 147
+    },
+    {
+      "path": "vanilla/textures/trims/items/helmet_trim_diamond.png",
+      "sha256": "0e134650d78cc6a16ca966581298a23fc9fa0db6522ae7dd18fc8bf85f49b454",
+      "size": 107
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim_diamond.png",
+      "sha256": "d3b927764b0f57a85798af540ec7f75430680c3d8f6c392a6c6c952208068f5e",
+      "size": 138
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim_diamond.png",
+      "sha256": "e0ee32049b1da6a7e3c6a5ff0d29a6294d325f8234d617083921b0f204002aca",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim_diamond.png",
+      "sha256": "99cac75a26790c75315665b0d9b67839e26a5f69ab07fa825dcca875a8f319a6",
+      "size": 127
+    },
+    {
+      "path": "vanilla/textures/trims/items/helmet_trim_emerald.png",
+      "sha256": "12f6e5ae37a5e9ddce7cee1b1650fae3ddc35da686d1a1a4ad203f67b48f53e5",
+      "size": 115
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim_emerald.png",
+      "sha256": "d0dd6ff77c0c8b5d9e881e8e55710667486867bf31d644b2cfe53ccf5520ab38",
+      "size": 143
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim_emerald.png",
+      "sha256": "1f0b60b83e555fd68bffc483b56daf8daf1599f44bf91f42dbc338c448a263a9",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim_emerald.png",
+      "sha256": "6f409b21bb2f50b8a4c9f6e39e51a57f20a35fbe37d36e0b46fe946fb7819f63",
+      "size": 147
+    },
+    {
+      "path": "vanilla/textures/trims/items/helmet_trim_gold.png",
+      "sha256": "ace5142e1b2ddd86854688d4dfa236bff03a8d9ed297db6d40d7e040a0804541",
+      "size": 115
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim_gold.png",
+      "sha256": "c90a4483a9524ae8857e8b01f947a1221ec9efb32317052cec570905d57b055c",
+      "size": 138
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim_gold.png",
+      "sha256": "8e8eedfc35aa2e6a922ce62927f659638ae4a76ff0ff376c222275bf9a16fa63",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim_gold.png",
+      "sha256": "f93276ab8227df725bc61c034e23dd4d4f1a4029fdb62812bf56944e6c0771f1",
+      "size": 141
+    },
+    {
+      "path": "vanilla/textures/trims/items/helmet_trim_iron.png",
+      "sha256": "3b0ecb82b822d7d6af5274eaabb41284235e745b7a8a19c0ab7da39a5bf57240",
+      "size": 115
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim_iron.png",
+      "sha256": "40d77a00dfb37cb18798f81a91aa102e8592a19767cd1c91af58414f3cbde918",
+      "size": 171
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim_iron.png",
+      "sha256": "5cef326157caaf0b079a8eb31e125e89f490a9b7a636813cb449b462dd0a1493",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim_iron.png",
+      "sha256": "6f5f77cbb98738e5b9ae7146dba6e36354e83524c2416760e34fe0f61a92c445",
+      "size": 141
+    },
+    {
+      "path": "vanilla/textures/trims/items/helmet_trim_lapis.png",
+      "sha256": "38a7bbb0e3f98c00e1c47483da98715ae191f24fce0b02ebd02b2c5f99352410",
+      "size": 115
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim_lapis.png",
+      "sha256": "236754dc4a4364997bfcdca360c2fdb946e889dfc9fe4d9c6338f6db7bc8c262",
+      "size": 164
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim_lapis.png",
+      "sha256": "386eb729cbab839ae96eeec6421990364191ce7d46686ecf1c518d97b4209aa4",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim_lapis.png",
+      "sha256": "3eb73afced2107500d45e27bf79fec1b900d4cd7e4d7bd161395f7e09ca16b9e",
+      "size": 145
+    },
+    {
+      "path": "vanilla/textures/trims/items/helmet_trim_netherite.png",
+      "sha256": "7a19f952c6c76d536e69aa9c364940a378d35e9c6f982cd81bab92fb97badbe3",
+      "size": 115
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim_netherite.png",
+      "sha256": "fd963acde5c0e4338648c4e68eeedeb450c64c64da0bfd59f05717e1e2faf25f",
+      "size": 171
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim_netherite.png",
+      "sha256": "6ce844d69f28451dd7af5207d57395ea5e917b7be359281156384ff0151c223e",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim_netherite.png",
+      "sha256": "584a4fbd149496dc054eb5687c75eaeddde8c7a762c19e93ca46cc7f15e2f50e",
+      "size": 139
+    },
+    {
+      "path": "vanilla/textures/trims/items/helmet_trim_quartz.png",
+      "sha256": "9b28764cb5d8f90412d426f5fb140f20cacb031710ab5e6a475b1a04b2d2306e",
+      "size": 115
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim_quartz.png",
+      "sha256": "f3f340ed4c091460772a68e39471b342f15d937ff1635fb88c8e6fa40d12cf0f",
+      "size": 144
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim_quartz.png",
+      "sha256": "cdd9e0b9bdcdb2b408c590238957dcef703fac032a530d797d15aeab7771825e",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim_quartz.png",
+      "sha256": "6d166aa9c62d5e2e31993ba095cf597bf6c1d46646c6103154ef8f75118a0af9",
+      "size": 141
+    },
+    {
+      "path": "vanilla/textures/trims/items/helmet_trim_redstone.png",
+      "sha256": "2a8aa6412c2ec97d2e2fd5398e8c6eec439cf571d1acb19c0ccb57cf4edaa36e",
+      "size": 113
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim_redstone.png",
+      "sha256": "fbba6954cfa52a8b73f5dcf7b78ab925785436c94f4de5f07b4f9ea460fa1f19",
+      "size": 148
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim_redstone.png",
+      "sha256": "c3c7ebc3e2004d741a15caaf4e28398d6482b0279280d1321c1595923f30809a",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim_redstone.png",
+      "sha256": "50388d010708056a6813cbe42ff35f4148b06ec69c3fd2b36b91973664f9e4dd",
+      "size": 147
+    },
+    {
+      "path": "vanilla/textures/trims/items/helmet_trim_resin.png",
+      "sha256": "22bb0988db308214a365f94b234a264311d1fb381c70fab7c5a9995696fc2d49",
+      "size": 115
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim_resin.png",
+      "sha256": "a5500ad797127b99b87304bc6ae59df3f7889ebc700b47d321a22aed771aa375",
+      "size": 149
+    },
+    {
+      "path": "vanilla/textures/trims/items/leggings_trim_resin.png",
+      "sha256": "b65e44b91f51d94ecb168641d31608d6314e2a3e1db0488bafa81bec1e53fbe7",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/trims/items/boots_trim_resin.png",
+      "sha256": "001ac0d06bda691413cc5d76aec92f67d522afa7baa8d31e64c3c1b41c108f5b",
+      "size": 146
+    },
+    {
+      "path": "vanilla/textures/generated/item/acacia_slab.png",
+      "sha256": "1e1f2761fc9605d59897c3b4b6ae9873bd276697994d9f673fd5391a207954e0",
+      "size": 1412
+    },
+    {
+      "path": "vanilla/textures/generated/item/acacia_stairs.png",
+      "sha256": "1e1f2761fc9605d59897c3b4b6ae9873bd276697994d9f673fd5391a207954e0",
+      "size": 1412
+    },
+    {
+      "path": "vanilla/textures/generated/item/acacia_wood.png",
+      "sha256": "b644846a8d5cbb731950ccd61d28273506bdb9da4c91effcdb31120e476cb138",
+      "size": 1138
+    },
+    {
+      "path": "vanilla/textures/generated/item/ancient_debris.png",
+      "sha256": "4faa467eab909f7367aa79877c37657af589ae453fb8eeedad5a9f76b728f146",
+      "size": 1447
+    },
+    {
+      "path": "vanilla/textures/generated/item/andesite_slab.png",
+      "sha256": "4983a5d8a5d429fae089523b3baffbb2c5c5da5da5f5e2d9ec6d14b59740330f",
+      "size": 1278
+    },
+    {
+      "path": "vanilla/textures/generated/item/andesite_stairs.png",
+      "sha256": "4983a5d8a5d429fae089523b3baffbb2c5c5da5da5f5e2d9ec6d14b59740330f",
+      "size": 1278
+    },
+    {
+      "path": "vanilla/textures/generated/item/azalea.png",
+      "sha256": "29faf9b70b9f1def5a165e09056e37c412744435147425f2f788a21283355678",
+      "size": 1138
+    },
+    {
+      "path": "vanilla/textures/generated/item/bamboo_mosaic_slab.png",
+      "sha256": "2aec7cd6e020b14f7bad4e55ad7a511d5127a2e322ad4a65dbaa255abf745df5",
+      "size": 1604
+    },
+    {
+      "path": "vanilla/textures/generated/item/bamboo_mosaic_stairs.png",
+      "sha256": "2aec7cd6e020b14f7bad4e55ad7a511d5127a2e322ad4a65dbaa255abf745df5",
+      "size": 1604
+    },
+    {
+      "path": "vanilla/textures/generated/item/bamboo_slab.png",
+      "sha256": "d4cbb53d0aa95aa946cf722ec9166fddc9127af083209045413ecea431df5df4",
+      "size": 1530
+    },
+    {
+      "path": "vanilla/textures/generated/item/bamboo_stairs.png",
+      "sha256": "d4cbb53d0aa95aa946cf722ec9166fddc9127af083209045413ecea431df5df4",
+      "size": 1530
+    },
+    {
+      "path": "vanilla/textures/generated/item/barrel.png",
+      "sha256": "091fdf0fd5cff60d8da08e0c6859ab9d85d416dbd2fa5602227ed78bb25d0dbd",
+      "size": 1361
+    },
+    {
+      "path": "vanilla/textures/generated/item/basalt.png",
+      "sha256": "19902a04095320efefa5ac718513c5b437366758fb06070731aaf8a6c762247f",
+      "size": 1215
+    },
+    {
+      "path": "vanilla/textures/generated/item/bee_nest.png",
+      "sha256": "758918aa5b9ab7643fccf8ad030b0219697d274faaac66b42273b508c0a62bf5",
+      "size": 1276
+    },
+    {
+      "path": "vanilla/textures/generated/item/beehive.png",
+      "sha256": "0e48315056598b1dc7b392ca426c0e0db5e866694e4ae8ae261985af8e15e853",
+      "size": 1204
+    },
+    {
+      "path": "vanilla/textures/generated/item/big_dripleaf.png",
+      "sha256": "3665e1948467c9f554fc1a6d8a13d347aa4db9b600a32cc89751acdbcb3a58d0",
+      "size": 518
+    },
+    {
+      "path": "vanilla/textures/generated/item/birch_slab.png",
+      "sha256": "6e4aa4be7c9b0f4b2b1f395a05048c246aa5d1730bcd778ead2c0ebb305b73ce",
+      "size": 1469
+    },
+    {
+      "path": "vanilla/textures/generated/item/birch_stairs.png",
+      "sha256": "6e4aa4be7c9b0f4b2b1f395a05048c246aa5d1730bcd778ead2c0ebb305b73ce",
+      "size": 1469
+    },
+    {
+      "path": "vanilla/textures/generated/item/birch_wood.png",
+      "sha256": "505e431be213f665ae4327cc9fae851bf1d8a3ec8b29354580edf058d0d511db",
+      "size": 1428
+    },
+    {
+      "path": "vanilla/textures/generated/item/blackstone_slab.png",
+      "sha256": "e71f59961fd2c0540f0f3b27029d193c3bbac5cffe98d10c424e8b6b0500d0df",
+      "size": 1266
+    },
+    {
+      "path": "vanilla/textures/generated/item/blackstone_stairs.png",
+      "sha256": "e71f59961fd2c0540f0f3b27029d193c3bbac5cffe98d10c424e8b6b0500d0df",
+      "size": 1266
+    },
+    {
+      "path": "vanilla/textures/generated/item/blast_furnace.png",
+      "sha256": "f549a84948c162728795a154c78a0687909b82e645eca00773925e256f02865c",
+      "size": 1442
+    },
+    {
+      "path": "vanilla/textures/generated/item/quartz_block.png",
+      "sha256": "6b3fc4a44a66c4817a15d72748b25ca5e4cbb2b5be0f278f589350b8bf1bc0d0",
+      "size": 966
+    },
+    {
+      "path": "vanilla/textures/generated/item/bone_block.png",
+      "sha256": "11a2b0141ffeeaaccdee4ebed2228122352a95ea86c7d50747f46a73ffef1e4a",
+      "size": 807
+    },
+    {
+      "path": "vanilla/textures/generated/item/brick_slab.png",
+      "sha256": "526a092d48a02b478a149fbf86778ba138ec6fab02a562645a5a4a12aa57d39e",
+      "size": 1455
+    },
+    {
+      "path": "vanilla/textures/generated/item/brick_stairs.png",
+      "sha256": "526a092d48a02b478a149fbf86778ba138ec6fab02a562645a5a4a12aa57d39e",
+      "size": 1455
+    },
+    {
+      "path": "vanilla/textures/generated/item/cactus.png",
+      "sha256": "46b4d2ed4cfd722be66280b74fc2c1172d5db32a5f1a5ab2bb55fbc2dbcbe9aa",
+      "size": 1171
+    },
+    {
+      "path": "vanilla/textures/generated/item/calibrated_sculk_sensor.png",
+      "sha256": "b1c5be60797e05bba4ab307ac78c9b0acbb6855e8321e482d2d28d7c0680b9ae",
+      "size": 971
+    },
+    {
+      "path": "vanilla/textures/generated/item/cartography_table.png",
+      "sha256": "6a068fe721fb9aff6d21ed6199faa2496136e6a59048f908a659da7be5b1d8c1",
+      "size": 1455
+    },
+    {
+      "path": "vanilla/textures/generated/item/cherry_slab.png",
+      "sha256": "45847a6a00fbbedc24678ad32efbce9b80b9cff52ade884ee9fe73d6da36eca2",
+      "size": 1445
+    },
+    {
+      "path": "vanilla/textures/generated/item/cherry_stairs.png",
+      "sha256": "45847a6a00fbbedc24678ad32efbce9b80b9cff52ade884ee9fe73d6da36eca2",
+      "size": 1445
+    },
+    {
+      "path": "vanilla/textures/generated/item/cherry_wood.png",
+      "sha256": "eea3093bd31755663ad613a256644c81c56b52768f80027a45901700be4d47ea",
+      "size": 1136
+    },
+    {
+      "path": "vanilla/textures/generated/item/chipped_anvil.png",
+      "sha256": "60de40a57f8270908d4518cfb5cb8de01516b9544c04df1a45204468c6a75e16",
+      "size": 953
+    },
+    {
+      "path": "vanilla/textures/generated/item/chiseled_bookshelf.png",
+      "sha256": "2b453fc079e95896194fcae79369207a888270887971c74ba21d89d76c376990",
+      "size": 1213
+    },
+    {
+      "path": "vanilla/textures/generated/item/cobbled_deepslate_slab.png",
+      "sha256": "3db592d41b7cfe9e97f677a276b8474215dfe549755050b5e1a6355893f2b870",
+      "size": 1329
+    },
+    {
+      "path": "vanilla/textures/generated/item/cobbled_deepslate_stairs.png",
+      "sha256": "3db592d41b7cfe9e97f677a276b8474215dfe549755050b5e1a6355893f2b870",
+      "size": 1329
+    },
+    {
+      "path": "vanilla/textures/generated/item/cobblestone_slab.png",
+      "sha256": "c6d3f924e4066ae27aa27851a15a02c43a0ef6e6ca3f93770c5f959aa8168e9e",
+      "size": 1309
+    },
+    {
+      "path": "vanilla/textures/generated/item/cobblestone_stairs.png",
+      "sha256": "c6d3f924e4066ae27aa27851a15a02c43a0ef6e6ca3f93770c5f959aa8168e9e",
+      "size": 1309
+    },
+    {
+      "path": "vanilla/textures/generated/item/composter.png",
+      "sha256": "40666c0a84c98910dda4295af65d1387bd4fa5d549b330db0db55a1150a16ad4",
+      "size": 1031
+    },
+    {
+      "path": "vanilla/textures/generated/item/crafter.png",
+      "sha256": "c421e8f3c40fa0bc9f5fc9a691bd32a027115184aca4f81ce91bfdf0da777660",
+      "size": 1670
+    },
+    {
+      "path": "vanilla/textures/generated/item/crafting_table.png",
+      "sha256": "85f08270815524d86d1db2e2092d92729fd50652f16f5a9066142834e579adeb",
+      "size": 1670
+    },
+    {
+      "path": "vanilla/textures/generated/item/crimson_hyphae.png",
+      "sha256": "faac57e1a468b1f84c4e7d9e3ea980afadeb14b0b734e476df5e5fc0fba4bf14",
+      "size": 1548
+    },
+    {
+      "path": "vanilla/textures/generated/item/crimson_slab.png",
+      "sha256": "c2ad495770205934d92997f029284bebd0ff9448bb189e9ec168878832a80c8b",
+      "size": 1381
+    },
+    {
+      "path": "vanilla/textures/generated/item/crimson_stairs.png",
+      "sha256": "c2ad495770205934d92997f029284bebd0ff9448bb189e9ec168878832a80c8b",
+      "size": 1381
+    },
+    {
+      "path": "vanilla/textures/generated/item/cut_copper_slab.png",
+      "sha256": "44748bc58eeb91775bae8f1afebc4bacb8c64bc8c73eabc17137ab3ccf787839",
+      "size": 1289
+    },
+    {
+      "path": "vanilla/textures/generated/item/cut_copper_stairs.png",
+      "sha256": "44748bc58eeb91775bae8f1afebc4bacb8c64bc8c73eabc17137ab3ccf787839",
+      "size": 1289
+    },
+    {
+      "path": "vanilla/textures/generated/item/cut_red_sandstone_slab.png",
+      "sha256": "6bf54448bd83d3d62a4e916f6e6dfa87220fc21d0007941b649600dc01f01e6f",
+      "size": 1150
+    },
+    {
+      "path": "vanilla/textures/generated/item/cut_sandstone_slab.png",
+      "sha256": "1eb62218c6ef1335425c0c588c1a6fe50d52c3fb230ec98410ad4490aaf5a7f5",
+      "size": 1193
+    },
+    {
+      "path": "vanilla/textures/generated/item/damaged_anvil.png",
+      "sha256": "046220d35db8ca63bcc2d778aa593443ba9376a578c22f21a60117bb33363d9c",
+      "size": 988
+    },
+    {
+      "path": "vanilla/textures/generated/item/dark_oak_slab.png",
+      "sha256": "2ed4f92155621f7808fb5c705762e7618ffe387718fd0dd7f35e1ac42cb53be1",
+      "size": 1297
+    },
+    {
+      "path": "vanilla/textures/generated/item/dark_oak_stairs.png",
+      "sha256": "2ed4f92155621f7808fb5c705762e7618ffe387718fd0dd7f35e1ac42cb53be1",
+      "size": 1297
+    },
+    {
+      "path": "vanilla/textures/generated/item/dark_oak_wood.png",
+      "sha256": "8fd289c846488d529f517e18412beb029f0edffafc8d98bead3a5d4980aba878",
+      "size": 1119
+    },
+    {
+      "path": "vanilla/textures/generated/item/dark_prismarine_slab.png",
+      "sha256": "1116df4450becc011464087a0f15082a3cba5343c78cdebebe999e1b97f42b5c",
+      "size": 1172
+    },
+    {
+      "path": "vanilla/textures/generated/item/dark_prismarine_stairs.png",
+      "sha256": "1116df4450becc011464087a0f15082a3cba5343c78cdebebe999e1b97f42b5c",
+      "size": 1172
+    },
+    {
+      "path": "vanilla/textures/generated/item/daylight_detector.png",
+      "sha256": "61e1c6aae07d9146e84e87c326c249a5d070033c82b0c90d9205fe1597958df0",
+      "size": 919
+    },
+    {
+      "path": "vanilla/textures/generated/item/deepslate_brick_slab.png",
+      "sha256": "439e8eba06b39a0155c73eb5462b11bfbe47d77964855deb3e4072597271c990",
+      "size": 1150
+    },
+    {
+      "path": "vanilla/textures/generated/item/deepslate_brick_stairs.png",
+      "sha256": "439e8eba06b39a0155c73eb5462b11bfbe47d77964855deb3e4072597271c990",
+      "size": 1150
+    },
+    {
+      "path": "vanilla/textures/generated/item/deepslate_tile_slab.png",
+      "sha256": "2fe348b4da8ef8477417fab3f3b153fd1e4b5c090f2562a3eb23d6251bf9e1af",
+      "size": 1122
+    },
+    {
+      "path": "vanilla/textures/generated/item/deepslate_tile_stairs.png",
+      "sha256": "2fe348b4da8ef8477417fab3f3b153fd1e4b5c090f2562a3eb23d6251bf9e1af",
+      "size": 1122
+    },
+    {
+      "path": "vanilla/textures/generated/item/diorite_slab.png",
+      "sha256": "5294075b495c9e7354aae30a3235da0b89e3cb5f75243c0fc2f531d87464f45a",
+      "size": 1390
+    },
+    {
+      "path": "vanilla/textures/generated/item/diorite_stairs.png",
+      "sha256": "5294075b495c9e7354aae30a3235da0b89e3cb5f75243c0fc2f531d87464f45a",
+      "size": 1390
+    },
+    {
+      "path": "vanilla/textures/generated/item/dirt_path.png",
+      "sha256": "fb7cacc92d912ce4092b5387f9b3102bd50c803bfc82cfeec2b87576304832d3",
+      "size": 1271
+    },
+    {
+      "path": "vanilla/textures/generated/item/dispenser.png",
+      "sha256": "9c9ab6d1a34a0bfebc1821fb434bc2221465fb47a0cc0bd6d5b273e80062919e",
+      "size": 1402
+    },
+    {
+      "path": "vanilla/textures/generated/item/dried_ghast.png",
+      "sha256": "7eb484fe87ffb8482923fdfcd92d35e86ecb34ebb6edc3eb360c82fda153e553",
+      "size": 773
+    },
+    {
+      "path": "vanilla/textures/generated/item/dried_kelp_block.png",
+      "sha256": "c2655473accfdc307159b0eda3349f326961c79bef6d37a8040beed522b92c98",
+      "size": 1486
+    },
+    {
+      "path": "vanilla/textures/generated/item/dropper.png",
+      "sha256": "9a6f95c047e093fe745ed7fc9346c57ac84ff2256e812fe1ab2104c1c497e62f",
+      "size": 1419
+    },
+    {
+      "path": "vanilla/textures/generated/item/enchanting_table.png",
+      "sha256": "5e034b655fba53d2a7940767d005a58c2e72de0a4693a7e273d15865b436fd4a",
+      "size": 1216
+    },
+    {
+      "path": "vanilla/textures/generated/item/end_portal_frame.png",
+      "sha256": "d1caf92c4c42402ca87dfa931671e42d77c802ef08c2798e7a3ea0bc246831c5",
+      "size": 1406
+    },
+    {
+      "path": "vanilla/textures/generated/item/end_stone_brick_slab.png",
+      "sha256": "2a3712d56ec358b802ee8cacdcdf9967729774a9585ccbe1461d5a44ed0b622b",
+      "size": 1394
+    },
+    {
+      "path": "vanilla/textures/generated/item/end_stone_brick_stairs.png",
+      "sha256": "2a3712d56ec358b802ee8cacdcdf9967729774a9585ccbe1461d5a44ed0b622b",
+      "size": 1394
+    },
+    {
+      "path": "vanilla/textures/generated/item/exposed_cut_copper_slab.png",
+      "sha256": "46be6e3c1a169aad7ecb92c45733720ff74f91f6a5789d2d1610728d58d46f8c",
+      "size": 1588
+    },
+    {
+      "path": "vanilla/textures/generated/item/exposed_cut_copper_stairs.png",
+      "sha256": "46be6e3c1a169aad7ecb92c45733720ff74f91f6a5789d2d1610728d58d46f8c",
+      "size": 1588
+    },
+    {
+      "path": "vanilla/textures/generated/item/fletching_table.png",
+      "sha256": "5334c253b9c398f191f2bd0488b8fca1a537a1accdc55b645fa486fbf7f42ab3",
+      "size": 1945
+    },
+    {
+      "path": "vanilla/textures/generated/item/flowering_azalea.png",
+      "sha256": "f50c718aa9f54015c6589e618869937eee64a104f38f7131ba7800ebc8edb839",
+      "size": 1392
+    },
+    {
+      "path": "vanilla/textures/generated/item/furnace.png",
+      "sha256": "2d34aafbadcdcdfef5320c698693cb9e63ac7b24e782a04083d773411715e4e8",
+      "size": 1425
+    },
+    {
+      "path": "vanilla/textures/generated/item/granite_slab.png",
+      "sha256": "604ff525d12c1097dc0ddd9996b67766750b8be344459d2a66099b2b3fa8d27a",
+      "size": 1502
+    },
+    {
+      "path": "vanilla/textures/generated/item/granite_stairs.png",
+      "sha256": "604ff525d12c1097dc0ddd9996b67766750b8be344459d2a66099b2b3fa8d27a",
+      "size": 1502
+    },
+    {
+      "path": "vanilla/textures/generated/item/grass_block.png",
+      "sha256": "bb7b9f7b49b195f670007f9e9a1517e59432c5cd3abf7d704951f15918ada2a3",
+      "size": 1725
+    },
+    {
+      "path": "vanilla/textures/generated/item/hay_block.png",
+      "sha256": "80d8b22c8e6a05fce5d96811749ccdef16bdf87d7cec382cbf121c58fd8e6826",
+      "size": 1531
+    },
+    {
+      "path": "vanilla/textures/generated/item/honey_block.png",
+      "sha256": "bdd7c1c60670f05c424d5cfa20cfa8828b044a94b5b623bea348d00b4dbe8190",
+      "size": 1292
+    },
+    {
+      "path": "vanilla/textures/generated/item/infested_chiseled_stone_bricks.png",
+      "sha256": "260b9addc3f8a76fb19b2c96cf0ddf7f592970aaca9fff2c5b5af5ea31f55d58",
+      "size": 1272
+    },
+    {
+      "path": "vanilla/textures/generated/item/infested_cobblestone.png",
+      "sha256": "c6d3f924e4066ae27aa27851a15a02c43a0ef6e6ca3f93770c5f959aa8168e9e",
+      "size": 1309
+    },
+    {
+      "path": "vanilla/textures/generated/item/infested_cracked_stone_bricks.png",
+      "sha256": "756ca94725ee50ba8f0d52856ff9fcd53f5eb0abae982e7c414cb787c076da83",
+      "size": 1426
+    },
+    {
+      "path": "vanilla/textures/generated/item/infested_deepslate.png",
+      "sha256": "0f81cdf00ccd468f3abd63e221e1e284b28388bebee8ffd46906c4502d4a271e",
+      "size": 1184
+    },
+    {
+      "path": "vanilla/textures/generated/item/infested_mossy_stone_bricks.png",
+      "sha256": "5b0b26245e8ffe433692bc13a37c16b3866c5f59fb9094d2a14e4c2d6be58bcc",
+      "size": 1775
+    },
+    {
+      "path": "vanilla/textures/generated/item/infested_stone.png",
+      "sha256": "d566f5ba01471c1d0a8b4355a7ac47af8d1181959a6092550939f12d456695c5",
+      "size": 936
+    },
+    {
+      "path": "vanilla/textures/generated/item/infested_stone_bricks.png",
+      "sha256": "9562c40c39ae58c4e27fb9882aabd92b309e452b21479b32d09dfd961f722ead",
+      "size": 1138
+    },
+    {
+      "path": "vanilla/textures/generated/item/jukebox.png",
+      "sha256": "cb79dce203fffdd9784c0867a26027cab8ba1c733aae01535c726c3b3eabe576",
+      "size": 1030
+    },
+    {
+      "path": "vanilla/textures/generated/item/jungle_slab.png",
+      "sha256": "ac948b1c2a26277d0a4996484bc764bf5b583f8d23837d2c3d9cfe2fd1ed6f3c",
+      "size": 1419
+    },
+    {
+      "path": "vanilla/textures/generated/item/jungle_stairs.png",
+      "sha256": "ac948b1c2a26277d0a4996484bc764bf5b583f8d23837d2c3d9cfe2fd1ed6f3c",
+      "size": 1419
+    },
+    {
+      "path": "vanilla/textures/generated/item/jungle_wood.png",
+      "sha256": "76a03c8e9b516e49c7eccce8be53118cce3c031f5b4bded5bcdffd99ba287df3",
+      "size": 1440
+    },
+    {
+      "path": "vanilla/textures/generated/item/lectern.png",
+      "sha256": "c67cf6e765aef021b7257b3a739fbbf035b4fb020252b78ae13eaf0a2858e95e",
+      "size": 1075
+    },
+    {
+      "path": "vanilla/textures/generated/item/lodestone.png",
+      "sha256": "7bb7788eaf1ad6fe7d9ed6898564f035c1296006eb2248a1158f3eeb044bb206",
+      "size": 1301
+    },
+    {
+      "path": "vanilla/textures/generated/item/loom.png",
+      "sha256": "b60a507b38b3d4985d638867c1c5b3c2d15cfe65b279476f9baf3137daf4838f",
+      "size": 1230
+    },
+    {
+      "path": "vanilla/textures/generated/item/magma_block.png",
+      "sha256": "0b50f81e7ba4fd5f1ab2caf7b82080078622076ac31a53189e180fbd6086ff92",
+      "size": 1745
+    },
+    {
+      "path": "vanilla/textures/generated/item/mangrove_roots.png",
+      "sha256": "a00345705fe7e03b69f5d8032b73f91ca5b66c958b3a7746b9fd9cf2c3402bb2",
+      "size": 1038
+    },
+    {
+      "path": "vanilla/textures/generated/item/mangrove_slab.png",
+      "sha256": "6362c0fd4eb7e6130c5ade2ea3a967f626e6ee481232134bbb195e855a292168",
+      "size": 1385
+    },
+    {
+      "path": "vanilla/textures/generated/item/mangrove_stairs.png",
+      "sha256": "6362c0fd4eb7e6130c5ade2ea3a967f626e6ee481232134bbb195e855a292168",
+      "size": 1385
+    },
+    {
+      "path": "vanilla/textures/generated/item/mangrove_wood.png",
+      "sha256": "2efa22b1dc4011f1b5f96b0c58a76f44e5e90529ebbf8316ed5530f630788640",
+      "size": 1115
+    },
+    {
+      "path": "vanilla/textures/generated/item/melon.png",
+      "sha256": "fe2b4c4d24eff090a1507b033e1cd8db22cc599a8a3c30f347823da20a163bce",
+      "size": 988
+    },
+    {
+      "path": "vanilla/textures/generated/item/mossy_cobblestone_slab.png",
+      "sha256": "ea6a81539ca93eac975ae862e0d46b5657089cb64120d5678e0969a8efa7ffab",
+      "size": 1774
+    },
+    {
+      "path": "vanilla/textures/generated/item/mossy_cobblestone_stairs.png",
+      "sha256": "ea6a81539ca93eac975ae862e0d46b5657089cb64120d5678e0969a8efa7ffab",
+      "size": 1774
+    },
+    {
+      "path": "vanilla/textures/generated/item/mossy_stone_brick_slab.png",
+      "sha256": "5b0b26245e8ffe433692bc13a37c16b3866c5f59fb9094d2a14e4c2d6be58bcc",
+      "size": 1775
+    },
+    {
+      "path": "vanilla/textures/generated/item/mossy_stone_brick_stairs.png",
+      "sha256": "5b0b26245e8ffe433692bc13a37c16b3866c5f59fb9094d2a14e4c2d6be58bcc",
+      "size": 1775
+    },
+    {
+      "path": "vanilla/textures/generated/item/mud_brick_slab.png",
+      "sha256": "0a0ab7b957d08dd0b4f9ee89b7e1c2bdcbebd57c3fe796bf85cb27f8726f3a4d",
+      "size": 1300
+    },
+    {
+      "path": "vanilla/textures/generated/item/mud_brick_stairs.png",
+      "sha256": "0a0ab7b957d08dd0b4f9ee89b7e1c2bdcbebd57c3fe796bf85cb27f8726f3a4d",
+      "size": 1300
+    },
+    {
+      "path": "vanilla/textures/generated/item/muddy_mangrove_roots.png",
+      "sha256": "b591ed3516eec170a878ec347f2a61f1e56411f0c9fb22bad871011fbf674465",
+      "size": 1661
+    },
+    {
+      "path": "vanilla/textures/generated/item/mycelium.png",
+      "sha256": "71c2a5eb0ff281e792a6b512ce6674e2bd5ddde6c187b5d9ea6edf6a2c4ea0a4",
+      "size": 1692
+    },
+    {
+      "path": "vanilla/textures/generated/item/nether_brick_slab.png",
+      "sha256": "b922e3dc16cfc4c3e4e683cf50363558aab19c4cefec7d1a4ccee99763454ef1",
+      "size": 1111
+    },
+    {
+      "path": "vanilla/textures/generated/item/nether_brick_stairs.png",
+      "sha256": "b922e3dc16cfc4c3e4e683cf50363558aab19c4cefec7d1a4ccee99763454ef1",
+      "size": 1111
+    },
+    {
+      "path": "vanilla/textures/generated/item/oak_slab.png",
+      "sha256": "91ce18949c39fbea495a9bd498833c388dc16e328be78cc512c3cf1b5b2ebdc5",
+      "size": 1430
+    },
+    {
+      "path": "vanilla/textures/generated/item/oak_stairs.png",
+      "sha256": "91ce18949c39fbea495a9bd498833c388dc16e328be78cc512c3cf1b5b2ebdc5",
+      "size": 1430
+    },
+    {
+      "path": "vanilla/textures/generated/item/oak_wood.png",
+      "sha256": "4bfe87a9a05ecc2e873bd4a9422d1743fe577380c33f4f7e0ade22038e1ef73a",
+      "size": 1186
+    },
+    {
+      "path": "vanilla/textures/generated/item/observer.png",
+      "sha256": "bf70eb5710c58f80f79414dd14987467e7e68b8a0210d4a66f8329e34571c56e",
+      "size": 1452
+    },
+    {
+      "path": "vanilla/textures/generated/item/ochre_froglight.png",
+      "sha256": "80660d5eb8aca49d69832df532586ec578a4c6d493fe8ff08ab0129a5a258c80",
+      "size": 1115
+    },
+    {
+      "path": "vanilla/textures/generated/item/oxidized_cut_copper_slab.png",
+      "sha256": "cb3c59e512f973aa5247a916a4687856295e7ae8412d3e528b5c1e721132571f",
+      "size": 1413
+    },
+    {
+      "path": "vanilla/textures/generated/item/oxidized_cut_copper_stairs.png",
+      "sha256": "cb3c59e512f973aa5247a916a4687856295e7ae8412d3e528b5c1e721132571f",
+      "size": 1413
+    },
+    {
+      "path": "vanilla/textures/generated/item/pale_oak_slab.png",
+      "sha256": "51b5fae36fea73eca5d2349733dbd8688317adbcb13fcdc4a37c7560ebfa6b20",
+      "size": 1454
+    },
+    {
+      "path": "vanilla/textures/generated/item/pale_oak_stairs.png",
+      "sha256": "51b5fae36fea73eca5d2349733dbd8688317adbcb13fcdc4a37c7560ebfa6b20",
+      "size": 1454
+    },
+    {
+      "path": "vanilla/textures/generated/item/pale_oak_wood.png",
+      "sha256": "6d2f46b965cc08cf1ef79cdb0016195c079b2beed78cebf4bcbc4cf7953800fa",
+      "size": 1217
+    },
+    {
+      "path": "vanilla/textures/generated/item/pearlescent_froglight.png",
+      "sha256": "534ff2620ffb41aa7b40f0403ad5211b3588d42f111600e870db3087a5e02cbe",
+      "size": 1096
+    },
+    {
+      "path": "vanilla/textures/generated/item/petrified_oak_slab.png",
+      "sha256": "91ce18949c39fbea495a9bd498833c388dc16e328be78cc512c3cf1b5b2ebdc5",
+      "size": 1430
+    },
+    {
+      "path": "vanilla/textures/generated/item/piston.png",
+      "sha256": "fced9ac9b5c1537024973ca5e7f43222bd5e0a005ef81f108d4680a94f35764f",
+      "size": 1492
+    },
+    {
+      "path": "vanilla/textures/generated/item/podzol.png",
+      "sha256": "3ea257a35f2bb30ef40b8fc93181f6b1f8d0ac0f18672896d99f1fd513e260b9",
+      "size": 1470
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_andesite_slab.png",
+      "sha256": "01e5c324ed697b47a21876898c84322e16535df3a9d33857e3453e522c7aa94f",
+      "size": 1374
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_andesite_stairs.png",
+      "sha256": "01e5c324ed697b47a21876898c84322e16535df3a9d33857e3453e522c7aa94f",
+      "size": 1374
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_basalt.png",
+      "sha256": "c6a263e3e6fe5662755808d1c5d71c5f88d4b337baaafeb24fda5964f7bf8858",
+      "size": 1029
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_blackstone_brick_slab.png",
+      "sha256": "4af03846be5d84b549b3314efde8a6191fe3891d3a1b068b1d7af48c34060de7",
+      "size": 1203
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_blackstone_brick_stairs.png",
+      "sha256": "4af03846be5d84b549b3314efde8a6191fe3891d3a1b068b1d7af48c34060de7",
+      "size": 1203
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_blackstone_slab.png",
+      "sha256": "c0a4c4499cb4d0f063d8eed883a5cc03b196264c5208bd01776d92c591e1032b",
+      "size": 1124
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_blackstone_stairs.png",
+      "sha256": "c0a4c4499cb4d0f063d8eed883a5cc03b196264c5208bd01776d92c591e1032b",
+      "size": 1124
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_deepslate_slab.png",
+      "sha256": "08ee6679070f67b6bcf055e655aa492b4daa22402200acec6daf2b0f9402b57c",
+      "size": 1212
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_deepslate_stairs.png",
+      "sha256": "08ee6679070f67b6bcf055e655aa492b4daa22402200acec6daf2b0f9402b57c",
+      "size": 1212
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_diorite_slab.png",
+      "sha256": "88c0c918410cc64c12ed0a1efcfb4dcfed1de65b995f263e55692a9ad75b2c93",
+      "size": 1398
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_diorite_stairs.png",
+      "sha256": "88c0c918410cc64c12ed0a1efcfb4dcfed1de65b995f263e55692a9ad75b2c93",
+      "size": 1398
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_granite_slab.png",
+      "sha256": "83f8662727ea1d6586f3e42ccadb2e06265d015e66ccd6f99d2ceba432b5c263",
+      "size": 1327
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_granite_stairs.png",
+      "sha256": "83f8662727ea1d6586f3e42ccadb2e06265d015e66ccd6f99d2ceba432b5c263",
+      "size": 1327
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_tuff_slab.png",
+      "sha256": "79fdfc072f714a1a235b4e0dd8f65b0183f2e663108bdc6b784553c8e8af586c",
+      "size": 1239
+    },
+    {
+      "path": "vanilla/textures/generated/item/polished_tuff_stairs.png",
+      "sha256": "79fdfc072f714a1a235b4e0dd8f65b0183f2e663108bdc6b784553c8e8af586c",
+      "size": 1239
+    },
+    {
+      "path": "vanilla/textures/generated/item/prismarine_brick_slab.png",
+      "sha256": "c589550551491882452c761f65780dba789ef582bbb6c6171c82a39c975591f1",
+      "size": 1382
+    },
+    {
+      "path": "vanilla/textures/generated/item/prismarine_brick_stairs.png",
+      "sha256": "c589550551491882452c761f65780dba789ef582bbb6c6171c82a39c975591f1",
+      "size": 1382
+    },
+    {
+      "path": "vanilla/textures/generated/item/prismarine_slab.png",
+      "sha256": "99d75a28736e51af99c2886dd17f5f41371ca07aa18170512c17e6990718e25c",
+      "size": 2001
+    },
+    {
+      "path": "vanilla/textures/generated/item/prismarine_stairs.png",
+      "sha256": "99d75a28736e51af99c2886dd17f5f41371ca07aa18170512c17e6990718e25c",
+      "size": 2001
+    },
+    {
+      "path": "vanilla/textures/generated/item/pumpkin.png",
+      "sha256": "c43bb06a91d9109dc26b8555e38575b99e4198b2b4787a68814ccb54743596ae",
+      "size": 1044
+    },
+    {
+      "path": "vanilla/textures/generated/item/purpur_slab.png",
+      "sha256": "736f1b46c83a83eea8ab956d5b63af4e78f3bb59cfb5bc6251cb253818e90fc5",
+      "size": 1080
+    },
+    {
+      "path": "vanilla/textures/generated/item/purpur_stairs.png",
+      "sha256": "736f1b46c83a83eea8ab956d5b63af4e78f3bb59cfb5bc6251cb253818e90fc5",
+      "size": 1080
+    },
+    {
+      "path": "vanilla/textures/generated/item/quartz_slab.png",
+      "sha256": "6b3fc4a44a66c4817a15d72748b25ca5e4cbb2b5be0f278f589350b8bf1bc0d0",
+      "size": 966
+    },
+    {
+      "path": "vanilla/textures/generated/item/quartz_stairs.png",
+      "sha256": "6b3fc4a44a66c4817a15d72748b25ca5e4cbb2b5be0f278f589350b8bf1bc0d0",
+      "size": 966
+    },
+    {
+      "path": "vanilla/textures/generated/item/red_nether_brick_slab.png",
+      "sha256": "2ac898f9f13013f22b00487379780ba7dfa86c74997e93d5d0986d9083c7ac90",
+      "size": 1135
+    },
+    {
+      "path": "vanilla/textures/generated/item/red_nether_brick_stairs.png",
+      "sha256": "2ac898f9f13013f22b00487379780ba7dfa86c74997e93d5d0986d9083c7ac90",
+      "size": 1135
+    },
+    {
+      "path": "vanilla/textures/generated/item/red_sandstone_slab.png",
+      "sha256": "1c6888395d861a9222d9a94d945e1e1504d255c05655755874d765689712c74d",
+      "size": 1288
+    },
+    {
+      "path": "vanilla/textures/generated/item/red_sandstone_stairs.png",
+      "sha256": "1c6888395d861a9222d9a94d945e1e1504d255c05655755874d765689712c74d",
+      "size": 1288
+    },
+    {
+      "path": "vanilla/textures/generated/item/reinforced_deepslate.png",
+      "sha256": "e7b21adf745a25a53e6cd0850856fc0d671d05b8b095f094f03b3c47436d140c",
+      "size": 1640
+    },
+    {
+      "path": "vanilla/textures/generated/item/resin_brick_slab.png",
+      "sha256": "6339ed0ba12332098ff4e4dcc6de0faf22b7ef127549b5996782621245a1f1e2",
+      "size": 1355
+    },
+    {
+      "path": "vanilla/textures/generated/item/resin_brick_stairs.png",
+      "sha256": "6339ed0ba12332098ff4e4dcc6de0faf22b7ef127549b5996782621245a1f1e2",
+      "size": 1355
+    },
+    {
+      "path": "vanilla/textures/generated/item/respawn_anchor.png",
+      "sha256": "07eebaadd5606c8bb714d7e2cfe51145854d1f6353e99b0f6cc77925d3bb1b9a",
+      "size": 1497
+    },
+    {
+      "path": "vanilla/textures/generated/item/sandstone_slab.png",
+      "sha256": "c62bcb0c901f64170efb833a7515ec47be3b7884f145bdcadcf05e5ab549f603",
+      "size": 1349
+    },
+    {
+      "path": "vanilla/textures/generated/item/sandstone_stairs.png",
+      "sha256": "c62bcb0c901f64170efb833a7515ec47be3b7884f145bdcadcf05e5ab549f603",
+      "size": 1349
+    },
+    {
+      "path": "vanilla/textures/generated/item/scaffolding.png",
+      "sha256": "1542196e3acbe50c0d3995be4f622605d05668ef4e71c9737468b8eeb36ee3f3",
+      "size": 1342
+    },
+    {
+      "path": "vanilla/textures/generated/item/sculk_catalyst.png",
+      "sha256": "cfb4fbda28b7372445e48e02d871ba74ce7a45ce55e438ab09c045b1be1567e7",
+      "size": 1343
+    },
+    {
+      "path": "vanilla/textures/generated/item/sculk_sensor.png",
+      "sha256": "a60839d06cc93b12ad7819ef286aef6bed934a987dbdb3c5de5d4979108d5a64",
+      "size": 868
+    },
+    {
+      "path": "vanilla/textures/generated/item/sculk_shrieker.png",
+      "sha256": "7daaf4f795136adbe3c8d7c86e2bb8cd4a4a472bb68534c442e621a07d8f74bc",
+      "size": 1157
+    },
+    {
+      "path": "vanilla/textures/generated/item/small_dripleaf.png",
+      "sha256": "2f4eda362bbbdfd4df5c8c3211bfb5602d7fe7632ba365fde30b08b44779d55e",
+      "size": 328
+    },
+    {
+      "path": "vanilla/textures/generated/item/smithing_table.png",
+      "sha256": "305854786f5be72ed5979578e85c6ae1dd960144035cea40e9026ce6b8e47f77",
+      "size": 1384
+    },
+    {
+      "path": "vanilla/textures/generated/item/smoker.png",
+      "sha256": "b5cd700474dd5a28cd38daabd2b6048597e55f5dcf59d0c22161156b2a34639c",
+      "size": 1590
+    },
+    {
+      "path": "vanilla/textures/generated/item/smooth_quartz.png",
+      "sha256": "232698bf462337f241b4ace4f9bc3f58689d472b785bb4199db987ae75511e14",
+      "size": 829
+    },
+    {
+      "path": "vanilla/textures/generated/item/smooth_quartz_slab.png",
+      "sha256": "232698bf462337f241b4ace4f9bc3f58689d472b785bb4199db987ae75511e14",
+      "size": 829
+    },
+    {
+      "path": "vanilla/textures/generated/item/smooth_quartz_stairs.png",
+      "sha256": "232698bf462337f241b4ace4f9bc3f58689d472b785bb4199db987ae75511e14",
+      "size": 829
+    },
+    {
+      "path": "vanilla/textures/generated/item/smooth_red_sandstone.png",
+      "sha256": "86321397947427a7e404cff1aca2b584c8ea36f866108ce13b7cd6b3fe0f2cb7",
+      "size": 1087
+    },
+    {
+      "path": "vanilla/textures/generated/item/smooth_red_sandstone_slab.png",
+      "sha256": "86321397947427a7e404cff1aca2b584c8ea36f866108ce13b7cd6b3fe0f2cb7",
+      "size": 1087
+    },
+    {
+      "path": "vanilla/textures/generated/item/smooth_red_sandstone_stairs.png",
+      "sha256": "86321397947427a7e404cff1aca2b584c8ea36f866108ce13b7cd6b3fe0f2cb7",
+      "size": 1087
+    },
+    {
+      "path": "vanilla/textures/generated/item/smooth_sandstone.png",
+      "sha256": "06107d051f58ca097da902dfbb13ee31a21766754f2e85b1dce5fee790173591",
+      "size": 1134
+    },
+    {
+      "path": "vanilla/textures/generated/item/smooth_sandstone_slab.png",
+      "sha256": "06107d051f58ca097da902dfbb13ee31a21766754f2e85b1dce5fee790173591",
+      "size": 1134
+    },
+    {
+      "path": "vanilla/textures/generated/item/smooth_sandstone_stairs.png",
+      "sha256": "06107d051f58ca097da902dfbb13ee31a21766754f2e85b1dce5fee790173591",
+      "size": 1134
+    },
+    {
+      "path": "vanilla/textures/generated/item/smooth_stone_slab.png",
+      "sha256": "64c2ed7a574a9c128941fd8d58d10a2ac1a9449ec7e368446f31101755f1b3c5",
+      "size": 1240
+    },
+    {
+      "path": "vanilla/textures/generated/item/snow_block.png",
+      "sha256": "47fa257a1141b0d4b8e6b0bc9fd6258521b1961bd3e8c83d83ccce259495529d",
+      "size": 762
+    },
+    {
+      "path": "vanilla/textures/generated/item/spruce_slab.png",
+      "sha256": "0b8800fa2feeb8297c429a4491b7e552cf519e9050d1332cbaa7273e025754b2",
+      "size": 1397
+    },
+    {
+      "path": "vanilla/textures/generated/item/spruce_stairs.png",
+      "sha256": "0b8800fa2feeb8297c429a4491b7e552cf519e9050d1332cbaa7273e025754b2",
+      "size": 1397
+    },
+    {
+      "path": "vanilla/textures/generated/item/spruce_wood.png",
+      "sha256": "1bc0dd7b5357796b6740839e83dd498dda3c29b936b8921cbfbc13cd04b895a8",
+      "size": 1107
+    },
+    {
+      "path": "vanilla/textures/generated/item/sticky_piston.png",
+      "sha256": "92e4e9c969cfa7ce6e1796197b3c4f8e8f238fed411ac72de0dacc97eb8d9fec",
+      "size": 1677
+    },
+    {
+      "path": "vanilla/textures/generated/item/stone_brick_slab.png",
+      "sha256": "9562c40c39ae58c4e27fb9882aabd92b309e452b21479b32d09dfd961f722ead",
+      "size": 1138
+    },
+    {
+      "path": "vanilla/textures/generated/item/stone_brick_stairs.png",
+      "sha256": "9562c40c39ae58c4e27fb9882aabd92b309e452b21479b32d09dfd961f722ead",
+      "size": 1138
+    },
+    {
+      "path": "vanilla/textures/generated/item/stone_slab.png",
+      "sha256": "d566f5ba01471c1d0a8b4355a7ac47af8d1181959a6092550939f12d456695c5",
+      "size": 936
+    },
+    {
+      "path": "vanilla/textures/generated/item/stone_stairs.png",
+      "sha256": "d566f5ba01471c1d0a8b4355a7ac47af8d1181959a6092550939f12d456695c5",
+      "size": 936
+    },
+    {
+      "path": "vanilla/textures/generated/item/stonecutter.png",
+      "sha256": "9cca062eb8962ba002368067197f9bbebb5207f4d2a9ca045ad5e4be8dfcd811",
+      "size": 1145
+    },
+    {
+      "path": "vanilla/textures/generated/item/stripped_acacia_wood.png",
+      "sha256": "a96496e88b10a23f3ded90c917bf0ca286fbf48904695062b037a81af0137b72",
+      "size": 1605
+    },
+    {
+      "path": "vanilla/textures/generated/item/stripped_birch_wood.png",
+      "sha256": "ac928064d853c9e0b8384a0116c0492435529520f3a02713aa2af861bce508c2",
+      "size": 1713
+    },
+    {
+      "path": "vanilla/textures/generated/item/stripped_cherry_wood.png",
+      "sha256": "717de240e3c327177520d6349bb1804e0f3904846aa0cca3d4da8eb30e275c1e",
+      "size": 1313
+    },
+    {
+      "path": "vanilla/textures/generated/item/stripped_crimson_hyphae.png",
+      "sha256": "2761dfd477c2c1d90db2e3b53b96a7382b594a24141963e5acaa681116b98590",
+      "size": 1210
+    },
+    {
+      "path": "vanilla/textures/generated/item/stripped_dark_oak_wood.png",
+      "sha256": "e0cb4251b1a5335269e3104d6722ba6fb58a72f29e8dcc3f33d9abb92297e495",
+      "size": 1167
+    },
+    {
+      "path": "vanilla/textures/generated/item/stripped_jungle_wood.png",
+      "sha256": "d94df0e7e637d4d61806ebc7a88197d52cac1c4270920a300744e22327b532a7",
+      "size": 1491
+    },
+    {
+      "path": "vanilla/textures/generated/item/stripped_mangrove_wood.png",
+      "sha256": "c80de24186bcfda317841b0b47d5230908e0cfdf3c9994f563080fe3953b8fce",
+      "size": 1262
+    },
+    {
+      "path": "vanilla/textures/generated/item/stripped_oak_wood.png",
+      "sha256": "ce2f10786d1113f386eeadb822cf24f7bdda3c8b111dc796907a63fa5d7d40e4",
+      "size": 1649
+    },
+    {
+      "path": "vanilla/textures/generated/item/stripped_pale_oak_wood.png",
+      "sha256": "adb91ca714823e0c1b5b8e0e7a265badfb27982aba985dd09b4b2efc54ba5321",
+      "size": 1115
+    },
+    {
+      "path": "vanilla/textures/generated/item/stripped_spruce_wood.png",
+      "sha256": "dd7aebdadcc08fa31e4c50fc24b42d28d44e4bee06d8e7ca4290e3ce769b520f",
+      "size": 1300
+    },
+    {
+      "path": "vanilla/textures/generated/item/stripped_warped_hyphae.png",
+      "sha256": "7e5a233f67bb3d04b05626d07bd55e9544212d63c3c8a1057ff81b69cc7ce163",
+      "size": 1250
+    },
+    {
+      "path": "vanilla/textures/generated/item/suspicious_gravel.png",
+      "sha256": "4c3391a2693b597420baa7dd31f0e5a74c085029f3fbb402740d8bd54c7fd582",
+      "size": 1548
+    },
+    {
+      "path": "vanilla/textures/generated/item/suspicious_sand.png",
+      "sha256": "cd5d4e70db559dfcd9b450d2a391a27d1e2c3bb8c52188fea040fb875305890d",
+      "size": 1453
+    },
+    {
+      "path": "vanilla/textures/generated/item/target.png",
+      "sha256": "da6973b393c9a51b3b86cd2ccbd100b64681ebb8366815893949192b4769a2ea",
+      "size": 1707
+    },
+    {
+      "path": "vanilla/textures/generated/item/tnt.png",
+      "sha256": "f414ae90d8d3563ed3fb4ecfc54e4873e0471f83272da81653e9faf72b388657",
+      "size": 1249
+    },
+    {
+      "path": "vanilla/textures/generated/item/tuff_brick_slab.png",
+      "sha256": "e881983c696c96ed4c11461ff2bbd53395b0fb4eaa82acabffe57b1f1c679aa9",
+      "size": 1469
+    },
+    {
+      "path": "vanilla/textures/generated/item/tuff_brick_stairs.png",
+      "sha256": "e881983c696c96ed4c11461ff2bbd53395b0fb4eaa82acabffe57b1f1c679aa9",
+      "size": 1469
+    },
+    {
+      "path": "vanilla/textures/generated/item/tuff_slab.png",
+      "sha256": "78de6dc4d0895096bb4ac73a69449821aeb39a7d086a8913e31e50d4622c201a",
+      "size": 1225
+    },
+    {
+      "path": "vanilla/textures/generated/item/tuff_stairs.png",
+      "sha256": "78de6dc4d0895096bb4ac73a69449821aeb39a7d086a8913e31e50d4622c201a",
+      "size": 1225
+    },
+    {
+      "path": "vanilla/textures/generated/item/verdant_froglight.png",
+      "sha256": "e9cabfdc6bc609b51f3a1335aab2821054bf5eb8df11dc2d89994a47784459ef",
+      "size": 1088
+    },
+    {
+      "path": "vanilla/textures/generated/item/warped_hyphae.png",
+      "sha256": "362ffaad8907f3734f8c2e116a8b7f7707adfee8002729cddbdd8eb22b2ebb96",
+      "size": 1548
+    },
+    {
+      "path": "vanilla/textures/generated/item/warped_slab.png",
+      "sha256": "a4323a70f5b4ca844d91720a06526fb0131d0084459406f53cdc414c6c913409",
+      "size": 1428
+    },
+    {
+      "path": "vanilla/textures/generated/item/warped_stairs.png",
+      "sha256": "a4323a70f5b4ca844d91720a06526fb0131d0084459406f53cdc414c6c913409",
+      "size": 1428
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_copper_block.png",
+      "sha256": "0bd550bedd43fc4264a4a07d2a3082944e041826b8737c75ca015dd5f136b8f6",
+      "size": 1241
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_chiseled_copper.png",
+      "sha256": "d5f6fe879e01e54454904586f4f3d56b0339054197dcfb2609f85584b83675b0",
+      "size": 1318
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_copper_bulb.png",
+      "sha256": "68a2a3686504556949d7fae8e759b3cc20ccea0847400444ae0a8835a37a78ab",
+      "size": 1527
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_copper_grate.png",
+      "sha256": "84046294532d1d557afa990da427c7523f29839b5f5160eb0b6c8d3276e8e649",
+      "size": 1210
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_cut_copper.png",
+      "sha256": "44748bc58eeb91775bae8f1afebc4bacb8c64bc8c73eabc17137ab3ccf787839",
+      "size": 1289
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_cut_copper_slab.png",
+      "sha256": "44748bc58eeb91775bae8f1afebc4bacb8c64bc8c73eabc17137ab3ccf787839",
+      "size": 1289
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_cut_copper_stairs.png",
+      "sha256": "44748bc58eeb91775bae8f1afebc4bacb8c64bc8c73eabc17137ab3ccf787839",
+      "size": 1289
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_exposed_chiseled_copper.png",
+      "sha256": "680eee75a0f72444f01d373900c83ef78014e4e5ef750535b0723edbe5389fc0",
+      "size": 1409
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_exposed_copper.png",
+      "sha256": "7cfc56e2bd933f4a7a651c913f8bded9f1eb280ba473114e9cbf4b141943c53e",
+      "size": 1398
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_exposed_copper_bulb.png",
+      "sha256": "8ea32b842101425c0551578c41c21e7bf2031d018a789ffde678b000b5aac6e3",
+      "size": 1493
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_exposed_copper_grate.png",
+      "sha256": "231308ba0fbdabd75b23fd446e5a3cef43c9bfb32f08452482c1841eb210c518",
+      "size": 1336
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_exposed_cut_copper.png",
+      "sha256": "46be6e3c1a169aad7ecb92c45733720ff74f91f6a5789d2d1610728d58d46f8c",
+      "size": 1588
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_exposed_cut_copper_slab.png",
+      "sha256": "46be6e3c1a169aad7ecb92c45733720ff74f91f6a5789d2d1610728d58d46f8c",
+      "size": 1588
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_exposed_cut_copper_stairs.png",
+      "sha256": "46be6e3c1a169aad7ecb92c45733720ff74f91f6a5789d2d1610728d58d46f8c",
+      "size": 1588
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_oxidized_chiseled_copper.png",
+      "sha256": "afcf634ba53a8fce2f1e57e0ce8277d29e798fcee63e1be6e02b341352a592fd",
+      "size": 1313
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_oxidized_copper.png",
+      "sha256": "e4560204f1bbcb6e5d26f43ab5a2915709ac77bfe266cfb53849b23d026f577c",
+      "size": 1335
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_oxidized_copper_bulb.png",
+      "sha256": "7276b4a58aef80c6db34c29532641ba37054375ed766c2cfdeea2e07573a03ce",
+      "size": 1464
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_oxidized_copper_grate.png",
+      "sha256": "f6eb0934a95cae27f3e2a51b56ebe039c0253b61e0f24085066921dc3f5db9fe",
+      "size": 1277
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_oxidized_cut_copper.png",
+      "sha256": "cb3c59e512f973aa5247a916a4687856295e7ae8412d3e528b5c1e721132571f",
+      "size": 1413
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_oxidized_cut_copper_slab.png",
+      "sha256": "cb3c59e512f973aa5247a916a4687856295e7ae8412d3e528b5c1e721132571f",
+      "size": 1413
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_oxidized_cut_copper_stairs.png",
+      "sha256": "cb3c59e512f973aa5247a916a4687856295e7ae8412d3e528b5c1e721132571f",
+      "size": 1413
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_weathered_chiseled_copper.png",
+      "sha256": "3cbd167f6a945bf3c56d62554e0d3b9adb7071290cc326339f1886fcfd6aea31",
+      "size": 1417
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_weathered_copper.png",
+      "sha256": "6bb2c55d0452511344fc9a272c5fca093b574d4246cf98bb80e0111b9bb8ee70",
+      "size": 1382
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_weathered_copper_bulb.png",
+      "sha256": "14bb16b862e0a6b628e840e5657818bc58ae9f594dac31658aa3997f07b5708d",
+      "size": 1574
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_weathered_copper_grate.png",
+      "sha256": "4ee9d53dbc34433a9c6cfd473441bf2f988cc7888ad521f7872edfc4a7ec1d9e",
+      "size": 1290
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_weathered_cut_copper.png",
+      "sha256": "9d235a3341a0304f1df4f16929cd0bb20f1a1d63b4218b4236035085be375875",
+      "size": 1558
+    },
+    {
+      "path": "vanilla/textures/generated/item/waxed_weathered_cut_copper_slab.png",
+      "sha256": "9d235a3341a0304f1df4f16929cd0bb20f1a1d63b4218b4236035085be375875",
+      "size": 1558
+    },
+    {
+      "path": "vanilla/textures/generated/item/weathered_cut_copper_slab.png",
+      "sha256": "9d235a3341a0304f1df4f16929cd0bb20f1a1d63b4218b4236035085be375875",
+      "size": 1558
+    },
+    {
+      "path": "vanilla/textures/generated/item/weathered_cut_copper_stairs.png",
+      "sha256": "9d235a3341a0304f1df4f16929cd0bb20f1a1d63b4218b4236035085be375875",
+      "size": 1558
     }
   ]
 }

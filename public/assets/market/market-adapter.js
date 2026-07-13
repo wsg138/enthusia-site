@@ -3,10 +3,30 @@
 
   const normalize = value => String(value ?? "").trim().toLowerCase();
   const materialName = value => normalize(value).replaceAll("_", " ");
-  const aliases = new Map([["skulker", "shulker"], ["skulker box", "shulker box"]]);
+  const romanLevel = level => ({1: "I", 2: "II", 3: "III", 4: "IV", 5: "V"})[level] || String(level);
+  const exactAliases = new Map([
+    ["gap", "golden apple"], ["god apple", "enchanted golden apple"], ["notch apple", "enchanted golden apple"],
+    ["enchanted golden apple", "enchanted golden apple"], ["pearl", "ender pearl"], ["enderpearl", "ender pearl"],
+    ["skulker", "shulker"], ["skulker box", "shulker box"]
+  ]);
+  const categories = [
+    {id: "SWORD", queries: ["sword"], matches: material => /^(WOODEN|STONE|COPPER|GOLDEN|IRON|DIAMOND|NETHERITE)_SWORD$/.test(material)},
+    {id: "ARMOR", queries: ["armor"], matches: material => /^(LEATHER|CHAINMAIL|COPPER|GOLDEN|IRON|DIAMOND|NETHERITE)_(HELMET|CHESTPLATE|LEGGINGS|BOOTS)$/.test(material) || material === "TURTLE_HELMET"},
+    {id: "WOOD", queries: ["wood"], matches: material => /_(LOG|WOOD|STEM|HYPHAE|PLANKS)$/.test(material)},
+    {id: "LOG", queries: ["log", "logs"], matches: material => /_(LOG|WOOD|STEM|HYPHAE)$/.test(material)},
+    {id: "PLANK", queries: ["plank", "planks"], matches: material => /_PLANKS$/.test(material)},
+    {id: "SHULKER", queries: ["shulker", "shulker box", "skulker", "skulker box"], matches: material => material === "SHULKER_BOX" || /_SHULKER_BOX$/.test(material)}
+  ];
+  const shulkerColors = ["white", "orange", "magenta", "light blue", "yellow", "lime", "pink", "gray", "light gray", "cyan", "purple", "blue", "brown", "green", "red", "black"];
+  function querySpec(value) {
+    const original = normalize(value).replace(/\bskulker\b/g, "shulker");
+    const shulkerColor = shulkerColors.find(color => original === `${color} shulker` || original === `${color} shulker box`);
+    if (shulkerColor) return {original, normalized: original, category: categories.find(category => category.id === "SHULKER"), preferredMaterial: `${shulkerColor.replaceAll(" ", "_").toUpperCase()}_SHULKER_BOX`};
+    const normalized = exactAliases.get(original) || original;
+    return {original, normalized, category: categories.find(category => category.queries.includes(normalized)) || null, preferredMaterial: null};
+  }
   const normalizeQuery = value => {
-    const normalized = normalize(value);
-    return aliases.get(normalized) || normalized.replace(/\bskulker\b/g, "shulker");
+    return querySpec(value).normalized;
   };
 
   function itemPresentation(item) {
@@ -14,9 +34,10 @@
     const baseDisplayName = item?.material === "ENCHANTED_BOOK" ? "Enchanted Book" : item?.material === "WRITTEN_BOOK" ? "Written Book" : item?.displayName || materialName(item?.material);
     const customDisplayName = metadata.customName && metadata.customName !== baseDisplayName ? metadata.customName : null;
     const variants = [
-      ...(metadata.storedEnchantments || []).map(enchantment => `${enchantment.displayName} ${enchantment.level}`),
-      ...(metadata.enchantments || []).map(enchantment => `${enchantment.displayName} ${enchantment.level}`),
-      metadata.potion?.basePotion, metadata.armorTrim ? `${metadata.armorTrim.material} ${metadata.armorTrim.pattern}` : null,
+      ...(metadata.storedEnchantments || []).map(enchantment => `${enchantment.displayName} ${romanLevel(enchantment.level)}`),
+      ...(metadata.enchantments || []).map(enchantment => `${enchantment.displayName} ${romanLevel(enchantment.level)}`),
+      ...(metadata.potion?.effects || []).map(effect => `${effect.name}${effect.amplifier ? ` ${romanLevel(effect.amplifier + 1)}` : ""}${effect.durationSeconds ? ` · ${Math.floor(effect.durationSeconds / 60)}:${String(effect.durationSeconds % 60).padStart(2, "0")}` : ""}`),
+      metadata.armorTrim ? `${metadata.armorTrim.material} ${metadata.armorTrim.pattern}` : null,
       metadata.smithingTemplate?.type, metadata.goatHornInstrument, metadata.writtenBook?.title,
       metadata.shulkerColor ? `${metadata.shulkerColor} Shulker Box` : null, metadata.publicVariantId
     ].filter(Boolean);
@@ -28,8 +49,8 @@
     const metadata = item.metadata || {};
     return [
       item.material, materialName(item.material), item.displayName, metadata.customName,
-      ...(metadata.enchantments || []).flatMap(enchantment => [enchantment.id, enchantment.displayName, `${enchantment.displayName} ${enchantment.level}`]),
-      ...(metadata.storedEnchantments || []).flatMap(enchantment => [enchantment.id, enchantment.displayName, `${enchantment.displayName} ${enchantment.level}`]),
+      ...(metadata.enchantments || []).flatMap(enchantment => [enchantment.id, enchantment.displayName, `${enchantment.displayName} ${enchantment.level}`, `${enchantment.displayName} ${romanLevel(enchantment.level)}`]),
+      ...(metadata.storedEnchantments || []).flatMap(enchantment => [enchantment.id, enchantment.displayName, `${enchantment.displayName} ${enchantment.level}`, `${enchantment.displayName} ${romanLevel(enchantment.level)}`]),
       metadata.armorTrim?.pattern, metadata.armorTrim?.material,
       metadata.potion?.basePotion, ...(metadata.potion?.effects || []).map(effect => effect.name),
       metadata.smithingTemplate?.type, metadata.shulkerColor,
@@ -53,7 +74,14 @@
       this.layout = layout;
       this.snapshot = snapshot;
       this.catalog = catalog?.items || [];
-      this.variants = variants?.items || [];
+      this.variants = (variants?.items || []).map(entry => {
+        if (entry.kind === "ENCHANTMENT") return {...entry, displayName: "Enchanted Book"};
+        if (entry.kind === "POTION") {
+          const [primary, duration] = entry.displayName.split(" — ");
+          return {...entry, displayName: primary, subtitle: duration || entry.subtitle?.replace(/^.*? — /, "") || null};
+        }
+        return entry;
+      });
       this.suggestionCatalog = [
         ...this.catalog.map(item => ({...item, kind: "MATERIAL", searchQuery: item.displayName, subtitle: null, item: {material: item.material, displayName: item.displayName, amount: 1, metadata: {}}})),
         ...this.variants
@@ -72,11 +100,13 @@
       ].map(match => ({...shop, match})));
     }
     searchItems(query) {
-      const friendly = normalizeQuery(query), material = friendly.replaceAll(" ", "_");
+      const spec = querySpec(query), friendly = spec.normalized, material = friendly.replaceAll(" ", "_");
       if (!friendly) return [];
       const entries = this.searchEntries();
-      const exact = entries.filter(entry => itemTerms(entry.match.item).some(term => term === friendly || term === material));
+      const categoryMatches = spec.category ? entries.filter(entry => spec.category.matches(entry.match.item.material)) : [];
+      const exact = spec.category ? categoryMatches : entries.filter(entry => itemTerms(entry.match.item).some(term => term === friendly || term === material));
       const selected = exact.length ? exact : friendly.length < 2 ? [] : entries.filter(entry => itemTerms(entry.match.item).some(term => term.startsWith(friendly) || term.startsWith(material) || term.includes(` ${friendly}`) || term.includes(friendly)));
+      selected.sort((a, b) => Number(b.match.item.material === spec.preferredMaterial) - Number(a.match.item.material === spec.preferredMaterial));
       const seen = new Set();
       return selected.filter(entry => {
         const key = `${entry.id}:${entry.match.side}:${entry.match.item.material}:${entry.match.contained}`;
@@ -86,20 +116,21 @@
       });
     }
     suggest(query, limit = 15) {
-      const value = normalizeQuery(query);
+      const spec = querySpec(query), value = spec.normalized;
       if (value.length < 1) return [];
       const available = new Set(this.searchEntries().flatMap(entry => [normalize(entry.match.item.displayName), normalize(entry.match.item.material)]));
       const materialQuery = value.replaceAll(" ", "_"), matches = this.suggestionCatalog.filter(entry => {
+        if (spec.category) return spec.category.matches(entry.material || entry.item?.material);
         const terms = [entry.displayName, entry.subtitle, entry.searchQuery, entry.material, entry.id, ...itemTerms(entry.item)].filter(Boolean).map(normalize);
         return terms.some(term => term.startsWith(value) || term.startsWith(materialQuery) || term.includes(` ${value}`));
       });
-      const rank = entry => normalize(entry.displayName).startsWith(value) ? 0 : normalize(entry.subtitle).startsWith(value) || normalize(entry.searchQuery).startsWith(value) ? 1 : 2;
+      const rank = entry => entry.material === spec.preferredMaterial ? -1 : normalize(entry.displayName).startsWith(value) ? 0 : normalize(entry.subtitle).startsWith(value) || normalize(entry.searchQuery).startsWith(value) ? 1 : 2;
       const seen = new Set();
       return matches.sort((a, b) => rank(a) - rank(b) || Number(available.has(normalize(b.displayName)) || available.has(normalize(b.material))) - Number(available.has(normalize(a.displayName)) || available.has(normalize(a.material))) || a.displayName.localeCompare(b.displayName)).filter(entry => {
-        const key = `${entry.kind}:${entry.displayName}`; if (seen.has(key)) return false; seen.add(key); return true;
+        const key = `${entry.kind}:${entry.displayName}:${entry.subtitle || ""}`; if (seen.has(key)) return false; seen.add(key); return true;
       }).slice(0, limit);
     }
   }
 
-  window.EnthusiaMarketAdapter = {StaticMarketAdapter, itemTerms, itemPresentation, containerEntries, normalizeQuery};
+  window.EnthusiaMarketAdapter = {StaticMarketAdapter, itemTerms, itemPresentation, containerEntries, normalizeQuery, querySpec, categories};
 })();

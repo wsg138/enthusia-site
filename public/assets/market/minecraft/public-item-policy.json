@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "minecraftVersion": "1.21.11",
+  "notes": "Curated public marketplace catalog policy. Registry presence alone does not make an item obtainable or appropriate for public search.",
+  "explicitExclusions": [
+    { "material": "BARRIER", "reason": "CREATIVE_ONLY" },
+    { "material": "BEDROCK", "reason": "NOT_OBTAINABLE" },
+    { "material": "COMMAND_BLOCK", "reason": "OPERATOR_ONLY" },
+    { "material": "CHAIN_COMMAND_BLOCK", "reason": "OPERATOR_ONLY" },
+    { "material": "REPEATING_COMMAND_BLOCK", "reason": "OPERATOR_ONLY" },
+    { "material": "COMMAND_BLOCK_MINECART", "reason": "OPERATOR_ONLY" },
+    { "material": "STRUCTURE_BLOCK", "reason": "TECHNICAL" },
+    { "material": "STRUCTURE_VOID", "reason": "TECHNICAL" },
+    { "material": "JIGSAW", "reason": "TECHNICAL" },
+    { "material": "DEBUG_STICK", "reason": "OPERATOR_ONLY" },
+    { "material": "LIGHT", "reason": "CREATIVE_ONLY" },
+    { "material": "KNOWLEDGE_BOOK", "reason": "TECHNICAL" },
+    { "material": "SPAWNER", "reason": "NOT_OBTAINABLE" },
+    { "material": "TRIAL_SPAWNER", "reason": "NOT_OBTAINABLE" },
+    { "material": "VAULT", "reason": "NOT_OBTAINABLE" },
+    { "material": "TEST_BLOCK", "reason": "INTERNAL" },
+    { "material": "TEST_INSTANCE_BLOCK", "reason": "INTERNAL" },
+    { "material": "PDB", "reason": "INTERNAL" }
+  ]
+}

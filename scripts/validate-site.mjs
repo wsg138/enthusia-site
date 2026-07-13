@@ -39,6 +39,7 @@ const marketRequired = [
   "market.js", "market-adapter.js", "market-data.js", "market-layout.json", "sample-market-snapshot.json", "market.css",
   "map-core.js", "overview.png", "minecraft/material-icon-manifest.js", "minecraft/material-icon-manifest.json",
   "minecraft/font-metrics.js", "minecraft/font-metrics.json", "minecraft/item-catalog.js", "minecraft/item-catalog.json",
+  "minecraft/public-item-policy.json", "minecraft/item-icon-validation-report.json", "minecraft/potion-variant-manifest.json",
   "minecraft/asset-source-manifest.json", "minecraft/vanilla/textures/gui/container/shulker_box.png",
   "minecraft/vanilla/textures/gui/sprites/container/slot.png", "minecraft/vanilla/textures/font/ascii.png"
 ];
@@ -62,7 +63,7 @@ const fingerprint = createHash("sha256").update(JSON.stringify(footprints)).dige
 if (layout.buildings.length !== 15 || layout.stalls.length !== 71) errors.push(`market: expected 15 buildings and 71 stalls, found ${layout.buildings.length}/${layout.stalls.length}`);
 if (fingerprint !== "6f6d926c79fecbcf250043aab2445dccc94c60d92ff70bc042ac8b4650f5b2d8") errors.push(`market: polygon fingerprint mismatch ${fingerprint}`);
 const catalog = JSON.parse(await readFile(path.join(marketDir, "minecraft", "item-catalog.json"), "utf8"));
-if (catalog.items?.length !== 1504) errors.push(`market: expected 1504 Minecraft 1.21.11 catalog items, found ${catalog.items?.length ?? 0}`);
+if (catalog.items?.length !== 1487 || catalog.excludedCount !== 17) errors.push(`market: expected 1487 public Minecraft 1.21.11 catalog items and 17 exclusions, found ${catalog.items?.length ?? 0}/${catalog.excludedCount ?? 0}`);
 const variants = JSON.parse(await readFile(path.join(marketDir, "minecraft", "item-variant-catalog.json"), "utf8"));
 if (variants.items?.length !== 342) errors.push(`market: expected 342 Minecraft 1.21.11 variant entries, found ${variants.items?.length ?? 0}`);
 for (const file of ["market.js", "market-adapter.js", "market-data.js", "minecraft/material-icon-manifest.js", "minecraft/font-metrics.js", "minecraft/item-catalog.js", "minecraft/item-variant-catalog.js"]) {
