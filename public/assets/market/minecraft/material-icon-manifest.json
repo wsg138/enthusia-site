@@ -192,6 +192,7209 @@
           "src": "minecraft/vanilla/textures/item/written_book.png"
         }
       ]
+    },
+    "ACACIA_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/acacia_boat.png"
+        }
+      ]
+    },
+    "ACACIA_CHEST_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/acacia_chest_boat.png"
+        }
+      ]
+    },
+    "ACACIA_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/acacia_door.png"
+        }
+      ]
+    },
+    "ACACIA_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/acacia_hanging_sign.png"
+        }
+      ]
+    },
+    "ACACIA_LEAVES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/acacia_leaves.png"
+        }
+      ]
+    },
+    "ACACIA_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/acacia_log.png"
+        }
+      ]
+    },
+    "ACACIA_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/acacia_planks.png"
+        }
+      ]
+    },
+    "ACACIA_SAPLING": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/acacia_sapling.png"
+        }
+      ]
+    },
+    "ACACIA_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/acacia_shelf.png"
+        }
+      ]
+    },
+    "ACACIA_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/acacia_sign.png"
+        }
+      ]
+    },
+    "ACACIA_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/acacia_trapdoor.png"
+        }
+      ]
+    },
+    "ACTIVATOR_RAIL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/activator_rail.png"
+        }
+      ]
+    },
+    "ALLAY_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/allay_spawn_egg.png"
+        }
+      ]
+    },
+    "ALLIUM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/allium.png"
+        }
+      ]
+    },
+    "AMETHYST_CLUSTER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/amethyst_cluster.png"
+        }
+      ]
+    },
+    "AMETHYST_SHARD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/amethyst_shard.png"
+        }
+      ]
+    },
+    "ANDESITE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/andesite.png"
+        }
+      ]
+    },
+    "ANGLER_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/angler_pottery_sherd.png"
+        }
+      ]
+    },
+    "ANVIL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/anvil.png"
+        }
+      ]
+    },
+    "APPLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/apple.png"
+        }
+      ]
+    },
+    "ARCHER_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/archer_pottery_sherd.png"
+        }
+      ]
+    },
+    "ARMADILLO_SCUTE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/armadillo_scute.png"
+        }
+      ]
+    },
+    "ARMADILLO_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/armadillo_spawn_egg.png"
+        }
+      ]
+    },
+    "ARMOR_STAND": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/armor_stand.png"
+        }
+      ]
+    },
+    "ARMS_UP_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/arms_up_pottery_sherd.png"
+        }
+      ]
+    },
+    "ARROW": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/arrow.png"
+        }
+      ]
+    },
+    "AXOLOTL_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/axolotl_spawn_egg.png"
+        }
+      ]
+    },
+    "AZALEA_LEAVES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/azalea_leaves.png"
+        }
+      ]
+    },
+    "AZURE_BLUET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/azure_bluet.png"
+        }
+      ]
+    },
+    "BAKED_POTATO": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/baked_potato.png"
+        }
+      ]
+    },
+    "BAMBOO": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bamboo.png"
+        }
+      ]
+    },
+    "BAMBOO_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bamboo_door.png"
+        }
+      ]
+    },
+    "BAMBOO_FENCE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bamboo_fence.png"
+        }
+      ]
+    },
+    "BAMBOO_FENCE_GATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bamboo_fence_gate.png"
+        }
+      ]
+    },
+    "BAMBOO_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bamboo_hanging_sign.png"
+        }
+      ]
+    },
+    "BAMBOO_MOSAIC": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bamboo_mosaic.png"
+        }
+      ]
+    },
+    "BAMBOO_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bamboo_planks.png"
+        }
+      ]
+    },
+    "BAMBOO_RAFT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bamboo_raft.png"
+        }
+      ]
+    },
+    "BAMBOO_CHEST_RAFT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bamboo_chest_raft.png"
+        }
+      ]
+    },
+    "BAMBOO_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bamboo_shelf.png"
+        }
+      ]
+    },
+    "BAMBOO_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bamboo_sign.png"
+        }
+      ]
+    },
+    "BAMBOO_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bamboo_trapdoor.png"
+        }
+      ]
+    },
+    "CREEPER_BANNER_PATTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/creeper_banner_pattern.png"
+        }
+      ]
+    },
+    "FLOW_BANNER_PATTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/flow_banner_pattern.png"
+        }
+      ]
+    },
+    "FLOWER_BANNER_PATTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/flower_banner_pattern.png"
+        }
+      ]
+    },
+    "GLOBE_BANNER_PATTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/globe_banner_pattern.png"
+        }
+      ]
+    },
+    "GUSTER_BANNER_PATTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/guster_banner_pattern.png"
+        }
+      ]
+    },
+    "MOJANG_BANNER_PATTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mojang_banner_pattern.png"
+        }
+      ]
+    },
+    "PIGLIN_BANNER_PATTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/piglin_banner_pattern.png"
+        }
+      ]
+    },
+    "SKULL_BANNER_PATTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/skull_banner_pattern.png"
+        }
+      ]
+    },
+    "BARRIER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/barrier.png"
+        }
+      ]
+    },
+    "BAT_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bat_spawn_egg.png"
+        }
+      ]
+    },
+    "BEACON": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/beacon.png"
+        }
+      ]
+    },
+    "BEDROCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bedrock.png"
+        }
+      ]
+    },
+    "BEE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bee_spawn_egg.png"
+        }
+      ]
+    },
+    "BEETROOT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/beetroot.png"
+        }
+      ]
+    },
+    "BEETROOT_SEEDS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/beetroot_seeds.png"
+        }
+      ]
+    },
+    "BEETROOT_SOUP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/beetroot_soup.png"
+        }
+      ]
+    },
+    "BELL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bell.png"
+        }
+      ]
+    },
+    "BIRCH_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/birch_boat.png"
+        }
+      ]
+    },
+    "BIRCH_CHEST_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/birch_chest_boat.png"
+        }
+      ]
+    },
+    "BIRCH_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/birch_door.png"
+        }
+      ]
+    },
+    "BIRCH_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/birch_hanging_sign.png"
+        }
+      ]
+    },
+    "BIRCH_LEAVES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/birch_leaves.png"
+        }
+      ]
+    },
+    "BIRCH_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/birch_log.png"
+        }
+      ]
+    },
+    "BIRCH_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/birch_planks.png"
+        }
+      ]
+    },
+    "BIRCH_SAPLING": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/birch_sapling.png"
+        }
+      ]
+    },
+    "BIRCH_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/birch_shelf.png"
+        }
+      ]
+    },
+    "BIRCH_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/birch_sign.png"
+        }
+      ]
+    },
+    "BIRCH_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/birch_trapdoor.png"
+        }
+      ]
+    },
+    "BLACK_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/black_bundle.png"
+        }
+      ]
+    },
+    "BLACK_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/black_candle.png"
+        }
+      ]
+    },
+    "BLACK_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/black_concrete.png"
+        }
+      ]
+    },
+    "BLACK_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/black_concrete_powder.png"
+        }
+      ]
+    },
+    "BLACK_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/black_dye.png"
+        }
+      ]
+    },
+    "BLACK_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/black_glazed_terracotta.png"
+        }
+      ]
+    },
+    "BLACK_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/black_harness.png"
+        }
+      ]
+    },
+    "BLACK_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/black_shulker_box.png"
+        }
+      ]
+    },
+    "BLACK_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/black_stained_glass.png"
+        }
+      ]
+    },
+    "BLACK_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/black_terracotta.png"
+        }
+      ]
+    },
+    "BLACK_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/black_wool.png"
+        }
+      ]
+    },
+    "BLACKSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/blackstone.png"
+        }
+      ]
+    },
+    "BLADE_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/blade_pottery_sherd.png"
+        }
+      ]
+    },
+    "BLAZE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/blaze_powder.png"
+        }
+      ]
+    },
+    "BLAZE_ROD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/blaze_rod.png"
+        }
+      ]
+    },
+    "BLAZE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/blaze_spawn_egg.png"
+        }
+      ]
+    },
+    "AMETHYST_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/amethyst_block.png"
+        }
+      ]
+    },
+    "BAMBOO_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bamboo_block.png"
+        }
+      ]
+    },
+    "COAL_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/coal_block.png"
+        }
+      ]
+    },
+    "COPPER_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/copper_block.png"
+        }
+      ]
+    },
+    "DIAMOND_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/diamond_block.png"
+        }
+      ]
+    },
+    "EMERALD_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/emerald_block.png"
+        }
+      ]
+    },
+    "GOLD_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/gold_block.png"
+        }
+      ]
+    },
+    "IRON_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/iron_block.png"
+        }
+      ]
+    },
+    "LAPIS_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lapis_block.png"
+        }
+      ]
+    },
+    "NETHERITE_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/netherite_block.png"
+        }
+      ]
+    },
+    "RAW_COPPER_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/raw_copper_block.png"
+        }
+      ]
+    },
+    "RAW_GOLD_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/raw_gold_block.png"
+        }
+      ]
+    },
+    "RAW_IRON_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/raw_iron_block.png"
+        }
+      ]
+    },
+    "REDSTONE_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/redstone_block.png"
+        }
+      ]
+    },
+    "RESIN_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/resin_block.png"
+        }
+      ]
+    },
+    "STRIPPED_BAMBOO_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_bamboo_block.png"
+        }
+      ]
+    },
+    "BLUE_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/blue_bundle.png"
+        }
+      ]
+    },
+    "BLUE_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/blue_candle.png"
+        }
+      ]
+    },
+    "BLUE_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/blue_concrete.png"
+        }
+      ]
+    },
+    "BLUE_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/blue_concrete_powder.png"
+        }
+      ]
+    },
+    "BLUE_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/blue_dye.png"
+        }
+      ]
+    },
+    "BLUE_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/blue_egg.png"
+        }
+      ]
+    },
+    "BLUE_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/blue_glazed_terracotta.png"
+        }
+      ]
+    },
+    "BLUE_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/blue_harness.png"
+        }
+      ]
+    },
+    "BLUE_ICE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/blue_ice.png"
+        }
+      ]
+    },
+    "BLUE_ORCHID": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/blue_orchid.png"
+        }
+      ]
+    },
+    "BLUE_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/blue_shulker_box.png"
+        }
+      ]
+    },
+    "BLUE_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/blue_stained_glass.png"
+        }
+      ]
+    },
+    "BLUE_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/blue_terracotta.png"
+        }
+      ]
+    },
+    "BLUE_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/blue_wool.png"
+        }
+      ]
+    },
+    "BOGGED_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bogged_spawn_egg.png"
+        }
+      ]
+    },
+    "BONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bone.png"
+        }
+      ]
+    },
+    "BONE_MEAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bone_meal.png"
+        }
+      ]
+    },
+    "BOOK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/book.png"
+        }
+      ]
+    },
+    "WRITABLE_BOOK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/writable_book.png"
+        }
+      ]
+    },
+    "BOOKSHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bookshelf.png"
+        }
+      ]
+    },
+    "BORDURE_INDENTED_BANNER_PATTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bordure_indented_banner_pattern.png"
+        }
+      ]
+    },
+    "EXPERIENCE_BOTTLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/experience_bottle.png"
+        }
+      ]
+    },
+    "BOW": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bow.png"
+        }
+      ]
+    },
+    "BOWL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bowl.png"
+        }
+      ]
+    },
+    "BRAIN_CORAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brain_coral.png"
+        }
+      ]
+    },
+    "BRAIN_CORAL_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brain_coral_block.png"
+        }
+      ]
+    },
+    "BRAIN_CORAL_FAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brain_coral_fan.png"
+        }
+      ]
+    },
+    "BREAD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bread.png"
+        }
+      ]
+    },
+    "BREEZE_ROD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/breeze_rod.png"
+        }
+      ]
+    },
+    "BREEZE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/breeze_spawn_egg.png"
+        }
+      ]
+    },
+    "BREWER_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/brewer_pottery_sherd.png"
+        }
+      ]
+    },
+    "BREWING_STAND": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/brewing_stand.png"
+        }
+      ]
+    },
+    "BRICK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/brick.png"
+        }
+      ]
+    },
+    "BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bricks.png"
+        }
+      ]
+    },
+    "BROWN_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/brown_bundle.png"
+        }
+      ]
+    },
+    "BROWN_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/brown_candle.png"
+        }
+      ]
+    },
+    "BROWN_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brown_concrete.png"
+        }
+      ]
+    },
+    "BROWN_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brown_concrete_powder.png"
+        }
+      ]
+    },
+    "BROWN_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/brown_dye.png"
+        }
+      ]
+    },
+    "BROWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/brown_egg.png"
+        }
+      ]
+    },
+    "BROWN_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brown_glazed_terracotta.png"
+        }
+      ]
+    },
+    "BROWN_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/brown_harness.png"
+        }
+      ]
+    },
+    "BROWN_MUSHROOM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brown_mushroom.png"
+        }
+      ]
+    },
+    "BROWN_MUSHROOM_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brown_mushroom_block.png"
+        }
+      ]
+    },
+    "BROWN_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brown_shulker_box.png"
+        }
+      ]
+    },
+    "BROWN_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brown_stained_glass.png"
+        }
+      ]
+    },
+    "BROWN_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brown_terracotta.png"
+        }
+      ]
+    },
+    "BROWN_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/brown_wool.png"
+        }
+      ]
+    },
+    "BRUSH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/brush.png"
+        }
+      ]
+    },
+    "BUBBLE_CORAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bubble_coral.png"
+        }
+      ]
+    },
+    "BUBBLE_CORAL_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bubble_coral_block.png"
+        }
+      ]
+    },
+    "BUBBLE_CORAL_FAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bubble_coral_fan.png"
+        }
+      ]
+    },
+    "BUCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bucket.png"
+        }
+      ]
+    },
+    "AXOLOTL_BUCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/axolotl_bucket.png"
+        }
+      ]
+    },
+    "COD_BUCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cod_bucket.png"
+        }
+      ]
+    },
+    "PUFFERFISH_BUCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pufferfish_bucket.png"
+        }
+      ]
+    },
+    "SALMON_BUCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/salmon_bucket.png"
+        }
+      ]
+    },
+    "TADPOLE_BUCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/tadpole_bucket.png"
+        }
+      ]
+    },
+    "TROPICAL_FISH_BUCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/tropical_fish_bucket.png"
+        }
+      ]
+    },
+    "BUDDING_AMETHYST": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/budding_amethyst.png"
+        }
+      ]
+    },
+    "BURN_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/burn_pottery_sherd.png"
+        }
+      ]
+    },
+    "BUSH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/bush.png"
+        }
+      ]
+    },
+    "CACTUS_FLOWER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cactus_flower.png"
+        }
+      ]
+    },
+    "CAKE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cake.png"
+        }
+      ]
+    },
+    "CALCITE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/calcite.png"
+        }
+      ]
+    },
+    "CAMEL_HUSK_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/camel_husk_spawn_egg.png"
+        }
+      ]
+    },
+    "CAMEL_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/camel_spawn_egg.png"
+        }
+      ]
+    },
+    "CAMPFIRE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/campfire.png"
+        }
+      ]
+    },
+    "CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/candle.png"
+        }
+      ]
+    },
+    "CARROT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/carrot.png"
+        }
+      ]
+    },
+    "CARROT_ON_A_STICK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/carrot_on_a_stick.png"
+        }
+      ]
+    },
+    "CARVED_PUMPKIN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/carved_pumpkin.png"
+        }
+      ]
+    },
+    "CAT_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cat_spawn_egg.png"
+        }
+      ]
+    },
+    "CAULDRON": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cauldron.png"
+        }
+      ]
+    },
+    "CAVE_SPIDER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cave_spider_spawn_egg.png"
+        }
+      ]
+    },
+    "CHAINMAIL_BOOTS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/chainmail_boots.png"
+        }
+      ]
+    },
+    "CHAINMAIL_CHESTPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/chainmail_chestplate.png"
+        }
+      ]
+    },
+    "CHAINMAIL_HELMET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/chainmail_helmet.png"
+        }
+      ]
+    },
+    "CHAINMAIL_LEGGINGS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/chainmail_leggings.png"
+        }
+      ]
+    },
+    "CHARCOAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/charcoal.png"
+        }
+      ]
+    },
+    "CHERRY_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cherry_boat.png"
+        }
+      ]
+    },
+    "CHERRY_CHEST_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cherry_chest_boat.png"
+        }
+      ]
+    },
+    "CHERRY_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cherry_door.png"
+        }
+      ]
+    },
+    "CHERRY_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cherry_hanging_sign.png"
+        }
+      ]
+    },
+    "CHERRY_LEAVES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cherry_leaves.png"
+        }
+      ]
+    },
+    "CHERRY_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cherry_log.png"
+        }
+      ]
+    },
+    "CHERRY_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cherry_planks.png"
+        }
+      ]
+    },
+    "CHERRY_SAPLING": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cherry_sapling.png"
+        }
+      ]
+    },
+    "CHERRY_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cherry_shelf.png"
+        }
+      ]
+    },
+    "CHERRY_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cherry_sign.png"
+        }
+      ]
+    },
+    "CHERRY_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cherry_trapdoor.png"
+        }
+      ]
+    },
+    "CHICKEN_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/chicken_spawn_egg.png"
+        }
+      ]
+    },
+    "CHISELED_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chiseled_copper.png"
+        }
+      ]
+    },
+    "CHISELED_DEEPSLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chiseled_deepslate.png"
+        }
+      ]
+    },
+    "CHISELED_NETHER_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chiseled_nether_bricks.png"
+        }
+      ]
+    },
+    "CHISELED_POLISHED_BLACKSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chiseled_polished_blackstone.png"
+        }
+      ]
+    },
+    "CHISELED_QUARTZ_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chiseled_quartz_block.png"
+        }
+      ]
+    },
+    "CHISELED_RED_SANDSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chiseled_red_sandstone.png"
+        }
+      ]
+    },
+    "CHISELED_RESIN_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chiseled_resin_bricks.png"
+        }
+      ]
+    },
+    "CHISELED_SANDSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chiseled_sandstone.png"
+        }
+      ]
+    },
+    "CHISELED_STONE_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chiseled_stone_bricks.png"
+        }
+      ]
+    },
+    "CHISELED_TUFF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chiseled_tuff.png"
+        }
+      ]
+    },
+    "CHISELED_TUFF_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chiseled_tuff_bricks.png"
+        }
+      ]
+    },
+    "CHORUS_FLOWER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chorus_flower.png"
+        }
+      ]
+    },
+    "CHORUS_FRUIT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/chorus_fruit.png"
+        }
+      ]
+    },
+    "CHORUS_PLANT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/chorus_plant.png"
+        }
+      ]
+    },
+    "CLAY": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/clay.png"
+        }
+      ]
+    },
+    "CLAY_BALL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/clay_ball.png"
+        }
+      ]
+    },
+    "CLOSED_EYEBLOSSOM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/closed_eyeblossom.png"
+        }
+      ]
+    },
+    "COAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/coal.png"
+        }
+      ]
+    },
+    "COAL_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/coal_ore.png"
+        }
+      ]
+    },
+    "COARSE_DIRT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/coarse_dirt.png"
+        }
+      ]
+    },
+    "COBBLED_DEEPSLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cobbled_deepslate.png"
+        }
+      ]
+    },
+    "COBBLESTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cobblestone.png"
+        }
+      ]
+    },
+    "COBWEB": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cobweb.png"
+        }
+      ]
+    },
+    "COCOA_BEANS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cocoa_beans.png"
+        }
+      ]
+    },
+    "COD_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cod_spawn_egg.png"
+        }
+      ]
+    },
+    "CONDUIT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/conduit.png"
+        }
+      ]
+    },
+    "COOKED_CHICKEN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cooked_chicken.png"
+        }
+      ]
+    },
+    "COOKED_COD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cooked_cod.png"
+        }
+      ]
+    },
+    "COOKED_MUTTON": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cooked_mutton.png"
+        }
+      ]
+    },
+    "COOKED_PORKCHOP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cooked_porkchop.png"
+        }
+      ]
+    },
+    "COOKED_RABBIT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cooked_rabbit.png"
+        }
+      ]
+    },
+    "COOKED_SALMON": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cooked_salmon.png"
+        }
+      ]
+    },
+    "COOKIE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cookie.png"
+        }
+      ]
+    },
+    "COPPER_AXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_axe.png"
+        }
+      ]
+    },
+    "COPPER_BARS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/copper_bars.png"
+        }
+      ]
+    },
+    "COPPER_BOOTS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_boots.png"
+        }
+      ]
+    },
+    "COPPER_BULB": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/copper_bulb.png"
+        }
+      ]
+    },
+    "COPPER_CHAIN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_chain.png"
+        }
+      ]
+    },
+    "COPPER_CHESTPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_chestplate.png"
+        }
+      ]
+    },
+    "COPPER_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_door.png"
+        }
+      ]
+    },
+    "COPPER_GOLEM_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_golem_spawn_egg.png"
+        }
+      ]
+    },
+    "COPPER_GRATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/copper_grate.png"
+        }
+      ]
+    },
+    "COPPER_HELMET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_helmet.png"
+        }
+      ]
+    },
+    "COPPER_HOE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_hoe.png"
+        }
+      ]
+    },
+    "COPPER_HORSE_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_horse_armor.png"
+        }
+      ]
+    },
+    "COPPER_INGOT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_ingot.png"
+        }
+      ]
+    },
+    "COPPER_LANTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_lantern.png"
+        }
+      ]
+    },
+    "COPPER_LEGGINGS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_leggings.png"
+        }
+      ]
+    },
+    "COPPER_NAUTILUS_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_nautilus_armor.png"
+        }
+      ]
+    },
+    "COPPER_NUGGET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_nugget.png"
+        }
+      ]
+    },
+    "COPPER_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/copper_ore.png"
+        }
+      ]
+    },
+    "COPPER_PICKAXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_pickaxe.png"
+        }
+      ]
+    },
+    "COPPER_SHOVEL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_shovel.png"
+        }
+      ]
+    },
+    "COPPER_SPEAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_spear.png"
+        }
+      ]
+    },
+    "COPPER_SWORD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/copper_sword.png"
+        }
+      ]
+    },
+    "COPPER_TORCH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/copper_torch.png"
+        }
+      ]
+    },
+    "COPPER_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/copper_trapdoor.png"
+        }
+      ]
+    },
+    "CORNFLOWER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cornflower.png"
+        }
+      ]
+    },
+    "COW_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cow_spawn_egg.png"
+        }
+      ]
+    },
+    "CRACKED_DEEPSLATE_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cracked_deepslate_bricks.png"
+        }
+      ]
+    },
+    "CRACKED_DEEPSLATE_TILES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cracked_deepslate_tiles.png"
+        }
+      ]
+    },
+    "CRACKED_NETHER_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cracked_nether_bricks.png"
+        }
+      ]
+    },
+    "CRACKED_POLISHED_BLACKSTONE_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cracked_polished_blackstone_bricks.png"
+        }
+      ]
+    },
+    "CRACKED_STONE_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cracked_stone_bricks.png"
+        }
+      ]
+    },
+    "CREAKING_HEART": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/creaking_heart.png"
+        }
+      ]
+    },
+    "CREAKING_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/creaking_spawn_egg.png"
+        }
+      ]
+    },
+    "CREEPER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/creeper_spawn_egg.png"
+        }
+      ]
+    },
+    "CRIMSON_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/crimson_door.png"
+        }
+      ]
+    },
+    "CRIMSON_FUNGUS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/crimson_fungus.png"
+        }
+      ]
+    },
+    "CRIMSON_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/crimson_hanging_sign.png"
+        }
+      ]
+    },
+    "CRIMSON_NYLIUM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/crimson_nylium.png"
+        }
+      ]
+    },
+    "CRIMSON_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/crimson_planks.png"
+        }
+      ]
+    },
+    "CRIMSON_ROOTS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/crimson_roots.png"
+        }
+      ]
+    },
+    "CRIMSON_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/crimson_shelf.png"
+        }
+      ]
+    },
+    "CRIMSON_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/crimson_sign.png"
+        }
+      ]
+    },
+    "CRIMSON_STEM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/crimson_stem.png"
+        }
+      ]
+    },
+    "CRIMSON_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/crimson_trapdoor.png"
+        }
+      ]
+    },
+    "CRYING_OBSIDIAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/crying_obsidian.png"
+        }
+      ]
+    },
+    "CUT_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cut_copper.png"
+        }
+      ]
+    },
+    "CUT_RED_SANDSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cut_red_sandstone.png"
+        }
+      ]
+    },
+    "CUT_SANDSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cut_sandstone.png"
+        }
+      ]
+    },
+    "CYAN_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cyan_bundle.png"
+        }
+      ]
+    },
+    "CYAN_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cyan_candle.png"
+        }
+      ]
+    },
+    "CYAN_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cyan_concrete.png"
+        }
+      ]
+    },
+    "CYAN_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cyan_concrete_powder.png"
+        }
+      ]
+    },
+    "CYAN_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cyan_dye.png"
+        }
+      ]
+    },
+    "CYAN_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cyan_glazed_terracotta.png"
+        }
+      ]
+    },
+    "CYAN_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cyan_harness.png"
+        }
+      ]
+    },
+    "CYAN_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cyan_shulker_box.png"
+        }
+      ]
+    },
+    "CYAN_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cyan_stained_glass.png"
+        }
+      ]
+    },
+    "CYAN_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cyan_terracotta.png"
+        }
+      ]
+    },
+    "CYAN_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/cyan_wool.png"
+        }
+      ]
+    },
+    "DANDELION": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dandelion.png"
+        }
+      ]
+    },
+    "DANGER_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/danger_pottery_sherd.png"
+        }
+      ]
+    },
+    "DARK_OAK_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/dark_oak_boat.png"
+        }
+      ]
+    },
+    "DARK_OAK_CHEST_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/dark_oak_chest_boat.png"
+        }
+      ]
+    },
+    "DARK_OAK_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/dark_oak_door.png"
+        }
+      ]
+    },
+    "DARK_OAK_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/dark_oak_hanging_sign.png"
+        }
+      ]
+    },
+    "DARK_OAK_LEAVES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dark_oak_leaves.png"
+        }
+      ]
+    },
+    "DARK_OAK_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dark_oak_log.png"
+        }
+      ]
+    },
+    "DARK_OAK_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dark_oak_planks.png"
+        }
+      ]
+    },
+    "DARK_OAK_SAPLING": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dark_oak_sapling.png"
+        }
+      ]
+    },
+    "DARK_OAK_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dark_oak_shelf.png"
+        }
+      ]
+    },
+    "DARK_OAK_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/dark_oak_sign.png"
+        }
+      ]
+    },
+    "DARK_OAK_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dark_oak_trapdoor.png"
+        }
+      ]
+    },
+    "DARK_PRISMARINE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dark_prismarine.png"
+        }
+      ]
+    },
+    "DEAD_BRAIN_CORAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_brain_coral.png"
+        }
+      ]
+    },
+    "DEAD_BRAIN_CORAL_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_brain_coral_block.png"
+        }
+      ]
+    },
+    "DEAD_BRAIN_CORAL_FAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_brain_coral_fan.png"
+        }
+      ]
+    },
+    "DEAD_BUBBLE_CORAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_bubble_coral.png"
+        }
+      ]
+    },
+    "DEAD_BUBBLE_CORAL_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_bubble_coral_block.png"
+        }
+      ]
+    },
+    "DEAD_BUBBLE_CORAL_FAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_bubble_coral_fan.png"
+        }
+      ]
+    },
+    "DEAD_BUSH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_bush.png"
+        }
+      ]
+    },
+    "DEAD_FIRE_CORAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_fire_coral.png"
+        }
+      ]
+    },
+    "DEAD_FIRE_CORAL_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_fire_coral_block.png"
+        }
+      ]
+    },
+    "DEAD_FIRE_CORAL_FAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_fire_coral_fan.png"
+        }
+      ]
+    },
+    "DEAD_HORN_CORAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_horn_coral.png"
+        }
+      ]
+    },
+    "DEAD_HORN_CORAL_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_horn_coral_block.png"
+        }
+      ]
+    },
+    "DEAD_HORN_CORAL_FAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_horn_coral_fan.png"
+        }
+      ]
+    },
+    "DEAD_TUBE_CORAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_tube_coral.png"
+        }
+      ]
+    },
+    "DEAD_TUBE_CORAL_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_tube_coral_block.png"
+        }
+      ]
+    },
+    "DEAD_TUBE_CORAL_FAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dead_tube_coral_fan.png"
+        }
+      ]
+    },
+    "DEEPSLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/deepslate.png"
+        }
+      ]
+    },
+    "DEEPSLATE_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/deepslate_bricks.png"
+        }
+      ]
+    },
+    "DEEPSLATE_COAL_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/deepslate_coal_ore.png"
+        }
+      ]
+    },
+    "DEEPSLATE_COPPER_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/deepslate_copper_ore.png"
+        }
+      ]
+    },
+    "DEEPSLATE_DIAMOND_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/deepslate_diamond_ore.png"
+        }
+      ]
+    },
+    "DEEPSLATE_EMERALD_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/deepslate_emerald_ore.png"
+        }
+      ]
+    },
+    "DEEPSLATE_GOLD_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/deepslate_gold_ore.png"
+        }
+      ]
+    },
+    "DEEPSLATE_IRON_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/deepslate_iron_ore.png"
+        }
+      ]
+    },
+    "DEEPSLATE_LAPIS_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/deepslate_lapis_ore.png"
+        }
+      ]
+    },
+    "DEEPSLATE_REDSTONE_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/deepslate_redstone_ore.png"
+        }
+      ]
+    },
+    "DEEPSLATE_TILES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/deepslate_tiles.png"
+        }
+      ]
+    },
+    "DETECTOR_RAIL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/detector_rail.png"
+        }
+      ]
+    },
+    "DIAMOND_AXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_axe.png"
+        }
+      ]
+    },
+    "DIAMOND_BOOTS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_boots.png"
+        }
+      ]
+    },
+    "DIAMOND_CHESTPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_chestplate.png"
+        }
+      ]
+    },
+    "DIAMOND_HELMET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_helmet.png"
+        }
+      ]
+    },
+    "DIAMOND_HOE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_hoe.png"
+        }
+      ]
+    },
+    "DIAMOND_HORSE_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_horse_armor.png"
+        }
+      ]
+    },
+    "DIAMOND_LEGGINGS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_leggings.png"
+        }
+      ]
+    },
+    "DIAMOND_NAUTILUS_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_nautilus_armor.png"
+        }
+      ]
+    },
+    "DIAMOND_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/diamond_ore.png"
+        }
+      ]
+    },
+    "DIAMOND_PICKAXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_pickaxe.png"
+        }
+      ]
+    },
+    "DIAMOND_SHOVEL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_shovel.png"
+        }
+      ]
+    },
+    "DIAMOND_SPEAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_spear.png"
+        }
+      ]
+    },
+    "DIAMOND_SWORD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/diamond_sword.png"
+        }
+      ]
+    },
+    "DIORITE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/diorite.png"
+        }
+      ]
+    },
+    "DIRT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dirt.png"
+        }
+      ]
+    },
+    "DISC_FRAGMENT_5": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/disc_fragment_5.png"
+        }
+      ]
+    },
+    "DOLPHIN_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/dolphin_spawn_egg.png"
+        }
+      ]
+    },
+    "DONKEY_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/donkey_spawn_egg.png"
+        }
+      ]
+    },
+    "DRAGON_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dragon_egg.png"
+        }
+      ]
+    },
+    "DRAGON_BREATH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/dragon_breath.png"
+        }
+      ]
+    },
+    "DRIED_KELP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/dried_kelp.png"
+        }
+      ]
+    },
+    "DRIPSTONE_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/dripstone_block.png"
+        }
+      ]
+    },
+    "DROWNED_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/drowned_spawn_egg.png"
+        }
+      ]
+    },
+    "ECHO_SHARD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/echo_shard.png"
+        }
+      ]
+    },
+    "EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/egg.png"
+        }
+      ]
+    },
+    "ELDER_GUARDIAN_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/elder_guardian_spawn_egg.png"
+        }
+      ]
+    },
+    "ELYTRA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/elytra.png"
+        }
+      ]
+    },
+    "EMERALD_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/emerald_ore.png"
+        }
+      ]
+    },
+    "MAP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/map.png"
+        }
+      ]
+    },
+    "END_CRYSTAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/end_crystal.png"
+        }
+      ]
+    },
+    "END_ROD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/end_rod.png"
+        }
+      ]
+    },
+    "END_STONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/end_stone.png"
+        }
+      ]
+    },
+    "END_STONE_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/end_stone_bricks.png"
+        }
+      ]
+    },
+    "ENDER_DRAGON_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/ender_dragon_spawn_egg.png"
+        }
+      ]
+    },
+    "ENDERMAN_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/enderman_spawn_egg.png"
+        }
+      ]
+    },
+    "ENDERMITE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/endermite_spawn_egg.png"
+        }
+      ]
+    },
+    "EVOKER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/evoker_spawn_egg.png"
+        }
+      ]
+    },
+    "EXPLORER_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/explorer_pottery_sherd.png"
+        }
+      ]
+    },
+    "EXPOSED_CHISELED_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/exposed_chiseled_copper.png"
+        }
+      ]
+    },
+    "EXPOSED_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/exposed_copper.png"
+        }
+      ]
+    },
+    "EXPOSED_COPPER_BARS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/exposed_copper_bars.png"
+        }
+      ]
+    },
+    "EXPOSED_COPPER_BULB": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/exposed_copper_bulb.png"
+        }
+      ]
+    },
+    "EXPOSED_COPPER_CHAIN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/exposed_copper_chain.png"
+        }
+      ]
+    },
+    "EXPOSED_COPPER_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/exposed_copper_door.png"
+        }
+      ]
+    },
+    "EXPOSED_COPPER_GRATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/exposed_copper_grate.png"
+        }
+      ]
+    },
+    "EXPOSED_COPPER_LANTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/exposed_copper_lantern.png"
+        }
+      ]
+    },
+    "EXPOSED_COPPER_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/exposed_copper_trapdoor.png"
+        }
+      ]
+    },
+    "EXPOSED_CUT_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/exposed_cut_copper.png"
+        }
+      ]
+    },
+    "EXPOSED_LIGHTNING_ROD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/exposed_lightning_rod.png"
+        }
+      ]
+    },
+    "ENDER_EYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/ender_eye.png"
+        }
+      ]
+    },
+    "FARMLAND": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/farmland.png"
+        }
+      ]
+    },
+    "FEATHER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/feather.png"
+        }
+      ]
+    },
+    "FERMENTED_SPIDER_EYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/fermented_spider_eye.png"
+        }
+      ]
+    },
+    "FERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/fern.png"
+        }
+      ]
+    },
+    "FIELD_MASONED_BANNER_PATTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/field_masoned_banner_pattern.png"
+        }
+      ]
+    },
+    "FIRE_CHARGE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/fire_charge.png"
+        }
+      ]
+    },
+    "FIRE_CORAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/fire_coral.png"
+        }
+      ]
+    },
+    "FIRE_CORAL_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/fire_coral_block.png"
+        }
+      ]
+    },
+    "FIRE_CORAL_FAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/fire_coral_fan.png"
+        }
+      ]
+    },
+    "FIREFLY_BUSH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/firefly_bush.png"
+        }
+      ]
+    },
+    "FIREWORK_ROCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/firework_rocket.png"
+        }
+      ]
+    },
+    "FIREWORK_STAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/firework_star.png"
+        }
+      ]
+    },
+    "FISHING_ROD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/fishing_rod.png"
+        }
+      ]
+    },
+    "FLINT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/flint.png"
+        }
+      ]
+    },
+    "FLINT_AND_STEEL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/flint_and_steel.png"
+        }
+      ]
+    },
+    "FLOW_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/flow_pottery_sherd.png"
+        }
+      ]
+    },
+    "FLOWER_POT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/flower_pot.png"
+        }
+      ]
+    },
+    "FLOWERING_AZALEA_LEAVES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/flowering_azalea_leaves.png"
+        }
+      ]
+    },
+    "FOX_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/fox_spawn_egg.png"
+        }
+      ]
+    },
+    "FRIEND_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/friend_pottery_sherd.png"
+        }
+      ]
+    },
+    "FROG_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/frog_spawn_egg.png"
+        }
+      ]
+    },
+    "FROGSPAWN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/frogspawn.png"
+        }
+      ]
+    },
+    "GHAST_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/ghast_spawn_egg.png"
+        }
+      ]
+    },
+    "GHAST_TEAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/ghast_tear.png"
+        }
+      ]
+    },
+    "GILDED_BLACKSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/gilded_blackstone.png"
+        }
+      ]
+    },
+    "GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/glass.png"
+        }
+      ]
+    },
+    "GLASS_BOTTLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/glass_bottle.png"
+        }
+      ]
+    },
+    "GLISTERING_MELON_SLICE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/glistering_melon_slice.png"
+        }
+      ]
+    },
+    "GLOW_BERRIES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/glow_berries.png"
+        }
+      ]
+    },
+    "GLOW_INK_SAC": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/glow_ink_sac.png"
+        }
+      ]
+    },
+    "GLOW_ITEM_FRAME": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/glow_item_frame.png"
+        }
+      ]
+    },
+    "GLOW_LICHEN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/glow_lichen.png"
+        }
+      ]
+    },
+    "GLOW_SQUID_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/glow_squid_spawn_egg.png"
+        }
+      ]
+    },
+    "GLOWSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/glowstone.png"
+        }
+      ]
+    },
+    "GLOWSTONE_DUST": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/glowstone_dust.png"
+        }
+      ]
+    },
+    "GOAT_HORN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/goat_horn.png"
+        }
+      ]
+    },
+    "GOAT_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/goat_spawn_egg.png"
+        }
+      ]
+    },
+    "GOLD_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/gold_ore.png"
+        }
+      ]
+    },
+    "GOLDEN_APPLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_apple.png"
+        }
+      ]
+    },
+    "GOLDEN_AXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_axe.png"
+        }
+      ]
+    },
+    "GOLDEN_BOOTS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_boots.png"
+        }
+      ]
+    },
+    "GOLDEN_CARROT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_carrot.png"
+        }
+      ]
+    },
+    "GOLDEN_CHESTPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_chestplate.png"
+        }
+      ]
+    },
+    "GOLDEN_HELMET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_helmet.png"
+        }
+      ]
+    },
+    "GOLDEN_HOE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_hoe.png"
+        }
+      ]
+    },
+    "GOLDEN_HORSE_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_horse_armor.png"
+        }
+      ]
+    },
+    "GOLDEN_LEGGINGS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_leggings.png"
+        }
+      ]
+    },
+    "GOLDEN_NAUTILUS_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_nautilus_armor.png"
+        }
+      ]
+    },
+    "GOLDEN_PICKAXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_pickaxe.png"
+        }
+      ]
+    },
+    "GOLDEN_SHOVEL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_shovel.png"
+        }
+      ]
+    },
+    "GOLDEN_SPEAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_spear.png"
+        }
+      ]
+    },
+    "GOLDEN_SWORD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/golden_sword.png"
+        }
+      ]
+    },
+    "GRANITE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/granite.png"
+        }
+      ]
+    },
+    "GRAVEL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/gravel.png"
+        }
+      ]
+    },
+    "GRAY_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/gray_bundle.png"
+        }
+      ]
+    },
+    "GRAY_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/gray_candle.png"
+        }
+      ]
+    },
+    "GRAY_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/gray_concrete.png"
+        }
+      ]
+    },
+    "GRAY_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/gray_concrete_powder.png"
+        }
+      ]
+    },
+    "GRAY_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/gray_dye.png"
+        }
+      ]
+    },
+    "GRAY_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/gray_glazed_terracotta.png"
+        }
+      ]
+    },
+    "GRAY_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/gray_harness.png"
+        }
+      ]
+    },
+    "GRAY_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/gray_shulker_box.png"
+        }
+      ]
+    },
+    "GRAY_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/gray_stained_glass.png"
+        }
+      ]
+    },
+    "GRAY_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/gray_terracotta.png"
+        }
+      ]
+    },
+    "GRAY_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/gray_wool.png"
+        }
+      ]
+    },
+    "GREEN_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/green_bundle.png"
+        }
+      ]
+    },
+    "GREEN_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/green_candle.png"
+        }
+      ]
+    },
+    "GREEN_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/green_concrete.png"
+        }
+      ]
+    },
+    "GREEN_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/green_concrete_powder.png"
+        }
+      ]
+    },
+    "GREEN_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/green_dye.png"
+        }
+      ]
+    },
+    "GREEN_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/green_glazed_terracotta.png"
+        }
+      ]
+    },
+    "GREEN_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/green_harness.png"
+        }
+      ]
+    },
+    "GREEN_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/green_shulker_box.png"
+        }
+      ]
+    },
+    "GREEN_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/green_stained_glass.png"
+        }
+      ]
+    },
+    "GREEN_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/green_terracotta.png"
+        }
+      ]
+    },
+    "GREEN_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/green_wool.png"
+        }
+      ]
+    },
+    "GUARDIAN_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/guardian_spawn_egg.png"
+        }
+      ]
+    },
+    "GUNPOWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/gunpowder.png"
+        }
+      ]
+    },
+    "GUSTER_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/guster_pottery_sherd.png"
+        }
+      ]
+    },
+    "HANGING_ROOTS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/hanging_roots.png"
+        }
+      ]
+    },
+    "HAPPY_GHAST_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/happy_ghast_spawn_egg.png"
+        }
+      ]
+    },
+    "HEART_OF_THE_SEA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/heart_of_the_sea.png"
+        }
+      ]
+    },
+    "HEART_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/heart_pottery_sherd.png"
+        }
+      ]
+    },
+    "HEARTBREAK_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/heartbreak_pottery_sherd.png"
+        }
+      ]
+    },
+    "HEAVY_CORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/heavy_core.png"
+        }
+      ]
+    },
+    "HOGLIN_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/hoglin_spawn_egg.png"
+        }
+      ]
+    },
+    "HONEY_BOTTLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/honey_bottle.png"
+        }
+      ]
+    },
+    "HONEYCOMB": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/honeycomb.png"
+        }
+      ]
+    },
+    "HONEYCOMB_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/honeycomb_block.png"
+        }
+      ]
+    },
+    "HOPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/hopper.png"
+        }
+      ]
+    },
+    "HORN_CORAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/horn_coral.png"
+        }
+      ]
+    },
+    "HORN_CORAL_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/horn_coral_block.png"
+        }
+      ]
+    },
+    "HORN_CORAL_FAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/horn_coral_fan.png"
+        }
+      ]
+    },
+    "HORSE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/horse_spawn_egg.png"
+        }
+      ]
+    },
+    "HOWL_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/howl_pottery_sherd.png"
+        }
+      ]
+    },
+    "HUSK_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/husk_spawn_egg.png"
+        }
+      ]
+    },
+    "ICE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/ice.png"
+        }
+      ]
+    },
+    "INK_SAC": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/ink_sac.png"
+        }
+      ]
+    },
+    "IRON_AXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_axe.png"
+        }
+      ]
+    },
+    "IRON_BARS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/iron_bars.png"
+        }
+      ]
+    },
+    "IRON_BOOTS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_boots.png"
+        }
+      ]
+    },
+    "IRON_CHAIN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_chain.png"
+        }
+      ]
+    },
+    "IRON_CHESTPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_chestplate.png"
+        }
+      ]
+    },
+    "IRON_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_door.png"
+        }
+      ]
+    },
+    "IRON_GOLEM_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_golem_spawn_egg.png"
+        }
+      ]
+    },
+    "IRON_HELMET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_helmet.png"
+        }
+      ]
+    },
+    "IRON_HOE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_hoe.png"
+        }
+      ]
+    },
+    "IRON_HORSE_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_horse_armor.png"
+        }
+      ]
+    },
+    "IRON_LEGGINGS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_leggings.png"
+        }
+      ]
+    },
+    "IRON_NAUTILUS_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_nautilus_armor.png"
+        }
+      ]
+    },
+    "IRON_NUGGET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_nugget.png"
+        }
+      ]
+    },
+    "IRON_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/iron_ore.png"
+        }
+      ]
+    },
+    "IRON_PICKAXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_pickaxe.png"
+        }
+      ]
+    },
+    "IRON_SHOVEL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_shovel.png"
+        }
+      ]
+    },
+    "IRON_SPEAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_spear.png"
+        }
+      ]
+    },
+    "IRON_SWORD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/iron_sword.png"
+        }
+      ]
+    },
+    "IRON_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/iron_trapdoor.png"
+        }
+      ]
+    },
+    "ITEM_FRAME": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/item_frame.png"
+        }
+      ]
+    },
+    "JACK_O_LANTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/jack_o_lantern.png"
+        }
+      ]
+    },
+    "JUNGLE_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/jungle_boat.png"
+        }
+      ]
+    },
+    "JUNGLE_CHEST_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/jungle_chest_boat.png"
+        }
+      ]
+    },
+    "JUNGLE_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/jungle_door.png"
+        }
+      ]
+    },
+    "JUNGLE_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/jungle_hanging_sign.png"
+        }
+      ]
+    },
+    "JUNGLE_LEAVES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/jungle_leaves.png"
+        }
+      ]
+    },
+    "JUNGLE_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/jungle_log.png"
+        }
+      ]
+    },
+    "JUNGLE_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/jungle_planks.png"
+        }
+      ]
+    },
+    "JUNGLE_SAPLING": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/jungle_sapling.png"
+        }
+      ]
+    },
+    "JUNGLE_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/jungle_shelf.png"
+        }
+      ]
+    },
+    "JUNGLE_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/jungle_sign.png"
+        }
+      ]
+    },
+    "JUNGLE_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/jungle_trapdoor.png"
+        }
+      ]
+    },
+    "KELP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/kelp.png"
+        }
+      ]
+    },
+    "KNOWLEDGE_BOOK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/knowledge_book.png"
+        }
+      ]
+    },
+    "LADDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/ladder.png"
+        }
+      ]
+    },
+    "LANTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/lantern.png"
+        }
+      ]
+    },
+    "LAPIS_LAZULI": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/lapis_lazuli.png"
+        }
+      ]
+    },
+    "LAPIS_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lapis_ore.png"
+        }
+      ]
+    },
+    "LARGE_AMETHYST_BUD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/large_amethyst_bud.png"
+        }
+      ]
+    },
+    "LAVA_BUCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/lava_bucket.png"
+        }
+      ]
+    },
+    "LEAD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/lead.png"
+        }
+      ]
+    },
+    "LEAF_LITTER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/leaf_litter.png"
+        }
+      ]
+    },
+    "LEATHER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/leather.png"
+        }
+      ]
+    },
+    "LEATHER_BOOTS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/leather_boots.png"
+        }
+      ]
+    },
+    "LEATHER_HELMET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/leather_helmet.png"
+        }
+      ]
+    },
+    "LEATHER_HORSE_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/leather_horse_armor.png"
+        }
+      ]
+    },
+    "LEATHER_LEGGINGS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/leather_leggings.png"
+        }
+      ]
+    },
+    "LEATHER_CHESTPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/leather_chestplate.png"
+        }
+      ]
+    },
+    "LEVER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lever.png"
+        }
+      ]
+    },
+    "LIGHT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/light.png"
+        }
+      ]
+    },
+    "LIGHT_BLUE_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/light_blue_bundle.png"
+        }
+      ]
+    },
+    "LIGHT_BLUE_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/light_blue_candle.png"
+        }
+      ]
+    },
+    "LIGHT_BLUE_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_blue_concrete.png"
+        }
+      ]
+    },
+    "LIGHT_BLUE_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_blue_concrete_powder.png"
+        }
+      ]
+    },
+    "LIGHT_BLUE_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/light_blue_dye.png"
+        }
+      ]
+    },
+    "LIGHT_BLUE_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_blue_glazed_terracotta.png"
+        }
+      ]
+    },
+    "LIGHT_BLUE_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/light_blue_harness.png"
+        }
+      ]
+    },
+    "LIGHT_BLUE_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_blue_stained_glass.png"
+        }
+      ]
+    },
+    "LIGHT_BLUE_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_blue_terracotta.png"
+        }
+      ]
+    },
+    "LIGHT_BLUE_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_blue_wool.png"
+        }
+      ]
+    },
+    "LIGHT_GRAY_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/light_gray_bundle.png"
+        }
+      ]
+    },
+    "LIGHT_GRAY_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/light_gray_candle.png"
+        }
+      ]
+    },
+    "LIGHT_GRAY_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_gray_concrete.png"
+        }
+      ]
+    },
+    "LIGHT_GRAY_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_gray_concrete_powder.png"
+        }
+      ]
+    },
+    "LIGHT_GRAY_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/light_gray_dye.png"
+        }
+      ]
+    },
+    "LIGHT_GRAY_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_gray_glazed_terracotta.png"
+        }
+      ]
+    },
+    "LIGHT_GRAY_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/light_gray_harness.png"
+        }
+      ]
+    },
+    "LIGHT_GRAY_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_gray_shulker_box.png"
+        }
+      ]
+    },
+    "LIGHT_GRAY_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_gray_stained_glass.png"
+        }
+      ]
+    },
+    "LIGHT_GRAY_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_gray_terracotta.png"
+        }
+      ]
+    },
+    "LIGHT_GRAY_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/light_gray_wool.png"
+        }
+      ]
+    },
+    "LIGHTNING_ROD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lightning_rod.png"
+        }
+      ]
+    },
+    "LILY_OF_THE_VALLEY": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lily_of_the_valley.png"
+        }
+      ]
+    },
+    "LILY_PAD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lily_pad.png"
+        }
+      ]
+    },
+    "LIME_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/lime_bundle.png"
+        }
+      ]
+    },
+    "LIME_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/lime_candle.png"
+        }
+      ]
+    },
+    "LIME_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lime_concrete.png"
+        }
+      ]
+    },
+    "LIME_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lime_concrete_powder.png"
+        }
+      ]
+    },
+    "LIME_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/lime_dye.png"
+        }
+      ]
+    },
+    "LIME_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lime_glazed_terracotta.png"
+        }
+      ]
+    },
+    "LIME_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/lime_harness.png"
+        }
+      ]
+    },
+    "LIME_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lime_shulker_box.png"
+        }
+      ]
+    },
+    "LIME_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lime_stained_glass.png"
+        }
+      ]
+    },
+    "LIME_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lime_terracotta.png"
+        }
+      ]
+    },
+    "LIME_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/lime_wool.png"
+        }
+      ]
+    },
+    "LLAMA_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/llama_spawn_egg.png"
+        }
+      ]
+    },
+    "MACE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mace.png"
+        }
+      ]
+    },
+    "MAGENTA_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/magenta_bundle.png"
+        }
+      ]
+    },
+    "MAGENTA_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/magenta_candle.png"
+        }
+      ]
+    },
+    "MAGENTA_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/magenta_concrete.png"
+        }
+      ]
+    },
+    "MAGENTA_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/magenta_concrete_powder.png"
+        }
+      ]
+    },
+    "MAGENTA_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/magenta_dye.png"
+        }
+      ]
+    },
+    "MAGENTA_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/magenta_glazed_terracotta.png"
+        }
+      ]
+    },
+    "MAGENTA_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/magenta_harness.png"
+        }
+      ]
+    },
+    "MAGENTA_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/magenta_shulker_box.png"
+        }
+      ]
+    },
+    "MAGENTA_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/magenta_stained_glass.png"
+        }
+      ]
+    },
+    "MAGENTA_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/magenta_terracotta.png"
+        }
+      ]
+    },
+    "MAGENTA_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/magenta_wool.png"
+        }
+      ]
+    },
+    "MAGMA_CREAM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/magma_cream.png"
+        }
+      ]
+    },
+    "MAGMA_CUBE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/magma_cube_spawn_egg.png"
+        }
+      ]
+    },
+    "MANGROVE_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mangrove_boat.png"
+        }
+      ]
+    },
+    "MANGROVE_CHEST_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mangrove_chest_boat.png"
+        }
+      ]
+    },
+    "MANGROVE_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mangrove_door.png"
+        }
+      ]
+    },
+    "MANGROVE_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mangrove_hanging_sign.png"
+        }
+      ]
+    },
+    "MANGROVE_LEAVES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/mangrove_leaves.png"
+        }
+      ]
+    },
+    "MANGROVE_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/mangrove_log.png"
+        }
+      ]
+    },
+    "MANGROVE_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/mangrove_planks.png"
+        }
+      ]
+    },
+    "MANGROVE_PROPAGULE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mangrove_propagule.png"
+        }
+      ]
+    },
+    "MANGROVE_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/mangrove_shelf.png"
+        }
+      ]
+    },
+    "MANGROVE_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mangrove_sign.png"
+        }
+      ]
+    },
+    "MANGROVE_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/mangrove_trapdoor.png"
+        }
+      ]
+    },
+    "FILLED_MAP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/filled_map.png"
+        }
+      ]
+    },
+    "MEDIUM_AMETHYST_BUD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/medium_amethyst_bud.png"
+        }
+      ]
+    },
+    "MELON_SEEDS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/melon_seeds.png"
+        }
+      ]
+    },
+    "MELON_SLICE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/melon_slice.png"
+        }
+      ]
+    },
+    "MILK_BUCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/milk_bucket.png"
+        }
+      ]
+    },
+    "MINECART": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/minecart.png"
+        }
+      ]
+    },
+    "CHEST_MINECART": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/chest_minecart.png"
+        }
+      ]
+    },
+    "COMMAND_BLOCK_MINECART": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/command_block_minecart.png"
+        }
+      ]
+    },
+    "FURNACE_MINECART": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/furnace_minecart.png"
+        }
+      ]
+    },
+    "HOPPER_MINECART": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/hopper_minecart.png"
+        }
+      ]
+    },
+    "TNT_MINECART": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/tnt_minecart.png"
+        }
+      ]
+    },
+    "MINER_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/miner_pottery_sherd.png"
+        }
+      ]
+    },
+    "SPAWNER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/spawner.png"
+        }
+      ]
+    },
+    "MOOSHROOM_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mooshroom_spawn_egg.png"
+        }
+      ]
+    },
+    "MOSS_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/moss_block.png"
+        }
+      ]
+    },
+    "MOSSY_COBBLESTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/mossy_cobblestone.png"
+        }
+      ]
+    },
+    "MOSSY_STONE_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/mossy_stone_bricks.png"
+        }
+      ]
+    },
+    "MOURNER_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mourner_pottery_sherd.png"
+        }
+      ]
+    },
+    "MUD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/mud.png"
+        }
+      ]
+    },
+    "MUD_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/mud_bricks.png"
+        }
+      ]
+    },
+    "MULE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mule_spawn_egg.png"
+        }
+      ]
+    },
+    "MUSHROOM_STEM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/mushroom_stem.png"
+        }
+      ]
+    },
+    "MUSHROOM_STEW": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mushroom_stew.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_11": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_11.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_13": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_13.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_5": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_5.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_BLOCKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_blocks.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_CAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_cat.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_CHIRP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_chirp.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_CREATOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_creator.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_CREATOR_MUSIC_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_creator_music_box.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_FAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_far.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_LAVA_CHICKEN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_lava_chicken.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_MALL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_mall.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_MELLOHI": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_mellohi.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_OTHERSIDE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_otherside.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_PIGSTEP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_pigstep.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_PRECIPICE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_precipice.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_RELIC": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_relic.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_STAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_stal.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_STRAD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_strad.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_TEARS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_tears.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_WAIT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_wait.png"
+        }
+      ]
+    },
+    "MUSIC_DISC_WARD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/music_disc_ward.png"
+        }
+      ]
+    },
+    "NAME_TAG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/name_tag.png"
+        }
+      ]
+    },
+    "NAUTILUS_SHELL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/nautilus_shell.png"
+        }
+      ]
+    },
+    "NAUTILUS_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/nautilus_spawn_egg.png"
+        }
+      ]
+    },
+    "NETHER_BRICK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/nether_brick.png"
+        }
+      ]
+    },
+    "NETHER_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/nether_bricks.png"
+        }
+      ]
+    },
+    "NETHER_GOLD_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/nether_gold_ore.png"
+        }
+      ]
+    },
+    "QUARTZ": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/quartz.png"
+        }
+      ]
+    },
+    "NETHER_QUARTZ_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/nether_quartz_ore.png"
+        }
+      ]
+    },
+    "NETHER_SPROUTS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/nether_sprouts.png"
+        }
+      ]
+    },
+    "NETHER_STAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/nether_star.png"
+        }
+      ]
+    },
+    "NETHER_WART": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/nether_wart.png"
+        }
+      ]
+    },
+    "NETHER_WART_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/nether_wart_block.png"
+        }
+      ]
+    },
+    "NETHERITE_AXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_axe.png"
+        }
+      ]
+    },
+    "NETHERITE_BOOTS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_boots.png"
+        }
+      ]
+    },
+    "NETHERITE_HELMET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_helmet.png"
+        }
+      ]
+    },
+    "NETHERITE_HOE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_hoe.png"
+        }
+      ]
+    },
+    "NETHERITE_HORSE_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_horse_armor.png"
+        }
+      ]
+    },
+    "NETHERITE_INGOT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_ingot.png"
+        }
+      ]
+    },
+    "NETHERITE_LEGGINGS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_leggings.png"
+        }
+      ]
+    },
+    "NETHERITE_NAUTILUS_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_nautilus_armor.png"
+        }
+      ]
+    },
+    "NETHERITE_PICKAXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_pickaxe.png"
+        }
+      ]
+    },
+    "NETHERITE_SCRAP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_scrap.png"
+        }
+      ]
+    },
+    "NETHERITE_SHOVEL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_shovel.png"
+        }
+      ]
+    },
+    "NETHERITE_SPEAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_spear.png"
+        }
+      ]
+    },
+    "NETHERITE_SWORD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/netherite_sword.png"
+        }
+      ]
+    },
+    "NETHERRACK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/netherrack.png"
+        }
+      ]
+    },
+    "NOTE_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/note_block.png"
+        }
+      ]
+    },
+    "OAK_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/oak_boat.png"
+        }
+      ]
+    },
+    "OAK_CHEST_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/oak_chest_boat.png"
+        }
+      ]
+    },
+    "OAK_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/oak_door.png"
+        }
+      ]
+    },
+    "OAK_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/oak_hanging_sign.png"
+        }
+      ]
+    },
+    "OAK_LEAVES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oak_leaves.png"
+        }
+      ]
+    },
+    "OAK_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oak_planks.png"
+        }
+      ]
+    },
+    "OAK_SAPLING": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oak_sapling.png"
+        }
+      ]
+    },
+    "OAK_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oak_shelf.png"
+        }
+      ]
+    },
+    "OAK_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/oak_sign.png"
+        }
+      ]
+    },
+    "OAK_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oak_trapdoor.png"
+        }
+      ]
+    },
+    "OBSIDIAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/obsidian.png"
+        }
+      ]
+    },
+    "OCELOT_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/ocelot_spawn_egg.png"
+        }
+      ]
+    },
+    "OMINOUS_BOTTLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/ominous_bottle.png"
+        }
+      ]
+    },
+    "OMINOUS_TRIAL_KEY": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/ominous_trial_key.png"
+        }
+      ]
+    },
+    "OPEN_EYEBLOSSOM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/open_eyeblossom.png"
+        }
+      ]
+    },
+    "ORANGE_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/orange_bundle.png"
+        }
+      ]
+    },
+    "ORANGE_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/orange_candle.png"
+        }
+      ]
+    },
+    "ORANGE_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/orange_concrete.png"
+        }
+      ]
+    },
+    "ORANGE_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/orange_concrete_powder.png"
+        }
+      ]
+    },
+    "ORANGE_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/orange_dye.png"
+        }
+      ]
+    },
+    "ORANGE_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/orange_glazed_terracotta.png"
+        }
+      ]
+    },
+    "ORANGE_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/orange_harness.png"
+        }
+      ]
+    },
+    "ORANGE_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/orange_shulker_box.png"
+        }
+      ]
+    },
+    "ORANGE_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/orange_stained_glass.png"
+        }
+      ]
+    },
+    "ORANGE_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/orange_terracotta.png"
+        }
+      ]
+    },
+    "ORANGE_TULIP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/orange_tulip.png"
+        }
+      ]
+    },
+    "ORANGE_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/orange_wool.png"
+        }
+      ]
+    },
+    "OXEYE_DAISY": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oxeye_daisy.png"
+        }
+      ]
+    },
+    "OXIDIZED_CHISELED_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oxidized_chiseled_copper.png"
+        }
+      ]
+    },
+    "OXIDIZED_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oxidized_copper.png"
+        }
+      ]
+    },
+    "OXIDIZED_COPPER_BARS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oxidized_copper_bars.png"
+        }
+      ]
+    },
+    "OXIDIZED_COPPER_BULB": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oxidized_copper_bulb.png"
+        }
+      ]
+    },
+    "OXIDIZED_COPPER_CHAIN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/oxidized_copper_chain.png"
+        }
+      ]
+    },
+    "OXIDIZED_COPPER_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/oxidized_copper_door.png"
+        }
+      ]
+    },
+    "OXIDIZED_COPPER_GRATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oxidized_copper_grate.png"
+        }
+      ]
+    },
+    "OXIDIZED_COPPER_LANTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/oxidized_copper_lantern.png"
+        }
+      ]
+    },
+    "OXIDIZED_COPPER_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oxidized_copper_trapdoor.png"
+        }
+      ]
+    },
+    "OXIDIZED_CUT_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oxidized_cut_copper.png"
+        }
+      ]
+    },
+    "OXIDIZED_LIGHTNING_ROD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/oxidized_lightning_rod.png"
+        }
+      ]
+    },
+    "PACKED_ICE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/packed_ice.png"
+        }
+      ]
+    },
+    "PACKED_MUD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/packed_mud.png"
+        }
+      ]
+    },
+    "PAINTING": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/painting.png"
+        }
+      ]
+    },
+    "PALE_HANGING_MOSS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pale_hanging_moss.png"
+        }
+      ]
+    },
+    "PALE_MOSS_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pale_moss_block.png"
+        }
+      ]
+    },
+    "PALE_MOSS_CARPET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pale_moss_carpet.png"
+        }
+      ]
+    },
+    "PALE_OAK_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pale_oak_boat.png"
+        }
+      ]
+    },
+    "PALE_OAK_CHEST_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pale_oak_chest_boat.png"
+        }
+      ]
+    },
+    "PALE_OAK_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pale_oak_door.png"
+        }
+      ]
+    },
+    "PALE_OAK_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pale_oak_hanging_sign.png"
+        }
+      ]
+    },
+    "PALE_OAK_LEAVES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pale_oak_leaves.png"
+        }
+      ]
+    },
+    "PALE_OAK_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pale_oak_log.png"
+        }
+      ]
+    },
+    "PALE_OAK_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pale_oak_planks.png"
+        }
+      ]
+    },
+    "PALE_OAK_SAPLING": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pale_oak_sapling.png"
+        }
+      ]
+    },
+    "PALE_OAK_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pale_oak_shelf.png"
+        }
+      ]
+    },
+    "PALE_OAK_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pale_oak_sign.png"
+        }
+      ]
+    },
+    "PALE_OAK_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pale_oak_trapdoor.png"
+        }
+      ]
+    },
+    "PANDA_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/panda_spawn_egg.png"
+        }
+      ]
+    },
+    "PAPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/paper.png"
+        }
+      ]
+    },
+    "PARCHED_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/parched_spawn_egg.png"
+        }
+      ]
+    },
+    "PARROT_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/parrot_spawn_egg.png"
+        }
+      ]
+    },
+    "PHANTOM_MEMBRANE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/phantom_membrane.png"
+        }
+      ]
+    },
+    "PHANTOM_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/phantom_spawn_egg.png"
+        }
+      ]
+    },
+    "PIG_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pig_spawn_egg.png"
+        }
+      ]
+    },
+    "PIGLIN_BRUTE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/piglin_brute_spawn_egg.png"
+        }
+      ]
+    },
+    "PIGLIN_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/piglin_spawn_egg.png"
+        }
+      ]
+    },
+    "PILLAGER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pillager_spawn_egg.png"
+        }
+      ]
+    },
+    "PINK_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pink_bundle.png"
+        }
+      ]
+    },
+    "PINK_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pink_candle.png"
+        }
+      ]
+    },
+    "PINK_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pink_concrete.png"
+        }
+      ]
+    },
+    "PINK_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pink_concrete_powder.png"
+        }
+      ]
+    },
+    "PINK_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pink_dye.png"
+        }
+      ]
+    },
+    "PINK_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pink_glazed_terracotta.png"
+        }
+      ]
+    },
+    "PINK_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pink_harness.png"
+        }
+      ]
+    },
+    "PINK_PETALS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pink_petals.png"
+        }
+      ]
+    },
+    "PINK_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pink_shulker_box.png"
+        }
+      ]
+    },
+    "PINK_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pink_stained_glass.png"
+        }
+      ]
+    },
+    "PINK_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pink_terracotta.png"
+        }
+      ]
+    },
+    "PINK_TULIP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pink_tulip.png"
+        }
+      ]
+    },
+    "PINK_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/pink_wool.png"
+        }
+      ]
+    },
+    "PITCHER_PLANT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pitcher_plant.png"
+        }
+      ]
+    },
+    "PITCHER_POD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pitcher_pod.png"
+        }
+      ]
+    },
+    "PLENTY_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/plenty_pottery_sherd.png"
+        }
+      ]
+    },
+    "POINTED_DRIPSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pointed_dripstone.png"
+        }
+      ]
+    },
+    "POISONOUS_POTATO": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/poisonous_potato.png"
+        }
+      ]
+    },
+    "POLAR_BEAR_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/polar_bear_spawn_egg.png"
+        }
+      ]
+    },
+    "POLISHED_ANDESITE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/polished_andesite.png"
+        }
+      ]
+    },
+    "POLISHED_BLACKSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/polished_blackstone.png"
+        }
+      ]
+    },
+    "POLISHED_BLACKSTONE_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/polished_blackstone_bricks.png"
+        }
+      ]
+    },
+    "POLISHED_DEEPSLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/polished_deepslate.png"
+        }
+      ]
+    },
+    "POLISHED_DIORITE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/polished_diorite.png"
+        }
+      ]
+    },
+    "POLISHED_GRANITE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/polished_granite.png"
+        }
+      ]
+    },
+    "POLISHED_TUFF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/polished_tuff.png"
+        }
+      ]
+    },
+    "POPPED_CHORUS_FRUIT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/popped_chorus_fruit.png"
+        }
+      ]
+    },
+    "POPPY": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/poppy.png"
+        }
+      ]
+    },
+    "POTATO": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/potato.png"
+        }
+      ]
+    },
+    "POWDER_SNOW_BUCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/powder_snow_bucket.png"
+        }
+      ]
+    },
+    "POWERED_RAIL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/powered_rail.png"
+        }
+      ]
+    },
+    "PRISMARINE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/prismarine.png"
+        }
+      ]
+    },
+    "PRISMARINE_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/prismarine_bricks.png"
+        }
+      ]
+    },
+    "PRISMARINE_CRYSTALS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/prismarine_crystals.png"
+        }
+      ]
+    },
+    "PRISMARINE_SHARD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/prismarine_shard.png"
+        }
+      ]
+    },
+    "PRIZE_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/prize_pottery_sherd.png"
+        }
+      ]
+    },
+    "PUFFERFISH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pufferfish.png"
+        }
+      ]
+    },
+    "PUFFERFISH_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pufferfish_spawn_egg.png"
+        }
+      ]
+    },
+    "PUMPKIN_PIE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pumpkin_pie.png"
+        }
+      ]
+    },
+    "PUMPKIN_SEEDS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/pumpkin_seeds.png"
+        }
+      ]
+    },
+    "PURPLE_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/purple_bundle.png"
+        }
+      ]
+    },
+    "PURPLE_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/purple_candle.png"
+        }
+      ]
+    },
+    "PURPLE_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/purple_concrete.png"
+        }
+      ]
+    },
+    "PURPLE_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/purple_concrete_powder.png"
+        }
+      ]
+    },
+    "PURPLE_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/purple_dye.png"
+        }
+      ]
+    },
+    "PURPLE_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/purple_glazed_terracotta.png"
+        }
+      ]
+    },
+    "PURPLE_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/purple_harness.png"
+        }
+      ]
+    },
+    "PURPLE_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/purple_stained_glass.png"
+        }
+      ]
+    },
+    "PURPLE_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/purple_terracotta.png"
+        }
+      ]
+    },
+    "PURPLE_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/purple_wool.png"
+        }
+      ]
+    },
+    "PURPUR_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/purpur_block.png"
+        }
+      ]
+    },
+    "PURPUR_PILLAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/purpur_pillar.png"
+        }
+      ]
+    },
+    "QUARTZ_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/quartz_bricks.png"
+        }
+      ]
+    },
+    "QUARTZ_PILLAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/quartz_pillar.png"
+        }
+      ]
+    },
+    "RABBIT_HIDE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/rabbit_hide.png"
+        }
+      ]
+    },
+    "RABBIT_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/rabbit_spawn_egg.png"
+        }
+      ]
+    },
+    "RABBIT_STEW": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/rabbit_stew.png"
+        }
+      ]
+    },
+    "RABBIT_FOOT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/rabbit_foot.png"
+        }
+      ]
+    },
+    "RAIL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/rail.png"
+        }
+      ]
+    },
+    "RAVAGER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/ravager_spawn_egg.png"
+        }
+      ]
+    },
+    "BEEF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/beef.png"
+        }
+      ]
+    },
+    "CHICKEN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/chicken.png"
+        }
+      ]
+    },
+    "COD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cod.png"
+        }
+      ]
+    },
+    "RAW_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/raw_copper.png"
+        }
+      ]
+    },
+    "RAW_GOLD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/raw_gold.png"
+        }
+      ]
+    },
+    "RAW_IRON": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/raw_iron.png"
+        }
+      ]
+    },
+    "MUTTON": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/mutton.png"
+        }
+      ]
+    },
+    "PORKCHOP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/porkchop.png"
+        }
+      ]
+    },
+    "RABBIT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/rabbit.png"
+        }
+      ]
+    },
+    "SALMON": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/salmon.png"
+        }
+      ]
+    },
+    "RED_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/red_bundle.png"
+        }
+      ]
+    },
+    "RED_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/red_candle.png"
+        }
+      ]
+    },
+    "RED_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_concrete.png"
+        }
+      ]
+    },
+    "RED_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_concrete_powder.png"
+        }
+      ]
+    },
+    "RED_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/red_dye.png"
+        }
+      ]
+    },
+    "RED_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_glazed_terracotta.png"
+        }
+      ]
+    },
+    "RED_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/red_harness.png"
+        }
+      ]
+    },
+    "RED_MUSHROOM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_mushroom.png"
+        }
+      ]
+    },
+    "RED_MUSHROOM_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_mushroom_block.png"
+        }
+      ]
+    },
+    "RED_NETHER_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_nether_bricks.png"
+        }
+      ]
+    },
+    "RED_SAND": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_sand.png"
+        }
+      ]
+    },
+    "RED_SANDSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_sandstone.png"
+        }
+      ]
+    },
+    "RED_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_stained_glass.png"
+        }
+      ]
+    },
+    "RED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_terracotta.png"
+        }
+      ]
+    },
+    "RED_TULIP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_tulip.png"
+        }
+      ]
+    },
+    "RED_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_wool.png"
+        }
+      ]
+    },
+    "COMPARATOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/comparator.png"
+        }
+      ]
+    },
+    "REDSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/redstone.png"
+        }
+      ]
+    },
+    "REDSTONE_LAMP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/redstone_lamp.png"
+        }
+      ]
+    },
+    "REDSTONE_ORE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/redstone_ore.png"
+        }
+      ]
+    },
+    "REPEATER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/repeater.png"
+        }
+      ]
+    },
+    "REDSTONE_TORCH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/redstone_torch.png"
+        }
+      ]
+    },
+    "RESIN_BRICK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/resin_brick.png"
+        }
+      ]
+    },
+    "RESIN_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/resin_bricks.png"
+        }
+      ]
+    },
+    "RESIN_CLUMP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/resin_clump.png"
+        }
+      ]
+    },
+    "ROOTED_DIRT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/rooted_dirt.png"
+        }
+      ]
+    },
+    "ROTTEN_FLESH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/rotten_flesh.png"
+        }
+      ]
+    },
+    "SADDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/saddle.png"
+        }
+      ]
+    },
+    "SALMON_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/salmon_spawn_egg.png"
+        }
+      ]
+    },
+    "SAND": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/sand.png"
+        }
+      ]
+    },
+    "SANDSTONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/sandstone.png"
+        }
+      ]
+    },
+    "SCRAPE_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/scrape_pottery_sherd.png"
+        }
+      ]
+    },
+    "SCULK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/sculk.png"
+        }
+      ]
+    },
+    "SCULK_VEIN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/sculk_vein.png"
+        }
+      ]
+    },
+    "SEA_LANTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/sea_lantern.png"
+        }
+      ]
+    },
+    "SEA_PICKLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/sea_pickle.png"
+        }
+      ]
+    },
+    "SEAGRASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/seagrass.png"
+        }
+      ]
+    },
+    "SHEAF_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/sheaf_pottery_sherd.png"
+        }
+      ]
+    },
+    "SHEARS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/shears.png"
+        }
+      ]
+    },
+    "SHEEP_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/sheep_spawn_egg.png"
+        }
+      ]
+    },
+    "SHELTER_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/shelter_pottery_sherd.png"
+        }
+      ]
+    },
+    "SHORT_DRY_GRASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/short_dry_grass.png"
+        }
+      ]
+    },
+    "SHORT_GRASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/short_grass.png"
+        }
+      ]
+    },
+    "SHROOMLIGHT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/shroomlight.png"
+        }
+      ]
+    },
+    "SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/shulker_box.png"
+        }
+      ]
+    },
+    "SHULKER_SHELL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/shulker_shell.png"
+        }
+      ]
+    },
+    "SHULKER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/shulker_spawn_egg.png"
+        }
+      ]
+    },
+    "SILVERFISH_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/silverfish_spawn_egg.png"
+        }
+      ]
+    },
+    "SKELETON_HORSE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/skeleton_horse_spawn_egg.png"
+        }
+      ]
+    },
+    "SKELETON_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/skeleton_spawn_egg.png"
+        }
+      ]
+    },
+    "SKULL_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/skull_pottery_sherd.png"
+        }
+      ]
+    },
+    "SLIME_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/slime_block.png"
+        }
+      ]
+    },
+    "SLIME_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/slime_spawn_egg.png"
+        }
+      ]
+    },
+    "SLIME_BALL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/slime_ball.png"
+        }
+      ]
+    },
+    "SMALL_AMETHYST_BUD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/small_amethyst_bud.png"
+        }
+      ]
+    },
+    "BOLT_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/bolt_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "DUNE_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/dune_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "EYE_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/eye_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "FLOW_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/flow_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "HOST_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/host_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "RAISER_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/raiser_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "RIB_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/rib_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/sentry_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/shaper_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/silence_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/snout_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/spire_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "TIDE_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/tide_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "VEX_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/vex_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "WARD_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/ward_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wayfinder_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "WILD_ARMOR_TRIM_SMITHING_TEMPLATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wild_armor_trim_smithing_template.png"
+        }
+      ]
+    },
+    "SMOOTH_BASALT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/smooth_basalt.png"
+        }
+      ]
+    },
+    "SMOOTH_STONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/smooth_stone.png"
+        }
+      ]
+    },
+    "SNIFFER_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/sniffer_egg.png"
+        }
+      ]
+    },
+    "SNIFFER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/sniffer_spawn_egg.png"
+        }
+      ]
+    },
+    "SNORT_POTTERY_SHERD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/snort_pottery_sherd.png"
+        }
+      ]
+    },
+    "SNOW": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/snow.png"
+        }
+      ]
+    },
+    "SNOW_GOLEM_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/snow_golem_spawn_egg.png"
+        }
+      ]
+    },
+    "SNOWBALL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/snowball.png"
+        }
+      ]
+    },
+    "SOUL_CAMPFIRE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/soul_campfire.png"
+        }
+      ]
+    },
+    "SOUL_LANTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/soul_lantern.png"
+        }
+      ]
+    },
+    "SOUL_SAND": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/soul_sand.png"
+        }
+      ]
+    },
+    "SOUL_SOIL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/soul_soil.png"
+        }
+      ]
+    },
+    "SOUL_TORCH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/soul_torch.png"
+        }
+      ]
+    },
+    "SPECTRAL_ARROW": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/spectral_arrow.png"
+        }
+      ]
+    },
+    "SPIDER_EYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/spider_eye.png"
+        }
+      ]
+    },
+    "SPIDER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/spider_spawn_egg.png"
+        }
+      ]
+    },
+    "SPONGE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/sponge.png"
+        }
+      ]
+    },
+    "SPORE_BLOSSOM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/spore_blossom.png"
+        }
+      ]
+    },
+    "SPRUCE_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/spruce_boat.png"
+        }
+      ]
+    },
+    "SPRUCE_CHEST_BOAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/spruce_chest_boat.png"
+        }
+      ]
+    },
+    "SPRUCE_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/spruce_door.png"
+        }
+      ]
+    },
+    "SPRUCE_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/spruce_hanging_sign.png"
+        }
+      ]
+    },
+    "SPRUCE_LEAVES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/spruce_leaves.png"
+        }
+      ]
+    },
+    "SPRUCE_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/spruce_log.png"
+        }
+      ]
+    },
+    "SPRUCE_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/spruce_planks.png"
+        }
+      ]
+    },
+    "SPRUCE_SAPLING": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/spruce_sapling.png"
+        }
+      ]
+    },
+    "SPRUCE_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/spruce_shelf.png"
+        }
+      ]
+    },
+    "SPRUCE_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/spruce_sign.png"
+        }
+      ]
+    },
+    "SPRUCE_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/spruce_trapdoor.png"
+        }
+      ]
+    },
+    "SPYGLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/spyglass.png"
+        }
+      ]
+    },
+    "SQUID_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/squid_spawn_egg.png"
+        }
+      ]
+    },
+    "COOKED_BEEF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/cooked_beef.png"
+        }
+      ]
+    },
+    "STICK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/stick.png"
+        }
+      ]
+    },
+    "STONE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stone.png"
+        }
+      ]
+    },
+    "STONE_AXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/stone_axe.png"
+        }
+      ]
+    },
+    "STONE_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stone_bricks.png"
+        }
+      ]
+    },
+    "STONE_HOE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/stone_hoe.png"
+        }
+      ]
+    },
+    "STONE_PICKAXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/stone_pickaxe.png"
+        }
+      ]
+    },
+    "STONE_SHOVEL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/stone_shovel.png"
+        }
+      ]
+    },
+    "STONE_SPEAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/stone_spear.png"
+        }
+      ]
+    },
+    "STONE_SWORD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/stone_sword.png"
+        }
+      ]
+    },
+    "STRAY_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/stray_spawn_egg.png"
+        }
+      ]
+    },
+    "STRIDER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/strider_spawn_egg.png"
+        }
+      ]
+    },
+    "STRING": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/string.png"
+        }
+      ]
+    },
+    "STRIPPED_ACACIA_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_acacia_log.png"
+        }
+      ]
+    },
+    "STRIPPED_BIRCH_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_birch_log.png"
+        }
+      ]
+    },
+    "STRIPPED_CHERRY_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_cherry_log.png"
+        }
+      ]
+    },
+    "STRIPPED_CRIMSON_STEM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_crimson_stem.png"
+        }
+      ]
+    },
+    "STRIPPED_DARK_OAK_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_dark_oak_log.png"
+        }
+      ]
+    },
+    "STRIPPED_JUNGLE_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_jungle_log.png"
+        }
+      ]
+    },
+    "STRIPPED_MANGROVE_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_mangrove_log.png"
+        }
+      ]
+    },
+    "STRIPPED_OAK_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_oak_log.png"
+        }
+      ]
+    },
+    "STRIPPED_PALE_OAK_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_pale_oak_log.png"
+        }
+      ]
+    },
+    "STRIPPED_SPRUCE_LOG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_spruce_log.png"
+        }
+      ]
+    },
+    "STRIPPED_WARPED_STEM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/stripped_warped_stem.png"
+        }
+      ]
+    },
+    "STRUCTURE_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/structure_block.png"
+        }
+      ]
+    },
+    "STRUCTURE_VOID": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/structure_void.png"
+        }
+      ]
+    },
+    "SUGAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/sugar.png"
+        }
+      ]
+    },
+    "SUGAR_CANE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/sugar_cane.png"
+        }
+      ]
+    },
+    "SUSPICIOUS_STEW": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/suspicious_stew.png"
+        }
+      ]
+    },
+    "SWEET_BERRIES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/sweet_berries.png"
+        }
+      ]
+    },
+    "TADPOLE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/tadpole_spawn_egg.png"
+        }
+      ]
+    },
+    "TALL_DRY_GRASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/tall_dry_grass.png"
+        }
+      ]
+    },
+    "TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/terracotta.png"
+        }
+      ]
+    },
+    "TEST_INSTANCE_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/test_instance_block.png"
+        }
+      ]
+    },
+    "TINTED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/tinted_glass.png"
+        }
+      ]
+    },
+    "TORCH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/torch.png"
+        }
+      ]
+    },
+    "TORCHFLOWER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/torchflower.png"
+        }
+      ]
+    },
+    "TORCHFLOWER_SEEDS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/torchflower_seeds.png"
+        }
+      ]
+    },
+    "TOTEM_OF_UNDYING": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/totem_of_undying.png"
+        }
+      ]
+    },
+    "TRADER_LLAMA_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/trader_llama_spawn_egg.png"
+        }
+      ]
+    },
+    "TRIAL_KEY": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/trial_key.png"
+        }
+      ]
+    },
+    "TRIDENT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/trident.png"
+        }
+      ]
+    },
+    "TRIPWIRE_HOOK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/tripwire_hook.png"
+        }
+      ]
+    },
+    "TROPICAL_FISH": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/tropical_fish.png"
+        }
+      ]
+    },
+    "TROPICAL_FISH_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/tropical_fish_spawn_egg.png"
+        }
+      ]
+    },
+    "TUBE_CORAL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/tube_coral.png"
+        }
+      ]
+    },
+    "TUBE_CORAL_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/tube_coral_block.png"
+        }
+      ]
+    },
+    "TUBE_CORAL_FAN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/tube_coral_fan.png"
+        }
+      ]
+    },
+    "TUFF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/tuff.png"
+        }
+      ]
+    },
+    "TUFF_BRICKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/tuff_bricks.png"
+        }
+      ]
+    },
+    "TURTLE_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/turtle_egg.png"
+        }
+      ]
+    },
+    "TURTLE_SCUTE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/turtle_scute.png"
+        }
+      ]
+    },
+    "TURTLE_HELMET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/turtle_helmet.png"
+        }
+      ]
+    },
+    "TURTLE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/turtle_spawn_egg.png"
+        }
+      ]
+    },
+    "TWISTING_VINES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/twisting_vines.png"
+        }
+      ]
+    },
+    "VEX_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/vex_spawn_egg.png"
+        }
+      ]
+    },
+    "VILLAGER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/villager_spawn_egg.png"
+        }
+      ]
+    },
+    "VINDICATOR_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/vindicator_spawn_egg.png"
+        }
+      ]
+    },
+    "VINE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/vine.png"
+        }
+      ]
+    },
+    "WANDERING_TRADER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wandering_trader_spawn_egg.png"
+        }
+      ]
+    },
+    "WARDEN_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/warden_spawn_egg.png"
+        }
+      ]
+    },
+    "WARPED_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/warped_door.png"
+        }
+      ]
+    },
+    "WARPED_FUNGUS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/warped_fungus.png"
+        }
+      ]
+    },
+    "WARPED_FUNGUS_ON_A_STICK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/warped_fungus_on_a_stick.png"
+        }
+      ]
+    },
+    "WARPED_HANGING_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/warped_hanging_sign.png"
+        }
+      ]
+    },
+    "WARPED_NYLIUM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/warped_nylium.png"
+        }
+      ]
+    },
+    "WARPED_PLANKS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/warped_planks.png"
+        }
+      ]
+    },
+    "WARPED_ROOTS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/warped_roots.png"
+        }
+      ]
+    },
+    "WARPED_SHELF": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/warped_shelf.png"
+        }
+      ]
+    },
+    "WARPED_SIGN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/warped_sign.png"
+        }
+      ]
+    },
+    "WARPED_STEM": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/warped_stem.png"
+        }
+      ]
+    },
+    "WARPED_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/warped_trapdoor.png"
+        }
+      ]
+    },
+    "WARPED_WART_BLOCK": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/warped_wart_block.png"
+        }
+      ]
+    },
+    "WATER_BUCKET": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/water_bucket.png"
+        }
+      ]
+    },
+    "WEATHERED_CHISELED_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/weathered_chiseled_copper.png"
+        }
+      ]
+    },
+    "WEATHERED_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/weathered_copper.png"
+        }
+      ]
+    },
+    "WEATHERED_COPPER_BARS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/weathered_copper_bars.png"
+        }
+      ]
+    },
+    "WEATHERED_COPPER_BULB": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/weathered_copper_bulb.png"
+        }
+      ]
+    },
+    "WEATHERED_COPPER_CHAIN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/weathered_copper_chain.png"
+        }
+      ]
+    },
+    "WEATHERED_COPPER_DOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/weathered_copper_door.png"
+        }
+      ]
+    },
+    "WEATHERED_COPPER_GRATE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/weathered_copper_grate.png"
+        }
+      ]
+    },
+    "WEATHERED_COPPER_LANTERN": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/weathered_copper_lantern.png"
+        }
+      ]
+    },
+    "WEATHERED_COPPER_TRAPDOOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/weathered_copper_trapdoor.png"
+        }
+      ]
+    },
+    "WEATHERED_CUT_COPPER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/weathered_cut_copper.png"
+        }
+      ]
+    },
+    "WEATHERED_LIGHTNING_ROD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/weathered_lightning_rod.png"
+        }
+      ]
+    },
+    "WEEPING_VINES": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/weeping_vines.png"
+        }
+      ]
+    },
+    "WET_SPONGE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/wet_sponge.png"
+        }
+      ]
+    },
+    "WHEAT": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wheat.png"
+        }
+      ]
+    },
+    "WHEAT_SEEDS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wheat_seeds.png"
+        }
+      ]
+    },
+    "WHITE_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/white_bundle.png"
+        }
+      ]
+    },
+    "WHITE_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/white_candle.png"
+        }
+      ]
+    },
+    "WHITE_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/white_concrete.png"
+        }
+      ]
+    },
+    "WHITE_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/white_concrete_powder.png"
+        }
+      ]
+    },
+    "WHITE_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/white_dye.png"
+        }
+      ]
+    },
+    "WHITE_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/white_glazed_terracotta.png"
+        }
+      ]
+    },
+    "WHITE_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/white_harness.png"
+        }
+      ]
+    },
+    "WHITE_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/white_shulker_box.png"
+        }
+      ]
+    },
+    "WHITE_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/white_stained_glass.png"
+        }
+      ]
+    },
+    "WHITE_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/white_terracotta.png"
+        }
+      ]
+    },
+    "WHITE_TULIP": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/white_tulip.png"
+        }
+      ]
+    },
+    "WHITE_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/white_wool.png"
+        }
+      ]
+    },
+    "WILDFLOWERS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wildflowers.png"
+        }
+      ]
+    },
+    "WIND_CHARGE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wind_charge.png"
+        }
+      ]
+    },
+    "WITCH_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/witch_spawn_egg.png"
+        }
+      ]
+    },
+    "WITHER_ROSE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/wither_rose.png"
+        }
+      ]
+    },
+    "WITHER_SKELETON_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wither_skeleton_spawn_egg.png"
+        }
+      ]
+    },
+    "WITHER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wither_spawn_egg.png"
+        }
+      ]
+    },
+    "WOLF_ARMOR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wolf_armor.png"
+        }
+      ]
+    },
+    "WOLF_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wolf_spawn_egg.png"
+        }
+      ]
+    },
+    "WOODEN_AXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wooden_axe.png"
+        }
+      ]
+    },
+    "WOODEN_HOE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wooden_hoe.png"
+        }
+      ]
+    },
+    "WOODEN_PICKAXE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wooden_pickaxe.png"
+        }
+      ]
+    },
+    "WOODEN_SHOVEL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wooden_shovel.png"
+        }
+      ]
+    },
+    "WOODEN_SPEAR": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wooden_spear.png"
+        }
+      ]
+    },
+    "WOODEN_SWORD": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/wooden_sword.png"
+        }
+      ]
+    },
+    "YELLOW_BUNDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/yellow_bundle.png"
+        }
+      ]
+    },
+    "YELLOW_CANDLE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/yellow_candle.png"
+        }
+      ]
+    },
+    "YELLOW_CONCRETE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/yellow_concrete.png"
+        }
+      ]
+    },
+    "YELLOW_CONCRETE_POWDER": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/yellow_concrete_powder.png"
+        }
+      ]
+    },
+    "YELLOW_DYE": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/yellow_dye.png"
+        }
+      ]
+    },
+    "YELLOW_GLAZED_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/yellow_glazed_terracotta.png"
+        }
+      ]
+    },
+    "YELLOW_HARNESS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/yellow_harness.png"
+        }
+      ]
+    },
+    "YELLOW_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/yellow_shulker_box.png"
+        }
+      ]
+    },
+    "YELLOW_STAINED_GLASS": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/yellow_stained_glass.png"
+        }
+      ]
+    },
+    "YELLOW_TERRACOTTA": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/yellow_terracotta.png"
+        }
+      ]
+    },
+    "YELLOW_WOOL": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/yellow_wool.png"
+        }
+      ]
+    },
+    "ZOGLIN_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/zoglin_spawn_egg.png"
+        }
+      ]
+    },
+    "ZOMBIE_HORSE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/zombie_horse_spawn_egg.png"
+        }
+      ]
+    },
+    "ZOMBIE_NAUTILUS_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/zombie_nautilus_spawn_egg.png"
+        }
+      ]
+    },
+    "ZOMBIE_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/zombie_spawn_egg.png"
+        }
+      ]
+    },
+    "ZOMBIE_VILLAGER_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/zombie_villager_spawn_egg.png"
+        }
+      ]
+    },
+    "ZOMBIFIED_PIGLIN_SPAWN_EGG": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/zombified_piglin_spawn_egg.png"
+        }
+      ]
     }
   },
   "gui": {

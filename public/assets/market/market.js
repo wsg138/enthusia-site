@@ -14,7 +14,7 @@
   const cssAssetBase = document.querySelector("[data-market-css-asset-base]")?.dataset.marketCssAssetBase ?? assetBase;
   const el = {
     viewport: $("#market-map"), scene: $("#map-scene"), svg: $("#map-svg"), buildings: $("#building-layer"),
-    stalls: $("#stall-layer"), tooltip: $("#map-tooltip"), hud: $("#coordinate-hud"), results: $("#search-results"),
+    stalls: $("#stall-layer"), tooltip: $("#map-tooltip"), hud: $("#coordinate-hud"), hudValue: $("#coordinate-value"), clearCoordinate: $("#clear-coordinate"), marker: $("#pinned-coordinate-marker"), results: $("#search-results"), resultsContent: $(".search-results-content"),
     drawer: $("#market-drawer"), backdrop: $("#drawer-backdrop"), content: $("#drawer-content"), title: $("#drawer-title"),
     kicker: $("#drawer-kicker"), summary: $("#drawer-summary"), back: $("#drawer-back"), inspector: $("#item-inspector"),
     inspectorContent: $("#inspector-content"), inspectorTitle: $("#inspector-title"), inspectorKicker: $("#inspector-kicker"),
@@ -24,7 +24,7 @@
   const filterFields = $("#filter-fields");
   const searchLabel = document.createElement("label");
   searchLabel.innerHTML = `Search stalls<input id="market-filter-search" placeholder="Stall, player, guild, item">`;
-  filterFields.prepend(searchLabel);
+  filterFields.querySelector(".mobile-sheet-handle").after(searchLabel);
   el.scene.style.width = `${t.imageWidth}px`;
   el.scene.style.height = `${t.imageHeight}px`;
   el.svg.setAttribute("viewBox", `0 0 ${t.imageWidth} ${t.imageHeight}`);
@@ -33,7 +33,9 @@
     view: { scale: 1, x: 0, y: 0 }, initial: null, pointer: null, cursor: null, hovered: null,
     selectedBuilding: null, selectedStall: null, drawerMode: null, drawerBuilding: null, highlightShop: null,
     inspectorHistory: [], filters: { text: "", floor: "ALL", owner: "ALL", shop: "ALL", stock: "ALL" },
-    matching: new Set(layout.stalls.map(stall => stall.id)), suggestionIndex: -1, mobileStack: [], mobileResultsOpen: false, searchReturn: false, lastSearch: null
+    matching: new Set(layout.stalls.map(stall => stall.id)), suggestionIndex: -1, mobileStack: [], mobileResultsOpen: false, searchReturn: false, lastSearch: null,
+    pinned: null, touchPointers: new Map(), touchTap: null, touchGesture: null,
+    sheet: {type: null, state: "hidden", previous: "normal", surface: null, returnFocus: null, gesture: null}
   };
   const buildingElements = new Map();
   const stallElements = new Map();
@@ -92,10 +94,20 @@
   }
   function hideTooltip() { el.tooltip.hidden = true; }
   function updateHud(pointer = state.cursor) {
-    if (!pointer) { el.hud.textContent = "X — · Z —"; return; }
-    const point = screenWorld(pointer.clientX, pointer.clientY);
-    el.hud.textContent = `X ${point.x.toFixed(1)} · Z ${point.z.toFixed(1)}`;
+    const point = pointer ? screenWorld(pointer.clientX, pointer.clientY) : state.pinned;
+    if (!point) { el.hudValue.textContent = "X — · Z —"; el.clearCoordinate.hidden = true; return; }
+    const pinned = !pointer || isMobile();
+    const value = pinned && state.pinned ? state.pinned : point;
+    el.hudValue.textContent = pinned ? `X ${Math.round(value.x)} · Z ${Math.round(value.z)}` : `X ${value.x.toFixed(1)} · Z ${value.z.toFixed(1)}`;
+    el.clearCoordinate.hidden = !state.pinned;
   }
+  function pinCoordinate(clientX, clientY) {
+    const world = screenWorld(clientX, clientY);
+    state.pinned = {x: Math.round(world.x), z: Math.round(world.z)};
+    const point = px(state.pinned); el.marker.hidden = false; el.marker.setAttribute("transform", `translate(${point.x} ${point.y})`);
+    updateHud(null);
+  }
+  function clearPinnedCoordinate() { state.pinned = null; el.marker.hidden = true; state.cursor = null; updateHud(null); }
   function setHover(building, event) {
     if (state.hovered !== building?.id) {
       if (state.hovered) buildingElements.get(state.hovered)?.classList.remove("hovered");
@@ -106,56 +118,77 @@
     else if (!building) hideTooltip();
   }
 
+  const touchMidpoint = () => { const points = [...state.touchPointers.values()].slice(0, 2); return {x: (points[0].x + points[1].x) / 2, y: (points[0].y + points[1].y) / 2, distance: Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y)}; };
+  function beginTouchGesture() {
+    const midpoint = touchMidpoint(), rect = el.viewport.getBoundingClientRect(), localX = midpoint.x - rect.left, localY = midpoint.y - rect.top;
+    state.touchGesture = {start: midpoint, view: {...state.view}, sceneX: (localX - state.view.x) / state.view.scale, sceneY: (localY - state.view.y) / state.view.scale};
+    state.touchTap = null; hideTooltip(); el.viewport.classList.add("dragging");
+    for (const id of state.touchPointers.keys()) try { el.viewport.setPointerCapture(id); } catch {}
+  }
+  function updateTouchGesture(event) {
+    if (!state.touchGesture || state.touchPointers.size < 2) return;
+    event.preventDefault(); const midpoint = touchMidpoint(), rect = el.viewport.getBoundingClientRect(), gesture = state.touchGesture;
+    const scale = Math.max(.35, Math.min(8, gesture.view.scale * midpoint.distance / Math.max(1, gesture.start.distance)));
+    const localX = midpoint.x - rect.left, localY = midpoint.y - rect.top;
+    state.view = {scale, x: localX - gesture.sceneX * scale, y: localY - gesture.sceneY * scale}; applyView();
+  }
+  function finishTouch(event, cancelled = false) {
+    const point = state.touchPointers.get(event.pointerId); state.touchPointers.delete(event.pointerId);
+    if (state.touchGesture) {
+      if (state.touchPointers.size < 2) { state.touchGesture = null; el.viewport.classList.remove("dragging"); }
+      return;
+    }
+    if (!cancelled && point && state.touchTap?.id === event.pointerId && Math.hypot(point.x - state.touchTap.startX, point.y - state.touchTap.startY) <= 6) {
+      pinCoordinate(event.clientX, event.clientY); const hit = hitBuilding(event.clientX, event.clientY); if (hit) openBuilding(hit);
+    }
+    state.touchTap = null;
+  }
   el.viewport.onpointerdown = event => {
-    state.cursor = { clientX: event.clientX, clientY: event.clientY };
-    updateHud();
+    if (event.pointerType === "touch") {
+      if (event.isPrimary && state.touchPointers.size) { state.touchPointers.clear(); state.touchGesture = null; state.touchTap = null; }
+      state.touchPointers.set(event.pointerId, {x: event.clientX, y: event.clientY});
+      if (state.touchPointers.size === 1) state.touchTap = {id: event.pointerId, startX: event.clientX, startY: event.clientY};
+      else if (state.touchPointers.size === 2) { event.preventDefault(); beginTouchGesture(); }
+      return;
+    }
+    state.cursor = {clientX: event.clientX, clientY: event.clientY}; updateHud();
     if (event.button !== 0) return;
     const hit = hitBuilding(event.clientX, event.clientY);
-    state.pointer = { id: event.pointerId, startX: event.clientX, startY: event.clientY, lastX: event.clientX, lastY: event.clientY, drag: false, pressed: hit?.id || null };
+    state.pointer = {id: event.pointerId, startX: event.clientX, startY: event.clientY, lastX: event.clientX, lastY: event.clientY, drag: false, pressed: hit?.id || null};
     if (hit) buildingElements.get(hit.id)?.classList.add("pressed");
   };
   el.viewport.onpointermove = event => {
-    state.cursor = { clientX: event.clientX, clientY: event.clientY };
-    updateHud();
+    if (event.pointerType === "touch") {
+      const point = state.touchPointers.get(event.pointerId); if (!point) return;
+      point.x = event.clientX; point.y = event.clientY;
+      if (state.touchTap && Math.hypot(point.x - state.touchTap.startX, point.y - state.touchTap.startY) > 6) state.touchTap = null;
+      updateTouchGesture(event); return;
+    }
+    state.cursor = {clientX: event.clientX, clientY: event.clientY}; updateHud();
     if (state.pointer?.id === event.pointerId) {
       const distance = Math.hypot(event.clientX - state.pointer.startX, event.clientY - state.pointer.startY);
-      if (!state.pointer.drag && distance > 5) {
-        state.pointer.drag = true;
-        el.viewport.setPointerCapture(event.pointerId);
-        el.viewport.classList.add("dragging");
-        hideTooltip();
-      }
-      if (state.pointer.drag) {
-        state.view.x += event.clientX - state.pointer.lastX;
-        state.view.y += event.clientY - state.pointer.lastY;
-        applyView();
-      }
-      state.pointer.lastX = event.clientX;
-      state.pointer.lastY = event.clientY;
-      return;
+      if (!state.pointer.drag && distance > 5) { state.pointer.drag = true; el.viewport.setPointerCapture(event.pointerId); el.viewport.classList.add("dragging"); hideTooltip(); }
+      if (state.pointer.drag) { state.view.x += event.clientX - state.pointer.lastX; state.view.y += event.clientY - state.pointer.lastY; applyView(); }
+      state.pointer.lastX = event.clientX; state.pointer.lastY = event.clientY; return;
     }
     setHover(hitBuilding(event.clientX, event.clientY), event);
   };
   el.viewport.onpointerup = event => {
-    const pointer = state.pointer;
-    if (!pointer || pointer.id !== event.pointerId) return;
+    if (event.pointerType === "touch") { finishTouch(event); return; }
+    const pointer = state.pointer; if (!pointer || pointer.id !== event.pointerId) return;
     if (pointer.pressed) buildingElements.get(pointer.pressed)?.classList.remove("pressed");
-    if (pointer.drag) {
-      try { el.viewport.releasePointerCapture(event.pointerId); } catch {}
-      el.viewport.classList.remove("dragging");
-    } else {
-      const hit = hitBuilding(event.clientX, event.clientY);
-      if (hit) openBuilding(hit);
-    }
+    if (pointer.drag) { try { el.viewport.releasePointerCapture(event.pointerId); } catch {} el.viewport.classList.remove("dragging"); }
+    else { pinCoordinate(event.clientX, event.clientY); const hit = hitBuilding(event.clientX, event.clientY); if (hit) openBuilding(hit); }
     state.pointer = null;
   };
-  el.viewport.onpointercancel = () => { state.pointer = null; el.viewport.classList.remove("dragging"); };
-  el.viewport.onpointerleave = () => { if (!state.pointer) setHover(null); state.cursor = null; updateHud(); };
+  el.viewport.onpointercancel = event => { if (event.pointerType === "touch") finishTouch(event, true); else state.pointer = null; el.viewport.classList.remove("dragging"); };
+  el.viewport.onpointerleave = event => { if (event.pointerType !== "touch" && !state.pointer) setHover(null); state.cursor = null; updateHud(null); };
   el.viewport.addEventListener("wheel", event => {
     event.preventDefault();
     state.cursor = { clientX: event.clientX, clientY: event.clientY };
     zoomAt(event.deltaY < 0 ? 1.15 : 1 / 1.15, event.clientX, event.clientY);
   }, { passive: false });
+  el.clearCoordinate.onclick = clearPinnedCoordinate;
 
   function applyView() { el.scene.style.transform = `translate(${state.view.x}px,${state.view.y}px) scale(${state.view.scale})`; updateHud(); }
   function fit() {
@@ -242,6 +275,7 @@
     if (metadata.publicVariantId) details.push(metadata.publicVariantId);
     return details.filter(Boolean);
   }
+  const itemPresentation = item => window.EnthusiaMarketAdapter.itemPresentation(item);
   function transactionLabels(direction) { return direction === "BUY" ? ["YOU PROVIDE", "YOU RECEIVE"] : direction === "TRADE" ? ["YOU RECEIVE", "YOU GIVE"] : ["YOU RECEIVE", "YOU PAY"]; }
   function iconDefinition(item) {
     const definition = iconManifest.materials[item.material] || iconManifest.fallback;
@@ -298,16 +332,81 @@
     node.addEventListener("focus", () => showItemTooltip(node, item)); node.addEventListener("blur", hideItemTooltip);
   }
   function itemPanel(item, label, shopId, side) {
-    return `<button class="transaction-side" data-inspect-shop="${shopId}" data-inspect-side="${side}" aria-label="Inspect ${esc(label.toLowerCase())}: ${esc(item.displayName)}"><span class="transaction-label">${label}</span><span class="transaction-item">${itemIcon(item)}<span class="item-copy"><strong>${item.amount}× ${esc(item.displayName)}</strong></span></span></button>`;
+    const presentation = itemPresentation(item);
+    return `<button class="transaction-side" data-inspect-shop="${shopId}" data-inspect-side="${side}" aria-label="Inspect ${esc(label.toLowerCase())}: ${esc(presentation.baseDisplayName)}"><span class="transaction-label">${label}</span><span class="transaction-item">${itemIcon(item)}<span class="item-copy"><strong>${item.amount}× ${esc(presentation.customDisplayName || presentation.baseDisplayName)}</strong>${presentation.variantSummary ? `<small>${esc(presentation.variantSummary)}</small>` : ""}</span></span></button>`;
   }
+
+  const mobileSurfaces = [el.drawer, el.inspector, el.results, filterFields];
+  function sheetLabel(surface) { return surface.querySelector(".sheet-compact-label"); }
+  function updateSheetHandle(surface, stateName) {
+    const handle = surface.querySelector(".mobile-sheet-handle"); if (!handle) return;
+    const expanded = stateName !== "collapsed" && stateName !== "hidden";
+    handle.setAttribute("aria-expanded", String(expanded));
+    handle.setAttribute("aria-label", `${expanded ? "Collapse" : "Expand"} ${surface === filterFields ? "filters" : surface === el.results ? "search results" : "market details"}`);
+  }
+  function activateSheet(type, surface, label, nextState = "normal", returnFocus = null) {
+    if (!isMobile()) return;
+    hideSuggestions();
+    for (const candidate of mobileSurfaces) candidate.classList.toggle("sheet-suppressed", candidate !== surface);
+    surface.classList.add("mobile-sheet-active"); surface.dataset.sheetState = nextState;
+    if (surface === el.results) surface.classList.add("mobile-sheet");
+    if (surface === filterFields) surface.classList.add("open");
+    if (label) sheetLabel(surface).textContent = label;
+    state.sheet = {type, state: nextState, previous: nextState === "collapsed" ? state.sheet.previous || "normal" : nextState, surface, returnFocus: returnFocus || state.sheet.returnFocus, gesture: null};
+    updateSheetHandle(surface, nextState);
+  }
+  function setSheetState(nextState) {
+    const sheet = state.sheet, surface = sheet.surface; if (!isMobile() || !surface) return;
+    if (nextState === "hidden") {
+      surface.classList.remove("mobile-sheet-active", "mobile-sheet"); surface.classList.add("sheet-suppressed"); surface.dataset.sheetState = "hidden";
+      if (surface === filterFields) surface.classList.remove("open");
+      state.sheet = {type: null, state: "hidden", previous: sheet.previous || "normal", surface: null, returnFocus: null, gesture: null};
+      sheet.returnFocus?.focus?.({preventScroll: true}); return;
+    }
+    const previous = nextState === "collapsed" ? (sheet.state === "expanded" ? "expanded" : "normal") : nextState;
+    surface.dataset.sheetState = nextState; state.sheet.state = nextState; state.sheet.previous = previous;
+    updateSheetHandle(surface, nextState);
+    if (nextState === "collapsed") surface.querySelector(".mobile-sheet-handle")?.focus({preventScroll: true});
+  }
+  function toggleSheet() { setSheetState(state.sheet.state === "collapsed" ? state.sheet.previous || "normal" : "collapsed"); }
+  function bindSheetSurface(surface) {
+    const handle = surface.querySelector(".mobile-sheet-handle"); if (!handle) return;
+    handle.addEventListener("pointerdown", event => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      state.sheet.gesture = {id: event.pointerId, startY: event.clientY, moved: false, started: state.sheet.state, time: performance.now()};
+      try { handle.setPointerCapture(event.pointerId); } catch {}
+    });
+    handle.addEventListener("pointermove", event => { const gesture = state.sheet.gesture; if (gesture?.id === event.pointerId && Math.abs(event.clientY - gesture.startY) > 6) gesture.moved = true; });
+    handle.addEventListener("pointerup", event => {
+      const gesture = state.sheet.gesture; if (!gesture || gesture.id !== event.pointerId) return;
+      const delta = event.clientY - gesture.startY, velocity = delta / Math.max(1, performance.now() - gesture.time); state.sheet.gesture = null;
+      if (!gesture.moved) toggleSheet();
+      else if (delta < -45 && gesture.started === "collapsed") setSheetState(state.sheet.previous || "normal");
+      else if (delta > 45 && gesture.started !== "collapsed") setSheetState("collapsed");
+      else if (delta > 80 && gesture.started === "collapsed" && velocity > .35) setSheetState("hidden");
+    });
+    handle.addEventListener("click", event => { if (event.detail === 0) toggleSheet(); });
+    surface.addEventListener("pointerdown", event => {
+      if (event.pointerType !== "touch" || event.target.closest(".mobile-sheet-handle") || surface.scrollTop > 0) return;
+      state.sheet.contentGesture = {id: event.pointerId, startY: event.clientY, startX: event.clientX};
+    });
+    surface.addEventListener("pointerup", event => {
+      const gesture = state.sheet.contentGesture; state.sheet.contentGesture = null;
+      if (!gesture || gesture.id !== event.pointerId || surface.scrollTop > 0) return;
+      const dy = event.clientY - gesture.startY, dx = Math.abs(event.clientX - gesture.startX);
+      if (dy > 70 && dy > dx * 1.5) setSheetState("collapsed");
+    });
+    surface.addEventListener("pointercancel", () => { state.sheet.contentGesture = null; });
+  }
+  mobileSurfaces.forEach(bindSheetSurface);
 
   function openBuilding(building) {
     closeInspector(); hideMobileResults(); filterFields.classList.remove("open"); state.mobileStack = [{type: "building", id: building.id}]; selectMap(building.id);
     if (building.stallIds.length === 1) return openStall(adapter.getStall(building.stallIds[0]), null);
     state.drawerBuilding = building; state.drawerMode = "building"; renderBuildingDrawer(); showDrawer();
   }
-  function showDrawer() { el.drawer.hidden = false; el.backdrop.hidden = false; requestAnimationFrame(() => $("#drawer-close").focus()); }
-  function closeDrawer() { closeInspector(); hideMobileResults(); el.drawer.hidden = true; el.backdrop.hidden = true; state.drawerMode = null; state.drawerBuilding = null; state.highlightShop = null; state.mobileStack = []; state.searchReturn = false; selectMap(null); }
+  function showDrawer() { el.drawer.hidden = false; el.backdrop.hidden = false; if (isMobile()) activateSheet("details", el.drawer, state.drawerBuilding?.label || el.title.textContent, "normal", el.viewport); else requestAnimationFrame(() => $("#drawer-close").focus()); }
+  function closeDrawer() { closeInspector(); hideMobileResults(); el.drawer.hidden = true; el.drawer.classList.remove("mobile-sheet-active"); el.backdrop.hidden = true; state.drawerMode = null; state.drawerBuilding = null; state.highlightShop = null; state.mobileStack = []; state.searchReturn = false; selectMap(null); }
   function renderBuildingDrawer() {
     const building = state.drawerBuilding;
     const totalShops = building.stallIds.reduce((sum, id) => sum + (adapter.getStall(id)?.shops.length || 0), 0);
@@ -378,7 +477,7 @@
     }
     renderInspector();
   }
-  function closeInspector() { el.inspector.hidden = true; state.inspectorHistory = []; hideItemTooltip(); document.body.classList.remove("inspector-open"); state.mobileStack = state.mobileStack.filter(entry => !["shop", "container"].includes(entry.type)); }
+  function closeInspector() { el.inspector.hidden = true; el.inspector.classList.remove("mobile-sheet-active"); state.inspectorHistory = []; hideItemTooltip(); document.body.classList.remove("inspector-open"); state.mobileStack = state.mobileStack.filter(entry => !["shop", "container"].includes(entry.type)); }
   function selectInspectorSide(shop, side) {
     const labels = transactionLabels(shop.direction);
     state.inspectorHistory = [inspectorEntry(shop, side, shop[side], side === "sellItem" ? labels[0] : labels[1])];
@@ -392,8 +491,8 @@
     renderInspector();
   }
   function inspectorItemDetails(item) {
-    const metadata = itemMetadata(item);
-    return `<section class="minecraft-tooltip"><div class="inspected-item">${itemIcon(item, "large")}<div><h3>${minecraftText(item.metadata?.customName || item.displayName)}</h3>${item.metadata?.customName ? `<p>${minecraftText(item.displayName, "muted")}</p>` : ""}<strong>${minecraftText(`${item.amount}x`)}</strong></div></div>${metadata.length ? `<ul>${metadata.map(detail => `<li>${minecraftText(detail, "muted")}</li>`).join("")}</ul>` : `<p>${minecraftText("No additional public item details.", "muted")}</p>`}<code>${minecraftText(`minecraft:${item.material.toLowerCase()}`, "identifier")}</code></section>`;
+    const metadata = itemMetadata(item), presentation = itemPresentation(item);
+    return `<section class="minecraft-tooltip"><div class="inspected-item">${itemIcon(item, "large")}<div><h3>${minecraftText(presentation.customDisplayName || presentation.baseDisplayName)}</h3>${presentation.customDisplayName ? `<p>${minecraftText(presentation.baseDisplayName, "muted")}</p>` : ""}<strong>${minecraftText(`${item.amount}x`)}</strong></div></div>${metadata.length ? `<ul>${metadata.map(detail => `<li>${minecraftText(detail, "muted")}</li>`).join("")}</ul>` : ""}<code>${minecraftText(`minecraft:${item.material.toLowerCase()}`, "identifier")}</code></section>`;
   }
   function containerMarkup(entry) {
     const { item, context, depth } = entry, container = item.metadata?.container;
@@ -414,7 +513,8 @@
     const entry = state.inspectorHistory.at(-1), { shop, item } = entry;
     const labels = transactionLabels(shop.direction), action = { SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction];
     el.inspector.hidden = false; document.body.classList.add("inspector-open");
-    el.inspectorKicker.textContent = `${action} · ${entry.role}`; el.inspectorTitle.textContent = item.displayName;
+    const presentation = itemPresentation(item);
+    el.inspectorKicker.textContent = `${action} · ${entry.role}`; el.inspectorTitle.textContent = presentation.customDisplayName || presentation.baseDisplayName;
     const backLabel = state.inspectorHistory.length > 1 ? `Back to ${state.inspectorHistory.at(-2).item.displayName}` : state.searchReturn ? "Back to search results" : "Back to stall";
     el.inspectorContent.innerHTML = `<button class="inspector-back mobile-navigation-back" type="button">← ${esc(backLabel)}</button><section class="inspector-shop-context"><span>Shop by <strong>${esc(shop.owner.name)}</strong></span>${locationMarkup(shop.interaction, true)}</section><div class="inspector-transaction-tabs"><button class="${entry.side === "sellItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="sellItem"><span class="transaction-tab-label">${labels[0]}</span>${itemIcon(shop.sellItem)}<strong>${shop.sellItem.amount}× ${esc(shop.sellItem.displayName)}</strong></button><button class="${entry.side === "costItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="costItem"><span class="transaction-tab-label">${labels[1]}</span>${itemIcon(shop.costItem)}<strong>${shop.costItem.amount}× ${esc(shop.costItem.displayName)}</strong></button></div>${inspectorItemDetails(item)}${containerMarkup(entry)}`;
     bindCopy(el.inspectorContent);
@@ -422,7 +522,7 @@
     el.inspectorContent.querySelector(".inspector-back")?.addEventListener("click", () => {
       if (state.inspectorHistory.length > 1) { state.inspectorHistory.pop(); state.mobileStack.pop(); renderInspector(); }
       else if (state.searchReturn) { closeInspector(); el.drawer.hidden = true; el.backdrop.hidden = true; showMobileResults(); }
-      else closeInspector();
+      else { closeInspector(); if (!el.drawer.hidden) showDrawer(); }
     });
     const container = item.metadata?.container;
     el.inspectorContent.querySelectorAll("[data-container-slot]").forEach(button => button.onclick = () => {
@@ -438,6 +538,7 @@
     });
     el.inspectorContent.querySelectorAll("[data-container-index]").forEach(button => bindItemTooltip(button, container.contents[Number(button.dataset.containerIndex)].item));
     requestAnimationFrame(() => el.inspectorContent.querySelector(".focused-match")?.scrollIntoView({ block: "center" }));
+    if (isMobile()) activateSheet("details", el.inspector, presentation.customDisplayName || presentation.baseDisplayName, "expanded", el.viewport);
   }
 
   function matchesFilters(stall) {
@@ -464,44 +565,64 @@
     $(selector).addEventListener(selector.includes("search") ? "input" : "change", event => { state.filters[key] = event.target.value; applyFilters(); });
   }
   $("#clear-filters").onclick = clearFilters;
-  $("#mobile-filters").onclick = () => { const open = !filterFields.classList.contains("open"); if (open) { closeInspector(); hideMobileResults(); el.drawer.hidden = true; el.backdrop.hidden = true; } filterFields.classList.toggle("open", open); $("#mobile-filters").setAttribute("aria-expanded", open); };
+  $("#apply-filters").onclick = () => { applyFilters(); if (isMobile()) setSheetState("collapsed"); };
+  $("#collapse-filters").onclick = () => setSheetState("collapsed");
+  $("#mobile-filters").onclick = () => {
+    closeInspector(); hideMobileResults(); el.drawer.hidden = true; el.backdrop.hidden = true;
+    activateSheet("filters", filterFields, "Filters", "normal", $("#mobile-filters"));
+    $("#mobile-filters").setAttribute("aria-expanded", "true");
+  };
 
-  function hideMobileResults() { el.results.classList.remove("mobile-sheet"); state.mobileResultsOpen = false; }
-  function showMobileResults() { if (!isMobile() || !state.lastSearch?.query) return; filterFields.classList.remove("open"); el.results.classList.add("mobile-sheet"); state.mobileResultsOpen = true; }
+  function hideMobileResults() {
+    el.results.classList.remove("mobile-sheet", "mobile-sheet-active");
+    if (state.sheet.surface === el.results) state.sheet = {type: null, state: "hidden", previous: "normal", surface: null, returnFocus: null, gesture: null};
+    state.mobileResultsOpen = false;
+  }
+  function showMobileResults() {
+    if (!isMobile() || !state.lastSearch) return;
+    state.mobileResultsOpen = true;
+    activateSheet("results", el.results, state.lastSearch.query ? `Results for “${state.lastSearch.query}”` : "Search results", "normal", $("#item-search"));
+    el.resultsContent.scrollTop = 0;
+  }
 
   function executeSearch(query = $("#item-search").value) {
-    const value = query.trim(), shops = adapter.searchItems(value);
-    if (value) {
-      const recent = JSON.parse(localStorage.getItem("enthusia-market-recent-searches") || "[]").filter(item => item !== value);
-      localStorage.setItem("enthusia-market-recent-searches", JSON.stringify([value, ...recent].slice(0, 6)));
-    }
+    const value = query.trim(), shops = value ? adapter.searchItems(value) : [];
+    $("#item-search").value = value;
     state.lastSearch = {query: value, shops}; state.searchReturn = false;
     if (isMobile()) { closeInspector(); el.drawer.hidden = true; el.backdrop.hidden = true; filterFields.classList.remove("open"); }
-    renderResults(value, shops); if (value) showMobileResults(); else hideMobileResults(); hideSuggestions(); return shops;
+    renderResults(value, shops); hideSuggestions(); $("#item-search").blur();
+    if (isMobile()) showMobileResults();
+    return shops;
   }
   function renderResults(query, shops) {
-    if (!query) { el.results.innerHTML = `<div class="empty-results"><h2>Browse the whole market</h2><p>Search for an item or select any building on the map.</p></div>`; return; }
-    el.results.innerHTML = `<p class="eyebrow">Item results</p><h2>${shops.length} result${shops.length === 1 ? "" : "s"} for “${esc(query)}”</h2><div class="result-list">${shops.map((shop, index) => {
+    if (!query) { el.resultsContent.innerHTML = `<div class="empty-results validation-message"><h2>Enter an item to search</h2><p>Type at least one character, then press Search.</p></div>`; return; }
+    const resolvedQuery = window.EnthusiaMarketAdapter.normalizeQuery(query);
+    const displayQuery = resolvedQuery.replace(/\b\w/g, value => value.toUpperCase());
+    const heading = shops.length ? `${shops.length} result${shops.length === 1 ? "" : "s"} for “${esc(displayQuery)}”` : `No current listings for ${esc(displayQuery)}`;
+    el.resultsContent.innerHTML = `<p class="eyebrow">Item results</p><h2>${heading}</h2>${shops.length ? `<div class="result-list">${shops.map((shop, index) => {
       const item = shop.match.item, containerPath = shop.match.containerPath || [], leadingItem = shop.match.contained ? containerPath[0] || shop.match.container : item;
       const inside = shop.match.contained ? `<small class="contained-match">Inside ${containerPath.map(container => esc(container.displayName)).join(" › ") || esc(shop.match.container.displayName)}</small>` : "";
       const primary = shop.match.contained ? `${item.amount}× ${esc(item.displayName)}` : esc(item.displayName);
-      return `<article class="result-card"><button class="result-main" data-result-index="${index}">${itemIcon(leadingItem)}<span><strong>${primary}</strong>${inside}<small>${{ SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction]} · ${displayStall(shop.stall.id)} · ${buildingNumber(shop.stall.buildingId)} · ${C.floorName(shop.stall.floor)}</small></span></button>${locationMarkup(shop.interaction, true)}</article>`;
-    }).join("")}</div>`;
-    el.results.querySelectorAll("[data-result-index]").forEach(button => button.onclick = () => {
+      return `<article class="result-card"><button class="result-main" data-result-index="${index}">${itemIcon(leadingItem)}<span><strong>${primary}</strong>${inside}<small>${{ SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction]} · ${displayStall(shop.stall.id)} · ${C.floorName(shop.stall.floor)}</small></span></button>${locationMarkup(shop.interaction, true)}</article>`;
+    }).join("")}</div>` : `<p class="no-results-copy">Try another item, variant, or material name.</p>`}`;
+    el.resultsContent.querySelectorAll("[data-result-index]").forEach(button => button.onclick = () => {
       const shop = shops[Number(button.dataset.resultIndex)], stall = shop.stall;
       state.searchReturn = isMobile(); hideMobileResults(); clearFilters(); focusBuilding(stall.buildingId); openStall(stall, null, shop.id); openInspector(shop.id, shop.match.side, shop.match);
     });
-    bindCopy(el.results);
+    bindCopy(el.resultsContent);
   }
   function focusBuilding(id) {
     const building = layout.buildings.find(item => item.id === id), point = px(building.labelPoint), rect = el.viewport.getBoundingClientRect(), scale = Math.max(state.view.scale, 2);
     state.view = { scale, x: rect.width / 2 - point.x * scale, y: rect.height / 2 - point.y * scale }; applyView(); selectMap(id);
   }
   function showSuggestions() {
-    const input = $("#item-search"), items = input.value.trim() ? adapter.suggest(input.value) : JSON.parse(localStorage.getItem("enthusia-market-recent-searches") || "[]");
+    const input = $("#item-search"), items = input.value.trim() ? adapter.suggest(input.value) : [];
     state.suggestionIndex = -1; const box = $("#search-suggestions");
-    if (!items.length) { box.hidden = true; return; }
-    box.innerHTML = items.map((item, index) => `<button role="option" data-suggestion="${esc(item)}" data-index="${index}">${esc(item)}</button>`).join(""); box.hidden = false;
+    if (!items.length) { box.replaceChildren(); box.hidden = true; return; }
+    box.innerHTML = items.map((entry, index) => {
+      const label = entry.displayName || entry.searchQuery, query = entry.searchQuery || label;
+      return `<button role="option" data-suggestion="${esc(query)}" data-index="${index}">${itemIcon(entry.item || {material:entry.material,displayName:label,amount:1})}<span><strong>${esc(label)}</strong>${entry.subtitle ? `<small>${esc(entry.subtitle)}</small>` : ""}</span></button>`;
+    }).join(""); box.hidden = false;
     box.querySelectorAll("button").forEach(button => button.onclick = () => { $("#item-search").value = button.dataset.suggestion; executeSearch(); });
   }
   function hideSuggestions() { $("#search-suggestions").hidden = true; state.suggestionIndex = -1; }
@@ -514,15 +635,22 @@
     else if (event.key === "Escape") hideSuggestions();
     buttons.forEach((button, index) => button.classList.toggle("active", index === state.suggestionIndex));
   };
+  document.addEventListener("pointerdown", event => {
+    if ($("#search-suggestions").hidden) return;
+    const path = event.composedPath?.() || [];
+    if (!path.includes($("#item-search")) && !path.includes($("#search-button")) && !path.includes($("#search-suggestions"))) hideSuggestions();
+  });
   $("#search-button").onclick = () => executeSearch(); $("#drawer-close").onclick = closeDrawer; el.backdrop.onclick = closeDrawer;
-  el.back.onclick = () => { closeInspector(); if (state.drawerBuilding) { state.drawerMode = "building"; renderBuildingDrawer(); } };
+  el.back.onclick = () => { closeInspector(); if (state.drawerBuilding) { state.drawerMode = "building"; renderBuildingDrawer(); showDrawer(); } };
   $("#inspector-close").onclick = () => isMobile() ? closeDrawer() : closeInspector();
   $("#zoom-in").onclick = () => zoomAt(1.2, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
   $("#zoom-out").onclick = () => zoomAt(.83, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
   $("#fit-map").onclick = fit;
   window.addEventListener("keydown", event => {
     if (event.key !== "Escape") return;
-    if (!el.inspector.hidden) {
+    if (isMobile() && state.sheet.surface && state.sheet.state !== "collapsed") setSheetState("collapsed");
+    else if (isMobile() && state.sheet.state === "collapsed") setSheetState("hidden");
+    else if (!el.inspector.hidden) {
       if (state.inspectorHistory.length > 1) { state.inspectorHistory.pop(); renderInspector(); } else closeInspector();
     } else if (!el.drawer.hidden) closeDrawer(); else hideSuggestions();
   });
