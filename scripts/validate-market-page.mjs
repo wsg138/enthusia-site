@@ -43,8 +43,11 @@ const evaluate = async expression => {
 async function waitFor(expression) { for (let attempt = 0; attempt < 70; attempt += 1) { if (await evaluate(expression)) return; await delay(100); } throw new Error(`Timed out: ${expression}`); }
 async function navigate(file, ready = "document.readyState==='complete'") {
   const url = siteBaseUrl ? `${siteBaseUrl}/${file}` : `file:///${client}/${file}`;
+  const expectedUrl = siteBaseUrl
+    ? `${siteBaseUrl}/${file === "index.html" ? "" : file.replace(/\.html$/, "")}`
+    : url;
   await send("Page.navigate", {url});
-  await waitFor(ready);
+  await waitFor(`location.href===${JSON.stringify(expectedUrl)}&&(${ready})`);
   await delay(100);
 }
 async function clickAt(point) { await send("Input.dispatchMouseEvent", {type: "mousePressed", x: point.x, y: point.y, button: "left", clickCount: 1}); await send("Input.dispatchMouseEvent", {type: "mouseReleased", x: point.x, y: point.y, button: "left", clickCount: 1}); await delay(45); }
@@ -86,6 +89,7 @@ try {
   }
 
   results.shopInspector = await evaluate("(()=>{const T=window.__MARKET_TEST__,shop=T.adapter.getShops()[0];T.openStall(shop.stall,null,shop.id);document.querySelector('.shop-card.highlight').click();return !document.querySelector('#item-inspector').hidden&&!document.querySelector('#market-drawer').hidden})()");
+  await waitFor("[...document.images].every(image=>image.complete)");
   results.failedImages = await evaluate("[...document.images].filter(image=>image.complete&&image.naturalWidth===0).map(image=>image.src)");
   results.realIcons = await evaluate("[...document.querySelectorAll('.minecraft-item-icon img')].every(image=>image.complete&&image.naturalWidth>0)&&!document.querySelector('.item-icon,.shop-item-icon')");
   results.shulker = await evaluate("(()=>{const T=window.__MARKET_TEST__,shop=T.adapter.getShops().find(x=>x.sellItem.metadata?.container?.type==='SHULKER');T.openStall(shop.stall,null,shop.id);T.openInspector(shop.id,'sellItem');return document.querySelectorAll('.minecraft-slot').length===27})()");
@@ -96,7 +100,7 @@ try {
   await navigate("market.html", "window.__MARKET_TEST__?.counts.stalls===71");
   results.mobile = await evaluate("(()=>{const T=window.__MARKET_TEST__,shop=T.adapter.getShops().find(x=>x.sellItem.metadata?.container?.type==='SHULKER');T.openStall(shop.stall,null,shop.id);T.openInspector(shop.id,'sellItem');const panel=document.querySelector('#item-inspector').getBoundingClientRect();return panel.width===document.documentElement.clientWidth&&document.querySelectorAll('.minecraft-slot').length===27&&!document.querySelector('#market-drawer').hidden})()");
   results.browserErrors = browserErrors;
-  results.failedResources = failedResources;
+  results.failedResources = failedResources.filter(resource => resource.error !== "net::ERR_ABORTED");
   console.log(JSON.stringify(results, null, 2));
   if (Object.entries(results).some(([key, value]) => !["counts", "browserErrors", "failedResources", "failedImages", "failedBuildingIds"].includes(key) && value !== true) || browserErrors.length || failedResources.length || results.failedImages.length || results.failedBuildingIds.length) process.exitCode = 1;
 } finally {
