@@ -1641,7 +1641,7 @@ function initWorldEffects() {
   const foregrounds = Object.fromEntries(sceneDefinitions.map(([name]) => {
     const image = document.createElement("img");
     image.className = `cinematic-foreground cinematic-foreground-${name}`;
-    image.src = `assets/minecraft-terrain-foreground-${name}-v1.png?v=7`;
+    image.src = `assets/minecraft-terrain-foreground-${name}-v1.png?v=8`;
     image.alt = "";
     image.decoding = "async";
     return [name, image];
@@ -1711,6 +1711,7 @@ function initWorldEffects() {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const debugEnabled = new URLSearchParams(window.location.search).get("sceneDebug") === "1";
   const debugLayer = new URLSearchParams(window.location.search).get("debugLayer") || "all";
+  const debugGlowDisabled = new URLSearchParams(window.location.search).get("sceneGlow") === "0";
   let sceneScale = 1;
   let sceneOrigin = { x: 0, y: 0 };
   let mobileCamera = false;
@@ -1840,6 +1841,11 @@ function initWorldEffects() {
     const moonControlB = mobileCamera ? screenToScene(window.innerWidth * 0.7, window.innerHeight * 0.12) : { x: SCENE_WIDTH * 0.68, y: SCENE_HEIGHT * 0.06 };
     const moonPoint = cubicPoint(moonStart, moonControlA, moonControlB, moonEnd, moonPhase);
     placeOrb(moon, moonPoint, currentProgress >= 0.27 && currentProgress <= 0.78);
+
+    if (debugGlowDisabled) {
+      sun.querySelector(".cinematic-orb-disc").style.boxShadow = "none";
+      moon.querySelector(".cinematic-orb-disc").style.boxShadow = "none";
+    }
 
     if (debugEnabled && (debugLayer === "sun-disk" || debugLayer === "moon-disk")) {
       Object.values(foregrounds).forEach((image) => { image.style.opacity = "0"; });
