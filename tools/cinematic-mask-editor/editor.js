@@ -6,6 +6,7 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const smooth = (value) => value * value * (3 - 2 * value);
+const DRAFT_STORAGE_KEY = "enthusia-cinematic-mask-editor-draft-v1";
 
 const sceneCanvas = $("#sceneCanvas");
 const sceneCtx = sceneCanvas.getContext("2d", { alpha: false });
@@ -31,6 +32,9 @@ const suggestionCtx = suggestionCanvas.getContext("2d");
 const finalAlphaCtx = finalAlphaCanvas.getContext("2d");
 const scratchCtx = scratchCanvas.getContext("2d");
 const sampleCtx = sampleCanvas.getContext("2d", { willReadFrequently: true });
+for (const context of [sceneCtx, editCtx, addCtx, subtractCtx, suggestionCtx, finalAlphaCtx, scratchCtx, sampleCtx]) {
+  context.imageSmoothingEnabled = false;
+}
 
 const state = {
   session: null,
@@ -52,7 +56,7 @@ const state = {
   progress: 0.28,
   viewMode: "final",
   glow: true,
-  showRepairs: true,
+  showRepairs: false,
   split: 0.5,
   scale: 1,
   panX: 0,
@@ -107,6 +111,40 @@ function setStatus(message, type = "") {
 function markDirty() {
   state.dirty = true;
   setStatus("Unsaved repair changes");
+  persistDraft();
+}
+
+function persistDraft() {
+  if (!state.session) return;
+  localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({
+    baseMaskSha256: state.session.baseMaskSha256,
+    strokes: state.strokes,
+    redo: state.redo,
+    acceptedSuggestions: [...state.acceptedSuggestions],
+    rejectedSuggestions: [...state.rejectedSuggestions],
+    checkpoint: state.currentCheckpoint,
+    progress: state.progress,
+    savedAt: new Date().toISOString(),
+  }));
+}
+
+function restoreDraft() {
+  try {
+    const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+    if (!raw) return false;
+    const draft = JSON.parse(raw);
+    if (draft.baseMaskSha256 !== state.session.baseMaskSha256) return false;
+    state.strokes = Array.isArray(draft.strokes) ? draft.strokes : [];
+    state.redo = Array.isArray(draft.redo) ? draft.redo : [];
+    state.acceptedSuggestions = new Set(Array.isArray(draft.acceptedSuggestions) ? draft.acceptedSuggestions : []);
+    state.rejectedSuggestions = new Set(Array.isArray(draft.rejectedSuggestions) ? draft.rejectedSuggestions : []);
+    state.currentCheckpoint = clamp(Number(draft.checkpoint) || 0, 0, state.session.checkpoints.length - 1);
+    state.progress = clamp(Number(draft.progress) || state.session.checkpoints[state.currentCheckpoint].progress, 0, 1);
+    state.dirty = state.strokes.length > 0 || state.acceptedSuggestions.size > 0 || state.rejectedSuggestions.size > 0;
+    return state.dirty;
+  } catch {
+    return false;
+  }
 }
 
 function phaseAt(progress) {
@@ -269,7 +307,9 @@ function finalAlphaArray() {
 function candidateForeground(phaseName) {
   const key = `${phaseName}:${state.repairRevision}`;
   if (state.foregroundCache.has(key)) return state.foregroundCache.get(key);
-  const source = imageData(state.images[`foreground${phaseName[0].toUpperCase()}${phaseName.slice(1)}`]);
+  // Reveal the real pixel at this exact scene coordinate. RGB comes directly
+  // from the active phase landscape; only alpha comes from the candidate mask.
+  const source = imageData(state.images[phaseName]);
   const alpha = finalAlphaArray();
   for (let index = 0; index < alpha.length; index++) source.data[index * 4 + 3] = alpha[index];
   const canvas = document.createElement("canvas");
@@ -308,6 +348,19 @@ function drawMaskOverlay(ctx) {
   ctx.drawImage(finalAlphaCanvas, 0, 0);
 }
 
+function drawDiagnosticLayer(ctx, layer, color) {
+  ctx.fillStyle = "#111";
+  ctx.fillRect(0, 0, W, H);
+  const source = layer.getContext("2d").getImageData(0, 0, W, H).data;
+  const rgb = color.match(/[a-f\d]{2}/gi).map(part => Number.parseInt(part, 16));
+  const output = ctx.createImageData(W, H);
+  for (let index = 0; index < W * H; index++) {
+    const offset = index * 4;
+    output.data[offset] = rgb[0];output.data[offset + 1] = rgb[1];output.data[offset + 2] = rgb[2];output.data[offset + 3] = source[offset + 3];
+  }
+  ctx.putImageData(output, 0, 0);
+}
+
 function drawRepairOverlays() {
   editCtx.clearRect(0, 0, W, H);
   if (!state.showRepairs) return;
@@ -322,9 +375,9 @@ function drawRepairOverlays() {
     const addAlpha = add[offset + 3];
     const subtractAlpha = subtract[offset + 3];
     if (subtractAlpha) {
-      overlay.data[offset] = 67;overlay.data[offset + 1] = 200;overlay.data[offset + 2] = 255;overlay.data[offset + 3] = Math.round(subtractAlpha * .72);
+      overlay.data[offset] = 255;overlay.data[offset + 1] = 66;overlay.data[offset + 2] = 58;overlay.data[offset + 3] = Math.round(subtractAlpha * .3);
     } else if (addAlpha) {
-      overlay.data[offset] = 255;overlay.data[offset + 1] = 122;overlay.data[offset + 2] = 26;overlay.data[offset + 3] = Math.round(addAlpha * .66);
+      overlay.data[offset] = 92;overlay.data[offset + 1] = 235;overlay.data[offset + 2] = 94;overlay.data[offset + 3] = Math.round(addAlpha * .28);
     } else if (suggestion?.[i]) {
       overlay.data[offset] = 120;overlay.data[offset + 1] = 255;overlay.data[offset + 2] = 45;overlay.data[offset + 3] = 210;
     }
@@ -339,11 +392,19 @@ function render() {
   switch (state.viewMode) {
     case "landscape": drawPhase(sceneCtx, phase); break;
     case "mask": drawPhase(sceneCtx, phase); drawMaskOverlay(sceneCtx); break;
-    case "foreground": sceneCtx.fillStyle = "#171717";sceneCtx.fillRect(0, 0, W, H);drawForeground(sceneCtx, phase, true); break;
+    case "foreground": {
+      sceneCtx.fillStyle = "#171717";sceneCtx.fillRect(0, 0, W, H);
+      sceneCtx.fillStyle = "#242424";
+      for (let y = 0; y < H; y += 16) for (let x = 0; x < W; x += 16) {
+        if (((x + y) / 16) % 2 === 0) sceneCtx.fillRect(x, y, 16, 16);
+      }
+      drawForeground(sceneCtx, phase, true);
+      break;
+    }
     case "disk": drawPhase(sceneCtx, phase);drawCelestial(sceneCtx, false);break;
     case "glow": drawPhase(sceneCtx, phase);drawCelestial(sceneCtx, true);break;
-    case "add": sceneCtx.fillStyle="#111";sceneCtx.fillRect(0,0,W,H);sceneCtx.drawImage(addCanvas,0,0);break;
-    case "subtract": sceneCtx.fillStyle="#111";sceneCtx.fillRect(0,0,W,H);sceneCtx.drawImage(subtractCanvas,0,0);break;
+    case "add": drawDiagnosticLayer(sceneCtx, addCanvas, "#5ceb5e");break;
+    case "subtract": drawDiagnosticLayer(sceneCtx, subtractCanvas, "#ff423a");break;
     case "split": {
       drawFinal(sceneCtx, false, state.glow);
       scratchCtx.clearRect(0, 0, W, H);drawFinal(scratchCtx, true, state.glow);
@@ -381,6 +442,7 @@ function suggestionFor(checkpointData) {
 
 function updateTransform() {
   stage.style.transform = `translate(${state.panX}px,${state.panY}px) scale(${state.scale})`;
+  stage.style.setProperty("--editor-scale", state.scale);
   viewport.classList.toggle("pixel-grid", state.scale >= 8);
   $("#zoomOutput").textContent = `${Math.round(state.scale * 100)}%`;
 }
@@ -501,6 +563,7 @@ async function save() {
     const result = await response.json();
     if (!response.ok || !result.ok) throw new Error(result.error || "Save failed.");
     state.dirty = false;
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
     setStatus("Repairs saved successfully", "success");
   } catch (error) {
     setStatus(error.message, "error");
@@ -550,7 +613,7 @@ function bindEvents() {
   $("#resetCheckpointBtn").addEventListener("click", async () => {if(await confirmAction("Reset checkpoint",`Remove unsaved edits for ${checkpoint().label}?`)){state.strokes=state.strokes.filter(s=>s.checkpoint!==checkpoint().id);state.acceptedSuggestions.delete(checkpoint().id);state.rejectedSuggestions.delete(checkpoint().id);rebuildRepairs();markDirty();}});
   $("#resetAllBtn").addEventListener("click", async () => {if(await confirmAction("Reset all changes","Remove every unsaved stroke and suggestion decision? Saved repair files remain the starting point.")){state.strokes=[];state.redo=[];state.acceptedSuggestions.clear();state.rejectedSuggestions.clear();rebuildRepairs();markDirty();}});
   $("#acceptSuggestionBtn").addEventListener("click", () => {state.acceptedSuggestions.add(checkpoint().id);state.rejectedSuggestions.delete(checkpoint().id);rebuildRepairs();markDirty();});
-  $("#rejectSuggestionBtn").addEventListener("click", () => {state.rejectedSuggestions.add(checkpoint().id);state.acceptedSuggestions.delete(checkpoint().id);rebuildRepairs();render();});
+  $("#rejectSuggestionBtn").addEventListener("click", () => {state.rejectedSuggestions.add(checkpoint().id);state.acceptedSuggestions.delete(checkpoint().id);rebuildRepairs();markDirty();});
   $("#clearSuggestionsBtn").addEventListener("click", () => {for(const key of state.suggestions.keys())state.suggestions.set(key,new Uint8ClampedArray(W*H));state.acceptedSuggestions.clear();state.rejectedSuggestions.clear();rebuildRepairs();markDirty();});
   $("#validateBtn").addEventListener("click", validate);
   $("#saveBtn").addEventListener("click", save);
@@ -604,12 +667,13 @@ async function init() {
     state.initialAdd = state.session.savedRepairs.add ? await loadOptionalOverlay("/assets/minecraft-occlusion-add-v2.png") : new ImageData(W,H);
     state.initialSubtract = state.session.savedRepairs.subtract ? await loadOptionalOverlay("/assets/minecraft-occlusion-subtract-v2.png") : new ImageData(W,H);
     for(const item of state.session.checkpoints)state.suggestions.set(item.id,suggestionFor(item));
+    const restoredDraft = restoreDraft();
     const container=$("#checkpointButtons");
     state.session.checkpoints.forEach((item,index)=>{const button=document.createElement("button");button.textContent=item.label;button.addEventListener("click",()=>focusCheckpoint(index));container.append(button);});
     bindEvents();
     rebuildRepairs();
-    requestAnimationFrame(()=>focusCheckpoint(0));
-    setStatus(state.session.savedRepairs.add||state.session.savedRepairs.subtract?"Loaded saved v2 repairs":"No unsaved strokes");
+    requestAnimationFrame(()=>focusCheckpoint(state.currentCheckpoint));
+    setStatus(restoredDraft ? "Restored unsaved browser draft" : state.session.savedRepairs.add||state.session.savedRepairs.subtract ? "Loaded saved v2 repairs" : "No unsaved strokes");
   } catch (error) {
     setStatus(error.message,"error");
     $("#validationResults").innerHTML=`<li class="error">${error.message}</li>`;
