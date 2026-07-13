@@ -24,6 +24,10 @@ await writeFile(path.join(output, "server", "index.js"), `export default {
         url.pathname = "/about.html";
         return env.ASSETS.fetch(new Request(url, request));
       }
+      if (url.pathname === "/market" || url.pathname === "/market/") {
+        url.pathname = "/market.html";
+        return env.ASSETS.fetch(new Request(url, request));
+      }
       const response = await env.ASSETS.fetch(request);
       if (response.status !== 404) return response;
       url.pathname = "/branded-not-found.html";

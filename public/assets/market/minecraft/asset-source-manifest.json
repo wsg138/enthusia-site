@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "minecraftVersion": "1.21.11",
+  "source": "Official locally installed Minecraft Java Edition client JAR",
+  "clientJarFilename": "1.21.11.jar",
+  "clientJarSha256": "1473c9489ac50fda3c435049a76a70d61a10b8610db27f5ba9d8756b686cd3bd",
+  "files": [
+    {
+      "path": "vanilla/textures/item/barrier.png",
+      "sha256": "8bb6746dd101a2707889dfbb7eec835b5db85620ef09d860129f2a9be18bd686",
+      "size": 149
+    },
+    {
+      "path": "vanilla/textures/item/bundle.png",
+      "sha256": "f6802172a7d95792766bc41b23861ef625601c3d57dff54f51a2045b24aac50c",
+      "size": 203
+    },
+    {
+      "path": "vanilla/textures/item/coast_armor_trim_smithing_template.png",
+      "sha256": "e2d17a4094bfe397a6cd71dd6f1b26c07db97c50b4591ff9803d9bef8cbf2771",
+      "size": 267
+    },
+    {
+      "path": "vanilla/textures/item/diamond.png",
+      "sha256": "fd11635ec666c3febb9e6dd6d3ec49cdfb4d16a2a1d595ebd10e56b302417d08",
+      "size": 207
+    },
+    {
+      "path": "vanilla/textures/item/emerald.png",
+      "sha256": "7aa1f12ee48666b2c3ae56fd9884ee95bf315795bfd1fd6e4ac3d3811ae3aacb",
+      "size": 182
+    },
+    {
+      "path": "vanilla/textures/item/enchanted_book.png",
+      "sha256": "f96da147fcf6f373df00ab5181043ea0c76af4ba7025f43f377f678ac466fb43",
+      "size": 251
+    },
+    {
+      "path": "vanilla/textures/item/ender_pearl.png",
+      "sha256": "ff40529856c82317ce24cec4ba384971f56aec0f8ce3756e059d2eb17f3b310a",
+      "size": 206
+    },
+    {
+      "path": "vanilla/textures/item/gold_ingot.png",
+      "sha256": "e4c1e2ea6d1fa70299163ebff573b4bfda1ef09099bedc4b5789c598f0a65738",
+      "size": 187
+    },
+    {
+      "path": "vanilla/textures/item/gold_nugget.png",
+      "sha256": "73c9c64b35e15a47366802fa899b115fce6380d1f19bda38dd7ef196182029ca",
+      "size": 136
+    },
+    {
+      "path": "vanilla/textures/item/iron_ingot.png",
+      "sha256": "ca67b14f685bfe1972addf6b44692dab601fe8d27464a30aa8e65f16f716cab2",
+      "size": 157
+    },
+    {
+      "path": "vanilla/textures/item/netherite_chestplate.png",
+      "sha256": "259fb539d007cf5a9491fdacdf45cefed9347f26be5a8c048bb76123f71bcee5",
+      "size": 216
+    },
+    {
+      "path": "vanilla/textures/item/netherite_upgrade_smithing_template.png",
+      "sha256": "c87c27232353eb8841c92ffa584534c4d32e521d68363da07c95ea9a8edacd01",
+      "size": 197
+    },
+    {
+      "path": "vanilla/textures/item/potion.png",
+      "sha256": "6a09a39bb6c41bc92bd5eca1f51caf5b582a85f68206b164476c8e14a4669416",
+      "size": 165
+    },
+    {
+      "path": "vanilla/textures/item/potion_overlay.png",
+      "sha256": "606f372ad8b832a8659c54adb5da0ace0bcc74b471b84211076197cb3c557043",
+      "size": 124
+    },
+    {
+      "path": "vanilla/textures/item/written_book.png",
+      "sha256": "8de9612f80a0a0727a6167453087f66d4bec700b0e4c03d6b6b1817034c935ba",
+      "size": 199
+    },
+    {
+      "path": "vanilla/textures/block/light_blue_shulker_box.png",
+      "sha256": "d6ab1f3c8ed8d0a4d72910f81385efa78225fa438f6148843cf342ed81bd806c",
+      "size": 268
+    },
+    {
+      "path": "vanilla/textures/block/light_blue_stained_glass.png",
+      "sha256": "9e42d238c974136ca7c16ff434c825064b78a4d82341708638a76ffd844c544f",
+      "size": 106
+    },
+    {
+      "path": "vanilla/textures/block/oak_log.png",
+      "sha256": "61735859c9c9ea82601191a77c6f256d93619cbaf7cad998a3ed5762877a34e6",
+      "size": 191
+    },
+    {
+      "path": "vanilla/textures/block/weathered_cut_copper.png",
+      "sha256": "7fe4ff5274baa27d40c0170a81d4ae5612e97f71e01a4a9d5d78ad96a5e2ea0c",
+      "size": 201
+    },
+    {
+      "path": "vanilla/textures/trims/items/chestplate_trim.png",
+      "sha256": "541e132cbc58e17abc81ca69285abd2787fce37b76072159d65a74b36487d7f1",
+      "size": 115
+    },
+    {
+      "path": "vanilla/textures/gui/sprites/container/slot.png",
+      "sha256": "11d26999221149d67619689e11fef2367b47ca2e8ac7c7fe9817846268da7f80",
+      "size": 83
+    },
+    {
+      "path": "vanilla/textures/gui/container/shulker_box.png",
+      "sha256": "55f7474b17b6944bb213a5b73ebd2b47e34a31207363c358d1c7f9207cd15887",
+      "size": 325
+    },
+    {
+      "path": "vanilla/textures/gui/sprites/container/bundle/bundle_progressbar_border.png",
+      "sha256": "b036e9d53f96f93e591d97ec2c1f7c551887b91c9e64913afc4f04d62a645552",
+      "size": 89
+    },
+    {
+      "path": "vanilla/textures/gui/sprites/container/bundle/bundle_progressbar_fill.png",
+      "sha256": "e668bc423acd15dfc846d655aa94c029d96f4b660787a95cb03e5a07732a1e63",
+      "size": 81
+    },
+    {
+      "path": "vanilla/textures/gui/sprites/container/bundle/bundle_progressbar_full.png",
+      "sha256": "2caf2175649fed5fc989bcfd2c6609d61e8346f5ca9bd213279c0f90786ab7de",
+      "size": 81
+    },
+    {
+      "path": "vanilla/textures/gui/sprites/container/bundle/slot_background.png",
+      "sha256": "6db0248819f6f1ad9a8c1adeac8df0f165262f36c9dbc5bd32110b5d5429dc44",
+      "size": 101
+    }
+  ]
+}
