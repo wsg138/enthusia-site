@@ -1,2 +1,4 @@
 dist/
 .visual-test/
+__pycache__/
+*.pyc

@@ -6,6 +6,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/validate-site.mjs",
+    "mask-editor": "python scripts/cinematic-mask-editor.py",
     "test": "npm run check"
   }
 }

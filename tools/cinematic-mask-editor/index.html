@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Enthusia Cinematic Mask Editor</title>
+  <link rel="stylesheet" href="editor.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="kicker">LOCAL REVIEW TOOL</p>
+      <h1>Cinematic terrain-mask editor</h1>
+      <p>Paint only what should physically cover or reveal the sun and moon. The active website mask is never overwritten.</p>
+    </div>
+    <div class="save-area">
+      <button id="validateBtn" class="button secondary">Validate</button>
+      <button id="saveBtn" class="button primary">Save Repairs</button>
+      <div id="saveStatus" class="status" role="status" aria-live="polite">No unsaved strokes</div>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <aside class="sidebar left-panel" aria-label="Editing tools">
+      <section>
+        <h2>1. Choose a tool</h2>
+        <div class="tool-grid" role="group" aria-label="Brush tools">
+          <button class="tool active terrain" data-tool="terrain"><strong>Terrain</strong><span>Cover the sun/moon</span></button>
+          <button class="tool sky" data-tool="sky"><strong>Sky</strong><span>Let the background show</span></button>
+          <button class="tool edge" data-tool="edge"><strong>Soft edge</strong><span>Rarely needed; narrow edge only</span></button>
+          <button class="tool" data-tool="pan"><strong>Pan</strong><span>Move around the image</span></button>
+          <button class="tool" data-tool="inspect"><strong>Inspect</strong><span>Read a pixel</span></button>
+        </div>
+      </section>
+
+      <section>
+        <h2>2. Brush</h2>
+        <label>Size <output id="brushSizeOutput">4 px</output>
+          <input id="brushSize" type="range" min="1" max="16" step="1" value="4" list="brushSizes" />
+        </label>
+        <datalist id="brushSizes"><option value="1"><option value="2"><option value="4"><option value="8"><option value="16"></datalist>
+        <div class="brush-presets" aria-label="Recommended brush sizes">
+          <button data-size="1">1</button><button data-size="2">2</button><button data-size="4">4</button><button data-size="8">8</button><button data-size="16">16</button>
+        </div>
+        <label>Hardness <output id="hardnessOutput">100%</output>
+          <input id="hardness" type="range" min="20" max="100" step="5" value="100" />
+        </label>
+      </section>
+
+      <section>
+        <h2>History</h2>
+        <div class="button-row">
+          <button id="undoBtn" class="button secondary">Undo</button>
+          <button id="redoBtn" class="button secondary">Redo</button>
+        </div>
+        <button id="clearStrokeBtn" class="button quiet wide">Clear current stroke</button>
+        <button id="resetCheckpointBtn" class="button quiet wide">Reset current checkpoint</button>
+        <button id="resetAllBtn" class="button danger wide">Reset all unsaved changes</button>
+      </section>
+
+      <section class="suggestion-box">
+        <h2>Conservative suggestion</h2>
+        <p>Bright green pixels are local suggestions only. Tree gaps are intentionally left uncertain.</p>
+        <div class="button-stack">
+          <button id="acceptSuggestionBtn" class="button suggestion">Accept suggestion</button>
+          <button id="rejectSuggestionBtn" class="button secondary">Reject suggestion</button>
+          <button id="clearSuggestionsBtn" class="button quiet">Clear all suggestions</button>
+        </div>
+      </section>
+    </aside>
+
+    <section class="workspace" aria-label="Scene editor">
+      <div class="checkpoint-bar">
+        <button id="previousCheckpoint" class="button secondary" aria-label="Previous checkpoint">← Previous</button>
+        <div id="checkpointButtons" class="checkpoint-buttons"></div>
+        <button id="nextCheckpoint" class="button secondary" aria-label="Next checkpoint">Next →</button>
+      </div>
+
+      <div class="viewbar">
+        <label>View
+          <select id="viewMode">
+            <option value="final">Final scene preview</option>
+            <option value="landscape">Original phase landscape</option>
+            <option value="mask">Terrain mask overlay</option>
+            <option value="foreground">Foreground by itself</option>
+            <option value="disk">Celestial disk without glow</option>
+            <option value="glow">Celestial disk with glow</option>
+            <option value="add">Repair-add overlay</option>
+            <option value="subtract">Repair-subtract overlay</option>
+            <option value="split">Before / after split</option>
+          </select>
+        </label>
+        <label>Progress <output id="progressOutput">0.28</output>
+          <input id="progressSlider" type="range" min="0" max="1" step="0.001" value="0.28" />
+        </label>
+        <label class="toggle"><input id="glowToggle" type="checkbox" checked /> Glow</label>
+        <label class="toggle"><input id="overlayToggle" type="checkbox" checked /> Repairs</label>
+        <label id="splitControl" hidden>Split <output id="splitOutput">50%</output>
+          <input id="splitSlider" type="range" min="10" max="90" value="50" />
+        </label>
+      </div>
+
+      <div id="viewport" class="viewport" tabindex="0" aria-label="Editable cinematic scene">
+        <div id="stage" class="stage">
+          <canvas id="sceneCanvas" width="1672" height="941"></canvas>
+          <canvas id="editCanvas" width="1672" height="941"></canvas>
+          <div id="brushCursor" class="brush-cursor" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="zoom-row">
+        <button id="zoomOutBtn" class="button secondary">− Zoom out</button>
+        <output id="zoomOutput">100%</output>
+        <button id="zoomInBtn" class="button secondary">+ Zoom in</button>
+        <button id="resetViewBtn" class="button quiet">Reset view</button>
+        <span class="hint">Mouse wheel zooms · Space-drag pans · Pixel grid appears at 800%</span>
+      </div>
+    </section>
+
+    <aside class="sidebar right-panel" aria-label="Pixel information and exports">
+      <section>
+        <h2>Pixel inspector</h2>
+        <dl class="inspector">
+          <div><dt>Scene coordinate</dt><dd id="inspectCoord">—</dd></div>
+          <div><dt>Base mask alpha</dt><dd id="inspectBase">—</dd></div>
+          <div><dt>Repair-add alpha</dt><dd id="inspectAdd">—</dd></div>
+          <div><dt>Repair-subtract alpha</dt><dd id="inspectSubtract">—</dd></div>
+          <div><dt>Final alpha</dt><dd id="inspectFinal">—</dd></div>
+          <div><dt>Source RGB</dt><dd id="inspectRgb">—</dd></div>
+        </dl>
+      </section>
+
+      <section>
+        <h2>Checkpoint</h2>
+        <p id="checkpointDescription">Sun behind right trees · progress 0.28</p>
+        <p class="plain-help"><strong>Terrain</strong> paints over objects that should hide the disk. <strong>Sky</strong> is only for real holes. Turn glow off before judging an edge.</p>
+      </section>
+
+      <section>
+        <h2>Validation</h2>
+        <ul id="validationResults" class="validation-list"><li>Click Validate when you finish all checkpoints.</li></ul>
+      </section>
+
+      <section>
+        <h2>Backup exports</h2>
+        <div class="button-stack">
+          <button id="exportAddBtn" class="button secondary">Export add PNG</button>
+          <button id="exportSubtractBtn" class="button secondary">Export subtract PNG</button>
+          <button id="exportJsonBtn" class="button secondary">Export repair JSON</button>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <dialog id="confirmDialog">
+    <form method="dialog">
+      <h2 id="confirmTitle">Confirm reset</h2>
+      <p id="confirmMessage"></p>
+      <div class="button-row end"><button value="cancel" class="button secondary">Cancel</button><button value="confirm" class="button danger">Confirm</button></div>
+    </form>
+  </dialog>
+
+  <script src="editor.js" defer></script>
+</body>
+</html>
