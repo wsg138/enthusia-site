@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "generatedAt": "2026-07-13T12:00:00-04:00",
   "sampleData": true,
   "buildings": [
@@ -78,7 +78,9 @@
       "owner": {
         "type": "NONE",
         "id": null,
+        "uuid": null,
         "name": "Unowned stall",
+        "avatarUrl": null,
         "avatar": {
           "kind": "NONE"
         }
@@ -101,9 +103,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-2",
+        "uuid": "00000000-0000-4000-8000-000000000002",
         "name": "CopperFox",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -118,34 +124,80 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "ENCHANTED_BOOK",
-            "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
+            "material": "RED_SHULKER_BOX",
+            "displayName": "Red Shulker Box",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "storedEnchantments": [
-                {
-                  "id": "minecraft:protection",
-                  "displayName": "Protection",
-                  "level": 4
-                },
-                {
-                  "id": "minecraft:unbreaking",
-                  "displayName": "Unbreaking",
-                  "level": 3
-                },
-                {
-                  "id": "minecraft:mending",
-                  "displayName": "Mending",
-                  "level": 1
-                }
-              ]
+              "shulkerColor": "Red",
+              "container": {
+                "type": "SHULKER",
+                "slots": 27,
+                "contents": [
+                  {
+                    "slot": 1,
+                    "item": {
+                      "material": "IRON_INGOT",
+                      "displayName": "Iron Ingot",
+                      "amount": 32,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "slot": 10,
+                    "item": {
+                      "material": "NETHERITE_CHESTPLATE",
+                      "displayName": "Netherite Chestplate",
+                      "amount": 1,
+                      "icon": null,
+                      "metadata": {
+                        "customName": "Emberguard Plate",
+                        "enchantments": [
+                          {
+                            "id": "minecraft:protection",
+                            "displayName": "Protection",
+                            "level": 4
+                          }
+                        ],
+                        "armorTrim": {
+                          "pattern": "Spire",
+                          "material": "Gold"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "slot": 20,
+                    "item": {
+                      "material": "SPLASH_POTION",
+                      "displayName": "Splash Potion of Swiftness",
+                      "amount": 1,
+                      "icon": null,
+                      "metadata": {
+                        "potion": {
+                          "basePotion": "Swiftness",
+                          "form": "SPLASH",
+                          "color": "#7CAFC6",
+                          "effects": [
+                            {
+                              "name": "Speed",
+                              "amplifier": 1,
+                              "durationSeconds": 67
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
             }
           },
           "costItem": {
-            "material": "EMERALD",
-            "displayName": "Emerald",
-            "amount": 6,
+            "material": "GOLD_INGOT",
+            "displayName": "Gold Ingot",
+            "amount": 4,
             "icon": null,
             "metadata": {}
           },
@@ -175,9 +227,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-3",
+        "uuid": "00000000-0000-4000-8000-000000000003",
         "name": "EmberWren",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -192,31 +248,113 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "NETHERITE_CHESTPLATE",
-            "displayName": "Netherite Chestplate",
+            "material": "DIAMOND",
+            "displayName": "Diamond",
+            "amount": 4,
+            "icon": null,
+            "metadata": {}
+          },
+          "costItem": {
+            "material": "PURPLE_SHULKER_BOX",
+            "displayName": "Purple Shulker Box",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Emberguard Plate",
-              "enchantments": [
-                {
-                  "id": "minecraft:protection",
-                  "displayName": "Protection",
-                  "level": 4
-                }
-              ],
-              "armorTrim": {
-                "pattern": "Spire",
-                "material": "Gold"
+              "shulkerColor": "Purple",
+              "container": {
+                "type": "SHULKER",
+                "slots": 27,
+                "contents": [
+                  {
+                    "slot": 2,
+                    "item": {
+                      "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
+                      "displayName": "Coast Armor Trim Smithing Template",
+                      "amount": 8,
+                      "icon": null,
+                      "metadata": {
+                        "smithingTemplate": {
+                          "type": "Coast Armor Trim"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "slot": 11,
+                    "item": {
+                      "material": "ENCHANTED_BOOK",
+                      "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
+                      "amount": 1,
+                      "icon": null,
+                      "metadata": {
+                        "storedEnchantments": [
+                          {
+                            "id": "minecraft:protection",
+                            "displayName": "Protection",
+                            "level": 4
+                          },
+                          {
+                            "id": "minecraft:unbreaking",
+                            "displayName": "Unbreaking",
+                            "level": 3
+                          },
+                          {
+                            "id": "minecraft:mending",
+                            "displayName": "Mending",
+                            "level": 1
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "slot": 22,
+                    "item": {
+                      "material": "BUNDLE",
+                      "displayName": "Bundle",
+                      "amount": 1,
+                      "icon": null,
+                      "metadata": {
+                        "container": {
+                          "type": "BUNDLE",
+                          "capacityUsed": 64,
+                          "capacityMax": 64,
+                          "contents": [
+                            {
+                              "item": {
+                                "material": "OAK_LOG",
+                                "displayName": "Oak Log",
+                                "amount": 24,
+                                "icon": null,
+                                "metadata": {}
+                              }
+                            },
+                            {
+                              "item": {
+                                "material": "IRON_INGOT",
+                                "displayName": "Iron Ingot",
+                                "amount": 12,
+                                "icon": null,
+                                "metadata": {}
+                              }
+                            },
+                            {
+                              "item": {
+                                "material": "ENDER_PEARL",
+                                "displayName": "Ender Pearl",
+                                "amount": 7,
+                                "icon": null,
+                                "metadata": {}
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
               }
             }
-          },
-          "costItem": {
-            "material": "DIAMOND",
-            "displayName": "Diamond",
-            "amount": 2,
-            "icon": null,
-            "metadata": {}
           },
           "interaction": {
             "world": "world",
@@ -244,9 +382,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-4",
+        "uuid": null,
         "name": "Cinder Market Cooperative",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-04-01T00:00:00Z",
@@ -263,27 +404,98 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "POTION",
-            "displayName": "Potion of Swiftness",
-            "amount": 2,
+            "material": "LIGHT_BLUE_SHULKER_BOX",
+            "displayName": "Light Blue Shulker Box",
+            "amount": 1,
             "icon": null,
             "metadata": {
-              "potion": {
-                "basePotion": "Swiftness",
-                "effects": [
+              "shulkerColor": "Light Blue",
+              "container": {
+                "type": "SHULKER",
+                "slots": 27,
+                "contents": [
                   {
-                    "name": "Speed",
-                    "amplifier": 1,
-                    "durationSeconds": 90
+                    "slot": 0,
+                    "item": {
+                      "material": "DIAMOND",
+                      "displayName": "Diamond",
+                      "amount": 16,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "slot": 4,
+                    "item": {
+                      "material": "ENCHANTED_BOOK",
+                      "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
+                      "amount": 1,
+                      "icon": null,
+                      "metadata": {
+                        "storedEnchantments": [
+                          {
+                            "id": "minecraft:protection",
+                            "displayName": "Protection",
+                            "level": 4
+                          },
+                          {
+                            "id": "minecraft:unbreaking",
+                            "displayName": "Unbreaking",
+                            "level": 3
+                          },
+                          {
+                            "id": "minecraft:mending",
+                            "displayName": "Mending",
+                            "level": 1
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "slot": 13,
+                    "item": {
+                      "material": "POTION",
+                      "displayName": "Potion of Fire Resistance",
+                      "amount": 1,
+                      "icon": null,
+                      "metadata": {
+                        "potion": {
+                          "basePotion": "Fire Resistance",
+                          "color": "#E49A3A",
+                          "effects": [
+                            {
+                              "name": "Fire Resistance",
+                              "amplifier": 0,
+                              "durationSeconds": 180
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "slot": 26,
+                    "item": {
+                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
+                      "displayName": "Netherite Upgrade Smithing Template",
+                      "amount": 2,
+                      "icon": null,
+                      "metadata": {
+                        "smithingTemplate": {
+                          "type": "Netherite Upgrade"
+                        }
+                      }
+                    }
                   }
                 ]
               }
             }
           },
           "costItem": {
-            "material": "GOLD_NUGGET",
-            "displayName": "Gold Nugget",
-            "amount": 18,
+            "material": "EMERALD",
+            "displayName": "Emerald",
+            "amount": 6,
             "icon": null,
             "metadata": {}
           },
@@ -313,9 +525,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-5",
+        "uuid": "00000000-0000-4000-8000-000000000005",
         "name": "QuartzBee",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -373,9 +589,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-6",
+        "uuid": "00000000-0000-4000-8000-000000000006",
         "name": "RiverOak",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-06-01T00:00:00Z",
@@ -390,89 +610,44 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "LIGHT_BLUE_SHULKER_BOX",
-            "displayName": "Light Blue Shulker Box",
+            "material": "IRON_INGOT",
+            "displayName": "Iron Ingot",
+            "amount": 16,
+            "icon": null,
+            "metadata": {}
+          },
+          "costItem": {
+            "material": "BUNDLE",
+            "displayName": "Bundle",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "shulkerColor": "Light Blue",
               "container": {
-                "type": "SHULKER",
-                "slots": 27,
+                "type": "BUNDLE",
+                "capacityUsed": 12,
+                "capacityMax": 64,
                 "contents": [
                   {
-                    "slot": 0,
                     "item": {
                       "material": "DIAMOND",
                       "displayName": "Diamond",
-                      "amount": 16,
+                      "amount": 4,
                       "icon": null,
                       "metadata": {}
                     }
                   },
                   {
-                    "slot": 4,
                     "item": {
-                      "material": "ENCHANTED_BOOK",
-                      "displayName": "Enchanted Book",
-                      "amount": 1,
+                      "material": "GOLD_INGOT",
+                      "displayName": "Gold Ingot",
+                      "amount": 8,
                       "icon": null,
-                      "metadata": {
-                        "enchantments": [
-                          {
-                            "id": "minecraft:mending",
-                            "displayName": "Mending",
-                            "level": 1
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "slot": 13,
-                    "item": {
-                      "material": "POTION",
-                      "displayName": "Potion of Fire Resistance",
-                      "amount": 3,
-                      "icon": null,
-                      "metadata": {
-                        "potion": {
-                          "basePotion": "Fire Resistance",
-                          "effects": [
-                            {
-                              "name": "Fire Resistance",
-                              "amplifier": 0,
-                              "durationSeconds": 180
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "slot": 26,
-                    "item": {
-                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
-                      "displayName": "Netherite Upgrade Smithing Template",
-                      "amount": 2,
-                      "icon": null,
-                      "metadata": {
-                        "smithingTemplate": {
-                          "type": "Netherite Upgrade"
-                        }
-                      }
+                      "metadata": {}
                     }
                   }
                 ]
               }
             }
-          },
-          "costItem": {
-            "material": "EMERALD",
-            "displayName": "Emerald",
-            "amount": 6,
-            "icon": null,
-            "metadata": {}
           },
           "interaction": {
             "world": "world",
@@ -500,9 +675,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-7",
+        "uuid": null,
         "name": "TheVeryLongGuildNameOfEnthusia",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-01-01T00:00:00Z",
@@ -519,17 +697,44 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "WRITTEN_BOOK",
-            "displayName": "Market Almanac",
+            "material": "BUNDLE",
+            "displayName": "Bundle",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Market Almanac",
-              "writtenBook": {
-                "title": "The Enthusia Market Almanac",
-                "author": "Wayfinder",
-                "generation": "Original",
-                "pageCount": 18
+              "container": {
+                "type": "BUNDLE",
+                "capacityUsed": 64,
+                "capacityMax": 64,
+                "contents": [
+                  {
+                    "item": {
+                      "material": "OAK_LOG",
+                      "displayName": "Oak Log",
+                      "amount": 24,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "item": {
+                      "material": "IRON_INGOT",
+                      "displayName": "Iron Ingot",
+                      "amount": 12,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "item": {
+                      "material": "ENDER_PEARL",
+                      "displayName": "Ender Pearl",
+                      "amount": 7,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  }
+                ]
               }
             }
           },
@@ -566,9 +771,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-8",
+        "uuid": "00000000-0000-4000-8000-000000000008",
         "name": "P2wn",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -584,14 +793,13 @@
           "direction": "BUY",
           "sellItem": {
             "material": "BUNDLE",
-            "displayName": "Explorer's Bundle",
+            "displayName": "Bundle",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Explorer's Bundle",
               "container": {
                 "type": "BUNDLE",
-                "capacityUsed": 43,
+                "capacityUsed": 64,
                 "capacityMax": 64,
                 "contents": [
                   {
@@ -658,9 +866,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-9",
+        "uuid": "00000000-0000-4000-8000-000000000009",
         "name": "CopperFox",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -714,7 +926,9 @@
       "owner": {
         "type": "NONE",
         "id": null,
+        "uuid": null,
         "name": "Unowned stall",
+        "avatarUrl": null,
         "avatar": {
           "kind": "NONE"
         }
@@ -737,9 +951,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-11",
+        "uuid": "00000000-0000-4000-8000-000000000011",
         "name": "ExtremelyLongMinecraftUsername",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -793,9 +1011,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-12",
+        "uuid": "00000000-0000-4000-8000-000000000012",
         "name": "QuartzBee",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-06-01T00:00:00Z",
@@ -849,9 +1071,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-13",
+        "uuid": null,
         "name": "Sunward Guild",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-01-01T00:00:00Z",
@@ -868,11 +1093,24 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "DIAMOND",
-            "displayName": "Diamond",
-            "amount": 8,
+            "material": "LINGERING_POTION",
+            "displayName": "Lingering Potion of Fire Resistance",
+            "amount": 1,
             "icon": null,
-            "metadata": {}
+            "metadata": {
+              "potion": {
+                "basePotion": "Fire Resistance",
+                "form": "LINGERING",
+                "color": "#E49A3A",
+                "effects": [
+                  {
+                    "name": "Fire Resistance",
+                    "amplifier": 0,
+                    "durationSeconds": 45
+                  }
+                ]
+              }
+            }
           },
           "costItem": {
             "material": "GOLD_INGOT",
@@ -907,9 +1145,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-14",
+        "uuid": "00000000-0000-4000-8000-000000000014",
         "name": "NetherCartographer",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -924,29 +1166,11 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "ENCHANTED_BOOK",
-            "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
-            "amount": 1,
+            "material": "DIAMOND",
+            "displayName": "Diamond",
+            "amount": 8,
             "icon": null,
-            "metadata": {
-              "storedEnchantments": [
-                {
-                  "id": "minecraft:protection",
-                  "displayName": "Protection",
-                  "level": 4
-                },
-                {
-                  "id": "minecraft:unbreaking",
-                  "displayName": "Unbreaking",
-                  "level": 3
-                },
-                {
-                  "id": "minecraft:mending",
-                  "displayName": "Mending",
-                  "level": 1
-                }
-              ]
-            }
+            "metadata": {}
           },
           "costItem": {
             "material": "EMERALD",
@@ -981,9 +1205,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-15",
+        "uuid": "00000000-0000-4000-8000-000000000015",
         "name": "P2wn",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -998,23 +1226,28 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "NETHERITE_CHESTPLATE",
-            "displayName": "Netherite Chestplate",
+            "material": "ENCHANTED_BOOK",
+            "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Emberguard Plate",
-              "enchantments": [
+              "storedEnchantments": [
                 {
                   "id": "minecraft:protection",
                   "displayName": "Protection",
                   "level": 4
+                },
+                {
+                  "id": "minecraft:unbreaking",
+                  "displayName": "Unbreaking",
+                  "level": 3
+                },
+                {
+                  "id": "minecraft:mending",
+                  "displayName": "Mending",
+                  "level": 1
                 }
-              ],
-              "armorTrim": {
-                "pattern": "Spire",
-                "material": "Gold"
-              }
+              ]
             }
           },
           "costItem": {
@@ -1050,9 +1283,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-16",
+        "uuid": null,
         "name": "Cinder Market Cooperative",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-04-01T00:00:00Z",
@@ -1069,20 +1305,22 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "POTION",
-            "displayName": "Potion of Swiftness",
-            "amount": 2,
+            "material": "NETHERITE_CHESTPLATE",
+            "displayName": "Netherite Chestplate",
+            "amount": 1,
             "icon": null,
             "metadata": {
-              "potion": {
-                "basePotion": "Swiftness",
-                "effects": [
-                  {
-                    "name": "Speed",
-                    "amplifier": 1,
-                    "durationSeconds": 90
-                  }
-                ]
+              "customName": "Emberguard Plate",
+              "enchantments": [
+                {
+                  "id": "minecraft:protection",
+                  "displayName": "Protection",
+                  "level": 4
+                }
+              ],
+              "armorTrim": {
+                "pattern": "Spire",
+                "material": "Gold"
               }
             }
           },
@@ -1119,9 +1357,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-17",
+        "uuid": "00000000-0000-4000-8000-000000000017",
         "name": "EmberWren",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -1136,13 +1378,21 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-            "displayName": "Coast Armor Trim Smithing Template",
+            "material": "POTION",
+            "displayName": "Potion of Swiftness",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "smithingTemplate": {
-                "type": "Coast Armor Trim"
+              "potion": {
+                "basePotion": "Swiftness",
+                "color": "#7CAFC6",
+                "effects": [
+                  {
+                    "name": "Speed",
+                    "amplifier": 1,
+                    "durationSeconds": 90
+                  }
+                ]
               }
             }
           },
@@ -1179,9 +1429,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-18",
+        "uuid": "00000000-0000-4000-8000-000000000018",
         "name": "ExtremelyLongMinecraftUsername",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-06-01T00:00:00Z",
@@ -1196,125 +1450,22 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "LIGHT_BLUE_SHULKER_BOX",
-            "displayName": "Light Blue Shulker Box",
+            "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
+            "displayName": "Coast Armor Trim Smithing Template",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "shulkerColor": "Light Blue",
-              "container": {
-                "type": "SHULKER",
-                "slots": 27,
-                "contents": [
-                  {
-                    "slot": 0,
-                    "item": {
-                      "material": "DIAMOND",
-                      "displayName": "Diamond",
-                      "amount": 16,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "slot": 4,
-                    "item": {
-                      "material": "ENCHANTED_BOOK",
-                      "displayName": "Enchanted Book",
-                      "amount": 1,
-                      "icon": null,
-                      "metadata": {
-                        "enchantments": [
-                          {
-                            "id": "minecraft:mending",
-                            "displayName": "Mending",
-                            "level": 1
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "slot": 13,
-                    "item": {
-                      "material": "POTION",
-                      "displayName": "Potion of Fire Resistance",
-                      "amount": 3,
-                      "icon": null,
-                      "metadata": {
-                        "potion": {
-                          "basePotion": "Fire Resistance",
-                          "effects": [
-                            {
-                              "name": "Fire Resistance",
-                              "amplifier": 0,
-                              "durationSeconds": 180
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "slot": 26,
-                    "item": {
-                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
-                      "displayName": "Netherite Upgrade Smithing Template",
-                      "amount": 2,
-                      "icon": null,
-                      "metadata": {
-                        "smithingTemplate": {
-                          "type": "Netherite Upgrade"
-                        }
-                      }
-                    }
-                  }
-                ]
+              "smithingTemplate": {
+                "type": "Coast Armor Trim"
               }
             }
           },
           "costItem": {
-            "material": "BUNDLE",
-            "displayName": "Explorer's Bundle",
-            "amount": 1,
+            "material": "EMERALD",
+            "displayName": "Emerald",
+            "amount": 6,
             "icon": null,
-            "metadata": {
-              "customName": "Explorer's Bundle",
-              "container": {
-                "type": "BUNDLE",
-                "capacityUsed": 43,
-                "capacityMax": 64,
-                "contents": [
-                  {
-                    "item": {
-                      "material": "OAK_LOG",
-                      "displayName": "Oak Log",
-                      "amount": 24,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "IRON_INGOT",
-                      "displayName": "Iron Ingot",
-                      "amount": 12,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "ENDER_PEARL",
-                      "displayName": "Ender Pearl",
-                      "amount": 7,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  }
-                ]
-              }
-            }
+            "metadata": {}
           },
           "interaction": {
             "world": "world",
@@ -1342,7 +1493,9 @@
       "owner": {
         "type": "NONE",
         "id": null,
+        "uuid": null,
         "name": "Unowned stall",
+        "avatarUrl": null,
         "avatar": {
           "kind": "NONE"
         }
@@ -1365,9 +1518,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-20",
+        "uuid": "00000000-0000-4000-8000-000000000020",
         "name": "RiverOak",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -1382,80 +1539,17 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "LIGHT_BLUE_SHULKER_BOX",
-            "displayName": "Light Blue Shulker Box",
+            "material": "WRITTEN_BOOK",
+            "displayName": "Market Almanac",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "shulkerColor": "Light Blue",
-              "container": {
-                "type": "SHULKER",
-                "slots": 27,
-                "contents": [
-                  {
-                    "slot": 0,
-                    "item": {
-                      "material": "DIAMOND",
-                      "displayName": "Diamond",
-                      "amount": 16,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "slot": 4,
-                    "item": {
-                      "material": "ENCHANTED_BOOK",
-                      "displayName": "Enchanted Book",
-                      "amount": 1,
-                      "icon": null,
-                      "metadata": {
-                        "enchantments": [
-                          {
-                            "id": "minecraft:mending",
-                            "displayName": "Mending",
-                            "level": 1
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "slot": 13,
-                    "item": {
-                      "material": "POTION",
-                      "displayName": "Potion of Fire Resistance",
-                      "amount": 3,
-                      "icon": null,
-                      "metadata": {
-                        "potion": {
-                          "basePotion": "Fire Resistance",
-                          "effects": [
-                            {
-                              "name": "Fire Resistance",
-                              "amplifier": 0,
-                              "durationSeconds": 180
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "slot": 26,
-                    "item": {
-                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
-                      "displayName": "Netherite Upgrade Smithing Template",
-                      "amount": 2,
-                      "icon": null,
-                      "metadata": {
-                        "smithingTemplate": {
-                          "type": "Netherite Upgrade"
-                        }
-                      }
-                    }
-                  }
-                ]
+              "customName": "Market Almanac",
+              "writtenBook": {
+                "title": "The Enthusia Market Almanac",
+                "author": "Wayfinder",
+                "generation": "Original",
+                "pageCount": 18
               }
             }
           },
@@ -1492,9 +1586,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-21",
+        "uuid": "00000000-0000-4000-8000-000000000021",
         "name": "NetherCartographer",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -1509,11 +1607,46 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "OAK_LOG",
-            "displayName": "Oak Log",
-            "amount": 16,
+            "material": "BUNDLE",
+            "displayName": "Bundle",
+            "amount": 1,
             "icon": null,
-            "metadata": {}
+            "metadata": {
+              "container": {
+                "type": "BUNDLE",
+                "capacityUsed": 64,
+                "capacityMax": 64,
+                "contents": [
+                  {
+                    "item": {
+                      "material": "OAK_LOG",
+                      "displayName": "Oak Log",
+                      "amount": 24,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "item": {
+                      "material": "IRON_INGOT",
+                      "displayName": "Iron Ingot",
+                      "amount": 12,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "item": {
+                      "material": "ENDER_PEARL",
+                      "displayName": "Ender Pearl",
+                      "amount": 7,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  }
+                ]
+              }
+            }
           },
           "costItem": {
             "material": "GOLD_INGOT",
@@ -1548,9 +1681,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-22",
+        "uuid": null,
         "name": "KIRK Guild",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-04-01T00:00:00Z",
@@ -1567,9 +1703,9 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "IRON_INGOT",
-            "displayName": "Iron Ingot",
-            "amount": 12,
+            "material": "OAK_LOG",
+            "displayName": "Oak Log",
+            "amount": 16,
             "icon": null,
             "metadata": {}
           },
@@ -1606,9 +1742,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-23",
+        "uuid": "00000000-0000-4000-8000-000000000023",
         "name": "CopperFox",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -1623,9 +1763,9 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
-            "displayName": "Waxed Weathered Cut Copper Stairs",
-            "amount": 8,
+            "material": "IRON_INGOT",
+            "displayName": "Iron Ingot",
+            "amount": 12,
             "icon": null,
             "metadata": {}
           },
@@ -1662,9 +1802,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-24",
+        "uuid": "00000000-0000-4000-8000-000000000024",
         "name": "EmberWren",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-06-01T00:00:00Z",
@@ -1679,9 +1823,9 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
-            "displayName": "Light Blue Stained Glass Pane",
-            "amount": 16,
+            "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
+            "displayName": "Waxed Weathered Cut Copper Stairs",
+            "amount": 8,
             "icon": null,
             "metadata": {}
           },
@@ -1718,9 +1862,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-25",
+        "uuid": null,
         "name": "Sunward Guild",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-01-01T00:00:00Z",
@@ -1737,9 +1884,9 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "DIAMOND",
-            "displayName": "Diamond",
-            "amount": 8,
+            "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
+            "displayName": "Light Blue Stained Glass Pane",
+            "amount": 16,
             "icon": null,
             "metadata": {}
           },
@@ -1776,9 +1923,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-26",
+        "uuid": "00000000-0000-4000-8000-000000000026",
         "name": "QuartzBee",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -1793,28 +1944,23 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "ENCHANTED_BOOK",
-            "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
+            "material": "LINGERING_POTION",
+            "displayName": "Lingering Potion of Fire Resistance",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "storedEnchantments": [
-                {
-                  "id": "minecraft:protection",
-                  "displayName": "Protection",
-                  "level": 4
-                },
-                {
-                  "id": "minecraft:unbreaking",
-                  "displayName": "Unbreaking",
-                  "level": 3
-                },
-                {
-                  "id": "minecraft:mending",
-                  "displayName": "Mending",
-                  "level": 1
-                }
-              ]
+              "potion": {
+                "basePotion": "Fire Resistance",
+                "form": "LINGERING",
+                "color": "#E49A3A",
+                "effects": [
+                  {
+                    "name": "Fire Resistance",
+                    "amplifier": 0,
+                    "durationSeconds": 45
+                  }
+                ]
+              }
             }
           },
           "costItem": {
@@ -1850,9 +1996,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-27",
+        "uuid": "00000000-0000-4000-8000-000000000027",
         "name": "RiverOak",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -1867,24 +2017,11 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "NETHERITE_CHESTPLATE",
-            "displayName": "Netherite Chestplate",
-            "amount": 1,
+            "material": "DIAMOND",
+            "displayName": "Diamond",
+            "amount": 8,
             "icon": null,
-            "metadata": {
-              "customName": "Emberguard Plate",
-              "enchantments": [
-                {
-                  "id": "minecraft:protection",
-                  "displayName": "Protection",
-                  "level": 4
-                }
-              ],
-              "armorTrim": {
-                "pattern": "Spire",
-                "material": "Gold"
-              }
-            }
+            "metadata": {}
           },
           "costItem": {
             "material": "DIAMOND",
@@ -1919,7 +2056,9 @@
       "owner": {
         "type": "NONE",
         "id": null,
+        "uuid": null,
         "name": "Unowned stall",
+        "avatarUrl": null,
         "avatar": {
           "kind": "NONE"
         }
@@ -1942,9 +2081,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-29",
+        "uuid": "00000000-0000-4000-8000-000000000029",
         "name": "P2wn",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -1959,13 +2102,22 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-            "displayName": "Coast Armor Trim Smithing Template",
+            "material": "NETHERITE_CHESTPLATE",
+            "displayName": "Netherite Chestplate",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "smithingTemplate": {
-                "type": "Coast Armor Trim"
+              "customName": "Emberguard Plate",
+              "enchantments": [
+                {
+                  "id": "minecraft:protection",
+                  "displayName": "Protection",
+                  "level": 4
+                }
+              ],
+              "armorTrim": {
+                "pattern": "Spire",
+                "material": "Gold"
               }
             }
           },
@@ -2002,9 +2154,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-30",
+        "uuid": "00000000-0000-4000-8000-000000000030",
         "name": "CopperFox",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-06-01T00:00:00Z",
@@ -2019,78 +2175,19 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "LIGHT_BLUE_SHULKER_BOX",
-            "displayName": "Light Blue Shulker Box",
+            "material": "POTION",
+            "displayName": "Potion of Swiftness",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "shulkerColor": "Light Blue",
-              "container": {
-                "type": "SHULKER",
-                "slots": 27,
-                "contents": [
+              "potion": {
+                "basePotion": "Swiftness",
+                "color": "#7CAFC6",
+                "effects": [
                   {
-                    "slot": 0,
-                    "item": {
-                      "material": "DIAMOND",
-                      "displayName": "Diamond",
-                      "amount": 16,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "slot": 4,
-                    "item": {
-                      "material": "ENCHANTED_BOOK",
-                      "displayName": "Enchanted Book",
-                      "amount": 1,
-                      "icon": null,
-                      "metadata": {
-                        "enchantments": [
-                          {
-                            "id": "minecraft:mending",
-                            "displayName": "Mending",
-                            "level": 1
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "slot": 13,
-                    "item": {
-                      "material": "POTION",
-                      "displayName": "Potion of Fire Resistance",
-                      "amount": 3,
-                      "icon": null,
-                      "metadata": {
-                        "potion": {
-                          "basePotion": "Fire Resistance",
-                          "effects": [
-                            {
-                              "name": "Fire Resistance",
-                              "amplifier": 0,
-                              "durationSeconds": 180
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "slot": 26,
-                    "item": {
-                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
-                      "displayName": "Netherite Upgrade Smithing Template",
-                      "amount": 2,
-                      "icon": null,
-                      "metadata": {
-                        "smithingTemplate": {
-                          "type": "Netherite Upgrade"
-                        }
-                      }
-                    }
+                    "name": "Speed",
+                    "amplifier": 1,
+                    "durationSeconds": 90
                   }
                 ]
               }
@@ -2129,9 +2226,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-31",
+        "uuid": null,
         "name": "TheVeryLongGuildNameOfEnthusia",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-01-01T00:00:00Z",
@@ -2148,17 +2248,13 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "WRITTEN_BOOK",
-            "displayName": "Market Almanac",
+            "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
+            "displayName": "Coast Armor Trim Smithing Template",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Market Almanac",
-              "writtenBook": {
-                "title": "The Enthusia Market Almanac",
-                "author": "Wayfinder",
-                "generation": "Original",
-                "pageCount": 18
+              "smithingTemplate": {
+                "type": "Coast Armor Trim"
               }
             }
           },
@@ -2195,9 +2291,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-32",
+        "uuid": "00000000-0000-4000-8000-000000000032",
         "name": "ExtremelyLongMinecraftUsername",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -2212,42 +2312,88 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "BUNDLE",
-            "displayName": "Explorer's Bundle",
+            "material": "LIGHT_BLUE_SHULKER_BOX",
+            "displayName": "Light Blue Shulker Box",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Explorer's Bundle",
+              "shulkerColor": "Light Blue",
               "container": {
-                "type": "BUNDLE",
-                "capacityUsed": 43,
-                "capacityMax": 64,
+                "type": "SHULKER",
+                "slots": 27,
                 "contents": [
                   {
+                    "slot": 0,
                     "item": {
-                      "material": "OAK_LOG",
-                      "displayName": "Oak Log",
-                      "amount": 24,
+                      "material": "DIAMOND",
+                      "displayName": "Diamond",
+                      "amount": 16,
                       "icon": null,
                       "metadata": {}
                     }
                   },
                   {
+                    "slot": 4,
                     "item": {
-                      "material": "IRON_INGOT",
-                      "displayName": "Iron Ingot",
-                      "amount": 12,
+                      "material": "ENCHANTED_BOOK",
+                      "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
+                      "amount": 1,
                       "icon": null,
-                      "metadata": {}
+                      "metadata": {
+                        "storedEnchantments": [
+                          {
+                            "id": "minecraft:protection",
+                            "displayName": "Protection",
+                            "level": 4
+                          },
+                          {
+                            "id": "minecraft:unbreaking",
+                            "displayName": "Unbreaking",
+                            "level": 3
+                          },
+                          {
+                            "id": "minecraft:mending",
+                            "displayName": "Mending",
+                            "level": 1
+                          }
+                        ]
+                      }
                     }
                   },
                   {
+                    "slot": 13,
                     "item": {
-                      "material": "ENDER_PEARL",
-                      "displayName": "Ender Pearl",
-                      "amount": 7,
+                      "material": "POTION",
+                      "displayName": "Potion of Fire Resistance",
+                      "amount": 1,
                       "icon": null,
-                      "metadata": {}
+                      "metadata": {
+                        "potion": {
+                          "basePotion": "Fire Resistance",
+                          "color": "#E49A3A",
+                          "effects": [
+                            {
+                              "name": "Fire Resistance",
+                              "amplifier": 0,
+                              "durationSeconds": 180
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "slot": 26,
+                    "item": {
+                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
+                      "displayName": "Netherite Upgrade Smithing Template",
+                      "amount": 2,
+                      "icon": null,
+                      "metadata": {
+                        "smithingTemplate": {
+                          "type": "Netherite Upgrade"
+                        }
+                      }
                     }
                   }
                 ]
@@ -2287,9 +2433,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-33",
+        "uuid": "00000000-0000-4000-8000-000000000033",
         "name": "QuartzBee",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -2304,11 +2454,19 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "OAK_LOG",
-            "displayName": "Oak Log",
-            "amount": 16,
+            "material": "WRITTEN_BOOK",
+            "displayName": "Market Almanac",
+            "amount": 1,
             "icon": null,
-            "metadata": {}
+            "metadata": {
+              "customName": "Market Almanac",
+              "writtenBook": {
+                "title": "The Enthusia Market Almanac",
+                "author": "Wayfinder",
+                "generation": "Original",
+                "pageCount": 18
+              }
+            }
           },
           "costItem": {
             "material": "GOLD_INGOT",
@@ -2343,9 +2501,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-34",
+        "uuid": null,
         "name": "KIRK Guild",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-04-01T00:00:00Z",
@@ -2362,11 +2523,46 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "IRON_INGOT",
-            "displayName": "Iron Ingot",
-            "amount": 12,
+            "material": "BUNDLE",
+            "displayName": "Bundle",
+            "amount": 1,
             "icon": null,
-            "metadata": {}
+            "metadata": {
+              "container": {
+                "type": "BUNDLE",
+                "capacityUsed": 64,
+                "capacityMax": 64,
+                "contents": [
+                  {
+                    "item": {
+                      "material": "OAK_LOG",
+                      "displayName": "Oak Log",
+                      "amount": 24,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "item": {
+                      "material": "IRON_INGOT",
+                      "displayName": "Iron Ingot",
+                      "amount": 12,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "item": {
+                      "material": "ENDER_PEARL",
+                      "displayName": "Ender Pearl",
+                      "amount": 7,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  }
+                ]
+              }
+            }
           },
           "costItem": {
             "material": "EMERALD",
@@ -2401,9 +2597,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-35",
+        "uuid": "00000000-0000-4000-8000-000000000035",
         "name": "NetherCartographer",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -2418,54 +2618,18 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
-            "displayName": "Waxed Weathered Cut Copper Stairs",
-            "amount": 8,
+            "material": "OAK_LOG",
+            "displayName": "Oak Log",
+            "amount": 16,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
-            "material": "BUNDLE",
-            "displayName": "Explorer's Bundle",
-            "amount": 1,
+            "material": "DIAMOND",
+            "displayName": "Diamond",
+            "amount": 2,
             "icon": null,
-            "metadata": {
-              "customName": "Explorer's Bundle",
-              "container": {
-                "type": "BUNDLE",
-                "capacityUsed": 43,
-                "capacityMax": 64,
-                "contents": [
-                  {
-                    "item": {
-                      "material": "OAK_LOG",
-                      "displayName": "Oak Log",
-                      "amount": 24,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "IRON_INGOT",
-                      "displayName": "Iron Ingot",
-                      "amount": 12,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "ENDER_PEARL",
-                      "displayName": "Ender Pearl",
-                      "amount": 7,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  }
-                ]
-              }
-            }
+            "metadata": {}
           },
           "interaction": {
             "world": "world",
@@ -2493,9 +2657,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-36",
+        "uuid": "00000000-0000-4000-8000-000000000036",
         "name": "P2wn",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-06-01T00:00:00Z",
@@ -2510,9 +2678,9 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
-            "displayName": "Light Blue Stained Glass Pane",
-            "amount": 16,
+            "material": "IRON_INGOT",
+            "displayName": "Iron Ingot",
+            "amount": 12,
             "icon": null,
             "metadata": {}
           },
@@ -2549,7 +2717,9 @@
       "owner": {
         "type": "NONE",
         "id": null,
+        "uuid": null,
         "name": "Unowned stall",
+        "avatarUrl": null,
         "avatar": {
           "kind": "NONE"
         }
@@ -2572,9 +2742,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-38",
+        "uuid": "00000000-0000-4000-8000-000000000038",
         "name": "EmberWren",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -2589,29 +2763,11 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "ENCHANTED_BOOK",
-            "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
-            "amount": 1,
+            "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
+            "displayName": "Light Blue Stained Glass Pane",
+            "amount": 16,
             "icon": null,
-            "metadata": {
-              "storedEnchantments": [
-                {
-                  "id": "minecraft:protection",
-                  "displayName": "Protection",
-                  "level": 4
-                },
-                {
-                  "id": "minecraft:unbreaking",
-                  "displayName": "Unbreaking",
-                  "level": 3
-                },
-                {
-                  "id": "minecraft:mending",
-                  "displayName": "Mending",
-                  "level": 1
-                }
-              ]
-            }
+            "metadata": {}
           },
           "costItem": {
             "material": "EMERALD",
@@ -2646,9 +2802,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-39",
+        "uuid": "00000000-0000-4000-8000-000000000039",
         "name": "ExtremelyLongMinecraftUsername",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -2663,78 +2823,20 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "LIGHT_BLUE_SHULKER_BOX",
-            "displayName": "Light Blue Shulker Box",
+            "material": "LINGERING_POTION",
+            "displayName": "Lingering Potion of Fire Resistance",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "shulkerColor": "Light Blue",
-              "container": {
-                "type": "SHULKER",
-                "slots": 27,
-                "contents": [
+              "potion": {
+                "basePotion": "Fire Resistance",
+                "form": "LINGERING",
+                "color": "#E49A3A",
+                "effects": [
                   {
-                    "slot": 0,
-                    "item": {
-                      "material": "DIAMOND",
-                      "displayName": "Diamond",
-                      "amount": 16,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "slot": 4,
-                    "item": {
-                      "material": "ENCHANTED_BOOK",
-                      "displayName": "Enchanted Book",
-                      "amount": 1,
-                      "icon": null,
-                      "metadata": {
-                        "enchantments": [
-                          {
-                            "id": "minecraft:mending",
-                            "displayName": "Mending",
-                            "level": 1
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "slot": 13,
-                    "item": {
-                      "material": "POTION",
-                      "displayName": "Potion of Fire Resistance",
-                      "amount": 3,
-                      "icon": null,
-                      "metadata": {
-                        "potion": {
-                          "basePotion": "Fire Resistance",
-                          "effects": [
-                            {
-                              "name": "Fire Resistance",
-                              "amplifier": 0,
-                              "durationSeconds": 180
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "slot": 26,
-                    "item": {
-                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
-                      "displayName": "Netherite Upgrade Smithing Template",
-                      "amount": 2,
-                      "icon": null,
-                      "metadata": {
-                        "smithingTemplate": {
-                          "type": "Netherite Upgrade"
-                        }
-                      }
-                    }
+                    "name": "Fire Resistance",
+                    "amplifier": 0,
+                    "durationSeconds": 45
                   }
                 ]
               }
@@ -2773,9 +2875,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-40",
+        "uuid": null,
         "name": "Cinder Market Cooperative",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-04-01T00:00:00Z",
@@ -2792,22 +2897,11 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "POTION",
-            "displayName": "Potion of Swiftness",
-            "amount": 2,
+            "material": "DIAMOND",
+            "displayName": "Diamond",
+            "amount": 8,
             "icon": null,
-            "metadata": {
-              "potion": {
-                "basePotion": "Swiftness",
-                "effects": [
-                  {
-                    "name": "Speed",
-                    "amplifier": 1,
-                    "durationSeconds": 90
-                  }
-                ]
-              }
-            }
+            "metadata": {}
           },
           "costItem": {
             "material": "GOLD_NUGGET",
@@ -2842,9 +2936,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-41",
+        "uuid": "00000000-0000-4000-8000-000000000041",
         "name": "RiverOak",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -2859,14 +2957,28 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-            "displayName": "Coast Armor Trim Smithing Template",
+            "material": "ENCHANTED_BOOK",
+            "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "smithingTemplate": {
-                "type": "Coast Armor Trim"
-              }
+              "storedEnchantments": [
+                {
+                  "id": "minecraft:protection",
+                  "displayName": "Protection",
+                  "level": 4
+                },
+                {
+                  "id": "minecraft:unbreaking",
+                  "displayName": "Unbreaking",
+                  "level": 3
+                },
+                {
+                  "id": "minecraft:mending",
+                  "displayName": "Mending",
+                  "level": 1
+                }
+              ]
             }
           },
           "costItem": {
@@ -2902,9 +3014,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-42",
+        "uuid": "00000000-0000-4000-8000-000000000042",
         "name": "NetherCartographer",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-06-01T00:00:00Z",
@@ -2919,80 +3035,22 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "LIGHT_BLUE_SHULKER_BOX",
-            "displayName": "Light Blue Shulker Box",
+            "material": "NETHERITE_CHESTPLATE",
+            "displayName": "Netherite Chestplate",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "shulkerColor": "Light Blue",
-              "container": {
-                "type": "SHULKER",
-                "slots": 27,
-                "contents": [
-                  {
-                    "slot": 0,
-                    "item": {
-                      "material": "DIAMOND",
-                      "displayName": "Diamond",
-                      "amount": 16,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "slot": 4,
-                    "item": {
-                      "material": "ENCHANTED_BOOK",
-                      "displayName": "Enchanted Book",
-                      "amount": 1,
-                      "icon": null,
-                      "metadata": {
-                        "enchantments": [
-                          {
-                            "id": "minecraft:mending",
-                            "displayName": "Mending",
-                            "level": 1
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "slot": 13,
-                    "item": {
-                      "material": "POTION",
-                      "displayName": "Potion of Fire Resistance",
-                      "amount": 3,
-                      "icon": null,
-                      "metadata": {
-                        "potion": {
-                          "basePotion": "Fire Resistance",
-                          "effects": [
-                            {
-                              "name": "Fire Resistance",
-                              "amplifier": 0,
-                              "durationSeconds": 180
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "slot": 26,
-                    "item": {
-                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
-                      "displayName": "Netherite Upgrade Smithing Template",
-                      "amount": 2,
-                      "icon": null,
-                      "metadata": {
-                        "smithingTemplate": {
-                          "type": "Netherite Upgrade"
-                        }
-                      }
-                    }
-                  }
-                ]
+              "customName": "Emberguard Plate",
+              "enchantments": [
+                {
+                  "id": "minecraft:protection",
+                  "displayName": "Protection",
+                  "level": 4
+                }
+              ],
+              "armorTrim": {
+                "pattern": "Spire",
+                "material": "Gold"
               }
             }
           },
@@ -3029,9 +3087,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-43",
+        "uuid": null,
         "name": "TheVeryLongGuildNameOfEnthusia",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-01-01T00:00:00Z",
@@ -3048,17 +3109,21 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "WRITTEN_BOOK",
-            "displayName": "Market Almanac",
+            "material": "POTION",
+            "displayName": "Potion of Swiftness",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Market Almanac",
-              "writtenBook": {
-                "title": "The Enthusia Market Almanac",
-                "author": "Wayfinder",
-                "generation": "Original",
-                "pageCount": 18
+              "potion": {
+                "basePotion": "Swiftness",
+                "color": "#7CAFC6",
+                "effects": [
+                  {
+                    "name": "Speed",
+                    "amplifier": 1,
+                    "durationSeconds": 90
+                  }
+                ]
               }
             }
           },
@@ -3095,9 +3160,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-44",
+        "uuid": "00000000-0000-4000-8000-000000000044",
         "name": "CopperFox",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -3112,45 +3181,13 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "BUNDLE",
-            "displayName": "Explorer's Bundle",
+            "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
+            "displayName": "Coast Armor Trim Smithing Template",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Explorer's Bundle",
-              "container": {
-                "type": "BUNDLE",
-                "capacityUsed": 43,
-                "capacityMax": 64,
-                "contents": [
-                  {
-                    "item": {
-                      "material": "OAK_LOG",
-                      "displayName": "Oak Log",
-                      "amount": 24,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "IRON_INGOT",
-                      "displayName": "Iron Ingot",
-                      "amount": 12,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "ENDER_PEARL",
-                      "displayName": "Ender Pearl",
-                      "amount": 7,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  }
-                ]
+              "smithingTemplate": {
+                "type": "Coast Armor Trim"
               }
             }
           },
@@ -3187,9 +3224,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-45",
+        "uuid": "00000000-0000-4000-8000-000000000045",
         "name": "EmberWren",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -3204,11 +3245,93 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "OAK_LOG",
-            "displayName": "Oak Log",
-            "amount": 16,
+            "material": "LIGHT_BLUE_SHULKER_BOX",
+            "displayName": "Light Blue Shulker Box",
+            "amount": 1,
             "icon": null,
-            "metadata": {}
+            "metadata": {
+              "shulkerColor": "Light Blue",
+              "container": {
+                "type": "SHULKER",
+                "slots": 27,
+                "contents": [
+                  {
+                    "slot": 0,
+                    "item": {
+                      "material": "DIAMOND",
+                      "displayName": "Diamond",
+                      "amount": 16,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "slot": 4,
+                    "item": {
+                      "material": "ENCHANTED_BOOK",
+                      "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
+                      "amount": 1,
+                      "icon": null,
+                      "metadata": {
+                        "storedEnchantments": [
+                          {
+                            "id": "minecraft:protection",
+                            "displayName": "Protection",
+                            "level": 4
+                          },
+                          {
+                            "id": "minecraft:unbreaking",
+                            "displayName": "Unbreaking",
+                            "level": 3
+                          },
+                          {
+                            "id": "minecraft:mending",
+                            "displayName": "Mending",
+                            "level": 1
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "slot": 13,
+                    "item": {
+                      "material": "POTION",
+                      "displayName": "Potion of Fire Resistance",
+                      "amount": 1,
+                      "icon": null,
+                      "metadata": {
+                        "potion": {
+                          "basePotion": "Fire Resistance",
+                          "color": "#E49A3A",
+                          "effects": [
+                            {
+                              "name": "Fire Resistance",
+                              "amplifier": 0,
+                              "durationSeconds": 180
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "slot": 26,
+                    "item": {
+                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
+                      "displayName": "Netherite Upgrade Smithing Template",
+                      "amount": 2,
+                      "icon": null,
+                      "metadata": {
+                        "smithingTemplate": {
+                          "type": "Netherite Upgrade"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
           },
           "costItem": {
             "material": "GOLD_INGOT",
@@ -3243,7 +3366,9 @@
       "owner": {
         "type": "NONE",
         "id": null,
+        "uuid": null,
         "name": "Unowned stall",
+        "avatarUrl": null,
         "avatar": {
           "kind": "NONE"
         }
@@ -3266,9 +3391,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-47",
+        "uuid": "00000000-0000-4000-8000-000000000047",
         "name": "QuartzBee",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -3283,11 +3412,46 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
-            "displayName": "Waxed Weathered Cut Copper Stairs",
-            "amount": 8,
+            "material": "BUNDLE",
+            "displayName": "Bundle",
+            "amount": 1,
             "icon": null,
-            "metadata": {}
+            "metadata": {
+              "container": {
+                "type": "BUNDLE",
+                "capacityUsed": 64,
+                "capacityMax": 64,
+                "contents": [
+                  {
+                    "item": {
+                      "material": "OAK_LOG",
+                      "displayName": "Oak Log",
+                      "amount": 24,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "item": {
+                      "material": "IRON_INGOT",
+                      "displayName": "Iron Ingot",
+                      "amount": 12,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "item": {
+                      "material": "ENDER_PEARL",
+                      "displayName": "Ender Pearl",
+                      "amount": 7,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  }
+                ]
+              }
+            }
           },
           "costItem": {
             "material": "DIAMOND",
@@ -3322,9 +3486,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-48",
+        "uuid": "00000000-0000-4000-8000-000000000048",
         "name": "RiverOak",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-06-01T00:00:00Z",
@@ -3339,8 +3507,8 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
-            "displayName": "Light Blue Stained Glass Pane",
+            "material": "OAK_LOG",
+            "displayName": "Oak Log",
             "amount": 16,
             "icon": null,
             "metadata": {}
@@ -3378,9 +3546,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-49",
+        "uuid": null,
         "name": "Sunward Guild",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-01-01T00:00:00Z",
@@ -3397,9 +3568,9 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "DIAMOND",
-            "displayName": "Diamond",
-            "amount": 8,
+            "material": "IRON_INGOT",
+            "displayName": "Iron Ingot",
+            "amount": 12,
             "icon": null,
             "metadata": {}
           },
@@ -3436,9 +3607,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-50",
+        "uuid": "00000000-0000-4000-8000-000000000050",
         "name": "P2wn",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -3453,29 +3628,11 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "ENCHANTED_BOOK",
-            "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
-            "amount": 1,
+            "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
+            "displayName": "Waxed Weathered Cut Copper Stairs",
+            "amount": 8,
             "icon": null,
-            "metadata": {
-              "storedEnchantments": [
-                {
-                  "id": "minecraft:protection",
-                  "displayName": "Protection",
-                  "level": 4
-                },
-                {
-                  "id": "minecraft:unbreaking",
-                  "displayName": "Unbreaking",
-                  "level": 3
-                },
-                {
-                  "id": "minecraft:mending",
-                  "displayName": "Mending",
-                  "level": 1
-                }
-              ]
-            }
+            "metadata": {}
           },
           "costItem": {
             "material": "EMERALD",
@@ -3510,9 +3667,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-51",
+        "uuid": "00000000-0000-4000-8000-000000000051",
         "name": "CopperFox",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -3527,24 +3688,11 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "NETHERITE_CHESTPLATE",
-            "displayName": "Netherite Chestplate",
-            "amount": 1,
+            "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
+            "displayName": "Light Blue Stained Glass Pane",
+            "amount": 16,
             "icon": null,
-            "metadata": {
-              "customName": "Emberguard Plate",
-              "enchantments": [
-                {
-                  "id": "minecraft:protection",
-                  "displayName": "Protection",
-                  "level": 4
-                }
-              ],
-              "armorTrim": {
-                "pattern": "Spire",
-                "material": "Gold"
-              }
-            }
+            "metadata": {}
           },
           "costItem": {
             "material": "DIAMOND",
@@ -3579,9 +3727,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-52",
+        "uuid": null,
         "name": "Cinder Market Cooperative",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-04-01T00:00:00Z",
@@ -3598,65 +3749,31 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "POTION",
-            "displayName": "Potion of Swiftness",
-            "amount": 2,
+            "material": "LINGERING_POTION",
+            "displayName": "Lingering Potion of Fire Resistance",
+            "amount": 1,
             "icon": null,
             "metadata": {
               "potion": {
-                "basePotion": "Swiftness",
+                "basePotion": "Fire Resistance",
+                "form": "LINGERING",
+                "color": "#E49A3A",
                 "effects": [
                   {
-                    "name": "Speed",
-                    "amplifier": 1,
-                    "durationSeconds": 90
+                    "name": "Fire Resistance",
+                    "amplifier": 0,
+                    "durationSeconds": 45
                   }
                 ]
               }
             }
           },
           "costItem": {
-            "material": "BUNDLE",
-            "displayName": "Explorer's Bundle",
-            "amount": 1,
+            "material": "GOLD_NUGGET",
+            "displayName": "Gold Nugget",
+            "amount": 18,
             "icon": null,
-            "metadata": {
-              "customName": "Explorer's Bundle",
-              "container": {
-                "type": "BUNDLE",
-                "capacityUsed": 43,
-                "capacityMax": 64,
-                "contents": [
-                  {
-                    "item": {
-                      "material": "OAK_LOG",
-                      "displayName": "Oak Log",
-                      "amount": 24,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "IRON_INGOT",
-                      "displayName": "Iron Ingot",
-                      "amount": 12,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "ENDER_PEARL",
-                      "displayName": "Ender Pearl",
-                      "amount": 7,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  }
-                ]
-              }
-            }
+            "metadata": {}
           },
           "interaction": {
             "world": "world",
@@ -3684,9 +3801,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-53",
+        "uuid": "00000000-0000-4000-8000-000000000053",
         "name": "ExtremelyLongMinecraftUsername",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -3701,15 +3822,11 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-            "displayName": "Coast Armor Trim Smithing Template",
-            "amount": 1,
+            "material": "DIAMOND",
+            "displayName": "Diamond",
+            "amount": 8,
             "icon": null,
-            "metadata": {
-              "smithingTemplate": {
-                "type": "Coast Armor Trim"
-              }
-            }
+            "metadata": {}
           },
           "costItem": {
             "material": "GOLD_INGOT",
@@ -3744,9 +3861,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-54",
+        "uuid": "00000000-0000-4000-8000-000000000054",
         "name": "QuartzBee",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-06-01T00:00:00Z",
@@ -3761,81 +3882,28 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "LIGHT_BLUE_SHULKER_BOX",
-            "displayName": "Light Blue Shulker Box",
+            "material": "ENCHANTED_BOOK",
+            "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "shulkerColor": "Light Blue",
-              "container": {
-                "type": "SHULKER",
-                "slots": 27,
-                "contents": [
-                  {
-                    "slot": 0,
-                    "item": {
-                      "material": "DIAMOND",
-                      "displayName": "Diamond",
-                      "amount": 16,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "slot": 4,
-                    "item": {
-                      "material": "ENCHANTED_BOOK",
-                      "displayName": "Enchanted Book",
-                      "amount": 1,
-                      "icon": null,
-                      "metadata": {
-                        "enchantments": [
-                          {
-                            "id": "minecraft:mending",
-                            "displayName": "Mending",
-                            "level": 1
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "slot": 13,
-                    "item": {
-                      "material": "POTION",
-                      "displayName": "Potion of Fire Resistance",
-                      "amount": 3,
-                      "icon": null,
-                      "metadata": {
-                        "potion": {
-                          "basePotion": "Fire Resistance",
-                          "effects": [
-                            {
-                              "name": "Fire Resistance",
-                              "amplifier": 0,
-                              "durationSeconds": 180
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "slot": 26,
-                    "item": {
-                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
-                      "displayName": "Netherite Upgrade Smithing Template",
-                      "amount": 2,
-                      "icon": null,
-                      "metadata": {
-                        "smithingTemplate": {
-                          "type": "Netherite Upgrade"
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
+              "storedEnchantments": [
+                {
+                  "id": "minecraft:protection",
+                  "displayName": "Protection",
+                  "level": 4
+                },
+                {
+                  "id": "minecraft:unbreaking",
+                  "displayName": "Unbreaking",
+                  "level": 3
+                },
+                {
+                  "id": "minecraft:mending",
+                  "displayName": "Mending",
+                  "level": 1
+                }
+              ]
             }
           },
           "costItem": {
@@ -3871,7 +3939,9 @@
       "owner": {
         "type": "NONE",
         "id": null,
+        "uuid": null,
         "name": "Unowned stall",
+        "avatarUrl": null,
         "avatar": {
           "kind": "NONE"
         }
@@ -3894,9 +3964,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-56",
+        "uuid": "00000000-0000-4000-8000-000000000056",
         "name": "NetherCartographer",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -3911,43 +3985,19 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "BUNDLE",
-            "displayName": "Explorer's Bundle",
+            "material": "POTION",
+            "displayName": "Potion of Swiftness",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Explorer's Bundle",
-              "container": {
-                "type": "BUNDLE",
-                "capacityUsed": 43,
-                "capacityMax": 64,
-                "contents": [
+              "potion": {
+                "basePotion": "Swiftness",
+                "color": "#7CAFC6",
+                "effects": [
                   {
-                    "item": {
-                      "material": "OAK_LOG",
-                      "displayName": "Oak Log",
-                      "amount": 24,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "IRON_INGOT",
-                      "displayName": "Iron Ingot",
-                      "amount": 12,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "ENDER_PEARL",
-                      "displayName": "Ender Pearl",
-                      "amount": 7,
-                      "icon": null,
-                      "metadata": {}
-                    }
+                    "name": "Speed",
+                    "amplifier": 1,
+                    "durationSeconds": 90
                   }
                 ]
               }
@@ -3986,9 +4036,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-57",
+        "uuid": "00000000-0000-4000-8000-000000000057",
         "name": "P2wn",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -4003,11 +4057,15 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "OAK_LOG",
-            "displayName": "Oak Log",
-            "amount": 16,
+            "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
+            "displayName": "Coast Armor Trim Smithing Template",
+            "amount": 1,
             "icon": null,
-            "metadata": {}
+            "metadata": {
+              "smithingTemplate": {
+                "type": "Coast Armor Trim"
+              }
+            }
           },
           "costItem": {
             "material": "GOLD_INGOT",
@@ -4042,9 +4100,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-58",
+        "uuid": null,
         "name": "KIRK Guild",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-04-01T00:00:00Z",
@@ -4085,11 +4146,21 @@
                     "slot": 4,
                     "item": {
                       "material": "ENCHANTED_BOOK",
-                      "displayName": "Enchanted Book",
+                      "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
                       "amount": 1,
                       "icon": null,
                       "metadata": {
-                        "enchantments": [
+                        "storedEnchantments": [
+                          {
+                            "id": "minecraft:protection",
+                            "displayName": "Protection",
+                            "level": 4
+                          },
+                          {
+                            "id": "minecraft:unbreaking",
+                            "displayName": "Unbreaking",
+                            "level": 3
+                          },
                           {
                             "id": "minecraft:mending",
                             "displayName": "Mending",
@@ -4104,11 +4175,12 @@
                     "item": {
                       "material": "POTION",
                       "displayName": "Potion of Fire Resistance",
-                      "amount": 3,
+                      "amount": 1,
                       "icon": null,
                       "metadata": {
                         "potion": {
                           "basePotion": "Fire Resistance",
+                          "color": "#E49A3A",
                           "effects": [
                             {
                               "name": "Fire Resistance",
@@ -4171,9 +4243,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-59",
+        "uuid": "00000000-0000-4000-8000-000000000059",
         "name": "EmberWren",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -4188,11 +4264,19 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
-            "displayName": "Waxed Weathered Cut Copper Stairs",
-            "amount": 8,
+            "material": "WRITTEN_BOOK",
+            "displayName": "Market Almanac",
+            "amount": 1,
             "icon": null,
-            "metadata": {}
+            "metadata": {
+              "customName": "Market Almanac",
+              "writtenBook": {
+                "title": "The Enthusia Market Almanac",
+                "author": "Wayfinder",
+                "generation": "Original",
+                "pageCount": 18
+              }
+            }
           },
           "costItem": {
             "material": "DIAMOND",
@@ -4227,9 +4311,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-60",
+        "uuid": "00000000-0000-4000-8000-000000000060",
         "name": "ExtremelyLongMinecraftUsername",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-06-01T00:00:00Z",
@@ -4244,11 +4332,46 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
-            "displayName": "Light Blue Stained Glass Pane",
-            "amount": 16,
+            "material": "BUNDLE",
+            "displayName": "Bundle",
+            "amount": 1,
             "icon": null,
-            "metadata": {}
+            "metadata": {
+              "container": {
+                "type": "BUNDLE",
+                "capacityUsed": 64,
+                "capacityMax": 64,
+                "contents": [
+                  {
+                    "item": {
+                      "material": "OAK_LOG",
+                      "displayName": "Oak Log",
+                      "amount": 24,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "item": {
+                      "material": "IRON_INGOT",
+                      "displayName": "Iron Ingot",
+                      "amount": 12,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "item": {
+                      "material": "ENDER_PEARL",
+                      "displayName": "Ender Pearl",
+                      "amount": 7,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  }
+                ]
+              }
+            }
           },
           "costItem": {
             "material": "GOLD_NUGGET",
@@ -4283,9 +4406,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-61",
+        "uuid": null,
         "name": "Sunward Guild",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-01-01T00:00:00Z",
@@ -4302,9 +4428,9 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "DIAMOND",
-            "displayName": "Diamond",
-            "amount": 8,
+            "material": "OAK_LOG",
+            "displayName": "Oak Log",
+            "amount": 16,
             "icon": null,
             "metadata": {}
           },
@@ -4341,9 +4467,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-62",
+        "uuid": "00000000-0000-4000-8000-000000000062",
         "name": "RiverOak",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -4358,29 +4488,11 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "ENCHANTED_BOOK",
-            "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
-            "amount": 1,
+            "material": "IRON_INGOT",
+            "displayName": "Iron Ingot",
+            "amount": 12,
             "icon": null,
-            "metadata": {
-              "storedEnchantments": [
-                {
-                  "id": "minecraft:protection",
-                  "displayName": "Protection",
-                  "level": 4
-                },
-                {
-                  "id": "minecraft:unbreaking",
-                  "displayName": "Unbreaking",
-                  "level": 3
-                },
-                {
-                  "id": "minecraft:mending",
-                  "displayName": "Mending",
-                  "level": 1
-                }
-              ]
-            }
+            "metadata": {}
           },
           "costItem": {
             "material": "EMERALD",
@@ -4415,9 +4527,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-63",
+        "uuid": "00000000-0000-4000-8000-000000000063",
         "name": "NetherCartographer",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -4432,24 +4548,11 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "NETHERITE_CHESTPLATE",
-            "displayName": "Netherite Chestplate",
-            "amount": 1,
+            "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
+            "displayName": "Waxed Weathered Cut Copper Stairs",
+            "amount": 8,
             "icon": null,
-            "metadata": {
-              "customName": "Emberguard Plate",
-              "enchantments": [
-                {
-                  "id": "minecraft:protection",
-                  "displayName": "Protection",
-                  "level": 4
-                }
-              ],
-              "armorTrim": {
-                "pattern": "Spire",
-                "material": "Gold"
-              }
-            }
+            "metadata": {}
           },
           "costItem": {
             "material": "DIAMOND",
@@ -4484,7 +4587,9 @@
       "owner": {
         "type": "NONE",
         "id": null,
+        "uuid": null,
         "name": "Unowned stall",
+        "avatarUrl": null,
         "avatar": {
           "kind": "NONE"
         }
@@ -4507,9 +4612,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-65",
+        "uuid": "00000000-0000-4000-8000-000000000065",
         "name": "CopperFox",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -4524,13 +4633,22 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-            "displayName": "Coast Armor Trim Smithing Template",
+            "material": "LINGERING_POTION",
+            "displayName": "Lingering Potion of Fire Resistance",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "smithingTemplate": {
-                "type": "Coast Armor Trim"
+              "potion": {
+                "basePotion": "Fire Resistance",
+                "form": "LINGERING",
+                "color": "#E49A3A",
+                "effects": [
+                  {
+                    "name": "Fire Resistance",
+                    "amplifier": 0,
+                    "durationSeconds": 45
+                  }
+                ]
               }
             }
           },
@@ -4567,9 +4685,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-66",
+        "uuid": "00000000-0000-4000-8000-000000000066",
         "name": "EmberWren",
+        "avatarUrl": "player-head-java.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-06-01T00:00:00Z",
@@ -4584,82 +4706,11 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "LIGHT_BLUE_SHULKER_BOX",
-            "displayName": "Light Blue Shulker Box",
-            "amount": 1,
+            "material": "DIAMOND",
+            "displayName": "Diamond",
+            "amount": 8,
             "icon": null,
-            "metadata": {
-              "shulkerColor": "Light Blue",
-              "container": {
-                "type": "SHULKER",
-                "slots": 27,
-                "contents": [
-                  {
-                    "slot": 0,
-                    "item": {
-                      "material": "DIAMOND",
-                      "displayName": "Diamond",
-                      "amount": 16,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "slot": 4,
-                    "item": {
-                      "material": "ENCHANTED_BOOK",
-                      "displayName": "Enchanted Book",
-                      "amount": 1,
-                      "icon": null,
-                      "metadata": {
-                        "enchantments": [
-                          {
-                            "id": "minecraft:mending",
-                            "displayName": "Mending",
-                            "level": 1
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  {
-                    "slot": 13,
-                    "item": {
-                      "material": "POTION",
-                      "displayName": "Potion of Fire Resistance",
-                      "amount": 3,
-                      "icon": null,
-                      "metadata": {
-                        "potion": {
-                          "basePotion": "Fire Resistance",
-                          "effects": [
-                            {
-                              "name": "Fire Resistance",
-                              "amplifier": 0,
-                              "durationSeconds": 180
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "slot": 26,
-                    "item": {
-                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
-                      "displayName": "Netherite Upgrade Smithing Template",
-                      "amount": 2,
-                      "icon": null,
-                      "metadata": {
-                        "smithingTemplate": {
-                          "type": "Netherite Upgrade"
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
-            }
+            "metadata": {}
           },
           "costItem": {
             "material": "EMERALD",
@@ -4694,9 +4745,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-67",
+        "uuid": null,
         "name": "TheVeryLongGuildNameOfEnthusia",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-01-01T00:00:00Z",
@@ -4713,18 +4767,28 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "WRITTEN_BOOK",
-            "displayName": "Market Almanac",
+            "material": "ENCHANTED_BOOK",
+            "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Market Almanac",
-              "writtenBook": {
-                "title": "The Enthusia Market Almanac",
-                "author": "Wayfinder",
-                "generation": "Original",
-                "pageCount": 18
-              }
+              "storedEnchantments": [
+                {
+                  "id": "minecraft:protection",
+                  "displayName": "Protection",
+                  "level": 4
+                },
+                {
+                  "id": "minecraft:unbreaking",
+                  "displayName": "Unbreaking",
+                  "level": 3
+                },
+                {
+                  "id": "minecraft:mending",
+                  "displayName": "Mending",
+                  "level": 1
+                }
+              ]
             }
           },
           "costItem": {
@@ -4760,9 +4824,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-68",
+        "uuid": "00000000-0000-4000-8000-000000000068",
         "name": "QuartzBee",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-02-01T00:00:00Z",
@@ -4777,45 +4845,22 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "BUNDLE",
-            "displayName": "Explorer's Bundle",
+            "material": "NETHERITE_CHESTPLATE",
+            "displayName": "Netherite Chestplate",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Explorer's Bundle",
-              "container": {
-                "type": "BUNDLE",
-                "capacityUsed": 43,
-                "capacityMax": 64,
-                "contents": [
-                  {
-                    "item": {
-                      "material": "OAK_LOG",
-                      "displayName": "Oak Log",
-                      "amount": 24,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "IRON_INGOT",
-                      "displayName": "Iron Ingot",
-                      "amount": 12,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "ENDER_PEARL",
-                      "displayName": "Ender Pearl",
-                      "amount": 7,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  }
-                ]
+              "customName": "Emberguard Plate",
+              "enchantments": [
+                {
+                  "id": "minecraft:protection",
+                  "displayName": "Protection",
+                  "level": 4
+                }
+              ],
+              "armorTrim": {
+                "pattern": "Spire",
+                "material": "Gold"
               }
             }
           },
@@ -4852,9 +4897,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-69",
+        "uuid": "00000000-0000-4000-8000-000000000069",
         "name": "RiverOak",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "JAVA",
+          "includesOuterLayer": false
         }
       },
       "ownerSince": "2026-03-01T00:00:00Z",
@@ -4869,54 +4918,30 @@
           },
           "direction": "TRADE",
           "sellItem": {
-            "material": "OAK_LOG",
-            "displayName": "Oak Log",
-            "amount": 16,
-            "icon": null,
-            "metadata": {}
-          },
-          "costItem": {
-            "material": "BUNDLE",
-            "displayName": "Explorer's Bundle",
+            "material": "POTION",
+            "displayName": "Potion of Swiftness",
             "amount": 1,
             "icon": null,
             "metadata": {
-              "customName": "Explorer's Bundle",
-              "container": {
-                "type": "BUNDLE",
-                "capacityUsed": 43,
-                "capacityMax": 64,
-                "contents": [
+              "potion": {
+                "basePotion": "Swiftness",
+                "color": "#7CAFC6",
+                "effects": [
                   {
-                    "item": {
-                      "material": "OAK_LOG",
-                      "displayName": "Oak Log",
-                      "amount": 24,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "IRON_INGOT",
-                      "displayName": "Iron Ingot",
-                      "amount": 12,
-                      "icon": null,
-                      "metadata": {}
-                    }
-                  },
-                  {
-                    "item": {
-                      "material": "ENDER_PEARL",
-                      "displayName": "Ender Pearl",
-                      "amount": 7,
-                      "icon": null,
-                      "metadata": {}
-                    }
+                    "name": "Speed",
+                    "amplifier": 1,
+                    "durationSeconds": 90
                   }
                 ]
               }
             }
+          },
+          "costItem": {
+            "material": "GOLD_INGOT",
+            "displayName": "Gold Ingot",
+            "amount": 4,
+            "icon": null,
+            "metadata": {}
           },
           "interaction": {
             "world": "world",
@@ -4944,9 +4969,12 @@
       "owner": {
         "type": "GUILD",
         "id": "public-owner-70",
+        "uuid": null,
         "name": "KIRK Guild",
+        "avatarUrl": null,
         "avatar": {
-          "kind": "GUILD_IMAGE"
+          "kind": "GUILD_IMAGE",
+          "url": "guild-banner.svg"
         }
       },
       "ownerSince": "2026-04-01T00:00:00Z",
@@ -4963,11 +4991,15 @@
           },
           "direction": "SELL",
           "sellItem": {
-            "material": "IRON_INGOT",
-            "displayName": "Iron Ingot",
-            "amount": 12,
+            "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
+            "displayName": "Coast Armor Trim Smithing Template",
+            "amount": 1,
             "icon": null,
-            "metadata": {}
+            "metadata": {
+              "smithingTemplate": {
+                "type": "Coast Armor Trim"
+              }
+            }
           },
           "costItem": {
             "material": "EMERALD",
@@ -5002,9 +5034,13 @@
       "owner": {
         "type": "PLAYER",
         "id": "public-owner-71",
+        "uuid": "00000000-0000-4000-8000-000000000071",
         "name": "P2wn",
+        "avatarUrl": "player-head-bedrock.svg",
         "avatar": {
-          "kind": "MINECRAFT_HEAD"
+          "kind": "MINECRAFT_HEAD",
+          "source": "FLOODGATE",
+          "includesOuterLayer": true
         }
       },
       "ownerSince": "2026-05-01T00:00:00Z",
@@ -5019,11 +5055,93 @@
           },
           "direction": "BUY",
           "sellItem": {
-            "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
-            "displayName": "Waxed Weathered Cut Copper Stairs",
-            "amount": 8,
+            "material": "LIGHT_BLUE_SHULKER_BOX",
+            "displayName": "Light Blue Shulker Box",
+            "amount": 1,
             "icon": null,
-            "metadata": {}
+            "metadata": {
+              "shulkerColor": "Light Blue",
+              "container": {
+                "type": "SHULKER",
+                "slots": 27,
+                "contents": [
+                  {
+                    "slot": 0,
+                    "item": {
+                      "material": "DIAMOND",
+                      "displayName": "Diamond",
+                      "amount": 16,
+                      "icon": null,
+                      "metadata": {}
+                    }
+                  },
+                  {
+                    "slot": 4,
+                    "item": {
+                      "material": "ENCHANTED_BOOK",
+                      "displayName": "Enchanted Book — Protection IV, Unbreaking III, Mending I",
+                      "amount": 1,
+                      "icon": null,
+                      "metadata": {
+                        "storedEnchantments": [
+                          {
+                            "id": "minecraft:protection",
+                            "displayName": "Protection",
+                            "level": 4
+                          },
+                          {
+                            "id": "minecraft:unbreaking",
+                            "displayName": "Unbreaking",
+                            "level": 3
+                          },
+                          {
+                            "id": "minecraft:mending",
+                            "displayName": "Mending",
+                            "level": 1
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "slot": 13,
+                    "item": {
+                      "material": "POTION",
+                      "displayName": "Potion of Fire Resistance",
+                      "amount": 1,
+                      "icon": null,
+                      "metadata": {
+                        "potion": {
+                          "basePotion": "Fire Resistance",
+                          "color": "#E49A3A",
+                          "effects": [
+                            {
+                              "name": "Fire Resistance",
+                              "amplifier": 0,
+                              "durationSeconds": 180
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "slot": 26,
+                    "item": {
+                      "material": "NETHERITE_UPGRADE_SMITHING_TEMPLATE",
+                      "displayName": "Netherite Upgrade Smithing Template",
+                      "amount": 2,
+                      "icon": null,
+                      "metadata": {
+                        "smithingTemplate": {
+                          "type": "Netherite Upgrade"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
           },
           "costItem": {
             "material": "DIAMOND",

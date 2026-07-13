@@ -38,8 +38,9 @@ const marketDir = path.join(publicDir, "assets", "market");
 const marketRequired = [
   "market.js", "market-adapter.js", "market-data.js", "market-layout.json", "sample-market-snapshot.json", "market.css",
   "map-core.js", "overview.png", "minecraft/material-icon-manifest.js", "minecraft/material-icon-manifest.json",
+  "minecraft/font-metrics.js", "minecraft/font-metrics.json", "minecraft/item-catalog.js", "minecraft/item-catalog.json",
   "minecraft/asset-source-manifest.json", "minecraft/vanilla/textures/gui/container/shulker_box.png",
-  "minecraft/vanilla/textures/gui/sprites/container/slot.png"
+  "minecraft/vanilla/textures/gui/sprites/container/slot.png", "minecraft/vanilla/textures/font/ascii.png"
 ];
 for (const file of marketRequired) {
   try { await access(path.join(marketDir, file)); }
@@ -60,7 +61,9 @@ const footprints = [...layout.buildings].sort((a, b) => number(a.id) - number(b.
 const fingerprint = createHash("sha256").update(JSON.stringify(footprints)).digest("hex");
 if (layout.buildings.length !== 15 || layout.stalls.length !== 71) errors.push(`market: expected 15 buildings and 71 stalls, found ${layout.buildings.length}/${layout.stalls.length}`);
 if (fingerprint !== "6f6d926c79fecbcf250043aab2445dccc94c60d92ff70bc042ac8b4650f5b2d8") errors.push(`market: polygon fingerprint mismatch ${fingerprint}`);
-for (const file of ["market.js", "market-adapter.js", "market-data.js", "minecraft/material-icon-manifest.js"]) {
+const catalog = JSON.parse(await readFile(path.join(marketDir, "minecraft", "item-catalog.json"), "utf8"));
+if (catalog.items?.length !== 1504) errors.push(`market: expected 1504 Minecraft 1.21.11 catalog items, found ${catalog.items?.length ?? 0}`);
+for (const file of ["market.js", "market-adapter.js", "market-data.js", "minecraft/material-icon-manifest.js", "minecraft/font-metrics.js", "minecraft/item-catalog.js"]) {
   const result = spawnSync(process.execPath, ["--check", path.join(marketDir, file)], {encoding: "utf8"});
   if (result.status !== 0) errors.push(`market: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }

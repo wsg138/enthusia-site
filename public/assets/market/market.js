@@ -5,6 +5,7 @@
   const layout = window.ENTHUSIA_MARKET_DATA.layout;
   const snapshot = window.ENTHUSIA_MARKET_DATA.snapshot;
   const iconManifest = window.ENTHUSIA_MINECRAFT_ASSETS;
+  const fontManifest = window.ENTHUSIA_MINECRAFT_FONT;
   const adapter = new window.EnthusiaMarketAdapter.StaticMarketAdapter(layout, snapshot);
   const $ = selector => document.querySelector(selector);
   const ns = "http://www.w3.org/2000/svg";
@@ -16,7 +17,8 @@
     stalls: $("#stall-layer"), tooltip: $("#map-tooltip"), hud: $("#coordinate-hud"), results: $("#search-results"),
     drawer: $("#market-drawer"), backdrop: $("#drawer-backdrop"), content: $("#drawer-content"), title: $("#drawer-title"),
     kicker: $("#drawer-kicker"), summary: $("#drawer-summary"), back: $("#drawer-back"), inspector: $("#item-inspector"),
-    inspectorContent: $("#inspector-content"), inspectorTitle: $("#inspector-title"), inspectorKicker: $("#inspector-kicker")
+    inspectorContent: $("#inspector-content"), inspectorTitle: $("#inspector-title"), inspectorKicker: $("#inspector-kicker"),
+    itemTooltip: $("#minecraft-hover-tooltip")
   };
 
   const filterFields = $("#filter-fields");
@@ -31,13 +33,15 @@
     view: { scale: 1, x: 0, y: 0 }, initial: null, pointer: null, cursor: null, hovered: null,
     selectedBuilding: null, selectedStall: null, drawerMode: null, drawerBuilding: null, highlightShop: null,
     inspectorHistory: [], filters: { text: "", floor: "ALL", owner: "ALL", shop: "ALL", stock: "ALL" },
-    matching: new Set(layout.stalls.map(stall => stall.id)), suggestionIndex: -1
+    matching: new Set(layout.stalls.map(stall => stall.id)), suggestionIndex: -1, mobileStack: [], mobileResultsOpen: false, searchReturn: false, lastSearch: null
   };
   const buildingElements = new Map();
   const stallElements = new Map();
   const px = point => ({ x: (point.x - t.originX) * t.pixelsPerBlock, y: (point.z - t.originZ) * t.pixelsPerBlock });
   const esc = value => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
   const displayStall = id => `Stall ${String(id).match(/\d+/)?.[0] || id}`;
+  const buildingNumber = id => `Building ${String(id).match(/\d+/)?.[0] || id}`;
+  const isMobile = () => matchMedia("(max-width: 600px), (max-height: 500px)").matches;
   const makeSvg = (name, attributes = {}) => {
     const node = document.createElementNS(ns, name);
     for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, value);
@@ -180,8 +184,9 @@
 
   function ownerVisual(owner, large = false) {
     const size = large ? " large" : "";
-    if (owner.type === "PLAYER") return `<span class="owner-image player-head${size}" aria-label="Minecraft player head"><img src="${assetBase}player-head-base.svg" alt=""><img class="skin-overlay" src="${assetBase}player-head-overlay.svg" alt=""></span>`;
-    if (owner.type === "GUILD") return `<span class="owner-image${size}"><img src="${assetBase}guild-banner.svg" alt="Guild banner"></span>`;
+    if (owner.type === "PLAYER" && owner.avatarUrl) return `<span class="owner-image player-head resolved${size}" aria-label="Minecraft player head for ${esc(owner.name)}"><img class="resolved-head" src="${assetBase}${esc(owner.avatarUrl)}" alt="" data-skin-source="${esc(owner.avatar?.source || "JAVA")}" data-outer-layer="${owner.avatar?.includesOuterLayer === true}"></span>`;
+    if (owner.type === "PLAYER") return `<span class="owner-image player-head fallback${size}" aria-label="Fallback Minecraft player head"><img src="${assetBase}player-head-base.svg" alt=""><img class="skin-overlay" src="${assetBase}player-head-overlay.svg" alt=""></span>`;
+    if (owner.type === "GUILD") return `<span class="owner-image${size}"><img src="${assetBase}${esc(owner.avatar?.url || "guild-banner.svg")}" alt="Guild banner"></span>`;
     return `<span class="owner-image${size}"><img src="${assetBase}unowned-stall.svg" alt="Unowned stall"></span>`;
   }
   const ownerType = owner => owner.type === "PLAYER" ? "Player" : owner.type === "GUILD" ? "Guild" : "Unowned";
@@ -256,17 +261,53 @@
     }).join("");
     return `<span class="minecraft-item-icon ${extraClass}" role="img" aria-label="${esc(item.displayName)}">${layers}</span>`;
   }
+  function minecraftText(value, className = "") {
+    const text = String(value ?? "");
+    return `<span class="minecraft-bitmap-text ${className}" style="--mc-font:url('${cssAssetBase}${fontManifest?.texture || "minecraft/vanilla/textures/font/ascii.png"}')" aria-label="${esc(text)}"><span class="mc-text-value" aria-hidden="true">${esc(text)}</span>${[...text].map(character => {
+      const code = character.codePointAt(0), width = fontManifest?.widths?.[code] || 6;
+      if (!fontManifest || code < 32 || code > 126) return `<span class="mc-fallback">${esc(character)}</span>`;
+      return `<span class="mc-glyph${character === " " ? " space" : ""}" style="--mc-col:${code % 16};--mc-row:${Math.floor(code / 16)};--mc-width:${width}" aria-hidden="true"></span>`;
+    }).join("")}</span>`;
+  }
+  function floatingTooltipMarkup(item) {
+    const details = itemMetadata(item);
+    return `<strong>${minecraftText(item.metadata?.customName || item.displayName)}</strong>${item.metadata?.customName ? minecraftText(item.displayName, "muted") : ""}${details.map(detail => minecraftText(detail, "muted")).join("")}`;
+  }
+  function showItemTooltip(anchor, item) {
+    el.itemTooltip.innerHTML = floatingTooltipMarkup(item); el.itemTooltip.hidden = false; el.itemTooltip.style.visibility = "hidden";
+    requestAnimationFrame(() => {
+      if (el.itemTooltip.hidden) return;
+      const margin = 10, anchorRect = anchor.getBoundingClientRect(), tooltipRect = el.itemTooltip.getBoundingClientRect();
+      if (isMobile()) {
+        el.itemTooltip.classList.add("mobile"); el.itemTooltip.style.left = `${margin}px`; el.itemTooltip.style.right = `${margin}px`; el.itemTooltip.style.top = "auto"; el.itemTooltip.style.bottom = `calc(76px + env(safe-area-inset-bottom))`;
+      } else {
+        el.itemTooltip.classList.remove("mobile"); el.itemTooltip.style.right = "auto"; el.itemTooltip.style.bottom = "auto";
+        let left = anchorRect.right + margin;
+        if (left + tooltipRect.width > innerWidth - margin) left = anchorRect.left - tooltipRect.width - margin;
+        let top = anchorRect.top;
+        if (top + tooltipRect.height > innerHeight - margin) top = innerHeight - tooltipRect.height - margin;
+        el.itemTooltip.style.left = `${Math.max(margin, Math.min(left, innerWidth - tooltipRect.width - margin))}px`;
+        el.itemTooltip.style.top = `${Math.max(margin, top)}px`;
+      }
+      el.itemTooltip.style.visibility = "visible";
+    });
+  }
+  function hideItemTooltip() { el.itemTooltip.hidden = true; el.itemTooltip.style.visibility = "hidden"; }
+  function bindItemTooltip(node, item) {
+    node.addEventListener("pointerenter", () => showItemTooltip(node, item)); node.addEventListener("pointerleave", hideItemTooltip);
+    node.addEventListener("focus", () => showItemTooltip(node, item)); node.addEventListener("blur", hideItemTooltip);
+  }
   function itemPanel(item, label, shopId, side) {
     return `<button class="transaction-side" data-inspect-shop="${shopId}" data-inspect-side="${side}" aria-label="Inspect ${esc(label.toLowerCase())}: ${esc(item.displayName)}"><span class="transaction-label">${label}</span><span class="transaction-item">${itemIcon(item)}<span class="item-copy"><strong>${item.amount}× ${esc(item.displayName)}</strong></span></span></button>`;
   }
 
   function openBuilding(building) {
-    closeInspector(); selectMap(building.id);
+    closeInspector(); hideMobileResults(); filterFields.classList.remove("open"); state.mobileStack = [{type: "building", id: building.id}]; selectMap(building.id);
     if (building.stallIds.length === 1) return openStall(adapter.getStall(building.stallIds[0]), null);
     state.drawerBuilding = building; state.drawerMode = "building"; renderBuildingDrawer(); showDrawer();
   }
   function showDrawer() { el.drawer.hidden = false; el.backdrop.hidden = false; requestAnimationFrame(() => $("#drawer-close").focus()); }
-  function closeDrawer() { closeInspector(); el.drawer.hidden = true; el.backdrop.hidden = true; state.drawerMode = null; state.drawerBuilding = null; state.highlightShop = null; selectMap(null); }
+  function closeDrawer() { closeInspector(); hideMobileResults(); el.drawer.hidden = true; el.backdrop.hidden = true; state.drawerMode = null; state.drawerBuilding = null; state.highlightShop = null; state.mobileStack = []; state.searchReturn = false; selectMap(null); }
   function renderBuildingDrawer() {
     const building = state.drawerBuilding;
     const totalShops = building.stallIds.reduce((sum, id) => sum + (adapter.getStall(id)?.shops.length || 0), 0);
@@ -288,7 +329,7 @@
   }
   function openStall(stall, fromBuilding = state.drawerBuilding, shopId = null) {
     if (!stall) return;
-    closeInspector(); state.drawerMode = "stall";
+    closeInspector(); hideMobileResults(); state.drawerMode = "stall";
     state.drawerBuilding = fromBuilding || layout.buildings.find(building => building.id === stall.buildingId);
     state.highlightShop = shopId; selectMap(stall.buildingId, stall.id);
     const building = layout.buildings.find(item => item.id === stall.buildingId), floor = building.floors.find(item => item.index === stall.floor);
@@ -297,7 +338,7 @@
     el.back.hidden = !fromBuilding || building.stallIds.length === 1;
     const members = stall.members.length ? `<section class="member-list"><h3>Members</h3><p>${stall.members.map(esc).join(" · ")}</p></section>` : "";
     el.content.innerHTML = `<div class="stall-hero">${ownerVisual(stall.owner, true)}<div><p class="eyebrow">${stall.owner.type === "NONE" ? "Available" : "Current owner"}</p><h3>${esc(stall.owner.name)}</h3><p>${stall.ownerSince ? `Owned for ${ownershipDuration(stall.ownerSince)} · since ${new Date(stall.ownerSince).toLocaleDateString()}` : "Ready to rent"}</p></div></div>${locationMarkup(stall.location)}<div class="detail-grid"><div><small>Rent remaining</small>${rentMarkup(stall.nextRentAt)}</div><div><small>Members</small><strong>${stall.members.length}</strong></div><div><small>Shops</small><strong>${stall.shops.length}</strong></div></div>${members}<h3>Shops</h3><div class="shop-list">${stall.shops.length ? stall.shops.map(shop => shopCard(shop, shop.id === shopId)).join("") : `<div class="shop-card empty"><strong>This stall is ready for its next shop.</strong><small>Ownership and live shop data will appear here.</small></div>`}</div>`;
-    showDrawer(); bindDrawerActions();
+    state.mobileStack = [...state.mobileStack.filter(entry => entry.type !== "stall"), {type: "stall", id: stall.id}]; showDrawer(); bindDrawerActions();
     if (shopId) requestAnimationFrame(() => el.content.querySelector(".shop-card.highlight")?.scrollIntoView({ block: "center" }));
   }
   function shopCard(shop, highlight) {
@@ -321,17 +362,23 @@
   function openInspector(shopId, side = null, match = null) {
     const shop = adapter.getShops().find(candidate => candidate.id === shopId);
     if (!shop) return;
+    hideMobileResults(); state.mobileStack.push({type: "shop", id: shop.id});
     const selectedSide = side || (shop.direction === "BUY" ? "sellItem" : "sellItem");
     const labels = transactionLabels(shop.direction);
     state.inspectorHistory = [inspectorEntry(shop, selectedSide, shop[selectedSide], selectedSide === "sellItem" ? labels[0] : labels[1])];
     if (match?.contained && match.container) {
       const containerSide = match.side;
-      const containerItem = shop[containerSide];
-      state.inspectorHistory = [inspectorEntry(shop, containerSide, containerItem, containerSide === "sellItem" ? labels[0] : labels[1], 0, { focusMaterial: match.item.material })];
+      const role = containerSide === "sellItem" ? labels[0] : labels[1];
+      let containerItem = shop[containerSide]; state.inspectorHistory = [inspectorEntry(shop, containerSide, containerItem, role, 0)];
+      for (let index = 0; index < Math.max(0, match.path.length - 1); index += 1) {
+        const step = match.path[index], child = containerItem.metadata?.container?.contents?.find((value, childIndex) => step.slot == null ? childIndex === step.index : value.slot === step.slot)?.item;
+        if (!child) break; containerItem = child; state.inspectorHistory.push(inspectorEntry(shop, containerSide, containerItem, role, index + 1));
+      }
+      state.inspectorHistory.at(-1).context = { focusMaterial: match.item.material };
     }
     renderInspector();
   }
-  function closeInspector() { el.inspector.hidden = true; state.inspectorHistory = []; document.body.classList.remove("inspector-open"); }
+  function closeInspector() { el.inspector.hidden = true; state.inspectorHistory = []; hideItemTooltip(); document.body.classList.remove("inspector-open"); state.mobileStack = state.mobileStack.filter(entry => !["shop", "container"].includes(entry.type)); }
   function selectInspectorSide(shop, side) {
     const labels = transactionLabels(shop.direction);
     state.inspectorHistory = [inspectorEntry(shop, side, shop[side], side === "sellItem" ? labels[0] : labels[1])];
@@ -341,11 +388,12 @@
     if (depth > 4) return;
     const current = state.inspectorHistory.at(-1);
     state.inspectorHistory.push(inspectorEntry(current.shop, current.side, item, current.role, depth, context));
+    state.mobileStack.push({type: "container", material: item.material});
     renderInspector();
   }
   function inspectorItemDetails(item) {
     const metadata = itemMetadata(item);
-    return `<section class="minecraft-tooltip"><div class="inspected-item">${itemIcon(item, "large")}<div><h3>${esc(item.metadata?.customName || item.displayName)}</h3>${item.metadata?.customName ? `<p>${esc(item.displayName)}</p>` : ""}<strong>${item.amount}×</strong></div></div>${metadata.length ? `<ul>${metadata.map(detail => `<li>${esc(detail)}</li>`).join("")}</ul>` : `<p>No additional public item details.</p>`}<code>minecraft:${esc(item.material.toLowerCase())}</code></section>`;
+    return `<section class="minecraft-tooltip"><div class="inspected-item">${itemIcon(item, "large")}<div><h3>${minecraftText(item.metadata?.customName || item.displayName)}</h3>${item.metadata?.customName ? `<p>${minecraftText(item.displayName, "muted")}</p>` : ""}<strong>${minecraftText(`${item.amount}x`)}</strong></div></div>${metadata.length ? `<ul>${metadata.map(detail => `<li>${minecraftText(detail, "muted")}</li>`).join("")}</ul>` : `<p>${minecraftText("No additional public item details.", "muted")}</p>`}<code>${minecraftText(`minecraft:${item.material.toLowerCase()}`, "identifier")}</code></section>`;
   }
   function containerMarkup(entry) {
     const { item, context, depth } = entry, container = item.metadata?.container;
@@ -353,23 +401,29 @@
     const note = `${entry.role === "YOU PROVIDE" || entry.role === "YOU GIVE" || entry.role === "YOU PAY" ? "Provided" : "Sold"} as one ${item.displayName}. Contents are not separate listings.`;
     if (container.type === "SHULKER") {
       const slots = new Map(container.contents.map(value => [value.slot, value.item]));
-      return `<section class="container-inspection"><h3>${esc(item.displayName)} contents</h3><p>${esc(note)}</p><div class="minecraft-shulker-window" style="--shulker-gui:url('${cssAssetBase}${iconManifest.gui.shulker}')"><div class="shulker-slot-grid">${Array.from({ length: 27 }, (_, slot) => {
+      return `<section class="container-inspection"><h3>${esc(item.displayName)} contents</h3><p>${esc(note)}</p><div class="shulker-frame" data-shulker-color="${esc(item.metadata?.shulkerColor || "Natural")}"><div class="minecraft-shulker-window" style="--shulker-gui:url('${cssAssetBase}${iconManifest.gui.shulker}')"><div class="shulker-title">${minecraftText(item.displayName)}</div><div class="shulker-slot-grid">${Array.from({ length: 27 }, (_, slot) => {
         const child = slots.get(slot), focused = child && context?.focusMaterial === child.material;
-        return `<button class="minecraft-slot${focused ? " focused-match" : ""}" style="--slot-image:url('${cssAssetBase}${iconManifest.gui.slot}')" data-container-slot="${slot}" ${child ? "" : "disabled"} aria-label="${child ? `${child.amount} ${esc(child.displayName)}` : "Empty slot"}">${child ? `${itemIcon(child)}<span class="stack-count">${child.amount}</span><span class="slot-tooltip"><strong>${esc(child.displayName)}</strong>${itemMetadata(child).map(detail => `<small>${esc(detail)}</small>`).join("")}</span>` : ""}</button>`;
-      }).join("")}</div></div></section>`;
+        return `<button class="minecraft-slot${focused ? " focused-match" : ""}" style="--slot-image:url('${cssAssetBase}${iconManifest.gui.slot}')" data-container-slot="${slot}" ${child ? "" : "disabled"} aria-label="${child ? `${child.amount} ${esc(child.displayName)}` : "Empty slot"}">${child ? `${itemIcon(child)}${child.amount > 1 ? `<span class="stack-count">${minecraftText(child.amount)}</span>` : ""}` : ""}</button>`;
+      }).join("")}</div></div></div></section>`;
     }
     const maximum = Math.max(1, container.capacityMax || 64), used = Math.max(0, container.capacityUsed || 0);
-    return `<section class="container-inspection bundle-inspection"><h3>${esc(item.displayName)} contents</h3><p>${esc(note)}</p><div class="bundle-meter" aria-label="${used} of ${maximum} bundle capacity used"><span style="width:${Math.min(100, used / maximum * 100)}%"></span></div><p>${used} used · ${Math.max(0, maximum - used)} remaining</p><div class="bundle-items">${container.contents.map((value, index) => { const child = value.item, focused = context?.focusMaterial === child.material; return `<button class="bundle-item${focused ? " focused-match" : ""}" data-container-index="${index}">${itemIcon(child)}<span><strong>${child.amount}× ${esc(child.displayName)}</strong><small>${itemMetadata(child).join(" · ") || "Bundle item"}</small></span></button>`; }).join("")}</div></section>`;
+    const full = used >= maximum;
+    return `<section class="container-inspection bundle-inspection"><h3>${esc(item.displayName)} contents</h3><p>${esc(note)}</p><div class="minecraft-bundle-tooltip"><div class="bundle-title">${minecraftText(item.metadata?.customName || "Bundle")}</div><div class="bundle-item-grid">${container.contents.map((value, index) => { const child = value.item, focused = context?.focusMaterial === child.material; return `<button class="bundle-slot${focused ? " focused-match" : ""}" style="--bundle-slot:url('${cssAssetBase}${iconManifest.gui.bundleSlot}')" data-container-index="${index}" aria-label="${child.amount} ${esc(child.displayName)}">${itemIcon(child)}${child.amount > 1 ? `<span class="stack-count">${minecraftText(child.amount)}</span>` : ""}</button>`; }).join("")}</div><div class="bundle-capacity-label">${minecraftText(full ? "Full!" : `${used}/${maximum}`)}</div><div class="bundle-capacity${full ? " full" : ""}" aria-label="${used} of ${maximum} bundle capacity used" style="--bundle-border:url('${cssAssetBase}${iconManifest.gui.bundleBorder}');--bundle-fill:url('${cssAssetBase}${full ? iconManifest.gui.bundleFull : iconManifest.gui.bundleFill}')"><span style="width:${Math.min(100, used / maximum * 100)}%"></span></div></div></section>`;
   }
   function renderInspector() {
     const entry = state.inspectorHistory.at(-1), { shop, item } = entry;
     const labels = transactionLabels(shop.direction), action = { SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction];
     el.inspector.hidden = false; document.body.classList.add("inspector-open");
     el.inspectorKicker.textContent = `${action} · ${entry.role}`; el.inspectorTitle.textContent = item.displayName;
-    el.inspectorContent.innerHTML = `${state.inspectorHistory.length > 1 ? `<button class="inspector-back" type="button">← Back to ${esc(state.inspectorHistory.at(-2).item.displayName)}</button>` : ""}<section class="inspector-shop-context"><span>Shop by <strong>${esc(shop.owner.name)}</strong></span>${locationMarkup(shop.interaction, true)}</section><div class="inspector-transaction-tabs"><button class="${entry.side === "sellItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="sellItem"><span class="transaction-tab-label">${labels[0]}</span>${itemIcon(shop.sellItem)}<strong>${shop.sellItem.amount}× ${esc(shop.sellItem.displayName)}</strong></button><button class="${entry.side === "costItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="costItem"><span class="transaction-tab-label">${labels[1]}</span>${itemIcon(shop.costItem)}<strong>${shop.costItem.amount}× ${esc(shop.costItem.displayName)}</strong></button></div>${inspectorItemDetails(item)}${containerMarkup(entry)}`;
+    const backLabel = state.inspectorHistory.length > 1 ? `Back to ${state.inspectorHistory.at(-2).item.displayName}` : state.searchReturn ? "Back to search results" : "Back to stall";
+    el.inspectorContent.innerHTML = `<button class="inspector-back mobile-navigation-back" type="button">← ${esc(backLabel)}</button><section class="inspector-shop-context"><span>Shop by <strong>${esc(shop.owner.name)}</strong></span>${locationMarkup(shop.interaction, true)}</section><div class="inspector-transaction-tabs"><button class="${entry.side === "sellItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="sellItem"><span class="transaction-tab-label">${labels[0]}</span>${itemIcon(shop.sellItem)}<strong>${shop.sellItem.amount}× ${esc(shop.sellItem.displayName)}</strong></button><button class="${entry.side === "costItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="costItem"><span class="transaction-tab-label">${labels[1]}</span>${itemIcon(shop.costItem)}<strong>${shop.costItem.amount}× ${esc(shop.costItem.displayName)}</strong></button></div>${inspectorItemDetails(item)}${containerMarkup(entry)}`;
     bindCopy(el.inspectorContent);
     el.inspectorContent.querySelectorAll("[data-inspector-side]").forEach(button => button.onclick = () => selectInspectorSide(shop, button.dataset.inspectorSide));
-    el.inspectorContent.querySelector(".inspector-back")?.addEventListener("click", () => { state.inspectorHistory.pop(); renderInspector(); });
+    el.inspectorContent.querySelector(".inspector-back")?.addEventListener("click", () => {
+      if (state.inspectorHistory.length > 1) { state.inspectorHistory.pop(); state.mobileStack.pop(); renderInspector(); }
+      else if (state.searchReturn) { closeInspector(); el.drawer.hidden = true; el.backdrop.hidden = true; showMobileResults(); }
+      else closeInspector();
+    });
     const container = item.metadata?.container;
     el.inspectorContent.querySelectorAll("[data-container-slot]").forEach(button => button.onclick = () => {
       const child = container.contents.find(value => value.slot === Number(button.dataset.containerSlot))?.item;
@@ -378,6 +432,11 @@
     el.inspectorContent.querySelectorAll("[data-container-index]").forEach(button => {
       button.onclick = () => inspectContained(container.contents[Number(button.dataset.containerIndex)].item, null, entry.depth + 1);
     });
+    el.inspectorContent.querySelectorAll("[data-container-slot]").forEach(button => {
+      const child = container.contents.find(value => value.slot === Number(button.dataset.containerSlot))?.item;
+      if (child) bindItemTooltip(button, child);
+    });
+    el.inspectorContent.querySelectorAll("[data-container-index]").forEach(button => bindItemTooltip(button, container.contents[Number(button.dataset.containerIndex)].item));
     requestAnimationFrame(() => el.inspectorContent.querySelector(".focused-match")?.scrollIntoView({ block: "center" }));
   }
 
@@ -405,7 +464,10 @@
     $(selector).addEventListener(selector.includes("search") ? "input" : "change", event => { state.filters[key] = event.target.value; applyFilters(); });
   }
   $("#clear-filters").onclick = clearFilters;
-  $("#mobile-filters").onclick = () => { const open = filterFields.classList.toggle("open"); $("#mobile-filters").setAttribute("aria-expanded", open); };
+  $("#mobile-filters").onclick = () => { const open = !filterFields.classList.contains("open"); if (open) { closeInspector(); hideMobileResults(); el.drawer.hidden = true; el.backdrop.hidden = true; } filterFields.classList.toggle("open", open); $("#mobile-filters").setAttribute("aria-expanded", open); };
+
+  function hideMobileResults() { el.results.classList.remove("mobile-sheet"); state.mobileResultsOpen = false; }
+  function showMobileResults() { if (!isMobile() || !state.lastSearch?.query) return; filterFields.classList.remove("open"); el.results.classList.add("mobile-sheet"); state.mobileResultsOpen = true; }
 
   function executeSearch(query = $("#item-search").value) {
     const value = query.trim(), shops = adapter.searchItems(value);
@@ -413,18 +475,21 @@
       const recent = JSON.parse(localStorage.getItem("enthusia-market-recent-searches") || "[]").filter(item => item !== value);
       localStorage.setItem("enthusia-market-recent-searches", JSON.stringify([value, ...recent].slice(0, 6)));
     }
-    renderResults(value, shops); hideSuggestions(); return shops;
+    state.lastSearch = {query: value, shops}; state.searchReturn = false;
+    if (isMobile()) { closeInspector(); el.drawer.hidden = true; el.backdrop.hidden = true; filterFields.classList.remove("open"); }
+    renderResults(value, shops); if (value) showMobileResults(); else hideMobileResults(); hideSuggestions(); return shops;
   }
   function renderResults(query, shops) {
     if (!query) { el.results.innerHTML = `<div class="empty-results"><h2>Browse the whole market</h2><p>Search for an item or select any building on the map.</p></div>`; return; }
     el.results.innerHTML = `<p class="eyebrow">Item results</p><h2>${shops.length} result${shops.length === 1 ? "" : "s"} for “${esc(query)}”</h2><div class="result-list">${shops.map((shop, index) => {
-      const item = shop.match.item;
-      const contained = shop.match.contained ? `<small class="contained-match">${item.amount}× inside ${esc(shop.match.container.displayName)} · container contents are not sold separately</small>` : "";
-      return `<article class="result-card"><button class="result-main" data-result-index="${index}">${itemIcon(item)}<span><strong>${esc(item.displayName)}</strong>${contained}<small>${{ SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction]} · ${displayStall(shop.stall.id)}</small><small>${C.floorName(shop.stall.floor)}</small></span></button>${locationMarkup(shop.interaction, true)}</article>`;
+      const item = shop.match.item, containerPath = shop.match.containerPath || [], leadingItem = shop.match.contained ? containerPath[0] || shop.match.container : item;
+      const inside = shop.match.contained ? `<small class="contained-match">Inside ${containerPath.map(container => esc(container.displayName)).join(" › ") || esc(shop.match.container.displayName)}</small>` : "";
+      const primary = shop.match.contained ? `${item.amount}× ${esc(item.displayName)}` : esc(item.displayName);
+      return `<article class="result-card"><button class="result-main" data-result-index="${index}">${itemIcon(leadingItem)}<span><strong>${primary}</strong>${inside}<small>${{ SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction]} · ${displayStall(shop.stall.id)} · ${buildingNumber(shop.stall.buildingId)} · ${C.floorName(shop.stall.floor)}</small></span></button>${locationMarkup(shop.interaction, true)}</article>`;
     }).join("")}</div>`;
     el.results.querySelectorAll("[data-result-index]").forEach(button => button.onclick = () => {
       const shop = shops[Number(button.dataset.resultIndex)], stall = shop.stall;
-      clearFilters(); focusBuilding(stall.buildingId); openStall(stall, null, shop.id); openInspector(shop.id, shop.match.side, shop.match);
+      state.searchReturn = isMobile(); hideMobileResults(); clearFilters(); focusBuilding(stall.buildingId); openStall(stall, null, shop.id); openInspector(shop.id, shop.match.side, shop.match);
     });
     bindCopy(el.results);
   }
@@ -451,7 +516,7 @@
   };
   $("#search-button").onclick = () => executeSearch(); $("#drawer-close").onclick = closeDrawer; el.backdrop.onclick = closeDrawer;
   el.back.onclick = () => { closeInspector(); if (state.drawerBuilding) { state.drawerMode = "building"; renderBuildingDrawer(); } };
-  $("#inspector-close").onclick = closeInspector;
+  $("#inspector-close").onclick = () => isMobile() ? closeDrawer() : closeInspector();
   $("#zoom-in").onclick = () => zoomAt(1.2, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
   $("#zoom-out").onclick = () => zoomAt(.83, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
   $("#fit-map").onclick = fit;
@@ -466,6 +531,7 @@
   window.__MARKET_TEST__ = {
     layout, snapshot, adapter, hitBuilding, screenWorld, openBuilding, openStall, openInspector, closeInspector, closeDrawer,
     executeSearch, applyFilters, clearFilters, focusBuilding, rentState, transactionLabels, itemMetadata, itemIcon,
+    minecraftText, showItemTooltip, hideItemTooltip, showMobileResults, hideMobileResults, buildingNumber,
     get state() { return state; }, counts: { buildings: layout.buildings.length, stalls: layout.stalls.length }, drawerMode: () => state.drawerMode
   };
   initMap(); applyFilters(); requestAnimationFrame(fit);

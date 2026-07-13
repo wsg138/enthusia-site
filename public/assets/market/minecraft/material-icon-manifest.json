@@ -79,6 +79,20 @@
         }
       ]
     },
+    "RED_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/red_shulker_box.png"
+        }
+      ]
+    },
+    "PURPLE_SHULKER_BOX": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/block/purple_shulker_box.png"
+        }
+      ]
+    },
     "LIGHT_BLUE_STAINED_GLASS_PANE": {
       "layers": [
         {
@@ -129,6 +143,42 @@
         }
       ]
     },
+    "SPLASH_POTION": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/potion_overlay.png",
+          "tintSource": "potion",
+          "defaultTint": "#385dc6"
+        },
+        {
+          "src": "minecraft/vanilla/textures/item/splash_potion.png"
+        }
+      ]
+    },
+    "LINGERING_POTION": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/potion_overlay.png",
+          "tintSource": "potion",
+          "defaultTint": "#385dc6"
+        },
+        {
+          "src": "minecraft/vanilla/textures/item/lingering_potion.png"
+        }
+      ]
+    },
+    "TIPPED_ARROW": {
+      "layers": [
+        {
+          "src": "minecraft/vanilla/textures/item/tipped_arrow_head.png",
+          "tintSource": "potion",
+          "defaultTint": "#385dc6"
+        },
+        {
+          "src": "minecraft/vanilla/textures/item/tipped_arrow_base.png"
+        }
+      ]
+    },
     "WAXED_WEATHERED_CUT_COPPER_STAIRS": {
       "layers": [
         {
@@ -151,5 +201,9 @@
     "bundleFill": "minecraft/vanilla/textures/gui/sprites/container/bundle/bundle_progressbar_fill.png",
     "bundleFull": "minecraft/vanilla/textures/gui/sprites/container/bundle/bundle_progressbar_full.png",
     "bundleSlot": "minecraft/vanilla/textures/gui/sprites/container/bundle/slot_background.png"
+  },
+  "font": {
+    "ascii": "minecraft/vanilla/textures/font/ascii.png",
+    "metrics": "minecraft/font-metrics.json"
   }
 }

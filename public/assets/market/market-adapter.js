@@ -21,18 +21,19 @@
     ].filter(Boolean).map(normalize);
   }
 
-  function containerEntries(item, side, container = null, path = [], depth = 0, ancestors = new Set()) {
-    const direct = [{item, side, container, contained: Boolean(container), path, depth}];
+  function containerEntries(item, side, container = null, path = [], depth = 0, ancestors = new Set(), containerPath = []) {
+    const direct = [{item, side, container, contained: Boolean(container), path, depth, containerPath}];
     if (!item || depth >= 4 || ancestors.has(item)) return direct;
     const contents = item?.metadata?.container?.contents || [];
     const nextAncestors = new Set(ancestors).add(item);
-    return direct.concat(contents.flatMap((entry, index) => containerEntries(entry.item, side, item, [...path, {index, slot: entry.slot ?? null}], depth + 1, nextAncestors)));
+    return direct.concat(contents.flatMap((entry, index) => containerEntries(entry.item, side, item, [...path, {index, slot: entry.slot ?? null}], depth + 1, nextAncestors, [...containerPath, item])));
   }
 
   class StaticMarketAdapter {
-    constructor(layout, snapshot) {
+    constructor(layout, snapshot, catalog = window.ENTHUSIA_MINECRAFT_ITEM_CATALOG) {
       this.layout = layout;
       this.snapshot = snapshot;
+      this.catalog = catalog?.items || [];
       this.stalls = new Map(snapshot.stalls.map(stall => [stall.id, stall]));
     }
     getStall(id) { return this.stalls.get(id) || null; }
@@ -60,11 +61,13 @@
         return true;
       });
     }
-    suggest(query, limit = 6) {
+    suggest(query, limit = 15) {
       const value = normalize(query);
-      if (value.length < 2) return [];
-      const names = [...new Set(this.searchEntries().flatMap(entry => [entry.match.item.displayName, materialName(entry.match.item.material), entry.match.item.metadata?.customName]).filter(Boolean))];
-      return names.filter(name => normalize(name).startsWith(value)).sort().slice(0, limit);
+      if (value.length < 1) return [];
+      const available = new Set(this.searchEntries().flatMap(entry => [normalize(entry.match.item.displayName), normalize(entry.match.item.material)]));
+      const materialQuery = value.replaceAll(" ", "_"), matches = this.catalog.filter(item => normalize(item.displayName).startsWith(value) || normalize(item.material).startsWith(materialQuery) || normalize(item.id).startsWith(`minecraft:${materialQuery}`));
+      const rank = item => normalize(item.displayName).startsWith(value) ? 0 : 1;
+      return matches.sort((a, b) => rank(a) - rank(b) || Number(available.has(normalize(b.displayName)) || available.has(normalize(b.material))) - Number(available.has(normalize(a.displayName)) || available.has(normalize(a.material))) || a.displayName.localeCompare(b.displayName)).slice(0, limit).map(item => item.displayName);
     }
   }
 
