@@ -100,7 +100,9 @@ try {
   results.containerResult = await evaluate("(()=>{const T=window.__MARKET_TEST__;T.executeSearch('ender pearl');const card=document.querySelector('.result-card'),text=card?.innerText||'';return text.includes('Inside Purple Shulker Box › Bundle')&&!text.includes('sold separately')&&card.querySelector('.minecraft-item-icon')?.getAttribute('aria-label')==='Purple Shulker Box'})()");
   results.bundle = await evaluate("(()=>{const T=window.__MARKET_TEST__,shop=T.adapter.getShops().find(x=>x.sellItem.metadata?.container?.type==='BUNDLE');T.openStall(shop.stall,null,shop.id);T.openInspector(shop.id,'sellItem');return Boolean(document.querySelector('.minecraft-bundle-tooltip'))&&document.querySelectorAll('.bundle-slot').length===3&&document.body.innerText.includes('Full!')&&!document.body.innerText.includes(\"Explorer's Bundle\")})()");
   results.shulkerCrop = await evaluate("(()=>{const T=window.__MARKET_TEST__,shop=T.adapter.getShops().find(x=>x.sellItem.metadata?.container?.type==='SHULKER');T.openStall(shop.stall,null,shop.id);T.openInspector(shop.id,'sellItem');const node=document.querySelector('.minecraft-shulker-window'),ratio=node.getBoundingClientRect().width/node.getBoundingClientRect().height;return document.querySelectorAll('.minecraft-slot').length===27&&ratio>2.30&&ratio<2.33&&!document.querySelector('.player-inventory,.hotbar')})()");
-  results.avatarContract = await evaluate("(()=>{const T=window.__MARKET_TEST__,stall=T.snapshot.stalls.find(x=>x.owner.type==='PLAYER'&&x.owner.avatarUrl);T.openStall(stall);const image=document.querySelector('.resolved-head');return Boolean(image&&image.dataset.outerLayer==='true'&&image.naturalWidth>0)})()");
+  await evaluate("(()=>{const T=window.__MARKET_TEST__,stall=T.snapshot.stalls.find(x=>x.owner.type==='PLAYER'&&x.owner.avatarUrl);T.openStall(stall)})()");
+  await waitFor("document.querySelector('.resolved-head')?.complete===true");
+  results.avatarContract = await evaluate("(()=>{const image=document.querySelector('.resolved-head');return Boolean(image&&image.dataset.outerLayer==='true'&&image.naturalWidth>0)})()");
 
   results.mobileViewports = {};
   for (const [width, height] of [[320,568],[360,640],[375,667],[390,844],[430,932],[844,390]]) {
@@ -118,7 +120,7 @@ try {
   results.browserErrors = browserErrors;
   results.failedResources = failedResources.filter(resource => resource.error !== "net::ERR_ABORTED");
   console.log(JSON.stringify(results, null, 2));
-  if (Object.entries(results).some(([key, value]) => !["counts", "browserErrors", "failedResources", "failedImages", "failedBuildingIds", "mobileViewports", "increasedTextMetrics"].includes(key) && value !== true) || Object.values(results.mobileViewports || {}).some(value => value !== true) || browserErrors.length || failedResources.length || results.failedImages.length || results.failedBuildingIds.length) process.exitCode = 1;
+  if (Object.entries(results).some(([key, value]) => !["counts", "browserErrors", "failedResources", "failedImages", "failedBuildingIds", "mobileViewports", "increasedTextMetrics"].includes(key) && value !== true) || Object.values(results.mobileViewports || {}).some(value => value !== true) || browserErrors.length || results.failedResources.length || results.failedImages.length || results.failedBuildingIds.length) process.exitCode = 1;
 } finally {
   socket.close(); child.kill();
 }
