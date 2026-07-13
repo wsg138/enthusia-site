@@ -87,6 +87,7 @@
             <option value="glow">Celestial disk with glow</option>
             <option value="add">Repair-add overlay</option>
             <option value="subtract">Repair-subtract overlay</option>
+            <option value="conflicts">Conflict review</option>
             <option value="split">Before / after split</option>
           </select>
         </label>
@@ -134,11 +135,16 @@
         <h2>Checkpoint</h2>
         <p id="checkpointDescription">Sun behind right trees · progress 0.28</p>
         <p class="plain-help"><strong>Terrain</strong> paints over objects that should hide the disk. <strong>Sky</strong> is only for real holes. Turn glow off before judging an edge.</p>
+        <p class="scene-note">Repairs apply to the entire scene. Checkpoints are different camera views of the same mask—you only need to correct newly visible problems.</p>
       </section>
 
       <section>
         <h2>Validation</h2>
         <ul id="validationResults" class="validation-list"><li>Click Validate when you finish all checkpoints.</li></ul>
+        <div class="button-stack validation-actions">
+          <button id="resolveConflictsBtn" class="button primary">Resolve conflicts</button>
+          <button id="reviewConflictsBtn" class="button secondary">Review unresolved</button>
+        </div>
       </section>
 
       <section>

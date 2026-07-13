@@ -22,7 +22,8 @@ const suggestionCanvas = document.createElement("canvas");
 const finalAlphaCanvas = document.createElement("canvas");
 const scratchCanvas = document.createElement("canvas");
 const sampleCanvas = document.createElement("canvas");
-for (const canvas of [addCanvas, subtractCanvas, suggestionCanvas, finalAlphaCanvas, scratchCanvas, sampleCanvas]) {
+const strokeCanvas = document.createElement("canvas");
+for (const canvas of [addCanvas, subtractCanvas, suggestionCanvas, finalAlphaCanvas, scratchCanvas, sampleCanvas, strokeCanvas]) {
   canvas.width = W;
   canvas.height = H;
 }
@@ -32,7 +33,8 @@ const suggestionCtx = suggestionCanvas.getContext("2d");
 const finalAlphaCtx = finalAlphaCanvas.getContext("2d");
 const scratchCtx = scratchCanvas.getContext("2d");
 const sampleCtx = sampleCanvas.getContext("2d", { willReadFrequently: true });
-for (const context of [sceneCtx, editCtx, addCtx, subtractCtx, suggestionCtx, finalAlphaCtx, scratchCtx, sampleCtx]) {
+const strokeCtx = strokeCanvas.getContext("2d", { willReadFrequently: true });
+for (const context of [sceneCtx, editCtx, addCtx, subtractCtx, suggestionCtx, finalAlphaCtx, scratchCtx, sampleCtx, strokeCtx]) {
   context.imageSmoothingEnabled = false;
 }
 
@@ -68,6 +70,7 @@ const state = {
   repairRevision: 0,
   foregroundCache: new Map(),
   dirty: false,
+  unresolvedConflicts: new Uint8Array(W * H),
 };
 
 const ASSETS = {
@@ -239,6 +242,7 @@ function currentRepairData() {
 }
 
 function rebuildRepairs() {
+  state.unresolvedConflicts.fill(0);
   addCtx.clearRect(0, 0, W, H);
   subtractCtx.clearRect(0, 0, W, H);
   addCtx.putImageData(state.initialAdd, 0, 0);
@@ -247,8 +251,13 @@ function rebuildRepairs() {
     const suggestion = state.suggestions.get(id);
     if (suggestion) {
       const data = addCtx.getImageData(0, 0, W, H);
-      for (let i = 0; i < suggestion.length; i++) if (suggestion[i] > data.data[i * 4 + 3]) data.data[i * 4 + 3] = suggestion[i];
+      const subtract = subtractCtx.getImageData(0, 0, W, H);
+      for (let i = 0; i < suggestion.length; i++) if (suggestion[i]) {
+        if (suggestion[i] > data.data[i * 4 + 3]) data.data[i * 4 + 3] = suggestion[i];
+        subtract.data[i * 4 + 3] = 0;
+      }
       addCtx.putImageData(data, 0, 0);
+      subtractCtx.putImageData(subtract, 0, 0);
     }
   }
   for (const stroke of state.strokes) drawStroke(stroke, false);
@@ -260,8 +269,8 @@ function rebuildRepairs() {
 function drawBrushPoint(ctx, point, stroke) {
   const radius = Math.max(.5, stroke.size / 2);
   ctx.save();
-  ctx.globalCompositeOperation = stroke.tool === "edge" ? "copy" : "source-over";
-  const alpha = stroke.tool === "edge" ? 0.5 : 1;
+  ctx.globalCompositeOperation = stroke.composite || (stroke.tool === "edge" ? "copy" : "source-over");
+  const alpha = stroke.alpha ?? (stroke.tool === "edge" ? 0.5 : 1);
   if (stroke.hardness >= .995) {
     ctx.fillStyle = `rgba(255,255,255,${alpha})`;
   } else {
@@ -276,8 +285,7 @@ function drawBrushPoint(ctx, point, stroke) {
   ctx.restore();
 }
 
-function drawStroke(stroke, refresh = true) {
-  const ctx = stroke.tool === "sky" ? subtractCtx : addCtx;
+function paintStroke(ctx, stroke) {
   if (stroke.points.length === 1) drawBrushPoint(ctx, stroke.points[0], stroke);
   for (let index = 1; index < stroke.points.length; index++) {
     const start = stroke.points[index - 1];
@@ -288,6 +296,56 @@ function drawStroke(stroke, refresh = true) {
       drawBrushPoint(ctx, { x: start.x + (end.x - start.x) * step / steps, y: start.y + (end.y - start.y) * step / steps }, stroke);
     }
   }
+}
+
+function clearOppositeLayer(stroke) {
+  const opposite = stroke.tool === "sky" ? addCtx : subtractCtx;
+  paintStroke(opposite, { ...stroke, tool: "terrain", composite: "destination-out", alpha: 1 });
+}
+
+function applyResolution(stroke) {
+  const add = addCtx.getImageData(0, 0, W, H);
+  const subtract = subtractCtx.getImageData(0, 0, W, H);
+  for (const pixel of stroke.pixels) {
+    const alpha = pixel.index * 4 + 3;
+    if (pixel.winner === "sky") {
+      add.data[alpha] = 0;
+      subtract.data[alpha] = pixel.value;
+    } else {
+      subtract.data[alpha] = 0;
+      add.data[alpha] = pixel.value;
+    }
+  }
+  addCtx.putImageData(add, 0, 0);
+  subtractCtx.putImageData(subtract, 0, 0);
+}
+
+function applySuggestionStroke(stroke) {
+  const add = addCtx.getImageData(0, 0, W, H);
+  const subtract = subtractCtx.getImageData(0, 0, W, H);
+  for (const pixel of stroke.pixels) {
+    const alpha = pixel.index * 4 + 3;
+    add.data[alpha] = Math.max(add.data[alpha], pixel.value);
+    subtract.data[alpha] = 0;
+  }
+  addCtx.putImageData(add, 0, 0);
+  subtractCtx.putImageData(subtract, 0, 0);
+}
+
+function drawStroke(stroke, refresh = true) {
+  if (stroke.tool === "resolution") {
+    applyResolution(stroke);
+    if (refresh) { state.repairRevision++; state.foregroundCache.clear(); render(); }
+    return;
+  }
+  if (stroke.tool === "suggestion") {
+    applySuggestionStroke(stroke);
+    if (refresh) { state.repairRevision++; state.foregroundCache.clear(); render(); }
+    return;
+  }
+  const ctx = stroke.tool === "sky" ? subtractCtx : addCtx;
+  if (stroke.exclusive) clearOppositeLayer(stroke);
+  paintStroke(ctx, stroke);
   if (refresh) {
     state.repairRevision++;
     state.foregroundCache.clear();
@@ -374,7 +432,9 @@ function drawRepairOverlays() {
     const offset = i * 4;
     const addAlpha = add[offset + 3];
     const subtractAlpha = subtract[offset + 3];
-    if (subtractAlpha) {
+    if (state.unresolvedConflicts[i]) {
+      overlay.data[offset] = 255;overlay.data[offset + 1] = 0;overlay.data[offset + 2] = 255;overlay.data[offset + 3] = 245;
+    } else if (subtractAlpha) {
       overlay.data[offset] = 255;overlay.data[offset + 1] = 66;overlay.data[offset + 2] = 58;overlay.data[offset + 3] = Math.round(subtractAlpha * .3);
     } else if (addAlpha) {
       overlay.data[offset] = 92;overlay.data[offset + 1] = 235;overlay.data[offset + 2] = 94;overlay.data[offset + 3] = Math.round(addAlpha * .28);
@@ -405,6 +465,15 @@ function render() {
     case "glow": drawPhase(sceneCtx, phase);drawCelestial(sceneCtx, true);break;
     case "add": drawDiagnosticLayer(sceneCtx, addCanvas, "#5ceb5e");break;
     case "subtract": drawDiagnosticLayer(sceneCtx, subtractCanvas, "#ff423a");break;
+    case "conflicts": {
+      drawFinal(sceneCtx, true, false);
+      const conflicts = sceneCtx.createImageData(W, H);
+      for (let i = 0; i < W * H; i++) if (state.unresolvedConflicts[i]) {
+        const offset = i * 4; conflicts.data[offset] = 255; conflicts.data[offset + 2] = 255; conflicts.data[offset + 3] = 255;
+      }
+      sceneCtx.putImageData(conflicts, 0, 0);
+      break;
+    }
     case "split": {
       drawFinal(sceneCtx, false, state.glow);
       scratchCtx.clearRect(0, 0, W, H);drawFinal(scratchCtx, true, state.glow);
@@ -545,6 +614,55 @@ function validate() {
   return errors.length === 0;
 }
 
+function strokeCoverage(stroke, indices) {
+  strokeCtx.clearRect(0, 0, W, H);
+  paintStroke(strokeCtx, { ...stroke, tool: "terrain" });
+  const data = strokeCtx.getImageData(0, 0, W, H).data;
+  const covered = new Set();
+  for (const index of indices) if (data[index * 4 + 3] > 0) covered.add(index);
+  return covered;
+}
+
+function resolveConflicts() {
+  const { add, subtract } = currentRepairData();
+  const conflicts = [];
+  for (let index = 0; index < W * H; index++) {
+    if (add[index * 4 + 3] >= 200 && subtract[index * 4 + 3] >= 200) conflicts.push(index);
+  }
+  state.unresolvedConflicts.fill(0);
+  if (!conflicts.length) {
+    setStatus("No Terrain/Sky conflicts to resolve", "success");
+    validate();
+    return;
+  }
+  const unresolved = new Set(conflicts);
+  const winners = new Map();
+  for (let i = state.strokes.length - 1; i >= 0 && unresolved.size; i--) {
+    const stroke = state.strokes[i];
+    if (!stroke.points?.length || stroke.tool === "resolution") continue;
+    const covered = strokeCoverage(stroke, unresolved);
+    for (const index of covered) {
+      winners.set(index, stroke.tool === "sky" ? "sky" : "terrain");
+      unresolved.delete(index);
+    }
+  }
+  const pixels = [];
+  for (const [index, winner] of winners) {
+    const offset = index * 4 + 3;
+    pixels.push({ index, winner, value: winner === "sky" ? subtract[offset] : add[offset] });
+  }
+  if (pixels.length) {
+    state.strokes.push({ tool: "resolution", checkpoint: checkpoint().id, pixels });
+    state.redo = [];
+    rebuildRepairs();
+    markDirty();
+  }
+  for (const index of unresolved) state.unresolvedConflicts[index] = 1;
+  render();
+  validate();
+  setStatus(`${pixels.length} conflicts resolved${unresolved.size ? `; ${unresolved.size} need review` : ""}`, unresolved.size ? "error" : "success");
+}
+
 async function save() {
   if (!validate()) return;
   $("#saveBtn").disabled = true;
@@ -612,10 +730,21 @@ function bindEvents() {
   $("#clearStrokeBtn").addEventListener("click", () => {state.currentStroke=null;rebuildRepairs();});
   $("#resetCheckpointBtn").addEventListener("click", async () => {if(await confirmAction("Reset checkpoint",`Remove unsaved edits for ${checkpoint().label}?`)){state.strokes=state.strokes.filter(s=>s.checkpoint!==checkpoint().id);state.acceptedSuggestions.delete(checkpoint().id);state.rejectedSuggestions.delete(checkpoint().id);rebuildRepairs();markDirty();}});
   $("#resetAllBtn").addEventListener("click", async () => {if(await confirmAction("Reset all changes","Remove every unsaved stroke and suggestion decision? Saved repair files remain the starting point.")){state.strokes=[];state.redo=[];state.acceptedSuggestions.clear();state.rejectedSuggestions.clear();rebuildRepairs();markDirty();}});
-  $("#acceptSuggestionBtn").addEventListener("click", () => {state.acceptedSuggestions.add(checkpoint().id);state.rejectedSuggestions.delete(checkpoint().id);rebuildRepairs();markDirty();});
+  $("#acceptSuggestionBtn").addEventListener("click", () => {
+    const id=checkpoint().id;
+    const suggestion=state.suggestions.get(id);
+    const pixels=[];
+    if(suggestion)for(let index=0;index<suggestion.length;index++)if(suggestion[index])pixels.push({index,value:suggestion[index]});
+    state.acceptedSuggestions.delete(id);
+    state.rejectedSuggestions.delete(id);
+    if(pixels.length){state.strokes.push({tool:"suggestion",checkpoint:id,pixels,exclusive:true});state.redo=[];}
+    rebuildRepairs();markDirty();
+  });
   $("#rejectSuggestionBtn").addEventListener("click", () => {state.rejectedSuggestions.add(checkpoint().id);state.acceptedSuggestions.delete(checkpoint().id);rebuildRepairs();markDirty();});
   $("#clearSuggestionsBtn").addEventListener("click", () => {for(const key of state.suggestions.keys())state.suggestions.set(key,new Uint8ClampedArray(W*H));state.acceptedSuggestions.clear();state.rejectedSuggestions.clear();rebuildRepairs();markDirty();});
   $("#validateBtn").addEventListener("click", validate);
+  $("#resolveConflictsBtn").addEventListener("click", resolveConflicts);
+  $("#reviewConflictsBtn").addEventListener("click", () => {state.viewMode="conflicts";$("#viewMode").value="conflicts";state.showRepairs=true;$("#overlayToggle").checked=true;render();});
   $("#saveBtn").addEventListener("click", save);
   $("#exportAddBtn").addEventListener("click", () => download("minecraft-occlusion-add-v2.png",pngData(addCanvas)));
   $("#exportSubtractBtn").addEventListener("click", () => download("minecraft-occlusion-subtract-v2.png",pngData(subtractCanvas)));
@@ -628,7 +757,7 @@ function bindEvents() {
     if(state.tool==="inspect")return;
     if(state.tool==="pan"||state.spaceDown){state.panning=true;state.panStart={x:event.clientX,y:event.clientY,panX:state.panX,panY:state.panY};viewport.style.cursor="grabbing";return;}
     state.dragging=true;
-    state.currentStroke={tool:state.tool,size:state.tool==="edge"?Math.min(2,state.brushSize):state.brushSize,hardness:state.tool==="edge"?1:state.hardness,checkpoint:checkpoint().id,points:[point]};
+    state.currentStroke={tool:state.tool,size:state.tool==="edge"?Math.min(2,state.brushSize):state.brushSize,hardness:state.tool==="edge"?1:state.hardness,checkpoint:checkpoint().id,exclusive:true,points:[point]};
     drawStroke(state.currentStroke);
   });
   viewport.addEventListener("pointermove", event => {
