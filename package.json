@@ -7,6 +7,7 @@
     "build": "node scripts/build.mjs",
     "check": "node scripts/validate-site.mjs",
     "mask-editor": "python scripts/cinematic-mask-editor.py",
+    "validate:cinematic": "python scripts/generate-terrain-mask.py --validate-only",
     "test": "npm run check"
   }
 }

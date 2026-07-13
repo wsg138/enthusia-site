@@ -1,13 +1,11 @@
 import { cp, mkdir, rm, writeFile } from "node:fs/promises";
-import { execFileSync } from "node:child_process";
 import path from "node:path";
+import "./validate-cinematic-deploy-assets.mjs";
 
 const root = process.cwd();
 const source = path.join(root, "public");
 const output = path.join(root, "dist");
 const client = path.join(output, "client");
-
-execFileSync("python", [path.join(root, "scripts", "generate-terrain-mask.py"), "--validate-only"], { stdio: "inherit" });
 
 await rm(output, { recursive: true, force: true });
 await mkdir(client, { recursive: true });
