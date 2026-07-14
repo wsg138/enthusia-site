@@ -92,6 +92,28 @@ await test("stall.updated replaces only one stall", async () => {
   assert.equal(h.client.snapshot.stalls[1], untouched); assert.notEqual(h.client.snapshot.stalls[0], before[0]); assert.equal(h.updates.length, 1);
 });
 
+await test("stall.updated preserves guild banner and leader-head avatar data", async () => {
+  const h = harness([response(apiSnapshot())]); await h.client.loadInitialSnapshot();
+  const before = h.client.snapshot.stalls, banner = {baseColor: "BLUE", patterns: [
+    {type: "STRIPE_TOP", color: "WHITE"}, {type: "CROSS", color: "RED"},
+  ]};
+  const changed = {...before[0], owner: {...before[0].owner, type: "GUILD", avatarUrl: null, avatar: {kind: "GUILD_BANNER", source: "LUMAGUILDS", banner}}};
+  h.client.handleMessage(JSON.stringify({type: "stall.updated", sequence: 11, stallId: changed.id, revision: 2, updatedAt: new Date().toISOString(), stall: changed}));
+  assert.deepEqual(h.client.snapshot.stalls[0].owner.avatar.banner, banner);
+  const leaderHead = {...changed, owner: {...changed.owner, avatarUrl: "https://minotar.net/helm/SyntheticLeader/96.png", avatar: {kind: "MINECRAFT_HEAD", source: "JAVA", includesOuterLayer: true}}};
+  h.client.handleMessage(JSON.stringify({type: "stall.updated", sequence: 12, stallId: changed.id, revision: 3, updatedAt: new Date().toISOString(), stall: leaderHead}));
+  assert.equal(h.client.snapshot.stalls[0].owner.avatarUrl, leaderHead.owner.avatarUrl);
+});
+
+await test("invalid avatar data triggers safe resynchronization", async () => {
+  const h = harness([response(apiSnapshot()), response(apiSnapshot(12))]); await h.client.loadInitialSnapshot();
+  const changed = structuredClone(h.client.snapshot.stalls[0]);
+  changed.owner.avatar = {kind: "GUILD_BANNER", banner: {baseColor: "BLUE", patterns: [{type: "PRIVATE_PATTERN", color: "RED"}]}};
+  h.client.handleMessage(JSON.stringify({type: "stall.updated", sequence: 11, stallId: changed.id, revision: 2, updatedAt: new Date().toISOString(), stall: changed}));
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(h.client.sequence, 12); assert.equal(h.updates.length, 0);
+});
+
 await test("older sequence is ignored", async () => {
   const h = harness([response(apiSnapshot())]); await h.client.loadInitialSnapshot();
   h.client.handleMessage(JSON.stringify({type: "stall.updated", sequence: 9, stallId: fallback.stalls[0].id, stall: fallback.stalls[0]}));

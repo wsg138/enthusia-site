@@ -12,6 +12,18 @@
   const isInteger = value => Number.isInteger(value) && value >= 0 && value <= 2147483647;
   const isPositive = value => isInteger(value) && value > 0;
   const isString = value => typeof value === "string" && value.length > 0;
+  const headUrlPattern = /^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/;
+  const bannerColors = new Set(["WHITE","ORANGE","MAGENTA","LIGHT_BLUE","YELLOW","LIME","PINK","GRAY","LIGHT_GRAY","CYAN","PURPLE","BLUE","BROWN","GREEN","RED","BLACK"]);
+  const bannerPatterns = new Set(["SQUARE_BOTTOM_LEFT","SQUARE_BOTTOM_RIGHT","SQUARE_TOP_LEFT","SQUARE_TOP_RIGHT","STRIPE_BOTTOM","STRIPE_TOP","STRIPE_LEFT","STRIPE_RIGHT","STRIPE_CENTER","STRIPE_MIDDLE","STRIPE_DOWNRIGHT","STRIPE_DOWNLEFT","STRIPE_SMALL","CROSS","STRAIGHT_CROSS","TRIANGLE_BOTTOM","TRIANGLE_TOP","TRIANGLES_BOTTOM","TRIANGLES_TOP","DIAGONAL_LEFT","DIAGONAL_RIGHT","DIAGONAL_LEFT_MIRROR","DIAGONAL_RIGHT_MIRROR","CIRCLE","RHOMBUS","HALF_VERTICAL","HALF_HORIZONTAL","HALF_VERTICAL_MIRROR","HALF_HORIZONTAL_MIRROR","BORDER","CURLY_BORDER","GRADIENT","GRADIENT_UP","BRICKS","GLOBE","CREEPER","SKULL","FLOWER","MOJANG","PIGLIN","FLOW","GUSTER"]);
+
+  function validAvatar(owner) {
+    if (!isObject(owner.avatar) || !isString(owner.avatar.kind)) return false;
+    if (owner.avatarUrl !== null && !headUrlPattern.test(owner.avatarUrl) && !["player-head-java.svg", "player-head-bedrock.svg"].includes(owner.avatarUrl)) return false;
+    const banner = owner.avatar.banner;
+    if (banner === undefined || banner === null) return true;
+    return isObject(banner) && bannerColors.has(banner.baseColor) && Array.isArray(banner.patterns) && banner.patterns.length <= 6
+      && banner.patterns.every(pattern => isObject(pattern) && bannerPatterns.has(pattern.type) && bannerColors.has(pattern.color));
+  }
 
   function validItem(item, depth = 0) {
     if (!isObject(item) || depth > 4 || !isString(item.material) || !isString(item.displayName) || !isPositive(item.amount) || item.amount > 64000 || !isObject(item.metadata)) return false;
@@ -21,7 +33,7 @@
 
   function validStall(stall, expectedIds) {
     if (!isObject(stall) || !expectedIds.has(stall.id) || !isString(stall.buildingId) || !Number.isInteger(stall.floor) || !isObject(stall.location) || !isObject(stall.owner) || !Array.isArray(stall.members) || !Array.isArray(stall.shops)) return false;
-    if (!isString(stall.owner.type) || !isString(stall.owner.name) || stall.members.some(member => typeof member !== "string")) return false;
+    if (!isString(stall.owner.type) || !isString(stall.owner.name) || !validAvatar(stall.owner) || stall.members.some(member => typeof member !== "string")) return false;
     return stall.shops.every(shop => isObject(shop) && isPositive(shop.id) && isObject(shop.owner) && isString(shop.owner.name) && ["BUY", "SELL", "TRADE"].includes(shop.direction) && validItem(shop.sellItem) && isPositive(shop.sellAmount) && validItem(shop.costItem) && isPositive(shop.costAmount) && isObject(shop.interaction) && isInteger(shop.stockCount) && isInteger(shop.availableTrades));
   }
 

@@ -245,12 +245,51 @@
     if (stallId) stallElements.get(stallId)?.classList.add("highlighted");
   }
 
+  const headUrlPattern = /^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/;
+  const bannerColors = {WHITE:"#f9fffe",ORANGE:"#f9801d",MAGENTA:"#c74ebd",LIGHT_BLUE:"#3ab3da",YELLOW:"#fed83d",LIME:"#80c71f",PINK:"#f38baa",GRAY:"#474f52",LIGHT_GRAY:"#9d9d97",CYAN:"#169c9c",PURPLE:"#8932b8",BLUE:"#3c44aa",BROWN:"#835432",GREEN:"#5e7c16",RED:"#b02e26",BLACK:"#1d1c21"};
+  function ownerHeadUrl(owner) {
+    if (headUrlPattern.test(owner.avatarUrl || "")) return owner.avatarUrl;
+    if (["player-head-java.svg", "player-head-bedrock.svg"].includes(owner.avatarUrl)) return `${assetBase}${owner.avatarUrl}`;
+    if (owner.type !== "PLAYER") return null;
+    const proxy = String(owner.uuid || "").startsWith("00000000-0000-0000-");
+    const identity = proxy ? owner.name : owner.uuid || owner.name;
+    if (!identity) return null;
+    return `https://minotar.net/helm/${encodeURIComponent(identity)}/96.png`;
+  }
+  function genericPlayer(owner, size, headUrl) {
+    const data = headUrl ? ` data-owner-head-url="${esc(headUrl)}" data-owner-head-name="${esc(owner.name)}" data-skin-source="${esc(owner.avatar?.source || "JAVA")}" data-outer-layer="${owner.avatar?.includesOuterLayer === true}"` : "";
+    return `<span class="owner-image player-head fallback${size}" aria-label="Generic player icon for ${esc(owner.name)}"${data}><img src="${assetBase}player-head-base.svg" alt="Generic player icon for ${esc(owner.name)}" width="82" height="82" decoding="async"><img class="skin-overlay" src="${assetBase}player-head-overlay.svg" alt="" width="82" height="82" decoding="async"></span>`;
+  }
   function ownerVisual(owner, large = false) {
-    const size = large ? " large" : "";
-    if (owner.type === "PLAYER" && owner.avatarUrl) return `<span class="owner-image player-head resolved${size}" aria-label="Minecraft player head for ${esc(owner.name)}"><img class="resolved-head" src="${assetBase}${esc(owner.avatarUrl)}" alt="" width="82" height="82" decoding="async" fetchpriority="high" data-skin-source="${esc(owner.avatar?.source || "JAVA")}" data-outer-layer="${owner.avatar?.includesOuterLayer === true}"></span>`;
-    if (owner.type === "PLAYER") return `<span class="owner-image player-head fallback${size}" aria-label="Fallback Minecraft player head"><img src="${assetBase}player-head-base.svg" alt="" width="82" height="82" decoding="async"><img class="skin-overlay" src="${assetBase}player-head-overlay.svg" alt="" width="82" height="82" decoding="async"></span>`;
-    if (owner.type === "GUILD") return `<span class="owner-image${size}"><img src="${assetBase}${esc(owner.avatar?.url || "guild-banner.svg")}" alt="Guild banner" width="82" height="82" decoding="async"></span>`;
+    const size = large ? " large" : "", headUrl = ownerHeadUrl(owner);
+    if (owner.avatar?.kind === "GUILD_BANNER" && owner.avatar.banner) return `<span class="owner-image guild-banner${size}" aria-label="Guild banner for ${esc(owner.name)}"><canvas width="40" height="80" role="img" aria-label="Guild banner for ${esc(owner.name)}" data-guild-banner="${esc(JSON.stringify(owner.avatar.banner))}"></canvas></span>`;
+    if ((owner.type === "PLAYER" || owner.avatar?.kind === "MINECRAFT_HEAD") && headUrl) return genericPlayer(owner, size, headUrl);
+    if (owner.type === "PLAYER") return genericPlayer(owner, size, null);
+    if (owner.type === "GUILD") return `<span class="owner-image${size}"><img src="${assetBase}guild-banner.svg" alt="Generic guild icon for ${esc(owner.name)}" width="82" height="82" decoding="async"></span>`;
     return `<span class="owner-image${size}"><img src="${assetBase}unowned-stall.svg" alt="Unowned stall" width="82" height="82" decoding="async"></span>`;
+  }
+  const bannerTextureNames = {STRIPE_SMALL:"small_stripes",DIAGONAL_LEFT_MIRROR:"diagonal_up_left",DIAGONAL_RIGHT_MIRROR:"diagonal_up_right",HALF_VERTICAL_MIRROR:"half_vertical_right",HALF_HORIZONTAL_MIRROR:"half_horizontal_bottom"};
+  const bannerMaskCache = new Map();
+  function bannerMask(type) {
+    const name = type === "BASE" ? "base" : bannerTextureNames[type] || type.toLowerCase();
+    if (!bannerMaskCache.has(name)) bannerMaskCache.set(name, new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error("banner-mask"));image.src=`${assetBase}minecraft/vanilla/textures/entity/banner/${name}.png`}));
+    return bannerMaskCache.get(name);
+  }
+  function tintBannerMask(image, color) {
+    const layer=document.createElement("canvas");layer.width=64;layer.height=64;const context=layer.getContext("2d");context.imageSmoothingEnabled=false;context.drawImage(image,0,0);context.globalCompositeOperation="multiply";context.fillStyle=color;context.fillRect(0,0,64,64);context.globalCompositeOperation="destination-in";context.drawImage(image,0,0);return layer;
+  }
+  async function drawGuildBanner(canvas, design) {
+    const definitions=[{type:"BASE",color:design.baseColor},...(design.patterns||[]).slice(0,6)];
+    const layers=await Promise.all(definitions.map(async pattern=>tintBannerMask(await bannerMask(pattern.type),bannerColors[pattern.color]||bannerColors.WHITE)));
+    const context=canvas.getContext("2d");context.imageSmoothingEnabled=false;context.clearRect(0,0,canvas.width,canvas.height);layers.forEach(layer=>context.drawImage(layer,0,0,canvas.width,canvas.height));
+  }
+  function hydrateOwnerVisuals(root=document) {
+    root.querySelectorAll("[data-owner-head-url]:not([data-head-loading])").forEach(node=>{
+      node.dataset.headLoading="true"; const image=new Image(); image.className="resolved-head"; image.alt=`Minecraft head for ${node.dataset.ownerHeadName}`; image.width=82; image.height=82; image.decoding="async"; image.dataset.skinSource=node.dataset.skinSource; image.dataset.outerLayer=node.dataset.outerLayer;
+      image.onload=()=>{node.replaceChildren(image);node.classList.remove("fallback");node.classList.add("resolved");node.setAttribute("aria-label",image.alt)};
+      image.onerror=()=>{image.onload=image.onerror=null;node.removeAttribute("data-owner-head-url");node.dataset.headFailed="true"}; image.src=node.dataset.ownerHeadUrl;
+    });
+    root.querySelectorAll("canvas[data-guild-banner]:not([data-banner-loading])").forEach(canvas=>{canvas.dataset.bannerLoading="true";drawGuildBanner(canvas,JSON.parse(canvas.dataset.guildBanner)).then(()=>canvas.dataset.bannerRendered="true").catch(()=>{const image=new Image();image.src=`${assetBase}guild-banner.svg`;image.alt=canvas.getAttribute("aria-label")||"Generic guild icon";image.width=82;image.height=82;canvas.closest(".owner-image")?.replaceChildren(image)})});
   }
   const ownerType = owner => owner.type === "PLAYER" ? "Player" : owner.type === "GUILD" ? "Guild" : "Unowned";
   function locationMarkup(location, compact = false) {
@@ -520,6 +559,7 @@
     el.kicker.textContent = "Market building"; el.title.textContent = building.label; el.summary.textContent = `${building.stallIds.length} stalls · ${totalShops} shops`; el.back.hidden = true;
     const anyMatch = building.stallIds.some(id => state.matching.has(id));
     el.content.innerHTML = `${anyMatch ? "" : `<p class="filter-empty-notice">No shops in this building match the current filters.</p>`}<div class="building-stall-groups">${[...building.floors].sort((a, b) => a.index - b.index).map(floor => `<section class="stall-group">${multipleFloors ? `<h3>${esc(floor.name)}</h3>` : ""}<div class="stall-card-list">${[...floor.stallIds].sort((left, right) => Number(state.matching.has(right)) - Number(state.matching.has(left)) || C.naturalCompare(left, right)).map(id => stallCard(adapter.getStall(id), state.matching.has(id))).join("")}</div></section>`).join("")}</div>`;
+    hydrateOwnerVisuals(el.content);
     el.content.querySelectorAll("[data-stall]").forEach(node => node.onclick = () => openStall(adapter.getStall(node.dataset.stall), building));
   }
   function stallCard(stall, matches = true) {
@@ -545,6 +585,7 @@
     const members = stall.members.length ? `<section class="member-list"><h3>Members</h3><p>${stall.members.map(esc).join(" · ")}</p></section>` : "";
     const orderedShops = stall.shops.map((shop, index) => ({shop, index})).sort((left, right) => Number(right.shop.stockCount > 0) - Number(left.shop.stockCount > 0) || left.index - right.index).map(entry => entry.shop);
     el.content.innerHTML = `<div class="stall-hero">${ownerVisual(stall.owner, true)}<div><p class="eyebrow">${stall.owner.type === "NONE" ? "Available" : "Current owner"}</p><h3>${esc(stall.owner.name)}</h3><p>${stall.ownerSince ? `Owned for ${ownershipDuration(stall.ownerSince)} · since ${new Date(stall.ownerSince).toLocaleDateString()}` : "Ready to rent"}</p></div></div>${locationMarkup(stall.location)}<div class="detail-grid"><div><small>Rent remaining</small>${rentMarkup(stall)}</div><div><small>Members</small><strong>${stall.members.length}</strong></div><div><small>Shops</small><strong>${stall.shops.length}</strong></div></div>${members}<h3>Shops</h3><div class="shop-list">${orderedShops.length ? orderedShops.map(shop => shopCard(shop, shop.id === shopId)).join("") : `<div class="shop-card empty"><strong>This stall is ready for its next shop.</strong><small>Ownership and live shop data will appear here.</small></div>`}</div>`;
+    hydrateOwnerVisuals(el.content);
     state.mobileStack = [...state.mobileStack.filter(entry => entry.type !== "stall"), {type: "stall", id: stall.id}]; showDrawer(); bindDrawerActions();
     if (shopId) requestAnimationFrame(() => el.content.querySelector(".shop-card.highlight")?.scrollIntoView({ block: "center" }));
   }
@@ -834,13 +875,14 @@
       const primary = shop.match.contained ? `${item.amount}× ${esc(presentation.baseDisplayName)}` : esc(presentation.baseDisplayName);
       const secondary = presentation.variantSummary ? `<small class="variant-summary" title="${esc(presentation.variantSummary)}">${esc(presentation.variantSummary)}</small>` : "";
       const out = shop.stockCount <= 0;
-      return `<article class="result-card${out ? " out-of-stock" : ""}"><button class="result-main" data-result-index="${index}">${itemIcon(leadingItem)}<span><strong>${primary}</strong>${secondary}${inside}${out ? `<strong class="stock-badge">Out of stock</strong>` : ""}<small>${{ SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction]} · ${displayStall(shop.stall.id)} · ${buildingNumber(shop.stall.buildingId)} · ${C.floorName(shop.stall.floor)}</small></span></button>${locationMarkup(shop.interaction, true)}</article>`;
+      return `<article class="result-card${out ? " out-of-stock" : ""}"><button class="result-main" data-result-index="${index}">${itemIcon(leadingItem)}<span><strong>${primary}</strong>${secondary}${inside}${out ? `<strong class="stock-badge">Out of stock</strong>` : ""}<small>${{ SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction]} · ${displayStall(shop.stall.id)} · ${buildingNumber(shop.stall.buildingId)} · ${C.floorName(shop.stall.floor)}</small></span></button><div class="result-owner">${ownerVisual(shop.stall.owner)}<span><small>Stall owner</small><strong>${esc(shop.stall.owner.name)}</strong></span></div>${locationMarkup(shop.interaction, true)}</article>`;
     }).join("")}</div>` : `<p class="no-results-copy">Try another item, variant, or material name.</p>`}`;
     el.resultsContent.querySelectorAll("[data-result-index]").forEach(button => button.onclick = () => {
       const shop = shops[Number(button.dataset.resultIndex)], stall = shop.stall;
       state.searchReturn = isMobile(); clearCollapsedContext(); hideMobileResults(); clearFilters(); focusBuilding(stall.buildingId); openStall(stall, null, shop.id); openInspector(shop.id, shop.match.side, shop.match);
     });
     bindCopy(el.resultsContent);
+    hydrateOwnerVisuals(el.resultsContent);
   }
   function focusBuilding(id) {
     const building = layout.buildings.find(item => item.id === id), point = px(building.labelPoint), rect = el.viewport.getBoundingClientRect(), scale = Math.max(state.view.scale, 2);
@@ -951,6 +993,7 @@
     layout, adapter, marketClient, hitBuilding, screenWorld, openBuilding, openStall, openInspector, closeInspector, closeDrawer,
     executeSearch, applyFilters, clearFilters, focusBuilding, rentState, transactionLabels, itemMetadata, itemIcon,
     minecraftText, drawMinecraftText, canonicalItemRaster, renderShulkerCanvas, matchesRentFilter, showItemTooltip, hideItemTooltip, showMobileResults, hideMobileResults, buildingNumber, refreshMarketUi,
+    ownerVisual, ownerHeadUrl, hydrateOwnerVisuals, drawGuildBanner,
     get snapshot() { return snapshot; }, get state() { return state; }, counts: { buildings: layout.buildings.length, stalls: layout.stalls.length }, drawerMode: () => state.drawerMode
   };
   initMap(); applyFilters(); updateViewportMetrics(); requestAnimationFrame(fit);

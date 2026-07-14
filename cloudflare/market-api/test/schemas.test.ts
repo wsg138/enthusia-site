@@ -5,6 +5,44 @@ import { fullSyncBody, makeStall, signedFetch } from "./helpers";
 
 describe("strict public schemas", () => {
   it("accepts a valid stall", () => expect(stallSchema.safeParse(makeStall("stall1")).success).toBe(true));
+  it("accepts a Java outer-layer head URL", () => {
+    const stall = makeStall("stall1");
+    stall.owner = {
+      ...stall.owner,
+      type: "PLAYER",
+      id: "00000000-0000-4000-8000-000000000099",
+      uuid: "00000000-0000-4000-8000-000000000099",
+      name: "SyntheticJava",
+      avatarUrl: "https://minotar.net/helm/00000000-0000-4000-8000-000000000099/96.png",
+      avatar: { kind: "MINECRAFT_HEAD", source: "JAVA", includesOuterLayer: true },
+    };
+    expect(stallSchema.safeParse(stall).success).toBe(true);
+  });
+  it("accepts zero- and six-layer guild banners in order", () => {
+    const stall = makeStall("stall1");
+    const bannerOwner = (patterns: Array<{type: string; color: string}>) => ({
+      ...stall.owner,
+      type: "GUILD" as const,
+      id: "synthetic-guild",
+      name: "Synthetic Guild",
+      avatar: { kind: "GUILD_BANNER", source: "LUMAGUILDS", banner: { baseColor: "BLUE", patterns } },
+    });
+    expect(stallSchema.safeParse({ ...stall, owner: bannerOwner([]) }).success).toBe(true);
+    const patterns = [
+      { type: "STRIPE_TOP", color: "WHITE" }, { type: "CROSS", color: "RED" },
+      { type: "BORDER", color: "BLACK" }, { type: "TRIANGLE_TOP", color: "YELLOW" },
+      { type: "CIRCLE", color: "LIME" }, { type: "FLOWER", color: "PURPLE" },
+    ];
+    const parsed = stallSchema.safeParse({ ...stall, owner: bannerOwner(patterns) });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.owner.avatar.banner?.patterns.map(pattern => pattern.type)).toEqual(patterns.map(pattern => pattern.type));
+  });
+  it("rejects unsupported, oversized, and private banner data", () => {
+    const stall = makeStall("stall1");
+    const banner = { baseColor: "BLUE", patterns: Array.from({ length: 7 }, () => ({ type: "CROSS", color: "RED" })), privateItemStack: "no" };
+    expect(stallSchema.safeParse({ ...stall, owner: { ...stall.owner, type: "GUILD", avatar: { kind: "GUILD_BANNER", banner } } }).success).toBe(false);
+    expect(stallSchema.safeParse({ ...stall, owner: { ...stall.owner, type: "GUILD", avatar: { kind: "GUILD_BANNER", banner: { baseColor: "BLUE", patterns: [{ type: "UNKNOWN", color: "RED" }] } } } }).success).toBe(false);
+  });
   it("accepts canonical Java UUID text without requiring RFC version or variant bits", () => {
     const proxyStyleUuid = "00000000-0000-0009-0000-000000000001";
     const stall = makeStall("stall1");

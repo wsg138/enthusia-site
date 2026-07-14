@@ -6,6 +6,25 @@ const isoDate = z.iso.datetime({ offset: true });
 const coordinate = z.number().int().min(-30_000_000).max(30_000_000);
 const nonnegative = z.number().int().min(0).max(2_147_483_647);
 const positive = z.number().int().positive().max(2_147_483_647);
+const bannerColorSchema = z.enum([
+  "WHITE", "ORANGE", "MAGENTA", "LIGHT_BLUE", "YELLOW", "LIME", "PINK", "GRAY",
+  "LIGHT_GRAY", "CYAN", "PURPLE", "BLUE", "BROWN", "GREEN", "RED", "BLACK",
+]);
+const bannerPatternTypeSchema = z.enum([
+  "SQUARE_BOTTOM_LEFT", "SQUARE_BOTTOM_RIGHT", "SQUARE_TOP_LEFT", "SQUARE_TOP_RIGHT",
+  "STRIPE_BOTTOM", "STRIPE_TOP", "STRIPE_LEFT", "STRIPE_RIGHT", "STRIPE_CENTER",
+  "STRIPE_MIDDLE", "STRIPE_DOWNRIGHT", "STRIPE_DOWNLEFT", "STRIPE_SMALL", "CROSS",
+  "STRAIGHT_CROSS", "TRIANGLE_BOTTOM", "TRIANGLE_TOP", "TRIANGLES_BOTTOM", "TRIANGLES_TOP",
+  "DIAGONAL_LEFT", "DIAGONAL_RIGHT", "DIAGONAL_LEFT_MIRROR", "DIAGONAL_RIGHT_MIRROR",
+  "CIRCLE", "RHOMBUS", "HALF_VERTICAL", "HALF_HORIZONTAL", "HALF_VERTICAL_MIRROR",
+  "HALF_HORIZONTAL_MIRROR", "BORDER", "CURLY_BORDER", "GRADIENT", "GRADIENT_UP",
+  "BRICKS", "GLOBE", "CREEPER", "SKULL", "FLOWER", "MOJANG", "PIGLIN", "FLOW", "GUSTER",
+]);
+const bannerDesignSchema = z.object({
+  baseColor: bannerColorSchema,
+  patterns: z.array(z.object({ type: bannerPatternTypeSchema, color: bannerColorSchema }).strict()).max(6),
+}).strict();
+const publicHeadUrlSchema = z.string().url().max(2048).regex(/^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/);
 
 const enchantmentSchema = z.object({
   id: shortString,
@@ -97,12 +116,13 @@ export const stallSchema = z.object({
     id: z.string().max(128).nullable(),
     uuid: z.guid().nullable(),
     name: z.string().min(1).max(64),
-    avatarUrl: z.string().max(2048).nullable(),
+    avatarUrl: publicHeadUrlSchema.nullable(),
     avatar: z.object({
       kind: z.string().min(1).max(32),
       source: z.string().min(1).max(32).nullable().optional(),
       includesOuterLayer: z.boolean().nullable().optional(),
       url: z.string().max(2048).optional(),
+      banner: bannerDesignSchema.nullable().optional(),
     }).strict(),
   }).strict(),
   ownerSince: isoDate.nullable(),
