@@ -36,7 +36,7 @@ for (const file of htmlFiles) {
 
 const marketDir = path.join(publicDir, "assets", "market");
 const marketRequired = [
-  "market.js", "market-adapter.js", "market-data.js", "market-layout.json", "sample-market-snapshot.json", "market.css",
+  "market.js", "market-api-client.js", "market-adapter.js", "market-data.js", "market-layout.json", "sample-market-snapshot.json", "market.css",
   "map-core.js", "overview.png", "minecraft/material-icon-manifest.js", "minecraft/material-icon-manifest.json",
   "minecraft/font-metrics.js", "minecraft/font-metrics.json", "minecraft/item-catalog.js", "minecraft/item-catalog.json",
   "minecraft/public-item-policy.json", "minecraft/item-icon-validation-report.json", "minecraft/potion-variant-manifest.json",
@@ -69,7 +69,7 @@ if (variants.items?.length !== 351) errors.push(`market: expected 351 Minecraft 
 if (variants.items?.some(item => item.kind === "ARMOR_TRIM_MATERIAL")) errors.push("market: pseudo armor-trim material variants must not be public search entries");
 const potions = JSON.parse(await readFile(path.join(marketDir, "minecraft", "potion-variant-manifest.json"), "utf8"));
 if (potions.items?.length !== 184 || potions.count !== 184) errors.push(`market: expected 184 audited potion variants, found ${potions.items?.length ?? 0}`);
-for (const file of ["market.js", "market-adapter.js", "market-data.js", "minecraft/material-icon-manifest.js", "minecraft/font-metrics.js", "minecraft/item-catalog.js", "minecraft/item-variant-catalog.js"]) {
+for (const file of ["market.js", "market-api-client.js", "market-adapter.js", "market-data.js", "minecraft/material-icon-manifest.js", "minecraft/font-metrics.js", "minecraft/item-catalog.js", "minecraft/item-variant-catalog.js"]) {
   const result = spawnSync(process.execPath, ["--check", path.join(marketDir, file)], {encoding: "utf8"});
   if (result.status !== 0) errors.push(`market: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }

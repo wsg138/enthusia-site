@@ -72,6 +72,21 @@ try {
   failedResources.length = 0;
   await navigate("market.html", "window.__MARKET_TEST__?.counts.buildings===15");
   results.counts = await evaluate("window.__MARKET_TEST__.counts");
+  results.liveUpdatePreservesContext = await evaluate(`(()=>{
+    const T=window.__MARKET_TEST__,stall=T.adapter.getShops().find(shop=>shop.stall.owner.type==='PLAYER').stall;
+    const untouched=T.adapter.snapshot.stalls.find(candidate=>candidate.id!==stall.id),shop=stall.shops[0];
+    document.querySelector('#item-search').value='diamond';T.executeSearch('diamond');
+    document.querySelector('#owner-filter').value='PLAYER';document.querySelector('#owner-filter').dispatchEvent(new Event('change'));
+    T.openStall(stall,null,shop.id);T.openInspector(shop.id,'sellItem');
+    const view={...T.state.view},modified={...stall,owner:{...stall.owner,name:'Live Preview Test'},shops:stall.shops.map((candidate,index)=>index?candidate:{...candidate,owner:{...candidate.owner,name:'LiveShopOwner'},stockCount:candidate.stockCount+1})};
+    T.marketClient.handleMessage(JSON.stringify({type:'stall.updated',schemaVersion:1,sequence:T.marketClient.sequence+1,stallId:stall.id,revision:2,updatedAt:new Date().toISOString(),stall:modified}));
+    const drawer=document.querySelector('#market-drawer').innerText,inspector=document.querySelector('#item-inspector').innerText;
+    return T.adapter.snapshot.stalls.find(candidate=>candidate.id===untouched.id)===untouched
+      &&document.querySelector('#item-search').value==='diamond'&&T.state.lastSearch.query==='diamond'
+      &&document.querySelector('#owner-filter').value==='PLAYER'&&T.state.filters.owner==='PLAYER'
+      &&T.state.selectedStall===stall.id&&drawer.includes('Live Preview Test')&&inspector.includes('LiveShopOwner')
+      &&T.state.view.scale===view.scale&&T.state.view.x===view.x&&T.state.view.y===view.y;
+  })()`);
   results.nativeStyle = await evaluate("getComputedStyle(document.querySelector('.map-card')).borderStyle==='solid'&&getComputedStyle(document.querySelector('.market-intro h1')).fontSize!=='16px'");
   results.activeNavigation = await evaluate("document.querySelector('.nav a.active')?.getAttribute('href')==='market.html'");
   results.disclaimer = await evaluate("document.body.innerText.includes('NOT AN OFFICIAL MINECRAFT PRODUCT')");

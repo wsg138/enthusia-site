@@ -90,6 +90,16 @@
       ];
       this.stalls = new Map(snapshot.stalls.map(stall => [stall.id, stall]));
     }
+    replaceSnapshot(snapshot) {
+      this.snapshot = snapshot;
+      this.stalls = new Map(snapshot.stalls.map(stall => [stall.id, stall]));
+    }
+    replaceStall(stall) {
+      const index = this.snapshot.stalls.findIndex(candidate => candidate.id === stall.id);
+      if (index < 0) return false;
+      const stalls = [...this.snapshot.stalls]; stalls[index] = stall;
+      this.snapshot = {...this.snapshot, stalls}; this.stalls.set(stall.id, stall); return true;
+    }
     getStall(id) { return this.stalls.get(id) || null; }
     getBuilding(id) { return this.layout.buildings.find(building => building.id === id) || null; }
     getShops() {

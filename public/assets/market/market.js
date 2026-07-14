@@ -1,9 +1,9 @@
-(function () {
+(async function () {
   "use strict";
 
   const C = window.EnthusiaMapCore;
   const layout = window.ENTHUSIA_MARKET_DATA.layout;
-  const snapshot = window.ENTHUSIA_MARKET_DATA.snapshot;
+  let snapshot = window.ENTHUSIA_MARKET_DATA.snapshot;
   const iconManifest = window.ENTHUSIA_MINECRAFT_ASSETS;
   const fontManifest = window.ENTHUSIA_MINECRAFT_FONT;
   const adapter = new window.EnthusiaMarketAdapter.StaticMarketAdapter(layout, snapshot);
@@ -18,7 +18,8 @@
     drawer: $("#market-drawer"), backdrop: $("#drawer-backdrop"), content: $("#drawer-content"), title: $("#drawer-title"),
     kicker: $("#drawer-kicker"), summary: $("#drawer-summary"), back: $("#drawer-back"), inspector: $("#item-inspector"),
     inspectorContent: $("#inspector-content"), inspectorTitle: $("#inspector-title"), inspectorKicker: $("#inspector-kicker"),
-    itemTooltip: $("#minecraft-hover-tooltip")
+    itemTooltip: $("#minecraft-hover-tooltip"), connection: $("#market-connection-status"),
+    connectionLabel: $("#market-connection-label"), lastUpdated: $("#market-last-updated")
   };
 
   const filterFields = $("#filter-fields");
@@ -41,6 +42,7 @@
     pinned: null, touchPointers: new Map(), touchTap: null, touchGesture: null, collapsedContext: null,
     sheet: {type: null, state: "hidden", previous: "normal", surface: null, returnFocus: null, gesture: null}
   };
+  let connectionStatus = {state: "connecting", source: "fallback", updatedAt: null};
   const buildingElements = new Map();
   const stallElements = new Map();
   const px = point => ({ x: (point.x - t.originX) * t.pixelsPerBlock, y: (point.z - t.originZ) * t.pixelsPerBlock });
@@ -844,6 +846,45 @@
     const building = layout.buildings.find(item => item.id === id), point = px(building.labelPoint), rect = el.viewport.getBoundingClientRect(), scale = Math.max(state.view.scale, 2);
     state.view = { scale, x: rect.width / 2 - point.x * scale, y: rect.height / 2 - point.y * scale }; applyView(); selectMap(id);
   }
+  function relativeUpdate(value) {
+    if (!value) return "";
+    const seconds = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / 1000));
+    if (seconds < 60) return "Last updated just now";
+    const minutes = Math.floor(seconds / 60);
+    return minutes < 60 ? `Last updated ${minutes}m ago` : `Last updated ${Math.floor(minutes / 60)}h ago`;
+  }
+  function renderConnectionStatus(status = connectionStatus) {
+    connectionStatus = status;
+    const labels = {live: "Live", connecting: "Connecting", reconnecting: "Reconnecting", offline: "Offline — showing saved market data", fallback: "Placeholder fallback"};
+    el.connection.className = `market-connection-status ${status.state}`;
+    el.connection.dataset.source = status.source;
+    el.connectionLabel.textContent = labels[status.state] || "Connecting";
+    el.lastUpdated.textContent = status.source === "api" && status.updatedAt ? ` · ${relativeUpdate(status.updatedAt)}` : "";
+    el.connection.title = status.source === "api" ? "Cloudflare placeholder snapshot" : "Local fallback placeholder snapshot";
+  }
+  setInterval(() => renderConnectionStatus(), 60000);
+  function refreshSearchInPlace() {
+    const query = state.lastSearch?.query;
+    if (!query) return;
+    const shops = adapter.searchItems(query).map((shop, index) => ({shop, index})).sort((left, right) => Number(right.shop.stockCount > 0) - Number(left.shop.stockCount > 0) || left.index - right.index).map(entry => entry.shop);
+    state.lastSearch = {query, shops}; renderResults(query, shops);
+  }
+  function refreshMarketUi(stallId = null) {
+    const selectedStall = state.selectedStall, building = state.drawerBuilding, highlightedShop = state.highlightShop;
+    const openedFromBuilding = !el.back.hidden;
+    const inspector = !el.inspector.hidden && state.inspectorHistory.length ? {shopId: state.inspectorHistory[0].shop.id, stallId: state.inspectorHistory[0].shop.stall.id, side: state.inspectorHistory[0].side} : null;
+    const drawerScroll = el.content.scrollTop, inspectorScroll = el.inspectorContent.scrollTop, resultsScroll = el.resultsContent.scrollTop;
+    applyFilters(); refreshSearchInPlace();
+    if (state.drawerMode === "stall" && selectedStall) {
+      const stall = adapter.getStall(selectedStall);
+      if (stall) openStall(stall, openedFromBuilding ? building : null, highlightedShop); else closeDrawer();
+    } else if (state.drawerMode === "building" && state.drawerBuilding) renderBuildingDrawer();
+    if (inspector && (!stallId || inspector.stallId === stallId)) {
+      const shop = adapter.getShops().find(candidate => candidate.id === inspector.shopId && candidate.stall.id === inspector.stallId);
+      if (shop) openInspector(shop.id, inspector.side); else closeInspector();
+    }
+    requestAnimationFrame(() => { el.content.scrollTop = drawerScroll; el.inspectorContent.scrollTop = inspectorScroll; el.resultsContent.scrollTop = resultsScroll; });
+  }
   function showSuggestions() {
     const input = $("#item-search"), normalized = input.value.trim().toLowerCase(), potionQuery = /potion|strength|slow falling|invis|water breathing|night vision|regeneration|poison|weakness|turtle master|wind charged|weaving|oozing|infestation/.test(normalized), items = normalized ? adapter.suggest(input.value, potionQuery ? 220 : 15) : [];
     state.suggestionIndex = -1; const box = $("#search-suggestions");
@@ -885,12 +926,6 @@
   });
   window.addEventListener("resize", () => requestAnimationFrame(fit));
 
-  window.__MARKET_TEST__ = {
-    layout, snapshot, adapter, hitBuilding, screenWorld, openBuilding, openStall, openInspector, closeInspector, closeDrawer,
-    executeSearch, applyFilters, clearFilters, focusBuilding, rentState, transactionLabels, itemMetadata, itemIcon,
-    minecraftText, drawMinecraftText, canonicalItemRaster, renderShulkerCanvas, matchesRentFilter, showItemTooltip, hideItemTooltip, showMobileResults, hideMobileResults, buildingNumber,
-    get state() { return state; }, counts: { buildings: layout.buildings.length, stalls: layout.stalls.length }, drawerMode: () => state.drawerMode
-  };
   function prefetchSnapshotAssets() {
     const urls = new Set();
     const visit = item => {
@@ -903,6 +938,22 @@
     }
     for (const source of urls) { const image = new Image(); image.decoding = "async"; image.src = source; }
   }
+  const marketClient = new window.EnthusiaMarketApi.MarketApiClient({
+    expectedStallIds: layout.stalls.map(stall => stall.id),
+    fallbackSnapshot: window.ENTHUSIA_MARKET_DATA.snapshot,
+    onStatus: renderConnectionStatus,
+    onSnapshot(nextSnapshot) { snapshot = nextSnapshot; adapter.replaceSnapshot(nextSnapshot); refreshMarketUi(); prefetchSnapshotAssets(); },
+    onStallUpdate(stallId, stall, nextSnapshot) { snapshot = nextSnapshot; adapter.replaceStall(stall); adapter.snapshot = nextSnapshot; refreshMarketUi(stallId); }
+  });
+  snapshot = await marketClient.loadInitialSnapshot();
+  adapter.replaceSnapshot(snapshot);
+  window.__MARKET_TEST__ = {
+    layout, adapter, marketClient, hitBuilding, screenWorld, openBuilding, openStall, openInspector, closeInspector, closeDrawer,
+    executeSearch, applyFilters, clearFilters, focusBuilding, rentState, transactionLabels, itemMetadata, itemIcon,
+    minecraftText, drawMinecraftText, canonicalItemRaster, renderShulkerCanvas, matchesRentFilter, showItemTooltip, hideItemTooltip, showMobileResults, hideMobileResults, buildingNumber, refreshMarketUi,
+    get snapshot() { return snapshot; }, get state() { return state; }, counts: { buildings: layout.buildings.length, stalls: layout.stalls.length }, drawerMode: () => state.drawerMode
+  };
   initMap(); applyFilters(); updateViewportMetrics(); requestAnimationFrame(fit);
+  marketClient.startLive();
   (window.requestIdleCallback || (callback => setTimeout(callback, 800)))(prefetchSnapshotAssets, {timeout: 4000});
 })();
