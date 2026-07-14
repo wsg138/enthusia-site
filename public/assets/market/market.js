@@ -22,6 +22,13 @@
   };
 
   const filterFields = $("#filter-fields");
+  document.documentElement.classList.add("market-viewer-active");
+  const overlayPortal = document.createElement("div");
+  overlayPortal.className = "market-page-root market-overlay-portal";
+  document.body.append(overlayPortal);
+  for (const overlay of [el.backdrop, el.drawer, el.inspector, el.itemTooltip]) {
+    if (overlay?.parentElement !== overlayPortal) overlayPortal.append(overlay);
+  }
   el.scene.style.width = `${t.imageWidth}px`;
   el.scene.style.height = `${t.imageHeight}px`;
   el.svg.setAttribute("viewBox", `0 0 ${t.imageWidth} ${t.imageHeight}`);
@@ -49,10 +56,11 @@
 
   function updateViewportMetrics() {
     const header = document.querySelector(".site-header"), footer = document.querySelector(".market-footer");
-    const headerHeight = Math.max(0, header?.getBoundingClientRect().height || 0);
-    document.documentElement.style.setProperty("--site-header-height", `${headerHeight}px`);
     const viewport = window.visualViewport;
-    const viewportTop = viewport?.offsetTop || 0, viewportBottom = viewportTop + (viewport?.height || innerHeight);
+    const viewportTop = viewport?.offsetTop || 0, viewportHeight = viewport?.height || innerHeight, viewportBottom = viewportTop + viewportHeight;
+    const headerBottom = header?.getBoundingClientRect().bottom || 0;
+    const visibleHeaderBottom = Math.max(0, Math.min(viewportHeight, headerBottom - viewportTop));
+    document.documentElement.style.setProperty("--visible-header-bottom", `${visibleHeaderBottom}px`);
     const footerRect = footer?.getBoundingClientRect();
     const overlap = footerRect ? Math.max(0, viewportBottom - Math.max(viewportTop, footerRect.top)) : 0;
     document.documentElement.style.setProperty("--visible-footer-overlap", `${Math.min(overlap, viewport?.height || innerHeight)}px`);
@@ -62,6 +70,9 @@
   const viewportObserver = new ResizeObserver(() => requestAnimationFrame(updateViewportMetrics));
   viewportObserver.observe(document.querySelector(".site-header"));
   viewportObserver.observe(document.querySelector(".market-footer"));
+  const headerObserver = new MutationObserver(() => requestAnimationFrame(updateViewportMetrics));
+  headerObserver.observe(document.querySelector(".site-header"), {attributes:true, attributeFilter:["class","style"]});
+  document.querySelector(".site-header").addEventListener("transitionrun", () => { const track = () => { updateViewportMetrics(); if (document.getAnimations().some(animation => animation.playState === "running")) requestAnimationFrame(track); }; track(); });
   addEventListener("scroll", updateViewportMetrics, {passive: true});
   addEventListener("resize", updateViewportMetrics, {passive: true});
   visualViewport?.addEventListener("resize", updateViewportMetrics, {passive: true});
@@ -311,22 +322,17 @@
     if (trim && definition.variants?.armorTrim?.[trim]) layers.push(...definition.variants.armorTrim[trim]);
     return layers;
   }
+  const iconItemRegistry = new Map();
+  let iconItemSequence = 0;
+  const hasGlint = item => item.metadata?.glintOverride !== false && (item.metadata?.glintOverride === true || item.metadata?.enchantments?.length || item.metadata?.storedEnchantments?.length);
   function itemIcon(item, extraClass = "") {
     const definitions = iconDefinition(item);
-    const layers = definitions.map((layer, index) => {
-      const source = `${assetBase}${layer.src}`;
-      if (layer.tint || layer.tintSource) {
-        const tint = layer.tint || item.metadata?.potion?.color || layer.defaultTint;
-        return `<span class="item-texture tint-layer" style="--item-mask:url('${cssAssetBase}${layer.src}');--item-tint:${esc(tint)}" aria-hidden="true"></span>`;
-      }
-      return `<img class="item-texture layer-${index}" src="${source}" alt="" width="32" height="32" decoding="async" draggable="false">`;
-    }).join("");
-    const metadata = item.metadata || {};
-    const enchanted = metadata.glintOverride !== false && (metadata.glintOverride === true || metadata.enchantments?.length || metadata.storedEnchantments?.length);
+    const enchanted = hasGlint(item), key = `icon-${++iconItemSequence}`;
+    iconItemRegistry.set(key, item);
     const silhouette = definitions.find(layer => !layer.tintSource)?.src || definitions[0]?.src;
     const glintTexture = iconManifest.glint?.item || "minecraft/vanilla/textures/misc/enchanted_glint_item.png";
     const glint = enchanted && silhouette ? `<span class="item-glint" style="--item-silhouette:url('${cssAssetBase}${silhouette}');--glint-texture:url('${cssAssetBase}${glintTexture}')" aria-hidden="true"></span>` : "";
-    return `<span class="minecraft-item-icon${enchanted ? " enchanted" : ""} ${extraClass}" role="img" aria-label="${esc(item.displayName)}">${layers}${glint}</span>`;
+    return `<span class="minecraft-item-icon${enchanted ? " enchanted" : ""} ${extraClass}" data-icon-key="${key}" role="img" aria-label="${esc(item.displayName)}"><canvas class="item-raster" width="16" height="16" aria-hidden="true"></canvas>${glint}</span>`;
   }
   function minecraftText(value, className = "") {
     const text = String(value ?? "");
@@ -585,10 +591,11 @@
   }
   function inspectorItemDetails(item) {
     const metadata = itemMetadata(item), presentation = itemPresentation(item);
-    const heading = `${presentation.customDisplayName || presentation.baseDisplayName} · ${item.amount}×`;
+    const heading = presentation.customDisplayName || presentation.baseDisplayName;
     return `<section class="minecraft-tooltip"><div class="inspected-item">${itemIcon(item, "large")}<div><h3 class="fit-inspector-heading">${minecraftText(heading)}</h3>${presentation.customDisplayName ? `<p>${minecraftText(presentation.baseDisplayName, "muted")}</p>` : ""}</div></div>${metadata.length ? `<ul>${metadata.map(detail => `<li>${minecraftText(detail, "muted")}</li>`).join("")}</ul>` : ""}<code>${minecraftText(`minecraft:${item.material.toLowerCase()}`, "identifier")}</code></section>`;
   }
   const canvasImageCache = new Map();
+  const canonicalRasterCache = new Map();
   function loadCanvasImage(relative) {
     const source = `${assetBase}${relative}`;
     if (!canvasImageCache.has(source)) canvasImageCache.set(source, new Promise((resolve, reject) => {
@@ -606,7 +613,13 @@
     }
     context.putImageData(pixels, 0, 0); return canvas;
   }
-  async function drawCanvasItem(context, item, x, y) {
+  function canonicalRasterKey(item, includeGlint) {
+    return JSON.stringify([item.material, item.metadata?.potion, item.metadata?.armorTrim, item.metadata?.enchantments, item.metadata?.storedEnchantments, item.metadata?.glintOverride, includeGlint]);
+  }
+  async function canonicalItemRaster(item, includeGlint = false) {
+    const key = canonicalRasterKey(item, includeGlint);
+    if (canonicalRasterCache.has(key)) return canonicalRasterCache.get(key);
+    const promise = (async () => {
     const icon = document.createElement("canvas"); icon.width = 16; icon.height = 16;
     const iconContext = icon.getContext("2d"); iconContext.imageSmoothingEnabled = false;
     for (const layer of iconDefinition(item)) {
@@ -615,14 +628,35 @@
       if (layer.tint || layer.tintSource) tintCanvas(layerCanvas, layer.tint || item.metadata?.potion?.color || layer.defaultTint);
       iconContext.drawImage(layerCanvas, 0, 0);
     }
-    const enchanted = item.metadata?.glintOverride === true || item.metadata?.enchantments?.length || item.metadata?.storedEnchantments?.length;
-    if (enchanted && iconManifest.glint?.item) {
+    if (includeGlint && hasGlint(item) && iconManifest.glint?.item) {
       const glintImage = await loadCanvasImage(iconManifest.glint.item), glint = document.createElement("canvas"); glint.width = 16; glint.height = 16;
       const glintContext = glint.getContext("2d"); glintContext.imageSmoothingEnabled = false; glintContext.globalAlpha = .58; glintContext.drawImage(glintImage, 0, 0, 16, 16);
       glintContext.globalCompositeOperation = "destination-in"; glintContext.drawImage(icon, 0, 0);
       iconContext.globalCompositeOperation = "lighter"; iconContext.drawImage(glint, 0, 0); iconContext.globalCompositeOperation = "source-over";
     }
-    context.drawImage(icon, x, y);
+      return icon;
+    })();
+    canonicalRasterCache.set(key, promise);
+    return promise;
+  }
+  async function renderItemIconNode(node) {
+    if (node.dataset.rasterRendered === "true") return;
+    const item = iconItemRegistry.get(node.dataset.iconKey), canvas = node.querySelector(".item-raster");
+    if (!item || !canvas) return;
+    const raster = await canonicalItemRaster(item, false), context = canvas.getContext("2d");
+    context.imageSmoothingEnabled = false; context.clearRect(0, 0, 16, 16); context.drawImage(raster, 0, 0); node.dataset.rasterRendered = "true";
+  }
+  function hydrateItemRasters(root = document) {
+    root.querySelectorAll?.(".minecraft-item-icon[data-icon-key]").forEach(node => renderItemIconNode(node).catch(error => { node.dataset.rasterError = error.message; }));
+  }
+  const itemRasterObserver = new MutationObserver(records => records.forEach(record => record.addedNodes.forEach(node => {
+    if (!(node instanceof Element)) return;
+    if (node.matches?.(".minecraft-item-icon[data-icon-key]")) renderItemIconNode(node);
+    hydrateItemRasters(node);
+  })));
+  itemRasterObserver.observe(document.body, {childList: true, subtree: true});
+  async function drawCanvasItem(context, item, x, y) {
+    context.drawImage(await canonicalItemRaster(item, true), x, y);
   }
   async function drawMinecraftText(context, text, x, y, color, rightAligned = false) {
     const font = await loadCanvasImage(fontManifest.texture), widths = [...String(text)].map(character => fontManifest.widths?.[character.codePointAt(0)] || 6);
@@ -635,21 +669,34 @@
     }
     layerContext.globalCompositeOperation = "source-in"; layerContext.fillStyle = color; layerContext.fillRect(0, 0, 176, 76); context.drawImage(layer, 0, 0);
   }
+  const shulkerRenderState = new WeakMap(), shulkerRenderTokens = new WeakMap(), activeShulkerCanvases = new Set();
   async function renderShulkerCanvas(canvas, item) {
-    const container = item.metadata.container, context = canvas.getContext("2d"); context.imageSmoothingEnabled = false; context.clearRect(0, 0, 176, 76);
-    const gui = await loadCanvasImage(iconManifest.gui.shulker); context.drawImage(gui, 0, 0, 176, 76, 0, 0, 176, 76);
+    const renderToken = (shulkerRenderTokens.get(canvas) || 0) + 1; shulkerRenderTokens.set(canvas, renderToken);
+    shulkerRenderState.set(canvas, item); activeShulkerCanvases.add(canvas); canvas.dataset.rendered = "false";
+    const container = item.metadata.container, frame = canvas.closest(".shulker-frame"), wrapper = canvas.parentElement;
+    const styles = getComputedStyle(frame), availableCssWidth = Math.min(400, Math.max(176, frame.clientWidth - parseFloat(styles.paddingLeft) - parseFloat(styles.paddingRight)));
+    const dpr = devicePixelRatio || 1, deviceScale = Math.max(1, Math.floor(availableCssWidth * dpr / 176));
+    canvas.width = 176 * deviceScale; canvas.height = 76 * deviceScale;
+    wrapper.style.width = `${canvas.width / dpr}px`; wrapper.style.height = `${canvas.height / dpr}px`;
+    const context = canvas.getContext("2d"); context.imageSmoothingEnabled = false; context.setTransform(deviceScale, 0, 0, deviceScale, 0, 0); context.clearRect(0, 0, 176, 76);
+    const gui = await loadCanvasImage(iconManifest.gui.shulker); if (shulkerRenderTokens.get(canvas) !== renderToken) return; context.drawImage(gui, 0, 0, 176, 76, 0, 0, 176, 76);
     await drawMinecraftText(context, item.metadata?.customName || item.displayName, 8, 6, "#404040");
     for (const entry of container.contents) {
-      const column = entry.slot % 9, row = Math.floor(entry.slot / 9), x = 8 + column * 18, y = 18 + row * 18;
-      await drawCanvasItem(context, entry.item, x, y);
+      const column = entry.slot % 9, row = Math.floor(entry.slot / 9), slotLeft = 7 + column * 18, slotTop = 17 + row * 18, x = slotLeft + 1, y = slotTop + 1;
+      await drawCanvasItem(context, entry.item, x, y); if (shulkerRenderTokens.get(canvas) !== renderToken) return;
       if (entry.item.amount > 1) {
-        const count = String(entry.item.amount), right = 7 + (column + 1) * 18, bottom = 17 + (row + 1) * 18;
-        await drawMinecraftText(context, count, right + 1, bottom - 6 + 1, "#3F3F3F", true);
-        await drawMinecraftText(context, count, right, bottom - 6, "#FFFFFF", true);
+        const count = String(entry.item.amount), countRight = slotLeft + 17, countTop = slotTop + 9;
+        await drawMinecraftText(context, count, countRight + 1, countTop + 1, "#3F3F3F", true); if (shulkerRenderTokens.get(canvas) !== renderToken) return;
+        await drawMinecraftText(context, count, countRight, countTop, "#FFFFFF", true); if (shulkerRenderTokens.get(canvas) !== renderToken) return;
       }
     }
-    canvas.dataset.rendered = "true";
+    canvas.dataset.rendered = "true"; canvas.dataset.deviceScale = String(deviceScale); canvas.dataset.dpr = String(dpr);
   }
+  const shulkerResizeObserver = new ResizeObserver(entries => entries.forEach(({target}) => {
+    const canvas = target.querySelector(".shulker-visual"), item = canvas && shulkerRenderState.get(canvas);
+    if (item) requestAnimationFrame(() => renderShulkerCanvas(canvas, item));
+  }));
+  addEventListener("resize", () => activeShulkerCanvases.forEach(canvas => { const item = shulkerRenderState.get(canvas); if (item && canvas.isConnected) renderShulkerCanvas(canvas, item); else activeShulkerCanvases.delete(canvas); }), {passive:true});
   function containerMarkup(entry) {
     const { item, context, depth } = entry, container = item.metadata?.container;
     if (!container) return "";
@@ -676,7 +723,7 @@
     bindCopy(el.inspectorContent);
     observeItemText(el.inspectorContent);
     const shulkerCanvas = el.inspectorContent.querySelector(".shulker-visual");
-    if (shulkerCanvas) renderShulkerCanvas(shulkerCanvas, item).catch(error => { shulkerCanvas.dataset.renderError = error.message; });
+    if (shulkerCanvas) { shulkerResizeObserver.observe(shulkerCanvas.closest(".shulker-frame")); renderShulkerCanvas(shulkerCanvas, item).catch(error => { shulkerCanvas.dataset.renderError = error.message; }); }
     el.inspectorContent.querySelectorAll("[data-inspector-side]").forEach(button => button.onclick = () => selectInspectorSide(shop, button.dataset.inspectorSide));
     el.inspectorContent.querySelector(".inspector-back")?.addEventListener("click", () => {
       if (state.inspectorHistory.length > 1) { state.inspectorHistory.pop(); state.mobileStack.pop(); renderInspector(); }
@@ -716,8 +763,11 @@
     for (const stall of layout.stalls) stallElements.get(stall.id).classList.toggle("filtered", !state.matching.has(stall.id));
     for (const building of layout.buildings) buildingElements.get(building.id).classList.toggle("filtered", !building.stallIds.some(id => state.matching.has(id)));
     $("#result-count").textContent = `${state.matching.size} of ${layout.stalls.length} stalls`;
-    const labels = { floor: "Floor", owner: "Owner", shop: "Shop", stock: "Stock" };
-    $("#filter-chips").innerHTML = Object.entries(state.filters).filter(([, value]) => value && value !== "ALL").map(([key, value]) => `<span class="chip">${labels[key]}: ${esc(value)}</span>`).join("");
+    const labels = { floor: "Floor", owner: "Owner", shop: "Shop", stock: "Stock" }, selectors = {floor:"#floor-filter",owner:"#owner-filter",shop:"#shop-filter",stock:"#stock-filter"};
+    const active = Object.entries(state.filters).filter(([, value]) => value && value !== "ALL");
+    $("#filter-chips").innerHTML = active.map(([key]) => { const select = $(selectors[key]), display = select.options[select.selectedIndex]?.text || state.filters[key]; return `<span class="chip">${labels[key]}: ${esc(display)} <button type="button" data-remove-filter="${key}" aria-label="Remove ${labels[key]} filter">×</button></span>`; }).join("") + (active.length ? `<button id="clear-active-filters" class="clear-active-filters" type="button">Clear all filters</button>` : "");
+    $("#filter-chips").querySelectorAll("[data-remove-filter]").forEach(button => button.onclick = () => { const key = button.dataset.removeFilter; state.filters[key] = "ALL"; $(selectors[key]).value = "ALL"; applyFilters(); });
+    $("#clear-active-filters")?.addEventListener("click", clearFilters);
     if (state.drawerMode === "building" && state.drawerBuilding) renderBuildingDrawer();
   }
   function clearFilters() {
@@ -786,7 +836,7 @@
     state.view = { scale, x: rect.width / 2 - point.x * scale, y: rect.height / 2 - point.y * scale }; applyView(); selectMap(id);
   }
   function showSuggestions() {
-    const input = $("#item-search"), items = input.value.trim() ? adapter.suggest(input.value) : [];
+    const input = $("#item-search"), normalized = input.value.trim().toLowerCase(), potionQuery = /potion|strength|slow falling|invis|water breathing|night vision|regeneration|poison|weakness|turtle master|wind charged|weaving|oozing|infestation/.test(normalized), items = normalized ? adapter.suggest(input.value, potionQuery ? 220 : 15) : [];
     state.suggestionIndex = -1; const box = $("#search-suggestions");
     if (!items.length) { box.replaceChildren(); box.hidden = true; return; }
     box.innerHTML = items.map((entry, index) => {
