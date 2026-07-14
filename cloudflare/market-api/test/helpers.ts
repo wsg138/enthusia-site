@@ -45,11 +45,11 @@ export async function signature(method: string, pathname: string, body: string, 
 }
 
 export async function signedFetch(pathname: string, method: "POST" | "PUT", data: Record<string, unknown>, options: {
-  timestamp?: string; signedPath?: string; secret?: string; serverId?: string; signature?: string; omit?: string;
+  timestamp?: string; signedPath?: string; secret?: string; serverId?: string; signature?: string; omit?: string; headerEventId?: string;
 } = {}): Promise<Response> {
   const body = JSON.stringify(data);
   const timestamp = options.timestamp ?? String(Date.now());
-  const eventId = String(data.eventId);
+  const eventId = options.headerEventId ?? String(data.eventId);
   const headers = new Headers({ "Content-Type": "application/json" });
   const values: Record<string, string> = {
     "X-Enthusia-Server-Id": options.serverId ?? SERVER_ID,

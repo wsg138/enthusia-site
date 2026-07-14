@@ -5,6 +5,26 @@ import { fullSyncBody, makeStall, signedFetch } from "./helpers";
 
 describe("strict public schemas", () => {
   it("accepts a valid stall", () => expect(stallSchema.safeParse(makeStall("stall1")).success).toBe(true));
+  it("keeps transaction quantities separate from item stack quantities", () => {
+    const stall = makeStall("stall1");
+    stall.shops.push({
+      id: 1,
+      owner: { id: "00000000-0000-4000-8000-000000000001", name: "P2wn" },
+      direction: "SELL",
+      sellItem: { material: "DIAMOND", displayName: "Diamond", amount: 1, icon: null, metadata: {} },
+      sellAmount: 64,
+      costItem: { material: "PAPER", displayName: "Currency", amount: 1, icon: null, metadata: {} },
+      costAmount: 100_000,
+      interaction: { world: "world", x: 1, y: 64, z: 2, source: "SHOP_SIGN" },
+      stockCount: 128,
+      availableTrades: 2,
+      searchable: true,
+    });
+    expect(stallSchema.safeParse(stall).success).toBe(true);
+    const withoutAmount = structuredClone(stall) as unknown as { shops: Array<Record<string, unknown>> };
+    delete withoutAmount.shops[0].costAmount;
+    expect(stallSchema.safeParse(withoutAmount).success).toBe(false);
+  });
   it("rejects an unknown private field", () => expect(stallSchema.safeParse({ ...makeStall("stall1"), staffNotes: "private" }).success).toBe(false));
   it("rejects duplicate full-sync stall IDs", () => {
     const body = fullSyncBody(); body.stalls[1].stall.id = body.stalls[0].stall.id;

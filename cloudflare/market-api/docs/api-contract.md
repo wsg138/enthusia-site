@@ -31,9 +31,9 @@ Each stall contains only:
 - `members`: up to 256 public names.
 - `shops`: up to 256 shops.
 
-A shop contains a positive numeric `id`, public owner `id` and `name`, direction (`BUY`, `SELL`, or `TRADE`), `sellItem`, `costItem`, interaction coordinates and source, nonnegative `stockCount` and `availableTrades`, and boolean `searchable`.
+A shop contains a positive numeric `id`, public owner `id` and `name`, direction (`BUY`, `SELL`, or `TRADE`), `sellItem`, positive `sellAmount`, `costItem`, positive `costAmount`, interaction coordinates and source, nonnegative `stockCount` and `availableTrades`, and boolean `searchable`. Item `amount` describes the serialized stack; `sellAmount` and `costAmount` describe one transaction and may exceed Minecraft stack limits.
 
-An item contains uppercase `material`, public `displayName`, positive `amount`, nullable public `icon`, and strict `metadata`. Metadata may include `customName`, `enchantments`, `storedEnchantments`, potion data, armor trim, smithing-template type, written-book summary, shulker color, and a bounded recursive container. Container entries contain an optional numeric slot and another public item. Text, array, coordinate, count, and nesting payload size are bounded by schema and route limits.
+An item contains uppercase `material`, public `displayName`, positive `amount`, nullable public `icon`, and strict `metadata`. Metadata may include nullable `customName`, `enchantments`, `storedEnchantments`, potion data, armor trim, smithing-template type, written-book summary, shulker color, and a bounded recursive container. Container entries contain an optional nullable numeric slot and another public item. Text, array, coordinate, count, and nesting payload size are bounded by schema and route limits.
 
 Sanitized example:
 

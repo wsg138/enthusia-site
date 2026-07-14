@@ -154,7 +154,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -167,7 +167,9 @@
           },
           "stockCount": 8,
           "availableTrades": 8,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         },
         {
           "id": 1011,
@@ -199,7 +201,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -212,7 +214,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -272,7 +276,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -285,7 +289,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         },
         {
           "id": 1021,
@@ -318,7 +324,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -331,7 +337,9 @@
           },
           "stockCount": 48,
           "availableTrades": 48,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         }
       ]
     },
@@ -393,7 +401,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -406,7 +414,9 @@
           },
           "stockCount": 48,
           "availableTrades": 48,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         },
         {
           "id": 1031,
@@ -439,7 +449,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -452,7 +462,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1032,
@@ -485,7 +497,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -498,7 +510,9 @@
           },
           "stockCount": 80,
           "availableTrades": 80,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -559,7 +573,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -572,7 +586,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1041,
@@ -644,7 +660,9 @@
           },
           "stockCount": 80,
           "availableTrades": 80,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 1
         }
       ]
     },
@@ -695,7 +713,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -708,7 +726,9 @@
           },
           "stockCount": 80,
           "availableTrades": 80,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         },
         {
           "id": 1051,
@@ -811,7 +831,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -824,7 +844,9 @@
           },
           "stockCount": 96,
           "availableTrades": 96,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         },
         {
           "id": 1052,
@@ -851,7 +873,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -864,7 +886,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         },
         {
           "id": 1053,
@@ -918,7 +942,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -931,7 +955,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         }
       ]
     },
@@ -1014,7 +1040,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1027,7 +1053,9 @@
           },
           "stockCount": 96,
           "availableTrades": 96,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         },
         {
           "id": 1061,
@@ -1039,14 +1067,14 @@
           "sellItem": {
             "material": "OAK_LOG",
             "displayName": "Oak Log",
-            "amount": 16,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1059,7 +1087,9 @@
           },
           "stockCount": 16,
           "availableTrades": 1,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 16,
+          "costAmount": 18
         },
         {
           "id": 1062,
@@ -1071,14 +1101,14 @@
           "sellItem": {
             "material": "IRON_INGOT",
             "displayName": "Iron Ingot",
-            "amount": 12,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1091,7 +1121,9 @@
           },
           "stockCount": 16,
           "availableTrades": 1,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 12,
+          "costAmount": 4
         }
       ]
     },
@@ -1131,14 +1163,14 @@
           "sellItem": {
             "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
             "displayName": "Waxed Weathered Cut Copper Stairs",
-            "amount": 8,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1151,7 +1183,9 @@
           },
           "stockCount": 16,
           "availableTrades": 2,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 8,
+          "costAmount": 18
         },
         {
           "id": 1071,
@@ -1163,14 +1197,14 @@
           "sellItem": {
             "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
             "displayName": "Light Blue Stained Glass Pane",
-            "amount": 16,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1183,7 +1217,9 @@
           },
           "stockCount": 16,
           "availableTrades": 1,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 16,
+          "costAmount": 4
         }
       ]
     },
@@ -1295,7 +1331,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1308,7 +1344,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1081,
@@ -1461,7 +1499,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 1
         }
       ]
     },
@@ -1533,7 +1573,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1546,7 +1586,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         },
         {
           "id": 1101,
@@ -1558,14 +1600,14 @@
           "sellItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 8,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1578,7 +1620,9 @@
           },
           "stockCount": 64,
           "availableTrades": 8,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 8,
+          "costAmount": 18
         },
         {
           "id": 1102,
@@ -1615,7 +1659,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1628,7 +1672,9 @@
           },
           "stockCount": 80,
           "availableTrades": 80,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1103,
@@ -1655,7 +1701,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1668,7 +1714,9 @@
           },
           "stockCount": 24,
           "availableTrades": 24,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -1723,7 +1771,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1736,7 +1784,9 @@
           },
           "stockCount": 64,
           "availableTrades": 64,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         },
         {
           "id": 1111,
@@ -1768,7 +1818,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1781,7 +1831,9 @@
           },
           "stockCount": 80,
           "availableTrades": 80,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         }
       ]
     },
@@ -1842,7 +1894,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1855,7 +1907,9 @@
           },
           "stockCount": 80,
           "availableTrades": 80,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1121,
@@ -1926,7 +1980,9 @@
           },
           "stockCount": 24,
           "availableTrades": 24,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 1
         },
         {
           "id": 1122,
@@ -1959,7 +2015,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -1972,7 +2028,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -2033,7 +2091,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2046,7 +2104,9 @@
           },
           "stockCount": 24,
           "availableTrades": 24,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         },
         {
           "id": 1131,
@@ -2079,7 +2139,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2092,7 +2152,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -2153,7 +2215,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2166,7 +2228,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         },
         {
           "id": 1141,
@@ -2199,7 +2263,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2212,7 +2276,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         }
       ]
     },
@@ -2274,7 +2340,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2287,7 +2353,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         },
         {
           "id": 1151,
@@ -2310,7 +2378,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2323,7 +2391,9 @@
           },
           "stockCount": 8,
           "availableTrades": 8,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1152,
@@ -2426,7 +2496,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2439,7 +2509,9 @@
           },
           "stockCount": 48,
           "availableTrades": 48,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         },
         {
           "id": 1153,
@@ -2466,7 +2538,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2479,7 +2551,9 @@
           },
           "stockCount": 64,
           "availableTrades": 64,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -2534,7 +2608,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2547,7 +2621,9 @@
           },
           "stockCount": 8,
           "availableTrades": 8,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1161,
@@ -2640,7 +2716,9 @@
           },
           "stockCount": 48,
           "availableTrades": 48,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 1
         }
       ]
     },
@@ -2680,14 +2758,14 @@
           "sellItem": {
             "material": "IRON_INGOT",
             "displayName": "Iron Ingot",
-            "amount": 12,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2700,7 +2778,9 @@
           },
           "stockCount": 48,
           "availableTrades": 4,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 12,
+          "costAmount": 6
         },
         {
           "id": 1171,
@@ -2712,14 +2792,14 @@
           "sellItem": {
             "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
             "displayName": "Waxed Weathered Cut Copper Stairs",
-            "amount": 8,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2732,7 +2812,9 @@
           },
           "stockCount": 64,
           "availableTrades": 8,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 8,
+          "costAmount": 2
         }
       ]
     },
@@ -2839,7 +2921,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2852,7 +2934,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         }
       ]
     },
@@ -2899,7 +2983,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2912,7 +2996,9 @@
           },
           "stockCount": 96,
           "availableTrades": 96,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         }
       ]
     },
@@ -2978,7 +3064,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -2991,7 +3077,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -3051,7 +3139,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -3064,7 +3152,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -3125,7 +3215,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -3138,7 +3228,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         }
       ]
     },
@@ -3200,7 +3292,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -3213,7 +3305,9 @@
           },
           "stockCount": 48,
           "availableTrades": 48,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1241,
@@ -3285,7 +3379,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 1
         }
       ]
     },
@@ -3346,7 +3442,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -3359,7 +3455,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -3490,7 +3588,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -3503,7 +3601,9 @@
           },
           "stockCount": 80,
           "availableTrades": 80,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -3568,14 +3668,14 @@
           "sellItem": {
             "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
             "displayName": "Light Blue Stained Glass Pane",
-            "amount": 16,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -3588,7 +3688,9 @@
           },
           "stockCount": 24,
           "availableTrades": 1,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 16,
+          "costAmount": 4
         }
       ]
     },
@@ -3730,7 +3832,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -3743,7 +3845,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -3791,7 +3895,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -3804,7 +3908,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -3844,14 +3950,14 @@
           "sellItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 8,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -3864,7 +3970,9 @@
           },
           "stockCount": 8,
           "availableTrades": 1,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 8,
+          "costAmount": 18
         }
       ]
     },
@@ -3924,7 +4032,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -3937,7 +4045,9 @@
           },
           "stockCount": 64,
           "availableTrades": 64,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1321,
@@ -4008,7 +4118,9 @@
           },
           "stockCount": 80,
           "availableTrades": 80,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 1
         }
       ]
     },
@@ -4069,7 +4181,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -4082,7 +4194,9 @@
           },
           "stockCount": 80,
           "availableTrades": 80,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -4143,7 +4257,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -4156,7 +4270,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -4217,7 +4333,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -4230,7 +4346,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         }
       ]
     },
@@ -4337,7 +4455,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -4350,7 +4468,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -4390,14 +4510,14 @@
           "sellItem": {
             "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
             "displayName": "Waxed Weathered Cut Copper Stairs",
-            "amount": 8,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -4410,7 +4530,9 @@
           },
           "stockCount": 48,
           "availableTrades": 6,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 8,
+          "costAmount": 2
         }
       ]
     },
@@ -4523,7 +4645,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -4536,7 +4658,9 @@
           },
           "stockCount": 64,
           "availableTrades": 64,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         }
       ]
     },
@@ -4609,7 +4733,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -4622,7 +4746,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1401,
@@ -4680,7 +4806,9 @@
           },
           "stockCount": 96,
           "availableTrades": 96,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 1
         }
       ]
     },
@@ -4727,7 +4855,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -4740,7 +4868,9 @@
           },
           "stockCount": 96,
           "availableTrades": 96,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -4796,7 +4926,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -4809,7 +4939,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -4869,7 +5001,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -4882,7 +5014,9 @@
           },
           "stockCount": 24,
           "availableTrades": 24,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         }
       ]
     },
@@ -4943,7 +5077,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -4956,7 +5090,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         }
       ]
     },
@@ -5042,7 +5178,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -5055,7 +5191,9 @@
           },
           "stockCount": 8,
           "availableTrades": 8,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -5110,7 +5248,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -5123,7 +5261,9 @@
           },
           "stockCount": 80,
           "availableTrades": 80,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         }
       ]
     },
@@ -5164,14 +5304,14 @@
           "sellItem": {
             "material": "IRON_INGOT",
             "displayName": "Iron Ingot",
-            "amount": 12,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -5184,7 +5324,9 @@
           },
           "stockCount": 96,
           "availableTrades": 8,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 12,
+          "costAmount": 4
         },
         {
           "id": 1481,
@@ -5196,7 +5338,7 @@
           "sellItem": {
             "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
             "displayName": "Waxed Weathered Cut Copper Stairs",
-            "amount": 8,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -5242,7 +5384,9 @@
           },
           "stockCount": 32,
           "availableTrades": 4,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 8,
+          "costAmount": 1
         }
       ]
     },
@@ -5373,7 +5517,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -5386,7 +5530,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -5468,7 +5614,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -5481,7 +5627,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -5529,7 +5677,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -5542,7 +5690,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         }
       ]
     },
@@ -5607,7 +5757,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -5620,7 +5770,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         }
       ]
     },
@@ -5680,7 +5832,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -5693,7 +5845,9 @@
           },
           "stockCount": 64,
           "availableTrades": 64,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -5779,7 +5933,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -5792,7 +5946,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         }
       ]
     },
@@ -5853,7 +6009,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -5866,7 +6022,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1561,
@@ -5938,7 +6096,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 1
         }
       ]
     },
@@ -6070,7 +6230,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -6083,7 +6243,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -6123,14 +6285,14 @@
           "sellItem": {
             "material": "OAK_LOG",
             "displayName": "Oak Log",
-            "amount": 16,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -6143,7 +6305,9 @@
           },
           "stockCount": 24,
           "availableTrades": 1,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 16,
+          "costAmount": 2
         }
       ]
     },
@@ -6183,14 +6347,14 @@
           "sellItem": {
             "material": "LIGHT_BLUE_STAINED_GLASS_PANE",
             "displayName": "Light Blue Stained Glass Pane",
-            "amount": 16,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -6203,7 +6367,9 @@
           },
           "stockCount": 48,
           "availableTrades": 3,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 16,
+          "costAmount": 18
         }
       ]
     },
@@ -6346,7 +6512,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -6359,7 +6525,9 @@
           },
           "stockCount": 64,
           "availableTrades": 64,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         }
       ]
     },
@@ -6406,7 +6574,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -6419,7 +6587,9 @@
           },
           "stockCount": 8,
           "availableTrades": 8,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -6459,14 +6629,14 @@
           "sellItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 8,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -6479,7 +6649,9 @@
           },
           "stockCount": 96,
           "availableTrades": 12,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 8,
+          "costAmount": 2
         }
       ]
     },
@@ -6564,7 +6736,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -6577,7 +6749,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         },
         {
           "id": 1641,
@@ -6649,7 +6823,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 1
         }
       ]
     },
@@ -6710,7 +6886,7 @@
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -6723,7 +6899,9 @@
           },
           "stockCount": 32,
           "availableTrades": 32,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 6
         }
       ]
     },
@@ -6785,7 +6963,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -6798,7 +6976,9 @@
           },
           "stockCount": 48,
           "availableTrades": 48,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     },
@@ -6849,7 +7029,7 @@
           "costItem": {
             "material": "GOLD_NUGGET",
             "displayName": "Gold Nugget",
-            "amount": 18,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -6862,7 +7042,9 @@
           },
           "stockCount": 16,
           "availableTrades": 16,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 18
         }
       ]
     },
@@ -6944,7 +7126,7 @@
           "costItem": {
             "material": "GOLD_INGOT",
             "displayName": "Gold Ingot",
-            "amount": 4,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -6957,7 +7139,9 @@
           },
           "stockCount": 80,
           "availableTrades": 80,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 4
         }
       ]
     },
@@ -6998,14 +7182,14 @@
           "sellItem": {
             "material": "WAXED_WEATHERED_CUT_COPPER_STAIRS",
             "displayName": "Waxed Weathered Cut Copper Stairs",
-            "amount": 8,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
           "costItem": {
             "material": "EMERALD",
             "displayName": "Emerald",
-            "amount": 6,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -7018,7 +7202,9 @@
           },
           "stockCount": 96,
           "availableTrades": 12,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 8,
+          "costAmount": 6
         }
       ]
     },
@@ -7130,7 +7316,7 @@
           "costItem": {
             "material": "DIAMOND",
             "displayName": "Diamond",
-            "amount": 2,
+            "amount": 1,
             "icon": null,
             "metadata": {}
           },
@@ -7143,7 +7329,9 @@
           },
           "stockCount": 0,
           "availableTrades": 0,
-          "searchable": true
+          "searchable": true,
+          "sellAmount": 1,
+          "costAmount": 2
         }
       ]
     }

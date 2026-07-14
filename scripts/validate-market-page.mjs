@@ -87,6 +87,8 @@ try {
       &&T.state.selectedStall===stall.id&&drawer.includes('Live Preview Test')&&inspector.includes('LiveShopOwner')
       &&T.state.view.scale===view.scale&&T.state.view.x===view.x&&T.state.view.y===view.y;
   })()`);
+  results.liveConnectionBadge = await evaluate("(()=>{const T=window.__MARKET_TEST__;T.marketClient.source='api';T.marketClient.emitStatus('live');return document.querySelector('#market-connection-label').textContent==='Live'&&document.querySelector('#market-connection-status').dataset.source==='api'})()");
+  results.nullOwnerAndRentRendering = await evaluate("(()=>{const T=window.__MARKET_TEST__,stall=T.adapter.snapshot.stalls.find(value=>value.owner.type==='NONE'&&value.ownerSince===null&&value.nextRentAt===null);T.openStall(stall);const text=document.querySelector('#market-drawer').innerText;return !/null|invalid date/i.test(text)})()");
   results.nativeStyle = await evaluate("getComputedStyle(document.querySelector('.map-card')).borderStyle==='solid'&&getComputedStyle(document.querySelector('.market-intro h1')).fontSize!=='16px'");
   results.activeNavigation = await evaluate("document.querySelector('.nav a.active')?.getAttribute('href')==='market.html'");
   results.disclaimer = await evaluate("document.body.innerText.includes('NOT AN OFFICIAL MINECRAFT PRODUCT')");
@@ -97,10 +99,14 @@ try {
   results.failedBuildingIds = [];
   for (const id of buildingIds) {
     await evaluate("window.__MARKET_TEST__.closeDrawer();document.querySelector('#market-map').scrollIntoView({block:'center'});document.querySelector('#fit-map').click()");
-    await delay(35);
-    const point = await evaluate(`(()=>{const T=window.__MARKET_TEST__,b=T.layout.buildings.find(x=>x.id==='${id}'),p=b.labelPoint,t=T.layout.renderTransform,v=T.state.view,r=document.querySelector('#market-map').getBoundingClientRect();return{x:r.left+v.x+(p.x-t.originX)*t.pixelsPerBlock*v.scale,y:r.top+v.y+(p.z-t.originZ)*t.pixelsPerBlock*v.scale}})()`);
-    await clickAt(point);
-    if (!await evaluate(`window.__MARKET_TEST__.state.selectedBuilding==='${id}'`)) { results.allBuildingsClickable = false; results.failedBuildingIds.push(id); }
+    await delay(75);
+    let selected = false;
+    for (let attempt = 0; attempt < 3 && !selected; attempt += 1) {
+      const point = await evaluate(`(()=>{const T=window.__MARKET_TEST__,b=T.layout.buildings.find(x=>x.id==='${id}'),p=b.labelPoint,t=T.layout.renderTransform,v=T.state.view,r=document.querySelector('#market-map').getBoundingClientRect();return{x:r.left+v.x+(p.x-t.originX)*t.pixelsPerBlock*v.scale,y:r.top+v.y+(p.z-t.originZ)*t.pixelsPerBlock*v.scale}})()`);
+      await clickAt(point); await delay(40);
+      selected = await evaluate(`window.__MARKET_TEST__.state.selectedBuilding==='${id}'`);
+    }
+    if (!selected) { results.allBuildingsClickable = false; results.failedBuildingIds.push(id); }
   }
 
   results.shopInspector = await evaluate("(()=>{const T=window.__MARKET_TEST__,shop=T.adapter.getShops()[0];T.openStall(shop.stall,null,shop.id);document.querySelector('.shop-card.highlight').click();return !document.querySelector('#item-inspector').hidden&&!document.querySelector('#market-drawer').hidden})()");
@@ -123,7 +129,7 @@ try {
   results.potionFamiliesReachable = await evaluate("(()=>{const values=window.__MARKET_TEST__.adapter.suggest('potion',220);return values.length>=184&&values.some(value=>value.displayName.includes('Strength'))&&values.some(value=>value.displayName.includes('Slow Falling'))})()");
   results.filterRemovalControls = await evaluate("(()=>{const floor=document.querySelector('#floor-filter'),owner=document.querySelector('#owner-filter');floor.value='2';floor.dispatchEvent(new Event('change'));owner.value='PLAYER';owner.dispatchEvent(new Event('change'));const one=document.querySelector('[data-remove-filter=\"floor\"]');if(!one||!document.querySelector('#clear-active-filters'))return false;one.click();const removed=floor.value==='ALL'&&owner.value==='PLAYER';document.querySelector('#clear-active-filters').click();return removed&&owner.value==='ALL'&&!document.querySelector('[data-remove-filter]')})()");
   results.panelGeometry = await evaluate("(async()=>{const T=window.__MARKET_TEST__,building=T.layout.buildings.find(value=>value.stallIds.length>1),header=document.querySelector('.site-header');T.openBuilding(building);for(const y of[0,document.querySelector('.filter-shell').offsetTop,document.querySelector('.map-card').offsetTop,document.documentElement.scrollHeight-innerHeight]){scrollTo(0,y);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));const panel=document.querySelector('#market-drawer').getBoundingClientRect(),visible=Math.max(0,Math.min(innerHeight,header.getBoundingClientRect().bottom));if(Math.abs(panel.top-visible)>2||Math.abs(panel.bottom-innerHeight)>2)return false}header.style.transform='translateY(-100%)';await new Promise(resolve=>setTimeout(resolve,80));const hidden=document.querySelector('#market-drawer').getBoundingClientRect();header.style.transform='';return hidden.top<=2&&Math.abs(hidden.bottom-innerHeight)<=2})()");
-  results.inspectorQuantityOmitted = await evaluate("(()=>{const T=window.__MARKET_TEST__,shop=T.adapter.getShops().find(value=>value.sellItem.amount>1);T.openStall(shop.stall,null,shop.id);T.openInspector(shop.id,'sellItem');const detail=document.querySelector('.minecraft-tooltip .inspected-item h3').textContent;return !detail.includes('×')&&!detail.includes('Â·')})()");
+  results.inspectorQuantityOmitted = await evaluate("(()=>{const T=window.__MARKET_TEST__,shop=T.adapter.getShops().find(value=>value.sellAmount>1);T.openStall(shop.stall,null,shop.id);T.openInspector(shop.id,'sellItem');const detail=document.querySelector('.minecraft-tooltip .inspected-item h3').textContent,tabs=document.querySelector('.inspector-transaction-tabs').textContent;return !detail.includes('×')&&!detail.includes('Â·')&&tabs.includes(shop.sellAmount+'×')&&tabs.includes(shop.costAmount+'×')})()");
   await evaluate("(()=>{const T=window.__MARKET_TEST__,stall=T.snapshot.stalls.find(x=>x.owner.type==='PLAYER'&&x.owner.avatarUrl);T.openStall(stall)})()");
   await waitFor("document.querySelector('.resolved-head')?.complete===true");
   results.avatarContract = await evaluate("(()=>{const image=document.querySelector('.resolved-head');return Boolean(image&&image.dataset.outerLayer==='true'&&image.naturalWidth>0)})()");

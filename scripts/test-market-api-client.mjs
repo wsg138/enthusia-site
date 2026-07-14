@@ -76,6 +76,15 @@ await test("invalid API snapshot uses local fallback", async () => {
   assert.equal(h.client.source, "fallback");
 });
 
+await test("transaction quantities are required and may exceed item stack limits", async () => {
+  const {validateSnapshot} = loadClient();
+  const stalls = structuredClone(fallback.stalls), shop = stalls.flatMap(stall => stall.shops)[0];
+  shop.sellItem.amount = 1; shop.sellAmount = 64; shop.costItem.amount = 1; shop.costAmount = 100000;
+  assert.ok(validateSnapshot(apiSnapshot(10, stalls), expectedStallIds));
+  delete shop.costAmount;
+  assert.equal(validateSnapshot(apiSnapshot(10, stalls), expectedStallIds), null);
+});
+
 await test("stall.updated replaces only one stall", async () => {
   const h = harness([response(apiSnapshot())]); await h.client.loadInitialSnapshot();
   const before = h.client.snapshot.stalls, untouched = before[1], changed = {...before[0], members: [...before[0].members, "LiveTest"]};

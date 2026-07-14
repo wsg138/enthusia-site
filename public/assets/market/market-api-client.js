@@ -9,11 +9,12 @@
   const FALLBACK_RETRY_DELAY = 60000;
 
   const isObject = value => Boolean(value) && typeof value === "object" && !Array.isArray(value);
-  const isInteger = value => Number.isInteger(value) && value >= 0;
+  const isInteger = value => Number.isInteger(value) && value >= 0 && value <= 2147483647;
+  const isPositive = value => isInteger(value) && value > 0;
   const isString = value => typeof value === "string" && value.length > 0;
 
   function validItem(item, depth = 0) {
-    if (!isObject(item) || depth > 4 || !isString(item.material) || !isString(item.displayName) || !Number.isInteger(item.amount) || item.amount <= 0 || !isObject(item.metadata)) return false;
+    if (!isObject(item) || depth > 4 || !isString(item.material) || !isString(item.displayName) || !isPositive(item.amount) || item.amount > 64000 || !isObject(item.metadata)) return false;
     const contents = item.metadata.container?.contents;
     return contents === undefined || Array.isArray(contents) && contents.length <= 1024 && contents.every(entry => isObject(entry) && validItem(entry.item, depth + 1));
   }
@@ -21,11 +22,11 @@
   function validStall(stall, expectedIds) {
     if (!isObject(stall) || !expectedIds.has(stall.id) || !isString(stall.buildingId) || !Number.isInteger(stall.floor) || !isObject(stall.location) || !isObject(stall.owner) || !Array.isArray(stall.members) || !Array.isArray(stall.shops)) return false;
     if (!isString(stall.owner.type) || !isString(stall.owner.name) || stall.members.some(member => typeof member !== "string")) return false;
-    return stall.shops.every(shop => isObject(shop) && Number.isInteger(shop.id) && isObject(shop.owner) && isString(shop.owner.name) && ["BUY", "SELL", "TRADE"].includes(shop.direction) && validItem(shop.sellItem) && validItem(shop.costItem) && isObject(shop.interaction) && isInteger(shop.stockCount) && isInteger(shop.availableTrades));
+    return stall.shops.every(shop => isObject(shop) && isPositive(shop.id) && isObject(shop.owner) && isString(shop.owner.name) && ["BUY", "SELL", "TRADE"].includes(shop.direction) && validItem(shop.sellItem) && isPositive(shop.sellAmount) && validItem(shop.costItem) && isPositive(shop.costAmount) && isObject(shop.interaction) && isInteger(shop.stockCount) && isInteger(shop.availableTrades));
   }
 
   function validateSnapshot(value, expectedStallIds) {
-    if (!isObject(value) || value.schemaVersion !== 1 || value.serverId !== "enthusia-main" || !isInteger(value.sequence) || !Number.isInteger(value.snapshotRevision) || value.snapshotRevision <= 0 || !Array.isArray(value.stalls) || value.stalls.length !== expectedStallIds.length) return null;
+    if (!isObject(value) || value.schemaVersion !== 1 || value.serverId !== "enthusia-main" || !isInteger(value.sequence) || !isPositive(value.snapshotRevision) || !Array.isArray(value.stalls) || value.stalls.length !== expectedStallIds.length) return null;
     const expected = new Set(expectedStallIds), ids = new Set(value.stalls.map(stall => stall?.id));
     if (ids.size !== expected.size || [...expected].some(id => !ids.has(id)) || !value.stalls.every(stall => validStall(stall, expected))) return null;
     return value;

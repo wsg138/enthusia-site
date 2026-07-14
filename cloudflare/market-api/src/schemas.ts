@@ -42,21 +42,21 @@ export interface PublicItem {
   amount: number;
   icon: string | null;
   metadata: {
-    customName?: string;
-    enchantments?: Array<z.infer<typeof enchantmentSchema>>;
-    storedEnchantments?: Array<z.infer<typeof enchantmentSchema>>;
-    potion?: z.infer<typeof potionSchema>;
-    armorTrim?: z.infer<typeof armorTrimSchema>;
-    smithingTemplate?: z.infer<typeof smithingTemplateSchema>;
-    writtenBook?: z.infer<typeof writtenBookSchema>;
-    shulkerColor?: string;
+    customName?: string | null;
+    enchantments?: Array<z.infer<typeof enchantmentSchema>> | null;
+    storedEnchantments?: Array<z.infer<typeof enchantmentSchema>> | null;
+    potion?: z.infer<typeof potionSchema> | null;
+    armorTrim?: z.infer<typeof armorTrimSchema> | null;
+    smithingTemplate?: z.infer<typeof smithingTemplateSchema> | null;
+    writtenBook?: z.infer<typeof writtenBookSchema> | null;
+    shulkerColor?: string | null;
     container?: {
       type: string;
-      slots?: number;
-      capacityUsed?: number;
-      capacityMax?: number;
-      contents: Array<{ slot?: number; item: PublicItem }>;
-    };
+      slots?: number | null;
+      capacityUsed?: number | null;
+      capacityMax?: number | null;
+      contents: Array<{ slot?: number | null; item: PublicItem }>;
+    } | null;
   };
 }
 
@@ -66,21 +66,21 @@ export const publicItemSchema: z.ZodType<PublicItem> = z.lazy(() => z.object({
   amount: positive.max(64_000),
   icon: z.string().url().max(2048).nullable(),
   metadata: z.object({
-    customName: z.string().min(1).max(256).optional(),
-    enchantments: z.array(enchantmentSchema).max(128).optional(),
-    storedEnchantments: z.array(enchantmentSchema).max(128).optional(),
-    potion: potionSchema.optional(),
-    armorTrim: armorTrimSchema.optional(),
-    smithingTemplate: smithingTemplateSchema.optional(),
-    writtenBook: writtenBookSchema.optional(),
-    shulkerColor: z.string().min(1).max(64).optional(),
+    customName: z.string().min(1).max(256).nullable().optional(),
+    enchantments: z.array(enchantmentSchema).max(128).nullable().optional(),
+    storedEnchantments: z.array(enchantmentSchema).max(128).nullable().optional(),
+    potion: potionSchema.nullable().optional(),
+    armorTrim: armorTrimSchema.nullable().optional(),
+    smithingTemplate: smithingTemplateSchema.nullable().optional(),
+    writtenBook: writtenBookSchema.nullable().optional(),
+    shulkerColor: z.string().min(1).max(64).nullable().optional(),
     container: z.object({
       type: z.string().min(1).max(32),
-      slots: nonnegative.max(1024).optional(),
-      capacityUsed: nonnegative.max(1_000_000).optional(),
-      capacityMax: nonnegative.max(1_000_000).optional(),
-      contents: z.array(z.object({ slot: nonnegative.max(1023).optional(), item: publicItemSchema }).strict()).max(1024),
-    }).strict().optional(),
+      slots: nonnegative.max(1024).nullable().optional(),
+      capacityUsed: nonnegative.max(1_000_000).nullable().optional(),
+      capacityMax: nonnegative.max(1_000_000).nullable().optional(),
+      contents: z.array(z.object({ slot: nonnegative.max(1023).nullable().optional(), item: publicItemSchema }).strict()).max(1024),
+    }).strict().nullable().optional(),
   }).strict(),
 }).strict());
 
@@ -100,8 +100,8 @@ export const stallSchema = z.object({
     avatarUrl: z.string().max(2048).nullable(),
     avatar: z.object({
       kind: z.string().min(1).max(32),
-      source: z.string().min(1).max(32).optional(),
-      includesOuterLayer: z.boolean().optional(),
+      source: z.string().min(1).max(32).nullable().optional(),
+      includesOuterLayer: z.boolean().nullable().optional(),
       url: z.string().max(2048).optional(),
     }).strict(),
   }).strict(),
@@ -113,7 +113,9 @@ export const stallSchema = z.object({
     owner: identitySchema,
     direction: z.enum(["BUY", "SELL", "TRADE"]),
     sellItem: publicItemSchema,
+    sellAmount: positive,
     costItem: publicItemSchema,
+    costAmount: positive,
     interaction: locationSchema.extend({ source: z.string().min(1).max(64) }).strict(),
     stockCount: nonnegative,
     availableTrades: nonnegative,
