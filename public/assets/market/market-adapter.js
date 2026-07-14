@@ -3,7 +3,22 @@
 
   const normalize = value => String(value ?? "").trim().toLowerCase();
   const materialName = value => normalize(value).replaceAll("_", " ");
-  const romanLevel = level => ({1: "I", 2: "II", 3: "III", 4: "IV", 5: "V"})[level] || String(level);
+  const romanLevel = level => ({1: "I", 2: "II", 3: "III", 4: "IV", 5: "V", 6: "VI", 7: "VII", 8: "VIII", 9: "IX", 10: "X"})[level] || String(level);
+  const enchantmentDisplay = enchantment => {
+    const displayName = String(enchantment?.displayName || "").trim();
+    const numeral = romanLevel(enchantment?.level);
+    return displayName === numeral || displayName.endsWith(` ${numeral}`) ? displayName : `${displayName} ${numeral}`.trim();
+  };
+  const formatStackQuantity = amount => {
+    const total = Number(amount);
+    if (!Number.isInteger(total) || total < 64) return String(amount);
+    const stacks = Math.floor(total / 64), remainder = total % 64;
+    return `${stacks} ${stacks === 1 ? "stack" : "stacks"}${remainder ? ` + ${remainder}` : ""}`;
+  };
+  const rawGold = Object.freeze({material: "RAW_GOLD", displayName: "Raw Gold", amount: 1, icon: null, metadata: {}});
+  const publicShop = shop => shop.direction === "TRADE" ? shop : {...shop, costItem: {...rawGold, metadata: {}}};
+  const publicStall = stall => ({...stall, shops: stall.shops.map(publicShop)});
+  const publicSnapshot = snapshot => ({...snapshot, stalls: snapshot.stalls.map(publicStall)});
   const exactAliases = new Map([
     ["gap", "golden apple"], ["god apple", "enchanted golden apple"], ["notch apple", "enchanted golden apple"],
     ["enchanted golden apple", "enchanted golden apple"], ["pearl", "ender pearl"], ["enderpearl", "ender pearl"],
@@ -36,8 +51,8 @@
     const baseDisplayName = item?.material === "ENCHANTED_BOOK" ? "Enchanted Book" : item?.material === "WRITTEN_BOOK" ? "Written Book" : compactTrimName || item?.displayName || materialName(item?.material);
     const customDisplayName = metadata.customName && metadata.customName !== baseDisplayName ? metadata.customName : null;
     const variants = [
-      ...(metadata.storedEnchantments || []).map(enchantment => `${enchantment.displayName} ${romanLevel(enchantment.level)}`),
-      ...(metadata.enchantments || []).map(enchantment => `${enchantment.displayName} ${romanLevel(enchantment.level)}`),
+      ...(metadata.storedEnchantments || []).map(enchantmentDisplay),
+      ...(metadata.enchantments || []).map(enchantmentDisplay),
       ...(metadata.potion?.effects || []).map(effect => `${effect.name}${effect.amplifier ? ` ${romanLevel(effect.amplifier + 1)}` : ""}${effect.durationSeconds ? ` · ${Math.floor(effect.durationSeconds / 60)}:${String(effect.durationSeconds % 60).padStart(2, "0")}` : ""}`),
       metadata.armorTrim ? `${metadata.armorTrim.material} ${metadata.armorTrim.pattern}` : null,
       metadata.smithingTemplate?.type, metadata.goatHornInstrument, metadata.writtenBook?.title,
@@ -74,7 +89,7 @@
   class StaticMarketAdapter {
     constructor(layout, snapshot, catalog = window.ENTHUSIA_MINECRAFT_ITEM_CATALOG, variants = window.ENTHUSIA_MINECRAFT_ITEM_VARIANTS) {
       this.layout = layout;
-      this.snapshot = snapshot;
+      this.snapshot = publicSnapshot(snapshot);
       this.catalog = catalog?.items || [];
       this.variants = (variants?.items || []).map(entry => {
         if (entry.kind === "ENCHANTMENT") return {...entry, displayName: "Enchanted Book"};
@@ -88,17 +103,17 @@
         ...this.catalog.map(item => { const publicItem = {material: item.material, displayName: item.displayName, amount: 1, metadata: {}}; return {...item, displayName: itemPresentation(publicItem).baseDisplayName, kind: "MATERIAL", searchQuery: item.displayName, subtitle: null, item: publicItem}; }),
         ...this.variants
       ];
-      this.stalls = new Map(snapshot.stalls.map(stall => [stall.id, stall]));
+      this.stalls = new Map(this.snapshot.stalls.map(stall => [stall.id, stall]));
     }
     replaceSnapshot(snapshot) {
-      this.snapshot = snapshot;
-      this.stalls = new Map(snapshot.stalls.map(stall => [stall.id, stall]));
+      this.snapshot = publicSnapshot(snapshot);
+      this.stalls = new Map(this.snapshot.stalls.map(stall => [stall.id, stall]));
     }
     replaceStall(stall) {
-      const index = this.snapshot.stalls.findIndex(candidate => candidate.id === stall.id);
+      const replacement = publicStall(stall), index = this.snapshot.stalls.findIndex(candidate => candidate.id === replacement.id);
       if (index < 0) return false;
-      const stalls = [...this.snapshot.stalls]; stalls[index] = stall;
-      this.snapshot = {...this.snapshot, stalls}; this.stalls.set(stall.id, stall); return true;
+      const stalls = [...this.snapshot.stalls]; stalls[index] = replacement;
+      this.snapshot = {...this.snapshot, stalls}; this.stalls.set(replacement.id, replacement); return true;
     }
     getStall(id) { return this.stalls.get(id) || null; }
     getBuilding(id) { return this.layout.buildings.find(building => building.id === id) || null; }
@@ -144,5 +159,5 @@
     }
   }
 
-  window.EnthusiaMarketAdapter = {StaticMarketAdapter, itemTerms, itemPresentation, containerEntries, normalizeQuery, querySpec, categories};
+  window.EnthusiaMarketAdapter = {StaticMarketAdapter, itemTerms, itemPresentation, containerEntries, normalizeQuery, querySpec, categories, enchantmentDisplay, formatStackQuantity};
 })();
