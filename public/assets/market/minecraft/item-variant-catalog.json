@@ -2,447 +2,12 @@
   "schemaVersion": 1,
   "minecraftVersion": "1.21.11",
   "source": "Official registries plus public-safe vanilla variant definitions",
-  "count": 362,
+  "count": 351,
   "enchantmentCount": 128,
   "potionVariantCount": 184,
   "armorTrimPatternCount": 18,
-  "armorTrimMaterialCount": 11,
+  "removedArmorTrimMaterialPseudoVariants": 11,
   "items": [
-    {
-      "id": "armor_trim_material:amethyst",
-      "kind": "ARMOR_TRIM_MATERIAL",
-      "displayName": "Armor Trim Material — Amethyst Material",
-      "subtitle": "Amethyst Material",
-      "searchQuery": "Amethyst Material",
-      "item": {
-        "material": "IRON_INGOT",
-        "displayName": "Armor Trim Material",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Amethyst Material"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_material:copper",
-      "kind": "ARMOR_TRIM_MATERIAL",
-      "displayName": "Armor Trim Material — Copper Material",
-      "subtitle": "Copper Material",
-      "searchQuery": "Copper Material",
-      "item": {
-        "material": "IRON_INGOT",
-        "displayName": "Armor Trim Material",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Copper Material"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_material:diamond",
-      "kind": "ARMOR_TRIM_MATERIAL",
-      "displayName": "Armor Trim Material — Diamond Material",
-      "subtitle": "Diamond Material",
-      "searchQuery": "Diamond Material",
-      "item": {
-        "material": "IRON_INGOT",
-        "displayName": "Armor Trim Material",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Diamond Material"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_material:emerald",
-      "kind": "ARMOR_TRIM_MATERIAL",
-      "displayName": "Armor Trim Material — Emerald Material",
-      "subtitle": "Emerald Material",
-      "searchQuery": "Emerald Material",
-      "item": {
-        "material": "IRON_INGOT",
-        "displayName": "Armor Trim Material",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Emerald Material"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_material:gold",
-      "kind": "ARMOR_TRIM_MATERIAL",
-      "displayName": "Armor Trim Material — Gold Material",
-      "subtitle": "Gold Material",
-      "searchQuery": "Gold Material",
-      "item": {
-        "material": "IRON_INGOT",
-        "displayName": "Armor Trim Material",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Gold Material"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_material:iron",
-      "kind": "ARMOR_TRIM_MATERIAL",
-      "displayName": "Armor Trim Material — Iron Material",
-      "subtitle": "Iron Material",
-      "searchQuery": "Iron Material",
-      "item": {
-        "material": "IRON_INGOT",
-        "displayName": "Armor Trim Material",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Iron Material"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_material:lapis",
-      "kind": "ARMOR_TRIM_MATERIAL",
-      "displayName": "Armor Trim Material — Lapis Material",
-      "subtitle": "Lapis Material",
-      "searchQuery": "Lapis Material",
-      "item": {
-        "material": "IRON_INGOT",
-        "displayName": "Armor Trim Material",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Lapis Material"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_material:netherite",
-      "kind": "ARMOR_TRIM_MATERIAL",
-      "displayName": "Armor Trim Material — Netherite Material",
-      "subtitle": "Netherite Material",
-      "searchQuery": "Netherite Material",
-      "item": {
-        "material": "IRON_INGOT",
-        "displayName": "Armor Trim Material",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Netherite Material"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_material:quartz",
-      "kind": "ARMOR_TRIM_MATERIAL",
-      "displayName": "Armor Trim Material — Quartz Material",
-      "subtitle": "Quartz Material",
-      "searchQuery": "Quartz Material",
-      "item": {
-        "material": "IRON_INGOT",
-        "displayName": "Armor Trim Material",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Quartz Material"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_material:redstone",
-      "kind": "ARMOR_TRIM_MATERIAL",
-      "displayName": "Armor Trim Material — Redstone Material",
-      "subtitle": "Redstone Material",
-      "searchQuery": "Redstone Material",
-      "item": {
-        "material": "IRON_INGOT",
-        "displayName": "Armor Trim Material",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Redstone Material"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_material:resin",
-      "kind": "ARMOR_TRIM_MATERIAL",
-      "displayName": "Armor Trim Material — Resin Material",
-      "subtitle": "Resin Material",
-      "searchQuery": "Resin Material",
-      "item": {
-        "material": "IRON_INGOT",
-        "displayName": "Armor Trim Material",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Resin Material"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:bolt",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Bolt Armor Trim",
-      "subtitle": "Bolt Armor Trim",
-      "searchQuery": "Bolt Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Bolt Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:coast",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Coast Armor Trim",
-      "subtitle": "Coast Armor Trim",
-      "searchQuery": "Coast Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Coast Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:dune",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Dune Armor Trim",
-      "subtitle": "Dune Armor Trim",
-      "searchQuery": "Dune Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Dune Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:eye",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Eye Armor Trim",
-      "subtitle": "Eye Armor Trim",
-      "searchQuery": "Eye Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Eye Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:flow",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Flow Armor Trim",
-      "subtitle": "Flow Armor Trim",
-      "searchQuery": "Flow Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Flow Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:host",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Host Armor Trim",
-      "subtitle": "Host Armor Trim",
-      "searchQuery": "Host Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Host Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:raiser",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Raiser Armor Trim",
-      "subtitle": "Raiser Armor Trim",
-      "searchQuery": "Raiser Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Raiser Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:rib",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Rib Armor Trim",
-      "subtitle": "Rib Armor Trim",
-      "searchQuery": "Rib Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Rib Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:sentry",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Sentry Armor Trim",
-      "subtitle": "Sentry Armor Trim",
-      "searchQuery": "Sentry Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Sentry Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:shaper",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Shaper Armor Trim",
-      "subtitle": "Shaper Armor Trim",
-      "searchQuery": "Shaper Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Shaper Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:silence",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Silence Armor Trim",
-      "subtitle": "Silence Armor Trim",
-      "searchQuery": "Silence Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Silence Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:snout",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Snout Armor Trim",
-      "subtitle": "Snout Armor Trim",
-      "searchQuery": "Snout Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Snout Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:spire",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Spire Armor Trim",
-      "subtitle": "Spire Armor Trim",
-      "searchQuery": "Spire Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Spire Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:tide",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Tide Armor Trim",
-      "subtitle": "Tide Armor Trim",
-      "searchQuery": "Tide Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Tide Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:vex",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Vex Armor Trim",
-      "subtitle": "Vex Armor Trim",
-      "searchQuery": "Vex Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Vex Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:ward",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Ward Armor Trim",
-      "subtitle": "Ward Armor Trim",
-      "searchQuery": "Ward Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Ward Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:wayfinder",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Wayfinder Armor Trim",
-      "subtitle": "Wayfinder Armor Trim",
-      "searchQuery": "Wayfinder Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Wayfinder Armor Trim"
-        }
-      }
-    },
-    {
-      "id": "armor_trim_pattern:wild",
-      "kind": "ARMOR_TRIM_PATTERN",
-      "displayName": "Armor Trim Pattern — Wild Armor Trim",
-      "subtitle": "Wild Armor Trim",
-      "searchQuery": "Wild Armor Trim",
-      "item": {
-        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
-        "displayName": "Armor Trim Pattern",
-        "amount": 1,
-        "metadata": {
-          "publicVariantId": "Wild Armor Trim"
-        }
-      }
-    },
     {
       "id": "potion:tipped_arrow:awkward",
       "kind": "POTION",
@@ -7044,6 +6609,276 @@
               }
             ]
           }
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:bolt",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Bolt Armor Trim",
+      "searchQuery": "Bolt Armor Trim armor trim",
+      "item": {
+        "material": "BOLT_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Bolt Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:coast",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Coast Armor Trim",
+      "searchQuery": "Coast Armor Trim armor trim",
+      "item": {
+        "material": "COAST_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Coast Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:dune",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Dune Armor Trim",
+      "searchQuery": "Dune Armor Trim armor trim",
+      "item": {
+        "material": "DUNE_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Dune Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:eye",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Eye Armor Trim",
+      "searchQuery": "Eye Armor Trim armor trim",
+      "item": {
+        "material": "EYE_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Eye Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:flow",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Flow Armor Trim",
+      "searchQuery": "Flow Armor Trim armor trim",
+      "item": {
+        "material": "FLOW_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Flow Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:host",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Host Armor Trim",
+      "searchQuery": "Host Armor Trim armor trim",
+      "item": {
+        "material": "HOST_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Host Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:raiser",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Raiser Armor Trim",
+      "searchQuery": "Raiser Armor Trim armor trim",
+      "item": {
+        "material": "RAISER_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Raiser Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:rib",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Rib Armor Trim",
+      "searchQuery": "Rib Armor Trim armor trim",
+      "item": {
+        "material": "RIB_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Rib Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:sentry",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Sentry Armor Trim",
+      "searchQuery": "Sentry Armor Trim armor trim",
+      "item": {
+        "material": "SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Sentry Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:shaper",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Shaper Armor Trim",
+      "searchQuery": "Shaper Armor Trim armor trim",
+      "item": {
+        "material": "SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Shaper Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:silence",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Silence Armor Trim",
+      "searchQuery": "Silence Armor Trim armor trim",
+      "item": {
+        "material": "SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Silence Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:snout",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Snout Armor Trim",
+      "searchQuery": "Snout Armor Trim armor trim",
+      "item": {
+        "material": "SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Snout Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:spire",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Spire Armor Trim",
+      "searchQuery": "Spire Armor Trim armor trim",
+      "item": {
+        "material": "SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Spire Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:tide",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Tide Armor Trim",
+      "searchQuery": "Tide Armor Trim armor trim",
+      "item": {
+        "material": "TIDE_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Tide Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:vex",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Vex Armor Trim",
+      "searchQuery": "Vex Armor Trim armor trim",
+      "item": {
+        "material": "VEX_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Vex Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:ward",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Ward Armor Trim",
+      "searchQuery": "Ward Armor Trim armor trim",
+      "item": {
+        "material": "WARD_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Ward Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:wayfinder",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Wayfinder Armor Trim",
+      "searchQuery": "Wayfinder Armor Trim armor trim",
+      "item": {
+        "material": "WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Wayfinder Armor Trim"
+        }
+      }
+    },
+    {
+      "id": "armor_trim_pattern:wild",
+      "kind": "ARMOR_TRIM_PATTERN",
+      "displayName": "Smithing Template",
+      "subtitle": "Wild Armor Trim",
+      "searchQuery": "Wild Armor Trim armor trim",
+      "item": {
+        "material": "WILD_ARMOR_TRIM_SMITHING_TEMPLATE",
+        "displayName": "Smithing Template",
+        "amount": 1,
+        "metadata": {
+          "publicVariantId": "Wild Armor Trim"
         }
       }
     },

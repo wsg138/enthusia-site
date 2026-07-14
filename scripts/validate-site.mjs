@@ -65,7 +65,8 @@ if (fingerprint !== "6f6d926c79fecbcf250043aab2445dccc94c60d92ff70bc042ac8b4650f
 const catalog = JSON.parse(await readFile(path.join(marketDir, "minecraft", "item-catalog.json"), "utf8"));
 if (catalog.items?.length !== 1487 || catalog.excludedCount !== 17) errors.push(`market: expected 1487 public Minecraft 1.21.11 catalog items and 17 exclusions, found ${catalog.items?.length ?? 0}/${catalog.excludedCount ?? 0}`);
 const variants = JSON.parse(await readFile(path.join(marketDir, "minecraft", "item-variant-catalog.json"), "utf8"));
-if (variants.items?.length !== 362) errors.push(`market: expected 362 Minecraft 1.21.11 variant entries, found ${variants.items?.length ?? 0}`);
+if (variants.items?.length !== 351) errors.push(`market: expected 351 Minecraft 1.21.11 variant entries, found ${variants.items?.length ?? 0}`);
+if (variants.items?.some(item => item.kind === "ARMOR_TRIM_MATERIAL")) errors.push("market: pseudo armor-trim material variants must not be public search entries");
 const potions = JSON.parse(await readFile(path.join(marketDir, "minecraft", "potion-variant-manifest.json"), "utf8"));
 if (potions.items?.length !== 184 || potions.count !== 184) errors.push(`market: expected 184 audited potion variants, found ${potions.items?.length ?? 0}`);
 for (const file of ["market.js", "market-adapter.js", "market-data.js", "minecraft/material-icon-manifest.js", "minecraft/font-metrics.js", "minecraft/item-catalog.js", "minecraft/item-variant-catalog.js"]) {

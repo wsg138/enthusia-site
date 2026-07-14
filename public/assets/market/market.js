@@ -683,23 +683,14 @@
   async function renderShulkerCanvas(canvas, item) {
     const renderToken = (shulkerRenderTokens.get(canvas) || 0) + 1; shulkerRenderTokens.set(canvas, renderToken);
     shulkerRenderState.set(canvas, item); activeShulkerCanvases.add(canvas); canvas.dataset.rendered = "false";
-    const container = item.metadata.container, frame = canvas.closest(".shulker-frame"), wrapper = canvas.parentElement;
-    const styles = getComputedStyle(frame), desiredCssWidth = Math.min(400, Math.max(1, frame.clientWidth - parseFloat(styles.paddingLeft) - parseFloat(styles.paddingRight)));
-    const dpr = devicePixelRatio || 1, backingScale = Math.max(1, Math.ceil(desiredCssWidth * dpr / 176));
-    canvas.width = 176 * backingScale; canvas.height = 76 * backingScale;
+    const frame = canvas.closest(".shulker-frame"), wrapper = canvas.parentElement;
+    const styles = getComputedStyle(frame), desiredCssWidth = Math.min(352, Math.max(1, frame.clientWidth - parseFloat(styles.paddingLeft) - parseFloat(styles.paddingRight)));
+    const dpr = devicePixelRatio || 1, backingScale = 1;
+    canvas.width = 176; canvas.height = 76;
     wrapper.style.width = `${desiredCssWidth}px`; wrapper.style.height = `${desiredCssWidth * 76 / 176}px`;
     const context = canvas.getContext("2d"); context.imageSmoothingEnabled = false; context.setTransform(backingScale, 0, 0, backingScale, 0, 0); context.clearRect(0, 0, 176, 76);
     const gui = await loadCanvasImage(iconManifest.gui.shulker); if (shulkerRenderTokens.get(canvas) !== renderToken) return; context.drawImage(gui, 0, 0, 176, 76, 0, 0, 176, 76);
     await drawMinecraftText(context, item.metadata?.customName || item.displayName, 8, 6, "#404040");
-    for (const entry of container.contents) {
-      const column = entry.slot % 9, row = Math.floor(entry.slot / 9), slotLeft = 7 + column * 18, slotTop = 17 + row * 18, x = slotLeft + 1, y = slotTop + 1;
-      await drawCanvasItem(context, entry.item, x, y); if (shulkerRenderTokens.get(canvas) !== renderToken) return;
-      if (entry.item.amount > 1) {
-        const count = String(entry.item.amount), countRight = slotLeft + 17, countTop = slotTop + 9;
-        await drawMinecraftText(context, count, countRight + 1, countTop + 1, "#3F3F3F", true); if (shulkerRenderTokens.get(canvas) !== renderToken) return;
-        await drawMinecraftText(context, count, countRight, countTop, "#FFFFFF", true); if (shulkerRenderTokens.get(canvas) !== renderToken) return;
-      }
-    }
     canvas.dataset.rendered = "true"; canvas.dataset.backingScale = String(backingScale); canvas.dataset.cssWidth = String(desiredCssWidth); canvas.dataset.dpr = String(dpr);
   }
   const shulkerResizeObserver = new ResizeObserver(entries => entries.forEach(({target}) => {
@@ -712,7 +703,7 @@
     if (!container) return "";
     if (container.type === "SHULKER") {
       const slots = new Map(container.contents.map(value => [value.slot, value.item]));
-      return `<section class="container-inspection"><h3>${esc(itemPresentation(item).baseDisplayName)} contents</h3><div class="shulker-frame" data-shulker-color="${esc(item.metadata?.shulkerColor || "Natural")}"><div class="minecraft-shulker-window"><canvas class="shulker-visual" width="176" height="76" aria-hidden="true"></canvas><div class="shulker-slot-grid">${Array.from({ length: 27 }, (_, slot) => {
+      return `<section class="container-inspection"><h3>${esc(itemPresentation(item).baseDisplayName)} contents</h3><div class="shulker-frame" data-shulker-color="${esc(item.metadata?.shulkerColor || "Natural")}"><div class="minecraft-shulker-window"><canvas class="shulker-visual" width="176" height="76" aria-hidden="true"></canvas><div class="shulker-item-grid" aria-hidden="true">${Array.from({length:27},(_,slot)=>{const child=slots.get(slot);return `<span class="shulker-item-cell">${child?`${itemIcon(child)}${child.amount>1?`<span class="shulker-stack-count">${minecraftText(child.amount)}</span>`:""}`:""}</span>`}).join("")}</div><div class="shulker-slot-grid">${Array.from({ length: 27 }, (_, slot) => {
         const child = slots.get(slot), focused = child && context?.focusMaterial === child.material;
         return `<button class="minecraft-slot${focused ? " focused-match" : ""}" data-container-slot="${slot}" ${child ? "" : "disabled"} aria-label="${child ? `${child.amount} ${esc(child.displayName)}` : "Empty slot"}"></button>`;
       }).join("")}</div></div></div></section>`;
