@@ -330,7 +330,9 @@
   function itemMetadata(item) {
     const metadata = item.metadata || {}, details = [];
     const levelName = level => ({ 1: "I", 2: "II", 3: "III", 4: "IV", 5: "V", 6: "VI", 7: "VII", 8: "VIII", 9: "IX", 10: "X" })[level] || level;
-    if (metadata.customName && metadata.customName.localeCompare(item.displayName, undefined, {sensitivity: "base"}) !== 0) details.push(`Named “${metadata.customName}”`);
+    const displayName = window.EnthusiaMarketAdapter.stripMinecraftFormatting(item.displayName);
+    const customName = window.EnthusiaMarketAdapter.stripMinecraftFormatting(metadata.customName);
+    if (customName && customName.localeCompare(displayName, undefined, {sensitivity: "base"}) !== 0) details.push(`Named “${customName}”`);
     if (metadata.enchantments?.length) details.push(...metadata.enchantments.map(window.EnthusiaMarketAdapter.enchantmentDisplay));
     if (metadata.storedEnchantments?.length) details.push(...metadata.storedEnchantments.map(window.EnthusiaMarketAdapter.enchantmentDisplay));
     if (metadata.armorTrim) details.push(`${metadata.armorTrim.material} ${metadata.armorTrim.pattern} Armor Trim`);
@@ -344,7 +346,7 @@
     if (metadata.bannerPatterns?.length) details.push(...metadata.bannerPatterns.map(pattern => `${pattern.color} ${pattern.pattern}`));
     if (metadata.publicVariantId) details.push(metadata.publicVariantId);
     const normalizedName = value => String(value).toLowerCase().replace(/^named\s+[“"]|[”"]$/g, "").replace(/[^a-z0-9]+/g, " ").trim();
-    const baseNames = new Set([item.displayName, metadata.customName].filter(Boolean).map(normalizedName));
+    const baseNames = new Set([displayName, customName].filter(Boolean).map(normalizedName));
     const seen = new Set();
     return details.filter(Boolean).filter(detail => {
       const normalized = normalizedName(detail);
@@ -353,6 +355,7 @@
     });
   }
   const itemPresentation = item => window.EnthusiaMarketAdapter.itemPresentation(item);
+  const publicItemName = value => window.EnthusiaMarketAdapter.stripMinecraftFormatting(value);
   function transactionQuantity(amount, itemName) {
     const grouped = window.EnthusiaMarketAdapter.formatStackQuantity(amount);
     const label = `${amount} ${itemName} — ${grouped}`;
@@ -378,7 +381,7 @@
     const silhouette = definitions.find(layer => !layer.tintSource)?.src || definitions[0]?.src;
     const glintTexture = iconManifest.glint?.item || "minecraft/vanilla/textures/misc/enchanted_glint_item.png";
     const glint = enchanted && silhouette ? `<span class="item-glint" style="--item-silhouette:url('${cssAssetBase}${silhouette}');--glint-texture:url('${cssAssetBase}${glintTexture}')" aria-hidden="true"></span>` : "";
-    return `<span class="minecraft-item-icon${enchanted ? " enchanted" : ""} ${extraClass}" data-icon-key="${key}" role="img" aria-label="${esc(item.displayName)}"><canvas class="item-raster" width="16" height="16" aria-hidden="true"></canvas>${glint}</span>`;
+    return `<span class="minecraft-item-icon${enchanted ? " enchanted" : ""} ${extraClass}" data-icon-key="${key}" role="img" aria-label="${esc(publicItemName(item.displayName))}"><canvas class="item-raster" width="16" height="16" aria-hidden="true"></canvas>${glint}</span>`;
   }
   function minecraftText(value, className = "") {
     const text = String(value ?? "");
@@ -392,7 +395,7 @@
   }
   function floatingTooltipMarkup(item) {
     const details = itemMetadata(item), presentation = itemPresentation(item);
-    return `<strong>${minecraftText(item.metadata?.customName || presentation.baseDisplayName)}</strong>${item.metadata?.customName ? minecraftText(presentation.baseDisplayName, "muted") : ""}${details.map(detail => minecraftText(detail, "muted")).join("")}`;
+    return `<strong>${minecraftText(presentation.customDisplayName || presentation.baseDisplayName)}</strong>${presentation.customDisplayName ? minecraftText(presentation.baseDisplayName, "muted") : ""}${details.map(detail => minecraftText(detail, "muted")).join("")}`;
   }
   function showItemTooltip(anchor, item) {
     el.itemTooltip.innerHTML = floatingTooltipMarkup(item); el.itemTooltip.hidden = false; el.itemTooltip.style.visibility = "hidden";
@@ -738,7 +741,7 @@
     wrapper.style.width = `${desiredCssWidth}px`; wrapper.style.height = `${desiredCssWidth * 76 / 176}px`;
     const context = canvas.getContext("2d"); context.imageSmoothingEnabled = false; context.setTransform(backingScale, 0, 0, backingScale, 0, 0); context.clearRect(0, 0, 176, 76);
     const gui = await loadCanvasImage(iconManifest.gui.shulker); if (shulkerRenderTokens.get(canvas) !== renderToken) return; context.drawImage(gui, 0, 0, 176, 76, 0, 0, 176, 76);
-    await drawMinecraftText(context, item.metadata?.customName || item.displayName, 8, 6, "#404040");
+    await drawMinecraftText(context, publicItemName(item.metadata?.customName || item.displayName), 8, 6, "#404040");
     canvas.dataset.rendered = "true"; canvas.dataset.backingScale = String(backingScale); canvas.dataset.cssWidth = String(desiredCssWidth); canvas.dataset.dpr = String(dpr);
   }
   const shulkerResizeObserver = new ResizeObserver(entries => entries.forEach(({target}) => {
@@ -753,12 +756,12 @@
       const slots = new Map(container.contents.map(value => [value.slot, value.item]));
       return `<section class="container-inspection"><h3>${esc(itemPresentation(item).baseDisplayName)} contents</h3><div class="shulker-frame" data-shulker-color="${esc(item.metadata?.shulkerColor || "Natural")}"><div class="minecraft-shulker-window"><canvas class="shulker-visual" width="176" height="76" aria-hidden="true"></canvas><div class="shulker-item-grid" aria-hidden="true">${Array.from({length:27},(_,slot)=>{const child=slots.get(slot);return `<span class="shulker-item-cell">${child?`${itemIcon(child)}${child.amount>1?`<span class="shulker-stack-count">${minecraftText(child.amount)}</span>`:""}`:""}</span>`}).join("")}</div><div class="shulker-slot-grid">${Array.from({ length: 27 }, (_, slot) => {
         const child = slots.get(slot), focused = child && context?.focusMaterial === child.material;
-        return `<button class="minecraft-slot${focused ? " focused-match" : ""}" data-container-slot="${slot}" ${child ? "" : "disabled"} aria-label="${child ? `${child.amount} ${esc(child.displayName)}` : "Empty slot"}"></button>`;
+        return `<button class="minecraft-slot${focused ? " focused-match" : ""}" data-container-slot="${slot}" ${child ? "" : "disabled"} aria-label="${child ? `${child.amount} ${esc(publicItemName(child.displayName))}` : "Empty slot"}"></button>`;
       }).join("")}</div></div></div></section>`;
     }
     const maximum = Math.max(1, container.capacityMax || 64), used = Math.max(0, container.capacityUsed || 0);
     const full = used >= maximum;
-    return `<section class="container-inspection bundle-inspection"><h3>${esc(itemPresentation(item).baseDisplayName)} contents</h3><div class="minecraft-bundle-tooltip"><div class="bundle-title">${minecraftText(item.metadata?.customName || "Bundle")}</div><div class="bundle-item-grid">${container.contents.map((value, index) => { const child = value.item, focused = context?.focusMaterial === child.material; return `<button class="bundle-slot${focused ? " focused-match" : ""}" style="--bundle-slot:url('${cssAssetBase}${iconManifest.gui.bundleSlot}')" data-container-index="${index}" aria-label="${child.amount} ${esc(child.displayName)}">${itemIcon(child)}${child.amount > 1 ? `<span class="stack-count">${minecraftText(child.amount)}</span>` : ""}</button>`; }).join("")}</div><div class="bundle-capacity-label">${minecraftText(full ? "Full!" : `${used}/${maximum}`)}</div><div class="bundle-capacity${full ? " full" : ""}" aria-label="${used} of ${maximum} bundle capacity used" style="--bundle-border:url('${cssAssetBase}${iconManifest.gui.bundleBorder}');--bundle-fill:url('${cssAssetBase}${full ? iconManifest.gui.bundleFull : iconManifest.gui.bundleFill}')"><span style="width:${Math.min(100, used / maximum * 100)}%"></span></div></div></section>`;
+    return `<section class="container-inspection bundle-inspection"><h3>${esc(itemPresentation(item).baseDisplayName)} contents</h3><div class="minecraft-bundle-tooltip"><div class="bundle-title">${minecraftText(publicItemName(item.metadata?.customName || "Bundle"))}</div><div class="bundle-item-grid">${container.contents.map((value, index) => { const child = value.item, focused = context?.focusMaterial === child.material; return `<button class="bundle-slot${focused ? " focused-match" : ""}" style="--bundle-slot:url('${cssAssetBase}${iconManifest.gui.bundleSlot}')" data-container-index="${index}" aria-label="${child.amount} ${esc(publicItemName(child.displayName))}">${itemIcon(child)}${child.amount > 1 ? `<span class="stack-count">${minecraftText(child.amount)}</span>` : ""}</button>`; }).join("")}</div><div class="bundle-capacity-label">${minecraftText(full ? "Full!" : `${used}/${maximum}`)}</div><div class="bundle-capacity${full ? " full" : ""}" aria-label="${used} of ${maximum} bundle capacity used" style="--bundle-border:url('${cssAssetBase}${iconManifest.gui.bundleBorder}');--bundle-fill:url('${cssAssetBase}${full ? iconManifest.gui.bundleFull : iconManifest.gui.bundleFill}')"><span style="width:${Math.min(100, used / maximum * 100)}%"></span></div></div></section>`;
   }
   function renderInspector() {
     const entry = state.inspectorHistory.at(-1), { shop, item } = entry;
@@ -766,7 +769,7 @@
     el.inspector.hidden = false; document.body.classList.add("inspector-open");
     const presentation = itemPresentation(item);
     el.inspectorKicker.textContent = `${action} · ${entry.role}`; el.inspectorTitle.textContent = "Item details";
-    const backLabel = state.inspectorHistory.length > 1 ? `Back to ${state.inspectorHistory.at(-2).item.displayName}` : state.searchReturn ? "Back to search results" : "Back to stall";
+    const backLabel = state.inspectorHistory.length > 1 ? `Back to ${publicItemName(state.inspectorHistory.at(-2).item.displayName)}` : state.searchReturn ? "Back to search results" : "Back to stall";
     const sellPresentation = itemPresentation(shop.sellItem), costPresentation = itemPresentation(shop.costItem);
     el.inspectorContent.innerHTML = `<button class="inspector-back mobile-navigation-back" type="button">← ${esc(backLabel)}</button><section class="inspector-shop-context"><span>Shop by <strong>${esc(shop.owner.name)}</strong></span>${locationMarkup(shop.interaction, true)}</section><div class="inspector-transaction-tabs"><button class="${entry.side === "sellItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="sellItem"><span class="transaction-tab-label">${labels[0]}</span>${itemIcon(shop.sellItem)}<strong>${transactionQuantity(shop.sellAmount, sellPresentation.baseDisplayName)}</strong></button><button class="${entry.side === "costItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="costItem"><span class="transaction-tab-label">${labels[1]}</span>${itemIcon(shop.costItem)}<strong>${transactionQuantity(shop.costAmount, costPresentation.baseDisplayName)}</strong></button></div>${inspectorItemDetails(item)}${containerMarkup(entry)}`;
     bindCopy(el.inspectorContent);
@@ -875,7 +878,7 @@
     const heading = shops.length ? `${shops.length} result${shops.length === 1 ? "" : "s"} for “${esc(displayQuery)}”` : `No current listings for ${esc(displayQuery)}`;
     el.resultsContent.innerHTML = `<p class="eyebrow">Item results</p><h2>${heading}</h2>${shops.length ? `<div class="result-list">${shops.map((shop, index) => {
       const item = shop.match.item, containerPath = shop.match.containerPath || [], leadingItem = shop.match.contained ? containerPath[0] || shop.match.container : item;
-      const inside = shop.match.contained ? `<small class="contained-match">Inside ${containerPath.map(container => esc(container.displayName)).join(" › ") || esc(shop.match.container.displayName)}</small>` : "";
+      const inside = shop.match.contained ? `<small class="contained-match">Inside ${containerPath.map(container => esc(publicItemName(container.displayName))).join(" › ") || esc(publicItemName(shop.match.container.displayName))}</small>` : "";
       const presentation = itemPresentation(item);
       const transactionAmount = shop.match.side === "costItem" ? shop.costAmount : shop.sellAmount;
       const primary = shop.match.contained ? `${item.amount}× ${esc(presentation.baseDisplayName)}` : transactionQuantity(transactionAmount, presentation.baseDisplayName);
@@ -938,8 +941,8 @@
     state.suggestionIndex = -1; const box = $("#search-suggestions");
     if (!items.length) { box.replaceChildren(); box.hidden = true; return; }
     box.innerHTML = items.map((entry, index) => {
-      const label = entry.displayName || entry.searchQuery, query = entry.searchQuery || label;
-      return `<button role="option" data-suggestion="${esc(query)}" data-index="${index}">${itemIcon(entry.item || {material:entry.material,displayName:label,amount:1})}<span><strong>${esc(label)}</strong>${entry.subtitle ? `<small>${esc(entry.subtitle)}</small>` : ""}</span></button>`;
+      const label = publicItemName(entry.displayName || entry.searchQuery), query = publicItemName(entry.searchQuery || label), subtitle = publicItemName(entry.subtitle);
+      return `<button role="option" data-suggestion="${esc(query)}" data-index="${index}">${itemIcon(entry.item || {material:entry.material,displayName:label,amount:1})}<span><strong>${esc(label)}</strong>${subtitle ? `<small>${esc(subtitle)}</small>` : ""}</span></button>`;
     }).join(""); box.hidden = false;
     box.querySelectorAll("button").forEach(button => button.onclick = () => { $("#item-search").value = button.dataset.suggestion; executeSearch(); });
   }

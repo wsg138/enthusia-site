@@ -4,8 +4,14 @@
   const normalize = value => String(value ?? "").trim().toLowerCase();
   const materialName = value => normalize(value).replaceAll("_", " ");
   const romanLevel = level => ({1: "I", 2: "II", 3: "III", 4: "IV", 5: "V", 6: "VI", 7: "VII", 8: "VIII", 9: "IX", 10: "X"})[level] || String(level);
+  const stripMinecraftFormatting = value => String(value ?? "")
+    .replace(/<\/?!?(?:[a-z][a-z0-9_-]*|#[0-9a-f]{6})(?::[^<>]*)?>/gi, "")
+    .replace(/(?:§x(?:§[0-9a-f]){6}|&x(?:&[0-9a-f]){6})/gi, "")
+    .replace(/&#[0-9a-f]{6}/gi, "")
+    .replace(/[§&][0-9a-fk-orx]/gi, "")
+    .trim();
   const enchantmentDisplay = enchantment => {
-    const displayName = String(enchantment?.displayName || "").trim();
+    const displayName = stripMinecraftFormatting(enchantment?.displayName);
     const numeral = romanLevel(enchantment?.level);
     return displayName === numeral || displayName.endsWith(` ${numeral}`) ? displayName : `${displayName} ${numeral}`.trim();
   };
@@ -48,8 +54,10 @@
     const metadata = item?.metadata || {};
     const armorTrimTemplate = item?.material?.match(/^(.+)_ARMOR_TRIM_SMITHING_TEMPLATE$/);
     const compactTrimName = armorTrimTemplate ? `${armorTrimTemplate[1].split("_").map(word => word[0] + word.slice(1).toLowerCase()).join(" ")} Armor Trim` : null;
-    const baseDisplayName = item?.material === "ENCHANTED_BOOK" ? "Enchanted Book" : item?.material === "WRITTEN_BOOK" ? "Written Book" : compactTrimName || item?.displayName || materialName(item?.material);
-    const customDisplayName = metadata.customName && metadata.customName !== baseDisplayName ? metadata.customName : null;
+    const publicDisplayName = stripMinecraftFormatting(item?.displayName);
+    const publicCustomName = stripMinecraftFormatting(metadata.customName);
+    const baseDisplayName = item?.material === "ENCHANTED_BOOK" ? "Enchanted Book" : item?.material === "WRITTEN_BOOK" ? "Written Book" : compactTrimName || publicDisplayName || materialName(item?.material);
+    const customDisplayName = publicCustomName && publicCustomName !== baseDisplayName ? publicCustomName : null;
     const variants = [
       ...(metadata.storedEnchantments || []).map(enchantmentDisplay),
       ...(metadata.enchantments || []).map(enchantmentDisplay),
@@ -65,9 +73,9 @@
     if (!item) return [];
     const metadata = item.metadata || {};
     return [
-      item.material, materialName(item.material), item.displayName, metadata.customName,
-      ...(metadata.enchantments || []).flatMap(enchantment => [enchantment.id, enchantment.displayName, `${enchantment.displayName} ${enchantment.level}`, `${enchantment.displayName} ${romanLevel(enchantment.level)}`]),
-      ...(metadata.storedEnchantments || []).flatMap(enchantment => [enchantment.id, enchantment.displayName, `${enchantment.displayName} ${enchantment.level}`, `${enchantment.displayName} ${romanLevel(enchantment.level)}`]),
+      item.material, materialName(item.material), stripMinecraftFormatting(item.displayName), stripMinecraftFormatting(metadata.customName),
+      ...(metadata.enchantments || []).flatMap(enchantment => [enchantment.id, stripMinecraftFormatting(enchantment.displayName), `${stripMinecraftFormatting(enchantment.displayName)} ${enchantment.level}`, enchantmentDisplay(enchantment)]),
+      ...(metadata.storedEnchantments || []).flatMap(enchantment => [enchantment.id, stripMinecraftFormatting(enchantment.displayName), `${stripMinecraftFormatting(enchantment.displayName)} ${enchantment.level}`, enchantmentDisplay(enchantment)]),
       metadata.armorTrim?.pattern, metadata.armorTrim?.material,
       metadata.potion?.basePotion, ...(metadata.potion?.effects || []).map(effect => effect.name),
       metadata.smithingTemplate?.type, metadata.shulkerColor,
@@ -90,8 +98,9 @@
     constructor(layout, snapshot, catalog = window.ENTHUSIA_MINECRAFT_ITEM_CATALOG, variants = window.ENTHUSIA_MINECRAFT_ITEM_VARIANTS) {
       this.layout = layout;
       this.snapshot = publicSnapshot(snapshot);
-      this.catalog = catalog?.items || [];
-      this.variants = (variants?.items || []).map(entry => {
+      this.catalog = (catalog?.items || []).map(entry => ({...entry, displayName: stripMinecraftFormatting(entry.displayName), subtitle: entry.subtitle == null ? entry.subtitle : stripMinecraftFormatting(entry.subtitle), searchQuery: entry.searchQuery == null ? entry.searchQuery : stripMinecraftFormatting(entry.searchQuery)}));
+      this.variants = (variants?.items || []).map(source => {
+        const entry = {...source, displayName: stripMinecraftFormatting(source.displayName), subtitle: source.subtitle == null ? source.subtitle : stripMinecraftFormatting(source.subtitle), searchQuery: source.searchQuery == null ? source.searchQuery : stripMinecraftFormatting(source.searchQuery)};
         if (entry.kind === "ENCHANTMENT") return {...entry, displayName: "Enchanted Book"};
         if (entry.kind === "POTION") {
           const [primary, duration] = entry.displayName.split(" — ");
@@ -144,7 +153,7 @@
     suggest(query, limit = 15) {
       const spec = querySpec(query), value = spec.normalized;
       if (value.length < 1) return [];
-      const available = new Set(this.searchEntries().flatMap(entry => [normalize(entry.match.item.displayName), normalize(entry.match.item.material)]));
+      const available = new Set(this.searchEntries().flatMap(entry => [normalize(stripMinecraftFormatting(entry.match.item.displayName)), normalize(entry.match.item.material)]));
       const materialQuery = value.replaceAll(" ", "_"), matches = this.suggestionCatalog.filter(entry => {
         if (spec.exactMaterial) return (entry.material || entry.item?.material) === spec.exactMaterial;
         if (spec.category) return spec.category.matches(entry.material || entry.item?.material);
@@ -159,5 +168,5 @@
     }
   }
 
-  window.EnthusiaMarketAdapter = {StaticMarketAdapter, itemTerms, itemPresentation, containerEntries, normalizeQuery, querySpec, categories, enchantmentDisplay, formatStackQuantity};
+  window.EnthusiaMarketAdapter = {StaticMarketAdapter, itemTerms, itemPresentation, containerEntries, normalizeQuery, querySpec, categories, stripMinecraftFormatting, enchantmentDisplay, formatStackQuantity};
 })();
