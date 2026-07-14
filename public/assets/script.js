@@ -1612,7 +1612,11 @@ function initScrollReveal() {
 }
 
 function initWorldEffects() {
-  if (!document.body.classList.contains("home-page") || document.querySelector(".world-effects")) return;
+  if (
+    !document.body.classList.contains("home-page") ||
+    document.body.classList.contains("static-gallery-background") ||
+    document.querySelector(".world-effects")
+  ) return;
 
   const SCENE_WIDTH = 1672;
   const SCENE_HEIGHT = 941;

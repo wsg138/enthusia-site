@@ -3614,6 +3614,18 @@ h1,h2,h3,
 @media(max-width:380px){.mobile-nav-panel{--mobile-nav-panel-space:18px}}
 
 /* Scroll-driven cinematic world experiment */
+.home-page.static-gallery-background::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(5,9,12,.16) 0%,rgba(7,10,9,.08) 36%,rgba(6,7,5,.72) 100%),
+    linear-gradient(90deg,rgba(6,8,7,.4),transparent 22% 78%,rgba(6,8,7,.42)),
+    url("screenshots/slide-01.webp") center 48%/cover no-repeat;
+}
+
 .world-effects.cinematic-world{
   background-image:linear-gradient(180deg,var(--scene-edge-top,#429dd6),var(--scene-edge-mid,#66b5db) 52%,var(--scene-edge-bottom,#18372f));
 }
@@ -3698,16 +3710,16 @@ body:not(.home-page)::before{
 
 .about-page::before{
   background:
-    linear-gradient(90deg,rgba(10,8,12,.76),rgba(10,8,12,.24) 62%,rgba(10,8,12,.12)),
-    linear-gradient(0deg,rgba(10,8,12,.7),transparent 58%),
-    url("season-one-spawn-about-v1.png") center/cover no-repeat;
+    linear-gradient(90deg,rgba(8,10,8,.78),rgba(8,10,8,.28) 62%,rgba(8,10,8,.2)),
+    linear-gradient(0deg,rgba(8,9,7,.76),transparent 58%),
+    url("screenshots/slide-12.webp") center 42%/cover no-repeat;
 }
 
 .rules-page::before{
   background:
-    linear-gradient(90deg,rgba(9,7,6,.9),rgba(11,8,6,.64) 52%,rgba(8,6,5,.86)),
-    linear-gradient(0deg,rgba(9,6,5,.92),transparent 54%),
-    url("rules-council-hall-v1.png") center/cover no-repeat;
+    linear-gradient(90deg,rgba(8,7,6,.9),rgba(10,8,6,.62) 52%,rgba(7,6,5,.86)),
+    linear-gradient(0deg,rgba(8,6,5,.92),transparent 54%),
+    url("screenshots/slide-05.webp") center 46%/cover no-repeat;
 }
 
 .rules-page .subhero{
@@ -3718,7 +3730,7 @@ body:not(.home-page)::before{
   background:
     linear-gradient(90deg,rgba(9,7,6,.84),rgba(11,8,6,.42) 60%,rgba(8,6,5,.7)),
     linear-gradient(0deg,rgba(9,6,5,.88),transparent 58%),
-    url("rules-council-hall-v1.png") center/cover no-repeat !important;
+    url("screenshots/slide-05.webp") center 46%/cover no-repeat !important;
 }
 
 body:not(.home-page) .subhero{
@@ -3734,9 +3746,9 @@ body.rules-page .subhero{
 body:not(.home-page) .subhero::after{background:linear-gradient(0deg,rgba(12,8,8,.48),transparent 66%)}
 .about-page .subhero{
   background:
-    linear-gradient(90deg,rgba(12,8,10,.72),rgba(12,8,10,.2) 68%),
-    linear-gradient(0deg,rgba(12,8,10,.7),transparent 60%),
-    url("season-one-spawn-about-v1.png") center/cover no-repeat !important;
+    linear-gradient(90deg,rgba(8,10,8,.74),rgba(8,10,8,.2) 68%),
+    linear-gradient(0deg,rgba(8,9,7,.72),transparent 60%),
+    url("screenshots/slide-12.webp") center 42%/cover no-repeat !important;
 }
 
 .cinematic-celestial{
