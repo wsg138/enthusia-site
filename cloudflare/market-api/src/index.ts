@@ -3,6 +3,12 @@ import { EnthusiaMarketRoom } from "./market-room";
 import { error, json, withPublicCors } from "./responses";
 import { fullSyncSchema, stallUpdateSchema, testRequestSchema, validateRouteStall } from "./schemas";
 import type { Env } from "./types";
+import {
+  eventRelationshipIssue,
+  logValidationSummary,
+  summarizeValidationIssues,
+  type SafeValidationSummary,
+} from "./validation-diagnostics";
 
 export { EnthusiaMarketRoom };
 
@@ -60,20 +66,33 @@ async function handleInternal(request: Request, env: Env, pathname: string): Pro
     return error("invalid_json", "Request body must contain valid JSON.", 400);
   }
   const eventHeader = request.headers.get("X-Enthusia-Event-Id");
+  const invalidRequest = (summary: SafeValidationSummary): Response => {
+    logValidationSummary(pathname, summary);
+    return json({
+      ok: false,
+      error: {
+        code: "invalid_request",
+        message: "Request validation failed.",
+        diagnostic: summary,
+      },
+    }, 400);
+  };
   if (pathname === "/internal/v1/test") {
     const parsed = testRequestSchema.safeParse(data);
-    if (!parsed.success || parsed.data.eventId !== eventHeader) return error("invalid_request", "Request validation failed.", 400);
+    if (!parsed.success) return invalidRequest(summarizeValidationIssues(parsed.error.issues, data));
+    if (parsed.data.eventId !== eventHeader) return invalidRequest(eventRelationshipIssue("eventId"));
     return json({ ok: true, authenticated: true, serverId: env.MARKET_SERVER_ID, serverTime: new Date().toISOString() }, 200, { "Cache-Control": "no-store" });
   }
   if (pathname === "/internal/v1/full-sync") {
     const parsed = fullSyncSchema.safeParse(data);
-    if (!parsed.success || parsed.data.eventId !== eventHeader) return error("invalid_request", "Request validation failed.", 400);
+    if (!parsed.success) return invalidRequest(summarizeValidationIssues(parsed.error.issues, data));
+    if (parsed.data.eventId !== eventHeader) return invalidRequest(eventRelationshipIssue("eventId"));
   } else {
     const parsed = stallUpdateSchema.safeParse(data);
     const stallId = decodeURIComponent(pathname.slice("/internal/v1/stalls/".length));
-    if (!parsed.success || parsed.data.eventId !== eventHeader || !validateRouteStall(stallId, parsed.data.stall)) {
-      return error("invalid_request", "Request validation failed.", 400);
-    }
+    if (!parsed.success) return invalidRequest(summarizeValidationIssues(parsed.error.issues, data));
+    if (parsed.data.eventId !== eventHeader) return invalidRequest(eventRelationshipIssue("eventId"));
+    if (!validateRouteStall(stallId, parsed.data.stall)) return invalidRequest(eventRelationshipIssue("stall.id"));
   }
   const headers = new Headers(request.headers);
   headers.set("X-Enthusia-Authenticated", "1");

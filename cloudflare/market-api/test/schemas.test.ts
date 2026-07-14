@@ -50,4 +50,21 @@ describe("strict public schemas", () => {
     const response = await signedFetch("/internal/v1/stalls/stall1", "PUT", { schemaVersion: 1, serverId: "enthusia-main", serverEpoch: "epoch", eventId, sentAt: new Date().toISOString(), padding: "x".repeat(257 * 1024) });
     expect(response.status).toBe(413);
   });
+  it("returns only bounded safe diagnostics for an authenticated schema failure", async () => {
+    const eventId = crypto.randomUUID();
+    const privateValue = "private-owner-value";
+    const body = fullSyncBody();
+    body.eventId = eventId;
+    body.stalls[0].stall.ownerSince = privateValue;
+    const response = await signedFetch("/internal/v1/full-sync", "POST", body);
+    expect(response.status).toBe(400);
+    const text = await response.text();
+    expect(text).not.toContain(privateValue);
+    expect(JSON.parse(text).error.diagnostic.issues[0]).toMatchObject({
+      path: "stalls[0].stall.ownerSince",
+      code: "invalid_format",
+      received: "string",
+      length: privateValue.length,
+    });
+  });
 });
