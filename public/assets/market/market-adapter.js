@@ -21,9 +21,9 @@
   function querySpec(value) {
     const original = normalize(value).replace(/\bskulker\b/g, "shulker");
     const shulkerColor = shulkerColors.find(color => original === `${color} shulker` || original === `${color} shulker box`);
-    if (shulkerColor) return {original, normalized: original, category: categories.find(category => category.id === "SHULKER"), preferredMaterial: `${shulkerColor.replaceAll(" ", "_").toUpperCase()}_SHULKER_BOX`};
+    if (shulkerColor) return {original, normalized: original, category: null, exactMaterial: `${shulkerColor.replaceAll(" ", "_").toUpperCase()}_SHULKER_BOX`};
     const normalized = exactAliases.get(original) || original;
-    return {original, normalized, category: categories.find(category => category.queries.includes(normalized)) || null, preferredMaterial: null};
+    return {original, normalized, category: categories.find(category => category.queries.includes(normalized)) || null, exactMaterial: null};
   }
   const normalizeQuery = value => {
     return querySpec(value).normalized;
@@ -31,7 +31,9 @@
 
   function itemPresentation(item) {
     const metadata = item?.metadata || {};
-    const baseDisplayName = item?.material === "ENCHANTED_BOOK" ? "Enchanted Book" : item?.material === "WRITTEN_BOOK" ? "Written Book" : item?.displayName || materialName(item?.material);
+    const armorTrimTemplate = item?.material?.match(/^(.+)_ARMOR_TRIM_SMITHING_TEMPLATE$/);
+    const compactTrimName = armorTrimTemplate ? `${armorTrimTemplate[1].split("_").map(word => word[0] + word.slice(1).toLowerCase()).join(" ")} Armor Trim` : null;
+    const baseDisplayName = item?.material === "ENCHANTED_BOOK" ? "Enchanted Book" : item?.material === "WRITTEN_BOOK" ? "Written Book" : compactTrimName || item?.displayName || materialName(item?.material);
     const customDisplayName = metadata.customName && metadata.customName !== baseDisplayName ? metadata.customName : null;
     const variants = [
       ...(metadata.storedEnchantments || []).map(enchantment => `${enchantment.displayName} ${romanLevel(enchantment.level)}`),
@@ -83,7 +85,7 @@
         return entry;
       });
       this.suggestionCatalog = [
-        ...this.catalog.map(item => ({...item, kind: "MATERIAL", searchQuery: item.displayName, subtitle: null, item: {material: item.material, displayName: item.displayName, amount: 1, metadata: {}}})),
+        ...this.catalog.map(item => { const publicItem = {material: item.material, displayName: item.displayName, amount: 1, metadata: {}}; return {...item, displayName: itemPresentation(publicItem).baseDisplayName, kind: "MATERIAL", searchQuery: item.displayName, subtitle: null, item: publicItem}; }),
         ...this.variants
       ];
       this.stalls = new Map(snapshot.stalls.map(stall => [stall.id, stall]));
@@ -104,9 +106,8 @@
       if (!friendly) return [];
       const entries = this.searchEntries();
       const categoryMatches = spec.category ? entries.filter(entry => spec.category.matches(entry.match.item.material)) : [];
-      const exact = spec.category ? categoryMatches : entries.filter(entry => itemTerms(entry.match.item).some(term => term === friendly || term === material));
-      const selected = exact.length ? exact : friendly.length < 2 ? [] : entries.filter(entry => itemTerms(entry.match.item).some(term => term.startsWith(friendly) || term.startsWith(material) || term.includes(` ${friendly}`) || term.includes(friendly)));
-      selected.sort((a, b) => Number(b.match.item.material === spec.preferredMaterial) - Number(a.match.item.material === spec.preferredMaterial));
+      const exact = spec.exactMaterial ? entries.filter(entry => entry.match.item.material === spec.exactMaterial) : spec.category ? categoryMatches : entries.filter(entry => itemTerms(entry.match.item).some(term => term === friendly || term === material));
+      const selected = spec.exactMaterial || spec.category ? exact : exact.length ? exact : friendly.length < 2 ? [] : entries.filter(entry => itemTerms(entry.match.item).some(term => term.startsWith(friendly) || term.startsWith(material) || term.includes(` ${friendly}`) || term.includes(friendly)));
       const seen = new Set();
       return selected.filter(entry => {
         const key = `${entry.id}:${entry.match.side}:${entry.match.item.material}:${entry.match.contained}`;
@@ -120,11 +121,12 @@
       if (value.length < 1) return [];
       const available = new Set(this.searchEntries().flatMap(entry => [normalize(entry.match.item.displayName), normalize(entry.match.item.material)]));
       const materialQuery = value.replaceAll(" ", "_"), matches = this.suggestionCatalog.filter(entry => {
+        if (spec.exactMaterial) return (entry.material || entry.item?.material) === spec.exactMaterial;
         if (spec.category) return spec.category.matches(entry.material || entry.item?.material);
         const terms = [entry.displayName, entry.subtitle, entry.searchQuery, entry.material, entry.id, ...itemTerms(entry.item)].filter(Boolean).map(normalize);
         return terms.some(term => term.startsWith(value) || term.startsWith(materialQuery) || term.includes(` ${value}`));
       });
-      const rank = entry => entry.material === spec.preferredMaterial ? -1 : normalize(entry.displayName).startsWith(value) ? 0 : normalize(entry.subtitle).startsWith(value) || normalize(entry.searchQuery).startsWith(value) ? 1 : 2;
+      const rank = entry => normalize(entry.displayName).startsWith(value) ? 0 : normalize(entry.subtitle).startsWith(value) || normalize(entry.searchQuery).startsWith(value) ? 1 : 2;
       const seen = new Set();
       return matches.sort((a, b) => rank(a) - rank(b) || Number(available.has(normalize(b.displayName)) || available.has(normalize(b.material))) - Number(available.has(normalize(a.displayName)) || available.has(normalize(a.material))) || a.displayName.localeCompare(b.displayName)).filter(entry => {
         const key = `${entry.kind}:${entry.displayName}:${entry.subtitle || ""}`; if (seen.has(key)) return false; seen.add(key); return true;

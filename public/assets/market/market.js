@@ -36,7 +36,7 @@
   const state = {
     view: { scale: 1, x: 0, y: 0 }, initial: null, pointer: null, cursor: null, hovered: null,
     selectedBuilding: null, selectedStall: null, drawerMode: null, drawerBuilding: null, highlightShop: null,
-    inspectorHistory: [], filters: { floor: "ALL", owner: "ALL", shop: "ALL", stock: "ALL" },
+    inspectorHistory: [], filters: { floor: "ALL", owner: "ALL", shop: "ALL", stock: "ALL", rent: "ALL" },
     matching: new Set(layout.stalls.map(stall => stall.id)), suggestionIndex: -1, mobileStack: [], mobileResultsOpen: false, searchReturn: false, lastSearch: null,
     pinned: null, touchPointers: new Map(), touchTap: null, touchGesture: null, collapsedContext: null,
     sheet: {type: null, state: "hidden", previous: "normal", surface: null, returnFocus: null, gesture: null}
@@ -341,12 +341,12 @@
       if (!fontManifest || code < 32 || code > 126) return `<span class="mc-fallback">${esc(character)}</span>`;
       return `<span class="mc-glyph${character === " " ? " space" : ""}" style="--mc-col:${code % 16};--mc-row:${Math.floor(code / 16)};--mc-width:${width}" aria-hidden="true"></span>`;
     };
-    const words = text.match(/\s+|\S+/g) || [];
+    const words = className.split(/\s+/).includes("identifier") ? text.split(/([_:])/).filter(Boolean) : text.match(/\s+|\S+/g) || [];
     return `<span class="minecraft-bitmap-text ${className}" style="--mc-font:url('${cssAssetBase}${fontManifest?.texture || "minecraft/vanilla/textures/font/ascii.png"}')" aria-label="${esc(text)}"><span class="mc-text-value" aria-hidden="true">${esc(text)}</span>${words.map(word => /^\s+$/.test(word) ? [...word].map(glyph).join("") : `<span class="mc-word">${[...word].map(glyph).join("")}</span>`).join("")}</span>`;
   }
   function floatingTooltipMarkup(item) {
-    const details = itemMetadata(item);
-    return `<strong>${minecraftText(item.metadata?.customName || item.displayName)}</strong>${item.metadata?.customName ? minecraftText(item.displayName, "muted") : ""}${details.map(detail => minecraftText(detail, "muted")).join("")}`;
+    const details = itemMetadata(item), presentation = itemPresentation(item);
+    return `<strong>${minecraftText(item.metadata?.customName || presentation.baseDisplayName)}</strong>${item.metadata?.customName ? minecraftText(presentation.baseDisplayName, "muted") : ""}${details.map(detail => minecraftText(detail, "muted")).join("")}`;
   }
   function showItemTooltip(anchor, item) {
     el.itemTooltip.innerHTML = floatingTooltipMarkup(item); el.itemTooltip.hidden = false; el.itemTooltip.style.visibility = "hidden";
@@ -379,6 +379,7 @@
     return `<button class="transaction-side" data-inspect-shop="${shopId}" data-inspect-side="${side}" aria-label="Inspect ${esc(label.toLowerCase())}: ${esc(presentation.baseDisplayName)}"><span class="transaction-label">${label}</span><span class="transaction-item">${itemIcon(item)}<span class="item-copy"><strong class="fit-item-name">${item.amount}× ${esc(presentation.baseDisplayName)}</strong></span></span></button>`;
   }
   const textFitObserver = new ResizeObserver(entries => entries.forEach(({target}) => fitItemText(target)));
+  const identifierFitObserver = new ResizeObserver(entries => entries.forEach(({target}) => fitIdentifierText(target)));
   function fitItemText(node) {
     const bitmap = node.querySelector(".minecraft-bitmap-text");
     if (bitmap) {
@@ -394,6 +395,14 @@
   }
   function observeItemText(root) {
     root.querySelectorAll(".fit-item-name,.fit-inspector-heading").forEach(node => { textFitObserver.observe(node); fitItemText(node); });
+    root.querySelectorAll(".minecraft-bitmap-text.identifier").forEach(node => { identifierFitObserver.observe(node); fitIdentifierText(node); });
+  }
+  function fitIdentifierText(node) {
+    const text = node.getAttribute("aria-label") || "", available = node.parentElement?.clientWidth || node.clientWidth;
+    const advance = [...text].reduce((sum, character) => sum + (fontManifest?.widths?.[character.codePointAt(0)] || 6), 0);
+    const pixelSize = Math.max(1.2, Math.min(2, available / Math.max(1, advance)));
+    node.style.setProperty("--identifier-pixel", `${pixelSize}px`);
+    node.classList.toggle("identifier-wrap", advance * pixelSize > available + 1);
   }
 
   const mobileSurfaces = [el.drawer, el.inspector, el.results, filterFields];
@@ -664,7 +673,8 @@
     const layerContext = layer.getContext("2d"); layerContext.imageSmoothingEnabled = false; let cursor = rightAligned ? x - total : x;
     for (const [index, character] of [...String(text)].entries()) {
       const code = character.codePointAt(0), width = widths[index];
-      if (code >= 32 && code <= 126 && character !== " ") layerContext.drawImage(font, (code % 16) * 8, Math.floor(code / 16) * 8, 8, 8, cursor, y, 8, 8);
+      const visibleWidth = Math.max(1, width - 1);
+      if (code >= 32 && code <= 126 && character !== " ") layerContext.drawImage(font, (code % 16) * 8, Math.floor(code / 16) * 8, visibleWidth, 8, cursor, y, visibleWidth, 8);
       cursor += width;
     }
     layerContext.globalCompositeOperation = "source-in"; layerContext.fillStyle = color; layerContext.fillRect(0, 0, 176, 76); context.drawImage(layer, 0, 0);
@@ -674,11 +684,11 @@
     const renderToken = (shulkerRenderTokens.get(canvas) || 0) + 1; shulkerRenderTokens.set(canvas, renderToken);
     shulkerRenderState.set(canvas, item); activeShulkerCanvases.add(canvas); canvas.dataset.rendered = "false";
     const container = item.metadata.container, frame = canvas.closest(".shulker-frame"), wrapper = canvas.parentElement;
-    const styles = getComputedStyle(frame), availableCssWidth = Math.min(400, Math.max(176, frame.clientWidth - parseFloat(styles.paddingLeft) - parseFloat(styles.paddingRight)));
-    const dpr = devicePixelRatio || 1, deviceScale = Math.max(1, Math.floor(availableCssWidth * dpr / 176));
-    canvas.width = 176 * deviceScale; canvas.height = 76 * deviceScale;
-    wrapper.style.width = `${canvas.width / dpr}px`; wrapper.style.height = `${canvas.height / dpr}px`;
-    const context = canvas.getContext("2d"); context.imageSmoothingEnabled = false; context.setTransform(deviceScale, 0, 0, deviceScale, 0, 0); context.clearRect(0, 0, 176, 76);
+    const styles = getComputedStyle(frame), desiredCssWidth = Math.min(400, Math.max(1, frame.clientWidth - parseFloat(styles.paddingLeft) - parseFloat(styles.paddingRight)));
+    const dpr = devicePixelRatio || 1, backingScale = Math.max(1, Math.ceil(desiredCssWidth * dpr / 176));
+    canvas.width = 176 * backingScale; canvas.height = 76 * backingScale;
+    wrapper.style.width = `${desiredCssWidth}px`; wrapper.style.height = `${desiredCssWidth * 76 / 176}px`;
+    const context = canvas.getContext("2d"); context.imageSmoothingEnabled = false; context.setTransform(backingScale, 0, 0, backingScale, 0, 0); context.clearRect(0, 0, 176, 76);
     const gui = await loadCanvasImage(iconManifest.gui.shulker); if (shulkerRenderTokens.get(canvas) !== renderToken) return; context.drawImage(gui, 0, 0, 176, 76, 0, 0, 176, 76);
     await drawMinecraftText(context, item.metadata?.customName || item.displayName, 8, 6, "#404040");
     for (const entry of container.contents) {
@@ -690,7 +700,7 @@
         await drawMinecraftText(context, count, countRight, countTop, "#FFFFFF", true); if (shulkerRenderTokens.get(canvas) !== renderToken) return;
       }
     }
-    canvas.dataset.rendered = "true"; canvas.dataset.deviceScale = String(deviceScale); canvas.dataset.dpr = String(dpr);
+    canvas.dataset.rendered = "true"; canvas.dataset.backingScale = String(backingScale); canvas.dataset.cssWidth = String(desiredCssWidth); canvas.dataset.dpr = String(dpr);
   }
   const shulkerResizeObserver = new ResizeObserver(entries => entries.forEach(({target}) => {
     const canvas = target.querySelector(".shulker-visual"), item = canvas && shulkerRenderState.get(canvas);
@@ -702,14 +712,14 @@
     if (!container) return "";
     if (container.type === "SHULKER") {
       const slots = new Map(container.contents.map(value => [value.slot, value.item]));
-      return `<section class="container-inspection"><h3>${esc(item.displayName)} contents</h3><div class="shulker-frame" data-shulker-color="${esc(item.metadata?.shulkerColor || "Natural")}"><div class="minecraft-shulker-window"><canvas class="shulker-visual" width="176" height="76" aria-hidden="true"></canvas><div class="shulker-slot-grid">${Array.from({ length: 27 }, (_, slot) => {
+      return `<section class="container-inspection"><h3>${esc(itemPresentation(item).baseDisplayName)} contents</h3><div class="shulker-frame" data-shulker-color="${esc(item.metadata?.shulkerColor || "Natural")}"><div class="minecraft-shulker-window"><canvas class="shulker-visual" width="176" height="76" aria-hidden="true"></canvas><div class="shulker-slot-grid">${Array.from({ length: 27 }, (_, slot) => {
         const child = slots.get(slot), focused = child && context?.focusMaterial === child.material;
         return `<button class="minecraft-slot${focused ? " focused-match" : ""}" data-container-slot="${slot}" ${child ? "" : "disabled"} aria-label="${child ? `${child.amount} ${esc(child.displayName)}` : "Empty slot"}"></button>`;
       }).join("")}</div></div></div></section>`;
     }
     const maximum = Math.max(1, container.capacityMax || 64), used = Math.max(0, container.capacityUsed || 0);
     const full = used >= maximum;
-    return `<section class="container-inspection bundle-inspection"><h3>${esc(item.displayName)} contents</h3><div class="minecraft-bundle-tooltip"><div class="bundle-title">${minecraftText(item.metadata?.customName || "Bundle")}</div><div class="bundle-item-grid">${container.contents.map((value, index) => { const child = value.item, focused = context?.focusMaterial === child.material; return `<button class="bundle-slot${focused ? " focused-match" : ""}" style="--bundle-slot:url('${cssAssetBase}${iconManifest.gui.bundleSlot}')" data-container-index="${index}" aria-label="${child.amount} ${esc(child.displayName)}">${itemIcon(child)}${child.amount > 1 ? `<span class="stack-count">${minecraftText(child.amount)}</span>` : ""}</button>`; }).join("")}</div><div class="bundle-capacity-label">${minecraftText(full ? "Full!" : `${used}/${maximum}`)}</div><div class="bundle-capacity${full ? " full" : ""}" aria-label="${used} of ${maximum} bundle capacity used" style="--bundle-border:url('${cssAssetBase}${iconManifest.gui.bundleBorder}');--bundle-fill:url('${cssAssetBase}${full ? iconManifest.gui.bundleFull : iconManifest.gui.bundleFill}')"><span style="width:${Math.min(100, used / maximum * 100)}%"></span></div></div></section>`;
+    return `<section class="container-inspection bundle-inspection"><h3>${esc(itemPresentation(item).baseDisplayName)} contents</h3><div class="minecraft-bundle-tooltip"><div class="bundle-title">${minecraftText(item.metadata?.customName || "Bundle")}</div><div class="bundle-item-grid">${container.contents.map((value, index) => { const child = value.item, focused = context?.focusMaterial === child.material; return `<button class="bundle-slot${focused ? " focused-match" : ""}" style="--bundle-slot:url('${cssAssetBase}${iconManifest.gui.bundleSlot}')" data-container-index="${index}" aria-label="${child.amount} ${esc(child.displayName)}">${itemIcon(child)}${child.amount > 1 ? `<span class="stack-count">${minecraftText(child.amount)}</span>` : ""}</button>`; }).join("")}</div><div class="bundle-capacity-label">${minecraftText(full ? "Full!" : `${used}/${maximum}`)}</div><div class="bundle-capacity${full ? " full" : ""}" aria-label="${used} of ${maximum} bundle capacity used" style="--bundle-border:url('${cssAssetBase}${iconManifest.gui.bundleBorder}');--bundle-fill:url('${cssAssetBase}${full ? iconManifest.gui.bundleFull : iconManifest.gui.bundleFill}')"><span style="width:${Math.min(100, used / maximum * 100)}%"></span></div></div></section>`;
   }
   function renderInspector() {
     const entry = state.inspectorHistory.at(-1), { shop, item } = entry;
@@ -749,11 +759,11 @@
 
   function matchingShops(stall) {
     const filter = state.filters;
-    if ((filter.floor !== "ALL" && stall.floor !== Number(filter.floor)) || (filter.owner !== "ALL" && stall.owner.type !== filter.owner)) return [];
+    if ((filter.floor !== "ALL" && stall.floor !== Number(filter.floor)) || (filter.owner !== "ALL" && stall.owner.type !== filter.owner) || !matchesRentFilter(stall, filter.rent)) return [];
     return stall.shops.filter(shop => (filter.shop === "ALL" || shop.direction === filter.shop) && (filter.stock === "ALL" || (filter.stock === "IN" ? shop.stockCount > 0 : shop.stockCount <= 0)));
   }
   function matchesFilters(stall) {
-    const baseMatches = (state.filters.floor === "ALL" || stall.floor === Number(state.filters.floor)) && (state.filters.owner === "ALL" || stall.owner.type === state.filters.owner);
+    const baseMatches = (state.filters.floor === "ALL" || stall.floor === Number(state.filters.floor)) && (state.filters.owner === "ALL" || stall.owner.type === state.filters.owner) && matchesRentFilter(stall, state.filters.rent);
     if (!baseMatches) return false;
     if (!stall.shops.length) return state.filters.shop === "ALL" && state.filters.stock === "ALL";
     return matchingShops(stall).length > 0;
@@ -763,7 +773,7 @@
     for (const stall of layout.stalls) stallElements.get(stall.id).classList.toggle("filtered", !state.matching.has(stall.id));
     for (const building of layout.buildings) buildingElements.get(building.id).classList.toggle("filtered", !building.stallIds.some(id => state.matching.has(id)));
     $("#result-count").textContent = `${state.matching.size} of ${layout.stalls.length} stalls`;
-    const labels = { floor: "Floor", owner: "Owner", shop: "Shop", stock: "Stock" }, selectors = {floor:"#floor-filter",owner:"#owner-filter",shop:"#shop-filter",stock:"#stock-filter"};
+    const labels = { floor: "Floor", owner: "Owner", shop: "Shop", stock: "Stock", rent: "Rent" }, selectors = {floor:"#floor-filter",owner:"#owner-filter",shop:"#shop-filter",stock:"#stock-filter",rent:"#rent-filter"};
     const active = Object.entries(state.filters).filter(([, value]) => value && value !== "ALL");
     $("#filter-chips").innerHTML = active.map(([key]) => { const select = $(selectors[key]), display = select.options[select.selectedIndex]?.text || state.filters[key]; return `<span class="chip">${labels[key]}: ${esc(display)} <button type="button" data-remove-filter="${key}" aria-label="Remove ${labels[key]} filter">×</button></span>`; }).join("") + (active.length ? `<button id="clear-active-filters" class="clear-active-filters" type="button">Clear all filters</button>` : "");
     $("#filter-chips").querySelectorAll("[data-remove-filter]").forEach(button => button.onclick = () => { const key = button.dataset.removeFilter; state.filters[key] = "ALL"; $(selectors[key]).value = "ALL"; applyFilters(); });
@@ -771,13 +781,21 @@
     if (state.drawerMode === "building" && state.drawerBuilding) renderBuildingDrawer();
   }
   function clearFilters() {
-    state.filters = { floor: "ALL", owner: "ALL", shop: "ALL", stock: "ALL" };
-    $("#floor-filter").value = $("#owner-filter").value = $("#shop-filter").value = $("#stock-filter").value = "ALL"; applyFilters();
+    state.filters = { floor: "ALL", owner: "ALL", shop: "ALL", stock: "ALL", rent: "ALL" };
+    $("#floor-filter").value = $("#owner-filter").value = $("#shop-filter").value = $("#stock-filter").value = $("#rent-filter").value = "ALL"; applyFilters();
+  }
+  function matchesRentFilter(stall, filter) {
+    if (!filter || filter === "ALL") return true;
+    if (filter === "AVAILABLE") return stall.owner.type === "NONE" && stall.available !== false;
+    if (stall.owner.type === "NONE" || !stall.nextRentAt) return false;
+    const remaining = new Date(stall.nextRentAt).getTime() - Date.now();
+    if (!Number.isFinite(remaining) || remaining <= 0) return false;
+    return filter === "UNDER_1_DAY" ? remaining <= 24 * 3600000 : filter === "UNDER_3_DAYS" ? remaining <= 72 * 3600000 : false;
   }
   for (const floor of [...new Set(layout.stalls.map(stall => stall.floor))].sort((a, b) => a - b)) {
     const option = document.createElement("option"); option.value = floor; option.textContent = C.floorName(floor); $("#floor-filter").append(option);
   }
-  for (const [selector, key] of [["#floor-filter", "floor"], ["#owner-filter", "owner"], ["#shop-filter", "shop"], ["#stock-filter", "stock"]]) {
+  for (const [selector, key] of [["#floor-filter", "floor"], ["#owner-filter", "owner"], ["#shop-filter", "shop"], ["#stock-filter", "stock"], ["#rent-filter", "rent"]]) {
     $(selector).addEventListener("change", event => { state.filters[key] = event.target.value; applyFilters(); });
   }
   $("#clear-filters").onclick = clearFilters;
@@ -879,7 +897,7 @@
   window.__MARKET_TEST__ = {
     layout, snapshot, adapter, hitBuilding, screenWorld, openBuilding, openStall, openInspector, closeInspector, closeDrawer,
     executeSearch, applyFilters, clearFilters, focusBuilding, rentState, transactionLabels, itemMetadata, itemIcon,
-    minecraftText, showItemTooltip, hideItemTooltip, showMobileResults, hideMobileResults, buildingNumber,
+    minecraftText, drawMinecraftText, canonicalItemRaster, renderShulkerCanvas, matchesRentFilter, showItemTooltip, hideItemTooltip, showMobileResults, hideMobileResults, buildingNumber,
     get state() { return state; }, counts: { buildings: layout.buildings.length, stalls: layout.stalls.length }, drawerMode: () => state.drawerMode
   };
   function prefetchSnapshotAssets() {
