@@ -3,16 +3,17 @@
   "minecraftVersion": "1.21.11",
   "publicCatalogItems": 1487,
   "successfullyResolvedIcons": 1487,
-  "directOfficialTextures": 707,
-  "officialCompositeRenders": 4,
-  "officialModelRenders": 698,
-  "officialSpecialRenders": 78,
-  "intentionalOfficialSharedIcons": 0,
+  "directOfficialTextures": 586,
+  "directOfficialModelLayers": 21,
+  "stableBlockTextures": 609,
+  "stableDerivedBlockIcons": 237,
+  "temporaryIntentionalBedWoolIcons": 16,
+  "officialPotionComposites": 0,
+  "officialArmorTrimTextures": 18,
   "unresolvedIcons": 0,
   "unrelatedFallbackIcons": 0,
   "barrierFallbackPublicItems": 0,
   "paperFallbackPublicItems": 0,
-  "woolFallbackBedsOrBanners": 0,
   "remainingFallbackIcons": 0,
   "trimTemplateValidation": [
     {
@@ -125,51 +126,53 @@
     }
   ],
   "resolutions": {
-    "directOfficialTexture": 707,
-    "officialCompositeRender": 4,
-    "officialModelRender": 698,
-    "officialSpecialRender": 78,
-    "intentionalOfficialShared": 0
+    "DIRECT_OFFICIAL_TEXTURE": 586,
+    "DIRECT_OFFICIAL_MODEL_LAYER": 21,
+    "STABLE_BLOCK_TEXTURE": 609,
+    "STABLE_DERIVED_BLOCK_ICON": 237,
+    "TEMPORARY_INTENTIONAL_BED_WOOL_ICON": 16,
+    "OFFICIAL_POTION_COMPOSITE": 0,
+    "OFFICIAL_ARMOR_TRIM_TEXTURE": 18
   },
   "validatedModelItems": [
     {
       "material": "STONE",
-      "resolution": "OFFICIAL_MODEL_RENDER",
+      "resolution": "STABLE_BLOCK_TEXTURE",
       "sourceTexture": null
     },
     {
       "material": "OAK_LOG",
-      "resolution": "OFFICIAL_MODEL_RENDER",
+      "resolution": "STABLE_BLOCK_TEXTURE",
       "sourceTexture": null
     },
     {
       "material": "OAK_STAIRS",
-      "resolution": "OFFICIAL_MODEL_RENDER",
+      "resolution": "STABLE_DERIVED_BLOCK_ICON",
       "sourceTexture": null
     },
     {
       "material": "BARREL",
-      "resolution": "OFFICIAL_MODEL_RENDER",
+      "resolution": "STABLE_DERIVED_BLOCK_ICON",
       "sourceTexture": null
     },
     {
       "material": "CHEST",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/chest/normal.png"
+      "resolution": "DIRECT_OFFICIAL_TEXTURE",
+      "sourceTexture": "item/paper"
     },
     {
       "material": "FURNACE",
-      "resolution": "OFFICIAL_MODEL_RENDER",
+      "resolution": "STABLE_DERIVED_BLOCK_ICON",
       "sourceTexture": null
     },
     {
       "material": "CRAFTING_TABLE",
-      "resolution": "OFFICIAL_MODEL_RENDER",
+      "resolution": "STABLE_DERIVED_BLOCK_ICON",
       "sourceTexture": null
     },
     {
       "material": "ANVIL",
-      "resolution": "OFFICIAL_MODEL_RENDER",
+      "resolution": "STABLE_BLOCK_TEXTURE",
       "sourceTexture": null
     },
     {
@@ -179,13 +182,13 @@
     },
     {
       "material": "BEACON",
-      "resolution": "OFFICIAL_MODEL_RENDER",
+      "resolution": "STABLE_BLOCK_TEXTURE",
       "sourceTexture": null
     },
     {
       "material": "OAK_FENCE",
-      "resolution": "OFFICIAL_MODEL_RENDER",
-      "sourceTexture": null
+      "resolution": "STABLE_BLOCK_TEXTURE",
+      "sourceTexture": "block/oak_planks"
     },
     {
       "material": "OAK_DOOR",
@@ -193,94 +196,39 @@
       "sourceTexture": null
     },
     {
-      "material": "OAK_SAPLING",
-      "resolution": "DIRECT_OFFICIAL_MODEL_LAYERS",
+      "material": "OAK_HANGING_SIGN",
+      "resolution": "DIRECT_OFFICIAL_TEXTURE",
       "sourceTexture": null
     },
     {
-      "material": "RED_SHULKER_BOX",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/shulker/shulker_red.png"
+      "material": "OAK_LEAVES",
+      "resolution": "STABLE_BLOCK_TEXTURE",
+      "sourceTexture": null
     },
     {
-      "material": "WHITE_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/white.png"
+      "material": "OAK_PLANKS",
+      "resolution": "STABLE_BLOCK_TEXTURE",
+      "sourceTexture": null
     },
     {
-      "material": "ORANGE_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/orange.png"
-    },
-    {
-      "material": "MAGENTA_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/magenta.png"
-    },
-    {
-      "material": "LIGHT_BLUE_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/light_blue.png"
-    },
-    {
-      "material": "YELLOW_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/yellow.png"
-    },
-    {
-      "material": "LIME_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/lime.png"
-    },
-    {
-      "material": "PINK_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/pink.png"
-    },
-    {
-      "material": "GRAY_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/gray.png"
-    },
-    {
-      "material": "LIGHT_GRAY_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/light_gray.png"
-    },
-    {
-      "material": "CYAN_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/cyan.png"
-    },
-    {
-      "material": "PURPLE_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/purple.png"
-    },
-    {
-      "material": "BLUE_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/blue.png"
-    },
-    {
-      "material": "BROWN_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/brown.png"
-    },
-    {
-      "material": "GREEN_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/green.png"
+      "material": "OAK_PRESSURE_PLATE",
+      "resolution": "STABLE_BLOCK_TEXTURE",
+      "sourceTexture": "block/oak_planks"
     },
     {
       "material": "RED_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/red.png"
+      "resolution": "TEMPORARY_INTENTIONAL_BED_WOOL_ICON",
+      "sourceTexture": "block/red_wool"
     },
     {
-      "material": "BLACK_BED",
-      "resolution": "OFFICIAL_SPECIAL_RENDER",
-      "sourceTexture": "minecraft/vanilla/textures/entity/bed/black.png"
+      "material": "BLUE_BED",
+      "resolution": "TEMPORARY_INTENTIONAL_BED_WOOL_ICON",
+      "sourceTexture": "block/blue_wool"
+    },
+    {
+      "material": "LIGHT_BLUE_BED",
+      "resolution": "TEMPORARY_INTENTIONAL_BED_WOOL_ICON",
+      "sourceTexture": "block/light_blue_wool"
     }
   ]
 }
