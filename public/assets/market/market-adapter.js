@@ -7,7 +7,7 @@
   const exactAliases = new Map([
     ["gap", "golden apple"], ["god apple", "enchanted golden apple"], ["notch apple", "enchanted golden apple"],
     ["enchanted golden apple", "enchanted golden apple"], ["pearl", "ender pearl"], ["enderpearl", "ender pearl"],
-    ["skulker", "shulker"], ["skulker box", "shulker box"]
+    ["skulker", "shulker"], ["skulker box", "shulker box"], ["invis", "invisibility"]
   ]);
   const categories = [
     {id: "SWORD", queries: ["sword"], matches: material => /^(WOODEN|STONE|COPPER|GOLDEN|IRON|DIAMOND|NETHERITE)_SWORD$/.test(material)},

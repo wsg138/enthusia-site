@@ -7454,6 +7454,926 @@
       "path": "vanilla/textures/generated/item/weathered_cut_copper_stairs.png",
       "sha256": "9d235a3341a0304f1df4f16929cd0bb20f1a1d63b4218b4236035085be375875",
       "size": 1558
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/water.png",
+      "sha256": "5a6775f8aadc2c0565707c2cebb17ce4ac44380aeb28ed79526ed0332bab12e5",
+      "size": 303
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/water.png",
+      "sha256": "ef47dc05543a3237a1131d4296c6854c48efaaacba998110921be160763540f2",
+      "size": 284
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/water.png",
+      "sha256": "d05f08c6d182b21bda4e99ec7557e583efde0578185273a02797673cb7ec248f",
+      "size": 263
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/water.png",
+      "sha256": "5d56ced147a3369997268bf89ce50254ccfebf4f4977b74db7ed75317a36de46",
+      "size": 248
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/mundane.png",
+      "sha256": "5a6775f8aadc2c0565707c2cebb17ce4ac44380aeb28ed79526ed0332bab12e5",
+      "size": 303
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/mundane.png",
+      "sha256": "ef47dc05543a3237a1131d4296c6854c48efaaacba998110921be160763540f2",
+      "size": 284
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/mundane.png",
+      "sha256": "d05f08c6d182b21bda4e99ec7557e583efde0578185273a02797673cb7ec248f",
+      "size": 263
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/mundane.png",
+      "sha256": "5d56ced147a3369997268bf89ce50254ccfebf4f4977b74db7ed75317a36de46",
+      "size": 248
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/thick.png",
+      "sha256": "5a6775f8aadc2c0565707c2cebb17ce4ac44380aeb28ed79526ed0332bab12e5",
+      "size": 303
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/thick.png",
+      "sha256": "ef47dc05543a3237a1131d4296c6854c48efaaacba998110921be160763540f2",
+      "size": 284
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/thick.png",
+      "sha256": "d05f08c6d182b21bda4e99ec7557e583efde0578185273a02797673cb7ec248f",
+      "size": 263
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/thick.png",
+      "sha256": "5d56ced147a3369997268bf89ce50254ccfebf4f4977b74db7ed75317a36de46",
+      "size": 248
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/awkward.png",
+      "sha256": "5a6775f8aadc2c0565707c2cebb17ce4ac44380aeb28ed79526ed0332bab12e5",
+      "size": 303
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/awkward.png",
+      "sha256": "ef47dc05543a3237a1131d4296c6854c48efaaacba998110921be160763540f2",
+      "size": 284
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/awkward.png",
+      "sha256": "d05f08c6d182b21bda4e99ec7557e583efde0578185273a02797673cb7ec248f",
+      "size": 263
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/awkward.png",
+      "sha256": "5d56ced147a3369997268bf89ce50254ccfebf4f4977b74db7ed75317a36de46",
+      "size": 248
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/night_vision.png",
+      "sha256": "3534caecc529c0251aea74c55925d7e501039e24006aab566a4b03f7cd5d356c",
+      "size": 318
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/night_vision.png",
+      "sha256": "e31e3b56bff424ab9f9fb2dc05b23fb9f5fe563505cbd98a36f70f0bf2a31b91",
+      "size": 304
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/night_vision.png",
+      "sha256": "93a7cc054f442a7838bbe868f8b973aa3b3946f0e6f821d1ecca240739e94dc2",
+      "size": 279
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/night_vision.png",
+      "sha256": "cb496b4cd67f6ab09418d8b86ab0f7b168ea24d1fa8742fdeb62046fae019cbd",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_night_vision.png",
+      "sha256": "3534caecc529c0251aea74c55925d7e501039e24006aab566a4b03f7cd5d356c",
+      "size": 318
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_night_vision.png",
+      "sha256": "e31e3b56bff424ab9f9fb2dc05b23fb9f5fe563505cbd98a36f70f0bf2a31b91",
+      "size": 304
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_night_vision.png",
+      "sha256": "93a7cc054f442a7838bbe868f8b973aa3b3946f0e6f821d1ecca240739e94dc2",
+      "size": 279
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_night_vision.png",
+      "sha256": "cb496b4cd67f6ab09418d8b86ab0f7b168ea24d1fa8742fdeb62046fae019cbd",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/invisibility.png",
+      "sha256": "4311483c8797f4c9aaa1b30ca645de6a028cf594b19e0bfdc966cf4784b5216a",
+      "size": 319
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/invisibility.png",
+      "sha256": "dd3fbfe998e33dea4cc809ac8283b28df86cf591622d59dd712f74ff02a81511",
+      "size": 307
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/invisibility.png",
+      "sha256": "49d6519f470f4b877bc705bf033ce6e499cb7aa02a38d6160bcf8bddf028b217",
+      "size": 284
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/invisibility.png",
+      "sha256": "47a78a09c51c5e2dee8d36fd1574a7d483516d3c6f1263611bb0b97704872ae2",
+      "size": 230
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_invisibility.png",
+      "sha256": "4311483c8797f4c9aaa1b30ca645de6a028cf594b19e0bfdc966cf4784b5216a",
+      "size": 319
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_invisibility.png",
+      "sha256": "dd3fbfe998e33dea4cc809ac8283b28df86cf591622d59dd712f74ff02a81511",
+      "size": 307
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_invisibility.png",
+      "sha256": "49d6519f470f4b877bc705bf033ce6e499cb7aa02a38d6160bcf8bddf028b217",
+      "size": 284
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_invisibility.png",
+      "sha256": "47a78a09c51c5e2dee8d36fd1574a7d483516d3c6f1263611bb0b97704872ae2",
+      "size": 230
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/leaping.png",
+      "sha256": "70a28d730b6450ccac7a9c8f2a6ca64ef1648b43af867bcac62019fbfccb47ee",
+      "size": 316
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/leaping.png",
+      "sha256": "257b0053fdf5a42825c0868c755403cec58050f7c3129add13c2e6c91983c1bd",
+      "size": 299
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/leaping.png",
+      "sha256": "acee2f0bf12839ed722eacf4a7d3dd541109e921b6d8b738bf4f6faa0f381dc2",
+      "size": 270
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/leaping.png",
+      "sha256": "72212bd527554c02c3065a22b77c3e9781fcf440e1b4867cabd6d4576617841d",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_leaping.png",
+      "sha256": "70a28d730b6450ccac7a9c8f2a6ca64ef1648b43af867bcac62019fbfccb47ee",
+      "size": 316
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_leaping.png",
+      "sha256": "257b0053fdf5a42825c0868c755403cec58050f7c3129add13c2e6c91983c1bd",
+      "size": 299
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_leaping.png",
+      "sha256": "acee2f0bf12839ed722eacf4a7d3dd541109e921b6d8b738bf4f6faa0f381dc2",
+      "size": 270
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_leaping.png",
+      "sha256": "72212bd527554c02c3065a22b77c3e9781fcf440e1b4867cabd6d4576617841d",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/strong_leaping.png",
+      "sha256": "70a28d730b6450ccac7a9c8f2a6ca64ef1648b43af867bcac62019fbfccb47ee",
+      "size": 316
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/strong_leaping.png",
+      "sha256": "257b0053fdf5a42825c0868c755403cec58050f7c3129add13c2e6c91983c1bd",
+      "size": 299
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/strong_leaping.png",
+      "sha256": "acee2f0bf12839ed722eacf4a7d3dd541109e921b6d8b738bf4f6faa0f381dc2",
+      "size": 270
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/strong_leaping.png",
+      "sha256": "72212bd527554c02c3065a22b77c3e9781fcf440e1b4867cabd6d4576617841d",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/fire_resistance.png",
+      "sha256": "51b5c4e0c092adef9e73e2462c72adf345940fe2c9aca6ebe727b5cbb9373dba",
+      "size": 309
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/fire_resistance.png",
+      "sha256": "78e26cb8b09408af2525337124fd6afdbdc95c08b772405a05e5dd4a6ff22a9a",
+      "size": 291
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/fire_resistance.png",
+      "sha256": "6da669fb962f59f694e9495d4add90b6dda1acadfc0a554f11e7f5acbbdcb435",
+      "size": 273
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/fire_resistance.png",
+      "sha256": "3992879a8482b1d75c98a944f6af8795223560770ac746ea5b42dfbc668b4fa7",
+      "size": 222
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_fire_resistance.png",
+      "sha256": "51b5c4e0c092adef9e73e2462c72adf345940fe2c9aca6ebe727b5cbb9373dba",
+      "size": 309
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_fire_resistance.png",
+      "sha256": "78e26cb8b09408af2525337124fd6afdbdc95c08b772405a05e5dd4a6ff22a9a",
+      "size": 291
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_fire_resistance.png",
+      "sha256": "6da669fb962f59f694e9495d4add90b6dda1acadfc0a554f11e7f5acbbdcb435",
+      "size": 273
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_fire_resistance.png",
+      "sha256": "3992879a8482b1d75c98a944f6af8795223560770ac746ea5b42dfbc668b4fa7",
+      "size": 222
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/swiftness.png",
+      "sha256": "b7c4aadc30296a7b2c3750a31ca22a1296b089695dcdde857ed2dd7026499d75",
+      "size": 311
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/swiftness.png",
+      "sha256": "183d37567932a56d7fab9ce5e4d0e18fc49b97b8b78b5f649c3809ea146501f1",
+      "size": 284
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/swiftness.png",
+      "sha256": "809a2741853145d60fd076cbb2cb3b3742385860b082362c77b479647033fcc8",
+      "size": 256
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/swiftness.png",
+      "sha256": "9da79780c679aae39ee5f438f7737f8094d235d51b813cef1e5816f0b0745186",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_swiftness.png",
+      "sha256": "b7c4aadc30296a7b2c3750a31ca22a1296b089695dcdde857ed2dd7026499d75",
+      "size": 311
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_swiftness.png",
+      "sha256": "183d37567932a56d7fab9ce5e4d0e18fc49b97b8b78b5f649c3809ea146501f1",
+      "size": 284
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_swiftness.png",
+      "sha256": "809a2741853145d60fd076cbb2cb3b3742385860b082362c77b479647033fcc8",
+      "size": 256
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_swiftness.png",
+      "sha256": "9da79780c679aae39ee5f438f7737f8094d235d51b813cef1e5816f0b0745186",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/strong_swiftness.png",
+      "sha256": "b7c4aadc30296a7b2c3750a31ca22a1296b089695dcdde857ed2dd7026499d75",
+      "size": 311
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/strong_swiftness.png",
+      "sha256": "183d37567932a56d7fab9ce5e4d0e18fc49b97b8b78b5f649c3809ea146501f1",
+      "size": 284
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/strong_swiftness.png",
+      "sha256": "809a2741853145d60fd076cbb2cb3b3742385860b082362c77b479647033fcc8",
+      "size": 256
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/strong_swiftness.png",
+      "sha256": "9da79780c679aae39ee5f438f7737f8094d235d51b813cef1e5816f0b0745186",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/slowness.png",
+      "sha256": "3baccce974032860db9448d839acf391173fa42afe1f69759172cdd2bf9c987a",
+      "size": 312
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/slowness.png",
+      "sha256": "136f30c8500abcf5c707b293a867054e9685ce4d0d00e44b14100e17fc997429",
+      "size": 300
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/slowness.png",
+      "sha256": "221ddb2ad23b6a7fa46cfdacf4e60e0473f339dd9503a420f61510687a49fa5a",
+      "size": 277
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/slowness.png",
+      "sha256": "9df7e5582d4dd1384218f359a70d284d68c05ac5c1bfe0ff7e82ee53f8d9c8a8",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_slowness.png",
+      "sha256": "3baccce974032860db9448d839acf391173fa42afe1f69759172cdd2bf9c987a",
+      "size": 312
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_slowness.png",
+      "sha256": "136f30c8500abcf5c707b293a867054e9685ce4d0d00e44b14100e17fc997429",
+      "size": 300
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_slowness.png",
+      "sha256": "221ddb2ad23b6a7fa46cfdacf4e60e0473f339dd9503a420f61510687a49fa5a",
+      "size": 277
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_slowness.png",
+      "sha256": "9df7e5582d4dd1384218f359a70d284d68c05ac5c1bfe0ff7e82ee53f8d9c8a8",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/strong_slowness.png",
+      "sha256": "3baccce974032860db9448d839acf391173fa42afe1f69759172cdd2bf9c987a",
+      "size": 312
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/strong_slowness.png",
+      "sha256": "136f30c8500abcf5c707b293a867054e9685ce4d0d00e44b14100e17fc997429",
+      "size": 300
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/strong_slowness.png",
+      "sha256": "221ddb2ad23b6a7fa46cfdacf4e60e0473f339dd9503a420f61510687a49fa5a",
+      "size": 277
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/strong_slowness.png",
+      "sha256": "9df7e5582d4dd1384218f359a70d284d68c05ac5c1bfe0ff7e82ee53f8d9c8a8",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/turtle_master.png",
+      "sha256": "65637dbcf55d5cb8ebe0c77cb8f3cbae31e7938289e9931f62570fa0bb4bc125",
+      "size": 311
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/turtle_master.png",
+      "sha256": "2b32315f1ca59afe34d3b261d161a0c6aee53cbb5a7a1cadc472d4a3f39d642b",
+      "size": 300
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/turtle_master.png",
+      "sha256": "b3e21e6879b5999a971c512036e0f2d93122ca2695bcbc35e91c101c7a46c9db",
+      "size": 276
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/turtle_master.png",
+      "sha256": "b6e2352721cf7eb37f22eba0df6baac7f870ae30aba3c91a0eb9202fd8b18e2a",
+      "size": 245
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_turtle_master.png",
+      "sha256": "65637dbcf55d5cb8ebe0c77cb8f3cbae31e7938289e9931f62570fa0bb4bc125",
+      "size": 311
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_turtle_master.png",
+      "sha256": "2b32315f1ca59afe34d3b261d161a0c6aee53cbb5a7a1cadc472d4a3f39d642b",
+      "size": 300
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_turtle_master.png",
+      "sha256": "b3e21e6879b5999a971c512036e0f2d93122ca2695bcbc35e91c101c7a46c9db",
+      "size": 276
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_turtle_master.png",
+      "sha256": "b6e2352721cf7eb37f22eba0df6baac7f870ae30aba3c91a0eb9202fd8b18e2a",
+      "size": 245
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/strong_turtle_master.png",
+      "sha256": "1026050f0c964d05646a4f9ce9bb2e6186ccd23f3dda571be2fb947f5fe95a8f",
+      "size": 311
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/strong_turtle_master.png",
+      "sha256": "e7925e4855e4c438aca3519d50543749febdef474d9874badfb0dc3034aa05f0",
+      "size": 300
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/strong_turtle_master.png",
+      "sha256": "9dacd0af67b240a9222083c7b72688c7c0bf14ca9578ca3f38a7e26e06dcaa95",
+      "size": 276
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/strong_turtle_master.png",
+      "sha256": "c3fdbdae4acbb7bd730935873cd1c15e9fc08fc259ec7a09c122bff5d6387f74",
+      "size": 245
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/water_breathing.png",
+      "sha256": "64de36c9a7dc3f46c7e9fff9a9826b4019d54730620b19a2ed1fb1ee4d7a4e91",
+      "size": 314
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/water_breathing.png",
+      "sha256": "02af71bb63db99358ed5591adba8ecac06a56ea8e4ab5083818d9f0861b5e215",
+      "size": 304
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/water_breathing.png",
+      "sha256": "3c719c1fd0fe95585453f70ec1b96f42704c1eaf4a9b95448e9beaf8a57f02e2",
+      "size": 279
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/water_breathing.png",
+      "sha256": "1b7647e9f2e1bea476703b44997777211af014faa0fa924df4f2ffb7c68df206",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_water_breathing.png",
+      "sha256": "64de36c9a7dc3f46c7e9fff9a9826b4019d54730620b19a2ed1fb1ee4d7a4e91",
+      "size": 314
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_water_breathing.png",
+      "sha256": "02af71bb63db99358ed5591adba8ecac06a56ea8e4ab5083818d9f0861b5e215",
+      "size": 304
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_water_breathing.png",
+      "sha256": "3c719c1fd0fe95585453f70ec1b96f42704c1eaf4a9b95448e9beaf8a57f02e2",
+      "size": 279
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_water_breathing.png",
+      "sha256": "1b7647e9f2e1bea476703b44997777211af014faa0fa924df4f2ffb7c68df206",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/healing.png",
+      "sha256": "6a423130463504700db72cc568e6f2b85d9d0b00c575472649995ceadd3a490b",
+      "size": 294
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/healing.png",
+      "sha256": "e044ba81f52b57d09faf3a6169748d471e6f063340b646fff07ba94194b70a9e",
+      "size": 265
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/healing.png",
+      "sha256": "9c533e770f7228a2950192267b159d725cfb443e840776077ca8a439707977c2",
+      "size": 244
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/healing.png",
+      "sha256": "573305071e0a26d70ee9cb8552d4bf5ee474d699b1c42dfeda467f74c92ef8e1",
+      "size": 248
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/strong_healing.png",
+      "sha256": "6a423130463504700db72cc568e6f2b85d9d0b00c575472649995ceadd3a490b",
+      "size": 294
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/strong_healing.png",
+      "sha256": "e044ba81f52b57d09faf3a6169748d471e6f063340b646fff07ba94194b70a9e",
+      "size": 265
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/strong_healing.png",
+      "sha256": "9c533e770f7228a2950192267b159d725cfb443e840776077ca8a439707977c2",
+      "size": 244
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/strong_healing.png",
+      "sha256": "573305071e0a26d70ee9cb8552d4bf5ee474d699b1c42dfeda467f74c92ef8e1",
+      "size": 248
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/harming.png",
+      "sha256": "58cda948d229c6536d7672ea926847ef182615d1122a1a094815c5f8222844d5",
+      "size": 309
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/harming.png",
+      "sha256": "a9d2aa6eb81e5768b26f15b4d8a1cd672f51e35e2d57b0b58c6ea2c3d21f7ab2",
+      "size": 283
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/harming.png",
+      "sha256": "ed858bd5cba229e411135b893fbf78ad179b452f60cb970fc36e4b91c0a6205c",
+      "size": 265
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/harming.png",
+      "sha256": "2173490e8f99fba8425bede2a0c9a6fb2c6357f064ca4d038aeebf8c99f0c190",
+      "size": 245
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/strong_harming.png",
+      "sha256": "58cda948d229c6536d7672ea926847ef182615d1122a1a094815c5f8222844d5",
+      "size": 309
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/strong_harming.png",
+      "sha256": "a9d2aa6eb81e5768b26f15b4d8a1cd672f51e35e2d57b0b58c6ea2c3d21f7ab2",
+      "size": 283
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/strong_harming.png",
+      "sha256": "ed858bd5cba229e411135b893fbf78ad179b452f60cb970fc36e4b91c0a6205c",
+      "size": 265
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/strong_harming.png",
+      "sha256": "2173490e8f99fba8425bede2a0c9a6fb2c6357f064ca4d038aeebf8c99f0c190",
+      "size": 245
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/poison.png",
+      "sha256": "7d0839077be5152b9d32467049864af530878c60f676004d3e98ce9b4be53f86",
+      "size": 312
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/poison.png",
+      "sha256": "a4266df14348b48c7f66f71087e68b61b43c1cf775b88a69e904a46a5e9c5750",
+      "size": 294
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/poison.png",
+      "sha256": "b6ef935c0ff8f3d03b188e9469c3acbf1449440222134bb2376a0ef4656b933c",
+      "size": 263
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/poison.png",
+      "sha256": "4d3fa65b7c1774ebfd65dffaeed31ecc57f79ded377761b190757fe9cf2d0a6f",
+      "size": 245
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_poison.png",
+      "sha256": "7d0839077be5152b9d32467049864af530878c60f676004d3e98ce9b4be53f86",
+      "size": 312
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_poison.png",
+      "sha256": "a4266df14348b48c7f66f71087e68b61b43c1cf775b88a69e904a46a5e9c5750",
+      "size": 294
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_poison.png",
+      "sha256": "b6ef935c0ff8f3d03b188e9469c3acbf1449440222134bb2376a0ef4656b933c",
+      "size": 263
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_poison.png",
+      "sha256": "4d3fa65b7c1774ebfd65dffaeed31ecc57f79ded377761b190757fe9cf2d0a6f",
+      "size": 245
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/strong_poison.png",
+      "sha256": "7d0839077be5152b9d32467049864af530878c60f676004d3e98ce9b4be53f86",
+      "size": 312
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/strong_poison.png",
+      "sha256": "a4266df14348b48c7f66f71087e68b61b43c1cf775b88a69e904a46a5e9c5750",
+      "size": 294
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/strong_poison.png",
+      "sha256": "b6ef935c0ff8f3d03b188e9469c3acbf1449440222134bb2376a0ef4656b933c",
+      "size": 263
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/strong_poison.png",
+      "sha256": "4d3fa65b7c1774ebfd65dffaeed31ecc57f79ded377761b190757fe9cf2d0a6f",
+      "size": 245
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/regeneration.png",
+      "sha256": "87caed36eb440658da29a32b180bf47f920d586f8a9ff8c11fcce28563128692",
+      "size": 315
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/regeneration.png",
+      "sha256": "ef4c79506ae55ad8220d9d4311e8cefef1fa4801af91e9005910cb967b51790f",
+      "size": 302
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/regeneration.png",
+      "sha256": "4e6b4ddd0df94395b321c0239a4c82fe58c7d097a6f5441464d8f29daa585c88",
+      "size": 278
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/regeneration.png",
+      "sha256": "dc62fa188748443d9c096544d1e46a2fac8019f8a80b54cbaf40d908f73789de",
+      "size": 230
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_regeneration.png",
+      "sha256": "87caed36eb440658da29a32b180bf47f920d586f8a9ff8c11fcce28563128692",
+      "size": 315
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_regeneration.png",
+      "sha256": "ef4c79506ae55ad8220d9d4311e8cefef1fa4801af91e9005910cb967b51790f",
+      "size": 302
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_regeneration.png",
+      "sha256": "4e6b4ddd0df94395b321c0239a4c82fe58c7d097a6f5441464d8f29daa585c88",
+      "size": 278
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_regeneration.png",
+      "sha256": "dc62fa188748443d9c096544d1e46a2fac8019f8a80b54cbaf40d908f73789de",
+      "size": 230
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/strong_regeneration.png",
+      "sha256": "87caed36eb440658da29a32b180bf47f920d586f8a9ff8c11fcce28563128692",
+      "size": 315
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/strong_regeneration.png",
+      "sha256": "ef4c79506ae55ad8220d9d4311e8cefef1fa4801af91e9005910cb967b51790f",
+      "size": 302
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/strong_regeneration.png",
+      "sha256": "4e6b4ddd0df94395b321c0239a4c82fe58c7d097a6f5441464d8f29daa585c88",
+      "size": 278
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/strong_regeneration.png",
+      "sha256": "dc62fa188748443d9c096544d1e46a2fac8019f8a80b54cbaf40d908f73789de",
+      "size": 230
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/strength.png",
+      "sha256": "51808192b529d79a2f165b2bb97e22e9f73ce619852d9ddf47e4da1b913aeece",
+      "size": 302
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/strength.png",
+      "sha256": "5aaa3c8a465607d17faabd23faa10c5a92d57c4fd047cdf3abf1d5877b2d0be7",
+      "size": 291
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/strength.png",
+      "sha256": "2cd2c78bb69b0514160fc310c7986d7863e45d2ebf5d09839ad595c0a01d3779",
+      "size": 265
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/strength.png",
+      "sha256": "f526828a1e5268884d4601595c528d50a93b848d743e6cf7c373c84b40cfb9d3",
+      "size": 222
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_strength.png",
+      "sha256": "51808192b529d79a2f165b2bb97e22e9f73ce619852d9ddf47e4da1b913aeece",
+      "size": 302
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_strength.png",
+      "sha256": "5aaa3c8a465607d17faabd23faa10c5a92d57c4fd047cdf3abf1d5877b2d0be7",
+      "size": 291
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_strength.png",
+      "sha256": "2cd2c78bb69b0514160fc310c7986d7863e45d2ebf5d09839ad595c0a01d3779",
+      "size": 265
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_strength.png",
+      "sha256": "f526828a1e5268884d4601595c528d50a93b848d743e6cf7c373c84b40cfb9d3",
+      "size": 222
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/strong_strength.png",
+      "sha256": "51808192b529d79a2f165b2bb97e22e9f73ce619852d9ddf47e4da1b913aeece",
+      "size": 302
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/strong_strength.png",
+      "sha256": "5aaa3c8a465607d17faabd23faa10c5a92d57c4fd047cdf3abf1d5877b2d0be7",
+      "size": 291
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/strong_strength.png",
+      "sha256": "2cd2c78bb69b0514160fc310c7986d7863e45d2ebf5d09839ad595c0a01d3779",
+      "size": 265
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/strong_strength.png",
+      "sha256": "f526828a1e5268884d4601595c528d50a93b848d743e6cf7c373c84b40cfb9d3",
+      "size": 222
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/weakness.png",
+      "sha256": "06383859ffee3c20476af9862a0dc620a3e4694faea03cd517b5f6a92610e548",
+      "size": 293
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/weakness.png",
+      "sha256": "8e1192910a3401064e5c7a5827c64d21a3f11ac18c47ea7928a574ac48a1635c",
+      "size": 268
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/weakness.png",
+      "sha256": "ee59762c994145a969b9d169c97cec3f56c9a2f7bb856fe9a1e19289455c1c08",
+      "size": 245
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/weakness.png",
+      "sha256": "32346b1345ab03ed22570cb20c79a38d96f5510ffdb522c9878ef5e2380e0ceb",
+      "size": 256
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_weakness.png",
+      "sha256": "06383859ffee3c20476af9862a0dc620a3e4694faea03cd517b5f6a92610e548",
+      "size": 293
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_weakness.png",
+      "sha256": "8e1192910a3401064e5c7a5827c64d21a3f11ac18c47ea7928a574ac48a1635c",
+      "size": 268
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_weakness.png",
+      "sha256": "ee59762c994145a969b9d169c97cec3f56c9a2f7bb856fe9a1e19289455c1c08",
+      "size": 245
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_weakness.png",
+      "sha256": "32346b1345ab03ed22570cb20c79a38d96f5510ffdb522c9878ef5e2380e0ceb",
+      "size": 256
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/luck.png",
+      "sha256": "d90adf52a833d0d9a214c8564f2c90ae08a8232d374a4ff04b7669493b373513",
+      "size": 302
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/luck.png",
+      "sha256": "c0f01509b66607183a9bc01c5eb5b058257c37d1dfe5810a6942f9b0c976b3b9",
+      "size": 282
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/luck.png",
+      "sha256": "9b827ae6c43e7d526bb67f30708273ed91be441425948a043ae7e76ccf614403",
+      "size": 263
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/luck.png",
+      "sha256": "048d3eeef2ea6584fdd357c53c72c35a0a2173762000e29f0d75e335a902da72",
+      "size": 264
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/slow_falling.png",
+      "sha256": "665091198e62652d60ed279aca4fe73ed08a138a2416b45e152771ce58bdffc5",
+      "size": 317
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/slow_falling.png",
+      "sha256": "75da591a7237fa397b728eee62261902d125f2d16d63d1eea8b9a327d701c0cc",
+      "size": 305
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/slow_falling.png",
+      "sha256": "93a7cd93eedec46ef8d810daac2d1734a76ff75d8cc0fd7b1cbadd6ad09f3f57",
+      "size": 283
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/slow_falling.png",
+      "sha256": "7b058083db4b207f2d0dbdcdf59412f39ac1564f878de618c9ced0834237d80c",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/long_slow_falling.png",
+      "sha256": "665091198e62652d60ed279aca4fe73ed08a138a2416b45e152771ce58bdffc5",
+      "size": 317
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/long_slow_falling.png",
+      "sha256": "75da591a7237fa397b728eee62261902d125f2d16d63d1eea8b9a327d701c0cc",
+      "size": 305
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/long_slow_falling.png",
+      "sha256": "93a7cd93eedec46ef8d810daac2d1734a76ff75d8cc0fd7b1cbadd6ad09f3f57",
+      "size": 283
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/long_slow_falling.png",
+      "sha256": "7b058083db4b207f2d0dbdcdf59412f39ac1564f878de618c9ced0834237d80c",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/wind_charged.png",
+      "sha256": "5cc574ac9c50db7348e4852c9a8ca9ad82c33710a8379c7270224f3afe1466fa",
+      "size": 313
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/wind_charged.png",
+      "sha256": "203856befeee5818b71009eaf5aa837125ab6adbb143ded5a1e5cc359746d434",
+      "size": 301
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/wind_charged.png",
+      "sha256": "82780c9723755fe2cf16111b4c604123896159dd783eb3123d138e559022e53c",
+      "size": 279
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/wind_charged.png",
+      "sha256": "eb98c0399e85bf623776f6aa5f08a9cf9ee5c9096d3089e3495044d4fa7b51a7",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/weaving.png",
+      "sha256": "086830b46cb1071fc01b5a50906c82a8f2e2c375d86655dd18d7e06c7343e53c",
+      "size": 304
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/weaving.png",
+      "sha256": "4c04ee3a9dc39000f8a4731d4f4473278d6fcbe30acb739f53a11fb0b698f80c",
+      "size": 287
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/weaving.png",
+      "sha256": "38913d54dd717a271fc1dfd6afe01ec62549b4e7a6ff15bfc4ff696d67a356a2",
+      "size": 260
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/weaving.png",
+      "sha256": "75a537530a325e407ef5d7f741b140a1f5bc0289d4b57804205482f0833f7a02",
+      "size": 266
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/oozing.png",
+      "sha256": "2a249f172780fe3342f8585e8b7173be7570ee9f1e666556eab007cfcf22415c",
+      "size": 317
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/oozing.png",
+      "sha256": "29d8ba7f294e58008bde27e9de049a46b47c4700c8dc26bb571dc8e1e6389adf",
+      "size": 304
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/oozing.png",
+      "sha256": "e3485861133f8bb5bb7997e9a513e95d258c553a028f0f2b65372cef9e893e58",
+      "size": 282
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/oozing.png",
+      "sha256": "4cf47725c71f7bdd4e28055160352e3c660eff72f1b48e27af47978d23569a55",
+      "size": 231
+    },
+    {
+      "path": "vanilla/textures/generated/potion/potion/infested.png",
+      "sha256": "2bdd559b73a32c71fbe45d61dc45dc1a20a73887464355b260ca7891db935329",
+      "size": 312
+    },
+    {
+      "path": "vanilla/textures/generated/potion/splash/infested.png",
+      "sha256": "b04560899a3be37c19beefbba7e79839d89a3af780fba688c7af9b40b663bbb2",
+      "size": 300
+    },
+    {
+      "path": "vanilla/textures/generated/potion/lingering/infested.png",
+      "sha256": "6214cd1e23f1af35489564c944ade38901a62472ef266859d274a84628c962b9",
+      "size": 273
+    },
+    {
+      "path": "vanilla/textures/generated/potion/tipped_arrow/infested.png",
+      "sha256": "6ce3fbb7c8ec1f296ffa251ce59f95eb305f9ea55e5064516c1490fcba8f102b",
+      "size": 245
     }
   ]
 }

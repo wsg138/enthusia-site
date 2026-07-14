@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "minecraftVersion": "1.21.11",
   "source": "Official registries plus public-safe vanilla variant definitions",
-  "count": 342,
+  "count": 362,
   "enchantmentCount": 128,
-  "potionVariantCount": 164,
+  "potionVariantCount": 184,
   "armorTrimPatternCount": 18,
   "armorTrimMaterialCount": 11,
   "items": [
@@ -444,6 +444,26 @@
       }
     },
     {
+      "id": "potion:tipped_arrow:awkward",
+      "kind": "POTION",
+      "displayName": "Arrow of Awkward",
+      "subtitle": "Awkward",
+      "searchQuery": "Arrow of Awkward",
+      "item": {
+        "material": "TIPPED_ARROW",
+        "displayName": "Tipped Arrow",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:awkward",
+            "basePotion": "Arrow of Awkward",
+            "color": "#385DC6",
+            "effects": []
+          }
+        }
+      }
+    },
+    {
       "id": "potion:tipped_arrow:fire_resistance",
       "kind": "POTION",
       "displayName": "Arrow of Fire Resistance",
@@ -606,7 +626,7 @@
       }
     },
     {
-      "id": "potion:tipped_arrow:infestation",
+      "id": "potion:tipped_arrow:infested",
       "kind": "POTION",
       "displayName": "Arrow of Infestation",
       "subtitle": "Infestation",
@@ -617,7 +637,7 @@
         "amount": 1,
         "metadata": {
           "potion": {
-            "id": "minecraft:infestation",
+            "id": "minecraft:infested",
             "basePotion": "Arrow of Infestation",
             "color": "#8C9B8C",
             "effects": [
@@ -763,6 +783,53 @@
                 "durationSeconds": 90
               }
             ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:tipped_arrow:luck",
+      "kind": "POTION",
+      "displayName": "Arrow of Luck",
+      "subtitle": "Luck",
+      "searchQuery": "Arrow of Luck",
+      "item": {
+        "material": "TIPPED_ARROW",
+        "displayName": "Tipped Arrow",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:luck",
+            "basePotion": "Arrow of Luck",
+            "color": "#59C106",
+            "effects": [
+              {
+                "id": "minecraft:luck",
+                "name": "Luck",
+                "amplifier": 0,
+                "durationSeconds": 300
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:tipped_arrow:mundane",
+      "kind": "POTION",
+      "displayName": "Arrow of Mundane",
+      "subtitle": "Mundane",
+      "searchQuery": "Arrow of Mundane",
+      "item": {
+        "material": "TIPPED_ARROW",
+        "displayName": "Tipped Arrow",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:mundane",
+            "basePotion": "Arrow of Mundane",
+            "color": "#385DC6",
+            "effects": []
           }
         }
       }
@@ -1402,6 +1469,46 @@
                 "durationSeconds": 20
               }
             ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:tipped_arrow:thick",
+      "kind": "POTION",
+      "displayName": "Arrow of Thick",
+      "subtitle": "Thick",
+      "searchQuery": "Arrow of Thick",
+      "item": {
+        "material": "TIPPED_ARROW",
+        "displayName": "Tipped Arrow",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:thick",
+            "basePotion": "Arrow of Thick",
+            "color": "#385DC6",
+            "effects": []
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:tipped_arrow:water",
+      "kind": "POTION",
+      "displayName": "Arrow of Water",
+      "subtitle": "Water",
+      "searchQuery": "Arrow of Water",
+      "item": {
+        "material": "TIPPED_ARROW",
+        "displayName": "Tipped Arrow",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:water",
+            "basePotion": "Arrow of Water",
+            "color": "#385DC6",
+            "effects": []
           }
         }
       }
@@ -4477,6 +4584,26 @@
       }
     },
     {
+      "id": "potion:lingering_potion:awkward",
+      "kind": "POTION",
+      "displayName": "Lingering Potion of Awkward",
+      "subtitle": "Awkward",
+      "searchQuery": "Lingering Potion of Awkward",
+      "item": {
+        "material": "LINGERING_POTION",
+        "displayName": "Lingering Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:awkward",
+            "basePotion": "Lingering Potion of Awkward",
+            "color": "#385DC6",
+            "effects": []
+          }
+        }
+      }
+    },
+    {
       "id": "potion:lingering_potion:fire_resistance",
       "kind": "POTION",
       "displayName": "Lingering Potion of Fire Resistance",
@@ -4639,7 +4766,7 @@
       }
     },
     {
-      "id": "potion:lingering_potion:infestation",
+      "id": "potion:lingering_potion:infested",
       "kind": "POTION",
       "displayName": "Lingering Potion of Infestation",
       "subtitle": "Infestation",
@@ -4650,7 +4777,7 @@
         "amount": 1,
         "metadata": {
           "potion": {
-            "id": "minecraft:infestation",
+            "id": "minecraft:infested",
             "basePotion": "Lingering Potion of Infestation",
             "color": "#8C9B8C",
             "effects": [
@@ -4796,6 +4923,53 @@
                 "durationSeconds": 90
               }
             ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:lingering_potion:luck",
+      "kind": "POTION",
+      "displayName": "Lingering Potion of Luck",
+      "subtitle": "Luck",
+      "searchQuery": "Lingering Potion of Luck",
+      "item": {
+        "material": "LINGERING_POTION",
+        "displayName": "Lingering Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:luck",
+            "basePotion": "Lingering Potion of Luck",
+            "color": "#59C106",
+            "effects": [
+              {
+                "id": "minecraft:luck",
+                "name": "Luck",
+                "amplifier": 0,
+                "durationSeconds": 300
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:lingering_potion:mundane",
+      "kind": "POTION",
+      "displayName": "Lingering Potion of Mundane",
+      "subtitle": "Mundane",
+      "searchQuery": "Lingering Potion of Mundane",
+      "item": {
+        "material": "LINGERING_POTION",
+        "displayName": "Lingering Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:mundane",
+            "basePotion": "Lingering Potion of Mundane",
+            "color": "#385DC6",
+            "effects": []
           }
         }
       }
@@ -5440,6 +5614,46 @@
       }
     },
     {
+      "id": "potion:lingering_potion:thick",
+      "kind": "POTION",
+      "displayName": "Lingering Potion of Thick",
+      "subtitle": "Thick",
+      "searchQuery": "Lingering Potion of Thick",
+      "item": {
+        "material": "LINGERING_POTION",
+        "displayName": "Lingering Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:thick",
+            "basePotion": "Lingering Potion of Thick",
+            "color": "#385DC6",
+            "effects": []
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:lingering_potion:water",
+      "kind": "POTION",
+      "displayName": "Lingering Potion of Water",
+      "subtitle": "Water",
+      "searchQuery": "Lingering Potion of Water",
+      "item": {
+        "material": "LINGERING_POTION",
+        "displayName": "Lingering Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:water",
+            "basePotion": "Lingering Potion of Water",
+            "color": "#385DC6",
+            "effects": []
+          }
+        }
+      }
+    },
+    {
       "id": "potion:lingering_potion:water_breathing",
       "kind": "POTION",
       "displayName": "Lingering Potion of Water Breathing",
@@ -5597,6 +5811,26 @@
                 "durationSeconds": 180
               }
             ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:potion:awkward",
+      "kind": "POTION",
+      "displayName": "Potion of Awkward",
+      "subtitle": "Awkward",
+      "searchQuery": "Potion of Awkward",
+      "item": {
+        "material": "POTION",
+        "displayName": "Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:awkward",
+            "basePotion": "Potion of Awkward",
+            "color": "#385DC6",
+            "effects": []
           }
         }
       }
@@ -5764,7 +5998,7 @@
       }
     },
     {
-      "id": "potion:potion:infestation",
+      "id": "potion:potion:infested",
       "kind": "POTION",
       "displayName": "Potion of Infestation",
       "subtitle": "Infestation",
@@ -5775,7 +6009,7 @@
         "amount": 1,
         "metadata": {
           "potion": {
-            "id": "minecraft:infestation",
+            "id": "minecraft:infested",
             "basePotion": "Potion of Infestation",
             "color": "#8C9B8C",
             "effects": [
@@ -5921,6 +6155,53 @@
                 "durationSeconds": 90
               }
             ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:potion:luck",
+      "kind": "POTION",
+      "displayName": "Potion of Luck",
+      "subtitle": "Luck",
+      "searchQuery": "Potion of Luck",
+      "item": {
+        "material": "POTION",
+        "displayName": "Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:luck",
+            "basePotion": "Potion of Luck",
+            "color": "#59C106",
+            "effects": [
+              {
+                "id": "minecraft:luck",
+                "name": "Luck",
+                "amplifier": 0,
+                "durationSeconds": 300
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:potion:mundane",
+      "kind": "POTION",
+      "displayName": "Potion of Mundane",
+      "subtitle": "Mundane",
+      "searchQuery": "Potion of Mundane",
+      "item": {
+        "material": "POTION",
+        "displayName": "Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:mundane",
+            "basePotion": "Potion of Mundane",
+            "color": "#385DC6",
+            "effects": []
           }
         }
       }
@@ -6565,6 +6846,46 @@
       }
     },
     {
+      "id": "potion:potion:thick",
+      "kind": "POTION",
+      "displayName": "Potion of Thick",
+      "subtitle": "Thick",
+      "searchQuery": "Potion of Thick",
+      "item": {
+        "material": "POTION",
+        "displayName": "Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:thick",
+            "basePotion": "Potion of Thick",
+            "color": "#385DC6",
+            "effects": []
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:potion:water",
+      "kind": "POTION",
+      "displayName": "Potion of Water",
+      "subtitle": "Water",
+      "searchQuery": "Potion of Water",
+      "item": {
+        "material": "POTION",
+        "displayName": "Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:water",
+            "basePotion": "Potion of Water",
+            "color": "#385DC6",
+            "effects": []
+          }
+        }
+      }
+    },
+    {
       "id": "potion:potion:water_breathing",
       "kind": "POTION",
       "displayName": "Potion of Water Breathing",
@@ -6722,6 +7043,26 @@
                 "durationSeconds": 180
               }
             ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:splash_potion:awkward",
+      "kind": "POTION",
+      "displayName": "Splash Potion of Awkward",
+      "subtitle": "Awkward",
+      "searchQuery": "Splash Potion of Awkward",
+      "item": {
+        "material": "SPLASH_POTION",
+        "displayName": "Splash Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:awkward",
+            "basePotion": "Splash Potion of Awkward",
+            "color": "#385DC6",
+            "effects": []
           }
         }
       }
@@ -6889,7 +7230,7 @@
       }
     },
     {
-      "id": "potion:splash_potion:infestation",
+      "id": "potion:splash_potion:infested",
       "kind": "POTION",
       "displayName": "Splash Potion of Infestation",
       "subtitle": "Infestation",
@@ -6900,7 +7241,7 @@
         "amount": 1,
         "metadata": {
           "potion": {
-            "id": "minecraft:infestation",
+            "id": "minecraft:infested",
             "basePotion": "Splash Potion of Infestation",
             "color": "#8C9B8C",
             "effects": [
@@ -7046,6 +7387,53 @@
                 "durationSeconds": 90
               }
             ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:splash_potion:luck",
+      "kind": "POTION",
+      "displayName": "Splash Potion of Luck",
+      "subtitle": "Luck",
+      "searchQuery": "Splash Potion of Luck",
+      "item": {
+        "material": "SPLASH_POTION",
+        "displayName": "Splash Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:luck",
+            "basePotion": "Splash Potion of Luck",
+            "color": "#59C106",
+            "effects": [
+              {
+                "id": "minecraft:luck",
+                "name": "Luck",
+                "amplifier": 0,
+                "durationSeconds": 300
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:splash_potion:mundane",
+      "kind": "POTION",
+      "displayName": "Splash Potion of Mundane",
+      "subtitle": "Mundane",
+      "searchQuery": "Splash Potion of Mundane",
+      "item": {
+        "material": "SPLASH_POTION",
+        "displayName": "Splash Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:mundane",
+            "basePotion": "Splash Potion of Mundane",
+            "color": "#385DC6",
+            "effects": []
           }
         }
       }
@@ -7685,6 +8073,46 @@
                 "durationSeconds": 20
               }
             ]
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:splash_potion:thick",
+      "kind": "POTION",
+      "displayName": "Splash Potion of Thick",
+      "subtitle": "Thick",
+      "searchQuery": "Splash Potion of Thick",
+      "item": {
+        "material": "SPLASH_POTION",
+        "displayName": "Splash Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:thick",
+            "basePotion": "Splash Potion of Thick",
+            "color": "#385DC6",
+            "effects": []
+          }
+        }
+      }
+    },
+    {
+      "id": "potion:splash_potion:water",
+      "kind": "POTION",
+      "displayName": "Splash Potion of Water",
+      "subtitle": "Water",
+      "searchQuery": "Splash Potion of Water",
+      "item": {
+        "material": "SPLASH_POTION",
+        "displayName": "Splash Potion",
+        "amount": 1,
+        "metadata": {
+          "potion": {
+            "id": "minecraft:water",
+            "basePotion": "Splash Potion of Water",
+            "color": "#385DC6",
+            "effects": []
           }
         }
       }

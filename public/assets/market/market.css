@@ -56,5 +56,36 @@
 @media(max-width:600px),(max-height:500px){.drawer-backdrop{display:none!important}}
 @keyframes sheet-in{from{transform:translateY(28px)}}
 
+/* Focused panel, item, container, filter, and viewport repairs. */
+:root{--site-header-height:72px;--visible-footer-overlap:0px;--collapsed-context-height:0px}
+.market-drawer,.item-inspector{top:var(--site-header-height);bottom:0;max-height:none}
+.market-drawer>header{grid-template-columns:42px minmax(0,1fr) 42px;align-items:center}
+.market-drawer>header>div{min-width:0}.market-drawer>header #drawer-back[hidden]{display:block;visibility:hidden;pointer-events:none}
+.market-drawer>header #drawer-close{grid-column:3;align-self:center;justify-self:end}
+.market-drawer header h2,.item-inspector h2,.stall-card-copy span,.stall-card-copy strong,.stall-card-copy small,.shop-card header small,.result-card strong,.result-card small,.suggestions strong,.suggestions small,.container-inspection h3{word-break:normal;overflow-wrap:normal}
+.minecraft-tooltip code,.coordinates,.minecraft-bitmap-text.identifier{word-break:normal;overflow-wrap:anywhere}
+.item-copy strong{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;white-space:normal;word-break:normal;overflow-wrap:normal;text-overflow:clip;overflow:hidden;line-height:1.28}
+.fit-inspector-heading{max-width:100%;word-break:normal;overflow-wrap:normal}.inspected-item h3 .minecraft-bitmap-text{flex-wrap:nowrap;max-width:100%;transform:scale(var(--heading-scale,1.15));transform-origin:left center}
+.mc-word{display:inline-flex;flex:0 0 auto}.minecraft-bitmap-text.identifier .mc-word{flex-wrap:wrap;min-width:0}
+.rent-countdown.available{color:var(--green)}
+.shop-card.out-of-stock,.result-card.out-of-stock{border-color:#74362f;background:#241010}.shop-card.out-of-stock:not(.highlight),.result-card.out-of-stock{opacity:.82}.stock-badge{display:inline-block;width:max-content;margin-top:7px;padding:3px 7px;border:1px solid #b84a3f;border-radius:5px;background:#431613;color:#ffaaa2;font-size:11px;line-height:1.2}
+.filter-unmatched{order:2;opacity:.48}.filter-no-match{margin-top:5px;color:#d38b82!important}.filter-empty-notice{padding:10px 12px;border-left:3px solid var(--orange);background:#28120b;color:var(--muted)}
+.minecraft-shulker-window{--gui-width:176;--gui-height:76;--slot-x:7;--slot-y:17;--slot-size:18;position:relative;width:min(400px,100%);aspect-ratio:176/76;background:none;overflow:hidden;image-rendering:pixelated}
+.shulker-visual{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated}
+.shulker-slot-grid{position:absolute;left:calc(var(--slot-x)/var(--gui-width)*100%);top:calc(var(--slot-y)/var(--gui-height)*100%);width:calc(9*var(--slot-size)/var(--gui-width)*100%);height:calc(3*var(--slot-size)/var(--gui-height)*100%);display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(3,1fr);gap:0}
+.minecraft-slot{width:100%;height:100%;padding:0;border:0;background:transparent!important;opacity:0;cursor:pointer}.minecraft-slot:focus-visible,.minecraft-slot.focused-match{opacity:1;outline:1px solid #ffff55;outline-offset:-1px;background:#ffff5528!important}.minecraft-slot:disabled{opacity:0;cursor:default}
+.container-inspection>p{display:none}
+.floating-minecraft-tooltip{z-index:1000;word-break:normal;overflow-wrap:normal}.floating-minecraft-tooltip .minecraft-bitmap-text{max-width:100%;flex-wrap:wrap}
+.market-footer{z-index:1}.market-drawer{z-index:70}.item-inspector{z-index:71}.drawer-backdrop{z-index:69}
+.market-drawer,.search-results{scrollbar-width:thin;scrollbar-color:#a95727 #1a0d08}.market-drawer::-webkit-scrollbar,.search-results::-webkit-scrollbar,.search-results-content::-webkit-scrollbar{width:8px}.market-drawer::-webkit-scrollbar-track,.search-results::-webkit-scrollbar-track,.search-results-content::-webkit-scrollbar-track{background:#1a0d08}.market-drawer::-webkit-scrollbar-thumb,.search-results::-webkit-scrollbar-thumb,.search-results-content::-webkit-scrollbar-thumb{border:2px solid #1a0d08;border-radius:8px;background:#8d4928}.market-drawer::-webkit-scrollbar-thumb:hover,.search-results::-webkit-scrollbar-thumb:hover,.search-results-content::-webkit-scrollbar-thumb:hover{background:#d46c2c}
+.item-inspector{scrollbar-width:none}.item-inspector::-webkit-scrollbar{display:none}
+@media(min-width:601px) and (min-height:501px){#pinned-coordinate-marker{display:none}.market-drawer,.item-inspector{height:auto}.market-drawer>header,.item-inspector>header{top:0}}
+@media(max-width:600px),(max-height:500px){
+  .market-drawer,.item-inspector{top:auto!important}.mobile-context-tab{bottom:var(--visible-footer-overlap)!important}
+  .search-results.mobile-sheet-active{bottom:calc(var(--visible-footer-overlap) + var(--collapsed-context-height))!important;max-height:calc(100dvh - var(--visible-footer-overlap) - var(--collapsed-context-height) - 12px)!important}
+  .search-results.mobile-sheet-active .search-results-content{padding-bottom:calc(18px + env(safe-area-inset-bottom) + var(--collapsed-context-height))}
+  .transaction-item .fit-item-name{font-size:inherit}.inspected-item h3{font-size:18px}
+}
+
 }
 .market-page .site-footer{position:relative;z-index:1}.market-page .footer-inner.market-footer{display:grid;gap:8px;position:relative;padding-block:24px;background:transparent}.market-page .footer-inner.market-footer>p{margin:0}.market-page .footer-inner.market-footer .minecraft-disclaimer{font-size:11px;line-height:1.35;color:var(--muted)}@media(max-width:600px),(max-height:500px){.market-page .footer-inner.market-footer{gap:5px;padding-block:15px calc(15px + env(safe-area-inset-bottom));font-size:14px}.market-page .footer-inner.market-footer>p:nth-child(n+2){font-size:9px;line-height:1.25;color:var(--muted)}}
