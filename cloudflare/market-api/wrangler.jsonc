@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "enthusia-market-api",
+  "main": "src/index.ts",
+  "account_id": "83982f6d6277634f57d216e6a7f24125",
+  "compatibility_date": "2026-07-14",
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "market-api.enthusia.info", "custom_domain": true }
+  ],
+  "durable_objects": {
+    "bindings": [
+      { "name": "MARKET_ROOM", "class_name": "EnthusiaMarketRoom" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["EnthusiaMarketRoom"] }
+  ],
+  "r2_buckets": [
+    { "binding": "MARKET_ASSETS", "bucket_name": "enthusia-market-assets" }
+  ],
+  "vars": {
+    "MARKET_SERVER_ID": "enthusia-main",
+    "MARKET_OBJECT_NAME": "enthusia-main",
+    "MARKET_SCHEMA_VERSION": "1",
+    "EXPECTED_STALL_COUNT": "71",
+    "PUBLIC_SITE_ORIGIN": "https://enthusia.info",
+    "EXPERIMENTAL_SITE_ORIGIN": "https://enthusia-community.racecarboy77.chatgpt.site"
+  }
+}

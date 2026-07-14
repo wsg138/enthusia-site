@@ -1,0 +1,72 @@
+# Enthusia Market API contract
+
+Version 1 exposes public market state without map geometry or plugin-private data. JSON objects are strict: fields not listed here are rejected on private writes.
+
+## Signed private requests
+
+`POST /internal/v1/test`, `POST /internal/v1/full-sync`, and `PUT /internal/v1/stalls/:stallId` require `X-Enthusia-Server-Id`, `X-Enthusia-Timestamp`, `X-Enthusia-Event-Id`, and `X-Enthusia-Signature`.
+
+The timestamp is Unix epoch milliseconds within five minutes. The event ID is 1–128 visible ASCII characters and must match the JSON `eventId`. The signature is `v1=` followed by a lowercase HMAC-SHA256 hexadecimal digest. Its canonical input contains no trailing newline:
+
+```text
+v1
+<METHOD>
+<PATHNAME>
+<SERVER_ID>
+<TIMESTAMP>
+<EVENT_ID>
+<SHA256_HEX_OF_EXACT_RAW_BODY_BYTES>
+```
+
+The body envelope is `schemaVersion: 1`, `serverId: "enthusia-main"`, a persistent `serverEpoch` string, an `eventId`, and ISO-8601 `sentAt`. Full sync adds a positive `snapshotRevision`, ISO-8601 `generatedAt`, and exactly 71 `{ revision, stall }` entries. A stall update adds a positive `revision` and one `stall`. The test route adds a bounded `probe` string and never changes state.
+
+## Public stall
+
+Each stall contains only:
+
+- `id`: one canonical `stall1` through `stall71` ID.
+- `buildingId`, integer `floor`, and `location` (`world`, integer `x`, `y`, `z`).
+- `owner`: `type` (`NONE`, `PLAYER`, or `GUILD`), nullable public `id`, nullable UUID, public `name`, nullable `avatarUrl`, and `avatar` with `kind` plus optional public `source`, `includesOuterLayer`, and `url`.
+- Nullable ISO-8601 `ownerSince` and `nextRentAt`.
+- `members`: up to 256 public names.
+- `shops`: up to 256 shops.
+
+A shop contains a positive numeric `id`, public owner `id` and `name`, direction (`BUY`, `SELL`, or `TRADE`), `sellItem`, `costItem`, interaction coordinates and source, nonnegative `stockCount` and `availableTrades`, and boolean `searchable`.
+
+An item contains uppercase `material`, public `displayName`, positive `amount`, nullable public `icon`, and strict `metadata`. Metadata may include `customName`, `enchantments`, `storedEnchantments`, potion data, armor trim, smithing-template type, written-book summary, shulker color, and a bounded recursive container. Container entries contain an optional numeric slot and another public item. Text, array, coordinate, count, and nesting payload size are bounded by schema and route limits.
+
+Sanitized example:
+
+```json
+{
+  "id": "stall35",
+  "buildingId": "building-7",
+  "floor": 1,
+  "location": { "world": "world", "x": 10, "y": 64, "z": -20 },
+  "owner": {
+    "type": "PLAYER",
+    "id": "public-owner-35",
+    "uuid": "00000000-0000-4000-8000-000000000035",
+    "name": "P2wn",
+    "avatarUrl": null,
+    "avatar": { "kind": "MINECRAFT_HEAD", "source": "JAVA", "includesOuterLayer": true }
+  },
+  "ownerSince": "2026-07-01T12:00:00Z",
+  "nextRentAt": "2026-07-15T12:00:00Z",
+  "members": [],
+  "shops": []
+}
+```
+
+Database row identifiers, permissions, economy internals, staff notes, secrets, authentication data, paths, raw serialized objects, commands, configuration, buildings, polygons, bounds, and foreground/layout assets are not accepted.
+
+## Public HTTP and live events
+
+- `GET /health` reports binding readiness and initialization state.
+- `GET /v1/market` returns the active 71-stall generation in natural stall order, or 503 before initialization.
+- `GET /v1/stalls/:stallId` returns one stall and supports `ETag`/`If-None-Match`.
+- `GET /v1/live?since=<sequence>` upgrades to a hibernating WebSocket for either allowed website Origin.
+
+The socket first sends `hello`. Replayable state events are `stall.updated` and `market.replaced`. When `since` predates retained history, the server sends `resync_required` with reason `history_unavailable`. State is committed before an event is broadcast. The newest 1,000 state-change events are retained.
+
+Public CORS allows only `https://enthusia.info` and `https://enthusia-community.racecarboy77.chatgpt.site`; non-browser requests without `Origin` remain valid. Internal endpoints never return CORS permission.

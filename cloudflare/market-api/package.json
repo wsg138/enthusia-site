@@ -1,0 +1,21 @@
+{
+  "name": "enthusia-market-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "0.18.4",
+    "@cloudflare/workers-types": "5.20260714.1",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10",
+    "wrangler": "4.110.0"
+  }
+}

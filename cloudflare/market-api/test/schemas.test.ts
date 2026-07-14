@@ -1,0 +1,33 @@
+import { describe, expect, it } from "vitest";
+import { EXPECTED_STALL_IDS } from "../src/expected-stalls";
+import { fullSyncSchema, stallSchema, stallUpdateSchema } from "../src/schemas";
+import { fullSyncBody, makeStall, signedFetch } from "./helpers";
+
+describe("strict public schemas", () => {
+  it("accepts a valid stall", () => expect(stallSchema.safeParse(makeStall("stall1")).success).toBe(true));
+  it("rejects an unknown private field", () => expect(stallSchema.safeParse({ ...makeStall("stall1"), staffNotes: "private" }).success).toBe(false));
+  it("rejects duplicate full-sync stall IDs", () => {
+    const body = fullSyncBody(); body.stalls[1].stall.id = body.stalls[0].stall.id;
+    expect(fullSyncSchema.safeParse(body).success).toBe(false);
+  });
+  it("rejects a missing canonical stall", () => {
+    const body = fullSyncBody(); body.stalls.pop();
+    expect(fullSyncSchema.safeParse(body).success).toBe(false);
+  });
+  it("rejects an extra stall", () => {
+    const body = fullSyncBody(); body.stalls.push({ revision: 1, stall: makeStall("stall1") });
+    expect(fullSyncSchema.safeParse(body).success).toBe(false);
+  });
+  it("contains exactly 71 expected IDs", () => expect(new Set(EXPECTED_STALL_IDS).size).toBe(71));
+  it("rejects a route and payload stall mismatch", async () => {
+    const eventId = crypto.randomUUID();
+    const body = { schemaVersion: 1, serverId: "enthusia-main", serverEpoch: "epoch", eventId, sentAt: new Date().toISOString(), revision: 2, stall: makeStall("stall2") };
+    expect(stallUpdateSchema.safeParse(body).success).toBe(true);
+    expect((await signedFetch("/internal/v1/stalls/stall1", "PUT", body)).status).toBe(400);
+  });
+  it("rejects an oversized update payload", async () => {
+    const eventId = crypto.randomUUID();
+    const response = await signedFetch("/internal/v1/stalls/stall1", "PUT", { schemaVersion: 1, serverId: "enthusia-main", serverEpoch: "epoch", eventId, sentAt: new Date().toISOString(), padding: "x".repeat(257 * 1024) });
+    expect(response.status).toBe(413);
+  });
+});
