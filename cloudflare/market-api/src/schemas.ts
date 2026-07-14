@@ -95,7 +95,7 @@ export const stallSchema = z.object({
   owner: z.object({
     type: z.enum(["NONE", "PLAYER", "GUILD"]),
     id: z.string().max(128).nullable(),
-    uuid: z.uuid().nullable(),
+    uuid: z.guid().nullable(),
     name: z.string().min(1).max(64),
     avatarUrl: z.string().max(2048).nullable(),
     avatar: z.object({

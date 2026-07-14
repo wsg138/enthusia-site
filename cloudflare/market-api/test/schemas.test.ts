@@ -5,6 +5,13 @@ import { fullSyncBody, makeStall, signedFetch } from "./helpers";
 
 describe("strict public schemas", () => {
   it("accepts a valid stall", () => expect(stallSchema.safeParse(makeStall("stall1")).success).toBe(true));
+  it("accepts canonical Java UUID text without requiring RFC version or variant bits", () => {
+    const proxyStyleUuid = "00000000-0000-0009-0000-000000000001";
+    const stall = makeStall("stall1");
+    stall.owner = { ...stall.owner, type: "PLAYER", id: proxyStyleUuid, uuid: proxyStyleUuid, name: "Example Player" };
+    expect(stallSchema.safeParse(stall).success).toBe(true);
+    expect(stallSchema.safeParse({ ...stall, owner: { ...stall.owner, uuid: "not-a-guid" } }).success).toBe(false);
+  });
   it("keeps transaction quantities separate from item stack quantities", () => {
     const stall = makeStall("stall1");
     stall.shops.push({

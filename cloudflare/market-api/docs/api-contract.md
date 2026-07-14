@@ -26,7 +26,7 @@ Each stall contains only:
 
 - `id`: one canonical `stall1` through `stall71` ID.
 - `buildingId`, integer `floor`, and `location` (`world`, integer `x`, `y`, `z`).
-- `owner`: `type` (`NONE`, `PLAYER`, or `GUILD`), nullable public `id`, nullable UUID, public `name`, nullable `avatarUrl`, and `avatar` with `kind` plus optional public `source`, `includesOuterLayer`, and `url`.
+- `owner`: `type` (`NONE`, `PLAYER`, or `GUILD`), nullable public `id`, nullable Java UUID text in canonical `8-4-4-4-12` hexadecimal form, public `name`, nullable `avatarUrl`, and `avatar` with `kind` plus optional public `source`, `includesOuterLayer`, and `url`. Proxy-assigned Minecraft UUIDs are not required to carry RFC version or variant bits.
 - Nullable ISO-8601 `ownerSince` and `nextRentAt`.
 - `members`: up to 256 public names.
 - `shops`: up to 256 shops.
