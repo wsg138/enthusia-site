@@ -8374,6 +8374,11 @@
       "path": "vanilla/textures/generated/potion/tipped_arrow/infested.png",
       "sha256": "6ce3fbb7c8ec1f296ffa251ce59f95eb305f9ea55e5064516c1490fcba8f102b",
       "size": 245
+    },
+    {
+      "path": "vanilla/textures/generated/item/honey_block.png",
+      "sha256": "3dd769e70cff0d4900e9e1713d8a5ef2c50376687888779feafae3a98898e316",
+      "size": 211
     }
   ]
 }

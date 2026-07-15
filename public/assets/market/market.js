@@ -660,7 +660,7 @@
     const source = `${assetBase}${relative}`;
     if (!canvasImageCache.has(source)) canvasImageCache.set(source, new Promise((resolve, reject) => {
       const image = new Image(); image.decoding = "async"; image.onload = () => resolve(image); image.onerror = reject; image.src = source;
-    }));
+    }).catch(error => { canvasImageCache.delete(source); throw error; }));
     return canvasImageCache.get(source);
   }
   function tintCanvas(canvas, tint) {
