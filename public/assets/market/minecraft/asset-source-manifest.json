@@ -2916,6 +2916,11 @@
       "size": 211
     },
     {
+      "path": "vanilla/textures/block/honey_block_bottom.png",
+      "sha256": "f94579b58d12b57573dacee815ffc8e24f0cd7c283683fd651041fab268ebbca",
+      "size": 198
+    },
+    {
       "path": "vanilla/textures/item/honey_bottle.png",
       "sha256": "299b5884e46622fa116bb7badd7db1243147fd89383e5dbb957092e0d7207c38",
       "size": 194
@@ -6667,8 +6672,8 @@
     },
     {
       "path": "vanilla/textures/generated/item/honey_block.png",
-      "sha256": "bdd7c1c60670f05c424d5cfa20cfa8828b044a94b5b623bea348d00b4dbe8190",
-      "size": 1292
+      "sha256": "03abeba5f4fcf78b761d721e40d0f78f7cabe8b3024d2c82bc548d8b989dc5b1",
+      "size": 1689
     },
     {
       "path": "vanilla/textures/generated/item/infested_chiseled_stone_bricks.png",

@@ -6457,7 +6457,8 @@
         }
       ],
       "resolution": "STABLE_DERIVED_BLOCK_ICON",
-      "model": "block/honey_block"
+      "model": "block/honey_block",
+      "render": "MODEL_ELEMENTS"
     },
     "HONEY_BOTTLE": {
       "layers": [
