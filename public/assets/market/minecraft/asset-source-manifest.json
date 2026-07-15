@@ -6671,11 +6671,6 @@
       "size": 1531
     },
     {
-      "path": "vanilla/textures/generated/item/honey_block.png",
-      "sha256": "aa00655ab00df45897ce9cf07a0a08e409b963ccd9ae447e0b54371ca2238da0",
-      "size": 2617
-    },
-    {
       "path": "vanilla/textures/generated/item/infested_chiseled_stone_bricks.png",
       "sha256": "260b9addc3f8a76fb19b2c96cf0ddf7f592970aaca9fff2c5b5af5ea31f55d58",
       "size": 1272
