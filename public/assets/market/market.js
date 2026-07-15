@@ -936,8 +936,17 @@
     }
     requestAnimationFrame(() => { el.content.scrollTop = drawerScroll; el.inspectorContent.scrollTop = inspectorScroll; el.resultsContent.scrollTop = resultsScroll; });
   }
-  function showSuggestions() {
-    const input = $("#item-search"), normalized = input.value.trim().toLowerCase(), potionQuery = /potion|strength|slow falling|invis|water breathing|night vision|regeneration|poison|weakness|turtle master|wind charged|weaving|oozing|infestation/.test(normalized), items = normalized ? adapter.suggest(input.value, potionQuery ? 220 : 15) : [];
+  let suggestionRevision = 0;
+  function showSuggestions(event) {
+    const input = $("#item-search");
+    if (event?.isComposing) return;
+    const revision = ++suggestionRevision, query = input.value;
+    queueMicrotask(() => renderSuggestions(query, revision));
+  }
+  function renderSuggestions(query, revision) {
+    const input = $("#item-search");
+    if (revision !== suggestionRevision || input.value !== query) return;
+    const normalized = query.trim().toLowerCase(), potionQuery = /potion|strength|slow falling|invis|water breathing|night vision|regeneration|poison|weakness|turtle master|wind charged|weaving|oozing|infestation/.test(normalized), items = normalized ? adapter.suggest(query, potionQuery ? 220 : 15) : [];
     state.suggestionIndex = -1; const box = $("#search-suggestions");
     if (!items.length) { box.replaceChildren(); box.hidden = true; return; }
     box.innerHTML = items.map((entry, index) => {
@@ -947,7 +956,10 @@
     box.querySelectorAll("button").forEach(button => button.onclick = () => { $("#item-search").value = button.dataset.suggestion; executeSearch(); });
   }
   function hideSuggestions() { $("#search-suggestions").hidden = true; state.suggestionIndex = -1; }
-  $("#item-search").oninput = showSuggestions; $("#item-search").onfocus = showSuggestions;
+  $("#item-search").addEventListener("input", showSuggestions);
+  $("#item-search").addEventListener("compositionend", showSuggestions);
+  $("#item-search").addEventListener("search", showSuggestions);
+  $("#item-search").addEventListener("focus", showSuggestions);
   $("#item-search").onkeydown = event => {
     const buttons = [...$("#search-suggestions").querySelectorAll("button")];
     if (event.key === "ArrowDown" && buttons.length) { event.preventDefault(); state.suggestionIndex = Math.min(buttons.length - 1, state.suggestionIndex + 1); }

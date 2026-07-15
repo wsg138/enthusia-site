@@ -3,6 +3,10 @@
 
   const normalize = value => String(value ?? "").trim().toLowerCase();
   const materialName = value => normalize(value).replaceAll("_", " ");
+  const itemSearchKey = value => normalize(stripMinecraftFormatting(value))
+    .replace(/^minecraft:/, "")
+    .replaceAll("_", " ")
+    .replace(/\s+/g, " ");
   const romanLevel = level => ({1: "I", 2: "II", 3: "III", 4: "IV", 5: "V", 6: "VI", 7: "VII", 8: "VIII", 9: "IX", 10: "X"})[level] || String(level);
   const stripMinecraftFormatting = value => String(value ?? "")
     .replace(/<\/?!?(?:[a-z][a-z0-9_-]*|#[0-9a-f]{6})(?::[^<>]*)?>/gi, "")
@@ -152,18 +156,18 @@
       });
     }
     suggest(query, limit = 15) {
-      const spec = querySpec(query), value = spec.normalized;
+      const spec = querySpec(query), value = itemSearchKey(spec.normalized);
       if (value.length < 1) return [];
-      const available = new Set(this.searchEntries().flatMap(entry => [normalize(stripMinecraftFormatting(entry.match.item.displayName)), normalize(entry.match.item.material)]));
-      const materialQuery = value.replaceAll(" ", "_"), matches = this.suggestionCatalog.filter(entry => {
+      const available = new Set(this.searchEntries().flatMap(entry => [entry.match.item.displayName, entry.match.item.material].map(itemSearchKey)));
+      const matches = this.suggestionCatalog.filter(entry => {
         if (spec.exactMaterial) return (entry.material || entry.item?.material) === spec.exactMaterial;
         if (spec.category) return spec.category.matches(entry.material || entry.item?.material);
-        const terms = [entry.displayName, entry.subtitle, entry.searchQuery, entry.material, entry.id, ...itemTerms(entry.item)].filter(Boolean).map(normalize);
-        return terms.some(term => term.startsWith(value) || term.startsWith(materialQuery) || term.includes(` ${value}`));
+        const terms = [entry.displayName, entry.subtitle, entry.searchQuery, entry.material, entry.id, ...itemTerms(entry.item)].filter(Boolean).map(itemSearchKey);
+        return terms.some(term => term.startsWith(value) || term.includes(` ${value}`));
       });
-      const rank = entry => normalize(entry.displayName).startsWith(value) ? 0 : normalize(entry.subtitle).startsWith(value) || normalize(entry.searchQuery).startsWith(value) ? 1 : 2;
+      const rank = entry => itemSearchKey(entry.displayName).startsWith(value) ? 0 : itemSearchKey(entry.subtitle).startsWith(value) || itemSearchKey(entry.searchQuery).startsWith(value) ? 1 : 2;
       const seen = new Set();
-      return matches.sort((a, b) => rank(a) - rank(b) || Number(available.has(normalize(b.displayName)) || available.has(normalize(b.material))) - Number(available.has(normalize(a.displayName)) || available.has(normalize(a.material))) || a.displayName.localeCompare(b.displayName)).filter(entry => {
+      return matches.sort((a, b) => rank(a) - rank(b) || Number(available.has(itemSearchKey(b.displayName)) || available.has(itemSearchKey(b.material))) - Number(available.has(itemSearchKey(a.displayName)) || available.has(itemSearchKey(a.material))) || a.displayName.localeCompare(b.displayName)).filter(entry => {
         const key = `${entry.kind}:${entry.displayName}:${entry.subtitle || ""}`; if (seen.has(key)) return false; seen.add(key); return true;
       }).slice(0, limit);
     }

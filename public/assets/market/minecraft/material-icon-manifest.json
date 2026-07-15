@@ -6453,12 +6453,12 @@
     "HONEY_BLOCK": {
       "layers": [
         {
-          "src": "minecraft/vanilla/textures/generated/item/honey_block.png"
+          "src": "minecraft/vanilla/textures/generated/item/honey_block.png?v=honey2"
         }
       ],
-      "resolution": "STABLE_DERIVED_BLOCK_ICON",
+      "resolution": "DEDICATED_PRE_RENDERED_ITEM_ICON",
       "model": "block/honey_block",
-      "render": "MODEL_ELEMENTS"
+      "render": "PRE_RENDERED"
     },
     "HONEY_BOTTLE": {
       "layers": [
