@@ -356,8 +356,8 @@
   }
   const itemPresentation = item => window.EnthusiaMarketAdapter.itemPresentation(item);
   const publicItemName = value => window.EnthusiaMarketAdapter.stripMinecraftFormatting(value);
-  function transactionQuantity(amount, itemName) {
-    const grouped = window.EnthusiaMarketAdapter.formatStackQuantity(amount);
+  function transactionQuantity(amount, itemName, direction, side) {
+    const grouped = window.EnthusiaMarketAdapter.formatTransactionQuantity(amount, direction, side);
     const label = `${amount} ${itemName} — ${grouped}`;
     return `<span class="transaction-quantity" title="${esc(label)}" aria-label="${esc(label)}"><span aria-hidden="true">${esc(grouped)} ${esc(itemName)}</span></span>`;
   }
@@ -423,9 +423,9 @@
     node.addEventListener("pointerenter", () => showItemTooltip(node, item)); node.addEventListener("pointerleave", hideItemTooltip);
     node.addEventListener("focus", () => showItemTooltip(node, item)); node.addEventListener("blur", hideItemTooltip);
   }
-  function itemPanel(item, amount, label, shopId, side) {
+  function itemPanel(item, amount, label, shopId, direction, side) {
     const presentation = itemPresentation(item);
-    return `<button class="transaction-side" data-inspect-shop="${shopId}" data-inspect-side="${side}" aria-label="Inspect ${esc(label.toLowerCase())}: ${esc(presentation.baseDisplayName)}"><span class="transaction-label">${label}</span><span class="transaction-item">${itemIcon(item)}<span class="item-copy"><strong class="fit-item-name">${transactionQuantity(amount, presentation.baseDisplayName)}</strong></span></span></button>`;
+    return `<button class="transaction-side" data-inspect-shop="${shopId}" data-inspect-side="${side}" aria-label="Inspect ${esc(label.toLowerCase())}: ${esc(presentation.baseDisplayName)}"><span class="transaction-label">${label}</span><span class="transaction-item">${itemIcon(item)}<span class="item-copy"><strong class="fit-item-name">${transactionQuantity(amount, presentation.baseDisplayName, direction, side)}</strong></span></span></button>`;
   }
   const textFitObserver = new ResizeObserver(entries => entries.forEach(({target}) => fitItemText(target)));
   const identifierFitObserver = new ResizeObserver(entries => entries.forEach(({target}) => fitIdentifierText(target)));
@@ -600,7 +600,7 @@
   function shopCard(shop, highlight) {
     const labels = transactionLabels(shop.direction), action = { SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction];
     const out = shop.stockCount <= 0;
-    return `<article class="shop-card${highlight ? " highlight" : ""}${out ? " out-of-stock" : ""}" data-shop="${shop.id}" tabindex="0" role="button" aria-label="Inspect ${action.toLowerCase()} shop by ${esc(shop.owner.name)}"><header><span class="direction">${action}</span><small>Shop by <strong title="${esc(shop.owner.name)}">${esc(shop.owner.name)}</strong></small></header>${out ? `<strong class="stock-badge">Out of stock</strong>` : ""}<div class="transaction-grid">${itemPanel(shop.sellItem, shop.sellAmount, labels[0], shop.id, "sellItem")}<span class="transaction-arrow" aria-hidden="true">⇄</span>${itemPanel(shop.costItem, shop.costAmount, labels[1], shop.id, "costItem")}</div><footer><span>${shop.stockCount} in stock · ${shop.availableTrades} trades available</span>${locationMarkup(shop.interaction, true)}</footer></article>`;
+    return `<article class="shop-card${highlight ? " highlight" : ""}${out ? " out-of-stock" : ""}" data-shop="${shop.id}" tabindex="0" role="button" aria-label="Inspect ${action.toLowerCase()} shop by ${esc(shop.owner.name)}"><header><span class="direction">${action}</span><small>Shop by <strong title="${esc(shop.owner.name)}">${esc(shop.owner.name)}</strong></small></header>${out ? `<strong class="stock-badge">Out of stock</strong>` : ""}<div class="transaction-grid">${itemPanel(shop.sellItem, shop.sellAmount, labels[0], shop.id, shop.direction, "sellItem")}<span class="transaction-arrow" aria-hidden="true">⇄</span>${itemPanel(shop.costItem, shop.costAmount, labels[1], shop.id, shop.direction, "costItem")}</div><footer><span>${shop.stockCount} in stock · ${shop.availableTrades} trades available</span>${locationMarkup(shop.interaction, true)}</footer></article>`;
   }
   function bindDrawerActions() {
     bindCopy(el.content);
@@ -771,7 +771,7 @@
     el.inspectorKicker.textContent = `${action} · ${entry.role}`; el.inspectorTitle.textContent = "Item details";
     const backLabel = state.inspectorHistory.length > 1 ? `Back to ${publicItemName(state.inspectorHistory.at(-2).item.displayName)}` : state.searchReturn ? "Back to search results" : "Back to stall";
     const sellPresentation = itemPresentation(shop.sellItem), costPresentation = itemPresentation(shop.costItem);
-    el.inspectorContent.innerHTML = `<button class="inspector-back mobile-navigation-back" type="button">← ${esc(backLabel)}</button><section class="inspector-shop-context"><span>Shop by <strong>${esc(shop.owner.name)}</strong></span>${locationMarkup(shop.interaction, true)}</section><div class="inspector-transaction-tabs"><button class="${entry.side === "sellItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="sellItem"><span class="transaction-tab-label">${labels[0]}</span>${itemIcon(shop.sellItem)}<strong>${transactionQuantity(shop.sellAmount, sellPresentation.baseDisplayName)}</strong></button><button class="${entry.side === "costItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="costItem"><span class="transaction-tab-label">${labels[1]}</span>${itemIcon(shop.costItem)}<strong>${transactionQuantity(shop.costAmount, costPresentation.baseDisplayName)}</strong></button></div>${inspectorItemDetails(item)}${containerMarkup(entry)}`;
+    el.inspectorContent.innerHTML = `<button class="inspector-back mobile-navigation-back" type="button">← ${esc(backLabel)}</button><section class="inspector-shop-context"><span>Shop by <strong>${esc(shop.owner.name)}</strong></span>${locationMarkup(shop.interaction, true)}</section><div class="inspector-transaction-tabs"><button class="${entry.side === "sellItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="sellItem"><span class="transaction-tab-label">${labels[0]}</span>${itemIcon(shop.sellItem)}<strong>${transactionQuantity(shop.sellAmount, sellPresentation.baseDisplayName, shop.direction, "sellItem")}</strong></button><button class="${entry.side === "costItem" && state.inspectorHistory.length === 1 ? "active" : ""}" data-inspector-side="costItem"><span class="transaction-tab-label">${labels[1]}</span>${itemIcon(shop.costItem)}<strong>${transactionQuantity(shop.costAmount, costPresentation.baseDisplayName, shop.direction, "costItem")}</strong></button></div>${inspectorItemDetails(item)}${containerMarkup(entry)}`;
     bindCopy(el.inspectorContent);
     observeItemText(el.inspectorContent);
     const shulkerCanvas = el.inspectorContent.querySelector(".shulker-visual");
@@ -881,7 +881,7 @@
       const inside = shop.match.contained ? `<small class="contained-match">Inside ${containerPath.map(container => esc(publicItemName(container.displayName))).join(" › ") || esc(publicItemName(shop.match.container.displayName))}</small>` : "";
       const presentation = itemPresentation(item);
       const transactionAmount = shop.match.side === "costItem" ? shop.costAmount : shop.sellAmount;
-      const primary = shop.match.contained ? `${item.amount}× ${esc(presentation.baseDisplayName)}` : transactionQuantity(transactionAmount, presentation.baseDisplayName);
+      const primary = shop.match.contained ? `${item.amount}× ${esc(presentation.baseDisplayName)}` : transactionQuantity(transactionAmount, presentation.baseDisplayName, shop.direction, shop.match.side);
       const secondary = presentation.variantSummary ? `<small class="variant-summary" title="${esc(presentation.variantSummary)}">${esc(presentation.variantSummary)}</small>` : "";
       const out = shop.stockCount <= 0;
       return `<article class="result-card${out ? " out-of-stock" : ""}"><button class="result-main" data-result-index="${index}">${itemIcon(leadingItem)}<span><strong>${primary}</strong>${secondary}${inside}${out ? `<strong class="stock-badge">Out of stock</strong>` : ""}<small>${{ SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction]} · ${displayStall(shop.stall.id)} · ${buildingNumber(shop.stall.buildingId)} · ${C.floorName(shop.stall.floor)}</small></span></button><div class="result-owner">${ownerVisual(shop.stall.owner)}<span><small>Stall owner</small><strong>${esc(shop.stall.owner.name)}</strong></span></div>${locationMarkup(shop.interaction, true)}</article>`;

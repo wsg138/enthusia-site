@@ -21,6 +21,7 @@
     const stacks = Math.floor(total / 64), remainder = total % 64;
     return `${stacks} ${stacks === 1 ? "stack" : "stacks"}${remainder ? ` + ${remainder}` : ""}`;
   };
+  const formatTransactionQuantity = (amount, direction, side) => direction !== "TRADE" && side === "costItem" ? String(amount) : formatStackQuantity(amount);
   const rawGold = Object.freeze({material: "RAW_GOLD", displayName: "Raw Gold", amount: 1, icon: null, metadata: {}});
   const publicShop = shop => shop.direction === "TRADE" ? shop : {...shop, costItem: {...rawGold, metadata: {}}};
   const publicStall = stall => ({...stall, shops: stall.shops.map(publicShop)});
@@ -168,5 +169,5 @@
     }
   }
 
-  window.EnthusiaMarketAdapter = {StaticMarketAdapter, itemTerms, itemPresentation, containerEntries, normalizeQuery, querySpec, categories, stripMinecraftFormatting, enchantmentDisplay, formatStackQuantity};
+  window.EnthusiaMarketAdapter = {StaticMarketAdapter, itemTerms, itemPresentation, containerEntries, normalizeQuery, querySpec, categories, stripMinecraftFormatting, enchantmentDisplay, formatStackQuantity, formatTransactionQuantity};
 })();
