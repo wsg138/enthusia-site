@@ -35,7 +35,13 @@
   const formatTransactionQuantity = (amount, direction, side) => direction !== "TRADE" && side === "costItem" ? String(amount) : formatStackQuantity(amount);
   const rawGold = Object.freeze({material: "RAW_GOLD", displayName: "Raw Gold", amount: 1, icon: null, metadata: {}});
   const publicShop = shop => shop.direction === "TRADE" ? shop : {...shop, costItem: {...rawGold, metadata: {}}};
-  const publicStall = stall => ({...stall, shops: stall.shops.map(publicShop)});
+  const publicStall = stall => ({
+    ...stall,
+    stallState: stall.stallState || (stall.owner.type === "NONE" ? "UNOWNED" : "OWNED"),
+    graceEndsAt: stall.graceEndsAt ?? null,
+    rentTimingStatus: stall.rentTimingStatus || (stall.owner.type === "NONE" ? "NOT_APPLICABLE" : stall.nextRentAt ? "PERSISTED" : "UNAVAILABLE"),
+    shops: stall.shops.map(publicShop),
+  });
   const publicSnapshot = snapshot => ({...snapshot, stalls: snapshot.stalls.map(publicStall)});
   const exactAliases = new Map([
     ["gap", "golden apple"], ["god apple", "enchanted golden apple"], ["notch apple", "enchanted golden apple"],

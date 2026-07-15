@@ -125,8 +125,11 @@ export const stallSchema = z.object({
       banner: bannerDesignSchema.nullable().optional(),
     }).strict(),
   }).strict(),
+  stallState: z.enum(["UNOWNED", "AUCTIONING", "OWNED", "GRACE", "RE_AUCTIONING", "EMERGENCY_AUCTIONING"]),
   ownerSince: isoDate.nullable(),
   nextRentAt: isoDate.nullable(),
+  graceEndsAt: isoDate.nullable(),
+  rentTimingStatus: z.enum(["PERSISTED", "LEGACY_DERIVED", "UNAVAILABLE", "NOT_APPLICABLE"]),
   members: z.array(z.string().min(1).max(64)).max(256),
   shops: z.array(z.object({
     id: positive,
@@ -143,6 +146,12 @@ export const stallSchema = z.object({
   }).strict()).max(256),
 }).strict().superRefine((stall, ctx) => {
   if (!EXPECTED_STALL_SET.has(stall.id)) ctx.addIssue({ code: "custom", message: "Unknown stall ID", path: ["id"] });
+  if (stall.stallState === "GRACE" && stall.ownerSince !== null && stall.graceEndsAt === null) {
+    ctx.addIssue({ code: "custom", message: "GRACE stalls require graceEndsAt", path: ["graceEndsAt"] });
+  }
+  if (stall.stallState !== "GRACE" && stall.graceEndsAt !== null) {
+    ctx.addIssue({ code: "custom", message: "Only GRACE stalls may expose graceEndsAt", path: ["graceEndsAt"] });
+  }
 });
 
 export type Stall = z.infer<typeof stallSchema>;

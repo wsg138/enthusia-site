@@ -15,6 +15,8 @@
   const headUrlPattern = /^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/;
   const bannerColors = new Set(["WHITE","ORANGE","MAGENTA","LIGHT_BLUE","YELLOW","LIME","PINK","GRAY","LIGHT_GRAY","CYAN","PURPLE","BLUE","BROWN","GREEN","RED","BLACK"]);
   const bannerPatterns = new Set(["SQUARE_BOTTOM_LEFT","SQUARE_BOTTOM_RIGHT","SQUARE_TOP_LEFT","SQUARE_TOP_RIGHT","STRIPE_BOTTOM","STRIPE_TOP","STRIPE_LEFT","STRIPE_RIGHT","STRIPE_CENTER","STRIPE_MIDDLE","STRIPE_DOWNRIGHT","STRIPE_DOWNLEFT","STRIPE_SMALL","CROSS","STRAIGHT_CROSS","TRIANGLE_BOTTOM","TRIANGLE_TOP","TRIANGLES_BOTTOM","TRIANGLES_TOP","DIAGONAL_LEFT","DIAGONAL_RIGHT","DIAGONAL_LEFT_MIRROR","DIAGONAL_RIGHT_MIRROR","CIRCLE","RHOMBUS","HALF_VERTICAL","HALF_HORIZONTAL","HALF_VERTICAL_MIRROR","HALF_HORIZONTAL_MIRROR","BORDER","CURLY_BORDER","GRADIENT","GRADIENT_UP","BRICKS","GLOBE","CREEPER","SKULL","FLOWER","MOJANG","PIGLIN","FLOW","GUSTER"]);
+  const stallStates = new Set(["UNOWNED", "AUCTIONING", "OWNED", "GRACE", "RE_AUCTIONING", "EMERGENCY_AUCTIONING"]);
+  const rentTimingStatuses = new Set(["PERSISTED", "LEGACY_DERIVED", "UNAVAILABLE", "NOT_APPLICABLE"]);
 
   function validAvatar(owner) {
     if (!isObject(owner.avatar) || !isString(owner.avatar.kind)) return false;
@@ -34,6 +36,9 @@
   function validStall(stall, expectedIds) {
     if (!isObject(stall) || !expectedIds.has(stall.id) || !isString(stall.buildingId) || !Number.isInteger(stall.floor) || !isObject(stall.location) || !isObject(stall.owner) || !Array.isArray(stall.members) || !Array.isArray(stall.shops)) return false;
     if (!isString(stall.owner.type) || !isString(stall.owner.name) || !validAvatar(stall.owner) || stall.members.some(member => typeof member !== "string")) return false;
+    if (stall.stallState !== undefined && !stallStates.has(stall.stallState)) return false;
+    if (stall.rentTimingStatus !== undefined && !rentTimingStatuses.has(stall.rentTimingStatus)) return false;
+    if (stall.graceEndsAt !== undefined && stall.graceEndsAt !== null && typeof stall.graceEndsAt !== "string") return false;
     return stall.shops.every(shop => isObject(shop) && isPositive(shop.id) && isObject(shop.owner) && isString(shop.owner.name) && ["BUY", "SELL", "TRADE"].includes(shop.direction) && validItem(shop.sellItem) && isPositive(shop.sellAmount) && validItem(shop.costItem) && isPositive(shop.costAmount) && isObject(shop.interaction) && isInteger(shop.stockCount) && isInteger(shop.availableTrades));
   }
 

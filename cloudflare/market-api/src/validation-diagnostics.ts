@@ -8,7 +8,7 @@ const SAFE_FIELDS = new Set([
   "schemaVersion", "serverId", "serverEpoch", "eventId", "sentAt", "snapshotRevision", "generatedAt",
   "stalls", "revision", "stall", "id", "buildingId", "floor", "location", "world", "x", "y", "z",
   "owner", "type", "uuid", "name", "avatarUrl", "avatar", "kind", "source", "includesOuterLayer", "url",
-  "ownerSince", "nextRentAt", "members", "shops", "direction", "sellItem", "sellAmount", "costItem",
+  "ownerSince", "nextRentAt", "stallState", "graceEndsAt", "rentTimingStatus", "members", "shops", "direction", "sellItem", "sellAmount", "costItem",
   "costAmount", "interaction", "stockCount", "availableTrades", "searchable", "material", "displayName",
   "amount", "icon", "metadata", "customName", "enchantments", "storedEnchantments", "potion", "armorTrim",
   "smithingTemplate", "writtenBook", "shulkerColor", "container", "level", "basePotion", "form", "color",

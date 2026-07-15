@@ -309,21 +309,38 @@
     root.querySelectorAll(".copy-coordinates").forEach(button => button.onclick = event => { event.stopPropagation(); copyText(button.dataset.copy, button); });
   }
 
-  function rentState(nextRentAt) {
-    if (!nextRentAt) return { className: "unavailable", text: "Rent time unavailable" };
-    const milliseconds = new Date(nextRentAt).getTime() - Date.now();
-    if (!Number.isFinite(milliseconds)) return { className: "unavailable", text: "Rent time unavailable" };
-    if (milliseconds <= 0) return { className: "expired", text: "Expired" };
+  function remainingTime(milliseconds) {
     const hours = milliseconds / 3600000, days = Math.floor(hours / 24), remainingHours = Math.floor(hours % 24), minutes = Math.max(0, Math.floor((milliseconds % 3600000) / 60000));
-    return { className: hours < 24 ? "urgent" : hours < 72 ? "warning" : "healthy", text: days ? `${days}d ${remainingHours}h` : `${Math.floor(hours)}h ${minutes}m` };
+    return days ? `${days}d ${remainingHours}h` : `${Math.floor(hours)}h ${minutes}m`;
+  }
+  function rentState(stall) {
+    const state = stall.stallState || (stall.owner.type === "NONE" ? "UNOWNED" : "OWNED");
+    if (state === "UNOWNED") return { className: "available", text: "Available to purchase" };
+    if (["AUCTIONING", "RE_AUCTIONING"].includes(state)) return { className: "warning", text: "Auction active" };
+    if (state === "EMERGENCY_AUCTIONING") return { className: "expired", text: "Emergency auction" };
+    if (state === "GRACE") {
+      if (!stall.graceEndsAt) return { className: "unavailable", text: "Overdue · grace deadline unavailable" };
+      const milliseconds = new Date(stall.graceEndsAt).getTime() - Date.now();
+      if (!Number.isFinite(milliseconds)) return { className: "unavailable", text: "Overdue · grace deadline unavailable" };
+      if (milliseconds <= 0) return { className: "expired", text: "Grace period expired · awaiting processing" };
+      return { className: "expired", text: `Overdue · grace ends in ${remainingTime(milliseconds)}` };
+    }
+    if (!stall.nextRentAt) return { className: "unavailable", text: "Rent time unavailable" };
+    const milliseconds = new Date(stall.nextRentAt).getTime() - Date.now();
+    if (!Number.isFinite(milliseconds)) return { className: "unavailable", text: "Rent time unavailable" };
+    if (milliseconds <= 0) return { className: "expired", text: "Rent overdue · awaiting collection" };
+    const hours = milliseconds / 3600000;
+    return { className: hours < 24 ? "urgent" : hours < 72 ? "warning" : "healthy", text: `Rent due in ${remainingTime(milliseconds)}` };
   }
   function rentMarkup(stall) {
-    if (stall.owner.type === "NONE" && stall.available !== false) return `<strong class="rent-countdown available">Available to purchase</strong>`;
-    const rent = rentState(stall.nextRentAt);
-    return `<strong class="rent-countdown ${rent.className}" data-next-rent="${esc(stall.nextRentAt || "")}">${rent.text}</strong>`;
+    const rent = rentState(stall);
+    return `<strong class="rent-countdown ${rent.className}" data-stall-state="${esc(stall.stallState || "")}" data-owner-type="${esc(stall.owner.type)}" data-next-rent="${esc(stall.nextRentAt || "")}" data-grace-ends="${esc(stall.graceEndsAt || "")}">${rent.text}</strong>`;
   }
   function refreshRentCountdowns() {
-    document.querySelectorAll("[data-next-rent]").forEach(node => { const rent = rentState(node.dataset.nextRent || null); node.className = `rent-countdown ${rent.className}`; node.textContent = rent.text; });
+    document.querySelectorAll("[data-stall-state]").forEach(node => {
+      const rent = rentState({stallState: node.dataset.stallState, nextRentAt: node.dataset.nextRent || null, graceEndsAt: node.dataset.graceEnds || null, owner: {type: node.dataset.ownerType}});
+      node.className = `rent-countdown ${rent.className}`; node.textContent = rent.text;
+    });
   }
   setInterval(refreshRentCountdowns, 60000);
 
@@ -829,7 +846,7 @@
   function matchesRentFilter(stall, filter) {
     if (!filter || filter === "ALL") return true;
     if (filter === "AVAILABLE") return stall.owner.type === "NONE" && stall.available !== false;
-    if (stall.owner.type === "NONE" || !stall.nextRentAt) return false;
+    if ((stall.stallState || "OWNED") !== "OWNED" || stall.owner.type === "NONE" || !stall.nextRentAt) return false;
     const remaining = new Date(stall.nextRentAt).getTime() - Date.now();
     if (!Number.isFinite(remaining) || remaining <= 0) return false;
     return filter === "UNDER_1_DAY" ? remaining <= 24 * 3600000 : filter === "UNDER_3_DAYS" ? remaining <= 72 * 3600000 : false;

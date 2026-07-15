@@ -27,9 +27,9 @@ Each stall contains only:
 - `id`: one canonical `stall1` through `stall71` ID.
 - `buildingId`, integer `floor`, and `location` (`world`, integer `x`, `y`, `z`).
 - `owner`: `type` (`NONE`, `PLAYER`, or `GUILD`), nullable public `id`, nullable Java UUID text in canonical `8-4-4-4-12` hexadecimal form, public `name`, nullable allowlisted Minotar `helm` URL, and `avatar` with `kind` plus optional public `source`, `includesOuterLayer`, `url`, and banner design. Proxy-assigned Minecraft UUIDs are not required to carry RFC version or variant bits.
-- Player and guild-leader head URLs use `https://minotar.net/helm/<uuid-or-name>/96.png`; the `helm` endpoint includes the skin outer layer. Java accounts prefer UUIDs. Floodgate/proxy identities use their known player name only as a best effort and retain a source marker so clients can fall back safely.
+- Java player and guild-leader head URLs use `https://minotar.net/helm/<uuid>/96.png`; the `helm` endpoint includes the skin outer layer. Floodgate/proxy identities do not query Java skin services by name and retain a source marker so clients use the generic Bedrock fallback until supported skin bytes are cached.
 - A guild banner design contains one of Minecraft's 16 banner colors as `baseColor` and zero to six ordered `{type, color}` pattern layers. Pattern names are the bounded public Minecraft/Paper names accepted by the schema. No Bukkit item, persistence record, submitter, or internal banner ID is public.
-- Nullable ISO-8601 `ownerSince` and `nextRentAt`.
+- Authoritative `stallState`; nullable ISO-8601 `ownerSince`, effective `nextRentAt`, and GRACE-only `graceEndsAt`; plus bounded `rentTimingStatus`. A legacy owned row may derive `nextRentAt` from `ownerSince` and the configured collection interval.
 - `members`: up to 256 public names.
 - `shops`: up to 256 shops.
 
@@ -53,8 +53,11 @@ Sanitized example:
     "avatarUrl": null,
     "avatar": { "kind": "MINECRAFT_HEAD", "source": "JAVA", "includesOuterLayer": true }
   },
+  "stallState": "OWNED",
   "ownerSince": "2026-07-01T12:00:00Z",
   "nextRentAt": "2026-07-15T12:00:00Z",
+  "graceEndsAt": null,
+  "rentTimingStatus": "PERSISTED",
   "members": [],
   "shops": []
 }

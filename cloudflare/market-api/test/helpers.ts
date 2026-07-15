@@ -15,6 +15,9 @@ export function makeStall(id: string): Stall {
     owner: { type: "NONE", id: null, uuid: null, name: "Unowned stall", avatarUrl: null, avatar: { kind: "NONE" } },
     ownerSince: null,
     nextRentAt: null,
+    stallState: "UNOWNED",
+    graceEndsAt: null,
+    rentTimingStatus: "NOT_APPLICABLE",
     members: [],
     shops: [],
   };

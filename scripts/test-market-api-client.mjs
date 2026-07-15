@@ -97,9 +97,15 @@ await test("stall.updated preserves guild banner and leader-head avatar data", a
   const before = h.client.snapshot.stalls, banner = {baseColor: "BLUE", patterns: [
     {type: "STRIPE_TOP", color: "WHITE"}, {type: "CROSS", color: "RED"},
   ]};
-  const changed = {...before[0], owner: {...before[0].owner, type: "GUILD", avatarUrl: null, avatar: {kind: "GUILD_BANNER", source: "LUMAGUILDS", banner}}};
+  const changed = {
+    ...before[0], stallState: "GRACE", ownerSince: "2026-07-01T12:00:00Z", nextRentAt: null,
+    graceEndsAt: "2026-07-04T12:00:00Z", rentTimingStatus: "UNAVAILABLE",
+    owner: {...before[0].owner, type: "GUILD", avatarUrl: null, avatar: {kind: "GUILD_BANNER", source: "LUMAGUILDS", banner}},
+  };
   h.client.handleMessage(JSON.stringify({type: "stall.updated", sequence: 11, stallId: changed.id, revision: 2, updatedAt: new Date().toISOString(), stall: changed}));
   assert.deepEqual(h.client.snapshot.stalls[0].owner.avatar.banner, banner);
+  assert.equal(h.client.snapshot.stalls[0].stallState, "GRACE");
+  assert.equal(h.client.snapshot.stalls[0].graceEndsAt, "2026-07-04T12:00:00Z");
   const leaderHead = {...changed, owner: {...changed.owner, avatarUrl: "https://minotar.net/helm/SyntheticLeader/96.png", avatar: {kind: "MINECRAFT_HEAD", source: "JAVA", includesOuterLayer: true}}};
   h.client.handleMessage(JSON.stringify({type: "stall.updated", sequence: 12, stallId: changed.id, revision: 3, updatedAt: new Date().toISOString(), stall: leaderHead}));
   assert.equal(h.client.snapshot.stalls[0].owner.avatarUrl, leaderHead.owner.avatarUrl);

@@ -5,6 +5,15 @@ import { fullSyncBody, makeStall, signedFetch } from "./helpers";
 
 describe("strict public schemas", () => {
   it("accepts a valid stall", () => expect(stallSchema.safeParse(makeStall("stall1")).success).toBe(true));
+  it("accepts authoritative owned, grace, and emergency-auction rent states", () => {
+    const owned = { ...makeStall("stall1"), stallState: "OWNED", ownerSince: "2026-07-01T12:00:00Z", nextRentAt: "2026-07-02T12:00:00Z", rentTimingStatus: "PERSISTED" };
+    const grace = { ...owned, stallState: "GRACE", nextRentAt: null, graceEndsAt: "2026-07-04T12:00:00Z", rentTimingStatus: "UNAVAILABLE" };
+    const emergency = { ...owned, stallState: "EMERGENCY_AUCTIONING", nextRentAt: null, graceEndsAt: null, rentTimingStatus: "NOT_APPLICABLE" };
+    expect(stallSchema.safeParse(owned).success).toBe(true);
+    expect(stallSchema.safeParse(grace).success).toBe(true);
+    expect(stallSchema.safeParse(emergency).success).toBe(true);
+    expect(stallSchema.safeParse({ ...owned, graceEndsAt: "2026-07-04T12:00:00Z" }).success).toBe(false);
+  });
   it("accepts a Java outer-layer head URL", () => {
     const stall = makeStall("stall1");
     stall.owner = {
