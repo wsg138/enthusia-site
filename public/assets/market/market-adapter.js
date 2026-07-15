@@ -14,6 +14,13 @@
     .replace(/&#[0-9a-f]{6}/gi, "")
     .replace(/[§&][0-9a-fk-orx]/gi, "")
     .trim();
+  const titleMaterialName = material => materialName(material).replace(/\b\w/g, character => character.toUpperCase());
+  const canonicalBlockName = (material, displayName) => String(material || "").endsWith("_BLOCK") && /\bblock of\b/i.test(displayName)
+    ? titleMaterialName(material)
+    : displayName;
+  const canonicalBlockQuery = value => normalize(value)
+    .replace(/^block of (.+)$/, "$1 block")
+    .replace(/^(.+?) block of (.+)$/, "$1 $2 block");
   const enchantmentDisplay = enchantment => {
     const displayName = stripMinecraftFormatting(enchantment?.displayName);
     const numeral = romanLevel(enchantment?.level);
@@ -45,7 +52,7 @@
   ];
   const shulkerColors = ["white", "orange", "magenta", "light blue", "yellow", "lime", "pink", "gray", "light gray", "cyan", "purple", "blue", "brown", "green", "red", "black"];
   function querySpec(value) {
-    const original = normalize(value).replace(/\bskulker\b/g, "shulker");
+    const original = canonicalBlockQuery(value).replace(/\bskulker\b/g, "shulker");
     const shulkerColor = shulkerColors.find(color => original === `${color} shulker` || original === `${color} shulker box`);
     if (shulkerColor) return {original, normalized: original, category: null, exactMaterial: `${shulkerColor.replaceAll(" ", "_").toUpperCase()}_SHULKER_BOX`};
     const normalized = exactAliases.get(original) || original;
@@ -59,7 +66,7 @@
     const metadata = item?.metadata || {};
     const armorTrimTemplate = item?.material?.match(/^(.+)_ARMOR_TRIM_SMITHING_TEMPLATE$/);
     const compactTrimName = armorTrimTemplate ? `${armorTrimTemplate[1].split("_").map(word => word[0] + word.slice(1).toLowerCase()).join(" ")} Armor Trim` : null;
-    const publicDisplayName = stripMinecraftFormatting(item?.displayName);
+    const publicDisplayName = canonicalBlockName(item?.material, stripMinecraftFormatting(item?.displayName));
     const publicCustomName = stripMinecraftFormatting(metadata.customName);
     const baseDisplayName = item?.material === "ENCHANTED_BOOK" ? "Enchanted Book" : item?.material === "WRITTEN_BOOK" ? "Written Book" : compactTrimName || publicDisplayName || materialName(item?.material);
     const customDisplayName = publicCustomName && publicCustomName !== baseDisplayName ? publicCustomName : null;
@@ -77,8 +84,9 @@
   function itemTerms(item) {
     if (!item) return [];
     const metadata = item.metadata || {};
+    const displayName = stripMinecraftFormatting(item.displayName);
     return [
-      item.material, materialName(item.material), stripMinecraftFormatting(item.displayName), stripMinecraftFormatting(metadata.customName),
+      item.material, materialName(item.material), displayName, canonicalBlockName(item.material, displayName), stripMinecraftFormatting(metadata.customName),
       ...(metadata.enchantments || []).flatMap(enchantment => [enchantment.id, stripMinecraftFormatting(enchantment.displayName), `${stripMinecraftFormatting(enchantment.displayName)} ${enchantment.level}`, enchantmentDisplay(enchantment)]),
       ...(metadata.storedEnchantments || []).flatMap(enchantment => [enchantment.id, stripMinecraftFormatting(enchantment.displayName), `${stripMinecraftFormatting(enchantment.displayName)} ${enchantment.level}`, enchantmentDisplay(enchantment)]),
       metadata.armorTrim?.pattern, metadata.armorTrim?.material,
@@ -103,7 +111,10 @@
     constructor(layout, snapshot, catalog = window.ENTHUSIA_MINECRAFT_ITEM_CATALOG, variants = window.ENTHUSIA_MINECRAFT_ITEM_VARIANTS) {
       this.layout = layout;
       this.snapshot = publicSnapshot(snapshot);
-      this.catalog = (catalog?.items || []).map(entry => ({...entry, displayName: stripMinecraftFormatting(entry.displayName), subtitle: entry.subtitle == null ? entry.subtitle : stripMinecraftFormatting(entry.subtitle), searchQuery: entry.searchQuery == null ? entry.searchQuery : stripMinecraftFormatting(entry.searchQuery)}));
+      this.catalog = (catalog?.items || []).map(entry => {
+        const displayName = canonicalBlockName(entry.material, stripMinecraftFormatting(entry.displayName));
+        return {...entry, displayName, subtitle: entry.subtitle == null ? entry.subtitle : stripMinecraftFormatting(entry.subtitle), searchQuery: entry.searchQuery == null ? displayName : canonicalBlockName(entry.material, stripMinecraftFormatting(entry.searchQuery))};
+      });
       this.variants = (variants?.items || []).map(source => {
         const entry = {...source, displayName: stripMinecraftFormatting(source.displayName), subtitle: source.subtitle == null ? source.subtitle : stripMinecraftFormatting(source.subtitle), searchQuery: source.searchQuery == null ? source.searchQuery : stripMinecraftFormatting(source.searchQuery)};
         if (entry.kind === "ENCHANTMENT") return {...entry, displayName: "Enchanted Book"};
