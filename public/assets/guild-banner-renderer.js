@@ -3,6 +3,10 @@
 
   const WIDTH = 20;
   const HEIGHT = 40;
+  const FACE_X = 1;
+  const FACE_Y = 1;
+  const FACE_WIDTH = 20;
+  const FACE_HEIGHT = 40;
   const MAX_RENDERED = 96;
   const ASSET_BASE = document.currentScript?.dataset.bannerAssetBase || "/banner-patterns/";
   const DYES = Object.freeze({
@@ -45,9 +49,9 @@
   }
   function tint(image, color) {
     const layer = canvas(), context = layer.getContext("2d"); context.imageSmoothingEnabled = false;
-    context.drawImage(image, 0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT);
+    context.drawImage(image, FACE_X, FACE_Y, FACE_WIDTH, FACE_HEIGHT, 0, 0, WIDTH, HEIGHT);
     context.globalCompositeOperation = "multiply"; context.fillStyle = color; context.fillRect(0, 0, WIDTH, HEIGHT);
-    context.globalCompositeOperation = "destination-in"; context.drawImage(image, 0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT);
+    context.globalCompositeOperation = "destination-in"; context.drawImage(image, FACE_X, FACE_Y, FACE_WIDTH, FACE_HEIGHT, 0, 0, WIDTH, HEIGHT);
     return layer;
   }
   function normalized(design) {
