@@ -1,0 +1,15 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Minecraft banner renderer fixture</title>
+<style>body{margin:20px;background:#17100d;color:#f8e6ca;font:14px system-ui}section{margin:22px 0}#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:14px}.sample{display:grid;justify-items:center;gap:5px}.sample canvas{width:40px;height:80px;image-rendering:pixelated;background:#2a1a13}.sample small{overflow-wrap:anywhere;text-align:center}</style>
+<h1>Local Minecraft banner renderer fixture</h1><p>Not linked from the public site. Serve the repository root locally and open this file to compare base colors, every supported mask, aliases, ordered layers, and unknown-pattern fallback.</p><div id="grid"></div>
+<script src="../public/assets/guild-banner-renderer.js" data-banner-asset-base="../public/banner-patterns/"></script>
+<script>
+const renderer=window.EnthusiaGuildBannerRenderer,grid=document.querySelector('#grid');
+const add=(name,design)=>{const wrap=document.createElement('div');wrap.className='sample';wrap.append(renderer.create(design,name),Object.assign(document.createElement('small'),{textContent:name}));grid.append(wrap)};
+Object.keys(renderer.dyes).forEach(baseColor=>add(baseColor,{baseColor}));
+Object.keys(renderer.patterns).forEach(type=>add(type,{baseColor:'WHITE',patterns:[{type,color:'RED'}]}));
+add('six ordered layers',{baseColor:'BLUE',patterns:[{type:'STRIPE_TOP',color:'WHITE'},{type:'CROSS',color:'RED'},{type:'BORDER',color:'YELLOW'},{type:'FLOWER',color:'LIME'},{type:'GRADIENT_UP',color:'PURPLE'},{type:'GUSTER',color:'ORANGE'}]});
+add('repeated colors',{baseColor:'BLACK',patterns:[{type:'STRIPE_LEFT',color:'WHITE'},{type:'STRIPE_RIGHT',color:'WHITE'},{type:'CIRCLE',color:'WHITE'}]});
+add('unknown fallback',{baseColor:'GREEN',patterns:[{type:'NOT_A_PATTERN',color:'RED'},{type:'BORDER',color:'WHITE'}]});
+</script>

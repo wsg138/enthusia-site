@@ -246,7 +246,6 @@
   }
 
   const headUrlPattern = /^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/;
-  const bannerColors = {WHITE:"#f9fffe",ORANGE:"#f9801d",MAGENTA:"#c74ebd",LIGHT_BLUE:"#3ab3da",YELLOW:"#fed83d",LIME:"#80c71f",PINK:"#f38baa",GRAY:"#474f52",LIGHT_GRAY:"#9d9d97",CYAN:"#169c9c",PURPLE:"#8932b8",BLUE:"#3c44aa",BROWN:"#835432",GREEN:"#5e7c16",RED:"#b02e26",BLACK:"#1d1c21"};
   function ownerHeadUrl(owner) {
     if (headUrlPattern.test(owner.avatarUrl || "")) return owner.avatarUrl;
     if (["player-head-java.svg", "player-head-bedrock.svg"].includes(owner.avatarUrl)) return `${assetBase}${owner.avatarUrl}`;
@@ -262,27 +261,13 @@
   }
   function ownerVisual(owner, large = false) {
     const size = large ? " large" : "", headUrl = ownerHeadUrl(owner);
-    if (owner.avatar?.kind === "GUILD_BANNER" && owner.avatar.banner) return `<span class="owner-image guild-banner${size}" aria-label="Guild banner for ${esc(owner.name)}"><canvas width="40" height="80" role="img" aria-label="Guild banner for ${esc(owner.name)}" data-guild-banner="${esc(JSON.stringify(owner.avatar.banner))}"></canvas></span>`;
+    if (owner.avatar?.kind === "GUILD_BANNER" && owner.avatar.banner) return `<span class="owner-image guild-banner${size}" aria-label="Guild banner for ${esc(owner.name)}"><canvas width="20" height="40" role="img" aria-label="Guild banner for ${esc(owner.name)}" data-guild-banner="${esc(JSON.stringify(owner.avatar.banner))}"></canvas></span>`;
     if ((owner.type === "PLAYER" || owner.avatar?.kind === "MINECRAFT_HEAD") && headUrl) return genericPlayer(owner, size, headUrl);
     if (owner.type === "PLAYER") return genericPlayer(owner, size, null);
     if (owner.type === "GUILD") return `<span class="owner-image${size}"><img src="${assetBase}guild-banner.svg" alt="Generic guild icon for ${esc(owner.name)}" width="82" height="82" decoding="async"></span>`;
     return `<span class="owner-image${size}"><img src="${assetBase}unowned-stall.svg" alt="Unowned stall" width="82" height="82" decoding="async"></span>`;
   }
-  const bannerTextureNames = {STRIPE_SMALL:"small_stripes",DIAGONAL_LEFT_MIRROR:"diagonal_up_left",DIAGONAL_RIGHT_MIRROR:"diagonal_up_right",HALF_VERTICAL_MIRROR:"half_vertical_right",HALF_HORIZONTAL_MIRROR:"half_horizontal_bottom"};
-  const bannerMaskCache = new Map();
-  function bannerMask(type) {
-    const name = type === "BASE" ? "base" : bannerTextureNames[type] || type.toLowerCase();
-    if (!bannerMaskCache.has(name)) bannerMaskCache.set(name, new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error("banner-mask"));image.src=`${assetBase}minecraft/vanilla/textures/entity/banner/${name}.png`}));
-    return bannerMaskCache.get(name);
-  }
-  function tintBannerMask(image, color) {
-    const layer=document.createElement("canvas");layer.width=64;layer.height=64;const context=layer.getContext("2d");context.imageSmoothingEnabled=false;context.drawImage(image,0,0);context.globalCompositeOperation="multiply";context.fillStyle=color;context.fillRect(0,0,64,64);context.globalCompositeOperation="destination-in";context.drawImage(image,0,0);return layer;
-  }
-  async function drawGuildBanner(canvas, design) {
-    const definitions=[{type:"BASE",color:design.baseColor},...(design.patterns||[]).slice(0,6)];
-    const layers=await Promise.all(definitions.map(async pattern=>tintBannerMask(await bannerMask(pattern.type),bannerColors[pattern.color]||bannerColors.WHITE)));
-    const context=canvas.getContext("2d");context.imageSmoothingEnabled=false;context.clearRect(0,0,canvas.width,canvas.height);layers.forEach(layer=>context.drawImage(layer,0,0,canvas.width,canvas.height));
-  }
+  const drawGuildBanner = (canvas, design) => window.EnthusiaGuildBannerRenderer?.draw(canvas, design) || Promise.reject(new Error("banner-renderer-unavailable"));
   function hydrateOwnerVisuals(root=document) {
     root.querySelectorAll("[data-owner-head-url]:not([data-head-loading])").forEach(node=>{
       node.dataset.headLoading="true"; const image=new Image(); image.className="resolved-head"; image.alt=`Minecraft head for ${node.dataset.ownerHeadName}`; image.width=82; image.height=82; image.decoding="async"; image.dataset.skinSource=node.dataset.skinSource; image.dataset.outerLayer=node.dataset.outerLayer;

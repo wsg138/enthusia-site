@@ -1,3 +1,5 @@
-Banner pattern assets can live in this directory if the site later moves from inline SVG rendering to self-hosted pattern sprites.
+Minecraft Java Edition banner cloth masks used by `assets/guild-banner-renderer.js`.
 
-The current guild leaderboard renderer builds banners locally in the browser from structured banner data and does not hot-link third-party banner assets.
+Each PNG is a self-hosted monochrome entity-banner texture from the same vanilla asset set used by the Market item renderer. The shared canvas renderer crops the 20×40 cloth face, preserves mask shading with multiply compositing, and applies the API's ordered dye layers without contacting a third-party service.
+
+`base.png` is the cloth mask; every other PNG maps directly to a normalized Java banner pattern key. Do not replace these masks with SVG approximations or use them as a pointed pennant.
