@@ -15,7 +15,7 @@ window.ENTHUSIA = {
         summary: "Top players by active playtime.",
         limit: 10,
         source: "playtime-active-all",
-        endpoint: "https://enthusia.info/api/leaderboards/playtime-active-all",
+        endpoint: "/api/leaderboards/playtime-active-all",
         mode: "player"
       },
       {
@@ -26,7 +26,7 @@ window.ENTHUSIA = {
         summary: "Richest players on the server.",
         limit: 10,
         source: "balance-active-all",
-        endpoint: "https://enthusia.info/api/leaderboards/balance-active-all",
+        endpoint: "/api/leaderboards/balance-active-all",
         mode: "player"
       },
       {
@@ -48,7 +48,7 @@ window.ENTHUSIA = {
         summary: "Top supporters.",
         limit: 5,
         source: "donators-all-time",
-        endpoint: "https://enthusia.info/api/leaderboards/donators-all-time",
+        endpoint: "/api/leaderboards/donators-all-time",
         mode: "player"
       }
     ],
