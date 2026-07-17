@@ -12,7 +12,8 @@
   const isInteger = value => Number.isInteger(value) && value >= 0 && value <= 2147483647;
   const isPositive = value => isInteger(value) && value > 0;
   const isString = value => typeof value === "string" && value.length > 0;
-  const headUrlPattern = /^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/;
+  const minotarHeadUrlPattern = /^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/;
+  const capturedHeadUrlPattern = /^https:\/\/market-api\.enthusia\.info\/v1\/player-heads\/[0-9a-f]{64}\.png$/;
   const bannerColors = new Set(["WHITE","ORANGE","MAGENTA","LIGHT_BLUE","YELLOW","LIME","PINK","GRAY","LIGHT_GRAY","CYAN","PURPLE","BLUE","BROWN","GREEN","RED","BLACK"]);
   const bannerPatterns = new Set(["SQUARE_BOTTOM_LEFT","SQUARE_BOTTOM_RIGHT","SQUARE_TOP_LEFT","SQUARE_TOP_RIGHT","STRIPE_BOTTOM","STRIPE_TOP","STRIPE_LEFT","STRIPE_RIGHT","STRIPE_CENTER","STRIPE_MIDDLE","STRIPE_DOWNRIGHT","STRIPE_DOWNLEFT","STRIPE_SMALL","CROSS","STRAIGHT_CROSS","TRIANGLE_BOTTOM","TRIANGLE_TOP","TRIANGLES_BOTTOM","TRIANGLES_TOP","DIAGONAL_LEFT","DIAGONAL_RIGHT","DIAGONAL_LEFT_MIRROR","DIAGONAL_RIGHT_MIRROR","CIRCLE","RHOMBUS","HALF_VERTICAL","HALF_HORIZONTAL","HALF_VERTICAL_MIRROR","HALF_HORIZONTAL_MIRROR","BORDER","CURLY_BORDER","GRADIENT","GRADIENT_UP","BRICKS","GLOBE","CREEPER","SKULL","FLOWER","MOJANG","PIGLIN","FLOW","GUSTER"]);
   const stallStates = new Set(["UNOWNED", "AUCTIONING", "OWNED", "GRACE", "RE_AUCTIONING", "EMERGENCY_AUCTIONING"]);
@@ -20,7 +21,14 @@
 
   function validAvatar(owner) {
     if (!isObject(owner.avatar) || !isString(owner.avatar.kind)) return false;
-    if (owner.avatarUrl !== null && !headUrlPattern.test(owner.avatarUrl) && !["player-head-java.svg", "player-head-bedrock.svg"].includes(owner.avatarUrl)) return false;
+    if (owner.avatarUrl !== null && !minotarHeadUrlPattern.test(owner.avatarUrl) && !capturedHeadUrlPattern.test(owner.avatarUrl)) return false;
+    if (owner.avatar.kind === "MINECRAFT_HEAD") {
+      if (!isString(owner.avatar.source) || typeof owner.avatar.includesOuterLayer !== "boolean") return false;
+      if (owner.avatar.source === "BEDROCK_CAPTURED") return capturedHeadUrlPattern.test(owner.avatarUrl || "") && owner.avatar.includesOuterLayer === true;
+      return ["JAVA", "FLOODGATE", "PROXY"].includes(owner.avatar.source) && (owner.avatarUrl === null || minotarHeadUrlPattern.test(owner.avatarUrl));
+    }
+    if (owner.avatar.kind === "NONE") return owner.type === "NONE" && owner.avatarUrl === null;
+    if (owner.avatar.kind !== "GUILD_BANNER") return false;
     const banner = owner.avatar.banner;
     if (banner === undefined || banner === null) return true;
     return isObject(banner) && bannerColors.has(banner.baseColor) && Array.isArray(banner.patterns) && banner.patterns.length <= 6
@@ -54,7 +62,7 @@
       this.apiOrigin = options.apiOrigin || API_ORIGIN;
       if (this.apiOrigin !== API_ORIGIN) throw new Error("Unsupported Market API origin");
       this.expectedStallIds = [...options.expectedStallIds];
-      this.fallbackSnapshot = options.fallbackSnapshot;
+      this.fixtureSnapshot = options.fixtureSnapshot || null;
       this.fetchImpl = options.fetchImpl || window.fetch.bind(window);
       this.WebSocketImpl = options.WebSocketImpl || window.WebSocket;
       this.onSnapshot = options.onSnapshot || (() => {});
@@ -64,7 +72,7 @@
       this.clearTimeoutImpl = options.clearTimeoutImpl || window.clearTimeout.bind(window);
       this.sequence = 0;
       this.snapshot = null;
-      this.source = "fallback";
+      this.source = "unavailable";
       this.lastUpdatedAt = null;
       this.socket = null;
       this.reconnectAttempt = 0;
@@ -73,7 +81,7 @@
       this.refreshPromise = null;
       this.stopped = false;
       this.online = typeof navigator === "undefined" || navigator.onLine !== false;
-      this.handleOnline = () => { this.online = true; this.reconnectAttempt = 0; this.scheduleReconnect(0); };
+      this.handleOnline = () => { this.online = true; this.reconnectAttempt = 0; this.source === "api" ? this.scheduleReconnect(0) : this.scheduleSnapshotRetry(0); };
       this.handleOffline = () => { this.online = false; this.closeSocket(); this.emitStatus("offline"); };
       this.handleVisibility = () => { if (document.visibilityState === "visible" && !this.isSocketOpen()) this.scheduleReconnect(0); };
       window.addEventListener?.("online", this.handleOnline);
@@ -113,23 +121,23 @@
     async loadInitialSnapshot() {
       this.emitStatus("connecting");
       if (window.location?.protocol === "file:") {
-        const fallback = { ...this.fallbackSnapshot, stalls: [...this.fallbackSnapshot.stalls] };
-        this.useSnapshot(fallback, "fallback", false); this.emitStatus("fallback"); return fallback;
+        if (!this.fixtureSnapshot) throw new Error("A local Market fixture is required for file previews");
+        const fixture = { ...this.fixtureSnapshot, stalls: [...this.fixtureSnapshot.stalls] };
+        this.useSnapshot(fixture, "fixture", false); this.emitStatus("fixture"); return fixture;
       }
       try {
         return this.useSnapshot(await this.fetchSnapshot(), "api", false);
       } catch {
-        const fallback = { ...this.fallbackSnapshot, stalls: [...this.fallbackSnapshot.stalls] };
-        this.useSnapshot(fallback, "fallback", false);
-        this.emitStatus("fallback");
+        this.source = "unavailable";
+        this.emitStatus("unavailable");
         this.scheduleSnapshotRetry();
-        return fallback;
+        return null;
       }
     }
 
     startLive() {
       if (this.stopped) return;
-      if (this.source !== "api") { this.emitStatus("fallback"); this.scheduleSnapshotRetry(); return; }
+      if (this.source !== "api") { this.emitStatus("unavailable"); this.scheduleSnapshotRetry(); return; }
       this.connect();
     }
 
@@ -143,7 +151,7 @@
           if (!this.isSocketOpen()) this.scheduleReconnect(0);
           return snapshot;
         } catch (error) {
-          if (this.source !== "api") this.emitStatus("fallback");
+          if (this.source !== "api") this.emitStatus("unavailable");
           else this.emitStatus(this.online ? "reconnecting" : "offline");
           this.scheduleSnapshotRetry();
           if (reason === "resync") this.closeSocket();
@@ -217,13 +225,13 @@
       if (this.stopped || !this.online || this.reconnectTimer || this.isSocketOpen()) return;
       const delay = delayOverride ?? RECONNECT_DELAYS[Math.min(this.reconnectAttempt, RECONNECT_DELAYS.length - 1)];
       if (delayOverride === undefined) this.reconnectAttempt += 1;
-      this.emitStatus(this.source === "api" ? "reconnecting" : "fallback");
+      this.emitStatus(this.source === "api" ? "reconnecting" : "unavailable");
       this.reconnectTimer = this.setTimeoutImpl(() => { this.reconnectTimer = null; this.source === "api" ? this.connect() : this.refreshSnapshot("retry"); }, delay);
     }
 
-    scheduleSnapshotRetry() {
+    scheduleSnapshotRetry(delay = FALLBACK_RETRY_DELAY) {
       if (this.stopped || this.snapshotRetryTimer || this.isSocketOpen()) return;
-      this.snapshotRetryTimer = this.setTimeoutImpl(() => { this.snapshotRetryTimer = null; this.refreshSnapshot("retry"); }, FALLBACK_RETRY_DELAY);
+      this.snapshotRetryTimer = this.setTimeoutImpl(() => { this.snapshotRetryTimer = null; this.refreshSnapshot("retry"); }, delay);
     }
 
     isSocketOpen() { return this.socket?.readyState === 1; }

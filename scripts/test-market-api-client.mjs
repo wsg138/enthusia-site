@@ -6,7 +6,12 @@ const sourcePath = new URL("../public/assets/market/market-api-client.js", impor
 const source = await readFile(sourcePath, "utf8");
 const fallback = JSON.parse(await readFile(new URL("../public/assets/market/sample-market-snapshot.json", import.meta.url), "utf8"));
 const expectedStallIds = fallback.stalls.map(stall => stall.id);
-const apiSnapshot = (sequence = 10, stalls = fallback.stalls, revision = 1) => ({
+const authoritativeStalls = fallback.stalls.map(stall => ({...stall, owner: stall.owner.type === "NONE"
+  ? {...stall.owner, avatarUrl: null, avatar: {kind: "NONE"}}
+  : stall.owner.type === "GUILD"
+    ? {...stall.owner, avatarUrl: null, avatar: {kind: "GUILD_BANNER", source: "LUMAGUILDS", banner: {baseColor: "BLUE", patterns: []}}}
+    : {...stall.owner, avatarUrl: `https://minotar.net/helm/Test${stall.id}/96.png`, avatar: {kind: "MINECRAFT_HEAD", source: "JAVA", includesOuterLayer: true}}}));
+const apiSnapshot = (sequence = 10, stalls = authoritativeStalls, revision = 1) => ({
   schemaVersion: 1, serverId: "enthusia-main", serverEpoch: "test-epoch", snapshotRevision: revision,
   sequence, generatedAt: new Date().toISOString(), updatedAt: new Date().toISOString(), stallCount: 71, stalls
 });
@@ -22,10 +27,10 @@ class MockWebSocket {
   close() { if (this.readyState === 3) return; this.readyState = 3; this.emit("close"); }
 }
 
-function loadClient() {
+function loadClient(protocol = "https:") {
   const listeners = new Map();
   const window = {
-    location: {protocol: "https:"}, fetch: null, WebSocket: MockWebSocket,
+    location: {protocol}, fetch: null, WebSocket: MockWebSocket,
     setTimeout, clearTimeout,
     addEventListener(type, listener) { listeners.set(type, listener); },
     removeEventListener(type) { listeners.delete(type); }
@@ -36,9 +41,9 @@ function loadClient() {
   return {MarketApiClient: window.EnthusiaMarketApi.MarketApiClient, validateSnapshot: window.EnthusiaMarketApi.validateSnapshot, window};
 }
 
-function harness(fetches) {
+function harness(fetches, protocol = "https:") {
   MockWebSocket.instances.length = 0;
-  const {MarketApiClient} = loadClient();
+  const {MarketApiClient} = loadClient(protocol);
   const timers = [], statuses = [], snapshots = [], updates = [];
   const fetchImpl = async (...args) => {
     const next = fetches.shift();
@@ -46,7 +51,7 @@ function harness(fetches) {
     return typeof next === "function" ? next(...args) : next;
   };
   const client = new MarketApiClient({
-    expectedStallIds, fallbackSnapshot: fallback, fetchImpl, WebSocketImpl: MockWebSocket,
+    expectedStallIds, fixtureSnapshot: fallback, fetchImpl, WebSocketImpl: MockWebSocket,
     setTimeoutImpl(fn, delay) { const timer = {fn, delay, active: true}; timers.push(timer); return timer; },
     clearTimeoutImpl(timer) { if (timer) timer.active = false; },
     onStatus(status) { statuses.push(status); }, onSnapshot(snapshot, meta) { snapshots.push({snapshot, meta}); },
@@ -66,19 +71,40 @@ await test("successful API startup", async () => {
   assert.equal(loaded.stalls.length, 71); assert.equal(h.client.source, "api"); assert.equal(h.client.sequence, 10);
 });
 
-await test("API failure uses local fallback", async () => {
+await test("API failure exposes an unavailable public state without a snapshot", async () => {
   const h = harness([new Error("offline")]); const loaded = await h.client.loadInitialSnapshot();
-  assert.equal(loaded.stalls.length, 71); assert.equal(h.client.source, "fallback"); assert.equal(h.statuses.at(-1).state, "fallback");
+  assert.equal(loaded, null); assert.equal(h.client.snapshot, null); assert.equal(h.client.source, "unavailable"); assert.equal(h.statuses.at(-1).state, "unavailable");
 });
 
-await test("invalid API snapshot uses local fallback", async () => {
+await test("invalid API snapshot exposes an unavailable public state", async () => {
   const h = harness([response({...apiSnapshot(), stalls: fallback.stalls.slice(1)})]); await h.client.loadInitialSnapshot();
-  assert.equal(h.client.source, "fallback");
+  assert.equal(h.client.snapshot, null); assert.equal(h.client.source, "unavailable");
+});
+
+await test("file previews may use the explicit local fixture", async () => {
+  const h = harness([], "file:"); const loaded = await h.client.loadInitialSnapshot();
+  assert.equal(loaded.stalls.length, 71); assert.equal(h.client.source, "fixture"); assert.equal(h.statuses.at(-1).state, "fixture");
+});
+
+await test("only approved owner-head URLs validate", async () => {
+  const {validateSnapshot} = loadClient();
+  const stalls = structuredClone(authoritativeStalls), owner = stalls.find(stall => stall.owner.type === "PLAYER").owner;
+  owner.avatarUrl = "https://market-api.enthusia.info/v1/player-heads/0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef.png";
+  owner.avatar = {kind: "MINECRAFT_HEAD", source: "BEDROCK_CAPTURED", includesOuterLayer: true};
+  assert.ok(validateSnapshot(apiSnapshot(10, stalls), expectedStallIds));
+  owner.avatarUrl = "https://market-api.enthusia.info/v1/player-heads/ABCDEF0123456789abcdef0123456789abcdef0123456789abcdef01234567.png";
+  assert.equal(validateSnapshot(apiSnapshot(10, stalls), expectedStallIds), null);
+  owner.avatarUrl = "https://example.test/head.png";
+  assert.equal(validateSnapshot(apiSnapshot(10, stalls), expectedStallIds), null);
+  owner.avatarUrl = "player-head-bedrock.svg";
+  assert.equal(validateSnapshot(apiSnapshot(10, stalls), expectedStallIds), null);
+  owner.avatarUrl = "https://minotar.net/helm/NotAllowedForCaptured/96.png";
+  assert.equal(validateSnapshot(apiSnapshot(10, stalls), expectedStallIds), null);
 });
 
 await test("transaction quantities are required and may exceed item stack limits", async () => {
   const {validateSnapshot} = loadClient();
-  const stalls = structuredClone(fallback.stalls), shop = stalls.flatMap(stall => stall.shops)[0];
+  const stalls = structuredClone(authoritativeStalls), shop = stalls.flatMap(stall => stall.shops)[0];
   shop.sellItem.amount = 1; shop.sellAmount = 64; shop.costItem.amount = 1; shop.costAmount = 100000;
   assert.ok(validateSnapshot(apiSnapshot(10, stalls), expectedStallIds));
   delete shop.costAmount;
@@ -122,19 +148,19 @@ await test("invalid avatar data triggers safe resynchronization", async () => {
 
 await test("older sequence is ignored", async () => {
   const h = harness([response(apiSnapshot())]); await h.client.loadInitialSnapshot();
-  h.client.handleMessage(JSON.stringify({type: "stall.updated", sequence: 9, stallId: fallback.stalls[0].id, stall: fallback.stalls[0]}));
+  h.client.handleMessage(JSON.stringify({type: "stall.updated", sequence: 9, stallId: authoritativeStalls[0].id, stall: authoritativeStalls[0]}));
   assert.equal(h.updates.length, 0); assert.equal(h.client.sequence, 10);
 });
 
 await test("sequence gap triggers snapshot resync", async () => {
-  const h = harness([response(apiSnapshot()), response(apiSnapshot(15, fallback.stalls, 2))]); await h.client.loadInitialSnapshot();
-  h.client.handleMessage(JSON.stringify({type: "stall.updated", sequence: 12, stallId: fallback.stalls[0].id, stall: fallback.stalls[0]}));
+  const h = harness([response(apiSnapshot()), response(apiSnapshot(15, authoritativeStalls, 2))]); await h.client.loadInitialSnapshot();
+  h.client.handleMessage(JSON.stringify({type: "stall.updated", sequence: 12, stallId: authoritativeStalls[0].id, stall: authoritativeStalls[0]}));
   await new Promise(resolve => setImmediate(resolve)); assert.equal(h.snapshots.length, 1); assert.equal(h.client.sequence, 15);
 });
 
 for (const eventType of ["market.replaced", "resync_required"]) {
   await test(`${eventType} fetches a full snapshot`, async () => {
-    const h = harness([response(apiSnapshot()), response(apiSnapshot(20, fallback.stalls, 2))]); await h.client.loadInitialSnapshot();
+    const h = harness([response(apiSnapshot()), response(apiSnapshot(20, authoritativeStalls, 2))]); await h.client.loadInitialSnapshot();
     h.client.handleMessage(JSON.stringify({type: eventType, sequence: 11}));
     await new Promise(resolve => setImmediate(resolve)); assert.equal(h.snapshots.length, 1); assert.equal(h.client.sequence, 20);
   });

@@ -3,10 +3,10 @@
 
   const C = window.EnthusiaMapCore;
   const layout = window.ENTHUSIA_MARKET_DATA.layout;
-  let snapshot = window.ENTHUSIA_MARKET_DATA.snapshot;
+  let snapshot = null;
   const iconManifest = window.ENTHUSIA_MINECRAFT_ASSETS;
   const fontManifest = window.ENTHUSIA_MINECRAFT_FONT;
-  const adapter = new window.EnthusiaMarketAdapter.StaticMarketAdapter(layout, snapshot);
+  const adapter = new window.EnthusiaMarketAdapter.StaticMarketAdapter(layout, null);
   const $ = selector => document.querySelector(selector);
   const ns = "http://www.w3.org/2000/svg";
   const t = layout.renderTransform;
@@ -42,7 +42,7 @@
     pinned: null, touchPointers: new Map(), touchTap: null, touchGesture: null, collapsedContext: null,
     sheet: {type: null, state: "hidden", previous: "normal", surface: null, returnFocus: null, gesture: null}
   };
-  let connectionStatus = {state: "connecting", source: "fallback", updatedAt: null};
+  let connectionStatus = {state: "connecting", source: "unavailable", updatedAt: null};
   const buildingElements = new Map();
   const stallElements = new Map();
   const px = point => ({ x: (point.x - t.originX) * t.pixelsPerBlock, y: (point.z - t.originZ) * t.pixelsPerBlock });
@@ -245,36 +245,30 @@
     if (stallId) stallElements.get(stallId)?.classList.add("highlighted");
   }
 
-  const headUrlPattern = /^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/;
+  const minotarHeadUrlPattern = /^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/;
+  const capturedHeadUrlPattern = /^https:\/\/market-api\.enthusia\.info\/v1\/player-heads\/[0-9a-f]{64}\.png$/;
   function ownerHeadUrl(owner) {
-    if (headUrlPattern.test(owner.avatarUrl || "")) return owner.avatarUrl;
-    if (["player-head-java.svg", "player-head-bedrock.svg"].includes(owner.avatarUrl)) return `${assetBase}${owner.avatarUrl}`;
-    if (owner.type !== "PLAYER") return null;
-    const proxy = String(owner.uuid || "").startsWith("00000000-0000-0000-");
-    const identity = proxy ? owner.name : owner.uuid || owner.name;
-    if (!identity) return null;
-    return `https://minotar.net/helm/${encodeURIComponent(identity)}/96.png`;
+    const url = owner?.avatarUrl || "";
+    return minotarHeadUrlPattern.test(url) || capturedHeadUrlPattern.test(url) ? url : null;
   }
-  function genericPlayer(owner, size, headUrl) {
-    const data = headUrl ? ` data-owner-head-url="${esc(headUrl)}" data-owner-head-name="${esc(owner.name)}" data-skin-source="${esc(owner.avatar?.source || "JAVA")}" data-outer-layer="${owner.avatar?.includesOuterLayer === true}"` : "";
-    return `<span class="owner-image player-head fallback${size}" aria-label="Generic player icon for ${esc(owner.name)}"${data}><img src="${assetBase}player-head-base.svg" alt="Generic player icon for ${esc(owner.name)}" width="82" height="82" decoding="async"><img class="skin-overlay" src="${assetBase}player-head-overlay.svg" alt="" width="82" height="82" decoding="async"></span>`;
+  function playerHead(owner, size, headUrl) {
+    return `<span class="owner-image player-head${size}" aria-label="Minecraft head for ${esc(owner.name)}" data-owner-head-url="${esc(headUrl)}" data-owner-head-name="${esc(owner.name)}" data-skin-source="${esc(owner.avatar?.source || "JAVA")}" data-outer-layer="${owner.avatar?.includesOuterLayer === true}"></span>`;
   }
   function ownerVisual(owner, large = false) {
     const size = large ? " large" : "", headUrl = ownerHeadUrl(owner);
     if (owner.avatar?.kind === "GUILD_BANNER" && owner.avatar.banner) return `<span class="owner-image guild-banner${size}" aria-label="Guild banner for ${esc(owner.name)}"><canvas width="20" height="40" role="img" aria-label="Guild banner for ${esc(owner.name)}" data-guild-banner="${esc(JSON.stringify(owner.avatar.banner))}"></canvas></span>`;
-    if ((owner.type === "PLAYER" || owner.avatar?.kind === "MINECRAFT_HEAD") && headUrl) return genericPlayer(owner, size, headUrl);
-    if (owner.type === "PLAYER") return genericPlayer(owner, size, null);
-    if (owner.type === "GUILD") return `<span class="owner-image${size}"><img src="${assetBase}guild-banner.svg" alt="Generic guild icon for ${esc(owner.name)}" width="82" height="82" decoding="async"></span>`;
+    if ((owner.type === "PLAYER" || owner.type === "GUILD") && headUrl) return playerHead(owner, size, headUrl);
+    if (owner.type === "PLAYER" || owner.type === "GUILD") return "";
     return `<span class="owner-image${size}"><img src="${assetBase}unowned-stall.svg" alt="Unowned stall" width="82" height="82" decoding="async"></span>`;
   }
   const drawGuildBanner = (canvas, design) => window.EnthusiaGuildBannerRenderer?.draw(canvas, design) || Promise.reject(new Error("banner-renderer-unavailable"));
   function hydrateOwnerVisuals(root=document) {
     root.querySelectorAll("[data-owner-head-url]:not([data-head-loading])").forEach(node=>{
       node.dataset.headLoading="true"; const image=new Image(); image.className="resolved-head"; image.alt=`Minecraft head for ${node.dataset.ownerHeadName}`; image.width=82; image.height=82; image.decoding="async"; image.dataset.skinSource=node.dataset.skinSource; image.dataset.outerLayer=node.dataset.outerLayer;
-      image.onload=()=>{node.replaceChildren(image);node.classList.remove("fallback");node.classList.add("resolved");node.setAttribute("aria-label",image.alt)};
-      image.onerror=()=>{image.onload=image.onerror=null;node.removeAttribute("data-owner-head-url");node.dataset.headFailed="true"}; image.src=node.dataset.ownerHeadUrl;
+      image.onload=()=>{node.replaceChildren(image);node.classList.add("resolved");node.setAttribute("aria-label",image.alt)};
+      image.onerror=()=>{image.onload=image.onerror=null;node.remove()}; image.src=node.dataset.ownerHeadUrl;
     });
-    root.querySelectorAll("canvas[data-guild-banner]:not([data-banner-loading])").forEach(canvas=>{canvas.dataset.bannerLoading="true";drawGuildBanner(canvas,JSON.parse(canvas.dataset.guildBanner)).then(()=>canvas.dataset.bannerRendered="true").catch(()=>{const image=new Image();image.src=`${assetBase}guild-banner.svg`;image.alt=canvas.getAttribute("aria-label")||"Generic guild icon";image.width=82;image.height=82;canvas.closest(".owner-image")?.replaceChildren(image)})});
+    root.querySelectorAll("canvas[data-guild-banner]:not([data-banner-loading])").forEach(canvas=>{canvas.dataset.bannerLoading="true";drawGuildBanner(canvas,JSON.parse(canvas.dataset.guildBanner)).then(()=>canvas.dataset.bannerRendered="true").catch(()=>canvas.closest(".owner-image")?.remove())});
   }
   const ownerType = owner => owner.type === "PLAYER" ? "Player" : owner.type === "GUILD" ? "Guild" : "Unowned";
   function locationMarkup(location, compact = false) {
@@ -556,6 +550,7 @@
   }
 
   function openBuilding(building) {
+    if (!snapshot) return;
     closeInspector(); hideMobileResults(); filterFields.classList.remove("open"); state.mobileStack = [{type: "building", id: building.id}]; selectMap(building.id);
     if (building.stallIds.length === 1) return openStall(adapter.getStall(building.stallIds[0]), null);
     state.drawerBuilding = building; state.drawerMode = "building"; renderBuildingDrawer(); showDrawer();
@@ -813,10 +808,10 @@
     return matchingShops(stall).length > 0;
   }
   function applyFilters() {
-    state.matching = new Set(snapshot.stalls.filter(matchesFilters).map(stall => stall.id));
+    state.matching = snapshot ? new Set(snapshot.stalls.filter(matchesFilters).map(stall => stall.id)) : new Set(layout.stalls.map(stall => stall.id));
     for (const stall of layout.stalls) stallElements.get(stall.id).classList.toggle("filtered", !state.matching.has(stall.id));
     for (const building of layout.buildings) buildingElements.get(building.id).classList.toggle("filtered", !building.stallIds.some(id => state.matching.has(id)));
-    $("#result-count").textContent = `${state.matching.size} of ${layout.stalls.length} stalls`;
+    $("#result-count").textContent = snapshot ? `${state.matching.size} of ${layout.stalls.length} stalls` : "Market data unavailable";
     const labels = { floor: "Floor", owner: "Owner", shop: "Shop", stock: "Stock", rent: "Rent" }, selectors = {floor:"#floor-filter",owner:"#owner-filter",shop:"#shop-filter",stock:"#stock-filter",rent:"#rent-filter"};
     const active = Object.entries(state.filters).filter(([, value]) => value && value !== "ALL");
     $("#filter-chips").innerHTML = active.map(([key]) => { const select = $(selectors[key]), display = select.options[select.selectedIndex]?.text || state.filters[key]; return `<span class="chip">${labels[key]}: ${esc(display)} <button type="button" data-remove-filter="${key}" aria-label="Remove ${labels[key]} filter">×</button></span>`; }).join("") + (active.length ? `<button id="clear-active-filters" class="clear-active-filters" type="button">Clear all filters</button>` : "");
@@ -908,12 +903,12 @@
   }
   function renderConnectionStatus(status = connectionStatus) {
     connectionStatus = status;
-    const labels = {live: "Live", connecting: "Connecting", reconnecting: "Reconnecting", offline: "Offline — showing saved market data", fallback: "Placeholder fallback"};
+    const labels = {live: "Live", connecting: "Connecting", reconnecting: "Reconnecting — showing saved market data", offline: "Offline — showing saved market data", unavailable: "Market data is temporarily unavailable.", fixture: "Local fixture"};
     el.connection.className = `market-connection-status ${status.state}`;
     el.connection.dataset.source = status.source;
     el.connectionLabel.textContent = labels[status.state] || "Connecting";
     el.lastUpdated.textContent = status.source === "api" && status.updatedAt ? ` · ${relativeUpdate(status.updatedAt)}` : "";
-    el.connection.title = status.source === "api" ? "Cloudflare placeholder snapshot" : "Local fallback placeholder snapshot";
+    el.connection.title = status.source === "api" ? "Authoritative Market API data" : status.source === "fixture" ? "Local file fixture" : "Authoritative Market API data is unavailable";
   }
   setInterval(() => renderConnectionStatus(), 60000);
   function refreshSearchInPlace() {
@@ -992,26 +987,27 @@
   window.addEventListener("resize", () => requestAnimationFrame(fit));
 
   function prefetchSnapshotAssets() {
+    if (!snapshot) return;
     const urls = new Set();
     const visit = item => {
       for (const layer of iconDefinition(item)) urls.add(`${assetBase}${layer.src}`);
       for (const entry of item.metadata?.container?.contents || []) visit(entry.item);
     };
     for (const stall of snapshot.stalls) {
-      if (stall.owner.avatarUrl) urls.add(`${assetBase}${stall.owner.avatarUrl}`);
+      if (ownerHeadUrl(stall.owner)) urls.add(ownerHeadUrl(stall.owner));
       for (const shop of stall.shops) { visit(shop.sellItem); visit(shop.costItem); }
     }
     for (const source of urls) { const image = new Image(); image.decoding = "async"; image.src = source; }
   }
   const marketClient = new window.EnthusiaMarketApi.MarketApiClient({
     expectedStallIds: layout.stalls.map(stall => stall.id),
-    fallbackSnapshot: window.ENTHUSIA_MARKET_DATA.snapshot,
+    fixtureSnapshot: window.ENTHUSIA_MARKET_DATA.snapshot,
     onStatus: renderConnectionStatus,
     onSnapshot(nextSnapshot) { snapshot = nextSnapshot; adapter.replaceSnapshot(nextSnapshot); refreshMarketUi(); prefetchSnapshotAssets(); },
     onStallUpdate(stallId, stall, nextSnapshot) { adapter.replaceStall(stall); snapshot = adapter.snapshot; refreshMarketUi(stallId); }
   });
   snapshot = await marketClient.loadInitialSnapshot();
-  adapter.replaceSnapshot(snapshot);
+  if (snapshot) adapter.replaceSnapshot(snapshot);
   window.__MARKET_TEST__ = {
     layout, adapter, marketClient, hitBuilding, screenWorld, openBuilding, openStall, openInspector, closeInspector, closeDrawer,
     executeSearch, applyFilters, clearFilters, focusBuilding, rentState, transactionLabels, itemMetadata, itemIcon,

@@ -58,7 +58,7 @@
 @keyframes sheet-in{from{transform:translateY(28px)}}
 
 /* Public owner heads and bounded guild banner canvases. */
-.owner-image img,.owner-image canvas{image-rendering:pixelated;image-rendering:crisp-edges}.owner-image.guild-banner{display:grid;place-items:center;background:transparent}.owner-image.guild-banner canvas{display:block;width:auto;height:100%;max-width:100%;aspect-ratio:1/2;background:transparent}.result-owner{display:flex;align-items:center;gap:8px;padding:5px 9px;color:var(--muted)}.result-owner .owner-image{width:32px;height:32px;border-radius:5px}.result-owner span small,.result-owner span strong{display:block}.result-owner span strong{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text);font-size:12px}
+.owner-image img,.owner-image canvas{image-rendering:pixelated;image-rendering:crisp-edges}.owner-image.player-head,.owner-image.guild-banner{background:transparent}.owner-image.guild-banner{display:grid;place-items:center}.owner-image.guild-banner canvas{display:block;width:auto;height:100%;max-width:100%;aspect-ratio:1/2;background:transparent}.result-owner{display:flex;align-items:center;gap:8px;padding:5px 9px;color:var(--muted)}.result-owner .owner-image{width:32px;height:32px;border-radius:5px}.result-owner span small,.result-owner span strong{display:block}.result-owner span strong{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text);font-size:12px}
 
 /* Focused panel, item, container, filter, and viewport repairs. */
 :root{--visible-header-bottom:0px;--visible-footer-overlap:0px;--collapsed-context-height:0px}

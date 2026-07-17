@@ -42,7 +42,7 @@
     rentTimingStatus: stall.rentTimingStatus || (stall.owner.type === "NONE" ? "NOT_APPLICABLE" : stall.nextRentAt ? "PERSISTED" : "UNAVAILABLE"),
     shops: stall.shops.map(publicShop),
   });
-  const publicSnapshot = snapshot => ({...snapshot, stalls: snapshot.stalls.map(publicStall)});
+  const publicSnapshot = snapshot => ({...(snapshot || {}), stalls: (snapshot?.stalls || []).map(publicStall)});
   const exactAliases = new Map([
     ["gap", "golden apple"], ["god apple", "enchanted golden apple"], ["notch apple", "enchanted golden apple"],
     ["enchanted golden apple", "enchanted golden apple"], ["pearl", "ender pearl"], ["enderpearl", "ender pearl"],
