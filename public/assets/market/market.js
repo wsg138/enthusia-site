@@ -251,22 +251,24 @@
     const url = owner?.avatarUrl || "";
     return minotarHeadUrlPattern.test(url) || capturedHeadUrlPattern.test(url) ? url : null;
   }
-  function playerHead(owner, size, headUrl) {
-    return `<span class="owner-image player-head${size}" aria-label="Minecraft head for ${esc(owner.name)}" data-owner-head-url="${esc(headUrl)}" data-owner-head-name="${esc(owner.name)}" data-skin-source="${esc(owner.avatar?.source || "JAVA")}" data-outer-layer="${owner.avatar?.includesOuterLayer === true}"></span>`;
+  function genericPlayer(owner, size, headUrl = null) {
+    const data = headUrl ? ` data-owner-head-url="${esc(headUrl)}" data-owner-head-name="${esc(owner.name)}" data-skin-source="${esc(owner.avatar?.source || "JAVA")}" data-outer-layer="${owner.avatar?.includesOuterLayer === true}"` : "";
+    return `<span class="owner-image player-head fallback${size}" aria-label="Generic player icon for ${esc(owner.name)}"${data}><img src="${assetBase}player-head-base.svg" alt="Generic player icon for ${esc(owner.name)}" width="82" height="82" decoding="async"><img class="skin-overlay" src="${assetBase}player-head-overlay.svg" alt="" width="82" height="82" decoding="async"></span>`;
   }
   function ownerVisual(owner, large = false) {
     const size = large ? " large" : "", headUrl = ownerHeadUrl(owner);
     if (owner.avatar?.kind === "GUILD_BANNER" && owner.avatar.banner) return `<span class="owner-image guild-banner${size}" aria-label="Guild banner for ${esc(owner.name)}"><canvas width="20" height="40" role="img" aria-label="Guild banner for ${esc(owner.name)}" data-guild-banner="${esc(JSON.stringify(owner.avatar.banner))}"></canvas></span>`;
-    if ((owner.type === "PLAYER" || owner.type === "GUILD") && headUrl) return playerHead(owner, size, headUrl);
-    if (owner.type === "PLAYER" || owner.type === "GUILD") return "";
+    if ((owner.type === "PLAYER" || owner.avatar?.kind === "MINECRAFT_HEAD") && headUrl) return genericPlayer(owner, size, headUrl);
+    if (owner.type === "PLAYER") return genericPlayer(owner, size);
+    if (owner.type === "GUILD") return "";
     return `<span class="owner-image${size}"><img src="${assetBase}unowned-stall.svg" alt="Unowned stall" width="82" height="82" decoding="async"></span>`;
   }
   const drawGuildBanner = (canvas, design) => window.EnthusiaGuildBannerRenderer?.draw(canvas, design) || Promise.reject(new Error("banner-renderer-unavailable"));
   function hydrateOwnerVisuals(root=document) {
     root.querySelectorAll("[data-owner-head-url]:not([data-head-loading])").forEach(node=>{
       node.dataset.headLoading="true"; const image=new Image(); image.className="resolved-head"; image.alt=`Minecraft head for ${node.dataset.ownerHeadName}`; image.width=82; image.height=82; image.decoding="async"; image.dataset.skinSource=node.dataset.skinSource; image.dataset.outerLayer=node.dataset.outerLayer;
-      image.onload=()=>{node.replaceChildren(image);node.classList.add("resolved");node.setAttribute("aria-label",image.alt)};
-      image.onerror=()=>{image.onload=image.onerror=null;node.remove()}; image.src=node.dataset.ownerHeadUrl;
+      image.onload=()=>{node.replaceChildren(image);node.classList.remove("fallback");node.classList.add("resolved");node.setAttribute("aria-label",image.alt)};
+      image.onerror=()=>{image.onload=image.onerror=null;node.removeAttribute("data-owner-head-url");node.dataset.headFailed="true"}; image.src=node.dataset.ownerHeadUrl;
     });
     root.querySelectorAll("canvas[data-guild-banner]:not([data-banner-loading])").forEach(canvas=>{canvas.dataset.bannerLoading="true";drawGuildBanner(canvas,JSON.parse(canvas.dataset.guildBanner)).then(()=>canvas.dataset.bannerRendered="true").catch(()=>canvas.closest(".owner-image")?.remove())});
   }

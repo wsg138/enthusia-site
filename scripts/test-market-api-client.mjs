@@ -81,6 +81,14 @@ await test("invalid API snapshot exposes an unavailable public state", async () 
   assert.equal(h.client.snapshot, null); assert.equal(h.client.source, "unavailable");
 });
 
+await test("a successful public API retry replaces the unavailable state with authoritative data", async () => {
+  const h = harness([new Error("offline"), response(apiSnapshot(11))]);
+  await h.client.loadInitialSnapshot();
+  const restored = await h.client.refreshSnapshot("retry");
+  assert.equal(restored.stalls.length, 71); assert.equal(h.client.source, "api"); assert.equal(h.client.sequence, 11);
+  assert.equal(h.snapshots.length, 1); assert.equal(h.snapshots[0].meta.source, "api");
+});
+
 await test("file previews may use the explicit local fixture", async () => {
   const h = harness([], "file:"); const loaded = await h.client.loadInitialSnapshot();
   assert.equal(loaded.stalls.length, 71); assert.equal(h.client.source, "fixture"); assert.equal(h.statuses.at(-1).state, "fixture");
