@@ -8,7 +8,8 @@
   const FACE_WIDTH = 20;
   const FACE_HEIGHT = 40;
   const MAX_RENDERED = 96;
-  const ASSET_BASE = document.currentScript?.dataset.bannerAssetBase || "/banner-patterns/";
+  const script = document.currentScript;
+  const ASSET_BASE = script?.dataset.bannerAssetBase || new URL("../banner-patterns/", script?.src || location.href).href;
   const DYES = Object.freeze({
     WHITE: "#f9fffe", ORANGE: "#f9801d", MAGENTA: "#c74ebd", LIGHT_BLUE: "#3ab3da",
     YELLOW: "#fed83d", LIME: "#80c71f", PINK: "#f38baa", GRAY: "#474f52",
