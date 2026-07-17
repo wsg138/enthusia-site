@@ -1001,9 +1001,15 @@
     }
     for (const source of urls) { const image = new Image(); image.decoding = "async"; image.src = source; }
   }
+  async function localFixtureSnapshot() {
+    if (window.location.protocol !== "file:") return null;
+    const response = await fetch(`${assetBase}sample-market-snapshot.json`);
+    if (!response.ok) throw new Error("Local Market fixture is unavailable");
+    return response.json();
+  }
   const marketClient = new window.EnthusiaMarketApi.MarketApiClient({
     expectedStallIds: layout.stalls.map(stall => stall.id),
-    fixtureSnapshot: window.ENTHUSIA_MARKET_DATA.snapshot,
+    fixtureSnapshot: await localFixtureSnapshot(),
     onStatus: renderConnectionStatus,
     onSnapshot(nextSnapshot) { snapshot = nextSnapshot; adapter.replaceSnapshot(nextSnapshot); refreshMarketUi(); prefetchSnapshotAssets(); },
     onStallUpdate(stallId, stall, nextSnapshot) { adapter.replaceStall(stall); snapshot = adapter.snapshot; refreshMarketUi(stallId); }
