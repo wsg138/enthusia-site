@@ -454,6 +454,33 @@ function initMobileNavigation() {
   });
 }
 
+function initDesktopDropdownGrace() {
+  const desktopPointerQuery = window.matchMedia("(min-width: 781px) and (hover: hover)");
+
+  document.querySelectorAll(".nav-dropdown").forEach((dropdown) => {
+    let closeTimer = 0;
+    const cancelClose = () => window.clearTimeout(closeTimer);
+    const openMenu = () => {
+      if (!desktopPointerQuery.matches) return;
+      cancelClose();
+      dropdown.classList.add("is-open");
+    };
+    const scheduleClose = () => {
+      cancelClose();
+      closeTimer = window.setTimeout(() => dropdown.classList.remove("is-open"), 180);
+    };
+
+    dropdown.addEventListener("pointerenter", openMenu);
+    dropdown.addEventListener("pointerleave", scheduleClose);
+    desktopPointerQuery.addEventListener("change", (event) => {
+      if (!event.matches) {
+        cancelClose();
+        dropdown.classList.remove("is-open");
+      }
+    });
+  });
+}
+
 function initDesktopExternalNavigation() {
   const nav = document.querySelector(".site-header .nav");
   if (!nav) return;
@@ -1824,6 +1851,7 @@ async function initSite(cfg) {
   setContactEmail(normalizedConfig);
   initWorldEffects();
   initCinematicHeader();
+  initDesktopDropdownGrace();
   initDesktopExternalNavigation();
   initMobileNavigation();
   initReturnToTop();
