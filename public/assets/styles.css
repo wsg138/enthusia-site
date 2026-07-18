@@ -3535,6 +3535,78 @@ h1,h2,h3{
   color:var(--muted);
 }
 
+.vote-listings{
+  margin:16px auto 0;
+  max-width:980px;
+  padding:0;
+  list-style:none;
+}
+
+.vote-card{
+  display:flex;
+  min-height:152px;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px;
+  padding:20px;
+}
+
+.vote-listing-number{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:34px;
+  min-height:28px;
+  padding:4px 8px;
+  border:1px solid rgba(255,211,106,.25);
+  border-radius:999px;
+  color:var(--gold);
+  background:rgba(255,138,0,.08);
+  font-size:.7rem;
+  font-weight:900;
+  letter-spacing:.1em;
+}
+
+.vote-card h3{
+  margin:0;
+  color:var(--text);
+  font-size:1.12rem;
+  line-height:1.2;
+}
+
+.vote-link{
+  display:flex;
+  width:100%;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:auto;
+  padding:10px 12px;
+  border:1px solid rgba(255,211,106,.2);
+  border-radius:7px;
+  color:var(--gold);
+  background:rgba(255,255,255,.035);
+  font-size:.78rem;
+  font-weight:900;
+  letter-spacing:.02em;
+  text-decoration:none;
+  transition:background .16s ease,border-color .16s ease,color .16s ease;
+}
+
+.vote-link:hover,
+.vote-link:focus-visible{
+  border-color:rgba(255,211,106,.48);
+  color:#fff1d5;
+  background:rgba(255,138,0,.14);
+  text-decoration:none;
+}
+
+.vote-link span{
+  color:currentColor;
+  font-size:1rem;
+  line-height:1;
+}
+
 /* Preserve the original interface type, with a dedicated home wordmark. */
 body,
 h1,h2,h3,
