@@ -34,7 +34,10 @@
           return response.json();
         })
         .then(colorIndex)
-        .catch(() => new Map());
+        .catch(() => {
+          colorsPromise = undefined;
+          return new Map();
+        });
     }
     return colorsPromise;
   }
