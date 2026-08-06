@@ -1,5 +1,6 @@
 const encoder = new TextEncoder();
 const STAFF_API_ORIGIN = "https://staff-api.enthusia.info";
+const STAFF_API_TIMEOUT_MS = 7000;
 const STATIC_ROUTES = new Set([
   "/v1/website/appeals/eligible",
   "/v1/website/appeals/submit",
@@ -42,6 +43,16 @@ function staffRoute(path) {
   return path;
 }
 
+async function boundedFetch(url, options) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), STAFF_API_TIMEOUT_MS);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export async function signedStaffRequest(env, path, body) {
   const configuration = staffApiConfiguration(env);
   const requestTarget = staffRoute(path);
@@ -53,7 +64,7 @@ export async function signedStaffRequest(env, path, body) {
   const canonical = `${method}\n${requestTarget}\n${timestamp}\n${nonce}\n${contentHash}`;
   const signature = base64Url(await hmacSha256(configuration.secret, canonical));
 
-  return fetch(`${STAFF_API_ORIGIN}${requestTarget}`, {
+  return boundedFetch(`${STAFF_API_ORIGIN}${requestTarget}`, {
     method,
     headers: {
       authorization: `Bearer ${configuration.bearer}`,
@@ -86,4 +97,4 @@ export function staffApiResponse(upstream, cacheControl = "no-store") {
   });
 }
 
-export { STAFF_API_ORIGIN, base64Url, staffApiConfiguration, staffRoute };
+export { STAFF_API_ORIGIN, STAFF_API_TIMEOUT_MS, base64Url, staffApiConfiguration, staffRoute };
