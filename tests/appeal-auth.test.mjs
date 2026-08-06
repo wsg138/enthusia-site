@@ -89,8 +89,9 @@ test("review decisions require version, bounded note, and replay key", () => {
   assert.equal(boundedIdempotencyKey("short"), null);
 });
 
-test("strict UUID validation rejects character-count impostors", () => {
+test("strict UUID validation supports Java and Floodgate identities", () => {
   assert.equal(isCanonicalUuid("123e4567-e89b-12d3-a456-426614174099"), true);
+  assert.equal(isCanonicalUuid("00000000-0000-0000-0009-01f64f65c7c3"), true);
   assert.equal(isCanonicalUuid("zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz"), false);
   assert.equal(isCanonicalUuid("123e4567e89b12d3a456426614174099"), false);
 });
