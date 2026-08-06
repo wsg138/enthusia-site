@@ -1,3 +1,5 @@
+import { isCanonicalUuid } from "./validation.js";
+
 const encoder = new TextEncoder();
 
 function decodeBase64Url(value) {
@@ -28,7 +30,7 @@ async function importVerificationKey(jwk) {
     jwk,
     { name: "ECDSA", namedCurve: "P-256" },
     false,
-    ["verify"],
+    ["verify"]
   );
 }
 
@@ -64,7 +66,7 @@ export async function verifyAccessJwt(token, env, nowSeconds = Math.floor(Date.n
     { name: "ECDSA", hash: "SHA-256" },
     key,
     decodeBase64Url(encodedSignature),
-    encoder.encode(`${encodedHeader}.${encodedPayload}`),
+    encoder.encode(`${encodedHeader}.${encodedPayload}`)
   );
   if (!valid) throw new Error("Invalid Access token signature");
   return payload;
@@ -74,7 +76,7 @@ function canonicalPlayer(claims) {
   const custom = claims.custom && typeof claims.custom === "object" ? claims.custom : {};
   const uuid = custom.minecraft_uuid ?? claims.minecraft_uuid;
   const name = custom.minecraft_name ?? claims.minecraft_name;
-  if (typeof uuid !== "string" || !/^[0-9a-fA-F-]{32,36}$/.test(uuid)) return null;
+  if (!isCanonicalUuid(uuid)) return null;
   if (typeof name !== "string" || !/^[A-Za-z0-9_]{1,16}$/.test(name)) return null;
   return { uuid: uuid.toLowerCase(), name };
 }
@@ -93,7 +95,7 @@ export function buildSession(claims) {
     subject: String(claims.sub ?? ""),
     email: typeof claims.email === "string" ? claims.email : null,
     player: Object.freeze(player),
-    roles: Object.freeze(claimRoles(claims)),
+    roles: Object.freeze(claimRoles(claims))
   });
 }
 
