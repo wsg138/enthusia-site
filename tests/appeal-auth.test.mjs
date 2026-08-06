@@ -4,15 +4,15 @@ import { buildSession, canReview } from "../functions/lib/auth.js";
 import { buildAppealPayload, sanitizeSubmission } from "../functions/api/appeals.js";
 import { sanitizeDecision } from "../functions/api/reviewer/appeals/[id].js";
 import { boundedIdempotencyKey, enforceRateLimit, requireSameOrigin } from "../functions/lib/security.js";
-import { reviewerRank, signedStaffRequest } from "../functions/lib/staff-api.js";
+import { reviewerRank, signedStaffRequest, staffRoute } from "../functions/lib/staff-api.js";
 
 const playerClaims = {
   sub: "access-user-1",
   custom: {
     minecraft_uuid: "123e4567-e89b-12d3-a456-426614174000",
     minecraft_name: "Lincoln",
-    roles: ["player"],
-  },
+    roles: ["player"]
+  }
 };
 
 test("buildSession requires a linked canonical player", () => {
@@ -32,13 +32,13 @@ test("browser identity fields cannot override appeal identity", () => {
     punishmentId,
     reason: "Please review this exact punishment.",
     playerName: "Impostor",
-    uuid: "bad",
+    uuid: "bad"
   });
   assert.deepEqual(buildAppealPayload(submission, session), {
     punishmentId,
     reason: "Please review this exact punishment.",
     accountId: "123e4567-e89b-12d3-a456-426614174000",
-    username: "Lincoln",
+    username: "Lincoln"
   });
 });
 
@@ -49,8 +49,8 @@ test("review access requires an explicitly configured privileged role", () => {
     custom: {
       minecraft_uuid: "123e4567-e89b-12d3-a456-426614174001",
       minecraft_name: "Mod",
-      roles: ["moderator"],
-    },
+      roles: ["moderator"]
+    }
   });
   const env = { APPEAL_REVIEWER_ROLES: "admin,moderator" };
   assert.equal(canReview(player, env), false);
@@ -60,10 +60,10 @@ test("review access requires an explicitly configured privileged role", () => {
 
 test("mutation requests require the exact site origin", () => {
   assert.equal(requireSameOrigin(new Request("https://enthusia.example/api/appeals", {
-    headers: { origin: "https://enthusia.example" },
+    headers: { origin: "https://enthusia.example" }
   })), true);
   assert.equal(requireSameOrigin(new Request("https://enthusia.example/api/appeals", {
-    headers: { origin: "https://evil.example" },
+    headers: { origin: "https://evil.example" }
   })), false);
 });
 
@@ -80,18 +80,18 @@ test("review decisions require version, bounded note, and replay key", () => {
     decision: "approve",
     expectedVersion: 2,
     note: "Approved after review",
-    idempotencyKey: "decision-123",
+    idempotencyKey: "decision-123"
   }), {
     decision: "approve",
     expectedVersion: 2,
     note: "Approved after review",
-    idempotencyKey: "decision-123",
+    idempotencyKey: "decision-123"
   });
   assert.equal(sanitizeDecision({
     decision: "approve",
     expectedVersion: 0,
     note: "Approved",
-    idempotencyKey: "decision-123",
+    idempotencyKey: "decision-123"
   }), null);
   assert.equal(boundedIdempotencyKey("short"), null);
 });
@@ -112,14 +112,13 @@ test("private Staff API requests carry a valid replay-protected signature", asyn
   };
   try {
     const env = {
-      STAFF_API_URL: "https://staff-api.example/",
       STAFF_API_BEARER_TOKEN: "b".repeat(32),
-      STAFF_API_HMAC_SECRET: "s".repeat(32),
+      STAFF_API_HMAC_SECRET: "s".repeat(32)
     };
     await signedStaffRequest(env, "/v1/website/appeals/eligible", {
-      accountId: "123e4567-e89b-12d3-a456-426614174000",
+      accountId: "123e4567-e89b-12d3-a456-426614174000"
     });
-    assert.equal(captured.url, "https://staff-api.example/v1/website/appeals/eligible");
+    assert.equal(captured.url, "https://staff-api.enthusia.info/v1/website/appeals/eligible");
     assert.equal(captured.options.method, "POST");
     assert.equal(captured.options.headers.authorization, `Bearer ${"b".repeat(32)}`);
     assert.match(captured.options.headers["x-enthusia-nonce"], /^[0-9a-f-]{36}$/);
@@ -128,4 +127,12 @@ test("private Staff API requests carry a valid replay-protected signature", asyn
   } finally {
     globalThis.fetch = originalFetch;
   }
+});
+
+test("private Staff API rejects routes outside the appeal allowlist", () => {
+  assert.throws(() => staffRoute("/v1/public/punishments"), /Invalid Staff API route/);
+  assert.equal(
+    staffRoute("/v1/website/appeals/reviewer/123e4567-e89b-12d3-a456-426614174099/decision"),
+    "/v1/website/appeals/reviewer/123e4567-e89b-12d3-a456-426614174099/decision"
+  );
 });
