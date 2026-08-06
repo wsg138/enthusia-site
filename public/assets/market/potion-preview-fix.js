@@ -11,8 +11,9 @@
   let colorsPromise;
 
   function potionId(value) {
-    if (typeof value !== "string" || !value.trim()) return null;
+    if (typeof value !== "string") return null;
     const normalized = value.trim().toLowerCase();
+    if (!normalized) return null;
     return normalized.includes(":") ? normalized : `minecraft:${normalized}`;
   }
 
@@ -38,17 +39,28 @@
     return colorsPromise;
   }
 
-  function visitItem(item, colors, depth = 0) {
-    if (!item || depth > 4) return item;
+  function normalizePotion(item, colors) {
     const potion = item.metadata?.potion;
-    const id = potionId(potion?.id || potion?.basePotion);
+    if (!potion) return;
+    const id = potionId(potion.id || potion.basePotion);
+    if (!id) return;
     const form = FORM_BY_MATERIAL[item.material];
-    if (potion && id && form) {
-      potion.id = id;
-      const exactColor = colors.get(`${form}:${id}`);
-      if (exactColor) potion.color = exactColor;
-    }
-    for (const entry of item.metadata?.container?.contents || []) visitItem(entry.item, colors, depth + 1);
+    if (!form) return;
+    potion.id = id;
+    const exactColor = colors.get(`${form}:${id}`);
+    if (exactColor) potion.color = exactColor;
+  }
+
+  function containedItems(item) {
+    const contents = item.metadata?.container?.contents || [];
+    return contents.map(entry => entry.item).filter(Boolean);
+  }
+
+  function visitItem(item, colors, depth = 0) {
+    if (!item) return item;
+    if (depth > 4) return item;
+    normalizePotion(item, colors);
+    for (const child of containedItems(item)) visitItem(child, colors, depth + 1);
     return item;
   }
 
@@ -63,6 +75,15 @@
   function visitSnapshot(snapshot, colors) {
     for (const stall of snapshot?.stalls || []) visitStall(stall, colors);
     return snapshot;
+  }
+
+  function stableJson(value) {
+    if (Array.isArray(value)) return `[${value.map(stableJson).join(",")}]`;
+    if (value && typeof value === "object") {
+      const fields = Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stableJson(value[key])}`);
+      return `{${fields.join(",")}}`;
+    }
+    return JSON.stringify(value);
   }
 
   root.EnthusiaPotionPreview = Object.freeze({ colorIndex, potionId, visitItem, visitSnapshot, visitStall });
@@ -89,7 +110,10 @@
     if (!event?.stall) return originalHandleMessage.call(this, raw);
     this.potionPreviewQueue = (this.potionPreviewQueue || Promise.resolve())
       .then(() => potionColors())
-      .then(colors => originalHandleMessage.call(this, JSON.stringify({ ...event, stall: visitStall(event.stall, colors) })));
+      .then(colors => {
+        event.stall = visitStall(event.stall, colors);
+        return originalHandleMessage.call(this, stableJson(event));
+      });
     return this.potionPreviewQueue;
   };
 })(globalThis);
