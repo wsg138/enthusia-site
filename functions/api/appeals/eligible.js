@@ -8,7 +8,7 @@ export async function onRequestGet(context) {
 
   try {
     const upstream = await signedStaffRequest(context.env, "/v1/website/appeals/eligible", {
-      accountId: session.subject,
+      accountId: session.player.uuid,
     });
     return staffApiResponse(upstream, "private, no-store");
   } catch {
