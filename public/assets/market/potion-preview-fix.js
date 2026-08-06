@@ -1,4 +1,4 @@
-(function () {
+(function (root) {
   "use strict";
 
   const FORM_BY_MATERIAL = Object.freeze({
@@ -16,6 +16,15 @@
     return normalized.includes(":") ? normalized : `minecraft:${normalized}`;
   }
 
+  function colorIndex(manifest) {
+    const colors = new Map();
+    for (const entry of manifest?.items || []) {
+      if (!entry?.potionId || !entry?.form || !entry?.exactTintColor) continue;
+      colors.set(`${entry.form}:${entry.potionId.toLowerCase()}`, entry.exactTintColor.toLowerCase());
+    }
+    return colors;
+  }
+
   async function potionColors() {
     if (!colorsPromise) {
       colorsPromise = fetch(manifestUrl, { cache: "force-cache", credentials: "same-origin" })
@@ -23,14 +32,7 @@
           if (!response.ok) throw new Error(`Potion manifest returned ${response.status}`);
           return response.json();
         })
-        .then(manifest => {
-          const colors = new Map();
-          for (const entry of manifest.items || []) {
-            if (!entry?.potionId || !entry?.form || !entry?.exactTintColor) continue;
-            colors.set(`${entry.form}:${entry.potionId.toLowerCase()}`, entry.exactTintColor.toLowerCase());
-          }
-          return colors;
-        })
+        .then(colorIndex)
         .catch(() => new Map());
     }
     return colorsPromise;
@@ -63,7 +65,9 @@
     return snapshot;
   }
 
-  const Api = window.EnthusiaMarketApi?.MarketApiClient;
+  root.EnthusiaPotionPreview = Object.freeze({ colorIndex, potionId, visitItem, visitSnapshot, visitStall });
+
+  const Api = root.EnthusiaMarketApi?.MarketApiClient;
   if (!Api) return;
 
   const originalFetchSnapshot = Api.prototype.fetchSnapshot;
@@ -82,9 +86,10 @@
   Api.prototype.handleMessage = function (raw) {
     let event;
     try { event = JSON.parse(raw); } catch { return originalHandleMessage.call(this, raw); }
-    if (event?.stall) {
-      return potionColors().then(colors => originalHandleMessage.call(this, JSON.stringify({ ...event, stall: visitStall(event.stall, colors) })));
-    }
-    return originalHandleMessage.call(this, raw);
+    if (!event?.stall) return originalHandleMessage.call(this, raw);
+    this.potionPreviewQueue = (this.potionPreviewQueue || Promise.resolve())
+      .then(() => potionColors())
+      .then(colors => originalHandleMessage.call(this, JSON.stringify({ ...event, stall: visitStall(event.stall, colors) })));
+    return this.potionPreviewQueue;
   };
-})();
+})(globalThis);
