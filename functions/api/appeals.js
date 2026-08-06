@@ -11,6 +11,18 @@ function sanitizeSubmission(input) {
   return { punishmentId, reason };
 }
 
+function buildAppealPayload(submission, session) {
+  return {
+    punishmentId: submission.punishmentId,
+    reason: submission.reason,
+    appellant: {
+      uuid: session.player.uuid,
+      name: session.player.name,
+      subject: session.subject,
+    },
+  };
+}
+
 export async function onRequestPost(context) {
   let session;
   try {
@@ -31,15 +43,7 @@ export async function onRequestPost(context) {
   const upstream = await context.env.APPEALS_API.fetch("https://staff.internal/appeals", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      punishmentId: submission.punishmentId,
-      reason: submission.reason,
-      appellant: {
-        uuid: session.player.uuid,
-        name: session.player.name,
-        subject: session.subject,
-      },
-    }),
+    body: JSON.stringify(buildAppealPayload(submission, session)),
   });
 
   return new Response(upstream.body, {
@@ -52,4 +56,4 @@ export function onRequest(context) {
   return methodNotAllowed(["POST"]);
 }
 
-export { sanitizeSubmission };
+export { buildAppealPayload, sanitizeSubmission };
