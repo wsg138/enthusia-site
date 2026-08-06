@@ -20,6 +20,25 @@ test("buildSession requires a linked canonical player", () => {
   assert.throws(() => buildSession({ sub: "user-1", email: "player@example.com" }), /not linked/);
 });
 
+test("buildSession accepts canonical Floodgate identity claims", () => {
+  const session = buildSession({
+    sub: "bedrock-access-user",
+    custom: {
+      minecraft_uuid: "00000000-0000-0000-0009-01f64f65c7c3",
+      minecraft_name: "BedrockPlayer",
+      roles: ["player"]
+    }
+  });
+  assert.equal(session.player.uuid, "00000000-0000-0000-0009-01f64f65c7c3");
+  assert.throws(() => buildSession({
+    sub: "malformed-access-user",
+    custom: {
+      minecraft_uuid: "zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz",
+      minecraft_name: "BadClaim"
+    }
+  }), /not linked/);
+});
+
 test("verified claims become immutable canonical identity", () => {
   const session = buildSession(playerClaims);
   assert.equal(session.player.name, "Lincoln");
