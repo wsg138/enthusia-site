@@ -3,10 +3,8 @@ const encoder = new TextEncoder();
 function decodeBase64Url(value) {
   const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
   const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
-  if (typeof atob === "function") {
-    return Uint8Array.from(atob(padded), (character) => character.charCodeAt(0));
-  }
-  return Uint8Array.from(Buffer.from(padded, "base64"));
+  if (typeof atob !== "function") throw new Error("Base64 decoding is unavailable");
+  return Uint8Array.from(atob(padded), (character) => character.charCodeAt(0));
 }
 
 function decodeJsonSegment(value) {
