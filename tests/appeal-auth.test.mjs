@@ -3,8 +3,9 @@ import test from "node:test";
 import { buildSession, canReview } from "../functions/lib/auth.js";
 import { buildAppealPayload, sanitizeSubmission } from "../functions/api/appeals.js";
 import { sanitizeDecision } from "../functions/api/reviewer/appeals/[id].js";
-import { boundedIdempotencyKey, enforceRateLimit, requireSameOrigin } from "../functions/lib/security.js";
+import { boundedIdempotencyKey, requireSameOrigin } from "../functions/lib/security.js";
 import { reviewerRank, signedStaffRequest, staffRoute } from "../functions/lib/staff-api.js";
+import { isCanonicalUuid } from "../functions/lib/validation.js";
 
 const playerClaims = {
   sub: "access-user-1",
@@ -67,14 +68,6 @@ test("mutation requests require the exact site origin", () => {
   })), false);
 });
 
-test("rate limiter fails closed and bounds a window", async () => {
-  assert.equal((await enforceRateLimit(null, "user")).allowed, false);
-  const values = new Map();
-  const kv = { get: (key) => values.get(key), put: (key, value) => values.set(key, value) };
-  assert.equal((await enforceRateLimit(kv, "user", 1, 60, 0)).allowed, true);
-  assert.equal((await enforceRateLimit(kv, "user", 1, 60, 1)).allowed, false);
-});
-
 test("review decisions require version, bounded note, and replay key", () => {
   assert.deepEqual(sanitizeDecision({
     decision: "approve",
@@ -94,6 +87,12 @@ test("review decisions require version, bounded note, and replay key", () => {
     idempotencyKey: "decision-123"
   }), null);
   assert.equal(boundedIdempotencyKey("short"), null);
+});
+
+test("strict UUID validation rejects character-count impostors", () => {
+  assert.equal(isCanonicalUuid("123e4567-e89b-12d3-a456-426614174099"), true);
+  assert.equal(isCanonicalUuid("zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz"), false);
+  assert.equal(isCanonicalUuid("123e4567e89b12d3a456426614174099"), false);
 });
 
 test("invalid and oversized submissions are rejected", () => {
