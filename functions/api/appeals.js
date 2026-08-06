@@ -18,7 +18,7 @@ function buildAppealPayload(submission, session) {
   return {
     punishmentId: submission.punishmentId,
     reason: submission.reason,
-    accountId: session.subject,
+    accountId: session.player.uuid,
     username: session.player.name,
   };
 }
