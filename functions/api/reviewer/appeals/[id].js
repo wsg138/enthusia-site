@@ -2,9 +2,9 @@ import { authenticateRequest, canReview } from "../../../lib/auth.js";
 import { forbidden, json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../lib/responses.js";
 import { boundedIdempotencyKey, requireSameOrigin } from "../../../lib/security.js";
 import { reviewerRank, signedStaffRequest, staffApiResponse } from "../../../lib/staff-api.js";
+import { isCanonicalUuid } from "../../../lib/validation.js";
 
 const DECISIONS = new Set(["approve", "deny", "request_information"]);
-const APPEAL_ID = /^[0-9a-fA-F-]{36}$/;
 
 function inputText(input, field) {
   return typeof input?.[field] === "string" ? input[field].trim() : "";
@@ -61,7 +61,7 @@ export async function onRequestPost(context) {
     decision = null;
   }
   const appealId = String(context.params.id ?? "").trim();
-  if (!decision || !APPEAL_ID.test(appealId)) return json({ error: "invalid_decision" }, 400);
+  if (!decision || !isCanonicalUuid(appealId)) return json({ error: "invalid_decision" }, 400);
   try {
     return await requestDecision(context, appealId, reviewer, decision);
   } catch {
