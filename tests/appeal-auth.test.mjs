@@ -4,34 +4,67 @@ import { buildSession, canReview } from "../functions/lib/auth.js";
 import { buildAppealPayload, sanitizeSubmission } from "../functions/api/appeals.js";
 import { sanitizeDecision } from "../functions/api/reviewer/appeals/[id].js";
 import { boundedIdempotencyKey, enforceRateLimit, requireSameOrigin } from "../functions/lib/security.js";
+import { reviewerRank, signedStaffRequest } from "../functions/lib/staff-api.js";
+
+const playerClaims = {
+  sub: "access-user-1",
+  custom: {
+    minecraft_uuid: "123e4567-e89b-12d3-a456-426614174000",
+    minecraft_name: "Lincoln",
+    roles: ["player"],
+  },
+};
 
 test("buildSession requires a linked canonical player", () => {
   assert.throws(() => buildSession({ sub: "user-1", email: "player@example.com" }), /not linked/);
 });
 
 test("verified claims become immutable canonical identity", () => {
-  const session = buildSession({ sub: "user-1", custom: { minecraft_uuid: "123e4567-e89b-12d3-a456-426614174000", minecraft_name: "Lincoln", roles: ["player"] } });
+  const session = buildSession(playerClaims);
   assert.equal(session.player.name, "Lincoln");
   assert.throws(() => { session.player.name = "Impostor"; }, TypeError);
 });
 
 test("browser identity fields cannot override appeal identity", () => {
-  const session = buildSession({ sub: "user-1", custom: { minecraft_uuid: "123e4567-e89b-12d3-a456-426614174000", minecraft_name: "Lincoln" } });
-  const submission = sanitizeSubmission({ punishmentId: "ban-42", reason: "Please review", playerName: "Impostor", uuid: "bad" });
-  assert.deepEqual(buildAppealPayload(submission, session), { punishmentId: "ban-42", reason: "Please review", appellant: { uuid: "123e4567-e89b-12d3-a456-426614174000", name: "Lincoln", subject: "user-1" } });
+  const session = buildSession(playerClaims);
+  const punishmentId = "123e4567-e89b-12d3-a456-426614174099";
+  const submission = sanitizeSubmission({
+    punishmentId,
+    reason: "Please review this exact punishment.",
+    playerName: "Impostor",
+    uuid: "bad",
+  });
+  assert.deepEqual(buildAppealPayload(submission, session), {
+    punishmentId,
+    reason: "Please review this exact punishment.",
+    accountId: "123e4567-e89b-12d3-a456-426614174000",
+    username: "Lincoln",
+  });
 });
 
 test("review access requires an explicitly configured privileged role", () => {
-  const player = buildSession({ sub: "p", custom: { minecraft_uuid: "123e4567e89b12d3a456426614174000", minecraft_name: "Player", roles: ["player"] } });
-  const moderator = buildSession({ sub: "m", custom: { minecraft_uuid: "123e4567e89b12d3a456426614174001", minecraft_name: "Mod", roles: ["moderator"] } });
+  const player = buildSession(playerClaims);
+  const moderator = buildSession({
+    sub: "m",
+    custom: {
+      minecraft_uuid: "123e4567-e89b-12d3-a456-426614174001",
+      minecraft_name: "Mod",
+      roles: ["moderator"],
+    },
+  });
   const env = { APPEAL_REVIEWER_ROLES: "admin,moderator" };
   assert.equal(canReview(player, env), false);
   assert.equal(canReview(moderator, env), true);
+  assert.equal(reviewerRank(moderator), "MOD");
 });
 
 test("mutation requests require the exact site origin", () => {
-  assert.equal(requireSameOrigin(new Request("https://enthusia.example/api/appeals", { headers: { origin: "https://enthusia.example" } })), true);
-  assert.equal(requireSameOrigin(new Request("https://enthusia.example/api/appeals", { headers: { origin: "https://evil.example" } })), false);
+  assert.equal(requireSameOrigin(new Request("https://enthusia.example/api/appeals", {
+    headers: { origin: "https://enthusia.example" },
+  })), true);
+  assert.equal(requireSameOrigin(new Request("https://enthusia.example/api/appeals", {
+    headers: { origin: "https://evil.example" },
+  })), false);
 });
 
 test("rate limiter fails closed and bounds a window", async () => {
@@ -42,13 +75,57 @@ test("rate limiter fails closed and bounds a window", async () => {
   assert.equal((await enforceRateLimit(kv, "user", 1, 60, 1)).allowed, false);
 });
 
-test("review decisions require version and replay key", () => {
-  assert.deepEqual(sanitizeDecision({ decision: "approve", expectedVersion: 2, note: "ok", idempotencyKey: "decision-123" }), { decision: "approve", expectedVersion: 2, note: "ok", idempotencyKey: "decision-123" });
-  assert.equal(sanitizeDecision({ decision: "approve", expectedVersion: -1, idempotencyKey: "decision-123" }), null);
+test("review decisions require version, bounded note, and replay key", () => {
+  assert.deepEqual(sanitizeDecision({
+    decision: "approve",
+    expectedVersion: 2,
+    note: "Approved after review",
+    idempotencyKey: "decision-123",
+  }), {
+    decision: "approve",
+    expectedVersion: 2,
+    note: "Approved after review",
+    idempotencyKey: "decision-123",
+  });
+  assert.equal(sanitizeDecision({
+    decision: "approve",
+    expectedVersion: 0,
+    note: "Approved",
+    idempotencyKey: "decision-123",
+  }), null);
   assert.equal(boundedIdempotencyKey("short"), null);
 });
 
 test("invalid and oversized submissions are rejected", () => {
-  assert.equal(sanitizeSubmission({ punishmentId: "", reason: "x" }), null);
-  assert.equal(sanitizeSubmission({ punishmentId: "ban", reason: "x".repeat(4001) }), null);
+  const punishmentId = "123e4567-e89b-12d3-a456-426614174099";
+  assert.equal(sanitizeSubmission({ punishmentId: "ban", reason: "Please review" }), null);
+  assert.equal(sanitizeSubmission({ punishmentId, reason: "short" }), null);
+  assert.equal(sanitizeSubmission({ punishmentId, reason: "x".repeat(1001) }), null);
+});
+
+test("private Staff API requests carry a valid replay-protected signature", async () => {
+  const originalFetch = globalThis.fetch;
+  let captured;
+  globalThis.fetch = async (url, options) => {
+    captured = { url: String(url), options };
+    return new Response("{}", { status: 200, headers: { "content-type": "application/json" } });
+  };
+  try {
+    const env = {
+      STAFF_API_URL: "https://staff-api.example/",
+      STAFF_API_BEARER_TOKEN: "b".repeat(32),
+      STAFF_API_HMAC_SECRET: "s".repeat(32),
+    };
+    await signedStaffRequest(env, "/v1/website/appeals/eligible", {
+      accountId: "123e4567-e89b-12d3-a456-426614174000",
+    });
+    assert.equal(captured.url, "https://staff-api.example/v1/website/appeals/eligible");
+    assert.equal(captured.options.method, "POST");
+    assert.equal(captured.options.headers.authorization, `Bearer ${"b".repeat(32)}`);
+    assert.match(captured.options.headers["x-enthusia-nonce"], /^[0-9a-f-]{36}$/);
+    assert.match(captured.options.headers["x-enthusia-content-sha256"], /^[A-Za-z0-9_-]{43}$/);
+    assert.match(captured.options.headers["x-enthusia-signature"], /^[A-Za-z0-9_-]{43}$/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
