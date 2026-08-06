@@ -1,9 +1,16 @@
 const encoder = new TextEncoder();
+const STAFF_API_ORIGIN = "https://staff-api.enthusia.info";
+const STATIC_ROUTES = new Set([
+  "/v1/website/appeals/eligible",
+  "/v1/website/appeals/submit",
+  "/v1/website/appeals/reviewer/list"
+]);
+const DECISION_ROUTE = /^\/v1\/website\/appeals\/reviewer\/[0-9a-f-]{36}\/decision$/i;
 
 function base64Url(bytes) {
   let binary = "";
   for (const value of bytes) binary += String.fromCharCode(value);
-  return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/, "");
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
 async function sha256(bytes) {
@@ -16,36 +23,37 @@ async function hmacSha256(secret, value) {
     encoder.encode(secret),
     { name: "HMAC", hash: "SHA-256" },
     false,
-    ["sign"],
+    ["sign"]
   );
   return new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(value)));
 }
 
 function staffApiConfiguration(env) {
-  const url = typeof env.STAFF_API_URL === "string" ? env.STAFF_API_URL.trim() : "";
   const bearer = typeof env.STAFF_API_BEARER_TOKEN === "string" ? env.STAFF_API_BEARER_TOKEN : "";
   const secret = typeof env.STAFF_API_HMAC_SECRET === "string" ? env.STAFF_API_HMAC_SECRET : "";
-  if (!url || bearer.length < 32 || secret.length < 32) throw new Error("Staff API is not configured");
-  const origin = new URL(url);
-  if (origin.protocol !== "https:") throw new Error("Staff API must use HTTPS");
-  return { origin, bearer, secret };
+  if (bearer.length < 32 || secret.length < 32) throw new Error("Staff API is not configured");
+  return { bearer, secret };
+}
+
+function staffRoute(path) {
+  if (!STATIC_ROUTES.has(path) && !DECISION_ROUTE.test(path)) {
+    throw new Error("Invalid Staff API route");
+  }
+  return path;
 }
 
 export async function signedStaffRequest(env, path, body) {
   const configuration = staffApiConfiguration(env);
-  const url = new URL(path, configuration.origin);
-  if (url.origin !== configuration.origin.origin) throw new Error("Invalid Staff API target");
-
+  const requestTarget = staffRoute(path);
   const payload = encoder.encode(JSON.stringify(body ?? {}));
   const method = "POST";
-  const requestTarget = `${url.pathname}${url.search}`;
   const timestamp = String(Date.now());
   const nonce = crypto.randomUUID();
   const contentHash = base64Url(await sha256(payload));
   const canonical = `${method}\n${requestTarget}\n${timestamp}\n${nonce}\n${contentHash}`;
   const signature = base64Url(await hmacSha256(configuration.secret, canonical));
 
-  return fetch(url, {
+  return fetch(`${STAFF_API_ORIGIN}${requestTarget}`, {
     method,
     headers: {
       authorization: `Bearer ${configuration.bearer}`,
@@ -53,9 +61,9 @@ export async function signedStaffRequest(env, path, body) {
       "x-enthusia-timestamp": timestamp,
       "x-enthusia-nonce": nonce,
       "x-enthusia-content-sha256": contentHash,
-      "x-enthusia-signature": signature,
+      "x-enthusia-signature": signature
     },
-    body: payload,
+    body: payload
   });
 }
 
@@ -73,9 +81,9 @@ export function staffApiResponse(upstream, cacheControl = "no-store") {
     status: upstream.status,
     headers: {
       "content-type": upstream.headers.get("content-type") ?? "application/json; charset=utf-8",
-      "cache-control": cacheControl,
-    },
+      "cache-control": cacheControl
+    }
   });
 }
 
-export { base64Url, staffApiConfiguration };
+export { STAFF_API_ORIGIN, base64Url, staffApiConfiguration, staffRoute };
