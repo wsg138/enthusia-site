@@ -36,7 +36,7 @@ for (const file of htmlFiles) {
 
 for (const file of ["appeal.html", path.join("reviewer", "appeals.html")]) {
   const html = await readFile(path.join(publicDir, file), "utf8");
-  const mainClass = html.match(/<main\b[^>]*\bclass=["']([^"']*)["']/i)?.[1] ?? "";
+  const mainClass = html.match(/<main\b[^>]*\sclass\s*=\s*["']([^"']*)["']/i)?.[1] ?? "";
   if (!mainClass.split(/\s+/).includes("page-main")) {
     errors.push(`${file}: main content must use page-main to stay above the background layer`);
   }
