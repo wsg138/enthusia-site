@@ -1,5 +1,134 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Submit an authenticated appeal for an eligible Enthusia SMP punishment."><title>Appeal a punishment | Enthusia</title><link rel="stylesheet" href="assets/styles.css?v=vision63"></head>
-<body><header class="site-header"><div class="container header-inner"><a class="brand" href="index.html">Enthusia SMP</a><nav class="nav" aria-label="Primary navigation"><a href="index.html">Home</a><a href="rules.html">Rules</a><a href="market.html">Market</a></nav></div></header><main class="page-main container"><h1>Appeal a punishment</h1><p>Your linked Minecraft identity is supplied by your signed-in account and cannot be changed here.</p><form id="appeal-form"><label>Punishment <select name="punishmentId" id="punishment" required><option value="">Loading appealable punishments…</option></select></label><section id="sanction" aria-live="polite"></section><label>Why should this punishment be reviewed? <textarea name="reason" minlength="10" maxlength="1000" required></textarea></label><button type="submit">Submit appeal</button><p id="result" role="status"></p></form></main><script type="module">
-const form=document.querySelector('#appeal-form');const result=document.querySelector('#result');const select=document.querySelector('#punishment');const sanction=document.querySelector('#sanction');let sanctions=[];function render(){const item=sanctions.find(x=>String(x.id)===select.value);sanction.textContent=item?`${item.type??'Punishment'} · issued ${item.createdAt??'unknown date'} · ${item.reason??'No public reason provided'}`:'';}function loadError(){sanctions=[];select.innerHTML='<option value="">Unable to load punishments — retry later</option>';sanction.textContent='';}async function load(){select.innerHTML='<option value="">Loading appealable punishments…</option>';try{const response=await fetch('/api/appeals/eligible');if(!response.ok){loadError();return;}const payload=await response.json();sanctions=Array.isArray(payload)?payload:payload.punishments??[];select.replaceChildren(new Option(sanctions.length?'Select a punishment':'No appealable punishments',''));for(const item of sanctions)select.add(new Option(`${item.type??'Punishment'} — ${item.createdAt??item.id}`,item.id));render();}catch{loadError();}}select.addEventListener('change',render);form.addEventListener('submit',async(event)=>{event.preventDefault();result.textContent='Submitting…';const data=Object.fromEntries(new FormData(form));try{const response=await fetch('/api/appeals',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});const payload=await response.json().catch(()=>({}));result.textContent=response.ok?'Appeal submitted.':payload.error==='rate_limited'?`Too many attempts. Try again in ${payload.retryAfter} seconds.`:`Unable to submit appeal (${response.status}).`;if(response.ok){form.reset();await load();}}catch{result.textContent='Unable to reach the appeal service. Retry in a moment.';}});load();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appeal a punishment | Enthusia</title>
+  <meta name="description" content="Submit an authenticated appeal for an eligible Enthusia SMP punishment." />
+  <meta name="theme-color" content="#100d0a" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css?v=vision64" />
+  <link rel="stylesheet" href="assets/appeals.css?v=1" />
+</head>
+<body class="appeal-page">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<div class="bg" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="bg-vignette"></div>
+  <div class="bg-heat"></div>
+</div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Enthusia SMP home">
+      <img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="46" height="46" />
+      <span class="brand-name">Enthusia SMP</span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="rules.html">Rules</a>
+      <a href="market.html">Market</a>
+      <a class="active" href="appeal.html" aria-current="page">Appeals</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-main appeal-page-main">
+  <section class="appeal-hero">
+    <div class="container appeal-hero-inner">
+      <div class="appeal-hero-copy">
+        <p class="eyebrow">Player support</p>
+        <h1>A fair review starts with the full story.</h1>
+        <p class="page-lead">Choose an eligible punishment, explain what staff should reconsider, and submit your appeal directly to the review queue.</p>
+      </div>
+      <div class="appeal-hero-facts" aria-label="Appeal safeguards">
+        <span><i aria-hidden="true"></i> Linked account</span>
+        <span><i aria-hidden="true"></i> Secure submission</span>
+        <span><i aria-hidden="true"></i> Staff reviewed</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="container appeal-workspace" aria-label="Punishment appeal">
+    <aside class="appeal-guide card" aria-labelledby="appeal-guide-title">
+      <p class="appeal-card-kicker">Before you submit</p>
+      <h2 id="appeal-guide-title">Make your appeal easy to review</h2>
+      <ol class="appeal-steps">
+        <li>
+          <span>01</span>
+          <div><strong>Select the case</strong><p>Only punishments currently eligible for appeal are shown.</p></div>
+        </li>
+        <li>
+          <span>02</span>
+          <div><strong>Give useful context</strong><p>Be direct, honest, and include details staff can verify.</p></div>
+        </li>
+        <li>
+          <span>03</span>
+          <div><strong>Wait for review</strong><p>Your appeal enters the staff queue after it is accepted.</p></div>
+        </li>
+      </ol>
+      <div class="appeal-guide-note">
+        <strong>Your identity is already linked.</strong>
+        <p>Your signed-in Minecraft account is attached automatically and cannot be changed on this form.</p>
+      </div>
+    </aside>
+
+    <article class="appeal-form-card card">
+      <header class="appeal-form-header">
+        <div>
+          <p class="appeal-card-kicker">Appeal form</p>
+          <h2>Request a review</h2>
+        </div>
+        <span class="appeal-secure-mark">Account verified</span>
+      </header>
+
+      <form id="appeal-form" class="appeal-form">
+        <div class="appeal-field">
+          <label for="punishment">
+            <span>Punishment</span>
+            <small>Choose the decision you want staff to review.</small>
+          </label>
+          <div class="appeal-select-wrap">
+            <select name="punishmentId" id="punishment" required aria-describedby="punishment-help">
+              <option value="">Loading appealable punishments&hellip;</option>
+            </select>
+          </div>
+          <p id="punishment-help" class="appeal-field-help">The list comes from the Minecraft account linked to your session.</p>
+          <section id="sanction" class="appeal-sanction" aria-live="polite"></section>
+        </div>
+
+        <div class="appeal-field">
+          <label for="appeal-reason">
+            <span>Why should this punishment be reviewed?</span>
+            <small>Explain what happened and what outcome you are requesting.</small>
+          </label>
+          <textarea id="appeal-reason" name="reason" minlength="10" maxlength="1000" rows="8" placeholder="Share the relevant context, any mistake you believe was made, and why the decision should be reconsidered." required></textarea>
+          <div class="appeal-field-footer">
+            <span>10&ndash;1,000 characters</span>
+            <span>Do not include passwords or private information.</span>
+          </div>
+        </div>
+
+        <div class="appeal-submit-row">
+          <p>Submitting creates a review request for the selected punishment.</p>
+          <button class="btn appeal-submit" type="submit" disabled>Submit appeal</button>
+        </div>
+        <p id="result" class="appeal-form-status" role="status" aria-live="polite"></p>
+      </form>
+    </article>
+  </section>
+</main>
+
+<footer class="appeal-footer">
+  <div class="container">
+    <p>Need help accessing your account? <a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Contact the staff team on Discord</a>.</p>
+  </div>
+</footer>
+
+<script type="module" src="assets/appeal.js?v=1"></script>
+</body>
+</html>
