@@ -3,6 +3,7 @@ const status = document.querySelector('#status');
 const refresh = document.querySelector('#refresh');
 const queueSummary = document.querySelector('#queue-summary');
 const key = () => crypto.randomUUID();
+const canonicalUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 const statusNames = {
   OPEN: 'Open',
@@ -18,7 +19,11 @@ function statusName(value) {
 }
 
 function statusTone(value) {
-  return String(value ?? 'unknown').toLowerCase().replaceAll('_', '-');
+  return String(value ?? 'unknown').toLowerCase().replace(/_/g, '-');
+}
+
+function displayValue(value, fallback = 'Unknown') {
+  return value === null || value === undefined ? fallback : value;
 }
 
 function detail(label, value) {
@@ -49,22 +54,36 @@ function emptyState(title, message, isError = false, isLoading = false) {
   return state;
 }
 
+function decisionEndpoint(appealId) {
+  const normalized = String(appealId ?? '');
+  return canonicalUuid.test(normalized) ? `/api/reviewer/appeals/${normalized}` : null;
+}
+
+function setCardStatus(result, message, tone) {
+  result.textContent = message;
+  result.className = `review-card-status is-${tone}`;
+}
+
 async function decide(appeal, decision, note, result, article) {
   if (note.trim().length < 3) {
-    result.textContent = 'Enter a decision note with at least 3 characters.';
-    result.className = 'review-card-status is-error';
+    setCardStatus(result, 'Enter a decision note with at least 3 characters.', 'error');
     note.focus();
+    return;
+  }
+
+  const endpoint = decisionEndpoint(appeal.id);
+  if (!endpoint) {
+    setCardStatus(result, 'This appeal has an invalid identifier. Refresh before deciding.', 'error');
     return;
   }
 
   const actionButtons = article.querySelectorAll('.review-action');
   actionButtons.forEach(button => { button.disabled = true; });
   article.setAttribute('aria-busy', 'true');
-  result.textContent = 'Saving decision…';
-  result.className = 'review-card-status is-pending';
+  setCardStatus(result, 'Saving decision…', 'pending');
 
   try {
-    const response = await fetch(`/api/reviewer/appeals/${encodeURIComponent(appeal.id)}`, {
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
@@ -76,32 +95,25 @@ async function decide(appeal, decision, note, result, article) {
     });
 
     if (response.status === 409) {
-      result.textContent = 'This appeal changed. Refresh before deciding.';
-      result.className = 'review-card-status is-error';
+      setCardStatus(result, 'This appeal changed. Refresh before deciding.', 'error');
       return;
     }
 
     if (response.ok) {
-      result.textContent = 'Decision saved.';
-      result.className = 'review-card-status is-success';
+      setCardStatus(result, 'Decision saved.', 'success');
       await load();
     } else {
-      result.textContent = `Unable to save this decision (${response.status}).`;
-      result.className = 'review-card-status is-error';
+      setCardStatus(result, `Unable to save this decision (${response.status}).`, 'error');
     }
   } catch {
-    result.textContent = 'Unable to reach the appeal service. Retry in a moment.';
-    result.className = 'review-card-status is-error';
+    setCardStatus(result, 'Unable to reach the appeal service. Retry in a moment.', 'error');
   } finally {
     article.removeAttribute('aria-busy');
     actionButtons.forEach(button => { button.disabled = false; });
   }
 }
 
-function card(appeal) {
-  const article = document.createElement('article');
-  article.className = 'appeal-review-card card';
-
+function cardHeader(appeal) {
   const header = document.createElement('header');
   header.className = 'review-card-header';
   const titleGroup = document.createElement('div');
@@ -115,80 +127,104 @@ function card(appeal) {
   badge.className = `review-status-badge is-${statusTone(appeal.status)}`;
   badge.textContent = statusName(appeal.status);
   header.append(titleGroup, badge);
+  return header;
+}
 
+function detailGrid(appeal) {
   const details = document.createElement('div');
   details.className = 'review-detail-grid';
   details.append(
-    detail('Punishment', appeal.punishmentType ?? 'Punishment'),
-    detail('Case', appeal.caseId ?? 'Unknown'),
-    detail('Appeal ID', appeal.id ?? 'Unknown'),
-    detail('Version', String(appeal.version ?? 0))
+    detail('Punishment', displayValue(appeal.punishmentType, 'Punishment')),
+    detail('Case', displayValue(appeal.caseId)),
+    detail('Appeal ID', displayValue(appeal.id)),
+    detail('Version', String(displayValue(appeal.version, 0)))
   );
+  return details;
+}
 
-  const reason = document.createElement('section');
-  reason.className = 'review-reason';
-  const reasonLabel = document.createElement('h3');
-  reasonLabel.textContent = 'Player statement';
-  const reasonText = document.createElement('p');
-  reasonText.textContent = appeal.reason || 'No appeal statement was provided.';
-  reason.append(reasonLabel, reasonText);
+function textSection(className, title, copy) {
+  const section = document.createElement('section');
+  section.className = className;
+  const heading = document.createElement('h3');
+  heading.textContent = title;
+  const body = document.createElement('p');
+  body.textContent = copy;
+  section.append(heading, body);
+  return section;
+}
 
-  article.append(header, details, reason);
+function decisionHeader() {
+  const header = document.createElement('div');
+  header.className = 'review-decision-header';
+  const title = document.createElement('h3');
+  title.textContent = 'Record a decision';
+  const hint = document.createElement('span');
+  hint.textContent = 'A note is required';
+  header.append(title, hint);
+  return header;
+}
 
+function decisionNote() {
+  const label = document.createElement('label');
+  label.textContent = 'Decision note';
+  const note = document.createElement('textarea');
+  note.minLength = 3;
+  note.maxLength = 1000;
+  note.rows = 4;
+  note.placeholder = 'Explain the decision and any next steps for the player.';
+  label.append(note);
+  return { label, note };
+}
+
+function decisionActions(appeal, note, result, article) {
+  const actions = document.createElement('div');
+  actions.className = 'review-actions';
+  const choices = [
+    ['Approve appeal', 'approve', 'approve'],
+    ['Deny appeal', 'deny', 'deny'],
+    ['Request information', 'request_information', 'information']
+  ];
+  for (const [label, value, tone] of choices) {
+    const button = document.createElement('button');
+    button.className = `review-action is-${tone}`;
+    button.type = 'button';
+    button.textContent = label;
+    button.addEventListener('click', () => decide(appeal, value, note, result, article));
+    actions.append(button);
+  }
+  return actions;
+}
+
+function decisionPanel(appeal, article) {
+  const panel = document.createElement('section');
+  panel.className = 'review-decision-panel';
+  const noteField = decisionNote();
+  const result = document.createElement('p');
+  result.className = 'review-card-status';
+  result.setAttribute('role', 'status');
+  panel.append(
+    decisionHeader(),
+    noteField.label,
+    decisionActions(appeal, noteField.note, result, article),
+    result
+  );
+  return panel;
+}
+
+function card(appeal) {
+  const article = document.createElement('article');
+  article.className = 'appeal-review-card card';
+  article.append(
+    cardHeader(appeal),
+    detailGrid(appeal),
+    textSection('review-reason', 'Player statement', appeal.reason || 'No appeal statement was provided.')
+  );
   if (appeal.decisionNote) {
-    const prior = document.createElement('section');
-    prior.className = 'review-prior-note';
-    const priorLabel = document.createElement('h3');
-    priorLabel.textContent = 'Latest decision note';
-    const priorText = document.createElement('p');
-    priorText.textContent = appeal.decisionNote;
-    prior.append(priorLabel, priorText);
-    article.append(prior);
+    article.append(textSection('review-prior-note', 'Latest decision note', appeal.decisionNote));
   }
-
   if (appeal.status === 'OPEN') {
-    const decisionPanel = document.createElement('section');
-    decisionPanel.className = 'review-decision-panel';
-    const decisionHeader = document.createElement('div');
-    decisionHeader.className = 'review-decision-header';
-    const decisionTitle = document.createElement('h3');
-    decisionTitle.textContent = 'Record a decision';
-    const decisionHint = document.createElement('span');
-    decisionHint.textContent = 'A note is required';
-    decisionHeader.append(decisionTitle, decisionHint);
-
-    const noteLabel = document.createElement('label');
-    noteLabel.textContent = 'Decision note';
-    const note = document.createElement('textarea');
-    note.minLength = 3;
-    note.maxLength = 1000;
-    note.rows = 4;
-    note.placeholder = 'Explain the decision and any next steps for the player.';
-    noteLabel.append(note);
-
-    const actions = document.createElement('div');
-    actions.className = 'review-actions';
-    const result = document.createElement('p');
-    result.className = 'review-card-status';
-    result.setAttribute('role', 'status');
-
-    for (const [label, value, tone] of [
-      ['Approve appeal', 'approve', 'approve'],
-      ['Deny appeal', 'deny', 'deny'],
-      ['Request information', 'request_information', 'information']
-    ]) {
-      const button = document.createElement('button');
-      button.className = `review-action is-${tone}`;
-      button.type = 'button';
-      button.textContent = label;
-      button.addEventListener('click', () => decide(appeal, value, note, result, article));
-      actions.append(button);
-    }
-
-    decisionPanel.append(decisionHeader, noteLabel, actions, result);
-    article.append(decisionPanel);
+    article.append(decisionPanel(appeal, article));
   }
-
   return article;
 }
 
