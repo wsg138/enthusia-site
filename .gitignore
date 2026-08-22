@@ -2,3 +2,7 @@ dist/
 .visual-test/
 __pycache__/
 *.pyc
+.dev.vars
+.dev.vars.*
+.env
+.env.*
