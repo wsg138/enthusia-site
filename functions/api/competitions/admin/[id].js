@@ -16,6 +16,7 @@ import { validatePublishableCompetitionConfig } from "../../../lib/competitions/
 import { json, methodNotAllowed, unauthorized } from "../../../lib/responses.js";
 import { requireSameOrigin } from "../../../lib/security.js";
 import { isCanonicalUuid } from "../../../lib/validation.js";
+import { sanitizeCompetitionVisibility } from "../../../lib/competitions/visibility.js";
 
 function competitionId(context) {
   const value = typeof context?.params?.id === "string" ? context.params.id.trim().toLowerCase() : "";
@@ -93,7 +94,8 @@ export async function onRequestPatch(context) {
 
   const note = changeNote(input.changeNote);
   const config = sanitizeCompetitionConfig(input.config);
-  if (!note || !config) {
+  const visibility = sanitizeCompetitionVisibility(input.visibility);
+  if (!note || !config || !visibility) {
     return json({ error: "invalid_competition_draft" }, 400);
   }
 
@@ -128,8 +130,10 @@ export async function onRequestPatch(context) {
       auditEventId: crypto.randomUUID(),
       title: basics.title,
       category: basics.category,
+      visibility,
       beforeTitle: current.title,
       beforeCategory: current.category,
+      beforeVisibility: current.visibility,
       config,
       actorSubject: authorized.session.subject,
       actorUuid: authorized.session.player.uuid,
