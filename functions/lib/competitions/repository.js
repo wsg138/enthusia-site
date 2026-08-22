@@ -237,6 +237,34 @@ export async function listAcceptedPublicParticipants(db, submissionId) {
   return rows(result);
 }
 
+export async function listAcceptedPublicParticipantsByCompetition(db, competitionId) {
+  const database = requireDatabase(db);
+  const result = await database.prepare(`
+    SELECT
+      p.submission_id AS submissionId,
+      p.player_uuid AS playerUuid,
+      p.player_name AS playerName,
+      p.participant_role AS role
+    FROM submission_participants p
+    JOIN submissions s ON s.id = p.submission_id
+    WHERE s.competition_id = ?
+      AND s.status = 'APPROVED'
+      AND s.removed_at IS NULL
+      AND p.invite_status = 'ACCEPTED'
+    ORDER BY
+      p.submission_id ASC,
+      CASE p.participant_role
+        WHEN 'OWNER' THEN 1
+        WHEN 'MAIN' THEN 2
+        WHEN 'GUILD_WORKER' THEN 3
+        WHEN 'HELPER' THEN 4
+        ELSE 5
+      END,
+      p.player_name COLLATE NOCASE ASC
+  `).bind(competitionId).all();
+  return rows(result);
+}
+
 export async function getPrivateSubmissionLocation(db, submissionId) {
   const database = requireDatabase(db);
   return database.prepare(`
