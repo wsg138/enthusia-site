@@ -30,6 +30,7 @@ export async function getAdminCompetition(db, competitionId) {
       c.slug,
       c.title,
       c.category,
+      c.visibility,
       c.lifecycle_state AS lifecycleState,
       c.current_config_version AS configVersion,
       c.created_by_uuid AS createdByUuid,
@@ -59,11 +60,13 @@ export async function saveDraftCompetition(db, change) {
   const beforeJson = JSON.stringify({
     title: change.beforeTitle,
     category: change.beforeCategory,
+    visibility: change.beforeVisibility,
     configVersion: change.expectedVersion
   });
   const afterJson = JSON.stringify({
     title: change.title,
     category: change.category,
+    visibility: change.visibility,
     configVersion: nextVersion
   });
 
@@ -93,6 +96,7 @@ export async function saveDraftCompetition(db, change) {
       UPDATE competitions
       SET title = ?,
           category = ?,
+          visibility = ?,
           updated_at = ?
       WHERE id = ?
         AND lifecycle_state = 'DRAFT'
@@ -107,6 +111,7 @@ export async function saveDraftCompetition(db, change) {
     `).bind(
       change.title,
       change.category,
+      change.visibility,
       change.createdAt,
       change.competitionId,
       nextVersion,
@@ -152,6 +157,7 @@ export async function saveDraftCompetition(db, change) {
       id: change.competitionId,
       title: change.title,
       category: change.category,
+      visibility: change.visibility,
       lifecycleState: "DRAFT",
       configVersion: nextVersion,
       updatedAt: change.createdAt,
