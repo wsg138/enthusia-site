@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   competitionSlug,
   initialCompetitionConfig,
+  sanitizeCompetitionConfig,
   sanitizeDraftCompetition
 } from "../functions/lib/competitions/config.js";
 
@@ -51,4 +52,42 @@ test("new competition configuration starts safe and unpublished by behavior", ()
   assert.equal(config.moderation.reviewGraceMinutes, 1440);
   assert.equal(config.moderation.openAIModeration, true);
   assert.equal(config.moderation.minecraftPrivacyReview, "MANUAL_STAFF");
+});
+
+test("editor config sanitization preserves safe choices and locks security invariants", () => {
+  const input = initialCompetitionConfig({ summary: "Build something memorable" });
+  input.appearance.accent = "#a1b2c3";
+  input.entries.allowedTypes = ["SOLO", "GROUP", "GROUP"];
+  input.entries.maxMainMembers = 5;
+  input.entries.coordinatesRequested = true;
+  input.entries.judgesCanViewCoordinates = true;
+  input.voting.enabled = true;
+  input.voting.minimumActiveMinutes = 240;
+  input.voting.judgesCanVote = true;
+  input.voting.showTotalsPublicWhileOpen = true;
+  input.moderation.requireStaffApproval = false;
+  input.moderation.openAIModeration = false;
+
+  const sanitized = sanitizeCompetitionConfig(input);
+  assert.ok(sanitized);
+  assert.equal(sanitized.appearance.accent, "#A1B2C3");
+  assert.deepEqual(sanitized.entries.allowedTypes, ["SOLO", "GROUP"]);
+  assert.equal(sanitized.entries.maxMainMembers, 5);
+  assert.equal(sanitized.voting.minimumActiveMinutes, 240);
+  assert.equal(sanitized.voting.judgesCanVote, false);
+  assert.equal(sanitized.voting.showTotalsPublicWhileOpen, false);
+  assert.equal(sanitized.moderation.requireStaffApproval, true);
+  assert.equal(sanitized.moderation.openAIModeration, true);
+});
+
+test("editor config rejects unsupported appearance and judging definitions", () => {
+  const badAccent = initialCompetitionConfig();
+  badAccent.appearance.accent = "red";
+  assert.equal(sanitizeCompetitionConfig(badAccent), null);
+
+  const badCriteria = initialCompetitionConfig();
+  badCriteria.judging.criteria = [
+    { id: "creativity", label: "Creativity", maxScore: 5, weight: 1 }
+  ];
+  assert.equal(sanitizeCompetitionConfig(badCriteria), null);
 });
