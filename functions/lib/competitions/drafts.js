@@ -33,6 +33,7 @@ export async function getAdminCompetition(db, competitionId) {
       c.visibility,
       c.lifecycle_state AS lifecycleState,
       c.current_config_version AS configVersion,
+      c.last_lifecycle_operation_id AS lastLifecycleOperationId,
       c.created_by_uuid AS createdByUuid,
       c.created_at AS createdAt,
       c.updated_at AS updatedAt,
