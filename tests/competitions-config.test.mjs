@@ -91,3 +91,21 @@ test("editor config rejects unsupported appearance and judging definitions", () 
   ];
   assert.equal(sanitizeCompetitionConfig(badCriteria), null);
 });
+
+test("editor config rejects malformed timestamps, numbers, booleans, and entry types", () => {
+  const badTime = initialCompetitionConfig();
+  badTime.schedule.submissionsOpenAt = "not-a-date";
+  assert.equal(sanitizeCompetitionConfig(badTime), null);
+
+  const badNumber = initialCompetitionConfig();
+  badNumber.voting.minimumActiveMinutes = "120";
+  assert.equal(sanitizeCompetitionConfig(badNumber), null);
+
+  const badBoolean = initialCompetitionConfig();
+  badBoolean.entries.coordinatesRequested = "true";
+  assert.equal(sanitizeCompetitionConfig(badBoolean), null);
+
+  const badEntryType = initialCompetitionConfig();
+  badEntryType.entries.allowedTypes = ["SOLO", "UNKNOWN"];
+  assert.equal(sanitizeCompetitionConfig(badEntryType), null);
+});
