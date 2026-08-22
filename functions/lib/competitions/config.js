@@ -50,6 +50,7 @@ export function initialCompetitionConfig({ summary = "" } = {}) {
       reviewCloseAt: null,
       votingOpenAt: null,
       votingCloseAt: null,
+      judgingOpenAt: null,
       judgingCloseAt: null
     },
     entries: {
