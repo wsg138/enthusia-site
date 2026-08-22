@@ -5,6 +5,14 @@ function requireDatabase(db) {
   return db;
 }
 
+function requireWritableDatabase(db) {
+  const database = requireDatabase(db);
+  if (typeof database.batch !== "function") {
+    throw new TypeError("Competition database binding does not support transactional batches");
+  }
+  return database;
+}
+
 function rows(result) {
   return Array.isArray(result?.results) ? result.results : [];
 }
@@ -16,6 +24,81 @@ export async function competitionSchemaReady(db) {
     .bind("competitions")
     .first();
   return row?.name === "competitions";
+}
+
+export async function competitionSlugExists(db, slug) {
+  const database = requireDatabase(db);
+  const row = await database
+    .prepare("SELECT id FROM competitions WHERE slug = ? LIMIT 1")
+    .bind(slug)
+    .first();
+  return Boolean(row?.id);
+}
+
+export async function createDraftCompetition(db, draft) {
+  const database = requireWritableDatabase(db);
+  const configJson = JSON.stringify(draft.config);
+
+  await database.batch([
+    database.prepare(`
+      INSERT INTO competitions (
+        id, slug, title, category, lifecycle_state, current_config_version,
+        created_by_subject, created_by_uuid, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, 'DRAFT', 1, ?, ?, ?, ?)
+    `).bind(
+      draft.id,
+      draft.slug,
+      draft.title,
+      draft.category,
+      draft.createdBySubject,
+      draft.createdByUuid,
+      draft.createdAt,
+      draft.createdAt
+    ),
+    database.prepare(`
+      INSERT INTO competition_config_versions (
+        competition_id, version, config_json, created_by_subject,
+        created_by_uuid, created_at, change_note
+      ) VALUES (?, 1, ?, ?, ?, ?, ?)
+    `).bind(
+      draft.id,
+      configJson,
+      draft.createdBySubject,
+      draft.createdByUuid,
+      draft.createdAt,
+      "Initial draft"
+    ),
+    database.prepare(`
+      INSERT INTO competition_audit_events (
+        id, competition_id, actor_subject, actor_uuid, action,
+        after_json, note, created_at
+      ) VALUES (?, ?, ?, ?, 'COMPETITION_CREATED', ?, ?, ?)
+    `).bind(
+      draft.auditEventId,
+      draft.id,
+      draft.createdBySubject,
+      draft.createdByUuid,
+      JSON.stringify({
+        slug: draft.slug,
+        title: draft.title,
+        category: draft.category,
+        lifecycleState: "DRAFT",
+        configVersion: 1
+      }),
+      "Initial draft created",
+      draft.createdAt
+    )
+  ]);
+
+  return {
+    id: draft.id,
+    slug: draft.slug,
+    title: draft.title,
+    category: draft.category,
+    lifecycleState: "DRAFT",
+    configVersion: 1,
+    createdAt: draft.createdAt
+  };
 }
 
 export async function listPublicCompetitions(db) {
