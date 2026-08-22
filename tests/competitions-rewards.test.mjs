@@ -44,12 +44,28 @@ test("recipient selection de-duplicates candidates and supports owner/all/random
     eligibleParticipantUuids: ["b", "a", "a"]
   }), ["a", "b"]);
 
-  assert.deepEqual(selectRewardRecipients({
+  const first = selectRewardRecipients({
     distributionMode: "RANDOM_ELIGIBLE",
     eligibleParticipantUuids: ["a", "b", "c"],
     randomCount: 2,
-    random: () => 0
-  }), ["a", "b"]);
+    selectionSeed: "reward-seed-1"
+  });
+  const retry = selectRewardRecipients({
+    distributionMode: "RANDOM_ELIGIBLE",
+    eligibleParticipantUuids: ["c", "a", "b"],
+    randomCount: 2,
+    selectionSeed: "reward-seed-1"
+  });
+  assert.deepEqual(retry, first);
+  assert.equal(first.length, 2);
+});
+
+test("random distribution refuses to run without a persisted seed", () => {
+  assert.throws(() => selectRewardRecipients({
+    distributionMode: "RANDOM_ELIGIBLE",
+    eligibleParticipantUuids: ["a", "b"],
+    randomCount: 1
+  }), /persisted selection seed/);
 });
 
 test("integer reward splitting preserves the exact total and is deterministic", () => {
