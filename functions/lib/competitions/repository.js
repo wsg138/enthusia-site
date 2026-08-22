@@ -82,6 +82,7 @@ export async function createDraftCompetition(db, draft) {
         slug: draft.slug,
         title: draft.title,
         category: draft.category,
+        visibility: "PUBLIC",
         lifecycleState: "DRAFT",
         configVersion: 1
       }),
@@ -95,6 +96,7 @@ export async function createDraftCompetition(db, draft) {
     slug: draft.slug,
     title: draft.title,
     category: draft.category,
+    visibility: "PUBLIC",
     lifecycleState: "DRAFT",
     configVersion: 1,
     createdAt: draft.createdAt
@@ -109,12 +111,14 @@ export async function listPublicCompetitions(db) {
       slug,
       title,
       category,
+      visibility,
       lifecycle_state AS lifecycleState,
       current_config_version AS configVersion,
       published_at AS publishedAt,
       archived_at AS archivedAt
     FROM competitions
-    WHERE published_at IS NOT NULL
+    WHERE visibility = 'PUBLIC'
+      AND published_at IS NOT NULL
       AND lifecycle_state NOT IN ('DRAFT', 'CANCELLED')
     ORDER BY
       CASE lifecycle_state
@@ -207,6 +211,7 @@ export async function listAdminCompetitions(db) {
       slug,
       title,
       category,
+      visibility,
       lifecycle_state AS lifecycleState,
       current_config_version AS configVersion,
       created_by_uuid AS createdByUuid,
