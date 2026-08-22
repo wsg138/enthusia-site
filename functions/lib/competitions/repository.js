@@ -17,6 +17,15 @@ function rows(result) {
   return Array.isArray(result?.results) ? result.results : [];
 }
 
+function parseConfig(value) {
+  if (typeof value !== "string") throw new Error("Competition config is unavailable");
+  const parsed = JSON.parse(value);
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new Error("Competition config is invalid");
+  }
+  return parsed;
+}
+
 export async function competitionSchemaReady(db) {
   const database = requireDatabase(db);
   const row = await database
@@ -135,6 +144,36 @@ export async function listPublicCompetitions(db) {
       published_at DESC
   `).all();
   return rows(result);
+}
+
+export async function getPublicCompetitionBySlug(db, slug) {
+  const database = requireDatabase(db);
+  const row = await database.prepare(`
+    SELECT
+      c.id,
+      c.slug,
+      c.title,
+      c.category,
+      c.visibility,
+      c.lifecycle_state AS lifecycleState,
+      c.current_config_version AS configVersion,
+      c.published_at AS publishedAt,
+      c.archived_at AS archivedAt,
+      v.config_json AS configJson
+    FROM competitions c
+    JOIN competition_config_versions v
+      ON v.competition_id = c.id
+     AND v.version = c.current_config_version
+    WHERE c.slug = ?
+      AND c.visibility IN ('PUBLIC', 'UNLISTED')
+      AND c.published_at IS NOT NULL
+      AND c.lifecycle_state NOT IN ('DRAFT', 'CANCELLED')
+    LIMIT 1
+  `).bind(slug).first();
+
+  if (!row) return null;
+  const { configJson, ...competition } = row;
+  return { ...competition, config: parseConfig(configJson) };
 }
 
 export async function listApprovedPublicSubmissions(db, competitionId) {
