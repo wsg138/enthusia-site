@@ -4,8 +4,26 @@ import { spawnSync } from "node:child_process";
 import path from "node:path";
 
 const publicDir = path.join(process.cwd(), "public");
-const htmlFiles = (await readdir(publicDir)).filter((file) => file.endsWith(".html"));
 const errors = [];
+const htmlScanSkipDirs = new Set(["assets", "banner-patterns"]);
+
+async function findHtmlFiles(directory, relative = "") {
+  const files = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const relativePath = path.join(relative, entry.name);
+    if (entry.isDirectory()) {
+      if (!htmlScanSkipDirs.has(entry.name)) {
+        files.push(...await findHtmlFiles(path.join(directory, entry.name), relativePath));
+      }
+      continue;
+    }
+    if (entry.isFile() && entry.name.endsWith(".html")) files.push(relativePath);
+  }
+  return files;
+}
+
+const htmlFiles = await findHtmlFiles(publicDir);
+const topLevelHtmlFiles = htmlFiles.filter((file) => path.dirname(file) === ".");
 
 for (const file of htmlFiles) {
   const fullPath = path.join(publicDir, file);
@@ -34,7 +52,11 @@ for (const file of htmlFiles) {
   }
 }
 
-for (const file of ["appeal.html", path.join("reviewer", "appeals.html")]) {
+for (const file of [
+  "appeal.html",
+  path.join("reviewer", "appeals.html"),
+  path.join("competitions", "admin", "index.html")
+]) {
   const html = await readFile(path.join(publicDir, file), "utf8");
   const mainClass = html.match(/<main\b[^>]*\s+class\s*=\s*["']([^"']*)["']/i)?.[1] ?? "";
   if (!mainClass.split(/\s+/).includes("page-main")) {
@@ -59,7 +81,7 @@ for (const file of marketRequired) {
 const marketHtml = await readFile(path.join(publicDir, "market.html"), "utf8");
 if (!marketHtml.includes('href="market.html" class="active" aria-current="page"')) errors.push("market.html: missing active Market navigation");
 if (!marketHtml.includes("NOT AN OFFICIAL MINECRAFT PRODUCT")) errors.push("market.html: missing Minecraft product disclaimer");
-for (const file of htmlFiles.filter(file => !["404.html", "celestial-test.html"].includes(file))) {
+for (const file of topLevelHtmlFiles.filter(file => !["404.html", "celestial-test.html"].includes(file))) {
   const html = await readFile(path.join(publicDir, file), "utf8");
   if (!html.includes('href="market.html"')) errors.push(`${file}: missing Market navigation`);
 }
@@ -80,6 +102,11 @@ if (potions.items?.length !== 184 || potions.count !== 184) errors.push(`market:
 for (const file of ["market.js", "market-api-client.js", "market-adapter.js", "market-data.js", "minecraft/material-icon-manifest.js", "minecraft/font-metrics.js", "minecraft/item-catalog.js", "minecraft/item-variant-catalog.js"]) {
   const result = spawnSync(process.execPath, ["--check", path.join(marketDir, file)], {encoding: "utf8"});
   if (result.status !== 0) errors.push(`market: invalid JavaScript ${file}: ${result.stderr.trim()}`);
+}
+
+for (const file of ["competitions-admin.js"]) {
+  const result = spawnSync(process.execPath, ["--check", path.join(publicDir, "assets", file)], {encoding: "utf8"});
+  if (result.status !== 0) errors.push(`competitions: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }
 
 if (errors.length) {
