@@ -8,7 +8,8 @@ async function migratedDatabase() {
   for (const file of [
     "0001_competitions.sql",
     "0002_competition_config_version_triggers.sql",
-    "0003_competition_config_operation_ids.sql"
+    "0003_competition_config_operation_ids.sql",
+    "0004_competition_visibility.sql"
   ]) {
     const sql = await readFile(new URL(`../migrations/${file}`, import.meta.url), "utf8");
     database.exec(sql);
@@ -55,6 +56,18 @@ test("competition migrations apply cleanly to SQLite", async () => {
   assert.ok(tables.some((row) => row.name === "competitions"));
   assert.ok(tables.some((row) => row.name === "competition_config_versions"));
   assert.ok(tables.some((row) => row.name === "competition_audit_events"));
+  database.close();
+});
+
+test("competition visibility defaults to public and rejects unknown modes", async () => {
+  const database = await migratedDatabase();
+  seedDraft(database);
+  const row = database.prepare("SELECT visibility FROM competitions WHERE id = ?").get("competition-1");
+  assert.equal(row.visibility, "PUBLIC");
+  assert.throws(
+    () => database.prepare("UPDATE competitions SET visibility = 'SECRET' WHERE id = ?").run("competition-1"),
+    /CHECK constraint failed/
+  );
   database.close();
 });
 
