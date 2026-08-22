@@ -94,8 +94,7 @@ export async function onRequestPatch(context) {
 
   const note = changeNote(input.changeNote);
   const config = sanitizeCompetitionConfig(input.config);
-  const visibility = sanitizeCompetitionVisibility(input.visibility);
-  if (!note || !config || !visibility) {
+  if (!note || !config) {
     return json({ error: "invalid_competition_draft" }, 400);
   }
 
@@ -112,6 +111,9 @@ export async function onRequestPatch(context) {
   if (current.configVersion !== input.expectedVersion) {
     return json({ error: "competition_version_conflict", currentVersion: current.configVersion }, 409);
   }
+
+  const visibility = sanitizeCompetitionVisibility(input.visibility, current.visibility);
+  if (!visibility) return json({ error: "invalid_competition_draft" }, 400);
 
   const basics = sanitizeDraftCompetition({
     title: input.title,
