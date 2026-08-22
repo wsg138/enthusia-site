@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Browse current, upcoming, and completed Enthusia competitions.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Competitions | Enthusia</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=vision63">
+  <link rel="stylesheet" href="../assets/competitions.css?v=1">
+</head>
+<body class="competitions-page" data-competition-page="catalog">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html">Enthusia SMP</a>
+      <nav class="nav" aria-label="Competition navigation">
+        <a href="../index.html">Home</a>
+        <a href="../rules.html">Rules</a>
+        <a href="../gallery.html">Gallery</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-main container competitions-main">
+    <section class="competitions-intro">
+      <div>
+        <p class="competitions-kicker">Enthusia Community</p>
+        <h1>Competitions</h1>
+        <p>Server competitions, community voting, judging, permanent results, and the builds and projects players created along the way.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="featured-title">
+      <div class="competition-section-heading">
+        <div>
+          <p class="competitions-kicker">Now</p>
+          <h2 id="featured-title">Current competition</h2>
+        </div>
+      </div>
+      <div id="featuredCompetition" class="competition-loading">Loading competition…</div>
+    </section>
+
+    <section class="competition-section" aria-labelledby="upcoming-title">
+      <div class="competition-section-heading">
+        <div>
+          <p class="competitions-kicker">Next</p>
+          <h2 id="upcoming-title">Upcoming</h2>
+        </div>
+        <p>Rules and schedules are available before submissions open.</p>
+      </div>
+      <div id="upcomingCompetitions" class="competition-grid"></div>
+    </section>
+
+    <section class="competition-section" aria-labelledby="history-title">
+      <div class="competition-section-heading">
+        <div>
+          <p class="competitions-kicker">Archive</p>
+          <h2 id="history-title">Completed competitions</h2>
+        </div>
+        <p>Results and approved entries remain available after a competition ends.</p>
+      </div>
+      <div id="competitionHistory" class="competition-grid"></div>
+    </section>
+  </main>
+
+  <script src="../assets/competitions.js?v=1" type="module"></script>
+</body>
+</html>
