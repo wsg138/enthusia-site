@@ -11,8 +11,16 @@ function hasAllowedRole(session, allowedRoles) {
   return session.roles.some((role) => allowed.has(String(role).toLowerCase()));
 }
 
+function enabledFlag(value) {
+  return String(value ?? "").trim().toLowerCase() === "true";
+}
+
 export function competitionsEnabled(env) {
-  return String(env?.COMPETITIONS_ENABLED ?? "").trim().toLowerCase() === "true";
+  return enabledFlag(env?.COMPETITIONS_ENABLED);
+}
+
+export function competitionsPublicAccessEnabled(env) {
+  return enabledFlag(env?.COMPETITIONS_PUBLIC_ACCESS);
 }
 
 export function competitionManagerRoles(env) {
@@ -26,12 +34,23 @@ export function competitionModeratorRoles(env) {
   );
 }
 
+export function competitionPreviewRoles(env) {
+  return normalizeRoleList(
+    env?.COMPETITIONS_PREVIEW_ROLES,
+    "founder,admin"
+  );
+}
+
 export function canManageCompetitions(session, env) {
   return hasAllowedRole(session, competitionManagerRoles(env));
 }
 
 export function canModerateCompetitions(session, env) {
   return hasAllowedRole(session, competitionModeratorRoles(env));
+}
+
+export function canPreviewCompetitions(session, env) {
+  return hasAllowedRole(session, competitionPreviewRoles(env));
 }
 
 export function hasCompetitionDatabase(env) {
