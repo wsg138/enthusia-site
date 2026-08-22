@@ -30,6 +30,26 @@ function uniqueSorted(values) {
   return [...new Set((values ?? []).filter(Boolean).map(String))].sort();
 }
 
+function seededRandom(seed) {
+  const text = String(seed ?? "");
+  if (!text) throw new TypeError("Random reward selection requires a persisted selection seed");
+
+  let state = 2166136261;
+  for (let index = 0; index < text.length; index += 1) {
+    state ^= text.charCodeAt(index);
+    state = Math.imul(state, 16777619);
+  }
+  state >>>= 0;
+
+  return () => {
+    state += 0x6D2B79F5;
+    let value = state;
+    value = Math.imul(value ^ (value >>> 15), value | 1);
+    value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 export function defaultRewardDistribution(rewardType) {
   if (rewardType === "MONEY" || rewardType === "ITEM") return "SPLIT_ELIGIBLE";
   if (rewardType === "MANUAL") return "MANUAL";
@@ -81,7 +101,7 @@ export function selectRewardRecipients({
   eligibleParticipantUuids = [],
   guildMemberUuids = [],
   randomCount = 1,
-  random = Math.random
+  selectionSeed = null
 }) {
   const eligible = uniqueSorted(eligibleParticipantUuids);
   const guildMembers = uniqueSorted(guildMemberUuids);
@@ -93,11 +113,11 @@ export function selectRewardRecipients({
     case "EACH_ELIGIBLE":
       return eligible;
     case "RANDOM_ELIGIBLE":
-      return takeRandom(eligible, randomCount, random);
+      return takeRandom(eligible, randomCount, seededRandom(selectionSeed));
     case "ALL_GUILD_MEMBERS":
       return guildMembers;
     case "RANDOM_GUILD_MEMBERS":
-      return takeRandom(guildMembers, randomCount, random);
+      return takeRandom(guildMembers, randomCount, seededRandom(selectionSeed));
     case "MANUAL":
       return [];
     default:
