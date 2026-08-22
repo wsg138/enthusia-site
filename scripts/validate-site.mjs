@@ -55,12 +55,25 @@ for (const file of htmlFiles) {
 for (const file of [
   "appeal.html",
   path.join("reviewer", "appeals.html"),
-  path.join("competitions", "admin", "index.html")
+  path.join("competitions", "admin", "index.html"),
+  path.join("competitions", "index.html"),
+  path.join("competitions", "detail.html")
 ]) {
   const html = await readFile(path.join(publicDir, file), "utf8");
   const mainClass = html.match(/<main\b[^>]*\s+class\s*=\s*["']([^"']*)["']/i)?.[1] ?? "";
   if (!mainClass.split(/\s+/).includes("page-main")) {
     errors.push(`${file}: main content must use page-main to stay above the background layer`);
+  }
+}
+
+for (const file of [
+  path.join("competitions", "admin", "index.html"),
+  path.join("competitions", "index.html"),
+  path.join("competitions", "detail.html")
+]) {
+  const html = await readFile(path.join(publicDir, file), "utf8");
+  if (!html.includes('name="robots" content="noindex,nofollow,noarchive"')) {
+    errors.push(`${file}: development competition pages must remain noindex`);
   }
 }
 
@@ -84,6 +97,9 @@ if (!marketHtml.includes("NOT AN OFFICIAL MINECRAFT PRODUCT")) errors.push("mark
 for (const file of topLevelHtmlFiles.filter(file => !["404.html", "celestial-test.html"].includes(file))) {
   const html = await readFile(path.join(publicDir, file), "utf8");
   if (!html.includes('href="market.html"')) errors.push(`${file}: missing Market navigation`);
+  if (/href=["'][^"']*competitions/i.test(html)) {
+    errors.push(`${file}: competition navigation must stay hidden during development`);
+  }
 }
 
 const layout = JSON.parse(await readFile(path.join(marketDir, "market-layout.json"), "utf8"));
@@ -104,7 +120,7 @@ for (const file of ["market.js", "market-api-client.js", "market-adapter.js", "m
   if (result.status !== 0) errors.push(`market: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }
 
-for (const file of ["competitions-admin.js"]) {
+for (const file of ["competitions-admin.js", "competitions.js"]) {
   const result = spawnSync(process.execPath, ["--check", path.join(publicDir, "assets", file)], {encoding: "utf8"});
   if (result.status !== 0) errors.push(`competitions: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }
