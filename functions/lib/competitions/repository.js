@@ -26,6 +26,13 @@ function parseConfig(value) {
   return parsed;
 }
 
+function rowsWithConfig(result) {
+  return rows(result).map((row) => {
+    const { configJson, ...competition } = row;
+    return { ...competition, config: parseConfig(configJson) };
+  });
+}
+
 export async function competitionSchemaReady(db) {
   const database = requireDatabase(db);
   const row = await database
@@ -116,21 +123,25 @@ export async function listPublicCompetitions(db) {
   const database = requireDatabase(db);
   const result = await database.prepare(`
     SELECT
-      id,
-      slug,
-      title,
-      category,
-      visibility,
-      lifecycle_state AS lifecycleState,
-      current_config_version AS configVersion,
-      published_at AS publishedAt,
-      archived_at AS archivedAt
-    FROM competitions
-    WHERE visibility = 'PUBLIC'
-      AND published_at IS NOT NULL
-      AND lifecycle_state NOT IN ('DRAFT', 'CANCELLED')
+      c.id,
+      c.slug,
+      c.title,
+      c.category,
+      c.visibility,
+      c.lifecycle_state AS lifecycleState,
+      c.current_config_version AS configVersion,
+      c.published_at AS publishedAt,
+      c.archived_at AS archivedAt,
+      v.config_json AS configJson
+    FROM competitions c
+    JOIN competition_config_versions v
+      ON v.competition_id = c.id
+     AND v.version = c.current_config_version
+    WHERE c.visibility = 'PUBLIC'
+      AND c.published_at IS NOT NULL
+      AND c.lifecycle_state NOT IN ('DRAFT', 'CANCELLED')
     ORDER BY
-      CASE lifecycle_state
+      CASE c.lifecycle_state
         WHEN 'SUBMISSIONS_OPEN' THEN 1
         WHEN 'REVIEW' THEN 2
         WHEN 'VOTING' THEN 3
@@ -141,9 +152,9 @@ export async function listPublicCompetitions(db) {
         WHEN 'ARCHIVED' THEN 8
         ELSE 9
       END,
-      published_at DESC
+      c.published_at DESC
   `).all();
-  return rows(result);
+  return rowsWithConfig(result);
 }
 
 export async function getPublicCompetitionBySlug(db, slug) {
