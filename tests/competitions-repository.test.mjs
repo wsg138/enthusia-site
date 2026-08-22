@@ -4,7 +4,9 @@ import test from "node:test";
 import {
   competitionSchemaReady,
   getPrivateSubmissionLocation,
+  getPublicCompetitionBySlug,
   listAcceptedPublicParticipants,
+  listAcceptedPublicParticipantsByCompetition,
   listAdminCompetitions,
   listApprovedPublicSubmissions,
   listPublicCompetitions
@@ -41,14 +43,39 @@ test("competition schema readiness checks the expected D1 table", async () => {
 });
 
 test("public competition list is an explicit published projection", async () => {
-  const db = fakeDatabase({ results: [{ id: "c1", slug: "spring-build" }] });
+  const db = fakeDatabase({
+    results: [{ id: "c1", slug: "spring-build", configJson: "{}" }]
+  });
   const rows = await listPublicCompetitions(db);
   assert.equal(rows.length, 1);
+  assert.deepEqual(rows[0].config, {});
   const sql = db.calls[0].sql;
   assert.equal(/SELECT\s+\*/i.test(sql), false);
+  assert.match(sql, /visibility = 'PUBLIC'/i);
   assert.match(sql, /published_at IS NOT NULL/i);
   assert.match(sql, /DRAFT/);
   assert.match(sql, /CANCELLED/);
+  assert.equal(sql.includes("submission_private_locations"), false);
+});
+
+test("direct public detail allows public or unlisted but never staff-only competitions", async () => {
+  const db = fakeDatabase({
+    first: {
+      id: "c1",
+      slug: "spring-build",
+      visibility: "UNLISTED",
+      lifecycleState: "VOTING",
+      configJson: "{\"schemaVersion\":1}"
+    }
+  });
+  const row = await getPublicCompetitionBySlug(db, "spring-build");
+  assert.equal(row.visibility, "UNLISTED");
+  assert.equal(row.config.schemaVersion, 1);
+  const sql = db.calls[0].sql;
+  assert.match(sql, /visibility IN \('PUBLIC', 'UNLISTED'\)/i);
+  assert.equal(sql.includes("STAFF_ONLY"), false);
+  assert.equal(sql.includes("submission_private_locations"), false);
+  assert.deepEqual(db.calls[0].bindings, ["spring-build"]);
 });
 
 test("public submissions never join or select the private coordinate table", async () => {
@@ -66,6 +93,16 @@ test("only accepted participants are exposed by the public participant projectio
   await listAcceptedPublicParticipants(db, "submission-1");
   assert.match(db.calls[0].sql, /invite_status = 'ACCEPTED'/);
   assert.deepEqual(db.calls[0].bindings, ["submission-1"]);
+});
+
+test("batched participant projection stays inside approved public submissions", async () => {
+  const db = fakeDatabase();
+  await listAcceptedPublicParticipantsByCompetition(db, "competition-1");
+  const sql = db.calls[0].sql;
+  assert.match(sql, /s\.status = 'APPROVED'/);
+  assert.match(sql, /p\.invite_status = 'ACCEPTED'/);
+  assert.equal(sql.includes("submission_private_locations"), false);
+  assert.deepEqual(db.calls[0].bindings, ["competition-1"]);
 });
 
 test("private location query is isolated to its dedicated function", async () => {
