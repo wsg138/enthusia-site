@@ -1,6 +1,6 @@
 import { competitionsEnabled, hasCompetitionDatabase } from "../../../lib/competitions/access.js";
 import {
-  bridgeContextForLinkedAccount,
+  bridgeContextsForAllLinkedAccounts,
   getCompetitionParticipantSession,
   linkedMinecraftAccount
 } from "../../../lib/competitions/participant-auth.js";
@@ -32,7 +32,6 @@ function safeLinkedAccounts(playerContext, session) {
     const name = String(raw?.name ?? "").trim();
     if (isCanonicalUuid(uuid) && /^[A-Za-z0-9_]{1,16}$/.test(name)) accounts.set(uuid, name);
   }
-  // Legacy-compatible fallback for the private Access-based development tests.
   for (const raw of playerContext?.linkedMinecraftAccounts ?? []) {
     const uuid = String(typeof raw === "string" ? raw : raw?.uuid ?? "").trim().toLowerCase();
     const name = String(typeof raw === "object" ? raw?.name ?? "" : "").trim();
@@ -45,15 +44,20 @@ function safeLinkedAccounts(playerContext, session) {
 }
 
 function safeGuilds(playerContext, permission) {
-  const guilds = [];
+  const guilds = new Map();
   for (const raw of playerContext?.guilds ?? []) {
     const id = String(raw?.guildId ?? raw?.id ?? "").trim();
     const name = String(raw?.guildName ?? raw?.name ?? "").trim();
     if (!id || id.length > 128 || !name || name.length > 80) continue;
     const permissions = Array.isArray(raw?.permissions) ? raw.permissions.map(String) : [];
-    guilds.push({ id, name, canSubmit: permissions.includes(permission) });
+    const current = guilds.get(id);
+    guilds.set(id, {
+      id,
+      name,
+      canSubmit: Boolean(current?.canSubmit) || permissions.includes(permission)
+    });
   }
-  return guilds.sort((left, right) => left.name.localeCompare(right.name));
+  return [...guilds.values()].sort((left, right) => left.name.localeCompare(right.name));
 }
 
 export async function onRequestGet(context) {
@@ -85,15 +89,18 @@ export async function onRequestGet(context) {
     const competition = await getPublicCompetitionBySlug(context.env.COMPETITIONS_DB, slug);
     if (!competition) return json({ error: "competition_not_found" }, 404);
 
-    const playerContext = await bridgeContextForLinkedAccount(context.env, session, selectedPlayer);
+    const contexts = await bridgeContextsForAllLinkedAccounts(context.env, session);
+    const selectedContext = contexts.find((item) => item.account.uuid === selectedPlayer.uuid)?.context;
+    if (!selectedContext) return json({ error: "minecraft_account_context_unavailable" }, 503);
     const permission = competition.config?.entries?.guildSubmissionPermission ?? "competition.submit";
+    const aggregateGuildContext = { guilds: contexts.flatMap((item) => item.context?.guilds ?? []) };
     return json({
       accountSubject: session.subject,
       discord: session.discord,
       selectedPlayer,
       linkedMinecraftAccounts: safeLinkedAccounts(null, session),
-      guilds: safeGuilds(playerContext, permission),
-      activeMinutes: Math.max(0, Math.floor(Number(playerContext.activeMinutes) || 0)),
+      guilds: safeGuilds(aggregateGuildContext, permission),
+      activeMinutes: Math.max(0, Math.floor(Number(selectedContext.activeMinutes) || 0)),
       votingRequiredActiveMinutes: Math.max(0, Math.floor(Number(competition.config?.voting?.minimumActiveMinutes) || 0)),
       lifecycleState: competition.lifecycleState
     });
