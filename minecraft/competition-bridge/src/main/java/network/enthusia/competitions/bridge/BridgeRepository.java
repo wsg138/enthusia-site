@@ -27,6 +27,7 @@ public final class BridgeRepository implements Closeable {
         Files.createDirectories(dataFolder);
         Path database = dataFolder.resolve("bridge.db").toAbsolutePath().normalize();
         this.jdbcUrl = "jdbc:sqlite:" + database;
+        Class.forName("org.sqlite.JDBC");
         migrate();
     }
 
@@ -35,6 +36,7 @@ public final class BridgeRepository implements Closeable {
         try (Statement statement = connection.createStatement()) {
             statement.execute("PRAGMA foreign_keys = ON");
             statement.execute("PRAGMA busy_timeout = 5000");
+            statement.execute("PRAGMA synchronous = FULL");
         }
         return connection;
     }
@@ -53,8 +55,22 @@ public final class BridgeRepository implements Closeable {
                       operation_key TEXT PRIMARY KEY,
                       reward_type TEXT NOT NULL,
                       recipient_uuid TEXT NOT NULL,
+                      request_hash TEXT,
                       state TEXT NOT NULL CHECK(state IN ('CLAIMED','DELIVERED','FAILED_RECONCILE')),
                       detail_json TEXT,
+                      created_at INTEGER NOT NULL,
+                      updated_at INTEGER NOT NULL
+                    )
+                    """);
+            if (!hasColumn(connection, "reward_operations", "request_hash")) {
+                statement.execute("ALTER TABLE reward_operations ADD COLUMN request_hash TEXT");
+            }
+            statement.execute("""
+                    CREATE TABLE IF NOT EXISTS pending_item_rewards (
+                      operation_key TEXT PRIMARY KEY REFERENCES reward_operations(operation_key) ON DELETE CASCADE,
+                      player_uuid TEXT NOT NULL,
+                      material_key TEXT NOT NULL,
+                      remaining INTEGER NOT NULL CHECK(remaining > 0),
                       created_at INTEGER NOT NULL,
                       updated_at INTEGER NOT NULL
                     )
@@ -74,7 +90,15 @@ public final class BridgeRepository implements Closeable {
                     )
                     """);
             statement.execute("CREATE INDEX IF NOT EXISTS idx_request_nonces_seen ON request_nonces(seen_at)");
+            statement.execute("CREATE INDEX IF NOT EXISTS idx_pending_items_player ON pending_item_rewards(player_uuid)");
             statement.execute("CREATE INDEX IF NOT EXISTS idx_contributor_reminders_player ON contributor_reminders(player_uuid)");
+        }
+    }
+
+    private static boolean hasColumn(Connection connection, String table, String column) throws SQLException {
+        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery("PRAGMA table_info(" + table + ")")) {
+            while (result.next()) if (column.equalsIgnoreCase(result.getString("name"))) return true;
+            return false;
         }
     }
 
@@ -104,36 +128,43 @@ public final class BridgeRepository implements Closeable {
         }
     }
 
-    public RewardClaim claimReward(String operationKey, String rewardType, UUID recipientUuid, long nowMillis) throws SQLException {
+    public RewardClaim claimReward(String operationKey, String rewardType, UUID recipientUuid, String requestHash, long nowMillis) throws SQLException {
         requireKey(operationKey);
         Objects.requireNonNull(rewardType, "rewardType");
         Objects.requireNonNull(recipientUuid, "recipientUuid");
+        requireHash(requestHash);
         try (Connection connection = open()) {
             connection.setAutoCommit(false);
             try {
                 Optional<RewardOperation> existing = rewardOperation(connection, operationKey);
                 if (existing.isPresent()) {
+                    RewardOperation operation = existing.get();
+                    boolean sameIdentity = operation.rewardType().equals(rewardType)
+                            && operation.recipientUuid().equals(recipientUuid)
+                            && (operation.requestHash() == null || operation.requestHash().equals(requestHash));
                     connection.commit();
-                    return switch (existing.get().state()) {
-                        case "DELIVERED" -> new RewardClaim(RewardClaimState.ALREADY_DELIVERED, existing.get());
-                        case "CLAIMED", "FAILED_RECONCILE" -> new RewardClaim(RewardClaimState.RECONCILIATION_REQUIRED, existing.get());
-                        default -> throw new SQLException("Unknown reward state " + existing.get().state());
+                    if (!sameIdentity) return new RewardClaim(RewardClaimState.OPERATION_CONFLICT, operation);
+                    return switch (operation.state()) {
+                        case "DELIVERED" -> new RewardClaim(RewardClaimState.ALREADY_DELIVERED, operation);
+                        case "CLAIMED", "FAILED_RECONCILE" -> new RewardClaim(RewardClaimState.RECONCILIATION_REQUIRED, operation);
+                        default -> throw new SQLException("Unknown reward state " + operation.state());
                     };
                 }
                 try (PreparedStatement insert = connection.prepareStatement("""
                         INSERT INTO reward_operations(
-                          operation_key, reward_type, recipient_uuid, state,
+                          operation_key, reward_type, recipient_uuid, request_hash, state,
                           detail_json, created_at, updated_at
-                        ) VALUES (?, ?, ?, 'CLAIMED', NULL, ?, ?)
+                        ) VALUES (?, ?, ?, ?, 'CLAIMED', NULL, ?, ?)
                         """)) {
                     insert.setString(1, operationKey);
                     insert.setString(2, rewardType);
                     insert.setString(3, recipientUuid.toString());
-                    insert.setLong(4, nowMillis);
+                    insert.setString(4, requestHash);
                     insert.setLong(5, nowMillis);
+                    insert.setLong(6, nowMillis);
                     insert.executeUpdate();
                 }
-                RewardOperation created = new RewardOperation(operationKey, rewardType, recipientUuid, "CLAIMED", null, nowMillis, nowMillis);
+                RewardOperation created = new RewardOperation(operationKey, rewardType, recipientUuid, requestHash, "CLAIMED", null, nowMillis, nowMillis);
                 connection.commit();
                 return new RewardClaim(RewardClaimState.CLAIMED, created);
             } catch (SQLException failure) {
@@ -168,6 +199,85 @@ public final class BridgeRepository implements Closeable {
         }
     }
 
+    public void acceptQueuedItem(String operationKey, UUID playerUuid, String materialKey, int amount, JsonObject detail, long nowMillis) throws SQLException {
+        requireKey(operationKey);
+        if (amount <= 0) throw new IllegalArgumentException("Queued item amount must be positive");
+        try (Connection connection = open()) {
+            connection.setAutoCommit(false);
+            try {
+                try (PreparedStatement insert = connection.prepareStatement("""
+                        INSERT INTO pending_item_rewards(operation_key,player_uuid,material_key,remaining,created_at,updated_at)
+                        VALUES(?,?,?,?,?,?)
+                        ON CONFLICT(operation_key) DO NOTHING
+                        """)) {
+                    insert.setString(1, operationKey);
+                    insert.setString(2, playerUuid.toString());
+                    insert.setString(3, materialKey);
+                    insert.setInt(4, amount);
+                    insert.setLong(5, nowMillis);
+                    insert.setLong(6, nowMillis);
+                    insert.executeUpdate();
+                }
+                try (PreparedStatement update = connection.prepareStatement("""
+                        UPDATE reward_operations
+                        SET state='DELIVERED',detail_json=?,updated_at=?
+                        WHERE operation_key=? AND state='CLAIMED'
+                        """)) {
+                    update.setString(1, detail == null ? null : detail.toString());
+                    update.setLong(2, nowMillis);
+                    update.setString(3, operationKey);
+                    if (update.executeUpdate() != 1) throw new SQLException("Reward operation is not claimable: " + operationKey);
+                }
+                connection.commit();
+            } catch (SQLException failure) {
+                connection.rollback();
+                throw failure;
+            } finally {
+                connection.setAutoCommit(true);
+            }
+        }
+    }
+
+    public List<PendingItem> pendingItems(UUID playerUuid) throws SQLException {
+        List<PendingItem> items = new ArrayList<>();
+        try (Connection connection = open(); PreparedStatement statement = connection.prepareStatement("""
+                SELECT operation_key,player_uuid,material_key,remaining
+                FROM pending_item_rewards WHERE player_uuid=? ORDER BY created_at,operation_key
+                """)) {
+            statement.setString(1, playerUuid.toString());
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) {
+                    items.add(new PendingItem(
+                            result.getString("operation_key"),
+                            UUID.fromString(result.getString("player_uuid")),
+                            result.getString("material_key"),
+                            result.getInt("remaining")
+                    ));
+                }
+            }
+        }
+        return items;
+    }
+
+    public void updatePendingItem(String operationKey, int remaining, long nowMillis) throws SQLException {
+        requireKey(operationKey);
+        if (remaining <= 0) {
+            try (Connection connection = open(); PreparedStatement statement = connection.prepareStatement(
+                    "DELETE FROM pending_item_rewards WHERE operation_key=?")) {
+                statement.setString(1, operationKey);
+                statement.executeUpdate();
+            }
+            return;
+        }
+        try (Connection connection = open(); PreparedStatement statement = connection.prepareStatement(
+                "UPDATE pending_item_rewards SET remaining=?,updated_at=? WHERE operation_key=?")) {
+            statement.setInt(1, remaining);
+            statement.setLong(2, nowMillis);
+            statement.setString(3, operationKey);
+            statement.executeUpdate();
+        }
+    }
+
     public Optional<RewardOperation> rewardOperation(String operationKey) throws SQLException {
         try (Connection connection = open()) {
             return rewardOperation(connection, operationKey);
@@ -176,7 +286,7 @@ public final class BridgeRepository implements Closeable {
 
     private Optional<RewardOperation> rewardOperation(Connection connection, String operationKey) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement("""
-                SELECT operation_key, reward_type, recipient_uuid, state,
+                SELECT operation_key, reward_type, recipient_uuid, request_hash, state,
                        detail_json, created_at, updated_at
                 FROM reward_operations WHERE operation_key = ? LIMIT 1
                 """)) {
@@ -189,6 +299,7 @@ public final class BridgeRepository implements Closeable {
                         result.getString("operation_key"),
                         result.getString("reward_type"),
                         UUID.fromString(result.getString("recipient_uuid")),
+                        result.getString("request_hash"),
                         result.getString("state"),
                         detail,
                         result.getLong("created_at"),
@@ -267,14 +378,15 @@ public final class BridgeRepository implements Closeable {
     public RepositoryStatus status() throws SQLException {
         try (Connection connection = open(); Statement statement = connection.createStatement()) {
             long nonceCount;
-            long claimedCount;
+            long unresolvedCount;
             long deliveredCount;
             long reminderCount;
+            long pendingItemCount;
             try (ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM request_nonces")) {
                 nonceCount = result.next() ? result.getLong(1) : 0;
             }
             try (ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM reward_operations WHERE state <> 'DELIVERED'")) {
-                claimedCount = result.next() ? result.getLong(1) : 0;
+                unresolvedCount = result.next() ? result.getLong(1) : 0;
             }
             try (ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM reward_operations WHERE state = 'DELIVERED'")) {
                 deliveredCount = result.next() ? result.getLong(1) : 0;
@@ -282,7 +394,10 @@ public final class BridgeRepository implements Closeable {
             try (ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM contributor_reminders")) {
                 reminderCount = result.next() ? result.getLong(1) : 0;
             }
-            return new RepositoryStatus(nonceCount, claimedCount, deliveredCount, reminderCount);
+            try (ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM pending_item_rewards")) {
+                pendingItemCount = result.next() ? result.getLong(1) : 0;
+            }
+            return new RepositoryStatus(nonceCount, unresolvedCount, deliveredCount, reminderCount, pendingItemCount);
         }
     }
 
@@ -292,14 +407,19 @@ public final class BridgeRepository implements Closeable {
         }
     }
 
+    private static void requireHash(String requestHash) {
+        if (requestHash == null || !requestHash.matches("[0-9a-f]{64}")) throw new IllegalArgumentException("Invalid request hash");
+    }
+
     @Override
     public void close() {
         // Connections are short-lived per operation; nothing remains open here.
     }
 
-    public enum RewardClaimState { CLAIMED, ALREADY_DELIVERED, RECONCILIATION_REQUIRED }
+    public enum RewardClaimState { CLAIMED, ALREADY_DELIVERED, RECONCILIATION_REQUIRED, OPERATION_CONFLICT }
     public record RewardClaim(RewardClaimState state, RewardOperation operation) {}
-    public record RewardOperation(String operationKey, String rewardType, UUID recipientUuid, String state, JsonObject detail, long createdAt, long updatedAt) {}
+    public record RewardOperation(String operationKey, String rewardType, UUID recipientUuid, String requestHash, String state, JsonObject detail, long createdAt, long updatedAt) {}
+    public record PendingItem(String operationKey, UUID playerUuid, String materialKey, int remaining) {}
     public record ContributorReminder(String competitionId, String submissionId, UUID playerUuid, String competitionTitle, String submissionTitle, String role, String actionUrl) {}
-    public record RepositoryStatus(long nonceCount, long unresolvedRewards, long deliveredRewards, long contributorReminders) {}
+    public record RepositoryStatus(long nonceCount, long unresolvedRewards, long deliveredRewards, long contributorReminders, long pendingItems) {}
 }

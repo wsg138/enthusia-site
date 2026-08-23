@@ -11,7 +11,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,3 +22,11 @@ jobs:
       - run: npm install --ignore-scripts
       - run: npm test
       - run: npm run build
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: minecraft/competition-bridge/pom.xml
+      - name: Verify competition bridge
+        run: mvn -B -f minecraft/competition-bridge/pom.xml verify

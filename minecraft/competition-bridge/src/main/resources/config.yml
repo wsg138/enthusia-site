@@ -1,7 +1,9 @@
 # Enthusia Competition Bridge
-# Keep the listener private (normally loopback) and expose it through a protected HTTPS reverse proxy/tunnel.
+# Keep the listener on loopback and expose it only through a protected HTTPS reverse proxy / Cloudflare Tunnel.
 server:
+  enabled: false
   bind-host: "127.0.0.1"
+  allow-non-loopback-bind: false
   port: 8765
   worker-threads: 4
   max-request-bytes: 65536
@@ -9,7 +11,8 @@ server:
 
 security:
   # Prefer environment variables ENTHUSIA_COMPETITION_BRIDGE_BEARER_TOKEN and
-  # ENTHUSIA_COMPETITION_BRIDGE_HMAC_SECRET. Values shorter than 32 characters disable the listener.
+  # ENTHUSIA_COMPETITION_BRIDGE_HMAC_SECRET. When server.enabled=true, both must
+  # be different random values of at least 32 characters.
   bearer-token: ""
   hmac-secret: ""
   max-clock-skew-seconds: 90
@@ -18,9 +21,10 @@ security:
 integrations:
   playtime-plugin: "EnthusiaPlaytime"
   guilds-plugin: "LumaGuilds"
-  # Website permission key. The bridge maps this to the LumaGuilds enum permission below.
+  lore-items-plugin: "EnthusiaLoreItems"
+  # Public website key returned in player-context when LumaGuilds grants the enum permission below.
   website-guild-submit-permission: "competition.submit"
-  lumaguilds-submit-permission: "ENTER_COMPETITIONS"
+  lumaguilds-submit-permission: "SUBMIT_COMPETITION_ENTRIES"
 
 staff:
   review-permission: "enthusia.competitions.review"
@@ -31,7 +35,10 @@ notifications:
   contributor-prefix: "&d[Competition Invite]&r "
 
 rewards:
-  # Command rewards are powerful and therefore opt-in + prefix restricted.
+  items:
+    # Queued vanilla items retry while a recipient is online and also on login.
+    retry-seconds: 60
+  # Raw command rewards are powerful and therefore opt-in + prefix restricted.
   commands:
     enabled: false
     allowed-prefixes:
@@ -44,8 +51,8 @@ rewards:
     permanent-command: "lp user {player} parent add {rank}"
     temporary-command: "lp user {player} parent addtemp {rank} {durationSeconds}s"
   lore-items:
-    # Used only when the stable EnthusiaLoreItems service API is unavailable.
-    # Leave blank to fail closed rather than guessing a command.
+    # Reserved for an explicit emergency fallback. Current bridge delivery uses
+    # the stable EnthusiaLoreItems V1 Bukkit service and otherwise fails closed.
     fallback-command: ""
 
 logging:
