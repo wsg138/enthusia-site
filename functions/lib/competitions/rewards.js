@@ -143,6 +143,67 @@ export function splitIntegerReward(totalAmount, recipientUuids) {
   });
 }
 
+export function splitWeightedIntegerReward(totalAmount, weightedRecipients) {
+  if (!Number.isSafeInteger(totalAmount) || totalAmount < 0) {
+    throw new TypeError("Reward amount must be a non-negative safe integer");
+  }
+  if (!Array.isArray(weightedRecipients)) {
+    throw new TypeError("Weighted reward recipients must be an array");
+  }
+
+  const byUuid = new Map();
+  for (const recipient of weightedRecipients) {
+    const recipientUuid = String(recipient?.recipientUuid ?? "").trim();
+    const weight = recipient?.weight;
+    if (!recipientUuid || !/^[A-Za-z0-9._:-]+$/.test(recipientUuid)) {
+      throw new TypeError("Weighted reward recipient UUID is invalid");
+    }
+    if (typeof weight !== "number" || !Number.isFinite(weight) || weight < 0 || weight > 1_000_000) {
+      throw new TypeError("Weighted reward recipient weight is invalid");
+    }
+    if (byUuid.has(recipientUuid)) {
+      throw new TypeError("Weighted reward recipients must be unique");
+    }
+    if (weight > 0) byUuid.set(recipientUuid, weight);
+  }
+
+  const recipients = [...byUuid.entries()]
+    .map(([recipientUuid, weight]) => ({ recipientUuid, weight }))
+    .sort((left, right) => left.recipientUuid.localeCompare(right.recipientUuid));
+  if (!recipients.length) return [];
+
+  const totalWeight = recipients.reduce((sum, recipient) => sum + recipient.weight, 0);
+  if (!(totalWeight > 0) || !Number.isFinite(totalWeight)) {
+    throw new TypeError("Weighted reward total weight is invalid");
+  }
+
+  let allocated = 0;
+  const shares = recipients.map((recipient) => {
+    const exact = totalAmount * recipient.weight / totalWeight;
+    const amount = Math.floor(exact);
+    allocated += amount;
+    return {
+      recipientUuid: recipient.recipientUuid,
+      amount,
+      fractionalRemainder: exact - amount
+    };
+  });
+
+  let remainder = totalAmount - allocated;
+  const remainderOrder = [...shares].sort((left, right) => (
+    right.fractionalRemainder - left.fractionalRemainder
+    || left.recipientUuid.localeCompare(right.recipientUuid)
+  ));
+  for (let index = 0; remainder > 0; index = (index + 1) % remainderOrder.length) {
+    remainderOrder[index].amount += 1;
+    remainder -= 1;
+  }
+
+  return shares
+    .sort((left, right) => left.recipientUuid.localeCompare(right.recipientUuid))
+    .map(({ recipientUuid, amount }) => ({ recipientUuid, amount }));
+}
+
 export function rewardOperationKey(rewardId, submissionId, recipientUuid = "entry") {
   const safe = [rewardId, submissionId, recipientUuid].map((value) => String(value ?? "").trim());
   if (safe.some((value) => !value || !/^[A-Za-z0-9._:-]+$/.test(value))) {
