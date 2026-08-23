@@ -29,14 +29,34 @@ function normalizedPlayerUuids(playerUuids) {
 export async function countLinkedPlayerEntrySlots(db, competitionId, playerUuids) {
   const database = requireDatabase(db);
   const uuids = normalizedPlayerUuids(playerUuids);
-  const placeholders = uuids.map(() => "?").join(",");
+  const values = uuids.map(() => "(?)").join(",");
   const row = await database.prepare(`
-    SELECT COUNT(DISTINCT submission_id) AS entryCount
-    FROM (
+    WITH seed_uuids(minecraft_uuid) AS (VALUES ${values}),
+    discord_ids AS (
+      SELECT l.discord_user_id
+      FROM competition_minecraft_links l
+      JOIN seed_uuids seed ON seed.minecraft_uuid = l.minecraft_uuid
+      UNION
+      SELECT lock.discord_user_id
+      FROM competition_minecraft_identity_locks lock
+      JOIN seed_uuids seed ON seed.minecraft_uuid = lock.minecraft_uuid
+    ),
+    identity_uuids AS (
+      SELECT minecraft_uuid FROM seed_uuids
+      UNION
+      SELECT l.minecraft_uuid
+      FROM competition_minecraft_links l
+      WHERE l.discord_user_id IN (SELECT discord_user_id FROM discord_ids)
+      UNION
+      SELECT lock.minecraft_uuid
+      FROM competition_minecraft_identity_locks lock
+      WHERE lock.discord_user_id IN (SELECT discord_user_id FROM discord_ids)
+    ),
+    slot_rows AS (
       SELECT s.id AS submission_id
       FROM submissions s
       WHERE s.competition_id = ?
-        AND s.owner_uuid IN (${placeholders})
+        AND s.owner_uuid IN (SELECT minecraft_uuid FROM identity_uuids)
         AND s.entry_type IN ('SOLO','GROUP')
         AND s.status NOT IN ('WITHDRAWN','REMOVED','REJECTED','DISQUALIFIED')
         AND s.removed_at IS NULL
@@ -45,14 +65,16 @@ export async function countLinkedPlayerEntrySlots(db, competitionId, playerUuids
       FROM submission_participants p
       JOIN submissions s ON s.id = p.submission_id
       WHERE s.competition_id = ?
-        AND p.player_uuid IN (${placeholders})
+        AND p.player_uuid IN (SELECT minecraft_uuid FROM identity_uuids)
         AND p.invite_status = 'ACCEPTED'
         AND p.participant_role = 'MAIN'
         AND s.entry_type = 'GROUP'
         AND s.status NOT IN ('WITHDRAWN','REMOVED','REJECTED','DISQUALIFIED')
         AND s.removed_at IS NULL
     )
-  `).bind(competitionId, ...uuids, competitionId, ...uuids).first();
+    SELECT COUNT(DISTINCT submission_id) AS entryCount
+    FROM slot_rows
+  `).bind(...uuids, competitionId, competitionId).first();
   return Number(row?.entryCount ?? 0);
 }
 
