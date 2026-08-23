@@ -5,6 +5,34 @@ CREATE UNIQUE INDEX idx_competitions_results_operation_id
     ON competitions(last_results_operation_id)
     WHERE last_results_operation_id IS NOT NULL;
 
+CREATE TABLE competition_result_draft_operations (
+    operation_id TEXT PRIMARY KEY,
+    competition_id TEXT NOT NULL,
+    config_version INTEGER NOT NULL CHECK (config_version >= 1),
+    result_set_hash TEXT NOT NULL CHECK (length(result_set_hash) = 64),
+    created_by_uuid TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (competition_id) REFERENCES competitions(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_result_draft_operations_competition
+    ON competition_result_draft_operations(competition_id, created_at);
+
+CREATE TRIGGER competition_result_draft_operation_guard
+BEFORE INSERT ON competition_result_draft_operations
+BEGIN
+    SELECT CASE
+        WHEN NOT EXISTS (
+            SELECT 1
+            FROM competitions c
+            WHERE c.id = NEW.competition_id
+              AND c.lifecycle_state = 'RESULTS_READY'
+              AND c.current_config_version = NEW.config_version
+        )
+        THEN RAISE(ABORT, 'competition_result_drafts_wrong_state_or_config')
+    END;
+END;
+
 CREATE TRIGGER competition_result_drafts_reject_operation_replay
 BEFORE UPDATE OF last_results_operation_id ON competitions
 WHEN NEW.last_results_operation_id IS NOT NULL
@@ -21,6 +49,17 @@ BEGIN
     SELECT CASE
         WHEN NEW.lifecycle_state <> 'RESULTS_READY'
         THEN RAISE(ABORT, 'competition_result_drafts_wrong_state')
+    END;
+
+    SELECT CASE
+        WHEN NOT EXISTS (
+            SELECT 1
+            FROM competition_result_draft_operations o
+            WHERE o.operation_id = NEW.last_results_operation_id
+              AND o.competition_id = NEW.id
+              AND o.config_version = NEW.current_config_version
+        )
+        THEN RAISE(ABORT, 'competition_result_drafts_operation_missing')
     END;
 
     SELECT CASE
