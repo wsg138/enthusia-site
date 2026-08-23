@@ -159,3 +159,25 @@ export async function finishRewardDelivery(db, {
   ).run();
   return Number(result?.meta?.changes ?? 0) === 1;
 }
+
+export async function completeManualRewardDelivery(db, {
+  deliveryId,
+  detail = null,
+  completedAt
+}) {
+  const database = requireDatabase(db);
+  const id = identifier(deliveryId, "Reward delivery ID");
+  if (typeof completedAt !== "string" || !Number.isFinite(Date.parse(completedAt))) {
+    throw new TypeError("Manual reward completion time is invalid");
+  }
+  const result = await database.prepare(`
+    UPDATE reward_deliveries
+    SET state = 'DELIVERED',
+        detail_json = COALESCE(?, detail_json),
+        updated_at = ?,
+        delivered_at = ?
+    WHERE id = ?
+      AND state = 'MANUAL'
+  `).bind(detailJson(detail), completedAt, completedAt, id).run();
+  return Number(result?.meta?.changes ?? 0) === 1;
+}
