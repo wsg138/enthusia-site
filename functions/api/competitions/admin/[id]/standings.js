@@ -5,6 +5,7 @@ import {
   hasCompetitionDatabase
 } from "../../../../lib/competitions/access.js";
 import { getAdminCompetition } from "../../../../lib/competitions/drafts.js";
+import { activeJudgeScores } from "../../../../lib/competitions/judge-score-set.js";
 import { listCompetitionJudgeScores, listCompetitionJudges } from "../../../../lib/competitions/judges.js";
 import { listApprovedPublicSubmissions } from "../../../../lib/competitions/repository.js";
 import { replaceProvisionalResultSet } from "../../../../lib/competitions/result-draft-set.js";
@@ -55,12 +56,9 @@ async function compute(context, competition, tieOrder = null) {
       : Promise.resolve([])
   ]);
 
-  // Historical score rows remain valuable for audit purposes after a judge is
-  // unassigned, but they must not continue to influence the active scoring set.
-  // Otherwise replacing a judge after they scored can make readiness report an
-  // impossible N+1/N score count forever.
-  const activeJudgeUuids = new Set(activeJudges.map((judge) => judge.judgeUuid));
-  const activeJudgeScores = judgeScores.filter((score) => activeJudgeUuids.has(score.judgeUuid));
+  // Historical score rows remain available for audit after a judge is removed,
+  // but only currently assigned judges participate in active standings.
+  const currentJudgeScores = activeJudgeScores(judgeScores, activeJudges);
 
   return buildCompetitionStandings({
     competitionId: competition.id,
@@ -69,7 +67,7 @@ async function compute(context, competition, tieOrder = null) {
     submissions,
     voteTotals,
     ballotCount,
-    judgeScores: activeJudgeScores,
+    judgeScores: currentJudgeScores,
     activeJudgeCount: activeJudges.length,
     tieOrder
   });
