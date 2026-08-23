@@ -5,6 +5,14 @@ CREATE UNIQUE INDEX idx_competitions_results_operation_id
     ON competitions(last_results_operation_id)
     WHERE last_results_operation_id IS NOT NULL;
 
+CREATE TRIGGER competition_result_drafts_reject_operation_replay
+BEFORE UPDATE OF last_results_operation_id ON competitions
+WHEN NEW.last_results_operation_id IS NOT NULL
+     AND NEW.last_results_operation_id = OLD.last_results_operation_id
+BEGIN
+    SELECT RAISE(ABORT, 'competition_result_drafts_operation_replay');
+END;
+
 CREATE TRIGGER competition_result_drafts_guard_finalize
 BEFORE UPDATE OF last_results_operation_id ON competitions
 WHEN NEW.last_results_operation_id IS NOT NULL
