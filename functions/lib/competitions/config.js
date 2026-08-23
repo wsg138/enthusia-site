@@ -13,6 +13,7 @@ const MAX_ACTIVE_MINUTES = 5_000_000;
 const INVALID = Symbol("invalid");
 
 const ENTRY_TYPES = new Set(["SOLO", "GROUP", "GUILD"]);
+const COMMUNITY_SCORE_MODES = new Set(["BALLOT_APPROVAL_RATE"]);
 const TIEBREAK_RULES = new Set([
   "JUDGE_REVOTE",
   "HIGHEST_JUDGE_SCORE",
@@ -140,6 +141,7 @@ export function initialCompetitionConfig({ summary = "" } = {}) {
       votesPerVoter: 3,
       minimumActiveMinutes: 120,
       allowChangesUntilClose: true,
+      communityScoreMode: "BALLOT_APPROVAL_RATE",
       showTotalsToStaff: true,
       showTotalsPublicWhileOpen: false,
       helpersCanVoteOwnEntry: true,
@@ -261,6 +263,10 @@ export function sanitizeCompetitionConfig(input) {
   const votesPerVoter = boundedInteger(votingInput.votesPerVoter, 1, 20, defaults.voting.votesPerVoter);
   const minimumActiveMinutes = boundedInteger(votingInput.minimumActiveMinutes, 0, MAX_ACTIVE_MINUTES, defaults.voting.minimumActiveMinutes);
   const allowChangesUntilClose = strictBoolean(votingInput.allowChangesUntilClose, defaults.voting.allowChangesUntilClose);
+  const communityScoreMode = hasValue(votingInput.communityScoreMode)
+    ? votingInput.communityScoreMode
+    : defaults.voting.communityScoreMode;
+  if (!COMMUNITY_SCORE_MODES.has(communityScoreMode)) return null;
 
   const judgingEnabled = strictBoolean(judgingInput.enabled, defaults.judging.enabled);
   const allowNonStaffJudges = strictBoolean(judgingInput.allowNonStaffJudges, defaults.judging.allowNonStaffJudges);
@@ -313,6 +319,7 @@ export function sanitizeCompetitionConfig(input) {
       votesPerVoter,
       minimumActiveMinutes,
       allowChangesUntilClose,
+      communityScoreMode,
       showTotalsToStaff: true,
       showTotalsPublicWhileOpen: false,
       helpersCanVoteOwnEntry: true,
