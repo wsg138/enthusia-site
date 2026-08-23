@@ -1,3 +1,5 @@
+import "./competitions-admin-flags.js";
+
 const ROOT = "/api/competitions/admin";
 
 function delay(ms) {
