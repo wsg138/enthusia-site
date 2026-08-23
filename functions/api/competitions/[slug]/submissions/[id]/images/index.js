@@ -11,6 +11,7 @@ import {
 } from "../../../../../../lib/competitions/media-storage.js";
 import { getCompetitionParticipantSession } from "../../../../../../lib/competitions/participant-auth.js";
 import { authorizeCompetitionRead } from "../../../../../../lib/competitions/public-access.js";
+import { competitionRateLimit, rateLimitHeaders } from "../../../../../../lib/competitions/rate-limit.js";
 import { getPublicCompetitionBySlug } from "../../../../../../lib/competitions/repository.js";
 import { attachSubmissionImage } from "../../../../../../lib/competitions/submission-media.js";
 import { getAccountSubmission, listSubmissionImages } from "../../../../../../lib/competitions/submissions.js";
@@ -100,6 +101,18 @@ function editable(competition, submission) {
   return Number.isFinite(close) && Date.now() <= close;
 }
 
+async function imageUploadRateLimit(context, session) {
+  const result = await competitionRateLimit(context.env.COMPETITIONS_DB, {
+    scope: "image-upload",
+    identity: session.subject,
+    limit: 12,
+    windowSeconds: 600
+  });
+  return result.allowed
+    ? null
+    : json({ error: "rate_limited", retryAfterSeconds: result.retryAfterSeconds }, 429, rateLimitHeaders(result));
+}
+
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   const revision = expectedRevision(context.request);
@@ -109,6 +122,13 @@ export async function onRequestPost(context) {
   const { session, competition, submission } = resolved;
   if (!editable(competition, submission)) return json({ error: "submission_locked" }, 409);
   if (submission.revision !== revision) return json({ error: "submission_revision_conflict" }, 409);
+
+  try {
+    const limited = await imageUploadRateLimit(context, session);
+    if (limited) return limited;
+  } catch {
+    return json({ error: "rate_limit_unavailable" }, 503);
+  }
 
   let existing;
   try {
@@ -205,4 +225,4 @@ export function onRequest() {
   return methodNotAllowed(["POST"]);
 }
 
-export { editable, expectedRevision, readLimitedBody, slugValue, submissionId };
+export { editable, expectedRevision, imageUploadRateLimit, readLimitedBody, slugValue, submissionId };
