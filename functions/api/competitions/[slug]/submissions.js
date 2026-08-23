@@ -2,14 +2,15 @@ import { competitionsEnabled, hasCompetitionDatabase } from "../../../lib/compet
 import {
   bridgeContextForLinkedAccount,
   getCompetitionParticipantSession,
-  linkedMinecraftAccount
+  linkedMinecraftAccount,
+  linkedMinecraftUuids
 } from "../../../lib/competitions/participant-auth.js";
 import { listEntrantModerationNotices } from "../../../lib/competitions/entrant-moderation.js";
 import { authorizeCompetitionRead } from "../../../lib/competitions/public-access.js";
 import { getPublicCompetitionBySlug } from "../../../lib/competitions/repository.js";
 import {
   countGuildEntries,
-  countPlayerEntrySlots,
+  countLinkedPlayerEntrySlots,
   createSubmissionDraft,
   listAccountSubmissions
 } from "../../../lib/competitions/submissions.js";
@@ -187,7 +188,11 @@ export async function onRequestPost(context) {
         return json({ error: "guild_entry_limit_reached" }, 409);
       }
     } else {
-      const count = await countPlayerEntrySlots(context.env.COMPETITIONS_DB, competition.id, owner.uuid);
+      const count = await countLinkedPlayerEntrySlots(
+        context.env.COMPETITIONS_DB,
+        competition.id,
+        linkedMinecraftUuids(session)
+      );
       if (count >= competition.config.entries.maxEntriesPerPlayer) {
         return json({ error: "player_entry_limit_reached" }, 409);
       }
@@ -228,8 +233,11 @@ export async function onRequestPost(context) {
     }, 201);
   } catch (error) {
     const message = String(error?.message ?? error);
-    if (message.includes("competition_judge_cannot_enter")) {
+    if (message.includes("competition_judge_cannot_enter") || message.includes("competition_linked_judge_cannot_enter")) {
       return json({ error: "judges_cannot_submit_entries" }, 409);
+    }
+    if (message.includes("competition_linked_entry_limit_reached")) {
+      return json({ error: "player_entry_limit_reached" }, 409);
     }
     return json({ error: "submission_create_failed" }, 503);
   }
