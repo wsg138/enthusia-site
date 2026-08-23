@@ -1,3 +1,4 @@
+import { pruneCompetitionIdentityState } from "./identity.js";
 import { canTransitionCompetition } from "./lifecycle.js";
 import { drainCompetitionNotifications } from "./notification-delivery.js";
 import { recoverStaleCompetitionNotifications } from "./notifications.js";
@@ -126,6 +127,7 @@ export async function runCompetitionScheduledJobs(env, now = new Date()) {
   if (!Number.isFinite(nowDate.getTime())) throw new TypeError("Scheduled competition time is invalid");
   const nowIso = nowDate.toISOString();
 
+  const identityPruned = await pruneCompetitionIdentityState(env.COMPETITIONS_DB, nowDate);
   const recoveredNotifications = await recoverStaleCompetitionNotifications(
     env.COMPETITIONS_DB,
     nowIso,
@@ -142,7 +144,7 @@ export async function runCompetitionScheduledJobs(env, now = new Date()) {
     notifications = [{ status: "DRAIN_FAILED", error: String(error?.message ?? error).slice(0, 300) }];
   }
 
-  return { recoveredNotifications, lifecycle, notifications };
+  return { identityPruned, recoveredNotifications, lifecycle, notifications };
 }
 
 export { SYSTEM_SUBJECT };
