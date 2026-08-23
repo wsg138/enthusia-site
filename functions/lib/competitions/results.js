@@ -56,7 +56,17 @@ export async function resultPublicationReadiness(db, competitionId) {
         FROM competition_result_drafts d
         WHERE d.competition_id = c.id
           AND d.config_version <> c.current_config_version
-      ) AS staleConfigCount
+      ) AS staleConfigCount,
+      (
+        SELECT COUNT(*)
+        FROM submission_moderation sm
+        JOIN submissions s ON s.id = sm.submission_id
+        WHERE s.competition_id = c.id
+          AND s.status = 'APPROVED'
+          AND s.removed_at IS NULL
+          AND sm.flagged_at IS NOT NULL
+          AND sm.flag_reason IS NOT NULL
+      ) AS openFlagCount
     FROM competitions c
     WHERE c.id = ?
     LIMIT 1
@@ -71,7 +81,8 @@ export async function resultPublicationReadiness(db, competitionId) {
     eligibleSubmissionCount: Number(summary.eligibleSubmissionCount),
     draftResultCount: Number(summary.draftResultCount),
     invalidDraftCount: Number(summary.invalidDraftCount),
-    staleConfigCount: Number(summary.staleConfigCount)
+    staleConfigCount: Number(summary.staleConfigCount),
+    openFlagCount: Number(summary.openFlagCount)
   };
 
   const errors = [];
@@ -79,6 +90,7 @@ export async function resultPublicationReadiness(db, competitionId) {
   if (normalized.draftResultCount !== normalized.eligibleSubmissionCount) errors.push("result_count_incomplete");
   if (normalized.invalidDraftCount > 0) errors.push("result_contains_ineligible_entry");
   if (normalized.staleConfigCount > 0) errors.push("result_config_version_stale");
+  if (normalized.openFlagCount > 0) errors.push("open_submission_flags");
 
   return { ready: errors.length === 0, errors, summary: normalized };
 }
