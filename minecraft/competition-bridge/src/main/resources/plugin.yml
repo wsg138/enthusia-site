@@ -16,6 +16,11 @@ commands:
     description: Manage the Enthusia competition server bridge.
     usage: /competitionbridge <status|reload>
     aliases: [cbridge, compbridge]
+  competitionlink:
+    description: Link this Minecraft account to your signed-in Enthusia Discord account.
+    usage: /competitionlink <code>
+    aliases: [complink]
+    permission: enthusia.competitions.link
 permissions:
   enthusia.competitions.bridge.admin:
     default: op
@@ -23,3 +28,6 @@ permissions:
   enthusia.competitions.review:
     default: op
     description: Receive staff notifications for competition submissions.
+  enthusia.competitions.link:
+    default: true
+    description: Claim a short-lived website account-link code in game.
