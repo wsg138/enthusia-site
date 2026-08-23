@@ -55,6 +55,31 @@ export function participantCanReceiveRewards({
   return true;
 }
 
+export function participantRewardWeight({
+  entryType,
+  role,
+  isAssignedJudge = false,
+  includeHelpers = false,
+  helperWeight = 0.5,
+  acceptedAt = null,
+  rewardsDeliveredAt = null
+}) {
+  if (!participantCanReceiveRewards({
+    entryType,
+    role,
+    isAssignedJudge,
+    includeHelpers,
+    acceptedAt,
+    rewardsDeliveredAt
+  })) return 0;
+
+  if (role !== "HELPER") return 1;
+  if (typeof helperWeight !== "number" || !Number.isFinite(helperWeight) || helperWeight <= 0 || helperWeight > 1) {
+    return 0;
+  }
+  return helperWeight;
+}
+
 export function canVoterVoteForSubmission({
   entryType,
   voterUuid,
