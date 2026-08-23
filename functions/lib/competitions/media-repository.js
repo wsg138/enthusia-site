@@ -1,3 +1,21 @@
+const APPEARANCE_MEDIA = Object.freeze({
+  BANNER: Object.freeze({
+    field: "bannerImageId",
+    label: "Banner",
+    auditAction: "COMPETITION_BANNER_UPDATED"
+  }),
+  ICON: Object.freeze({
+    field: "iconImageId",
+    label: "Icon",
+    auditAction: "COMPETITION_ICON_UPDATED"
+  }),
+  CATEGORY: Object.freeze({
+    field: "categoryImageId",
+    label: "Category artwork",
+    auditAction: "COMPETITION_CATEGORY_ART_UPDATED"
+  })
+});
+
 function requireDatabase(db) {
   if (!db || typeof db.prepare !== "function") {
     throw new TypeError("Competition database binding is unavailable");
@@ -36,6 +54,13 @@ function moderationBindings(record) {
     JSON.stringify(record.moderation.scores ?? {}),
     JSON.stringify(record.moderation.appliedInputTypes ?? {})
   ];
+}
+
+function appearanceSpec(value) {
+  const purpose = String(value ?? "").trim().toUpperCase();
+  const spec = APPEARANCE_MEDIA[purpose];
+  if (!spec) throw new TypeError("Unsupported competition appearance media purpose");
+  return { purpose, ...spec };
 }
 
 export async function createCompetitionMediaRecord(db, record) {
@@ -103,13 +128,15 @@ export async function createCompetitionMediaRecord(db, record) {
   });
 }
 
-export async function createAndAttachCompetitionBanner(db, change) {
+export async function createAndAttachCompetitionAppearanceMedia(db, change) {
   const database = requireWritableDatabase(db);
+  const spec = appearanceSpec(change.purpose);
   const nextVersion = change.expectedVersion + 1;
   const configJson = JSON.stringify(change.config);
   const mediaAfter = JSON.stringify({
     mediaId: change.id,
-    purpose: "BANNER",
+    purpose: spec.purpose,
+    appearanceField: spec.field,
     mimeType: change.mimeType,
     width: change.width,
     height: change.height,
@@ -126,7 +153,7 @@ export async function createAndAttachCompetitionBanner(db, change) {
         moderation_outcome, moderation_categories_json, moderation_scores_json,
         moderation_applied_input_types_json, created_by_uuid, created_at
       )
-      SELECT ?, c.id, 'BANNER', ?, ?, ?, ?, ?, ?, ?, ?, 'PASSED', ?, ?, ?, ?, ?
+      SELECT ?, c.id, '${spec.purpose}', ?, ?, ?, ?, ?, ?, ?, ?, 'PASSED', ?, ?, ?, ?, ?
       FROM competitions c
       WHERE c.id = ?
         AND c.lifecycle_state = 'DRAFT'
@@ -150,14 +177,17 @@ export async function createAndAttachCompetitionBanner(db, change) {
         competition_id, version, config_json, created_by_subject,
         created_by_uuid, created_at, change_note, operation_id
       )
-      SELECT c.id, ?, ?, ?, ?, ?, 'Banner image updated', ?
+      SELECT c.id, ?, ?, ?, ?, ?, ?, ?
       FROM competitions c
       WHERE c.id = ?
         AND c.lifecycle_state = 'DRAFT'
         AND c.current_config_version = ?
         AND EXISTS (
           SELECT 1 FROM competition_media m
-          WHERE m.id = ? AND m.competition_id = c.id AND m.removed_at IS NULL
+          WHERE m.id = ?
+            AND m.competition_id = c.id
+            AND m.purpose = '${spec.purpose}'
+            AND m.removed_at IS NULL
         )
     `).bind(
       nextVersion,
@@ -165,6 +195,7 @@ export async function createAndAttachCompetitionBanner(db, change) {
       change.actorSubject,
       change.actorUuid,
       change.createdAt,
+      `${spec.label} image updated`,
       change.operationId,
       change.competitionId,
       change.expectedVersion,
@@ -175,20 +206,23 @@ export async function createAndAttachCompetitionBanner(db, change) {
         id, competition_id, actor_subject, actor_uuid, action,
         after_json, note, created_at
       )
-      SELECT ?, c.id, ?, ?, 'COMPETITION_BANNER_UPDATED', ?, ?, ?
+      SELECT ?, c.id, ?, ?, '${spec.auditAction}', ?, ?, ?
       FROM competitions c
       WHERE c.id = ?
         AND c.current_config_version = ?
         AND EXISTS (
           SELECT 1 FROM competition_media m
-          WHERE m.id = ? AND m.competition_id = c.id AND m.removed_at IS NULL
+          WHERE m.id = ?
+            AND m.competition_id = c.id
+            AND m.purpose = '${spec.purpose}'
+            AND m.removed_at IS NULL
         )
     `).bind(
       change.auditEventId,
       change.actorSubject,
       change.actorUuid,
       mediaAfter,
-      "Banner image uploaded, moderated, and attached to the competition",
+      `${spec.label} image uploaded, moderated, and attached to the competition`,
       change.createdAt,
       change.competitionId,
       nextVersion,
@@ -205,7 +239,7 @@ export async function createAndAttachCompetitionBanner(db, change) {
     media: publicMediaRow({
       id: change.id,
       competitionId: change.competitionId,
-      purpose: "BANNER",
+      purpose: spec.purpose,
       storageKey: change.storageKey,
       mimeType: change.mimeType,
       byteSize: change.byteSize,
@@ -213,8 +247,13 @@ export async function createAndAttachCompetitionBanner(db, change) {
       height: change.height,
       sha256: change.sha256
     }),
+    appearanceField: spec.field,
     configVersion: nextVersion
   };
+}
+
+export async function createAndAttachCompetitionBanner(db, change) {
+  return createAndAttachCompetitionAppearanceMedia(db, { ...change, purpose: "BANNER" });
 }
 
 export async function getCompetitionMediaForManager(db, competitionId, mediaId) {
@@ -264,8 +303,11 @@ export async function getPublicCompetitionMedia(db, mediaId) {
       AND c.visibility IN ('PUBLIC', 'UNLISTED')
       AND c.published_at IS NOT NULL
       AND c.lifecycle_state NOT IN ('DRAFT', 'CANCELLED')
-      AND m.purpose = 'BANNER'
-      AND json_extract(v.config_json, '$.appearance.bannerImageId') = m.id
+      AND (
+        (m.purpose = 'BANNER' AND json_extract(v.config_json, '$.appearance.bannerImageId') = m.id)
+        OR (m.purpose = 'ICON' AND json_extract(v.config_json, '$.appearance.iconImageId') = m.id)
+        OR (m.purpose = 'CATEGORY' AND json_extract(v.config_json, '$.appearance.categoryImageId') = m.id)
+      )
     LIMIT 1
   `).bind(mediaId).first();
   return publicMediaRow(row);
