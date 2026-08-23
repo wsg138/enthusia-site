@@ -24,6 +24,7 @@ final class BridgeHttpServer implements AutoCloseable {
     private final Plugin plugin;
     private final BridgeConfig config;
     private final BridgeRepository repository;
+    private final LinkCodeRepository linkCodes;
     private final RewardDeliveryService rewards;
     private final RequestAuthenticator authenticator;
     private final PlaytimeIntegration playtime;
@@ -31,10 +32,11 @@ final class BridgeHttpServer implements AutoCloseable {
     private final HttpServer server;
     private final ExecutorService executor;
 
-    BridgeHttpServer(Plugin plugin, BridgeConfig config, BridgeRepository repository, RewardDeliveryService rewards) throws IOException {
+    BridgeHttpServer(Plugin plugin, BridgeConfig config, BridgeRepository repository, LinkCodeRepository linkCodes, RewardDeliveryService rewards) throws IOException {
         this.plugin = plugin;
         this.config = config;
         this.repository = repository;
+        this.linkCodes = linkCodes;
         this.rewards = rewards;
         this.authenticator = new RequestAuthenticator(config.security(), repository);
         this.playtime = new PlaytimeIntegration(plugin);
@@ -103,6 +105,9 @@ final class BridgeHttpServer implements AutoCloseable {
                 case "/v1/competitions/rewards/deliver" -> rewards.deliver(config, input, body);
                 case "/v1/competitions/notifications/submission" -> submissionNotification(input);
                 case "/v1/competitions/notifications/contributor" -> contributorNotification(input);
+                case "/v1/competitions/link/register" -> registerLink(input);
+                case "/v1/competitions/link/status" -> linkStatus(input);
+                case "/v1/competitions/link/consume" -> consumeLink(input);
                 default -> throw new BridgeRequestException(404, "not_found", "Unknown bridge route");
             };
             if (config.logging().successfulRequests()) plugin.getLogger().info("Competition bridge request completed: " + path);
@@ -170,6 +175,34 @@ final class BridgeHttpServer implements AutoCloseable {
         JsonObject output = new JsonObject();
         output.add("members", values);
         return output;
+    }
+
+    private JsonObject registerLink(JsonObject input) throws Exception {
+        String codeHash = linkCodeHash(input);
+        long expiresAt;
+        try {
+            expiresAt = Instant.parse(text(input, "expiresAt", 64)).toEpochMilli();
+        } catch (Exception exception) {
+            throw new BridgeRequestException(400, "invalid_link_expiry", "expiresAt must be an ISO-8601 timestamp");
+        }
+        linkCodes.register(codeHash, expiresAt, System.currentTimeMillis());
+        return status("REGISTERED");
+    }
+
+    private JsonObject linkStatus(JsonObject input) throws Exception {
+        LinkCodeRepository.LinkStatus link = linkCodes.status(linkCodeHash(input), System.currentTimeMillis());
+        JsonObject output = status(link.status());
+        if (link.minecraftUuid() != null) {
+            output.addProperty("minecraftUuid", link.minecraftUuid().toString());
+            output.addProperty("minecraftName", link.minecraftName());
+        }
+        if (link.expiresAtMillis() > 0) output.addProperty("expiresAt", Instant.ofEpochMilli(link.expiresAtMillis()).toString());
+        return output;
+    }
+
+    private JsonObject consumeLink(JsonObject input) throws Exception {
+        linkCodes.consume(linkCodeHash(input));
+        return status("CONSUMED");
     }
 
     private JsonObject submissionNotification(JsonObject input) throws Exception {
@@ -253,7 +286,10 @@ final class BridgeHttpServer implements AutoCloseable {
                 || path.equals("/v1/competitions/guild-members")
                 || path.equals("/v1/competitions/rewards/deliver")
                 || path.equals("/v1/competitions/notifications/submission")
-                || path.equals("/v1/competitions/notifications/contributor");
+                || path.equals("/v1/competitions/notifications/contributor")
+                || path.equals("/v1/competitions/link/register")
+                || path.equals("/v1/competitions/link/status")
+                || path.equals("/v1/competitions/link/consume");
     }
 
     private static JsonObject playerResult(UUID uuid, String name) {
@@ -296,6 +332,12 @@ final class BridgeHttpServer implements AutoCloseable {
     private static UUID uuid(JsonObject input, String key) throws BridgeRequestException {
         try { return UUID.fromString(text(input, key, 128)); }
         catch (IllegalArgumentException exception) { throw new BridgeRequestException(400, "invalid_request", key + " must be a UUID"); }
+    }
+
+    private static String linkCodeHash(JsonObject input) throws BridgeRequestException {
+        String value = text(input, "codeHash", 64);
+        if (!value.matches("[A-Za-z0-9_-]{43}")) throw new BridgeRequestException(400, "invalid_link_code_hash", "codeHash is invalid");
+        return value;
     }
 
     private static String color(String value) {
