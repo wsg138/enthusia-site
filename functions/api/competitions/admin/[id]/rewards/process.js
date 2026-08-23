@@ -8,6 +8,7 @@ import { deliverCompetitionPrize } from "../../../../../lib/competitions/bridge.
 import { getAdminCompetition } from "../../../../../lib/competitions/drafts.js";
 import {
   claimRewardDelivery,
+  completeManualRewardDelivery,
   finishRewardDelivery,
   listCompetitionRewardDeliveries
 } from "../../../../../lib/competitions/reward-ledger.js";
@@ -103,6 +104,12 @@ async function processOne(context, competitionIdValue, delivery) {
   }
 }
 
+function manualNote(value) {
+  if (typeof value !== "string") return null;
+  const normalized = value.trim();
+  return normalized && normalized.length <= 1000 ? normalized : null;
+}
+
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   const id = competitionId(context);
@@ -116,7 +123,7 @@ export async function onRequestPost(context) {
   } catch {
     input = null;
   }
-  if (!new Set(["PROCESS_PENDING", "RETRY_ONE"]).has(input?.action)) {
+  if (!new Set(["PROCESS_PENDING", "RETRY_ONE", "COMPLETE_MANUAL"]).has(input?.action)) {
     return json({ error: "invalid_reward_delivery_action" }, 400);
   }
 
@@ -128,6 +135,30 @@ export async function onRequestPost(context) {
     }
 
     const deliveries = await listCompetitionRewardDeliveries(context.env.COMPETITIONS_DB, id);
+    if (input.action === "COMPLETE_MANUAL") {
+      const deliveryId = String(input?.deliveryId ?? "").trim();
+      const note = manualNote(input?.note);
+      if (!deliveryId || !note) return json({ error: "manual_reward_completion_requires_note" }, 400);
+      const delivery = deliveries.find((candidate) => candidate.id === deliveryId);
+      if (!delivery) return json({ error: "reward_delivery_not_found" }, 404);
+      if (delivery.state !== "MANUAL") return json({ error: "reward_delivery_not_manual" }, 409);
+      const completedAt = new Date().toISOString();
+      const completed = await completeManualRewardDelivery(context.env.COMPETITIONS_DB, {
+        deliveryId,
+        completedAt,
+        detail: {
+          ...(delivery.detail ?? {}),
+          manualCompletion: {
+            note,
+            completedByUuid: authorized.session.player.uuid,
+            completedAt
+          }
+        }
+      });
+      if (!completed) return json({ error: "manual_reward_completion_conflict" }, 409);
+      return json({ status: "DELIVERED", deliveries: await listCompetitionRewardDeliveries(context.env.COMPETITIONS_DB, id) });
+    }
+
     let targets;
     if (input.action === "RETRY_ONE") {
       const deliveryId = String(input?.deliveryId ?? "").trim();
@@ -154,4 +185,4 @@ export function onRequest() {
   return methodNotAllowed(["POST"]);
 }
 
-export { deliveryPayload, processOne };
+export { deliveryPayload, manualNote, processOne };
