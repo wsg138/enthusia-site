@@ -35,6 +35,115 @@ export async function getStaffSubmissionImage(db, competitionId, submissionId, i
   `).bind(competitionId, submissionId, imageId).first();
 }
 
+export async function attachStaffSubmissionImage(db, image) {
+  const database = requireWritableDatabase(db);
+  const nextRevision = image.expectedRevision + 1;
+  const results = await database.batch([
+    database.prepare(`
+      UPDATE submissions
+      SET revision = ?,
+          staff_edited = 1,
+          updated_at = ?,
+          cover_image_id = COALESCE(cover_image_id, ?)
+      WHERE id = ?
+        AND competition_id = ?
+        AND revision = ?
+        AND owner_subject LIKE 'staff-manual:%'
+        AND removed_at IS NULL
+        AND status IN ('PENDING_REVIEW','NEEDS_CHANGES')
+    `).bind(
+      nextRevision,
+      image.createdAt,
+      image.id,
+      image.submissionId,
+      image.competitionId,
+      image.expectedRevision
+    ),
+    database.prepare(`
+      INSERT INTO submission_images (
+        id, submission_id, sort_order, storage_key, sha256, mime_type,
+        byte_size, width, height, moderation_state, created_at
+      )
+      SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PASSED', ?
+      WHERE EXISTS (
+        SELECT 1 FROM submissions s
+        WHERE s.id = ?
+          AND s.competition_id = ?
+          AND s.revision = ?
+          AND s.updated_at = ?
+          AND s.owner_subject LIKE 'staff-manual:%'
+      )
+    `).bind(
+      image.id,
+      image.submissionId,
+      image.sortOrder,
+      image.storageKey,
+      image.sha256,
+      image.mimeType,
+      image.byteSize,
+      image.width,
+      image.height,
+      image.createdAt,
+      image.submissionId,
+      image.competitionId,
+      nextRevision,
+      image.createdAt
+    ),
+    database.prepare(`
+      INSERT INTO moderation_checks (
+        id, competition_id, submission_id, target_type, target_id,
+        provider, model, outcome, categories_json, scores_json,
+        content_hash, checked_at
+      )
+      SELECT ?, ?, ?, 'IMAGE', ?, ?, ?, 'PASSED', ?, ?, ?, ?
+      WHERE EXISTS (
+        SELECT 1 FROM submission_images i
+        WHERE i.submission_id = ? AND i.id = ? AND i.removed_at IS NULL
+      )
+    `).bind(
+      image.moderationCheckId,
+      image.competitionId,
+      image.submissionId,
+      image.id,
+      image.moderation.provider,
+      image.moderation.model,
+      JSON.stringify(image.moderation.categories ?? {}),
+      JSON.stringify(image.moderation.scores ?? {}),
+      image.sha256,
+      image.createdAt,
+      image.submissionId,
+      image.id
+    ),
+    database.prepare(`
+      INSERT INTO competition_audit_events (
+        id, competition_id, submission_id, actor_subject, actor_uuid,
+        action, after_json, note, created_at
+      )
+      SELECT ?, ?, ?, ?, ?, 'SUBMISSION_IMAGE_ADDED_BY_STAFF', ?, ?, ?
+      WHERE EXISTS (
+        SELECT 1 FROM submission_images i
+        WHERE i.submission_id = ? AND i.id = ? AND i.removed_at IS NULL
+      )
+    `).bind(
+      image.auditEventId,
+      image.competitionId,
+      image.submissionId,
+      image.actorSubject,
+      image.actorUuid,
+      JSON.stringify({ imageId: image.id, sortOrder: image.sortOrder, revision: nextRevision, staffEdited: true }),
+      image.privateNote ?? "Image added to staff-managed submission",
+      image.createdAt,
+      image.submissionId,
+      image.id
+    )
+  ]);
+  const updated = Number(results?.[0]?.meta?.changes ?? 0) === 1;
+  const inserted = Number(results?.[1]?.meta?.changes ?? 0) === 1;
+  return updated && inserted
+    ? { status: "UPDATED", revision: nextRevision }
+    : { status: "CONFLICT" };
+}
+
 export async function removeStaffSubmissionImage(db, removal) {
   const database = requireWritableDatabase(db);
   const nextRevision = removal.expectedRevision + 1;
