@@ -3,6 +3,7 @@ import { moderateText } from "../../../../lib/competitions/moderation.js";
 import { sha256Hex } from "../../../../lib/competitions/media-policy.js";
 import { getCompetitionParticipantSession } from "../../../../lib/competitions/participant-auth.js";
 import { authorizeCompetitionRead } from "../../../../lib/competitions/public-access.js";
+import { competitionRateLimit, rateLimitHeaders } from "../../../../lib/competitions/rate-limit.js";
 import { getPublicCompetitionBySlug } from "../../../../lib/competitions/repository.js";
 import { updateOwnedSubmissionDraft } from "../../../../lib/competitions/submission-edit.js";
 import {
@@ -205,6 +206,18 @@ async function moderateSubmissionText(context, competition, submission) {
   return checks;
 }
 
+async function submissionModerationRateLimit(context, session) {
+  const result = await competitionRateLimit(context.env.COMPETITIONS_DB, {
+    scope: "submission-moderation",
+    identity: session.subject,
+    limit: 10,
+    windowSeconds: 600
+  });
+  return result.allowed
+    ? null
+    : json({ error: "rate_limited", retryAfterSeconds: result.retryAfterSeconds }, 429, rateLimitHeaders(result));
+}
+
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   const resolved = await resolveOwnerContext(context);
@@ -266,6 +279,9 @@ export async function onRequestPost(context) {
       return json({ error: "submission_coordinates_required" }, 409);
     }
 
+    const limited = await submissionModerationRateLimit(context, session);
+    if (limited) return limited;
+
     const checks = await moderateSubmissionText(context, competition, submission);
     if (checks.some((check) => check.outcome === "ERROR")) {
       return json({ error: "moderation_unavailable" }, 503);
@@ -297,4 +313,12 @@ export function onRequest() {
   return methodNotAllowed(["GET", "PUT", "POST"]);
 }
 
-export { cleanDescription, cleanTitle, needsChangesWindowOpen, requestedLocation, slugValue, submissionId };
+export {
+  cleanDescription,
+  cleanTitle,
+  needsChangesWindowOpen,
+  requestedLocation,
+  slugValue,
+  submissionId,
+  submissionModerationRateLimit
+};
