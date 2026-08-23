@@ -11,7 +11,7 @@ function requireWritableDatabase(db) {
 
 export async function inviteSubmissionContributor(db, invite) {
   const database = requireWritableDatabase(db);
-  const results = await database.batch([
+  const statements = [
     database.prepare(`
       INSERT INTO submission_participants (
         submission_id, player_uuid, player_name, participant_role,
@@ -50,7 +50,41 @@ export async function inviteSubmissionContributor(db, invite) {
       `Invited ${invite.playerName} as ${invite.role}`,
       invite.invitedAt
     )
-  ]);
+  ];
+
+  if (invite.notification) {
+    statements.push(database.prepare(`
+      INSERT INTO competition_notification_outbox (
+        id, competition_id, submission_id, event_type, recipient_uuid,
+        operation_key, payload_json, state, attempts, next_attempt_at,
+        created_at, updated_at
+      )
+      SELECT ?, ?, ?, 'CONTRIBUTOR_INVITE', ?, ?, ?, 'PENDING', 0, ?, ?, ?
+      WHERE EXISTS (
+        SELECT 1 FROM submission_participants
+        WHERE submission_id = ?
+          AND player_uuid = ?
+          AND invite_status = 'PENDING'
+          AND invited_at = ?
+      )
+      ON CONFLICT(operation_key) DO NOTHING
+    `).bind(
+      invite.notification.id,
+      invite.competitionId,
+      invite.submissionId,
+      invite.playerUuid,
+      invite.notification.operationKey,
+      JSON.stringify(invite.notification.payload ?? {}),
+      invite.invitedAt,
+      invite.invitedAt,
+      invite.invitedAt,
+      invite.submissionId,
+      invite.playerUuid,
+      invite.invitedAt
+    ));
+  }
+
+  const results = await database.batch(statements);
   return Number(results?.[0]?.meta?.changes ?? 0) === 1;
 }
 
@@ -140,7 +174,7 @@ export async function getPendingSubmissionInvite(db, competitionId, submissionId
 export async function respondSubmissionInvite(db, response) {
   const database = requireWritableDatabase(db);
   const status = response.accept ? "ACCEPTED" : "DECLINED";
-  const results = await database.batch([
+  const statements = [
     database.prepare(`
       UPDATE submission_participants
       SET invite_status = ?, responded_at = ?
@@ -166,6 +200,41 @@ export async function respondSubmissionInvite(db, response) {
       response.accept ? "Contributor invite accepted" : "Contributor invite declined",
       response.respondedAt
     )
-  ]);
+  ];
+
+  if (response.notification) {
+    statements.push(database.prepare(`
+      INSERT INTO competition_notification_outbox (
+        id, competition_id, submission_id, event_type, recipient_uuid,
+        operation_key, payload_json, state, attempts, next_attempt_at,
+        created_at, updated_at
+      )
+      SELECT ?, ?, ?, 'CONTRIBUTOR_RESPONSE', ?, ?, ?, 'PENDING', 0, ?, ?, ?
+      WHERE EXISTS (
+        SELECT 1 FROM submission_participants
+        WHERE submission_id = ?
+          AND player_uuid = ?
+          AND invite_status = ?
+          AND responded_at = ?
+      )
+      ON CONFLICT(operation_key) DO NOTHING
+    `).bind(
+      response.notification.id,
+      response.competitionId,
+      response.submissionId,
+      response.notification.recipientUuid ?? null,
+      response.notification.operationKey,
+      JSON.stringify(response.notification.payload ?? {}),
+      response.respondedAt,
+      response.respondedAt,
+      response.respondedAt,
+      response.submissionId,
+      response.playerUuid,
+      status,
+      response.respondedAt
+    ));
+  }
+
+  const results = await database.batch(statements);
   return Number(results?.[0]?.meta?.changes ?? 0) === 1;
 }
