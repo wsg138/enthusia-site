@@ -1,10 +1,10 @@
-import { authenticateRequest } from "../../../../../../lib/auth.js";
 import {
   competitionsEnabled,
   hasCompetitionDatabase,
   hasCompetitionMedia
 } from "../../../../../../lib/competitions/access.js";
 import { deleteCompetitionImage } from "../../../../../../lib/competitions/media-storage.js";
+import { getCompetitionParticipantSession } from "../../../../../../lib/competitions/participant-auth.js";
 import { authorizeCompetitionRead } from "../../../../../../lib/competitions/public-access.js";
 import { getPublicCompetitionBySlug } from "../../../../../../lib/competitions/repository.js";
 import {
@@ -40,10 +40,11 @@ async function resolveOwner(context) {
   }
   let session;
   try {
-    session = await authenticateRequest(context.request, context.env);
+    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
   } catch {
-    return { response: unauthorized() };
+    return { response: json({ error: "competition_identity_unavailable" }, 503) };
   }
+  if (!session) return { response: unauthorized() };
   const slug = slugValue(context);
   const submissionId = paramUuid(context, "id");
   const imageId = paramUuid(context, "imageId");
@@ -114,7 +115,7 @@ export async function onRequestDelete(context) {
       submissionId: resolved.submission.id,
       imageId: resolved.image.id,
       ownerSubject: resolved.session.subject,
-      actorUuid: resolved.session.player.uuid,
+      actorUuid: resolved.submission.ownerUuid,
       expectedRevision: revision,
       removedAt,
       auditEventId: crypto.randomUUID()
