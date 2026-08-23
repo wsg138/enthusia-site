@@ -7,7 +7,34 @@ import {
   notificationRetryAt
 } from "./notifications.js";
 
-function contributorPayload(notification, action) {
+function siteOrigin(env) {
+  const raw = String(env?.COMPETITIONS_SITE_ORIGIN ?? "").trim();
+  if (!raw) return null;
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== "https:" && url.hostname !== "localhost") return null;
+    return url.origin;
+  } catch {
+    return null;
+  }
+}
+
+function entrantActionUrl(env, notification) {
+  const origin = siteOrigin(env);
+  const slug = String(notification.payload?.competitionSlug ?? "").trim().toLowerCase();
+  if (!origin || !/^[a-z0-9](?:[a-z0-9-]{0,78}[a-z0-9])?$/.test(slug)) return "";
+  return `${origin}/competitions/detail.html?competition=${encodeURIComponent(slug)}`;
+}
+
+function staffReviewUrl(env, notification) {
+  const origin = siteOrigin(env);
+  if (!origin) return "";
+  const params = new URLSearchParams({ competition: notification.competitionId, section: "review" });
+  if (notification.submissionId) params.set("submission", notification.submissionId);
+  return `${origin}/competitions/admin/?${params}`;
+}
+
+function contributorPayload(env, notification, action) {
   const payload = notification.payload ?? {};
   return {
     action,
@@ -18,7 +45,7 @@ function contributorPayload(notification, action) {
       competitionTitle: payload.competitionTitle,
       submissionTitle: payload.submissionTitle,
       role: payload.role,
-      actionUrl: payload.actionUrl ?? ""
+      actionUrl: payload.actionUrl ?? entrantActionUrl(env, notification)
     } : {})
   };
 }
@@ -28,20 +55,20 @@ export async function deliverCompetitionNotification(env, notification) {
   let body;
   if (notification.eventType === "CONTRIBUTOR_INVITE") {
     path = "/v1/competitions/notifications/contributor";
-    body = contributorPayload(notification, "UPSERT");
+    body = contributorPayload(env, notification, "UPSERT");
   } else if (
     notification.eventType === "CONTRIBUTOR_RESPONSE"
     || notification.eventType === "CONTRIBUTOR_REMOVED"
   ) {
     path = "/v1/competitions/notifications/contributor";
-    body = contributorPayload(notification, "CLEAR");
+    body = contributorPayload(env, notification, "CLEAR");
   } else if (notification.eventType === "SUBMISSION_REVIEW") {
     path = "/v1/competitions/notifications/submission";
     body = {
       competitionTitle: notification.payload?.competitionTitle,
       submissionTitle: notification.payload?.submissionTitle,
       ownerName: notification.payload?.ownerName,
-      reviewUrl: notification.payload?.reviewUrl ?? ""
+      reviewUrl: notification.payload?.reviewUrl ?? staffReviewUrl(env, notification)
     };
   } else {
     throw new Error(`Unsupported competition notification event: ${notification.eventType}`);
@@ -91,3 +118,5 @@ export function scheduleCompetitionNotificationDrain(context, options = {}) {
       .catch(() => {})
   );
 }
+
+export { entrantActionUrl, staffReviewUrl };
