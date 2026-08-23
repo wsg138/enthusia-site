@@ -10,6 +10,7 @@ import {
   saveJudgeScore
 } from "../../../lib/competitions/judges.js";
 import { publicCompetitionConfig, publicSubmissionDetail } from "../../../lib/competitions/public.js";
+import { listPublicSubmissionImages } from "../../../lib/competitions/public-submission-media.js";
 import {
   getPrivateSubmissionLocation,
   listAcceptedPublicParticipantsByCompetition,
@@ -24,11 +25,12 @@ function competitionId(context) {
   return isCanonicalUuid(value) ? value : null;
 }
 
-function groupParticipants(rows) {
+function groupRows(rows, key = "submissionId") {
   const grouped = new Map();
-  for (const participant of rows) {
-    if (!grouped.has(participant.submissionId)) grouped.set(participant.submissionId, []);
-    grouped.get(participant.submissionId).push(participant);
+  for (const row of rows) {
+    const id = row[key];
+    if (!grouped.has(id)) grouped.set(id, []);
+    grouped.get(id).push(row);
   }
   return grouped;
 }
@@ -75,11 +77,13 @@ async function judgeWorkspace(context, id, authorized) {
     };
   }
 
-  const [submissions, participants] = await Promise.all([
+  const [submissions, participants, images] = await Promise.all([
     listApprovedPublicSubmissions(context.env.COMPETITIONS_DB, id),
-    listAcceptedPublicParticipantsByCompetition(context.env.COMPETITIONS_DB, id)
+    listAcceptedPublicParticipantsByCompetition(context.env.COMPETITIONS_DB, id),
+    listPublicSubmissionImages(context.env.COMPETITIONS_DB, id)
   ]);
-  const grouped = groupParticipants(participants);
+  const groupedParticipants = groupRows(participants);
+  const groupedImages = groupRows(images);
 
   const entries = await Promise.all(submissions.map(async (submission) => {
     const [existingScore, location] = await Promise.all([
@@ -89,7 +93,11 @@ async function judgeWorkspace(context, id, authorized) {
         : Promise.resolve(null)
     ]);
     return {
-      ...publicSubmissionDetail(submission, grouped.get(submission.id) ?? []),
+      ...publicSubmissionDetail(
+        submission,
+        groupedParticipants.get(submission.id) ?? [],
+        groupedImages.get(submission.id) ?? []
+      ),
       location: location ? {
         worldName: location.worldName,
         x: location.x,
@@ -193,4 +201,4 @@ export function onRequest() {
   return methodNotAllowed(["GET", "POST"]);
 }
 
-export { groupParticipants };
+export { groupRows };
