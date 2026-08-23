@@ -1,4 +1,8 @@
 import { competitionBridgeConfiguration } from "../../lib/competitions/bridge.js";
+import {
+  competitionDiscordConfigured,
+  drainCompetitionDiscordNotifications
+} from "../../lib/competitions/discord-notifications.js";
 import { drainCompetitionNotifications } from "../../lib/competitions/notification-delivery.js";
 
 export function competitionNotificationDeliveryReady(env) {
@@ -13,12 +17,17 @@ export function competitionNotificationDeliveryReady(env) {
 
 export async function onRequest(context) {
   const response = await context.next();
-  if (
-    typeof context.waitUntil === "function"
-    && competitionNotificationDeliveryReady(context.env)
-  ) {
+  if (typeof context.waitUntil !== "function" || !context.env?.COMPETITIONS_DB) return response;
+
+  if (competitionNotificationDeliveryReady(context.env)) {
     context.waitUntil(
       drainCompetitionNotifications(context.env, context.env.COMPETITIONS_DB, { limit: 25 })
+        .catch(() => {})
+    );
+  }
+  if (competitionDiscordConfigured(context.env)) {
+    context.waitUntil(
+      drainCompetitionDiscordNotifications(context.env, context.env.COMPETITIONS_DB, { limit: 25 })
         .catch(() => {})
     );
   }
