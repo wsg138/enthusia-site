@@ -1,8 +1,36 @@
 .competitions-page{
+  font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:16px;
+  line-height:1.55;
+  letter-spacing:normal;
   background:
     radial-gradient(circle at 12% 10%,rgba(255,138,0,.09),transparent 30rem),
     radial-gradient(circle at 88% 18%,rgba(255,211,106,.06),transparent 28rem),
     var(--bg);
+}
+
+/*
+  The main site has a number of intentionally expressive homepage type rules.
+  Competitions is a denser application surface, so keep its type scale and
+  vertical rhythm independent of those global rules.
+*/
+.competitions-page h1,
+.competitions-page h2,
+.competitions-page h3{
+  font-family:inherit;
+  font-weight:800;
+  letter-spacing:-.025em;
+  line-height:1.12;
+}
+
+.competitions-page .brand,
+.competitions-page .nav a{
+  font-family:inherit;
+  letter-spacing:normal;
+}
+
+.competitions-page p{
+  line-height:1.55;
 }
 
 .competitions-main{
@@ -29,7 +57,7 @@
   margin-bottom:28px;
 }
 
-.competitions-intro h1{margin:.1rem 0 .5rem;font-size:clamp(2rem,5vw,4rem)}
+.competitions-intro h1{margin:.1rem 0 .5rem;font-size:clamp(2rem,5vw,4rem);line-height:1.04}
 .competitions-intro p{max-width:720px;margin:0;color:var(--muted)}
 
 .competition-section{margin-top:34px}
@@ -40,7 +68,7 @@
   gap:18px;
   margin-bottom:14px;
 }
-.competition-section-heading h2{margin:.1rem 0 0}
+.competition-section-heading h2{margin:.1rem 0 0;line-height:1.12}
 .competition-section-heading p{margin:0;color:var(--muted)}
 
 .competition-grid{
