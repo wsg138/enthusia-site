@@ -1,5 +1,6 @@
 import { hasCompetitionDatabase } from "../../lib/competitions/access.js";
 import { authorizeCompetitionRead } from "../../lib/competitions/public-access.js";
+import { listPublicSubmissionImages } from "../../lib/competitions/public-submission-media.js";
 import {
   publicCompetitionDetail,
   publicEntriesVisibleInState,
@@ -19,11 +20,12 @@ function competitionSlug(context) {
   return value;
 }
 
-function groupParticipants(rows) {
+function groupRows(rows, key = "submissionId") {
   const grouped = new Map();
-  for (const participant of rows) {
-    if (!grouped.has(participant.submissionId)) grouped.set(participant.submissionId, []);
-    grouped.get(participant.submissionId).push(participant);
+  for (const row of rows) {
+    const id = row[key];
+    if (!grouped.has(id)) grouped.set(id, []);
+    grouped.get(id).push(row);
   }
   return grouped;
 }
@@ -54,19 +56,22 @@ export async function onRequestGet(context) {
     }
 
     const resultsVisible = ["COMPLETED", "ARCHIVED"].includes(competition.lifecycleState);
-    const [submissions, participants, results] = await Promise.all([
+    const [submissions, participants, images, results] = await Promise.all([
       listApprovedPublicSubmissions(context.env.COMPETITIONS_DB, competition.id),
       listAcceptedPublicParticipantsByCompetition(context.env.COMPETITIONS_DB, competition.id),
+      listPublicSubmissionImages(context.env.COMPETITIONS_DB, competition.id),
       resultsVisible ? listPublicResults(context.env.COMPETITIONS_DB, competition.id) : Promise.resolve([])
     ]);
-    const participantsBySubmission = groupParticipants(participants);
+    const participantsBySubmission = groupRows(participants);
+    const imagesBySubmission = groupRows(images);
 
     return json({
       competition: publicCompetitionDetail(competition),
       entriesVisible: true,
       submissions: submissions.map((submission) => publicSubmissionDetail(
         submission,
-        participantsBySubmission.get(submission.id) ?? []
+        participantsBySubmission.get(submission.id) ?? [],
+        imagesBySubmission.get(submission.id) ?? []
       )),
       results
     });
@@ -79,4 +84,4 @@ export function onRequest() {
   return methodNotAllowed(["GET"]);
 }
 
-export { competitionSlug, groupParticipants };
+export { competitionSlug, groupRows };
