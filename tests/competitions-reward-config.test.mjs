@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   initialRewardConfig,
+  materializeCompetitionRewards,
   publicCompetitionRewards,
   sanitizeCompetitionRewards
 } from "../functions/lib/competitions/reward-config.js";
@@ -71,6 +72,29 @@ test("public reward projection never exposes command or execution payload", () =
   assert.equal("payload" in projected.definitions[0], false);
   assert.equal(JSON.stringify(projected).includes("lp user"), false);
   assert.equal(JSON.stringify(projected).includes("enthusia.winner"), false);
+});
+
+test("published reward definitions bind source IDs to competition and config version", () => {
+  const records = materializeCompetitionRewards({
+    competitionId: "00000000-0000-0000-0000-000000000111",
+    configVersion: 7,
+    rewards: {
+      helperRewardMultiplier: 0.5,
+      definitions: [commandReward()]
+    },
+    createdAt: "2026-08-23T00:30:00.000Z"
+  });
+
+  assert.equal(records.length, 1);
+  assert.equal(
+    records[0].id,
+    "00000000-0000-0000-0000-000000000111:first-command"
+  );
+  const payload = JSON.parse(records[0].configJson);
+  assert.equal(payload.sourceDefinitionId, "first-command");
+  assert.equal(payload.configVersion, 7);
+  assert.equal(payload.helperRewardMultiplier, 0.5);
+  assert.equal(payload.payload.command.includes("enthusia.winner"), true);
 });
 
 test("reward definitions reject malformed commands and unsafe identifiers", () => {
