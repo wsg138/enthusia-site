@@ -37,6 +37,10 @@ SELECT
     attempts, next_attempt_at, last_error, created_at, updated_at, delivered_at
 FROM competition_discord_outbox;
 
+-- SQLite validates trigger dependencies while rebuilding a referenced table.
+-- Remove the old trigger before dropping the table and recreate it below
+-- against the new schema.
+DROP TRIGGER IF EXISTS competition_submission_review_discord_notification;
 DROP TABLE competition_discord_outbox;
 ALTER TABLE competition_discord_outbox_v2 RENAME TO competition_discord_outbox;
 
