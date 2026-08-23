@@ -1,0 +1,20 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "enthusia-competition-jobs-dev",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-22",
+  "workers_dev": false,
+  "vars": {
+    "COMPETITION_JOBS_ENABLED": "true"
+  },
+  "d1_databases": [
+    {
+      "binding": "COMPETITIONS_DB",
+      "database_name": "enthusia-competitions-dev",
+      "database_id": "REPLACE_WITH_DEV_D1_DATABASE_ID"
+    }
+  ],
+  "triggers": {
+    "crons": ["*/2 * * * *"]
+  }
+}
