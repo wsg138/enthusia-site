@@ -108,7 +108,9 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
 
     private BridgeHttpServer startServer(BridgeConfig config) throws Exception {
         if (!config.server().enabled()) return null;
-        return new BridgeHttpServer(this, config, repository, linkCodes, rewardDelivery) {{ start(); }};
+        BridgeHttpServer server = new BridgeHttpServer(this, config, repository, linkCodes, rewardDelivery);
+        server.start();
+        return server;
     }
 
     private void scheduleItemRetries(BridgeConfig config) {
