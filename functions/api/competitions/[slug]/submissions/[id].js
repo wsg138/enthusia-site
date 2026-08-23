@@ -4,6 +4,7 @@ import { moderateText } from "../../../../lib/competitions/moderation.js";
 import { sha256Hex } from "../../../../lib/competitions/media-policy.js";
 import { authorizeCompetitionRead } from "../../../../lib/competitions/public-access.js";
 import { getPublicCompetitionBySlug } from "../../../../lib/competitions/repository.js";
+import { updateOwnedSubmissionDraft } from "../../../../lib/competitions/submission-edit.js";
 import {
   getAccountSubmission,
   getSubmissionLocation,
@@ -11,7 +12,6 @@ import {
   listSubmissionParticipants,
   recordTextModerationChecks,
   submitSubmissionForReview,
-  updateSubmissionDraft,
   withdrawSubmission
 } from "../../../../lib/competitions/submissions.js";
 import { json, methodNotAllowed, unauthorized } from "../../../../lib/responses.js";
@@ -145,7 +145,7 @@ export async function onRequestPut(context) {
   }
 
   try {
-    const result = await updateSubmissionDraft(context.env.COMPETITIONS_DB, {
+    const result = await updateOwnedSubmissionDraft(context.env.COMPETITIONS_DB, {
       competitionId: competition.id,
       submissionId: submission.id,
       ownerSubject: session.subject,
