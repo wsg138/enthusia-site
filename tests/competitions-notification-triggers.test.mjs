@@ -68,7 +68,7 @@ function seedPendingContributor(database) {
   );
 }
 
-test("submission review transition atomically creates a durable staff notification", async () => {
+test("submission review transition atomically creates Minecraft and Discord staff notifications", async () => {
   const database = await migratedDatabase();
   seedCompetition(database);
   seedSubmission(database);
@@ -97,6 +97,14 @@ test("submission review transition atomically creates a durable staff notificati
     ownerName: "Builder",
     submissionId: "submission-1"
   });
+
+  const discord = database.prepare(`
+    SELECT event_type AS eventType, operation_key AS operationKey, payload_json AS payloadJson
+    FROM competition_discord_outbox
+  `).get();
+  assert.equal(discord.eventType, "SUBMISSION_REVIEW");
+  assert.equal(discord.operationKey, "discord-submission-review:submission-1:2");
+  assert.deepEqual(JSON.parse(discord.payloadJson), JSON.parse(row.payloadJson));
   database.close();
 });
 
