@@ -13,6 +13,7 @@ import {
   moderateSubmission,
   removeStaffSubmission,
   restoreStaffSubmission,
+  setSubmissionFlag,
   staffEditSubmission
 } from "../../../../../lib/competitions/staff-submissions.js";
 import { listSubmissionImages, listSubmissionParticipants } from "../../../../../lib/competitions/submissions.js";
@@ -146,6 +147,33 @@ export async function onRequestPost(context) {
     input = null;
   }
   const action = input?.action;
+
+  if (new Set(["FLAG", "CLEAR_FLAG"]).has(action)) {
+    if (submission.ownerUuid === session.player.uuid) {
+      return json({ error: "staff_cannot_moderate_own_entry" }, 409);
+    }
+    const privateNote = reason(input?.privateNote, 4000, action === "FLAG");
+    if (action === "FLAG" && !privateNote) return json({ error: "private_note_required" }, 400);
+    if (input?.privateNote && !privateNote) return json({ error: "private_note_invalid" }, 400);
+    try {
+      const flagged = action === "FLAG";
+      const updated = await setSubmissionFlag(context.env.COMPETITIONS_DB, {
+        competitionId,
+        submissionId,
+        flagged,
+        reason: privateNote,
+        note: privateNote,
+        actorSubject: session.subject,
+        actorUuid: session.player.uuid,
+        changedAt: new Date().toISOString(),
+        auditEventId: crypto.randomUUID()
+      });
+      if (!updated) return json({ error: "submission_flag_conflict" }, 409);
+      return json({ status: flagged ? "FLAGGED" : "FLAG_CLEARED", flagged });
+    } catch {
+      return json({ error: "submission_flag_update_failed" }, 503);
+    }
+  }
 
   if (new Set(["APPROVE", "NEEDS_CHANGES", "REJECT", "DISQUALIFY"]).has(action)) {
     if (submission.ownerUuid === session.player.uuid) {
