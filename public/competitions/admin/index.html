@@ -8,6 +8,7 @@
   <title>Competition Admin | Enthusia</title>
   <link rel="stylesheet" href="../../assets/styles.css?v=vision63">
   <link rel="stylesheet" href="../../assets/competitions-admin.css?v=1">
+  <link rel="stylesheet" href="../../assets/competitions-admin-operations.css?v=1">
 </head>
 <body class="competition-admin-page">
   <header class="site-header competition-admin-header">
@@ -144,9 +145,17 @@
                     Accent color
                     <input name="accent" type="color" value="#7d5cff">
                   </label>
-                  <div class="admin-static-field">
+                  <div class="admin-static-field admin-banner-field" id="bannerMediaField">
                     <span>Banner / cover image</span>
-                    <p>Competition media uploads will be connected after the private R2 upload flow is implemented.</p>
+                    <p>PNG or JPEG. The browser removes normal embedded metadata, then the server validates the bytes and runs the free OpenAI moderation pass before private R2 storage.</p>
+                    <div class="admin-banner-preview" id="bannerMediaPreview" hidden>
+                      <img id="bannerMediaPreviewImage" alt="Current competition banner preview">
+                    </div>
+                    <div class="admin-banner-actions">
+                      <input id="bannerMediaInput" type="file" accept="image/png,image/jpeg">
+                      <button class="button-secondary" id="uploadBannerMedia" type="button">Upload & attach banner</button>
+                    </div>
+                    <p class="admin-form-result" id="bannerMediaResult" role="status"></p>
                   </div>
                 </div>
 
@@ -314,7 +323,7 @@
                 </div>
                 <div id="publishReadiness" class="publish-readiness" aria-live="polite"></div>
                 <div class="admin-inline-alert admin-info">
-                  Publishing is intentionally disabled during this development phase. Results will also require an explicit staff publish action; timers can never publish results automatically.
+                  Lifecycle actions here affect only the isolated development competition resources. Production remains disabled until launch approval, and timers can never publish final results automatically.
                 </div>
               </section>
             </form>
@@ -339,5 +348,6 @@
   </main>
 
   <script type="module" src="../../assets/competitions-admin.js?v=1"></script>
+  <script type="module" src="../../assets/competitions-admin-media.js?v=1"></script>
 </body>
 </html>
