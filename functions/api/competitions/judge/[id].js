@@ -1,4 +1,3 @@
-import { authenticateRequest } from "../../../lib/auth.js";
 import {
   competitionsEnabled,
   hasCompetitionDatabase
@@ -9,6 +8,7 @@ import {
   getJudgeScore,
   saveJudgeScore
 } from "../../../lib/competitions/judges.js";
+import { getCompetitionParticipantSession, linkedMinecraftUuids } from "../../../lib/competitions/participant-auth.js";
 import { publicCompetitionConfig, publicSubmissionDetail } from "../../../lib/competitions/public.js";
 import { listPublicSubmissionImages } from "../../../lib/competitions/public-submission-media.js";
 import {
@@ -35,6 +35,13 @@ function groupRows(rows, key = "submissionId") {
   return grouped;
 }
 
+function judgingWindowOpen(competition, now = Date.now()) {
+  if (competition?.lifecycleState !== "JUDGING" || !competition?.config?.judging?.enabled) return false;
+  const openAt = Date.parse(competition.config?.schedule?.judgingOpenAt ?? "");
+  const closeAt = Date.parse(competition.config?.schedule?.judgingCloseAt ?? "");
+  return Number.isFinite(openAt) && Number.isFinite(closeAt) && now >= openAt && now < closeAt;
+}
+
 async function authorizeJudge(context, id) {
   if (!competitionsEnabled(context.env)) return { response: json({ error: "not_found" }, 404) };
   if (!hasCompetitionDatabase(context.env)) {
@@ -43,19 +50,20 @@ async function authorizeJudge(context, id) {
 
   let session;
   try {
-    session = await authenticateRequest(context.request, context.env);
+    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
   } catch {
-    return { response: unauthorized() };
+    return { response: json({ error: "competition_identity_unavailable" }, 503) };
   }
+  if (!session) return { response: unauthorized() };
+  const linkedUuids = linkedMinecraftUuids(session);
+  if (!linkedUuids.length) return { response: json({ error: "minecraft_link_required" }, 403) };
 
   try {
-    const assignment = await getActiveCompetitionJudge(
-      context.env.COMPETITIONS_DB,
-      id,
-      session.player.uuid
-    );
-    if (!assignment) return { response: json({ error: "competition_judge_required" }, 403) };
-    return { session, assignment };
+    for (const judgeUuid of linkedUuids) {
+      const assignment = await getActiveCompetitionJudge(context.env.COMPETITIONS_DB, id, judgeUuid);
+      if (assignment) return { session, assignment, judgeUuid };
+    }
+    return { response: json({ error: "competition_judge_required" }, 403) };
   } catch {
     return { response: json({ error: "competition_judge_unavailable" }, 503) };
   }
@@ -64,7 +72,7 @@ async function authorizeJudge(context, id) {
 async function judgeWorkspace(context, id, authorized) {
   const competition = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
   if (!competition) return null;
-  if (competition.lifecycleState !== "JUDGING") {
+  if (!judgingWindowOpen(competition)) {
     return {
       competition: {
         id: competition.id,
@@ -87,7 +95,7 @@ async function judgeWorkspace(context, id, authorized) {
 
   const entries = await Promise.all(submissions.map(async (submission) => {
     const [existingScore, location] = await Promise.all([
-      getJudgeScore(context.env.COMPETITIONS_DB, id, submission.id, authorized.session.player.uuid),
+      getJudgeScore(context.env.COMPETITIONS_DB, id, submission.id, authorized.judgeUuid),
       authorized.assignment.canViewCoordinates
         ? getPrivateSubmissionLocation(context.env.COMPETITIONS_DB, submission.id)
         : Promise.resolve(null)
@@ -119,6 +127,7 @@ async function judgeWorkspace(context, id, authorized) {
       config: publicCompetitionConfig(competition.config)
     },
     judgingOpen: true,
+    judgeMinecraftUuid: authorized.judgeUuid,
     canViewCoordinates: authorized.assignment.canViewCoordinates,
     coordinateNotice: authorized.assignment.canViewCoordinates
       ? "You are an assigned judge and may view private submission coordinates for this competition. Coordinate access is staff-audited and must not be shared."
@@ -165,16 +174,14 @@ export async function onRequestPost(context) {
     return json({ error: "competition_database_unavailable" }, 503);
   }
   if (!competition) return json({ error: "competition_not_found" }, 404);
-  if (competition.lifecycleState !== "JUDGING" || !competition.config?.judging?.enabled) {
-    return json({ error: "judging_not_open" }, 409);
-  }
+  if (!judgingWindowOpen(competition)) return json({ error: "judging_not_open" }, 409);
 
   const criteria = competition.config?.judging?.criteria ?? [];
   try {
     const saved = await saveJudgeScore(context.env.COMPETITIONS_DB, {
       competitionId: id,
       submissionId,
-      judgeUuid: authorized.session.player.uuid,
+      judgeUuid: authorized.judgeUuid,
       configVersion: competition.configVersion,
       criteria,
       scores: input?.scores,
@@ -201,4 +208,4 @@ export function onRequest() {
   return methodNotAllowed(["GET", "POST"]);
 }
 
-export { groupRows };
+export { groupRows, judgingWindowOpen };
