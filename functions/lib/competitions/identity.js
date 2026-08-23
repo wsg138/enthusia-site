@@ -122,7 +122,10 @@ function normalizeDiscordUser(raw) {
     ? null
     : String(raw.avatar).trim().slice(0, 128) || null;
   if (!/^\d{16,22}$/.test(id) || !username || username.length > 80) return null;
-  return { id, username: username.slice(0, 80), globalName, avatarHash };
+  const roleIds = Array.isArray(raw?.roleIds)
+    ? [...new Set(raw.roleIds.map(String).filter((role) => /^\d{16,22}$/.test(role)))]
+    : [];
+  return { id, username: username.slice(0, 80), globalName, avatarHash, roleIds };
 }
 
 export async function createIdentitySession(db, rawDiscordUser, now = new Date()) {
@@ -136,14 +139,15 @@ export async function createIdentitySession(db, rawDiscordUser, now = new Date()
   await database.batch([
     database.prepare(`
       INSERT INTO competition_discord_accounts (
-        discord_user_id, username, global_name, avatar_hash, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?)
+        discord_user_id, username, global_name, avatar_hash, guild_role_ids_json, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(discord_user_id) DO UPDATE SET
         username = excluded.username,
         global_name = excluded.global_name,
         avatar_hash = excluded.avatar_hash,
+        guild_role_ids_json = excluded.guild_role_ids_json,
         updated_at = excluded.updated_at
-    `).bind(user.id, user.username, user.globalName, user.avatarHash, createdAt, createdAt),
+    `).bind(user.id, user.username, user.globalName, user.avatarHash, JSON.stringify(user.roleIds), createdAt, createdAt),
     database.prepare(`
       INSERT INTO competition_identity_sessions (
         session_hash, discord_user_id, created_at, expires_at, last_seen_at
@@ -185,7 +189,9 @@ export async function getCompetitionIdentitySession(request, db, now = new Date(
       s.expires_at AS expiresAt,
       a.username,
       a.global_name AS globalName,
-      a.avatar_hash AS avatarHash
+      a.avatar_hash AS avatarHash,
+      a.guild_role_ids_json AS guildRoleIdsJson,
+      a.updated_at AS discordRolesCheckedAt
     FROM competition_identity_sessions s
     JOIN competition_discord_accounts a ON a.discord_user_id = s.discord_user_id
     WHERE s.session_hash = ?
@@ -200,6 +206,8 @@ export async function getCompetitionIdentitySession(request, db, now = new Date(
       AND last_seen_at < ?
   `).bind(nowIso, sessionHash, new Date(timestamp(now) - 15 * 60 * 1000).toISOString()).run().catch(() => {});
   const links = await listDiscordMinecraftLinks(database, row.discordUserId);
+  let guildRoleIds = [];
+  try { guildRoleIds = JSON.parse(row.guildRoleIdsJson ?? "[]"); } catch { guildRoleIds = []; }
   return Object.freeze({
     subject: `discord:${row.discordUserId}`,
     discord: Object.freeze({
@@ -209,6 +217,8 @@ export async function getCompetitionIdentitySession(request, db, now = new Date(
       avatarHash: row.avatarHash
     }),
     linkedMinecraftAccounts: Object.freeze(links.map((link) => Object.freeze({ ...link }))),
+    guildRoleIds: Object.freeze(Array.isArray(guildRoleIds) ? guildRoleIds.map(String) : []),
+    discordRolesCheckedAt: row.discordRolesCheckedAt,
     expiresAt: row.expiresAt,
     sessionHash
   });

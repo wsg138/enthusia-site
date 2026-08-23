@@ -33,7 +33,7 @@ test("Discord competition OAuth uses identify and allows interactive first-time 
   assert.equal(url.origin, "https://discord.com");
   assert.equal(url.pathname, "/oauth2/authorize");
   assert.equal(url.searchParams.get("client_id"), ENV.DISCORD_CLIENT_ID);
-  assert.equal(url.searchParams.get("scope"), "identify");
+  assert.equal(url.searchParams.get("scope"), "identify guilds.members.read");
   assert.equal(url.searchParams.get("response_type"), "code");
   assert.equal(url.searchParams.get("redirect_uri"), ENV.DISCORD_OAUTH_REDIRECT_URI);
   assert.ok(url.searchParams.get("state"));

@@ -46,6 +46,26 @@ export function competitionMediaKey({ competitionId, mediaId, extension, purpose
   return `competitions/${competition}/${purpose}/${media}.${extension}`;
 }
 
+export function galleryMediaKey({ mediaId, extension }) {
+  const media = safeId(mediaId, "Gallery media ID");
+  if (!new Set(["png", "jpg"]).has(extension)) throw new TypeError("Unsupported image extension");
+  return `gallery/submissions/${media}.${extension}`;
+}
+
+export async function prepareGalleryImage({ data, mediaId, env, fetchImpl = fetch }) {
+  const prepared = await prepareCompetitionImage({ data, competitionId: mediaId, mediaId, env, fetchImpl });
+  if (prepared.status === "READY") prepared.key = galleryMediaKey({ mediaId, extension: prepared.inspection.extension });
+  return prepared;
+}
+
+export async function deleteGalleryImage(bucket, key) {
+  if (!bucket || typeof bucket.delete !== "function") throw new TypeError("Gallery media bucket is unavailable");
+  if (typeof key !== "string" || !/^gallery\/submissions\/[0-9a-f-]{36}\.(?:png|jpg)$/.test(key)) {
+    throw new TypeError("Gallery media key is invalid");
+  }
+  await bucket.delete(key);
+}
+
 export async function prepareCompetitionImage({ data, competitionId, mediaId, purpose = "submission", env, fetchImpl = fetch }) {
   const binary = asBytes(data);
   const inspection = inspectCompetitionImage(binary);

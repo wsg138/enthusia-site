@@ -34,7 +34,7 @@ export async function beginDiscordOAuth(db, env, returnTo) {
   const url = new URL(DISCORD_AUTHORIZE_URL);
   url.searchParams.set("response_type", "code");
   url.searchParams.set("client_id", config.clientId);
-  url.searchParams.set("scope", "identify");
+  url.searchParams.set("scope", "identify guilds.members.read");
   url.searchParams.set("state", state);
   url.searchParams.set("redirect_uri", config.redirectUri);
   // Do not force prompt=none: first-time users must be allowed to see Discord's
@@ -74,6 +74,18 @@ async function fetchDiscordUser(accessToken, fetchImpl = fetch) {
   return body;
 }
 
+async function fetchDiscordMemberRoles(accessToken, env, fetchImpl = fetch) {
+  const guildId = String(env?.DISCORD_GUILD_ID ?? "").trim();
+  if (!/^\d{16,22}$/.test(guildId)) return [];
+  const response = await fetchImpl(`${DISCORD_USER_URL}/guilds/${guildId}/member`, {
+    headers: { authorization: `Bearer ${accessToken}` }
+  });
+  if (response.status === 404) return [];
+  const body = await response.json().catch(() => null);
+  if (!response.ok || !Array.isArray(body?.roles)) throw new Error(`Discord member lookup failed: ${response.status}`);
+  return body.roles.map(String).filter((role) => /^\d{16,22}$/.test(role));
+}
+
 export async function completeDiscordOAuth(db, env, { code, state }, fetchImpl = fetch) {
   const safeCode = typeof code === "string" ? code.trim() : "";
   const safeState = typeof state === "string" ? state.trim() : "";
@@ -85,7 +97,8 @@ export async function completeDiscordOAuth(db, env, { code, state }, fetchImpl =
 
   const accessToken = await exchangeAuthorizationCode(env, safeCode, fetchImpl);
   const user = await fetchDiscordUser(accessToken, fetchImpl);
-  const session = await createIdentitySession(db, user);
+  const roleIds = await fetchDiscordMemberRoles(accessToken, env, fetchImpl);
+  const session = await createIdentitySession(db, { ...user, roleIds });
   return {
     returnTo: oauthState.returnTo,
     cookie: competitionSessionCookie(session.token),
