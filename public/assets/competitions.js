@@ -78,6 +78,7 @@ function stageDescription(state) {
 
 function renderStagePanel(competition, { includeSchedule = true } = {}) {
   const wrapper = document.createElement("div");
+  wrapper.className = "competition-stage-block";
   const panel = document.createElement("section");
   panel.className = "competition-stage-panel";
   const { current, next, target } = nextStage(competition);

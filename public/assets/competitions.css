@@ -195,8 +195,11 @@
 .competition-featured-copy>p{max-width:760px;color:var(--muted)}
 .competition-featured-copy{align-self:center}
 .competition-featured-copy .competition-primary-action{margin-top:8px}
-.competition-featured>.competition-stage-panel{align-self:center}
-.competition-featured.has-banner>.competition-stage-panel{grid-column:1/-1}
+.competition-featured>.competition-stage-block{align-self:center}
+.competition-featured .competition-stage-panel{padding:16px 18px}
+.competition-featured .competition-stage-copy p{display:none}
+.competition-featured .competition-stage-copy{min-width:110px}
+.competition-featured.has-banner>.competition-stage-block{grid-column:1/-1}
 
 .competition-empty{padding:26px;text-align:center;color:var(--muted)}
 
@@ -415,7 +418,7 @@
   .competition-grid,.submission-grid,.competition-reward-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .competition-featured,
   .competition-featured.has-banner{grid-template-columns:1fr}
-  .competition-featured.has-banner>.competition-stage-panel{grid-column:auto}
+  .competition-featured.has-banner>.competition-stage-block{grid-column:auto}
   .competition-featured-banner{min-height:0;aspect-ratio:16/7}
   .competition-podium{grid-template-columns:1fr}
   .competition-podium-card,.competition-podium-card[data-placement="1"]{min-height:0}
