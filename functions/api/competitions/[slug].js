@@ -10,6 +10,7 @@ import {
   listAcceptedPublicParticipantsByCompetition,
   listApprovedPublicSubmissions
 } from "../../lib/competitions/repository.js";
+import { listPublicResults } from "../../lib/competitions/results.js";
 import { json, methodNotAllowed } from "../../lib/responses.js";
 
 function competitionSlug(context) {
@@ -47,13 +48,16 @@ export async function onRequestGet(context) {
       return json({
         competition: publicCompetitionDetail(competition),
         entriesVisible: false,
-        submissions: []
+        submissions: [],
+        results: []
       });
     }
 
-    const [submissions, participants] = await Promise.all([
+    const resultsVisible = ["COMPLETED", "ARCHIVED"].includes(competition.lifecycleState);
+    const [submissions, participants, results] = await Promise.all([
       listApprovedPublicSubmissions(context.env.COMPETITIONS_DB, competition.id),
-      listAcceptedPublicParticipantsByCompetition(context.env.COMPETITIONS_DB, competition.id)
+      listAcceptedPublicParticipantsByCompetition(context.env.COMPETITIONS_DB, competition.id),
+      resultsVisible ? listPublicResults(context.env.COMPETITIONS_DB, competition.id) : Promise.resolve([])
     ]);
     const participantsBySubmission = groupParticipants(participants);
 
@@ -63,7 +67,8 @@ export async function onRequestGet(context) {
       submissions: submissions.map((submission) => publicSubmissionDetail(
         submission,
         participantsBySubmission.get(submission.id) ?? []
-      ))
+      )),
+      results
     });
   } catch {
     return json({ error: "competition_detail_unavailable" }, 503);
