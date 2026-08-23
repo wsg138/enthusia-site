@@ -3,7 +3,7 @@ import { drainCompetitionNotifications } from "./notification-delivery.js";
 import { recoverStaleCompetitionNotifications } from "./notifications.js";
 import { transitionCompetitionState } from "./state.js";
 
-const AUTOMATIC_STATES = new Set(["UPCOMING", "SUBMISSIONS_OPEN", "REVIEW", "VOTING", "JUDGING"]);
+const AUTOMATIC_STATES = new Set(["UPCOMING", "SUBMISSIONS_OPEN", "REVIEW", "VOTING"]);
 const SYSTEM_SUBJECT = "system:competition-jobs";
 
 function rows(result) {
@@ -46,19 +46,20 @@ export function automaticCompetitionTarget(competition, now = new Date()) {
       target = "VOTING";
     } else if (!votingEnabled && judgingEnabled && due(schedule.judgingOpenAt, nowMs)) {
       target = "JUDGING";
-    } else if (!votingEnabled && !judgingEnabled && due(schedule.reviewCloseAt, nowMs)) {
-      target = "RESULTS_READY";
     }
-  } else if (competition.lifecycleState === "VOTING" && due(schedule.votingCloseAt, nowMs)) {
-    if (judgingEnabled) {
-      if (due(schedule.judgingOpenAt, nowMs)) target = "JUDGING";
-    } else {
-      target = "RESULTS_READY";
-    }
-  } else if (competition.lifecycleState === "JUDGING" && due(schedule.judgingCloseAt, nowMs)) {
-    target = "RESULTS_READY";
+  } else if (
+    competition.lifecycleState === "VOTING"
+    && judgingEnabled
+    && due(schedule.votingCloseAt, nowMs)
+    && due(schedule.judgingOpenAt, nowMs)
+  ) {
+    target = "JUDGING";
   }
 
+  // RESULTS_READY is deliberately not a scheduled target. That state means staff
+  // has closed the scoring stage and is ready to build/review a provisional
+  // result set. Clock expiry alone is insufficient evidence that scoring is
+  // complete, ties are resolved, abuse flags are handled, or judges have scored.
   if (!target || !canTransitionCompetition(competition.lifecycleState, target, { automatic: true })) return null;
   return target;
 }
@@ -76,7 +77,7 @@ export async function listAutomaticCompetitionCandidates(db, limit = 100) {
     JOIN competition_config_versions v
       ON v.competition_id = c.id
      AND v.version = c.current_config_version
-    WHERE c.lifecycle_state IN ('UPCOMING','SUBMISSIONS_OPEN','REVIEW','VOTING','JUDGING')
+    WHERE c.lifecycle_state IN ('UPCOMING','SUBMISSIONS_OPEN','REVIEW','VOTING')
     ORDER BY c.updated_at ASC, c.id ASC
     LIMIT ?
   `).bind(safeLimit).all();
