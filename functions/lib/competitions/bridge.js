@@ -3,6 +3,7 @@ const BRIDGE_TIMEOUT_MS = 5000;
 const ROUTES = new Set([
   "/v1/competitions/player-context",
   "/v1/competitions/player-lookup",
+  "/v1/competitions/guild-members",
   "/v1/competitions/rewards/deliver",
   "/v1/competitions/notifications/submission",
   "/v1/competitions/notifications/contributor"
@@ -127,6 +128,41 @@ export async function competitionPlayerLookup(env, minecraftName) {
     throw new Error("Competition bridge returned invalid player lookup");
   }
   return { uuid, name: canonicalName };
+}
+
+export async function competitionGuildMembers(env, guildId) {
+  const id = typeof guildId === "string" ? guildId.trim() : "";
+  if (!id || id.length > 128 || !/^[A-Za-z0-9._:-]+$/.test(id)) throw new TypeError("Guild ID is invalid");
+  const response = await signedCompetitionBridgeRequest(env, "/v1/competitions/guild-members", { guildId: id });
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`Competition bridge guild membership failed: ${response.status}`);
+  const body = await response.json();
+  if (!body || typeof body !== "object" || !Array.isArray(body.members)) {
+    throw new Error("Competition bridge returned invalid guild membership");
+  }
+  const members = body.members.map((raw) => {
+    const uuid = String(typeof raw === "string" ? raw : raw?.uuid ?? "").trim().toLowerCase();
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(uuid)) {
+      throw new Error("Competition bridge returned invalid guild member UUID");
+    }
+    return uuid;
+  });
+  return [...new Set(members)].sort();
+}
+
+export async function deliverCompetitionPrize(env, delivery) {
+  const response = await signedCompetitionBridgeRequest(env, "/v1/competitions/rewards/deliver", delivery);
+  const body = await response.json().catch(() => null);
+  if (!response.ok) {
+    const error = new Error(`Competition bridge prize delivery failed: ${response.status}`);
+    error.status = response.status;
+    error.body = body;
+    throw error;
+  }
+  if (!body || typeof body !== "object" || typeof body.status !== "string") {
+    throw new Error("Competition bridge returned invalid prize delivery response");
+  }
+  return body;
 }
 
 export { BRIDGE_TIMEOUT_MS, configuration as competitionBridgeConfiguration, route as competitionBridgeRoute };
