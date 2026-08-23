@@ -112,6 +112,8 @@ export function initialCompetitionConfig({ summary = "" } = {}) {
     },
     appearance: {
       bannerImageId: null,
+      iconImageId: null,
+      categoryImageId: null,
       accent: null
     },
     schedule: {
@@ -202,7 +204,9 @@ export function sanitizeCompetitionConfig(input) {
   }
 
   const bannerImageId = optionalIdentifier(appearanceInput.bannerImageId);
-  if (bannerImageId === INVALID) return null;
+  const iconImageId = optionalIdentifier(appearanceInput.iconImageId);
+  const categoryImageId = optionalIdentifier(appearanceInput.categoryImageId);
+  if (invalid(bannerImageId, iconImageId, categoryImageId)) return null;
 
   let guildSubmissionPermission = defaults.entries.guildSubmissionPermission;
   if (hasValue(entriesInput.guildSubmissionPermission)) {
@@ -299,7 +303,7 @@ export function sanitizeCompetitionConfig(input) {
   return {
     schemaVersion: 1,
     public: { summary, description, rules },
-    appearance: { bannerImageId, accent },
+    appearance: { bannerImageId, iconImageId, categoryImageId, accent },
     schedule,
     entries: {
       allowedTypes,
