@@ -1,19 +1,9 @@
 PRAGMA foreign_keys = ON;
 
-CREATE TABLE competition_judges (
-    competition_id TEXT NOT NULL,
-    judge_uuid TEXT NOT NULL,
-    judge_name TEXT NOT NULL,
-    assigned_by_uuid TEXT NOT NULL,
-    assigned_at TEXT NOT NULL,
-    removed_at TEXT,
-    removed_by_uuid TEXT,
-    PRIMARY KEY (competition_id, judge_uuid),
-    FOREIGN KEY (competition_id) REFERENCES competitions(id) ON DELETE CASCADE
-);
-
-CREATE INDEX idx_competition_judges_active
-    ON competition_judges(competition_id, removed_at, judge_name);
+-- competition_judges is part of the baseline competition schema. This
+-- migration extends it with removal audit metadata and enforces the fairness
+-- rules around judging, entry participation, and public voting.
+ALTER TABLE competition_judges ADD COLUMN removed_by_uuid TEXT;
 
 -- A judge may be credited only as a HELPER. Owners/main entrants/guild workers
 -- can never be turned into judges for the same competition.
