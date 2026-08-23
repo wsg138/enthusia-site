@@ -76,9 +76,13 @@ export async function listResultRecipientsContext(db, competitionId) {
       ORDER BY p.submission_id ASC, p.player_uuid ASC
     `).bind(competitionId).all(),
     database.prepare(`
-      SELECT judge_uuid AS judgeUuid
-      FROM competition_judges
-      WHERE competition_id = ?
+      SELECT DISTINCT COALESCE(linked.minecraft_uuid, j.judge_uuid) AS judgeUuid
+      FROM competition_judges j
+      LEFT JOIN competition_minecraft_links selected
+        ON selected.minecraft_uuid = j.judge_uuid
+      LEFT JOIN competition_minecraft_links linked
+        ON linked.discord_user_id = selected.discord_user_id
+      WHERE j.competition_id = ?
     `).bind(competitionId).all()
   ]);
 
@@ -87,7 +91,7 @@ export async function listResultRecipientsContext(db, competitionId) {
     if (!participants.has(participant.submissionId)) participants.set(participant.submissionId, []);
     participants.get(participant.submissionId).push(participant);
   }
-  const judgeUuids = new Set(rows(judgeRows).map((row) => row.judgeUuid));
+  const judgeUuids = new Set(rows(judgeRows).map((row) => row.judgeUuid).filter(Boolean));
   return rows(resultRows).map((result) => ({
     ...result,
     placement: Number(result.placement),
@@ -151,7 +155,9 @@ export function planRewardForResult(reward, context, { guildMemberUuids = null }
   const candidates = eligibleParticipants(context, reward);
   const eligibleUuids = candidates.map((candidate) => candidate.playerUuid);
   const guildMembers = Array.isArray(guildMemberUuids)
-    ? [...new Set(guildMemberUuids.map(String))].sort()
+    ? [...new Set(guildMemberUuids.map(String))]
+        .filter((uuid) => !context.judgeUuids.has(uuid))
+        .sort()
     : null;
 
   if (
