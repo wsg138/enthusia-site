@@ -55,6 +55,13 @@ async function compute(context, competition, tieOrder = null) {
       : Promise.resolve([])
   ]);
 
+  // Historical score rows remain valuable for audit purposes after a judge is
+  // unassigned, but they must not continue to influence the active scoring set.
+  // Otherwise replacing a judge after they scored can make readiness report an
+  // impossible N+1/N score count forever.
+  const activeJudgeUuids = new Set(activeJudges.map((judge) => judge.judgeUuid));
+  const activeJudgeScores = judgeScores.filter((score) => activeJudgeUuids.has(score.judgeUuid));
+
   return buildCompetitionStandings({
     competitionId: competition.id,
     configVersion: competition.configVersion,
@@ -62,7 +69,7 @@ async function compute(context, competition, tieOrder = null) {
     submissions,
     voteTotals,
     ballotCount,
-    judgeScores,
+    judgeScores: activeJudgeScores,
     activeJudgeCount: activeJudges.length,
     tieOrder
   });
