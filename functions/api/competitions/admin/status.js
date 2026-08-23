@@ -6,7 +6,10 @@ import {
   hasCompetitionMedia
 } from "../../../lib/competitions/access.js";
 import { competitionBridgeConfiguration } from "../../../lib/competitions/bridge.js";
-import { competitionDiscordConfigured } from "../../../lib/competitions/discord-notifications.js";
+import {
+  competitionContributorDiscordConfigured,
+  competitionDiscordConfigured
+} from "../../../lib/competitions/discord-notifications.js";
 import { discordOAuthConfigured } from "../../../lib/competitions/discord-oauth.js";
 import { moderationModel } from "../../../lib/competitions/moderation.js";
 import { currentCompetitionSchemaReady } from "../../../lib/competitions/schema-readiness.js";
@@ -40,6 +43,7 @@ export function buildStatusSnapshot(env, schemaReady) {
   const oauthConfigured = discordOAuthConfigured(env);
   const bridgeReady = bridgeConfigured(env);
   const discordStaffReady = competitionDiscordConfigured(env);
+  const discordContributorReady = competitionContributorDiscordConfigured(env);
   const originReady = siteOriginConfigured(env);
   return {
     ok: Boolean(
@@ -73,7 +77,8 @@ export function buildStatusSnapshot(env, schemaReady) {
     },
     notifications: {
       minecraftConfigured: bridgeReady,
-      discordStaffConfigured: discordStaffReady
+      discordStaffConfigured: discordStaffReady,
+      discordContributorDmConfigured: discordContributorReady
     },
     siteOrigin: {
       configured: originReady
