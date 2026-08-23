@@ -1,4 +1,5 @@
-import { competitionsEnabled, hasCompetitionDatabase } from "../../lib/competitions/access.js";
+import { hasCompetitionDatabase } from "../../lib/competitions/access.js";
+import { authorizeCompetitionRead } from "../../lib/competitions/public-access.js";
 import {
   publicCompetitionDetail,
   publicEntriesVisibleInState,
@@ -27,7 +28,9 @@ function groupParticipants(rows) {
 }
 
 export async function onRequestGet(context) {
-  if (!competitionsEnabled(context.env)) return json({ error: "not_found" }, 404);
+  const authorized = await authorizeCompetitionRead(context);
+  if (authorized.response) return authorized.response;
+
   if (!hasCompetitionDatabase(context.env)) {
     return json({ error: "competition_database_unavailable" }, 503);
   }
