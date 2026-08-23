@@ -1,6 +1,8 @@
 import { inspectCompetitionImage, sha256Hex } from "./media-policy.js";
 import { moderateImageDataUrl } from "./moderation.js";
 
+const MEDIA_PURPOSES = new Set(["submission", "banner", "gallery", "icon", "category"]);
+
 function asBytes(value) {
   if (value instanceof Uint8Array) return value;
   if (value instanceof ArrayBuffer) return new Uint8Array(value);
@@ -40,7 +42,7 @@ export function competitionMediaKey({ competitionId, mediaId, extension, purpose
   const competition = safeId(competitionId, "Competition ID");
   const media = safeId(mediaId, "Media ID");
   if (!new Set(["png", "jpg"]).has(extension)) throw new TypeError("Unsupported image extension");
-  if (!new Set(["submission", "banner", "gallery"]).has(purpose)) throw new TypeError("Unsupported media purpose");
+  if (!MEDIA_PURPOSES.has(purpose)) throw new TypeError("Unsupported media purpose");
   return `competitions/${competition}/${purpose}/${media}.${extension}`;
 }
 
@@ -118,7 +120,7 @@ export async function deleteCompetitionImage(bucket, key) {
   if (!bucket || typeof bucket.delete !== "function") {
     throw new TypeError("Competition media bucket is unavailable");
   }
-  if (typeof key !== "string" || !/^competitions\/[0-9a-f-]{36}\/(?:submission|banner|gallery)\/[0-9a-f-]{36}\.(?:png|jpg)$/.test(key)) {
+  if (typeof key !== "string" || !/^competitions\/[0-9a-f-]{36}\/(?:submission|banner|gallery|icon|category)\/[0-9a-f-]{36}\.(?:png|jpg)$/.test(key)) {
     throw new TypeError("Competition media key is invalid");
   }
   await bucket.delete(key);
