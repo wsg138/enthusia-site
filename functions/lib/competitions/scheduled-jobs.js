@@ -6,6 +6,7 @@ import { transitionCompetitionState } from "./state.js";
 
 const AUTOMATIC_STATES = new Set(["UPCOMING", "SUBMISSIONS_OPEN", "REVIEW", "VOTING"]);
 const SYSTEM_SUBJECT = "system:competition-jobs";
+const SYSTEM_ACTOR_UUID = "system";
 
 function rows(result) {
   return Array.isArray(result?.results) ? result.results : [];
@@ -107,7 +108,7 @@ export async function advanceAutomaticCompetitionStates(db, now = new Date(), { 
       operationId: crypto.randomUUID(),
       auditEventId: crypto.randomUUID(),
       actorSubject: SYSTEM_SUBJECT,
-      actorUuid: null,
+      actorUuid: SYSTEM_ACTOR_UUID,
       note: `Automatic schedule transition to ${targetState}`,
       createdAt
     });
@@ -147,4 +148,4 @@ export async function runCompetitionScheduledJobs(env, now = new Date()) {
   return { identityPruned, recoveredNotifications, lifecycle, notifications };
 }
 
-export { SYSTEM_SUBJECT };
+export { SYSTEM_ACTOR_UUID, SYSTEM_SUBJECT };
