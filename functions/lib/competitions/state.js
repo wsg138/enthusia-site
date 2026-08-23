@@ -5,12 +5,44 @@ function requireWritableDatabase(db) {
   return db;
 }
 
+function rewardPublicationStatements(database, transition) {
+  if (!Array.isArray(transition.rewardDefinitions)) return [];
+  if (transition.expectedState !== "DRAFT" || transition.targetState !== "UPCOMING") {
+    throw new TypeError("Reward definitions may only be materialized when publishing a draft");
+  }
+
+  const statements = [
+    database.prepare("DELETE FROM reward_definitions WHERE competition_id = ?")
+      .bind(transition.competitionId)
+  ];
+  for (const reward of transition.rewardDefinitions) {
+    statements.push(database.prepare(`
+      INSERT INTO reward_definitions (
+        id, competition_id, placement, reward_type,
+        distribution_mode, config_json, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      reward.id,
+      transition.competitionId,
+      reward.placement,
+      reward.rewardType,
+      reward.distributionMode,
+      reward.configJson,
+      reward.createdAt
+    ));
+  }
+  return statements;
+}
+
 export async function transitionCompetitionState(db, transition) {
   const database = requireWritableDatabase(db);
   const beforeJson = JSON.stringify({ lifecycleState: transition.expectedState });
   const afterJson = JSON.stringify({ lifecycleState: transition.targetState });
+  const rewardStatements = rewardPublicationStatements(database, transition);
+  const updateIndex = rewardStatements.length;
 
   const results = await database.batch([
+    ...rewardStatements,
     database.prepare(`
       UPDATE competitions
       SET lifecycle_state = ?,
@@ -67,7 +99,7 @@ export async function transitionCompetitionState(db, transition) {
     )
   ]);
 
-  const changed = Number(results?.[0]?.meta?.changes ?? 0);
+  const changed = Number(results?.[updateIndex]?.meta?.changes ?? 0);
   if (changed !== 1) return { status: "CONFLICT" };
   return {
     status: "UPDATED",
