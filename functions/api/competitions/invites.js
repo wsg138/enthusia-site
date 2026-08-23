@@ -7,7 +7,7 @@ import {
 import { getAdminCompetition } from "../../lib/competitions/drafts.js";
 import { getCompetitionParticipantSession, linkedMinecraftUuids } from "../../lib/competitions/participant-auth.js";
 import { canChangeParticipantRoster } from "../../lib/competitions/participants.js";
-import { countPlayerEntrySlots } from "../../lib/competitions/submissions.js";
+import { countLinkedPlayerEntrySlots } from "../../lib/competitions/submissions.js";
 import { json, methodNotAllowed, unauthorized } from "../../lib/responses.js";
 import { requireSameOrigin } from "../../lib/security.js";
 import { isCanonicalUuid } from "../../lib/validation.js";
@@ -93,7 +93,11 @@ export async function onRequestPost(context) {
     }
 
     if (accept && invite.role === "MAIN") {
-      const count = await countPlayerEntrySlots(context.env.COMPETITIONS_DB, competitionId, playerUuid);
+      const count = await countLinkedPlayerEntrySlots(
+        context.env.COMPETITIONS_DB,
+        competitionId,
+        [...authorized.accounts]
+      );
       if (count >= competition.config.entries.maxEntriesPerPlayer) {
         return json({ error: "player_entry_limit_reached" }, 409);
       }
@@ -119,7 +123,12 @@ export async function onRequestPost(context) {
     });
   } catch (error) {
     const message = String(error?.message ?? error);
-    if (message.includes("competition_judge_cannot_enter")) return json({ error: "judge_can_only_be_helper" }, 409);
+    if (message.includes("competition_judge_cannot_enter") || message.includes("competition_linked_judge_cannot_enter")) {
+      return json({ error: "judge_can_only_be_helper" }, 409);
+    }
+    if (message.includes("competition_linked_entry_limit_reached")) {
+      return json({ error: "player_entry_limit_reached" }, 409);
+    }
     return json({ error: "invite_response_failed" }, 503);
   }
 }
