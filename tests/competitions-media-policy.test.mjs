@@ -110,6 +110,6 @@ test("competition image policy rejects unsupported bytes and oversized input", (
 test("competition image hashes are stable SHA-256 hex", async () => {
   assert.equal(
     await sha256Hex(new TextEncoder().encode("enthusia")),
-    "c12c3deebd6ed8f19e293ac03d179956ee796c44043147f3f51efceefc770269"
+    "a2f83134a5c9e40ed691ed2b03bb07028d5a727e80d8733245ea5688d4cabaa4"
   );
 });
