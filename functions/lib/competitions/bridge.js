@@ -6,7 +6,10 @@ const ROUTES = new Set([
   "/v1/competitions/guild-members",
   "/v1/competitions/rewards/deliver",
   "/v1/competitions/notifications/submission",
-  "/v1/competitions/notifications/contributor"
+  "/v1/competitions/notifications/contributor",
+  "/v1/competitions/link/register",
+  "/v1/competitions/link/status",
+  "/v1/competitions/link/consume"
 ]);
 
 function base64Url(bytes) {
@@ -20,29 +23,15 @@ async function sha256(bytes) {
 }
 
 async function hmacSha256(secret, value) {
-  const key = await crypto.subtle.importKey(
-    "raw",
-    encoder.encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"]
-  );
+  const key = await crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   return new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(value)));
 }
 
 function configuration(env) {
-  const rawOrigin = typeof env?.COMPETITION_BRIDGE_ORIGIN === "string"
-    ? env.COMPETITION_BRIDGE_ORIGIN.trim()
-    : "";
-  const bearer = typeof env?.COMPETITION_BRIDGE_BEARER_TOKEN === "string"
-    ? env.COMPETITION_BRIDGE_BEARER_TOKEN
-    : "";
-  const secret = typeof env?.COMPETITION_BRIDGE_HMAC_SECRET === "string"
-    ? env.COMPETITION_BRIDGE_HMAC_SECRET
-    : "";
-  if (!rawOrigin || bearer.length < 32 || secret.length < 32) {
-    throw new Error("Competition bridge is not configured");
-  }
+  const rawOrigin = typeof env?.COMPETITION_BRIDGE_ORIGIN === "string" ? env.COMPETITION_BRIDGE_ORIGIN.trim() : "";
+  const bearer = typeof env?.COMPETITION_BRIDGE_BEARER_TOKEN === "string" ? env.COMPETITION_BRIDGE_BEARER_TOKEN : "";
+  const secret = typeof env?.COMPETITION_BRIDGE_HMAC_SECRET === "string" ? env.COMPETITION_BRIDGE_HMAC_SECRET : "";
+  if (!rawOrigin || bearer.length < 32 || secret.length < 32) throw new Error("Competition bridge is not configured");
   const origin = new URL(rawOrigin).origin;
   if (!origin.startsWith("https://")) throw new Error("Competition bridge requires HTTPS");
   return { origin, bearer, secret };
@@ -56,11 +45,8 @@ function route(path) {
 async function boundedFetch(url, options) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), BRIDGE_TIMEOUT_MS);
-  try {
-    return await fetch(url, { ...options, signal: controller.signal });
-  } finally {
-    clearTimeout(timeout);
-  }
+  try { return await fetch(url, { ...options, signal: controller.signal }); }
+  finally { clearTimeout(timeout); }
 }
 
 export async function signedCompetitionBridgeRequest(env, path, body) {
@@ -73,7 +59,6 @@ export async function signedCompetitionBridgeRequest(env, path, body) {
   const contentHash = base64Url(await sha256(payload));
   const canonical = `${method}\n${requestTarget}\n${timestamp}\n${nonce}\n${contentHash}`;
   const signature = base64Url(await hmacSha256(config.secret, canonical));
-
   return boundedFetch(`${config.origin}${requestTarget}`, {
     method,
     headers: {
@@ -95,13 +80,7 @@ export async function competitionPlayerContext(env, session) {
   });
   if (!response.ok) throw new Error(`Competition bridge player context failed: ${response.status}`);
   const body = await response.json();
-  if (
-    !body
-    || typeof body !== "object"
-    || !Array.isArray(body.linkedMinecraftAccounts)
-    || !Number.isFinite(body.activeMinutes)
-    || !Array.isArray(body.guilds)
-  ) {
+  if (!body || typeof body !== "object" || !Array.isArray(body.linkedMinecraftAccounts) || !Number.isFinite(body.activeMinutes) || !Array.isArray(body.guilds)) {
     throw new Error("Competition bridge returned invalid player context");
   }
   return {
@@ -121,10 +100,7 @@ export async function competitionPlayerLookup(env, minecraftName) {
   const body = await response.json();
   const uuid = String(body?.uuid ?? "").trim().toLowerCase();
   const canonicalName = String(body?.name ?? "").trim();
-  if (
-    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(uuid)
-    || !/^[A-Za-z0-9_]{1,16}$/.test(canonicalName)
-  ) {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(uuid) || !/^[A-Za-z0-9_]{1,16}$/.test(canonicalName)) {
     throw new Error("Competition bridge returned invalid player lookup");
   }
   return { uuid, name: canonicalName };
@@ -137,14 +113,10 @@ export async function competitionGuildMembers(env, guildId) {
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`Competition bridge guild membership failed: ${response.status}`);
   const body = await response.json();
-  if (!body || typeof body !== "object" || !Array.isArray(body.members)) {
-    throw new Error("Competition bridge returned invalid guild membership");
-  }
+  if (!body || typeof body !== "object" || !Array.isArray(body.members)) throw new Error("Competition bridge returned invalid guild membership");
   const members = body.members.map((raw) => {
     const uuid = String(typeof raw === "string" ? raw : raw?.uuid ?? "").trim().toLowerCase();
-    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(uuid)) {
-      throw new Error("Competition bridge returned invalid guild member UUID");
-    }
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(uuid)) throw new Error("Competition bridge returned invalid guild member UUID");
     return uuid;
   });
   return [...new Set(members)].sort();
@@ -159,10 +131,28 @@ export async function deliverCompetitionPrize(env, delivery) {
     error.body = body;
     throw error;
   }
-  if (!body || typeof body !== "object" || typeof body.status !== "string") {
-    throw new Error("Competition bridge returned invalid prize delivery response");
-  }
+  if (!body || typeof body !== "object" || typeof body.status !== "string") throw new Error("Competition bridge returned invalid prize delivery response");
   return body;
+}
+
+async function linkBridgeJson(env, path, body) {
+  const response = await signedCompetitionBridgeRequest(env, path, body);
+  const payload = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(`Competition link bridge failed: ${response.status}:${payload?.error ?? "unknown"}`);
+  if (!payload || typeof payload !== "object" || typeof payload.status !== "string") throw new Error("Competition link bridge returned an invalid response");
+  return payload;
+}
+
+export function registerCompetitionLinkCode(env, codeHash, expiresAt) {
+  return linkBridgeJson(env, "/v1/competitions/link/register", { codeHash, expiresAt });
+}
+
+export function competitionLinkStatus(env, codeHash) {
+  return linkBridgeJson(env, "/v1/competitions/link/status", { codeHash });
+}
+
+export function consumeCompetitionLinkCode(env, codeHash) {
+  return linkBridgeJson(env, "/v1/competitions/link/consume", { codeHash });
 }
 
 export { BRIDGE_TIMEOUT_MS, configuration as competitionBridgeConfiguration, route as competitionBridgeRoute };
