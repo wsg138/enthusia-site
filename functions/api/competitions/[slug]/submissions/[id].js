@@ -269,7 +269,7 @@ export async function onRequestPost(context) {
       listSubmissionImages(context.env.COMPETITIONS_DB, submission.id),
       getSubmissionLocation(context.env.COMPETITIONS_DB, submission.id)
     ]);
-    if (images.length < competition.config.entries.minImages || images.length > competition.config.entries.maxImages) {
+    if (images.length < competition.config.entries.minImages) {
       return json({ error: "submission_image_count_invalid" }, 409);
     }
     if (images.some((image) => image.moderationState !== "PASSED")) {

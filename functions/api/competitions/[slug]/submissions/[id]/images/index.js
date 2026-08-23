@@ -14,7 +14,7 @@ import { authorizeCompetitionRead } from "../../../../../../lib/competitions/pub
 import { competitionRateLimit, rateLimitHeaders } from "../../../../../../lib/competitions/rate-limit.js";
 import { getPublicCompetitionBySlug } from "../../../../../../lib/competitions/repository.js";
 import { attachSubmissionImage } from "../../../../../../lib/competitions/submission-media.js";
-import { getAccountSubmission, listSubmissionImages } from "../../../../../../lib/competitions/submissions.js";
+import { getAccountSubmission } from "../../../../../../lib/competitions/submissions.js";
 import { json, methodNotAllowed, unauthorized } from "../../../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../../../lib/security.js";
 import { isCanonicalUuid } from "../../../../../../lib/validation.js";
@@ -128,16 +128,6 @@ export async function onRequestPost(context) {
     if (limited) return limited;
   } catch {
     return json({ error: "rate_limit_unavailable" }, 503);
-  }
-
-  let existing;
-  try {
-    existing = await listSubmissionImages(context.env.COMPETITIONS_DB, submission.id);
-  } catch {
-    return json({ error: "submission_images_unavailable" }, 503);
-  }
-  if (existing.length >= competition.config.entries.maxImages) {
-    return json({ error: "submission_image_limit_reached" }, 409);
   }
 
   const requestedType = String(context.request.headers.get("content-type") ?? "").split(";", 1)[0].trim().toLowerCase();

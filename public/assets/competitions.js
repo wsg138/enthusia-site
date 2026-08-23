@@ -294,17 +294,6 @@ async function loadCatalog() {
   }
 }
 
-function infoItem(label, value) {
-  const item = document.createElement("div");
-  item.className = "competition-info-item";
-  const strong = document.createElement("strong");
-  strong.textContent = value;
-  const span = document.createElement("span");
-  span.textContent = label;
-  item.append(strong, span);
-  return item;
-}
-
 function placementLabel(value) {
   const placement = Number(value);
   if (!Number.isInteger(placement) || placement < 1) return "Placement";
@@ -361,15 +350,50 @@ function renderOverview(root, competition) {
   description.className = "competition-copy";
   description.textContent = text(config.public?.description, config.public?.summary || "No description has been published yet.");
 
-  const info = document.createElement("div");
-  info.className = "competition-info-grid";
-  info.append(
-    infoItem("Max entries per player", String(config.entries?.maxEntriesPerPlayer ?? "—")),
-    infoItem("Images per entry", `Up to ${config.entries?.maxImages ?? "—"}`),
-    infoItem("Entry types", (config.entries?.allowedTypes ?? []).join(", ") || "—")
-  );
+  const guide = document.createElement("div");
+  guide.className = "competition-guide-callout";
+  const guideCopy = document.createElement("div");
+  const guideHeading = document.createElement("h2");
+  guideHeading.textContent = "New to competitions?";
+  const guideText = document.createElement("p");
+  guideText.textContent = "Read the competition guide for entry steps, screenshots, voting, judging, schedules, and results.";
+  guideCopy.append(guideHeading, guideText);
+  const guideLink = document.createElement("a");
+  guideLink.className = "competition-primary-action";
+  guideLink.href = "guide.html";
+  guideLink.textContent = "Read the competition guide";
+  guide.append(guideCopy, guideLink);
 
-  section.append(description, info);
+  section.append(description, guide);
+
+  const fullDetails = document.createElement("details");
+  fullDetails.className = "competition-full-details";
+  const fullDetailsSummary = document.createElement("summary");
+  fullDetailsSummary.textContent = "View all competition settings";
+  const detailList = document.createElement("dl");
+  const addDetail = (label, value) => {
+    const row = document.createElement("div");
+    const term = document.createElement("dt");
+    term.textContent = label;
+    const description = document.createElement("dd");
+    description.textContent = value;
+    row.append(term, description);
+    detailList.append(row);
+  };
+  const entries = config.entries ?? {};
+  const voting = config.voting ?? {};
+  const judging = config.judging ?? {};
+  addDetail("Entry types", (entries.allowedTypes ?? []).map((type) => type.toLowerCase()).join(", ") || "Not listed");
+  addDetail("Entries per player", String(entries.maxEntriesPerPlayer ?? "Not listed"));
+  if ((entries.allowedTypes ?? []).includes("GUILD")) addDetail("Entries per guild", String(entries.maxEntriesPerGuild ?? "Not listed"));
+  if ((entries.allowedTypes ?? []).includes("GROUP")) addDetail("Main group members", entries.maxMainMembers ? `Up to ${entries.maxMainMembers}` : "Not listed");
+  addDetail("Screenshots", `At least ${entries.minImages ?? 1}; no maximum. PNG or JPEG, up to 8 MB each.`);
+  addDetail("Community voting", voting.enabled ? `${voting.votesPerVoter ?? "Published"} choices per voter` : "Not used for this competition");
+  if (voting.enabled) addDetail("Voting eligibility", `${voting.minimumActiveMinutes ?? 0} active minutes required`);
+  addDetail("Judging", judging.enabled ? `${(judging.criteria ?? []).length} published scoring criteria` : "Not used for this competition");
+  addDetail("Private coordinates", entries.coordinatesRequested ? "Requested for staff review" : "Not requested");
+  fullDetails.append(fullDetailsSummary, detailList);
+  section.append(fullDetails);
   if (config.entries?.coordinatesRequested && config.entries?.judgesCanViewCoordinates) {
     const warning = document.createElement("div");
     warning.className = "competition-private-warning";

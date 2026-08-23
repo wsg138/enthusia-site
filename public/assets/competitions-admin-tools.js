@@ -264,10 +264,6 @@ function renderManualUpload(card, competition, submission) {
       result.textContent = "Choose at least one PNG or JPEG.";
       return;
     }
-    if (selected.length > competition.config.entries.maxImages) {
-      result.textContent = `This competition permits at most ${competition.config.entries.maxImages} images per entry.`;
-      return;
-    }
     button.disabled = true;
     let revision = toolState.manualSubmission?.revision ?? submission.revision;
     let uploaded = 0;

@@ -102,9 +102,8 @@ async function approvalReadiness(db, competition, submissionId) {
     getPrivateSubmissionLocation(db, submissionId)
   ]);
   const minImages = Number(competition.config?.entries?.minImages ?? 1);
-  const maxImages = Number(competition.config?.entries?.maxImages ?? 8);
-  if (images.length < minImages || images.length > maxImages) {
-    return { error: "submission_image_count_invalid", imageCount: images.length, minImages, maxImages };
+  if (images.length < minImages) {
+    return { error: "submission_image_count_invalid", imageCount: images.length, minImages };
   }
   if (images.some((image) => image.moderationState !== "PASSED")) {
     return { error: "submission_image_moderation_incomplete" };

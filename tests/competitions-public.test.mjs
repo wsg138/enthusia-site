@@ -59,6 +59,7 @@ test("public config exposes entrant-facing rules without private integration set
 
   assert.equal(projection.entries.coordinatesRequested, true);
   assert.equal(projection.entries.judgesCanViewCoordinates, true);
+  assert.equal("maxImages" in projection.entries, false);
   assert.equal("guildSubmissionPermission" in projection.entries, false);
   assert.equal("moderation" in projection, false);
   assert.equal("showTotalsToStaff" in projection.voting, false);

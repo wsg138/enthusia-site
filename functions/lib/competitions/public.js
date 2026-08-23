@@ -50,7 +50,6 @@ export function publicCompetitionConfig(config = {}) {
         : [],
       maxEntriesPerPlayer: config.entries?.maxEntriesPerPlayer ?? null,
       maxEntriesPerGuild: config.entries?.maxEntriesPerGuild ?? null,
-      maxImages: config.entries?.maxImages ?? null,
       minImages: config.entries?.minImages ?? null,
       maxDescriptionChars: config.entries?.maxDescriptionChars ?? null,
       coordinatesRequested: Boolean(config.entries?.coordinatesRequested),

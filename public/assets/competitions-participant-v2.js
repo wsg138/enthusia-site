@@ -415,7 +415,7 @@ async function reorderImages(wizard, ids, coverId) {
 function imagesStep(wizard, panel) {
   panel.append(el("h3", "", "Images"));
   const limits = wizard.state.competition.config.entries;
-  panel.append(el("p", "participant-muted", `Upload ${limits.minImages}–${limits.maxImages} screenshots. The selected cover image appears first publicly.`));
+  panel.append(el("p", "participant-muted", "Upload as many screenshots as the entry needs. Each image can be up to 8 MB. The selected cover image appears first publicly."));
   const warning = el("div", "participant-image-warning");
   warning.append(el("strong", "", "Before uploading"), el("p", "", "Competition screenshots become public after approval. Hide coordinates, minimap waypoints, private chat, private base locations, and anything else you do not want published."));
   panel.append(warning);
@@ -473,7 +473,7 @@ function imagesStep(wizard, panel) {
   });
   panel.append(grid);
 
-  if (canEdit(wizard.state.competition, wizard.submission) && images.length < limits.maxImages) {
+  if (canEdit(wizard.state.competition, wizard.submission)) {
     const upload = el("div", "participant-upload-row");
     const file = input("file", "image");
     file.accept = "image/png,image/jpeg";
@@ -562,7 +562,6 @@ function reviewStep(wizard, panel) {
   const images = wizard.submission.images ?? [];
   const blockers = [];
   if (images.length < limits.minImages) blockers.push(`Add at least ${limits.minImages} image${limits.minImages === 1 ? "" : "s"}.`);
-  if (images.length > limits.maxImages) blockers.push(`Remove images until no more than ${limits.maxImages} remain.`);
   if (limits.coordinatesRequested && !wizard.submission.location?.exactCoordinatesConfirmed) blockers.push("Confirm exact private coordinates.");
   const summary = el("div", "participant-review-grid");
   summary.append(el("div", "participant-review-item", `Status: ${statusLabel(wizard.submission.status)}`), el("div", "participant-review-item", `Entry type: ${wizard.submission.entryType}`), el("div", "participant-review-item", `Images: ${images.length}`), el("div", "participant-review-item", `Accepted people: ${(wizard.submission.participants ?? []).filter((person) => person.inviteStatus === "ACCEPTED").length}`));

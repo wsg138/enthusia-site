@@ -14,7 +14,6 @@ import {
 } from "../../../../../../../lib/competitions/media-storage.js";
 import { attachStaffSubmissionImage } from "../../../../../../../lib/competitions/staff-media.js";
 import { getStaffSubmission } from "../../../../../../../lib/competitions/staff-submissions.js";
-import { listSubmissionImages } from "../../../../../../../lib/competitions/submissions.js";
 import { json, methodNotAllowed, unauthorized } from "../../../../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../../../../lib/security.js";
 import { isCanonicalUuid } from "../../../../../../../lib/validation.js";
@@ -90,12 +89,10 @@ export async function onRequestPost(context) {
 
   let competition;
   let submission;
-  let existing;
   try {
-    [competition, submission, existing] = await Promise.all([
+    [competition, submission] = await Promise.all([
       getAdminCompetition(context.env.COMPETITIONS_DB, competitionId),
-      getStaffSubmission(context.env.COMPETITIONS_DB, competitionId, submissionId),
-      listSubmissionImages(context.env.COMPETITIONS_DB, submissionId)
+      getStaffSubmission(context.env.COMPETITIONS_DB, competitionId, submissionId)
     ]);
   } catch {
     return json({ error: "submission_unavailable" }, 503);
@@ -109,10 +106,6 @@ export async function onRequestPost(context) {
     return json({ error: "submission_locked" }, 409);
   }
   if (submission.revision !== revision) return json({ error: "submission_revision_conflict" }, 409);
-  if (existing.length >= competition.config.entries.maxImages) {
-    return json({ error: "submission_image_limit_reached" }, 409);
-  }
-
   const requestedType = String(context.request.headers.get("content-type") ?? "").split(";", 1)[0].trim().toLowerCase();
   if (!competitionImageLimits().mimeTypes.includes(requestedType)) {
     return json({ error: "unsupported_image_type" }, 415);

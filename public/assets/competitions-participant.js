@@ -508,7 +508,7 @@ async function changeImageOrder(wizard, imageIds, coverImageId) {
 function buildImagesStep(wizard, panel) {
   panel.append(element("h3", "", "Images"));
   const limits = wizard.state.competition.config.entries;
-  panel.append(element("p", "participant-muted", `Upload ${limits.minImages}–${limits.maxImages} screenshots. Drag-free ordering controls are included so keyboard/touch users can reorder too. The selected cover image appears first publicly.`));
+  panel.append(element("p", "participant-muted", "Upload as many screenshots as the entry needs. Each image can be up to 8 MB. Ordering controls are included for keyboard and touch users, and the selected cover image appears first publicly."));
   const privacy = element("div", "participant-image-warning");
   privacy.append(
     element("strong", "", "Before uploading"),
@@ -578,7 +578,7 @@ function buildImagesStep(wizard, panel) {
   });
   panel.append(grid);
 
-  if (canEditSubmission(wizard.state.competition, wizard.submission) && images.length < limits.maxImages) {
+  if (canEditSubmission(wizard.state.competition, wizard.submission)) {
     const uploadRow = element("div", "participant-upload-row");
     const file = input("file", "submissionImage");
     file.accept = "image/png,image/jpeg";
@@ -730,7 +730,6 @@ function buildReviewStep(wizard, panel) {
   const limits = wizard.state.competition.config.entries;
   const blockers = [];
   if (images.length < limits.minImages) blockers.push(`Add at least ${limits.minImages} image${limits.minImages === 1 ? "" : "s"}.`);
-  if (images.length > limits.maxImages) blockers.push(`Remove images until no more than ${limits.maxImages} remain.`);
   if (limits.coordinatesRequested && !submission.location?.exactCoordinatesConfirmed) blockers.push("Confirm exact private coordinates.");
   if (blockers.length) {
     const block = element("div", "participant-moderation-notice");
