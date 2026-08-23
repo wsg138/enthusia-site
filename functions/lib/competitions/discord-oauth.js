@@ -37,7 +37,9 @@ export async function beginDiscordOAuth(db, env, returnTo) {
   url.searchParams.set("scope", "identify");
   url.searchParams.set("state", state);
   url.searchParams.set("redirect_uri", config.redirectUri);
-  url.searchParams.set("prompt", "none");
+  // Do not force prompt=none: first-time users must be allowed to see Discord's
+  // normal authorization/login UI. Returning users can still complete the flow
+  // without granting any scope beyond identify.
   return { url: url.toString(), expiresAt };
 }
 
