@@ -1,5 +1,6 @@
 import "./competitions-admin-workspace.js";
 import "./competitions-admin-tools.js";
+import "./competitions-admin-bootstrap.js";
 
 const workspaceStyles = document.createElement("link");
 workspaceStyles.rel = "stylesheet";
