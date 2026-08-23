@@ -10,6 +10,7 @@ import {
   isCompetitionState,
   validatePublishableCompetitionConfig
 } from "../../../../lib/competitions/lifecycle.js";
+import { materializeCompetitionRewards } from "../../../../lib/competitions/reward-config.js";
 import { transitionCompetitionState } from "../../../../lib/competitions/state.js";
 import { json, methodNotAllowed, unauthorized } from "../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../lib/security.js";
@@ -117,6 +118,20 @@ export async function onRequestPost(context) {
   }
 
   const now = new Date().toISOString();
+  let rewardDefinitions;
+  if (expectedState === "DRAFT" && targetState === "UPCOMING") {
+    try {
+      rewardDefinitions = materializeCompetitionRewards({
+        competitionId: id,
+        configVersion: current.configVersion,
+        rewards: current.config.rewards,
+        createdAt: now
+      });
+    } catch {
+      return json({ error: "competition_rewards_invalid" }, 409);
+    }
+  }
+
   try {
     const result = await transitionCompetitionState(context.env.COMPETITIONS_DB, {
       competitionId: id,
@@ -127,7 +142,8 @@ export async function onRequestPost(context) {
       actorSubject: authorized.session.subject,
       actorUuid: authorized.session.player.uuid,
       note: changeNote,
-      createdAt: now
+      createdAt: now,
+      ...(rewardDefinitions ? { rewardDefinitions } : {})
     });
 
     if (result.status !== "UPDATED") {
