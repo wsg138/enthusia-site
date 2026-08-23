@@ -26,54 +26,33 @@ export function canChangeParticipantRoster(lifecycleState, operation, { existing
   return false;
 }
 
-function acceptedBeforeRewards({ acceptedAt = null, rewardsDeliveredAt = null }) {
-  if (!acceptedAt || !rewardsDeliveredAt) return true;
-  const accepted = Date.parse(acceptedAt);
-  const delivered = Date.parse(rewardsDeliveredAt);
-  return !(Number.isFinite(accepted) && Number.isFinite(delivered) && accepted > delivered);
-}
-
 export function participantCanReceiveRewards({
   entryType,
   role,
   isAssignedJudge = false,
+  includeHelpers = false,
   acceptedAt = null,
   rewardsDeliveredAt = null
 }) {
-  if (!ENTRY_TYPES.has(entryType) || !PARTICIPANT_ROLES.has(role) || isAssignedJudge) return false;
+  if (!ENTRY_TYPES.has(entryType) || !PARTICIPANT_ROLES.has(role)) return false;
+  if (isAssignedJudge) return false;
+  if (role === "HELPER") {
+    if (!includeHelpers || entryType !== "GROUP") return false;
+  } else if (entryType === "GUILD") {
+    if (role !== "GUILD_WORKER") return false;
+  } else if (role !== "OWNER" && role !== "MAIN") {
+    return false;
+  }
 
-  let roleEligible = false;
-  if (entryType === "SOLO") roleEligible = role === "OWNER";
-  if (entryType === "GROUP") roleEligible = role === "OWNER" || role === "MAIN" || role === "HELPER";
-  if (entryType === "GUILD") roleEligible = role === "GUILD_WORKER" || role === "HELPER";
-  if (!roleEligible) return false;
+  if (acceptedAt && rewardsDeliveredAt) {
+    const accepted = Date.parse(acceptedAt);
+    const delivered = Date.parse(rewardsDeliveredAt);
+    if (Number.isFinite(accepted) && Number.isFinite(delivered) && accepted > delivered) {
+      return false;
+    }
+  }
 
-  return acceptedBeforeRewards({ acceptedAt, rewardsDeliveredAt });
-}
-
-export function participantRewardWeight({
-  entryType,
-  role,
-  isAssignedJudge = false,
-  acceptedAt = null,
-  rewardsDeliveredAt = null,
-  helperRewardMultiplier = 0.5
-}) {
-  if (!participantCanReceiveRewards({
-    entryType,
-    role,
-    isAssignedJudge,
-    acceptedAt,
-    rewardsDeliveredAt
-  })) return 0;
-
-  if (role !== "HELPER") return 1;
-  return typeof helperRewardMultiplier === "number"
-    && Number.isFinite(helperRewardMultiplier)
-    && helperRewardMultiplier >= 0
-    && helperRewardMultiplier <= 1
-    ? helperRewardMultiplier
-    : 0.5;
+  return true;
 }
 
 export function canVoterVoteForSubmission({
