@@ -84,11 +84,10 @@ test("assigned judge cannot later own an entry but may be an accepted helper", a
   `).run("2026-08-23T00:05:00.000Z", "2026-08-23T00:06:00.000Z");
 
   assert.throws(() => database.prepare(`
-    INSERT INTO submission_participants (
-      submission_id, player_uuid, player_name, participant_role,
-      invite_status, invited_by_uuid, invited_at, responded_at
-    ) VALUES ('entry-1', 'judge-2', 'Judge Two', 'MAIN', 'ACCEPTED', 'owner-1', ?, ?)
-  `).run("2026-08-23T00:05:00.000Z", "2026-08-23T00:06:00.000Z"), /UNIQUE|constraint|judge/);
+    UPDATE submission_participants
+    SET participant_role = 'MAIN'
+    WHERE submission_id = 'entry-1' AND player_uuid = 'judge-1'
+  `).run(), /judge_cannot_enter/);
 
   database.close();
 });
