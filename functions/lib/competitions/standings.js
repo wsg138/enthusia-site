@@ -138,7 +138,10 @@ export function buildCompetitionStandings({
         judgeUuid: score.judgeUuid,
         computedScore: score.computedScore,
         criteria: score.criteria,
-        bonusPoints: score.bonusPoints
+        bonusPoints: score.bonusPoints,
+        publicFeedback: typeof score.publicFeedback === "string" && score.publicFeedback.trim()
+          ? score.publicFeedback.trim()
+          : null
       }))
     };
   });
