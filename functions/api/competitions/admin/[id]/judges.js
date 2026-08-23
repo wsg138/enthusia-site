@@ -4,6 +4,7 @@ import {
   competitionsEnabled,
   hasCompetitionDatabase
 } from "../../../../lib/competitions/access.js";
+import { competitionPlayerLookup } from "../../../../lib/competitions/bridge.js";
 import { getAdminCompetition } from "../../../../lib/competitions/drafts.js";
 import {
   assignCompetitionJudge,
@@ -75,8 +76,7 @@ export async function onRequestPost(context) {
   }
 
   const action = input?.action;
-  const judgeUuid = typeof input?.judgeUuid === "string" ? input.judgeUuid.trim().toLowerCase() : "";
-  if (!isCanonicalUuid(judgeUuid) || !new Set(["ASSIGN", "REMOVE"]).has(action)) {
+  if (!new Set(["ASSIGN", "REMOVE"]).has(action)) {
     return json({ error: "invalid_judge_request" }, 400);
   }
 
@@ -91,10 +91,30 @@ export async function onRequestPost(context) {
     return json({ error: "judge_roster_locked", lifecycleState: competition.lifecycleState }, 409);
   }
 
+  let judgeUuid = typeof input?.judgeUuid === "string" ? input.judgeUuid.trim().toLowerCase() : "";
+  let judgeName = typeof input?.judgeName === "string" ? input.judgeName.trim() : "";
+
+  if (action === "ASSIGN" && !isCanonicalUuid(judgeUuid)) {
+    const minecraftName = typeof input?.minecraftName === "string" ? input.minecraftName.trim() : judgeName;
+    if (!/^[A-Za-z0-9_]{1,16}$/.test(minecraftName)) return json({ error: "invalid_judge_name" }, 400);
+    try {
+      const target = await competitionPlayerLookup(context.env, minecraftName);
+      if (!target) return json({ error: "minecraft_player_not_found" }, 404);
+      judgeUuid = target.uuid;
+      judgeName = target.name;
+    } catch (error) {
+      if (String(error?.message ?? error).includes("Competition bridge")) {
+        return json({ error: "competition_bridge_unavailable" }, 503);
+      }
+      return json({ error: "judge_player_lookup_failed" }, 503);
+    }
+  }
+
+  if (!isCanonicalUuid(judgeUuid)) return json({ error: "invalid_judge_request" }, 400);
+
   const now = new Date().toISOString();
   try {
     if (action === "ASSIGN") {
-      const judgeName = typeof input?.judgeName === "string" ? input.judgeName.trim() : "";
       if (!/^[A-Za-z0-9_]{1,16}$/.test(judgeName)) {
         return json({ error: "invalid_judge_name" }, 400);
       }
