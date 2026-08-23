@@ -5,6 +5,12 @@ import {
 } from "../../lib/competitions/access.js";
 import { json, methodNotAllowed } from "../../lib/responses.js";
 
+export function competitionPromotionDetailUrl(slug) {
+  const value = typeof slug === "string" ? slug.trim().toLowerCase() : "";
+  if (!/^[a-z0-9](?:[a-z0-9-]{0,78}[a-z0-9])?$/.test(value)) return null;
+  return `/competitions/detail.html?competition=${encodeURIComponent(value)}`;
+}
+
 export async function onRequestGet(context) {
   if (!competitionsEnabled(context.env) || !competitionsPublicAccessEnabled(context.env)) {
     return json({ promotions: [] });
@@ -32,6 +38,7 @@ export async function onRequestGet(context) {
       JOIN submission_images i ON i.id = p.image_id AND i.submission_id = s.id
       WHERE p.removed_at IS NULL
         AND c.visibility = 'PUBLIC'
+        AND c.published_at IS NOT NULL
         AND c.lifecycle_state IN ('COMPLETED','ARCHIVED')
         AND s.status = 'APPROVED'
         AND s.removed_at IS NULL
@@ -40,12 +47,16 @@ export async function onRequestGet(context) {
       ORDER BY p.promoted_at DESC, p.id DESC
       LIMIT 48
     `).all();
-    const promotions = (Array.isArray(result?.results) ? result.results : []).map((row) => ({
-      ...row,
-      imageUrl: `/api/competitions/submission-media/${encodeURIComponent(row.imageId)}`,
-      competitionUrl: `/competitions/detail.html?slug=${encodeURIComponent(row.competitionSlug)}`,
-      credit: row.entryType === "GUILD" && row.guildName ? row.guildName : row.ownerName
-    }));
+    const promotions = (Array.isArray(result?.results) ? result.results : []).flatMap((row) => {
+      const competitionUrl = competitionPromotionDetailUrl(row.competitionSlug);
+      if (!competitionUrl) return [];
+      return [{
+        ...row,
+        imageUrl: `/api/competitions/submission-media/${encodeURIComponent(row.imageId)}`,
+        competitionUrl,
+        credit: row.entryType === "GUILD" && row.guildName ? row.guildName : row.ownerName
+      }];
+    });
     return json({ promotions });
   } catch {
     return json({ promotions: [] });
