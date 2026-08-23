@@ -30,3 +30,10 @@ jobs:
           cache-dependency-path: minecraft/competition-bridge/pom.xml
       - name: Verify competition bridge
         run: mvn -B -f minecraft/competition-bridge/pom.xml verify
+      - name: Upload verified competition bridge JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: EnthusiaCompetitionBridge-${{ github.sha }}
+          path: minecraft/competition-bridge/target/competition-bridge-1.0.0-SNAPSHOT.jar
+          if-no-files-found: error
+          retention-days: 14
