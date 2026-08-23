@@ -17,6 +17,21 @@ function rows(result) {
   return Array.isArray(result?.results) ? result.results : [];
 }
 
+function publicJudgeFeedback(snapshotJson) {
+  let snapshot;
+  try {
+    snapshot = JSON.parse(snapshotJson);
+  } catch {
+    return [];
+  }
+  const scorecards = snapshot?.evidence?.judges?.scorecards;
+  if (!Array.isArray(scorecards)) return [];
+  return scorecards
+    .map((scorecard) => typeof scorecard?.publicFeedback === "string" ? scorecard.publicFeedback.trim() : "")
+    .filter(Boolean)
+    .slice(0, 50);
+}
+
 export async function resultPublicationReadiness(db, competitionId) {
   const database = requireDatabase(db);
   const summary = await database.prepare(`
@@ -256,6 +271,9 @@ export async function listPublicResults(db, competitionId) {
     ownerName: row.ownerName,
     guildId: row.guildId ?? null,
     guildName: row.guildName ?? null,
-    staffEdited: Boolean(row.staffEdited)
+    staffEdited: Boolean(row.staffEdited),
+    publicJudgeFeedback: publicJudgeFeedback(row.snapshotJson)
   }));
 }
+
+export { publicJudgeFeedback };
