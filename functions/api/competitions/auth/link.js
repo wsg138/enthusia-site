@@ -87,7 +87,10 @@ export async function onRequestPost(context) {
       }
       await consumeCompetitionLinkCode(context.env, requestId).catch(() => {});
       return json({ status: linked.status, minecraft: { uuid: linked.uuid, name: linked.name } });
-    } catch {
+    } catch (error) {
+      if (String(error?.message ?? error).includes("minecraft_identity_locked_to_another_discord")) {
+        return json({ error: "minecraft_identity_locked_to_another_discord" }, 409);
+      }
       return json({ error: "minecraft_link_poll_failed" }, 503);
     }
   }
