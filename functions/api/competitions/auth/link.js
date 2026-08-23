@@ -11,6 +11,7 @@ import {
   getCompetitionIdentitySession,
   unlinkMinecraftAccount
 } from "../../../lib/competitions/identity.js";
+import { competitionRateLimit, rateLimitHeaders } from "../../../lib/competitions/rate-limit.js";
 import { json, methodNotAllowed, unauthorized } from "../../../lib/responses.js";
 import { requireSameOrigin } from "../../../lib/security.js";
 import { isCanonicalUuid } from "../../../lib/validation.js";
@@ -26,6 +27,18 @@ async function authorize(context) {
   }
 }
 
+async function linkStartRateLimit(context, session) {
+  const result = await competitionRateLimit(context.env.COMPETITIONS_DB, {
+    scope: "link-start",
+    identity: session.subject,
+    limit: 6,
+    windowSeconds: 600
+  });
+  return result.allowed
+    ? null
+    : json({ error: "rate_limited", retryAfterSeconds: result.retryAfterSeconds }, 429, rateLimitHeaders(result));
+}
+
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   const authorized = await authorize(context);
@@ -36,6 +49,8 @@ export async function onRequestPost(context) {
 
   if (action === "START") {
     try {
+      const limited = await linkStartRateLimit(context, authorized.session);
+      if (limited) return limited;
       const link = await createMinecraftLinkCode(
         context.env.COMPETITIONS_DB,
         authorized.session.discord.id
@@ -116,3 +131,5 @@ export async function onRequestPost(context) {
 export function onRequest() {
   return methodNotAllowed(["POST"]);
 }
+
+export { linkStartRateLimit };
