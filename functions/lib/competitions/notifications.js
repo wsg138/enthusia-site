@@ -41,8 +41,6 @@ export async function listPendingCompetitionNotifications(db, now, limit = 25) {
       payload_json AS payloadJson,
       attempts,
       next_attempt_at AS nextAttemptAt,
-      bridge_delivered_at AS bridgeDeliveredAt,
-      discord_delivered_at AS discordDeliveredAt,
       created_at AS createdAt
     FROM competition_notification_outbox
     WHERE state IN ('PENDING','FAILED')
@@ -68,24 +66,6 @@ export async function claimCompetitionNotification(db, id, now) {
       AND state IN ('PENDING','FAILED')
       AND next_attempt_at <= ?
   `).bind(now, id, now).run();
-  return Number(result?.meta?.changes ?? 0) === 1;
-}
-
-export async function markCompetitionNotificationChannelDelivered(db, id, channel, deliveredAt) {
-  const database = requireDatabase(db);
-  const column = channel === "bridge"
-    ? "bridge_delivered_at"
-    : channel === "discord"
-      ? "discord_delivered_at"
-      : null;
-  if (!column) throw new TypeError("Unsupported competition notification channel");
-  const result = await database.prepare(`
-    UPDATE competition_notification_outbox
-    SET ${column} = COALESCE(${column}, ?),
-        updated_at = ?
-    WHERE id = ?
-      AND state = 'DELIVERING'
-  `).bind(deliveredAt, deliveredAt, id).run();
   return Number(result?.meta?.changes ?? 0) === 1;
 }
 
