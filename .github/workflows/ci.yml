@@ -33,7 +33,7 @@ jobs:
       - name: Upload verified competition bridge JAR
         uses: actions/upload-artifact@v4
         with:
-          name: EnthusiaCompetitionBridge-${{ github.sha }}
+          name: EnthusiaCompetitionBridge-${{ github.event.pull_request.head.sha || github.sha }}
           path: minecraft/competition-bridge/target/competition-bridge-1.0.0-SNAPSHOT.jar
           if-no-files-found: error
           retention-days: 14
