@@ -2,6 +2,7 @@ const encoder = new TextEncoder();
 const BRIDGE_TIMEOUT_MS = 5000;
 const ROUTES = new Set([
   "/v1/competitions/player-context",
+  "/v1/competitions/player-lookup",
   "/v1/competitions/rewards/deliver",
   "/v1/competitions/notifications/submission",
   "/v1/competitions/notifications/contributor"
@@ -108,6 +109,24 @@ export async function competitionPlayerContext(env, session) {
     guilds: body.guilds,
     fetchedAt: typeof body.fetchedAt === "string" ? body.fetchedAt : null
   };
+}
+
+export async function competitionPlayerLookup(env, minecraftName) {
+  const name = typeof minecraftName === "string" ? minecraftName.trim() : "";
+  if (!/^[A-Za-z0-9_]{1,16}$/.test(name)) throw new TypeError("Minecraft name is invalid");
+  const response = await signedCompetitionBridgeRequest(env, "/v1/competitions/player-lookup", { minecraftName: name });
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`Competition bridge player lookup failed: ${response.status}`);
+  const body = await response.json();
+  const uuid = String(body?.uuid ?? "").trim().toLowerCase();
+  const canonicalName = String(body?.name ?? "").trim();
+  if (
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(uuid)
+    || !/^[A-Za-z0-9_]{1,16}$/.test(canonicalName)
+  ) {
+    throw new Error("Competition bridge returned invalid player lookup");
+  }
+  return { uuid, name: canonicalName };
 }
 
 export { BRIDGE_TIMEOUT_MS, configuration as competitionBridgeConfiguration, route as competitionBridgeRoute };
