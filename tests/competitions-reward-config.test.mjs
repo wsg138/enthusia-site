@@ -22,16 +22,15 @@ function commandReward(overrides = {}) {
   };
 }
 
-test("reward config defaults helpers to half reward", () => {
-  assert.deepEqual(initialRewardConfig(), {
-    helperRewardMultiplier: 0.5,
-    definitions: []
-  });
+test("reward config excludes helpers by default", () => {
+  assert.deepEqual(initialRewardConfig(), { definitions: [] });
+  const config = sanitizeCompetitionRewards({ definitions: [commandReward()] });
+  assert.equal(config.definitions[0].includeHelpers, false);
+  assert.equal(config.definitions[0].helperWeight, 0);
 });
 
 test("reward config accepts supported definitions and sorts by placement", () => {
   const config = sanitizeCompetitionRewards({
-    helperRewardMultiplier: 0.5,
     definitions: [
       commandReward({ id: "second", placement: 2 }),
       {
@@ -39,6 +38,8 @@ test("reward config accepts supported definitions and sorts by placement", () =>
         placement: 1,
         rewardType: "MONEY",
         distributionMode: "SPLIT_ELIGIBLE",
+        includeHelpers: true,
+        helperWeight: 0.5,
         publicLabel: "$10,000",
         publicDescription: "Ten thousand Enthusia dollars split between eligible participants.",
         payload: { amount: 10000, currency: "balance" }
@@ -49,6 +50,21 @@ test("reward config accepts supported definitions and sorts by placement", () =>
   assert.ok(config);
   assert.deepEqual(config.definitions.map((reward) => reward.id), ["first-money", "second"]);
   assert.equal(config.definitions[0].payload.amount, 10000);
+  assert.equal(config.definitions[0].includeHelpers, true);
+  assert.equal(config.definitions[0].helperWeight, 0.5);
+});
+
+test("helper rewards must be explicitly enabled per reward", () => {
+  const config = sanitizeCompetitionRewards({
+    definitions: [commandReward({ includeHelpers: true })]
+  });
+  assert.ok(config);
+  assert.equal(config.definitions[0].includeHelpers, true);
+  assert.equal(config.definitions[0].helperWeight, 0.5);
+
+  assert.equal(sanitizeCompetitionRewards({
+    definitions: [commandReward({ includeHelpers: true, helperWeight: 0 })]
+  }), null);
 });
 
 test("random reward definitions require a recipient count", () => {
@@ -69,18 +85,18 @@ test("public reward projection never exposes command or execution payload", () =
   const projected = publicCompetitionRewards({ definitions: [commandReward()] });
   assert.equal(projected.definitions.length, 1);
   assert.equal(projected.definitions[0].publicLabel, "Champion reward");
+  assert.equal(projected.definitions[0].includeHelpers, false);
   assert.equal("payload" in projected.definitions[0], false);
   assert.equal(JSON.stringify(projected).includes("lp user"), false);
   assert.equal(JSON.stringify(projected).includes("enthusia.winner"), false);
 });
 
-test("published reward definitions bind source IDs to competition and config version", () => {
+test("published reward definitions bind helper policy, source IDs, and config version", () => {
   const records = materializeCompetitionRewards({
     competitionId: "00000000-0000-0000-0000-000000000111",
     configVersion: 7,
     rewards: {
-      helperRewardMultiplier: 0.5,
-      definitions: [commandReward()]
+      definitions: [commandReward({ includeHelpers: true, helperWeight: 0.25 })]
     },
     createdAt: "2026-08-23T00:30:00.000Z"
   });
@@ -93,7 +109,8 @@ test("published reward definitions bind source IDs to competition and config ver
   const payload = JSON.parse(records[0].configJson);
   assert.equal(payload.sourceDefinitionId, "first-command");
   assert.equal(payload.configVersion, 7);
-  assert.equal(payload.helperRewardMultiplier, 0.5);
+  assert.equal(payload.includeHelpers, true);
+  assert.equal(payload.helperWeight, 0.25);
   assert.equal(payload.payload.command.includes("enthusia.winner"), true);
 });
 
