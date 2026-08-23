@@ -27,10 +27,15 @@ async function hmacSha256(secret, value) {
   return new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(value)));
 }
 
+function flag(value) {
+  return String(value ?? "").trim().toLowerCase() === "true";
+}
+
 function configuration(env) {
   const rawOrigin = typeof env?.COMPETITION_BRIDGE_ORIGIN === "string" ? env.COMPETITION_BRIDGE_ORIGIN.trim() : "";
   const bearer = typeof env?.COMPETITION_BRIDGE_BEARER_TOKEN === "string" ? env.COMPETITION_BRIDGE_BEARER_TOKEN : "";
   const secret = typeof env?.COMPETITION_BRIDGE_HMAC_SECRET === "string" ? env.COMPETITION_BRIDGE_HMAC_SECRET : "";
+  const accessRequired = flag(env?.COMPETITION_BRIDGE_ACCESS_REQUIRED);
   const accessClientId = typeof env?.COMPETITION_BRIDGE_ACCESS_CLIENT_ID === "string"
     ? env.COMPETITION_BRIDGE_ACCESS_CLIENT_ID.trim()
     : "";
@@ -42,6 +47,9 @@ function configuration(env) {
   if (Boolean(accessClientId) !== Boolean(accessClientSecret)) {
     throw new Error("Competition bridge Access service credentials are incomplete");
   }
+  if (accessRequired && (!accessClientId || !accessClientSecret)) {
+    throw new Error("Competition bridge Access service authentication is required");
+  }
   if (accessClientId && (accessClientId.length > 256 || accessClientSecret.length < 16 || accessClientSecret.length > 512)) {
     throw new Error("Competition bridge Access service credentials are invalid");
   }
@@ -52,6 +60,7 @@ function configuration(env) {
     origin,
     bearer,
     secret,
+    accessRequired,
     accessClientId: accessClientId || null,
     accessClientSecret: accessClientSecret || null
   };
