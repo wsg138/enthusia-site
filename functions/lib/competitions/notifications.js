@@ -98,6 +98,26 @@ export async function failCompetitionNotification(db, id, { failedAt, nextAttemp
   return Number(result?.meta?.changes ?? 0) === 1;
 }
 
+export async function recoverStaleCompetitionNotifications(db, now, staleAfterSeconds = 300) {
+  const database = requireDatabase(db);
+  const timestamp = Date.parse(now);
+  if (!Number.isFinite(timestamp)) throw new TypeError("Notification recovery time is invalid");
+  const seconds = Number.isInteger(staleAfterSeconds)
+    ? Math.min(3600, Math.max(60, staleAfterSeconds))
+    : 300;
+  const staleBefore = new Date(timestamp - seconds * 1000).toISOString();
+  const result = await database.prepare(`
+    UPDATE competition_notification_outbox
+    SET state = 'FAILED',
+        next_attempt_at = ?,
+        last_error = 'delivery_lease_expired',
+        updated_at = ?
+    WHERE state = 'DELIVERING'
+      AND updated_at <= ?
+  `).bind(now, now, staleBefore).run();
+  return Number(result?.meta?.changes ?? 0);
+}
+
 export function notificationRetryAt(now, attempts) {
   const timestamp = Date.parse(now);
   if (!Number.isFinite(timestamp)) throw new TypeError("Notification retry time is invalid");
