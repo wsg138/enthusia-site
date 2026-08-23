@@ -7,6 +7,7 @@ import {
 } from "../../../../../lib/competitions/access.js";
 import { getAdminCompetition } from "../../../../../lib/competitions/drafts.js";
 import { getPrivateSubmissionLocation } from "../../../../../lib/competitions/repository.js";
+import { staffSubmissionConflict } from "../../../../../lib/competitions/staff-conflicts.js";
 import {
   getStaffSubmission,
   listStaffSubmissionModerationChecks,
@@ -74,6 +75,24 @@ async function resolve(context, session) {
     return { competition, submission, competitionId, submissionId, session };
   } catch {
     return { response: json({ error: "submission_unavailable" }, 503) };
+  }
+}
+
+async function staffConflictResponse(context, submission, session) {
+  try {
+    const conflict = await staffSubmissionConflict(
+      context.env.COMPETITIONS_DB,
+      context.env,
+      submission,
+      session.player.uuid
+    );
+    if (!conflict.conflict) return null;
+    return json({
+      error: "staff_cannot_moderate_own_entry",
+      conflictReason: conflict.reason
+    }, 409);
+  } catch {
+    return json({ error: "staff_conflict_check_unavailable" }, 503);
   }
 }
 
@@ -148,10 +167,23 @@ export async function onRequestPost(context) {
   }
   const action = input?.action;
 
+  const staffMutationActions = new Set([
+    "FLAG",
+    "CLEAR_FLAG",
+    "APPROVE",
+    "NEEDS_CHANGES",
+    "REJECT",
+    "DISQUALIFY",
+    "REMOVE",
+    "RESTORE",
+    "EDIT"
+  ]);
+  if (staffMutationActions.has(action)) {
+    const conflict = await staffConflictResponse(context, submission, session);
+    if (conflict) return conflict;
+  }
+
   if (new Set(["FLAG", "CLEAR_FLAG"]).has(action)) {
-    if (submission.ownerUuid === session.player.uuid) {
-      return json({ error: "staff_cannot_moderate_own_entry" }, 409);
-    }
     const privateNote = reason(input?.privateNote, 4000, action === "FLAG");
     if (action === "FLAG" && !privateNote) return json({ error: "private_note_required" }, 400);
     if (input?.privateNote && !privateNote) return json({ error: "private_note_invalid" }, 400);
@@ -176,9 +208,6 @@ export async function onRequestPost(context) {
   }
 
   if (new Set(["APPROVE", "NEEDS_CHANGES", "REJECT", "DISQUALIFY"]).has(action)) {
-    if (submission.ownerUuid === session.player.uuid) {
-      return json({ error: "staff_cannot_moderate_own_entry" }, 409);
-    }
     const publicReason = reason(input?.publicReason, 1000, action !== "APPROVE");
     const privateNote = reason(input?.privateNote, 4000, false);
     if (action !== "APPROVE" && !publicReason) return json({ error: "public_reason_required" }, 400);
@@ -288,4 +317,4 @@ export function onRequest() {
   return methodNotAllowed(["GET", "POST"]);
 }
 
-export { approvalReadiness, cleanDescription, cleanTitle, paramUuid, reason };
+export { approvalReadiness, cleanDescription, cleanTitle, paramUuid, reason, staffConflictResponse };
