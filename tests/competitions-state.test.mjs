@@ -26,10 +26,7 @@ function fakeWritableDatabase({ changes = 1, auditRows = [] } = {}) {
     },
     async batch(statements) {
       this.batchStatements = statements;
-      return [
-        { meta: { changes } },
-        { meta: { changes } }
-      ];
+      return statements.map(() => ({ meta: { changes } }));
     }
   };
 }
@@ -55,6 +52,52 @@ test("lifecycle transition updates state and audit in one transactional batch", 
   assert.match(db.calls[1].sql, /last_lifecycle_operation_id = \?/);
   assert.equal(result.status, "UPDATED");
   assert.equal(result.lifecycleState, "UPCOMING");
+});
+
+test("draft publication freezes reward definitions in the same transactional batch", async () => {
+  const db = fakeWritableDatabase({ changes: 1 });
+  const result = await transitionCompetitionState(db, {
+    competitionId: "competition-1",
+    expectedState: "DRAFT",
+    targetState: "UPCOMING",
+    operationId: "operation-1",
+    auditEventId: "audit-1",
+    actorSubject: "subject-1",
+    actorUuid: "00000000-0000-0000-0000-000000000001",
+    note: "Publish with rewards",
+    createdAt: "2026-08-22T23:45:00.000Z",
+    rewardDefinitions: [{
+      id: "competition-1:first-money",
+      placement: 1,
+      rewardType: "MONEY",
+      distributionMode: "SPLIT_ELIGIBLE",
+      configJson: "{\"schemaVersion\":1}",
+      createdAt: "2026-08-22T23:45:00.000Z"
+    }]
+  });
+
+  assert.equal(db.batchStatements.length, 4);
+  assert.match(db.calls[0].sql, /DELETE FROM reward_definitions/);
+  assert.match(db.calls[1].sql, /INSERT INTO reward_definitions/);
+  assert.match(db.calls[2].sql, /UPDATE competitions/);
+  assert.match(db.calls[3].sql, /COMPETITION_STATE_CHANGED/);
+  assert.equal(result.status, "UPDATED");
+});
+
+test("reward replacement is rejected outside the draft publication transition", async () => {
+  const db = fakeWritableDatabase({ changes: 1 });
+  await assert.rejects(() => transitionCompetitionState(db, {
+    competitionId: "competition-1",
+    expectedState: "UPCOMING",
+    targetState: "SUBMISSIONS_OPEN",
+    operationId: "operation-2",
+    auditEventId: "audit-2",
+    actorSubject: "subject-1",
+    actorUuid: "00000000-0000-0000-0000-000000000001",
+    note: "Open submissions",
+    createdAt: "2026-08-22T23:46:00.000Z",
+    rewardDefinitions: []
+  }), /only be materialized when publishing a draft/);
 });
 
 test("stale lifecycle transition reports conflict", async () => {
