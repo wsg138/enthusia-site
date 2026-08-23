@@ -118,6 +118,21 @@ function renderScoreForm(workspace, entry, root) {
   }
   form.append(scoreGrid);
 
+  const bonusLabel = node("label", "participant-field");
+  bonusLabel.append(node("span", "participant-field-label", "Bonus / penalty points"));
+  const bonus = document.createElement("input");
+  bonus.type = "number";
+  bonus.name = "bonusPoints";
+  bonus.min = "-10";
+  bonus.max = "10";
+  bonus.step = "0.1";
+  bonus.value = Number.isFinite(Number(entry.score?.bonusPoints)) ? String(entry.score?.bonusPoints ?? 0) : "0";
+  bonusLabel.append(
+    bonus,
+    node("span", "participant-muted", "Optional adjustment from -10 to +10. It is applied after the weighted criteria average, then the final judge score is clamped to 0–10.")
+  );
+  form.append(bonusLabel);
+
   if (workspace.competition.config?.judging?.publicFeedbackOptional) {
     const feedbackLabel = node("label", "participant-field");
     feedbackLabel.append(node("span", "participant-field-label", "Optional public feedback"));
@@ -155,6 +170,12 @@ function renderScoreForm(workspace, entry, root) {
       }
       scores[input.dataset.criterionId] = value;
     }
+    const bonusPoints = Number(bonus.value);
+    if (!Number.isFinite(bonusPoints) || bonusPoints < -10 || bonusPoints > 10) {
+      result.textContent = "Bonus / penalty points must be between -10 and +10.";
+      result.className = "participant-wizard-message is-error";
+      return;
+    }
     save.disabled = true;
     result.textContent = "Saving…";
     result.className = "participant-wizard-message";
@@ -164,7 +185,7 @@ function renderScoreForm(workspace, entry, root) {
         body: JSON.stringify({
           submissionId: entry.id,
           scores,
-          bonusPoints: Number(entry.score?.bonusPoints ?? 0),
+          bonusPoints,
           publicFeedback: form.querySelector('[name="publicFeedback"]')?.value.trim() || null,
           privateNote: privateNote.value.trim() || null
         })
@@ -178,6 +199,7 @@ function renderScoreForm(workspace, entry, root) {
         publicFeedback: form.querySelector('[name="publicFeedback"]')?.value.trim() || null,
         privateNote: privateNote.value.trim() || null
       };
+      bonus.value = String(payload.bonusPoints ?? 0);
       result.textContent = `Saved · ${Number(payload.computedScore).toFixed(2)} / 10`;
       result.className = "participant-wizard-message is-success";
       save.textContent = "Update score";
