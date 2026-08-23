@@ -1,3 +1,5 @@
+import { publicCompetitionRewards } from "./reward-config.js";
+
 const ENTRY_VISIBLE_STATES = new Set([
   "VOTING",
   "JUDGING",
@@ -67,7 +69,8 @@ export function publicCompetitionConfig(config = {}) {
       judgeWeight: config.judging?.judgeWeight ?? null,
       tiebreakRule: config.judging?.tiebreakRule ?? null,
       publicFeedbackOptional: Boolean(config.judging?.publicFeedbackOptional)
-    }
+    },
+    rewards: publicCompetitionRewards(config.rewards)
   };
 }
 
