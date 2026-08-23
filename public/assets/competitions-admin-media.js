@@ -1,3 +1,11 @@
+import "./competitions-admin-workspace.js";
+
+const workspaceStyles = document.createElement("link");
+workspaceStyles.rel = "stylesheet";
+workspaceStyles.href = "../../assets/competitions-admin-workspace.css?v=1";
+workspaceStyles.dataset.competitionWorkspaceStyles = "true";
+if (!document.querySelector("[data-competition-workspace-styles]")) document.head.append(workspaceStyles);
+
 const API_ROOT = "/api/competitions/admin";
 const MAX_UPLOAD_BYTES = 8 * 1024 * 1024;
 const MAX_DIMENSION = 8192;
