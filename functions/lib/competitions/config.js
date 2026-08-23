@@ -1,3 +1,5 @@
+import { initialRewardConfig, sanitizeCompetitionRewards } from "./reward-config.js";
+
 const TITLE_MIN = 3;
 const TITLE_MAX = 100;
 const CATEGORY_MAX = 48;
@@ -153,6 +155,7 @@ export function initialCompetitionConfig({ summary = "" } = {}) {
       judgeWeight: null,
       tiebreakRule: null
     },
+    rewards: initialRewardConfig(),
     moderation: {
       requireStaffApproval: true,
       reviewGraceMinutes: 1440,
@@ -173,9 +176,10 @@ export function sanitizeCompetitionConfig(input) {
   const entriesInput = input.entries ?? {};
   const votingInput = input.voting ?? {};
   const judgingInput = input.judging ?? {};
+  const rewardsInput = input.rewards ?? {};
   const moderationInput = input.moderation ?? {};
 
-  for (const section of [publicInput, appearanceInput, scheduleInput, entriesInput, votingInput, judgingInput, moderationInput]) {
+  for (const section of [publicInput, appearanceInput, scheduleInput, entriesInput, votingInput, judgingInput, rewardsInput, moderationInput]) {
     if (!section || typeof section !== "object" || Array.isArray(section)) return null;
   }
 
@@ -263,6 +267,7 @@ export function sanitizeCompetitionConfig(input) {
   const communityWeight = optionalNumber(judgingInput.communityWeight, 0, 100);
   const judgeWeight = optionalNumber(judgingInput.judgeWeight, 0, 100);
   const reviewGraceMinutes = boundedInteger(moderationInput.reviewGraceMinutes, 0, 10080, defaults.moderation.reviewGraceMinutes);
+  const rewards = sanitizeCompetitionRewards(rewardsInput);
 
   if (invalid(
     maxEntriesPerPlayer,
@@ -283,7 +288,7 @@ export function sanitizeCompetitionConfig(input) {
     communityWeight,
     judgeWeight,
     reviewGraceMinutes
-  )) return null;
+  ) || !rewards) return null;
 
   return {
     schemaVersion: 1,
@@ -323,6 +328,7 @@ export function sanitizeCompetitionConfig(input) {
       judgeWeight,
       tiebreakRule
     },
+    rewards,
     moderation: {
       requireStaffApproval: true,
       reviewGraceMinutes,
