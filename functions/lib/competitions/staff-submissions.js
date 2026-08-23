@@ -35,12 +35,16 @@ export async function listStaffCompetitionSubmissions(db, competitionId) {
       sm.reviewed_by_uuid AS reviewedByUuid,
       sm.reviewed_at AS reviewedAt,
       sm.disqualified_at AS disqualifiedAt,
+      sm.flag_reason AS flagReason,
+      sm.flagged_by_uuid AS flaggedByUuid,
+      sm.flagged_at AS flaggedAt,
       (SELECT COUNT(*) FROM submission_images i WHERE i.submission_id = s.id AND i.removed_at IS NULL) AS imageCount,
       (SELECT COUNT(*) FROM submission_participants p WHERE p.submission_id = s.id AND p.invite_status = 'ACCEPTED') AS acceptedParticipantCount
     FROM submissions s
     LEFT JOIN submission_moderation sm ON sm.submission_id = s.id
     WHERE s.competition_id = ?
     ORDER BY
+      sm.flagged_at IS NULL ASC,
       CASE s.status
         WHEN 'PENDING_REVIEW' THEN 1
         WHEN 'NEEDS_CHANGES' THEN 2
@@ -56,6 +60,7 @@ export async function listStaffCompetitionSubmissions(db, competitionId) {
   return rows(result).map((row) => ({
     ...row,
     staffEdited: Boolean(row.staffEdited),
+    flagged: Boolean(row.flaggedAt),
     imageCount: Number(row.imageCount),
     acceptedParticipantCount: Number(row.acceptedParticipantCount)
   }));
@@ -91,14 +96,21 @@ export async function getStaffSubmission(db, competitionId, submissionId) {
       sm.private_note AS privateNote,
       sm.reviewed_by_uuid AS reviewedByUuid,
       sm.reviewed_at AS reviewedAt,
-      sm.disqualified_at AS disqualifiedAt
+      sm.disqualified_at AS disqualifiedAt,
+      sm.flag_reason AS flagReason,
+      sm.flagged_by_uuid AS flaggedByUuid,
+      sm.flagged_at AS flaggedAt
     FROM submissions s
     LEFT JOIN submission_moderation sm ON sm.submission_id = s.id
     WHERE s.competition_id = ?
       AND s.id = ?
     LIMIT 1
   `).bind(competitionId, submissionId).first();
-  return row ? { ...row, staffEdited: Boolean(row.staffEdited) } : null;
+  return row ? {
+    ...row,
+    staffEdited: Boolean(row.staffEdited),
+    flagged: Boolean(row.flaggedAt)
+  } : null;
 }
 
 export async function listStaffSubmissionModerationChecks(db, submissionId) {
@@ -128,6 +140,71 @@ export async function listStaffSubmissionModerationChecks(db, submissionId) {
   }));
 }
 
+export async function setSubmissionFlag(db, flag) {
+  const database = requireWritableDatabase(db);
+  const flagged = Boolean(flag.flagged);
+  if (flagged && (typeof flag.reason !== "string" || !flag.reason.trim())) {
+    throw new TypeError("A private flag reason is required");
+  }
+  const action = flagged ? "SUBMISSION_FLAGGED" : "SUBMISSION_FLAG_CLEARED";
+  const reason = flagged ? flag.reason.trim() : null;
+  const results = await database.batch([
+    flagged
+      ? database.prepare(`
+          INSERT INTO submission_moderation (
+            submission_id, flag_reason, flagged_by_uuid, flagged_at
+          )
+          SELECT ?, ?, ?, ?
+          WHERE EXISTS (
+            SELECT 1 FROM submissions
+            WHERE id = ? AND competition_id = ? AND removed_at IS NULL
+          )
+          ON CONFLICT(submission_id) DO UPDATE SET
+            flag_reason = excluded.flag_reason,
+            flagged_by_uuid = excluded.flagged_by_uuid,
+            flagged_at = excluded.flagged_at
+        `).bind(
+          flag.submissionId,
+          reason,
+          flag.actorUuid,
+          flag.changedAt,
+          flag.submissionId,
+          flag.competitionId
+        )
+      : database.prepare(`
+          UPDATE submission_moderation
+          SET flag_reason = NULL,
+              flagged_by_uuid = NULL,
+              flagged_at = NULL
+          WHERE submission_id = ?
+            AND flagged_at IS NOT NULL
+            AND EXISTS (
+              SELECT 1 FROM submissions
+              WHERE id = ? AND competition_id = ?
+            )
+        `).bind(flag.submissionId, flag.submissionId, flag.competitionId),
+    database.prepare(`
+      INSERT INTO competition_audit_events (
+        id, competition_id, submission_id, actor_subject, actor_uuid,
+        action, after_json, note, created_at
+      )
+      SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
+      WHERE changes() = 1
+    `).bind(
+      flag.auditEventId,
+      flag.competitionId,
+      flag.submissionId,
+      flag.actorSubject,
+      flag.actorUuid,
+      action,
+      JSON.stringify({ flagged, reason }),
+      flagged ? reason : (flag.note ?? "Internal submission flag cleared"),
+      flag.changedAt
+    )
+  ]);
+  return Number(results?.[0]?.meta?.changes ?? 0) === 1;
+}
+
 export async function moderateSubmission(db, decision) {
   const database = requireWritableDatabase(db);
   const statusMap = {
@@ -143,14 +220,6 @@ export async function moderateSubmission(db, decision) {
     ? ["PENDING_REVIEW", "NEEDS_CHANGES", "APPROVED"]
     : ["PENDING_REVIEW"];
   const placeholders = allowedCurrent.map(() => "?").join(",");
-  const params = [
-    targetStatus,
-    decision.action === "APPROVE" ? decision.reviewedAt : null,
-    decision.reviewedAt,
-    decision.submissionId,
-    decision.competitionId,
-    ...allowedCurrent
-  ];
 
   const results = await database.batch([
     database.prepare(`
