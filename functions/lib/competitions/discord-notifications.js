@@ -1,5 +1,6 @@
 const DISCORD_TIMEOUT_MS = 5000;
 const MAX_ERROR_LENGTH = 500;
+const DISCORD_API_ROOT = "https://discord.com/api/v10";
 
 function rows(result) {
   return Array.isArray(result?.results) ? result.results : [];
@@ -14,7 +15,7 @@ function parsePayload(row) {
   return { ...row, payload, payloadJson: undefined };
 }
 
-function discordConfiguration(env) {
+function staffWebhookConfiguration(env) {
   const raw = String(env?.COMPETITIONS_DISCORD_STAFF_WEBHOOK ?? "").trim();
   if (!raw) return null;
   let webhook;
@@ -36,6 +37,19 @@ function discordConfiguration(env) {
   const roleId = String(env?.COMPETITIONS_DISCORD_STAFF_ROLE_ID ?? "").trim();
   if (roleId && !/^\d{16,22}$/.test(roleId)) throw new Error("Competition Discord staff role ID is invalid");
   return { webhook: webhook.toString(), roleId: roleId || null };
+}
+
+function contributorBotConfiguration(env) {
+  const token = String(env?.COMPETITIONS_DISCORD_BOT_TOKEN ?? "").trim();
+  if (!token) return null;
+  if (token.length < 50 || token.length > 256 || !/^[A-Za-z0-9._-]+$/.test(token)) {
+    throw new Error("Competition Discord bot token is invalid");
+  }
+  return { token };
+}
+
+function discordConfiguration(env) {
+  return staffWebhookConfiguration(env);
 }
 
 function siteOrigin(env) {
@@ -62,10 +76,17 @@ function reviewUrl(env, notification) {
   return `${origin}/competitions/admin/?${params}`;
 }
 
+function contributorUrl(env, notification) {
+  const origin = siteOrigin(env);
+  const slug = String(notification.payload?.competitionSlug ?? "").trim().toLowerCase();
+  if (!origin || !/^[a-z0-9](?:[a-z0-9-]{0,78}[a-z0-9])?$/.test(slug)) return null;
+  return `${origin}/competitions/detail.html?competition=${encodeURIComponent(slug)}`;
+}
+
 function webhookPayload(env, notification, config) {
   const payload = notification.payload ?? {};
   if (notification.eventType !== "SUBMISSION_REVIEW") {
-    throw new Error(`Unsupported competition Discord event: ${notification.eventType}`);
+    throw new Error(`Unsupported competition Discord webhook event: ${notification.eventType}`);
   }
   const url = reviewUrl(env, notification);
   const mention = config.roleId ? `<@&${config.roleId}> ` : "";
@@ -81,6 +102,25 @@ function webhookPayload(env, notification, config) {
       footer: { text: "Enthusia Competition review" },
       timestamp: notification.createdAt
     }]
+  };
+}
+
+function contributorMessagePayload(env, notification) {
+  if (notification.eventType !== "CONTRIBUTOR_INVITE") {
+    throw new Error(`Unsupported competition contributor Discord event: ${notification.eventType}`);
+  }
+  const payload = notification.payload ?? {};
+  const role = String(payload.role ?? "contributor").replaceAll("_", " ").toLowerCase();
+  const actionUrl = contributorUrl(env, notification);
+  const lines = [
+    `You were invited as **${role}** on **${String(payload.submissionTitle ?? "a competition entry").slice(0, 150)}**`,
+    `Competition: **${String(payload.competitionTitle ?? "Enthusia Competition").slice(0, 150)}**`,
+    "Accept or decline the invite from the Competition page."
+  ];
+  if (actionUrl) lines.push(actionUrl);
+  return {
+    content: lines.join("\n"),
+    allowed_mentions: { parse: [] }
   };
 }
 
@@ -102,6 +142,7 @@ export async function listPendingCompetitionDiscordNotifications(db, nowIso, lim
       competition_id AS competitionId,
       submission_id AS submissionId,
       event_type AS eventType,
+      recipient_discord_user_id AS recipientDiscordUserId,
       operation_key AS operationKey,
       payload_json AS payloadJson,
       state,
@@ -170,8 +211,8 @@ export async function recoverStaleCompetitionDiscordNotifications(db, nowIso, le
   return Number(result?.meta?.changes ?? 0);
 }
 
-export async function deliverCompetitionDiscordNotification(env, notification, fetchImpl = fetch) {
-  const config = discordConfiguration(env);
+async function deliverStaffWebhook(env, notification, fetchImpl) {
+  const config = staffWebhookConfiguration(env);
   if (!config) return { status: "NOT_CONFIGURED" };
   const response = await boundedFetch(config.webhook, {
     method: "POST",
@@ -185,17 +226,66 @@ export async function deliverCompetitionDiscordNotification(env, notification, f
   return { status: "DELIVERED", messageId: body?.id ?? null };
 }
 
+async function deliverContributorDm(env, notification, fetchImpl) {
+  const config = contributorBotConfiguration(env);
+  if (!config) return { status: "NOT_CONFIGURED" };
+  const recipient = String(notification.recipientDiscordUserId ?? "").trim();
+  if (!/^\d{16,22}$/.test(recipient)) throw new Error("Competition contributor Discord recipient is invalid");
+
+  const auth = { authorization: `Bot ${config.token}`, "content-type": "application/json" };
+  const channelResponse = await boundedFetch(`${DISCORD_API_ROOT}/users/@me/channels`, {
+    method: "POST",
+    headers: auth,
+    body: JSON.stringify({ recipient_id: recipient })
+  }, fetchImpl);
+  const channel = await channelResponse.json().catch(() => null);
+  if (!channelResponse.ok || !/^\d{16,22}$/.test(String(channel?.id ?? ""))) {
+    throw new Error(`Competition contributor DM channel failed: ${channelResponse.status}:${channel?.message ?? "unknown"}`);
+  }
+
+  const messageResponse = await boundedFetch(`${DISCORD_API_ROOT}/channels/${channel.id}/messages`, {
+    method: "POST",
+    headers: auth,
+    body: JSON.stringify(contributorMessagePayload(env, notification))
+  }, fetchImpl);
+  const message = await messageResponse.json().catch(() => null);
+  if (!messageResponse.ok) {
+    throw new Error(`Competition contributor DM failed: ${messageResponse.status}:${message?.message ?? "unknown"}`);
+  }
+  return { status: "DELIVERED", messageId: message?.id ?? null };
+}
+
+export async function deliverCompetitionDiscordNotification(env, notification, fetchImpl = fetch) {
+  if (notification.eventType === "SUBMISSION_REVIEW") {
+    return deliverStaffWebhook(env, notification, fetchImpl);
+  }
+  if (notification.eventType === "CONTRIBUTOR_INVITE") {
+    return deliverContributorDm(env, notification, fetchImpl);
+  }
+  throw new Error(`Unsupported competition Discord event: ${notification.eventType}`);
+}
+
+function eventConfigured(env, eventType) {
+  try {
+    if (eventType === "SUBMISSION_REVIEW") return Boolean(staffWebhookConfiguration(env));
+    if (eventType === "CONTRIBUTOR_INVITE") return Boolean(contributorBotConfiguration(env));
+    return false;
+  } catch {
+    return false;
+  }
+}
+
 export async function drainCompetitionDiscordNotifications(env, db, { limit = 25, fetchImpl = fetch } = {}) {
-  const config = discordConfiguration(env);
-  if (!config) return [];
   const now = new Date().toISOString();
   const pending = await listPendingCompetitionDiscordNotifications(db, now, limit);
   const outcomes = [];
   for (const notification of pending) {
+    if (!eventConfigured(env, notification.eventType)) continue;
     const claimedAt = new Date().toISOString();
     if (!await claimCompetitionDiscordNotification(db, notification.id, claimedAt)) continue;
     try {
       const delivery = await deliverCompetitionDiscordNotification(env, notification, fetchImpl);
+      if (delivery.status === "NOT_CONFIGURED") continue;
       const deliveredAt = new Date().toISOString();
       await completeCompetitionDiscordNotification(db, notification.id, deliveredAt);
       outcomes.push({ id: notification.id, status: delivery.status });
@@ -221,10 +311,26 @@ export function scheduleCompetitionDiscordDrain(context, options = {}) {
 
 export function competitionDiscordConfigured(env) {
   try {
-    return Boolean(discordConfiguration(env));
+    return Boolean(staffWebhookConfiguration(env));
   } catch {
     return false;
   }
 }
 
-export { discordConfiguration, reviewUrl, webhookPayload };
+export function competitionContributorDiscordConfigured(env) {
+  try {
+    return Boolean(contributorBotConfiguration(env));
+  } catch {
+    return false;
+  }
+}
+
+export {
+  contributorBotConfiguration,
+  contributorMessagePayload,
+  contributorUrl,
+  discordConfiguration,
+  reviewUrl,
+  staffWebhookConfiguration,
+  webhookPayload
+};
