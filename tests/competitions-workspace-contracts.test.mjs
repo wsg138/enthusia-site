@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
+import { competitionPromotionDetailUrl } from "../functions/api/gallery/competition-promotions.js";
 import {
   safeGuilds,
   safeLinkedAccounts
@@ -92,4 +93,12 @@ test("judge workspace groups participants and images by submission without leaki
   ]);
   assert.deepEqual(grouped.get("a").map((row) => row.value), [1, 3]);
   assert.deepEqual(grouped.get("b").map((row) => row.value), [2]);
+});
+
+test("Gallery competition promotions use the competition detail query contract", () => {
+  assert.equal(
+    competitionPromotionDetailUrl("summer-build"),
+    "/competitions/detail.html?competition=summer-build"
+  );
+  assert.equal(competitionPromotionDetailUrl("../bad"), null);
 });
