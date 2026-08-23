@@ -6,6 +6,7 @@ import {
   rewardOperationKey,
   selectRewardRecipients,
   splitIntegerReward,
+  splitWeightedIntegerReward,
   validateRewardDefinition
 } from "../functions/lib/competitions/rewards.js";
 
@@ -76,6 +77,50 @@ test("integer reward splitting preserves the exact total and is deterministic", 
     { recipientUuid: "c", amount: 3 }
   ]);
   assert.equal(shares.reduce((sum, share) => sum + share.amount, 0), 10);
+});
+
+test("weighted integer splitting gives helpers half weight and preserves the exact total", () => {
+  const shares = splitWeightedIntegerReward(10, [
+    { recipientUuid: "helper", weight: 0.5 },
+    { recipientUuid: "main", weight: 1 },
+    { recipientUuid: "owner", weight: 1 }
+  ]);
+  assert.deepEqual(shares, [
+    { recipientUuid: "helper", amount: 2 },
+    { recipientUuid: "main", amount: 4 },
+    { recipientUuid: "owner", amount: 4 }
+  ]);
+  assert.equal(shares.reduce((sum, share) => sum + share.amount, 0), 10);
+});
+
+test("weighted integer splitting is input-order independent and deterministically assigns remainders", () => {
+  const first = splitWeightedIntegerReward(11, [
+    { recipientUuid: "owner", weight: 1 },
+    { recipientUuid: "helper", weight: 0.5 },
+    { recipientUuid: "main", weight: 1 }
+  ]);
+  const retry = splitWeightedIntegerReward(11, [
+    { recipientUuid: "main", weight: 1 },
+    { recipientUuid: "owner", weight: 1 },
+    { recipientUuid: "helper", weight: 0.5 }
+  ]);
+  assert.deepEqual(retry, first);
+  assert.deepEqual(first, [
+    { recipientUuid: "helper", amount: 2 },
+    { recipientUuid: "main", amount: 5 },
+    { recipientUuid: "owner", amount: 4 }
+  ]);
+  assert.equal(first.reduce((sum, share) => sum + share.amount, 0), 11);
+});
+
+test("weighted splitting rejects duplicate or invalid recipients", () => {
+  assert.throws(() => splitWeightedIntegerReward(10, [
+    { recipientUuid: "player", weight: 1 },
+    { recipientUuid: "player", weight: 0.5 }
+  ]), /unique/);
+  assert.throws(() => splitWeightedIntegerReward(10, [
+    { recipientUuid: "player", weight: -1 }
+  ]), /weight/);
 });
 
 test("reward operation keys are stable per reward/submission/recipient", () => {
