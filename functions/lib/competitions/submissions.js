@@ -17,15 +17,26 @@ function rows(result) {
   return Array.isArray(result?.results) ? result.results : [];
 }
 
-export async function countPlayerEntrySlots(db, competitionId, playerUuid) {
+function normalizedPlayerUuids(playerUuids) {
+  const values = [...new Set((Array.isArray(playerUuids) ? playerUuids : [playerUuids])
+    .map((value) => String(value ?? "").trim().toLowerCase())
+    .filter(Boolean))];
+  if (!values.length) throw new TypeError("At least one Minecraft UUID is required");
+  if (values.length > 32) throw new TypeError("Too many Minecraft UUIDs");
+  return values;
+}
+
+export async function countLinkedPlayerEntrySlots(db, competitionId, playerUuids) {
   const database = requireDatabase(db);
+  const uuids = normalizedPlayerUuids(playerUuids);
+  const placeholders = uuids.map(() => "?").join(",");
   const row = await database.prepare(`
     SELECT COUNT(DISTINCT submission_id) AS entryCount
     FROM (
       SELECT s.id AS submission_id
       FROM submissions s
       WHERE s.competition_id = ?
-        AND s.owner_uuid = ?
+        AND s.owner_uuid IN (${placeholders})
         AND s.entry_type IN ('SOLO','GROUP')
         AND s.status NOT IN ('WITHDRAWN','REMOVED','REJECTED','DISQUALIFIED')
         AND s.removed_at IS NULL
@@ -34,15 +45,19 @@ export async function countPlayerEntrySlots(db, competitionId, playerUuid) {
       FROM submission_participants p
       JOIN submissions s ON s.id = p.submission_id
       WHERE s.competition_id = ?
-        AND p.player_uuid = ?
+        AND p.player_uuid IN (${placeholders})
         AND p.invite_status = 'ACCEPTED'
         AND p.participant_role = 'MAIN'
         AND s.entry_type = 'GROUP'
         AND s.status NOT IN ('WITHDRAWN','REMOVED','REJECTED','DISQUALIFIED')
         AND s.removed_at IS NULL
     )
-  `).bind(competitionId, playerUuid, competitionId, playerUuid).first();
+  `).bind(competitionId, ...uuids, competitionId, ...uuids).first();
   return Number(row?.entryCount ?? 0);
+}
+
+export async function countPlayerEntrySlots(db, competitionId, playerUuid) {
+  return countLinkedPlayerEntrySlots(db, competitionId, [playerUuid]);
 }
 
 export async function countGuildEntries(db, competitionId, guildId) {
@@ -454,3 +469,5 @@ export async function withdrawSubmission(db, withdrawal) {
   ]);
   return Number(results?.[0]?.meta?.changes ?? 0) === 1;
 }
+
+export { normalizedPlayerUuids };
