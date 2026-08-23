@@ -1,8 +1,8 @@
 import { authenticateRequest } from "../../../../../../lib/auth.js";
 import { competitionsEnabled, hasCompetitionDatabase } from "../../../../../../lib/competitions/access.js";
+import { reorderOwnedSubmissionImages } from "../../../../../../lib/competitions/submission-image-order.js";
 import { authorizeCompetitionRead } from "../../../../../../lib/competitions/public-access.js";
 import { getPublicCompetitionBySlug } from "../../../../../../lib/competitions/repository.js";
-import { reorderSubmissionImages } from "../../../../../../lib/competitions/submission-media.js";
 import { getAccountSubmission, listSubmissionImages } from "../../../../../../lib/competitions/submissions.js";
 import { json, methodNotAllowed, unauthorized } from "../../../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../../../lib/security.js";
@@ -73,7 +73,7 @@ export async function onRequestPost(context) {
       || requestedIds.slice().sort().some((value, index) => value !== currentIds[index])
     ) return json({ error: "image_order_must_include_all_images" }, 409);
 
-    const result = await reorderSubmissionImages(context.env.COMPETITIONS_DB, {
+    const result = await reorderOwnedSubmissionImages(context.env.COMPETITIONS_DB, {
       competitionId: competition.id,
       submissionId: submission.id,
       ownerSubject: session.subject,
