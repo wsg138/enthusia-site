@@ -4,7 +4,6 @@ import {
   completeCompetitionNotification,
   failCompetitionNotification,
   listPendingCompetitionNotifications,
-  markCompetitionNotificationChannelDelivered,
   notificationRetryAt
 } from "./notifications.js";
 
@@ -51,60 +50,6 @@ function contributorPayload(env, notification, action) {
   };
 }
 
-function discordWebhookUrl(env) {
-  const raw = String(env?.COMPETITION_STAFF_DISCORD_WEBHOOK_URL ?? "").trim();
-  if (!raw) throw new Error("competition_discord_webhook_not_configured");
-  let url;
-  try {
-    url = new URL(raw);
-  } catch {
-    throw new Error("competition_discord_webhook_invalid");
-  }
-  if (url.protocol !== "https:" || url.hostname !== "discord.com" || !/^\/api\/webhooks\/\d+\/[A-Za-z0-9._-]+\/?$/.test(url.pathname)) {
-    throw new Error("competition_discord_webhook_invalid");
-  }
-  url.search = "";
-  url.hash = "";
-  return url.toString();
-}
-
-function discordRoleId(env) {
-  const value = String(env?.COMPETITION_STAFF_DISCORD_ROLE_ID ?? "").trim();
-  return /^\d{5,30}$/.test(value) ? value : null;
-}
-
-function discordSubmissionReviewPayload(env, notification) {
-  const reviewUrl = notification.payload?.reviewUrl ?? staffReviewUrl(env, notification);
-  const roleId = discordRoleId(env);
-  const competitionTitle = String(notification.payload?.competitionTitle ?? "Competition").slice(0, 256);
-  const submissionTitle = String(notification.payload?.submissionTitle ?? "New submission").slice(0, 256);
-  const ownerName = String(notification.payload?.ownerName ?? "Unknown player").slice(0, 256);
-  return {
-    ...(roleId ? { content: `<@&${roleId}> new competition submission requires review.` } : {}),
-    allowed_mentions: roleId ? { parse: [], roles: [roleId] } : { parse: [] },
-    embeds: [{
-      title: "Competition submission ready for review",
-      description: `**${submissionTitle}**\nSubmitted by ${ownerName}`,
-      fields: [{ name: "Competition", value: competitionTitle, inline: true }],
-      ...(reviewUrl ? { url: reviewUrl } : {}),
-      timestamp: new Date().toISOString()
-    }]
-  };
-}
-
-function needsBridge(notification) {
-  return new Set([
-    "CONTRIBUTOR_INVITE",
-    "CONTRIBUTOR_RESPONSE",
-    "CONTRIBUTOR_REMOVED",
-    "SUBMISSION_REVIEW"
-  ]).has(notification.eventType);
-}
-
-function needsDiscord(notification) {
-  return notification.eventType === "SUBMISSION_REVIEW";
-}
-
 export async function deliverCompetitionNotification(env, notification) {
   let path;
   let body;
@@ -140,20 +85,7 @@ export async function deliverCompetitionNotification(env, notification) {
   return responseBody;
 }
 
-export async function deliverCompetitionDiscordNotification(env, notification, fetchImpl = fetch) {
-  if (notification.eventType !== "SUBMISSION_REVIEW") {
-    throw new Error(`Unsupported Discord competition notification event: ${notification.eventType}`);
-  }
-  const response = await fetchImpl(discordWebhookUrl(env), {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(discordSubmissionReviewPayload(env, notification))
-  });
-  if (!response.ok) throw new Error(`Competition Discord webhook failed: ${response.status}`);
-  return { status: "DELIVERED" };
-}
-
-export async function drainCompetitionNotifications(env, db, { limit = 25, discordFetch = fetch } = {}) {
+export async function drainCompetitionNotifications(env, db, { limit = 25 } = {}) {
   const now = new Date().toISOString();
   const pending = await listPendingCompetitionNotifications(db, now, limit);
   const outcomes = [];
@@ -162,14 +94,7 @@ export async function drainCompetitionNotifications(env, db, { limit = 25, disco
     const claimed = await claimCompetitionNotification(db, notification.id, claimedAt);
     if (!claimed) continue;
     try {
-      if (needsBridge(notification) && !notification.bridgeDeliveredAt) {
-        await deliverCompetitionNotification(env, notification);
-        await markCompetitionNotificationChannelDelivered(db, notification.id, "bridge", new Date().toISOString());
-      }
-      if (needsDiscord(notification) && !notification.discordDeliveredAt) {
-        await deliverCompetitionDiscordNotification(env, notification, discordFetch);
-        await markCompetitionNotificationChannelDelivered(db, notification.id, "discord", new Date().toISOString());
-      }
+      await deliverCompetitionNotification(env, notification);
       const deliveredAt = new Date().toISOString();
       await completeCompetitionNotification(db, notification.id, deliveredAt);
       outcomes.push({ id: notification.id, status: "DELIVERED" });
@@ -194,12 +119,4 @@ export function scheduleCompetitionNotificationDrain(context, options = {}) {
   );
 }
 
-export {
-  discordRoleId,
-  discordSubmissionReviewPayload,
-  discordWebhookUrl,
-  entrantActionUrl,
-  needsBridge,
-  needsDiscord,
-  staffReviewUrl
-};
+export { entrantActionUrl, staffReviewUrl };
