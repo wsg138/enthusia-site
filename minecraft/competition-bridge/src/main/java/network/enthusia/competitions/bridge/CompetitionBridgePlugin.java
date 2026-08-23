@@ -22,6 +22,7 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
     private final Object runtimeLock = new Object();
     private volatile BridgeConfig runtimeConfig;
     private volatile BridgeRepository repository;
+    private volatile LinkCodeRepository linkCodes;
     private volatile RewardDeliveryService rewardDelivery;
     private volatile BridgeHttpServer httpServer;
     private volatile BukkitTask itemRetryTask;
@@ -31,6 +32,7 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
         saveDefaultConfig();
         try {
             repository = new BridgeRepository(getDataFolder().toPath());
+            linkCodes = new LinkCodeRepository(getDataFolder().toPath());
             rewardDelivery = new RewardDeliveryService(this, repository);
             runtimeConfig = BridgeConfig.load(this);
             httpServer = startServer(runtimeConfig);
@@ -46,6 +48,9 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
             getCommand("competitionbridge").setExecutor(this);
             getCommand("competitionbridge").setTabCompleter(this);
         }
+        if (getCommand("competitionlink") != null) {
+            getCommand("competitionlink").setExecutor(this);
+        }
         getLogger().info("EnthusiaCompetitionBridge enabled; listener " + listenerSummary(runtimeConfig));
     }
 
@@ -55,6 +60,8 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
             cancelItemRetryTask();
             closeQuietly(httpServer);
             httpServer = null;
+            closeQuietly(linkCodes);
+            linkCodes = null;
             closeQuietly(repository);
             repository = null;
             rewardDelivery = null;
@@ -101,9 +108,7 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
 
     private BridgeHttpServer startServer(BridgeConfig config) throws Exception {
         if (!config.server().enabled()) return null;
-        BridgeHttpServer server = new BridgeHttpServer(this, config, repository, rewardDelivery);
-        server.start();
-        return server;
+        return new BridgeHttpServer(this, config, repository, linkCodes, rewardDelivery) {{ start(); }};
     }
 
     private void scheduleItemRetries(BridgeConfig config) {
@@ -140,6 +145,9 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (command.getName().equalsIgnoreCase("competitionlink")) {
+            return handleLinkCommand(sender, args);
+        }
         if (!sender.hasPermission("enthusia.competitions.bridge.admin")) {
             sender.sendMessage(ChatColor.RED + "You do not have permission to manage the competition bridge.");
             return true;
@@ -178,9 +186,45 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
         return true;
     }
 
+    private boolean handleLinkCommand(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(ChatColor.RED + "This command must be run in-game by the Minecraft account being linked.");
+            return true;
+        }
+        if (args.length != 1) {
+            player.sendMessage(ChatColor.RED + "Usage: /competitionlink <code>");
+            return true;
+        }
+        String code = args[0].trim().toUpperCase(Locale.ROOT);
+        LinkCodeRepository repo = linkCodes;
+        if (repo == null) {
+            player.sendMessage(ChatColor.RED + "Competition account linking is temporarily unavailable.");
+            return true;
+        }
+        try {
+            LinkCodeRepository.LinkStatus result = repo.claim(
+                    code,
+                    player.getUniqueId(),
+                    player.getName(),
+                    System.currentTimeMillis()
+            );
+            switch (result.status()) {
+                case "CLAIMED" -> player.sendMessage(ChatColor.GREEN + "Link code accepted. Return to the Enthusia website to finish linking this account.");
+                case "EXPIRED" -> player.sendMessage(ChatColor.RED + "That link code is expired or does not exist. Generate a new code on the website.");
+                case "ALREADY_CLAIMED" -> player.sendMessage(ChatColor.RED + "That link code was already claimed by another Minecraft account.");
+                case "INVALID" -> player.sendMessage(ChatColor.RED + "That link code is invalid. Codes are eight characters.");
+                default -> player.sendMessage(ChatColor.RED + "The link could not be completed. Generate a new code and try again.");
+            }
+        } catch (Exception exception) {
+            getLogger().log(Level.WARNING, "Minecraft competition link claim failed for " + player.getUniqueId(), exception);
+            player.sendMessage(ChatColor.RED + "Competition account linking is temporarily unavailable.");
+        }
+        return true;
+    }
+
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length != 1) return List.of();
+        if (!command.getName().equalsIgnoreCase("competitionbridge") || args.length != 1) return List.of();
         String prefix = args[0].toLowerCase(Locale.ROOT);
         return List.of("status", "reload").stream().filter(value -> value.startsWith(prefix)).toList();
     }
