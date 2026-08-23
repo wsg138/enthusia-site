@@ -89,7 +89,16 @@ export function publicCompetitionDetail(competition) {
   };
 }
 
-export function publicSubmissionDetail(submission, participants = []) {
+export function publicSubmissionDetail(submission, participants = [], images = []) {
+  const publicImages = images.map((image) => ({
+    id: image.id,
+    sortOrder: image.sortOrder,
+    width: image.width,
+    height: image.height,
+    mimeType: image.mimeType,
+    isCover: image.id === (submission.coverImageId ?? null),
+    url: `/api/competitions/submission-media/${image.id}`
+  }));
   return {
     id: submission.id,
     competitionId: submission.competitionId,
@@ -101,10 +110,14 @@ export function publicSubmissionDetail(submission, participants = []) {
     title: submission.title,
     description: submission.description,
     coverImageId: submission.coverImageId ?? null,
+    coverImageUrl: submission.coverImageId
+      ? `/api/competitions/submission-media/${submission.coverImageId}`
+      : null,
     revision: submission.revision,
     staffEdited: Boolean(submission.staffEdited),
     submittedAt: submission.submittedAt ?? null,
     approvedAt: submission.approvedAt ?? null,
+    images: publicImages,
     participants: participants.map((participant) => ({
       playerUuid: participant.playerUuid,
       playerName: participant.playerName,
