@@ -1,4 +1,3 @@
-import { authenticateRequest } from "../../../../../../lib/auth.js";
 import {
   competitionsEnabled,
   hasCompetitionDatabase,
@@ -10,6 +9,7 @@ import {
   prepareCompetitionImage,
   storePreparedCompetitionImage
 } from "../../../../../../lib/competitions/media-storage.js";
+import { getCompetitionParticipantSession } from "../../../../../../lib/competitions/participant-auth.js";
 import { authorizeCompetitionRead } from "../../../../../../lib/competitions/public-access.js";
 import { getPublicCompetitionBySlug } from "../../../../../../lib/competitions/repository.js";
 import { attachSubmissionImage } from "../../../../../../lib/competitions/submission-media.js";
@@ -74,10 +74,11 @@ async function resolveOwner(context) {
   }
   let session;
   try {
-    session = await authenticateRequest(context.request, context.env);
+    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
   } catch {
-    return { response: unauthorized() };
+    return { response: json({ error: "competition_identity_unavailable" }, 503) };
   }
+  if (!session) return { response: unauthorized() };
   const slug = slugValue(context);
   const id = submissionId(context);
   if (!slug || !id) return { response: json({ error: "submission_not_found" }, 404) };
@@ -163,7 +164,7 @@ export async function onRequestPost(context) {
       competitionId: competition.id,
       submissionId: submission.id,
       ownerSubject: session.subject,
-      actorUuid: session.player.uuid,
+      actorUuid: submission.ownerUuid,
       expectedRevision: revision,
       sortOrder: existing.length,
       storageKey: stored.key,
