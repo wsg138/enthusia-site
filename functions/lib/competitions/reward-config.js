@@ -171,6 +171,34 @@ export function sanitizeCompetitionRewards(input) {
   return { helperRewardMultiplier, definitions };
 }
 
+export function materializeCompetitionRewards({ competitionId, configVersion, rewards, createdAt }) {
+  const safeCompetitionId = identifier(competitionId, 80);
+  if (!safeCompetitionId || !Number.isInteger(configVersion) || configVersion < 1 || typeof createdAt !== "string") {
+    throw new TypeError("Reward publication identity is invalid");
+  }
+  const sanitized = sanitizeCompetitionRewards(rewards);
+  if (!sanitized) throw new TypeError("Reward configuration is invalid");
+
+  return sanitized.definitions.map((definition) => ({
+    id: `${safeCompetitionId}:${definition.id}`,
+    competitionId: safeCompetitionId,
+    placement: definition.placement,
+    rewardType: definition.rewardType,
+    distributionMode: definition.distributionMode,
+    configJson: JSON.stringify({
+      schemaVersion: 1,
+      sourceDefinitionId: definition.id,
+      configVersion,
+      randomCount: definition.randomCount,
+      publicLabel: definition.publicLabel,
+      publicDescription: definition.publicDescription,
+      helperRewardMultiplier: sanitized.helperRewardMultiplier,
+      payload: definition.payload
+    }),
+    createdAt
+  }));
+}
+
 export function publicCompetitionRewards(rewards) {
   const sanitized = sanitizeCompetitionRewards(rewards);
   if (!sanitized) return initialRewardConfig();
