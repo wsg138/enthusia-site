@@ -219,6 +219,49 @@ function infoItem(label, value) {
   return item;
 }
 
+function placementLabel(value) {
+  const placement = Number(value);
+  if (!Number.isInteger(placement) || placement < 1) return "Placement";
+  const mod100 = placement % 100;
+  if (mod100 >= 11 && mod100 <= 13) return `${placement}th place`;
+  return `${placement}${({ 1: "st", 2: "nd", 3: "rd" })[placement % 10] ?? "th"} place`;
+}
+
+function renderRewards(section, competition) {
+  const definitions = Array.isArray(competition.config?.rewards?.definitions)
+    ? competition.config.rewards.definitions
+    : [];
+  if (!definitions.length) return;
+
+  const heading = document.createElement("h2");
+  heading.textContent = "Rewards";
+  const grid = document.createElement("div");
+  grid.className = "competition-reward-grid";
+
+  for (const reward of definitions) {
+    const card = document.createElement("article");
+    card.className = "competition-reward-card";
+    const place = document.createElement("span");
+    place.className = "competition-reward-placement";
+    place.textContent = placementLabel(reward.placement);
+    const title = document.createElement("strong");
+    title.textContent = reward.publicLabel;
+    const description = document.createElement("p");
+    description.textContent = reward.publicDescription;
+    card.append(place, title, description);
+    grid.append(card);
+  }
+
+  const helperMultiplier = competition.config?.rewards?.helperRewardMultiplier;
+  const note = document.createElement("p");
+  note.className = "competition-reward-note";
+  note.textContent = typeof helperMultiplier === "number" && helperMultiplier !== 1
+    ? `Helpers are reward-eligible at ${Math.round(helperMultiplier * 100)}% of the normal participant share when the reward supports proportional distribution.`
+    : "Reward distribution follows the rules shown for each competition.";
+
+  section.append(heading, grid, note);
+}
+
 function renderOverview(root, competition) {
   const config = competition.config ?? {};
   const schedule = config.schedule ?? {};
@@ -249,6 +292,8 @@ function renderOverview(root, competition) {
     warning.textContent = "This competition requests private build coordinates. Assigned judges will be allowed to see those coordinates for judging.";
     section.append(warning);
   }
+
+  renderRewards(section, competition);
 
   const rulesHeading = document.createElement("h2");
   rulesHeading.textContent = "Rules";
