@@ -1,4 +1,10 @@
 export const SCORING_FORMULA_VERSION = "enthusia-components-v1";
+const SCORE_DECIMALS = 6;
+const SCORE_FACTOR = 10 ** SCORE_DECIMALS;
+
+function roundScore(value) {
+  return Math.round((value + Number.EPSILON) * SCORE_FACTOR) / SCORE_FACTOR;
+}
 
 function finiteNumber(value, label) {
   if (typeof value !== "number" || !Number.isFinite(value)) {
@@ -10,7 +16,7 @@ function finiteNumber(value, label) {
 function boundedScore(value, label) {
   const score = finiteNumber(value, label);
   if (score < 0 || score > 10) throw new RangeError(`${label} must be between 0 and 10`);
-  return score;
+  return roundScore(score);
 }
 
 function normalizedCriteria(criteria) {
@@ -52,11 +58,11 @@ export function calculateJudgeScore({ criteria, scores, bonusPoints = 0 }) {
     throw new RangeError("Judge bonus points must be between -10 and 10");
   }
 
-  const baseScore = weightedTotal / totalWeight;
-  const computedScore = Math.max(0, Math.min(10, baseScore + bonus));
+  const baseScore = roundScore(weightedTotal / totalWeight);
+  const computedScore = roundScore(Math.max(0, Math.min(10, baseScore + bonus)));
   return {
     baseScore,
-    bonusPoints: bonus,
+    bonusPoints: roundScore(bonus),
     computedScore,
     scores: normalizedScores,
     criteria: normalized
@@ -66,7 +72,7 @@ export function calculateJudgeScore({ criteria, scores, bonusPoints = 0 }) {
 export function aggregateJudgeScores(judgeScores) {
   if (!Array.isArray(judgeScores) || !judgeScores.length) return null;
   const values = judgeScores.map((score, index) => boundedScore(score, `Judge score ${index + 1}`));
-  return values.reduce((sum, value) => sum + value, 0) / values.length;
+  return roundScore(values.reduce((sum, value) => sum + value, 0) / values.length);
 }
 
 export function combineCompetitionComponents({
@@ -121,11 +127,11 @@ export function combineCompetitionComponents({
 
   return {
     formulaVersion: SCORING_FORMULA_VERSION,
-    finalScore: community * communityPercent / 100 + judges * judgePercent / 100,
+    finalScore: roundScore(community * communityPercent / 100 + judges * judgePercent / 100),
     communityComponent: community,
     judgeComponent: judges,
-    communityWeight: communityPercent,
-    judgeWeight: judgePercent
+    communityWeight: roundScore(communityPercent),
+    judgeWeight: roundScore(judgePercent)
   };
 }
 
@@ -148,6 +154,7 @@ export function createResultSnapshot({
   return {
     schemaVersion: 1,
     formulaVersion: SCORING_FORMULA_VERSION,
+    rounding: { decimals: SCORE_DECIMALS, mode: "nearest" },
     competitionId: String(competitionId),
     submissionId: String(submissionId),
     configVersion,
