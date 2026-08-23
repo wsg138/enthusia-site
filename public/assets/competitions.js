@@ -65,7 +65,6 @@ function competitionCard(competition) {
   article.style.setProperty("--competition-accent", accent(competition));
 
   const image = bannerImage(competition, "competition-card-banner", "");
-
   const body = document.createElement("div");
   body.className = "competition-card-body";
 
@@ -121,7 +120,6 @@ function renderFeatured(root, competition) {
   const feature = document.createElement("article");
   feature.className = "competition-featured";
   feature.style.setProperty("--competition-accent", accent(competition));
-
   const media = bannerImage(competition, "competition-featured-banner", "");
   if (media) feature.classList.add("has-banner");
 
@@ -285,7 +283,6 @@ function renderOverview(root, competition) {
   );
 
   section.append(description, info);
-
   if (config.entries?.coordinatesRequested && config.entries?.judgesCanViewCoordinates) {
     const warning = document.createElement("div");
     warning.className = "competition-private-warning";
@@ -369,6 +366,96 @@ function renderEntries(root, payload) {
     grid.append(card);
   }
   section.append(grid);
+  root.append(section);
+}
+
+function scoreText(result) {
+  const parts = [`Final ${Number(result.finalScore).toFixed(2)}`];
+  if (result.communityComponent !== null && result.communityComponent !== undefined) {
+    parts.push(`Community ${Number(result.communityComponent).toFixed(2)}`);
+  }
+  if (result.judgeComponent !== null && result.judgeComponent !== undefined) {
+    parts.push(`Judges ${Number(result.judgeComponent).toFixed(2)}`);
+  }
+  return parts.join(" · ");
+}
+
+function resultName(result) {
+  return result.entryType === "GUILD" && result.guildName
+    ? result.guildName
+    : result.ownerName;
+}
+
+function resultCard(result, podium = false) {
+  const card = document.createElement("article");
+  card.className = podium ? "competition-podium-card" : "competition-result-row";
+  card.dataset.placement = String(result.placement);
+
+  const place = document.createElement("strong");
+  place.className = "competition-result-place";
+  place.textContent = placementLabel(result.placement);
+  const copy = document.createElement("div");
+  const heading = document.createElement("h3");
+  heading.textContent = result.title;
+  const owner = document.createElement("p");
+  owner.textContent = result.entryType === "GUILD" && result.guildName
+    ? `${result.guildName} · submitted by ${result.ownerName}`
+    : `By ${resultName(result)}`;
+  const score = document.createElement("span");
+  score.className = "competition-result-score";
+  score.textContent = scoreText(result);
+  copy.append(heading, owner, score);
+  card.append(place, copy);
+  if (result.staffEdited) {
+    const edited = document.createElement("span");
+    edited.className = "staff-edited-label";
+    edited.textContent = "Edited by staff";
+    card.append(edited);
+  }
+  return card;
+}
+
+function renderResults(root, payload) {
+  const section = document.createElement("section");
+  section.className = "competition-tab-panel";
+  section.dataset.tabPanel = "results";
+  section.hidden = true;
+
+  const results = Array.isArray(payload.results) ? payload.results : [];
+  if (!results.length) {
+    const notice = document.createElement("div");
+    notice.className = "competition-empty";
+    notice.textContent = ["COMPLETED", "ARCHIVED"].includes(payload.competition.lifecycleState)
+      ? "No published placements are available."
+      : "Results have not been published yet.";
+    section.append(notice);
+    root.append(section);
+    return;
+  }
+
+  const heading = document.createElement("div");
+  heading.className = "competition-results-heading";
+  const title = document.createElement("h2");
+  title.textContent = "Final results";
+  const note = document.createElement("p");
+  note.textContent = "These placements are the permanent published result snapshot for this competition.";
+  heading.append(title, note);
+
+  const podium = document.createElement("div");
+  podium.className = "competition-podium";
+  for (const result of results.filter((item) => item.placement <= 3)) {
+    podium.append(resultCard(result, true));
+  }
+
+  const allHeading = document.createElement("h2");
+  allHeading.textContent = "All placements";
+  const list = document.createElement("div");
+  list.className = "competition-result-list";
+  for (const result of results) list.append(resultCard(result));
+
+  section.append(heading);
+  if (podium.children.length) section.append(podium);
+  section.append(allHeading, list);
   root.append(section);
 }
 
@@ -462,9 +549,7 @@ async function loadDetail() {
     renderPlaceholderPanel(content, "vote", competition.config?.voting?.enabled
       ? "Voting controls will appear here when the authenticated voting flow is enabled."
       : "This competition does not use community voting.");
-    renderPlaceholderPanel(content, "results", ["COMPLETED", "ARCHIVED"].includes(competition.lifecycleState)
-      ? "Published placements will appear here after the results pipeline is connected."
-      : "Results have not been published yet.");
+    renderResults(content, payload);
 
     shell.append(hero, tabs, content);
     root.replaceChildren(shell);
