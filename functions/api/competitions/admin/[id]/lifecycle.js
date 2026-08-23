@@ -77,6 +77,10 @@ export async function onRequestPost(context) {
     return json({ error: "invalid_lifecycle_request" }, 400);
   }
 
+  if (expectedState === "RESULTS_READY" && targetState === "COMPLETED") {
+    return json({ error: "competition_results_publish_endpoint_required" }, 409);
+  }
+
   let current;
   try {
     current = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
