@@ -106,25 +106,12 @@ function sanitizePayload(rewardType, payload) {
 }
 
 export function initialRewardConfig() {
-  return {
-    helperRewardMultiplier: 0.5,
-    definitions: []
-  };
+  return { definitions: [] };
 }
 
 export function sanitizeCompetitionRewards(input) {
   const source = input === null || input === undefined ? {} : input;
   if (!source || typeof source !== "object" || Array.isArray(source)) return null;
-
-  const helperRewardMultiplier = source.helperRewardMultiplier === null || source.helperRewardMultiplier === undefined
-    ? 0.5
-    : source.helperRewardMultiplier;
-  if (
-    typeof helperRewardMultiplier !== "number"
-    || !Number.isFinite(helperRewardMultiplier)
-    || helperRewardMultiplier < 0
-    || helperRewardMultiplier > 1
-  ) return null;
 
   const rawDefinitions = source.definitions ?? [];
   if (!Array.isArray(rawDefinitions) || rawDefinitions.length > MAX_REWARDS) return null;
@@ -146,6 +133,19 @@ export function sanitizeCompetitionRewards(input) {
       ? positiveInteger(raw.randomCount, MAX_RANDOM_RECIPIENTS)
       : null;
 
+    const includeHelpers = raw.includeHelpers === undefined ? false : raw.includeHelpers;
+    if (typeof includeHelpers !== "boolean") return null;
+    const helperWeight = includeHelpers
+      ? (raw.helperWeight === undefined ? 0.5 : raw.helperWeight)
+      : 0;
+    if (
+      typeof helperWeight !== "number"
+      || !Number.isFinite(helperWeight)
+      || helperWeight < 0
+      || helperWeight > 1
+      || (includeHelpers && helperWeight === 0)
+    ) return null;
+
     const publicLabel = text(raw.publicLabel, MAX_PUBLIC_LABEL, { required: true });
     const publicDescription = text(raw.publicDescription, MAX_PUBLIC_DESCRIPTION, { required: true, multiline: true });
     const payload = sanitizePayload(rewardType, raw.payload);
@@ -157,6 +157,8 @@ export function sanitizeCompetitionRewards(input) {
       rewardType,
       distributionMode,
       randomCount,
+      includeHelpers,
+      helperWeight,
       publicLabel,
       publicDescription,
       payload
@@ -168,7 +170,7 @@ export function sanitizeCompetitionRewards(input) {
   }
 
   definitions.sort((left, right) => left.placement - right.placement || left.id.localeCompare(right.id));
-  return { helperRewardMultiplier, definitions };
+  return { definitions };
 }
 
 export function materializeCompetitionRewards({ competitionId, configVersion, rewards, createdAt }) {
@@ -190,9 +192,10 @@ export function materializeCompetitionRewards({ competitionId, configVersion, re
       sourceDefinitionId: definition.id,
       configVersion,
       randomCount: definition.randomCount,
+      includeHelpers: definition.includeHelpers,
+      helperWeight: definition.helperWeight,
       publicLabel: definition.publicLabel,
       publicDescription: definition.publicDescription,
-      helperRewardMultiplier: sanitized.helperRewardMultiplier,
       payload: definition.payload
     }),
     createdAt
@@ -203,13 +206,14 @@ export function publicCompetitionRewards(rewards) {
   const sanitized = sanitizeCompetitionRewards(rewards);
   if (!sanitized) return initialRewardConfig();
   return {
-    helperRewardMultiplier: sanitized.helperRewardMultiplier,
     definitions: sanitized.definitions.map((definition) => ({
       id: definition.id,
       placement: definition.placement,
       rewardType: definition.rewardType,
       distributionMode: definition.distributionMode,
       randomCount: definition.randomCount,
+      includeHelpers: definition.includeHelpers,
+      helperWeight: definition.includeHelpers ? definition.helperWeight : null,
       publicLabel: definition.publicLabel,
       publicDescription: definition.publicDescription
     }))
