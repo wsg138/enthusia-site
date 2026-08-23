@@ -1,0 +1,25 @@
+name: EnthusiaCompetitionBridge
+main: network.enthusia.competitions.bridge.CompetitionBridgePlugin
+version: '${project.version}'
+api-version: '1.21'
+author: Enthusia
+description: Authenticated website-to-Minecraft bridge for Enthusia competitions.
+softdepend:
+  - EnthusiaPlaytime
+  - LumaGuilds
+  - Vault
+  - EnthusiaLoreItems
+  - LuckPerms
+  - Tebex
+commands:
+  competitionbridge:
+    description: Manage the Enthusia competition server bridge.
+    usage: /competitionbridge <status|reload>
+    aliases: [cbridge, compbridge]
+permissions:
+  enthusia.competitions.bridge.admin:
+    default: op
+    description: View bridge status and reload the bridge.
+  enthusia.competitions.review:
+    default: op
+    description: Receive staff notifications for competition submissions.
