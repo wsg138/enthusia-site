@@ -6,7 +6,7 @@ import {
 } from "./access.js";
 import { json } from "../responses.js";
 
-export async function authorizeCompetitionRead(context) {
+export async function authorizeCompetitionRead(context, authenticator = authenticateRequest) {
   if (!competitionsEnabled(context.env)) {
     return { response: json({ error: "not_found" }, 404) };
   }
@@ -17,7 +17,7 @@ export async function authorizeCompetitionRead(context) {
 
   let session;
   try {
-    session = await authenticateRequest(context.request, context.env);
+    session = await authenticator(context.request, context.env);
   } catch {
     return { response: json({ error: "not_found" }, 404) };
   }
