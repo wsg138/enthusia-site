@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import { activeJudgeScores } from "../functions/lib/competitions/judge-score-set.js";
@@ -81,7 +82,8 @@ test("public feedback projection strips judge identity and scorecard internals",
 });
 
 test("public feedback browser module syntax-checks and renders text safely", async () => {
-  const path = new URL("../public/assets/competitions-public-feedback.js", import.meta.url);
+  const url = new URL("../public/assets/competitions-public-feedback.js", import.meta.url);
+  const path = fileURLToPath(url);
   const result = spawnSync(process.execPath, ["--check", path], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr);
   const source = await readFile(path, "utf8");
