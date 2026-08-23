@@ -71,9 +71,10 @@ export function clearCompetitionSessionCookie() {
   return `${SESSION_COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`;
 }
 
-function safeReturnTo(value) {
-  if (typeof value !== "string" || !value.startsWith("/competitions")) return "/competitions/";
-  if (value.includes("\\") || value.includes("\r") || value.includes("\n") || value.startsWith("//")) return "/competitions/";
+export function safeReturnTo(value) {
+  if (typeof value !== "string" || !value.startsWith("/")) return "/";
+  if (value.includes("\\") || value.includes("\r") || value.includes("\n") || value.startsWith("//")) return "/";
+  if (value.startsWith("/api/")) return "/";
   return value.slice(0, 500);
 }
 
@@ -357,5 +358,4 @@ export {
   SESSION_COOKIE,
   SESSION_TTL_SECONDS,
   normalizeDiscordUser,
-  safeReturnTo
 };

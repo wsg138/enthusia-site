@@ -87,6 +87,7 @@ const competitionRequiredAssets = [
   "competitions-participant.css",
   "competitions-judge.css",
   "gallery-competitions.css",
+  "site-account.js",
   "competitions-admin.js",
   "competitions-admin-media.js",
   "competitions-admin-workspace.js",
@@ -128,9 +129,6 @@ if (!marketHtml.includes("NOT AN OFFICIAL MINECRAFT PRODUCT")) errors.push("mark
 for (const file of topLevelHtmlFiles.filter(file => !["404.html", "celestial-test.html"].includes(file))) {
   const html = await readFile(path.join(publicDir, file), "utf8");
   if (!html.includes('href="market.html"')) errors.push(`${file}: missing Market navigation`);
-  if (/href=["'][^"']*competitions/i.test(html)) {
-    errors.push(`${file}: competition navigation must stay hidden during development`);
-  }
 }
 
 const layout = JSON.parse(await readFile(path.join(marketDir, "market-layout.json"), "utf8"));

@@ -320,6 +320,10 @@ function initMobileNavigation() {
       }
       return;
     }
+    if (item.matches(".site-account")) {
+      mainLinks.append(item.cloneNode(true));
+      return;
+    }
     if (!item.matches(".nav-dropdown")) return;
     const communityButton = document.createElement("button");
     communityButton.className = "mobile-nav-community-trigger";
@@ -1849,6 +1853,7 @@ async function initSite(cfg) {
 
   setExternalLinkTargets(normalizedConfig);
   setContactEmail(normalizedConfig);
+  await import("./site-account.js");
   initWorldEffects();
   initCinematicHeader();
   initDesktopDropdownGrace();

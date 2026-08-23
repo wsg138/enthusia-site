@@ -6,6 +6,7 @@ import {
   discordOAuthConfiguration,
   discordOAuthConfigured
 } from "../functions/lib/competitions/discord-oauth.js";
+import { safeReturnTo } from "../functions/lib/competitions/identity.js";
 
 function writeOnlyDb() {
   return {
@@ -42,4 +43,12 @@ test("Discord OAuth configuration fails closed for missing secret or insecure re
   assert.equal(discordOAuthConfigured(ENV), true);
   assert.throws(() => discordOAuthConfiguration({ ...ENV, DISCORD_CLIENT_SECRET: "" }), /not configured/);
   assert.throws(() => discordOAuthConfiguration({ ...ENV, DISCORD_OAUTH_REDIRECT_URI: "http://example.com/callback" }), /HTTPS/);
+});
+
+test("Discord OAuth returns to safe same-site pages", () => {
+  assert.equal(safeReturnTo("/appeal.html?punishment=test"), "/appeal.html?punishment=test");
+  assert.equal(safeReturnTo("//evil.example"), "/");
+  assert.equal(safeReturnTo("/api/private"), "/");
+  assert.equal(safeReturnTo("https://evil.example"), "/");
+  assert.equal(safeReturnTo("/competitions\\evil"), "/");
 });

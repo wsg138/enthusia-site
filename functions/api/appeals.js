@@ -1,4 +1,4 @@
-import { authenticateRequest } from "../lib/auth.js";
+import { authenticatePlayerRequest } from "../lib/player-session.js";
 import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../lib/responses.js";
 import { appealIdempotencyKey, requireSameOrigin } from "../lib/security.js";
 import { signedStaffRequest, staffApiResponse } from "../lib/staff-api.js";
@@ -27,7 +27,7 @@ function buildAppealPayload(submission, session) {
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   let session;
-  try { session = await authenticateRequest(context.request, context.env); } catch { return unauthorized(); }
+  try { session = await authenticatePlayerRequest(context.request, context.env); } catch { return unauthorized(); }
 
   let submission;
   try { submission = sanitizeSubmission(await context.request.json()); } catch { submission = null; }

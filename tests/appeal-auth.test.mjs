@@ -6,6 +6,7 @@ import { sanitizeDecision } from "../functions/api/reviewer/appeals/[id].js";
 import { boundedIdempotencyKey, requireSameOrigin } from "../functions/lib/security.js";
 import { reviewerRank, signedStaffRequest, staffRoute } from "../functions/lib/staff-api.js";
 import { isCanonicalUuid } from "../functions/lib/validation.js";
+import { discordPlayerSession } from "../functions/lib/player-session.js";
 
 const playerClaims = {
   sub: "access-user-1",
@@ -18,6 +19,20 @@ const playerClaims = {
 
 test("buildSession requires a linked canonical player", () => {
   assert.throws(() => buildSession({ sub: "user-1", email: "player@example.com" }), /not linked/);
+});
+
+test("Discord sessions use the first linked Minecraft account for appeals", () => {
+  const session = discordPlayerSession({
+    subject: "discord:123",
+    linkedMinecraftAccounts: [{ uuid: "123e4567-e89b-12d3-a456-426614174000", name: "Lincoln" }]
+  });
+  assert.deepEqual(session.player, {
+    uuid: "123e4567-e89b-12d3-a456-426614174000",
+    name: "Lincoln"
+  });
+  assert.deepEqual(session.roles, []);
+  assert.throws(() => { session.player.name = "Impostor"; }, TypeError);
+  assert.throws(() => discordPlayerSession({ linkedMinecraftAccounts: [] }), /no linked Minecraft account/);
 });
 
 test("buildSession accepts canonical Floodgate identity claims", () => {

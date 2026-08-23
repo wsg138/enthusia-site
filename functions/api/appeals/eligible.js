@@ -1,10 +1,10 @@
-import { authenticateRequest } from "../../lib/auth.js";
+import { authenticatePlayerRequest } from "../../lib/player-session.js";
 import { methodNotAllowed, serviceUnavailable, unauthorized } from "../../lib/responses.js";
 import { signedStaffRequest, staffApiResponse } from "../../lib/staff-api.js";
 
 export async function onRequestGet(context) {
   let session;
-  try { session = await authenticateRequest(context.request, context.env); } catch { return unauthorized(); }
+  try { session = await authenticatePlayerRequest(context.request, context.env); } catch { return unauthorized(); }
 
   try {
     const upstream = await signedStaffRequest(context.env, "/v1/website/appeals/eligible", {

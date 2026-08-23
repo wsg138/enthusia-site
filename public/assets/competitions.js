@@ -27,6 +27,115 @@ function stateLabel(state) {
   })[state] ?? state;
 }
 
+const STAGE_COPY = Object.freeze({
+  UPCOMING: ["Getting ready", "Read the brief and plan your entry before submissions open."],
+  SUBMISSIONS_OPEN: ["Submissions open", "Create an entry, add your screenshots, and send it to staff for review."],
+  REVIEW: ["Entry review", "Staff checks each entry. Entrants can make any requested fixes."],
+  VOTING: ["Community voting", "Eligible players can vote for their favorite approved entries."],
+  JUDGING: ["Judging", "Assigned judges score approved entries using the published criteria."],
+  RESULTS_READY: ["Final checks", "Staff is resolving the final standings before results are published."],
+  COMPLETED: ["Results published", "Placements are final and the approved entries remain available here."],
+  ARCHIVED: ["Archived", "This competition and its results are preserved in the archive."]
+});
+
+function stageSchedule(competition) {
+  const schedule = competition.config?.schedule ?? {};
+  const voting = Boolean(competition.config?.voting?.enabled);
+  const judging = Boolean(competition.config?.judging?.enabled);
+  return [
+    { state: "UPCOMING", label: "Getting ready", start: null, end: schedule.submissionsOpenAt },
+    { state: "SUBMISSIONS_OPEN", label: "Submissions", start: schedule.submissionsOpenAt, end: schedule.submissionsCloseAt },
+    { state: "REVIEW", label: "Entry review", start: schedule.submissionsCloseAt, end: voting ? schedule.votingOpenAt : judging ? schedule.judgingOpenAt : schedule.reviewCloseAt },
+    ...(voting ? [{ state: "VOTING", label: "Community voting", start: schedule.votingOpenAt, end: schedule.votingCloseAt }] : []),
+    ...(judging ? [{ state: "JUDGING", label: "Judging", start: schedule.judgingOpenAt, end: schedule.judgingCloseAt }] : []),
+    { state: "RESULTS_READY", label: "Final checks", start: judging ? schedule.judgingCloseAt : voting ? schedule.votingCloseAt : schedule.reviewCloseAt, end: null },
+    { state: "COMPLETED", label: "Results published", start: null, end: null }
+  ];
+}
+
+function nextStage(competition) {
+  const stages = stageSchedule(competition);
+  const index = stages.findIndex((stage) => stage.state === competition.lifecycleState);
+  const current = stages[index] ?? { state: competition.lifecycleState, label: stateLabel(competition.lifecycleState), end: null };
+  const next = index >= 0 ? stages[index + 1] ?? null : null;
+  return { current, next, target: current.end };
+}
+
+function countdownText(value, now = Date.now()) {
+  const target = Date.parse(value ?? "");
+  if (!Number.isFinite(target)) return null;
+  const seconds = Math.max(0, Math.floor((target - now) / 1000));
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainder = seconds % 60;
+  return [days ? `${days}d` : null, `${String(hours).padStart(2, "0")}h`, `${String(minutes).padStart(2, "0")}m`, `${String(remainder).padStart(2, "0")}s`].filter(Boolean).join(" ");
+}
+
+function stageDescription(state) {
+  return STAGE_COPY[state]?.[1] ?? "Follow this competition here as it moves through each round.";
+}
+
+function renderStagePanel(competition, { includeSchedule = true } = {}) {
+  const wrapper = document.createElement("div");
+  const panel = document.createElement("section");
+  panel.className = "competition-stage-panel";
+  const { current, next, target } = nextStage(competition);
+  const copy = document.createElement("div");
+  copy.className = "competition-stage-copy";
+  const eyebrow = document.createElement("span");
+  eyebrow.className = "competition-stage-label";
+  eyebrow.textContent = "Current stage";
+  const title = document.createElement("strong");
+  title.textContent = STAGE_COPY[competition.lifecycleState]?.[0] ?? current.label;
+  const description = document.createElement("p");
+  description.textContent = stageDescription(competition.lifecycleState);
+  copy.append(eyebrow, title, description);
+  const countdown = document.createElement("div");
+  countdown.className = "competition-countdown";
+  const value = document.createElement("strong");
+  const caption = document.createElement("span");
+  const update = () => {
+    const remaining = countdownText(target);
+    value.textContent = remaining ?? (next ? "Date pending" : "Complete");
+    caption.textContent = next ? `until ${next.label.toLowerCase()}` : "No further stages";
+  };
+  update();
+  if (target) window.setInterval(update, 1000);
+  countdown.append(value, caption);
+  panel.append(copy, countdown);
+  wrapper.append(panel);
+
+  if (includeSchedule) {
+    const details = document.createElement("details");
+    details.className = "competition-schedule-disclosure";
+    const summary = document.createElement("summary");
+    summary.textContent = "See every stage and date";
+    const list = document.createElement("ol");
+    list.className = "competition-stage-list";
+    for (const stage of stageSchedule(competition)) {
+      const item = document.createElement("li");
+      item.className = `competition-stage-row${stage.state === competition.lifecycleState ? " is-current" : ""}`;
+      const dot = document.createElement("span");
+      dot.className = "competition-stage-dot";
+      const stageCopy = document.createElement("div");
+      const heading = document.createElement("strong");
+      heading.textContent = stage.label;
+      const explanation = document.createElement("p");
+      explanation.textContent = stageDescription(stage.state);
+      stageCopy.append(heading, explanation);
+      const time = document.createElement("span");
+      time.className = "competition-stage-time";
+      time.textContent = stage.start && stage.end ? `${formatDate(stage.start)} – ${formatDate(stage.end)}` : stage.end ? `Until ${formatDate(stage.end)}` : stage.start ? `After ${formatDate(stage.start)}` : "Published by staff";
+      item.append(dot, stageCopy, time);
+      list.append(item);
+    }
+    details.append(summary, list);
+    wrapper.append(details);
+  }
+  return wrapper;
+}
+
 function detailHref(slug) {
   return `detail.html?competition=${encodeURIComponent(slug)}`;
 }
@@ -68,14 +177,9 @@ function competitionCard(competition) {
   const body = document.createElement("div");
   body.className = "competition-card-body";
 
-  const meta = document.createElement("div");
-  meta.className = "competition-card-meta";
-  for (const label of [stateLabel(competition.lifecycleState), competition.category]) {
-    const badge = document.createElement("span");
-    badge.className = "competition-badge";
-    badge.textContent = label;
-    meta.append(badge);
-  }
+  const meta = document.createElement("span");
+  meta.className = "competition-card-context";
+  meta.textContent = competition.category;
 
   const heading = document.createElement("h3");
   heading.textContent = competition.title;
@@ -140,21 +244,7 @@ function renderFeatured(root, competition) {
 
   const side = document.createElement("div");
   side.className = "competition-featured-side";
-  const schedule = competition.config?.schedule ?? {};
-  const rows = [
-    ["Category", competition.category],
-    ["Submissions close", formatDate(schedule.submissionsCloseAt)],
-    ["Voting closes", competition.config?.voting?.enabled ? formatDate(schedule.votingCloseAt) : "No community vote"]
-  ];
-  for (const [label, value] of rows) {
-    const item = document.createElement("div");
-    const strong = document.createElement("strong");
-    strong.textContent = value;
-    const span = document.createElement("span");
-    span.textContent = label;
-    item.append(strong, span);
-    side.append(item);
-  }
+  side.append(renderStagePanel(competition, { includeSchedule: false }));
 
   if (media) feature.append(media);
   feature.append(copy, side);
@@ -267,6 +357,8 @@ function renderOverview(root, competition) {
   section.className = "competition-tab-panel";
   section.dataset.tabPanel = "overview";
 
+  section.append(renderStagePanel(competition));
+
   const description = document.createElement("div");
   description.className = "competition-copy";
   description.textContent = text(config.public?.description, config.public?.summary || "No description has been published yet.");
@@ -274,9 +366,6 @@ function renderOverview(root, competition) {
   const info = document.createElement("div");
   info.className = "competition-info-grid";
   info.append(
-    infoItem("Submissions open", formatDate(schedule.submissionsOpenAt)),
-    infoItem("Submissions close", formatDate(schedule.submissionsCloseAt)),
-    infoItem("Review ends", formatDate(schedule.reviewCloseAt)),
     infoItem("Max entries per player", String(config.entries?.maxEntriesPerPlayer ?? "—")),
     infoItem("Images per entry", `Up to ${config.entries?.maxImages ?? "—"}`),
     infoItem("Entry types", (config.entries?.allowedTypes ?? []).join(", ") || "—")
