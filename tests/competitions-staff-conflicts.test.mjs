@@ -26,6 +26,11 @@ function seedCompetition(database) {
     now
   );
   database.prepare(`
+    INSERT INTO competition_discord_accounts (
+      discord_user_id, username, global_name, avatar_hash, created_at, updated_at
+    ) VALUES ('111111111111111111', 'owner', NULL, NULL, ?, ?)
+  `).run(now, now);
+  database.prepare(`
     INSERT INTO submissions (
       id, competition_id, entry_type, status, owner_subject, owner_uuid,
       owner_name, title, description, revision, created_at, updated_at
@@ -88,11 +93,6 @@ test("Discord-linked alt cannot review an entry owned by another linked account"
   const database = await migratedDatabase();
   seedCompetition(database);
   const now = "2026-08-23T04:30:00.000Z";
-  database.prepare(`
-    INSERT INTO competition_discord_accounts (
-      discord_user_id, username, global_name, avatar_hash, created_at, updated_at
-    ) VALUES ('111111111111111111', 'owner', NULL, NULL, ?, ?)
-  `).run(now, now);
   database.prepare(`
     INSERT INTO competition_minecraft_links (
       minecraft_uuid, discord_user_id, minecraft_name, linked_at, updated_at
