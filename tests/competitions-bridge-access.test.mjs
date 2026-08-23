@@ -10,8 +10,9 @@ const BASE = {
   COMPETITION_BRIDGE_HMAC_SECRET: "h".repeat(48)
 };
 
-test("bridge works without Access credentials when the hostname is not Access protected", () => {
+test("bridge works without Access credentials when Access service auth is not required", () => {
   const config = competitionBridgeConfiguration(BASE);
+  assert.equal(config.accessRequired, false);
   assert.equal(config.accessClientId, null);
   assert.equal(config.accessClientSecret, null);
 });
@@ -27,12 +28,21 @@ test("bridge Access service credentials must be supplied as a complete pair", ()
   );
 });
 
+test("required bridge Access service auth fails closed when credentials are absent", () => {
+  assert.throws(
+    () => competitionBridgeConfiguration({ ...BASE, COMPETITION_BRIDGE_ACCESS_REQUIRED: "true" }),
+    /Access service authentication is required/
+  );
+});
+
 test("bridge Access service credentials are retained for outgoing requests", () => {
   const config = competitionBridgeConfiguration({
     ...BASE,
+    COMPETITION_BRIDGE_ACCESS_REQUIRED: "true",
     COMPETITION_BRIDGE_ACCESS_CLIENT_ID: "1234567890abcdef.access",
     COMPETITION_BRIDGE_ACCESS_CLIENT_SECRET: "s".repeat(48)
   });
+  assert.equal(config.accessRequired, true);
   assert.equal(config.accessClientId, "1234567890abcdef.access");
   assert.equal(config.accessClientSecret, "s".repeat(48));
 });
