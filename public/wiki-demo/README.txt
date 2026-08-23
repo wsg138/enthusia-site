@@ -1,0 +1,1 @@
+This directory is a temporary pre-publication preview of the proposed Enthusia wiki information architecture. It does not publish to Miraheze and should not be merged into the production website as a permanent wiki implementation.
