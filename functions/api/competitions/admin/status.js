@@ -9,7 +9,7 @@ import { competitionBridgeConfiguration } from "../../../lib/competitions/bridge
 import { competitionDiscordConfigured } from "../../../lib/competitions/discord-notifications.js";
 import { discordOAuthConfigured } from "../../../lib/competitions/discord-oauth.js";
 import { moderationModel } from "../../../lib/competitions/moderation.js";
-import { competitionSchemaReady } from "../../../lib/competitions/repository.js";
+import { currentCompetitionSchemaReady } from "../../../lib/competitions/schema-readiness.js";
 import { json, methodNotAllowed, unauthorized } from "../../../lib/responses.js";
 
 function bridgeConfigured(env) {
@@ -103,7 +103,7 @@ export async function onRequestGet(context) {
 
   let schemaReady = false;
   try {
-    schemaReady = await competitionSchemaReady(context.env.COMPETITIONS_DB);
+    schemaReady = await currentCompetitionSchemaReady(context.env.COMPETITIONS_DB);
   } catch {
     return json({ error: "competition_database_unavailable" }, 503);
   }
