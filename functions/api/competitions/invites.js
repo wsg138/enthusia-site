@@ -1,12 +1,11 @@
-import { authenticateRequest } from "../../lib/auth.js";
 import { competitionsEnabled, hasCompetitionDatabase } from "../../lib/competitions/access.js";
-import { competitionPlayerContext } from "../../lib/competitions/bridge.js";
 import {
   getPendingSubmissionInvite,
   listPendingInvitesForPlayer,
   respondSubmissionInvite
 } from "../../lib/competitions/contributors.js";
 import { getAdminCompetition } from "../../lib/competitions/drafts.js";
+import { getCompetitionParticipantSession, linkedMinecraftUuids } from "../../lib/competitions/participant-auth.js";
 import { canChangeParticipantRoster } from "../../lib/competitions/participants.js";
 import { countPlayerEntrySlots } from "../../lib/competitions/submissions.js";
 import { json, methodNotAllowed, unauthorized } from "../../lib/responses.js";
@@ -15,11 +14,16 @@ import { isCanonicalUuid } from "../../lib/validation.js";
 
 function linkedAccounts(playerContext, session) {
   const accounts = new Set();
+  for (const raw of session?.linkedMinecraftAccounts ?? []) {
+    const uuid = String(raw?.uuid ?? "").trim().toLowerCase();
+    if (isCanonicalUuid(uuid)) accounts.add(uuid);
+  }
+  // Compatibility fallback for older unit contracts only.
   for (const raw of playerContext?.linkedMinecraftAccounts ?? []) {
     const uuid = String(typeof raw === "string" ? raw : raw?.uuid ?? "").trim().toLowerCase();
     if (isCanonicalUuid(uuid)) accounts.add(uuid);
   }
-  accounts.add(session.player.uuid);
+  if (session?.player?.uuid && isCanonicalUuid(session.player.uuid)) accounts.add(session.player.uuid);
   return accounts;
 }
 
@@ -28,17 +32,14 @@ async function authorize(context) {
   if (!hasCompetitionDatabase(context.env)) return { response: json({ error: "competition_database_unavailable" }, 503) };
   let session;
   try {
-    session = await authenticateRequest(context.request, context.env);
+    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
   } catch {
-    return { response: unauthorized() };
+    return { response: json({ error: "competition_identity_unavailable" }, 503) };
   }
-  let playerContext;
-  try {
-    playerContext = await competitionPlayerContext(context.env, session);
-  } catch {
-    return { response: json({ error: "competition_bridge_unavailable" }, 503) };
-  }
-  return { session, playerContext, accounts: linkedAccounts(playerContext, session) };
+  if (!session) return { response: unauthorized() };
+  const accounts = new Set(linkedMinecraftUuids(session));
+  if (!accounts.size) return { response: json({ error: "minecraft_link_required" }, 403) };
+  return { session, accounts };
 }
 
 export async function onRequestGet(context) {
