@@ -8,6 +8,7 @@ import {
 } from "../../../lib/competitions/participant-auth.js";
 import { canVoterVoteForSubmission, voterMeetsActivePlaytime } from "../../../lib/competitions/participants.js";
 import { authorizeCompetitionRead } from "../../../lib/competitions/public-access.js";
+import { competitionRateLimit, rateLimitHeaders } from "../../../lib/competitions/rate-limit.js";
 import {
   getPublicCompetitionBySlug,
   listAcceptedPublicParticipantsByCompetition,
@@ -118,6 +119,18 @@ async function eligibility(context, session, competition) {
   };
 }
 
+async function ballotWriteRateLimit(context, session) {
+  const result = await competitionRateLimit(context.env.COMPETITIONS_DB, {
+    scope: "ballot-write",
+    identity: session.subject,
+    limit: 30,
+    windowSeconds: 300
+  });
+  return result.allowed
+    ? null
+    : json({ error: "rate_limited", retryAfterSeconds: result.retryAfterSeconds }, 429, rateLimitHeaders(result));
+}
+
 export async function onRequestGet(context) {
   const resolved = await authenticatedCompetitionContext(context);
   if (resolved.response) return resolved.response;
@@ -179,6 +192,9 @@ export async function onRequestPost(context) {
   if (eligible.error) return json(eligible, eligible.status);
 
   try {
+    const limited = await ballotWriteRateLimit(context, session);
+    if (limited) return limited;
+
     const existing = await getCompetitionBallot(context.env.COMPETITIONS_DB, competition.id, session.subject);
     if (existing.length && !competition.config.voting.allowChangesUntilClose) {
       return json({ error: "ballot_changes_disabled" }, 409);
@@ -229,4 +245,11 @@ export function onRequest() {
   return methodNotAllowed(["GET", "POST"]);
 }
 
-export { allGuildIds, groupParticipants, guildIds, slugValue, votingWindowOpen };
+export {
+  allGuildIds,
+  ballotWriteRateLimit,
+  groupParticipants,
+  guildIds,
+  slugValue,
+  votingWindowOpen
+};
