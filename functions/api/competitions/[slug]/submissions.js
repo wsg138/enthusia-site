@@ -1,6 +1,7 @@
 import { authenticateRequest } from "../../../lib/auth.js";
 import { competitionsEnabled, hasCompetitionDatabase } from "../../../lib/competitions/access.js";
 import { competitionPlayerContext } from "../../../lib/competitions/bridge.js";
+import { listEntrantModerationNotices } from "../../../lib/competitions/entrant-moderation.js";
 import { authorizeCompetitionRead } from "../../../lib/competitions/public-access.js";
 import { getPublicCompetitionBySlug } from "../../../lib/competitions/repository.js";
 import {
@@ -101,12 +102,25 @@ export async function onRequestGet(context) {
   const resolved = await resolveEntrantContext(context);
   if (resolved.response) return resolved.response;
   try {
-    const submissions = await listAccountSubmissions(
-      context.env.COMPETITIONS_DB,
-      resolved.competition.id,
-      resolved.session.subject
-    );
-    return json({ competitionId: resolved.competition.id, submissions });
+    const [submissions, notices] = await Promise.all([
+      listAccountSubmissions(
+        context.env.COMPETITIONS_DB,
+        resolved.competition.id,
+        resolved.session.subject
+      ),
+      listEntrantModerationNotices(
+        context.env.COMPETITIONS_DB,
+        resolved.competition.id,
+        resolved.session.subject
+      )
+    ]);
+    return json({
+      competitionId: resolved.competition.id,
+      submissions: submissions.map((submission) => ({
+        ...submission,
+        moderation: notices.get(submission.id) ?? null
+      }))
+    });
   } catch {
     return json({ error: "submissions_unavailable" }, 503);
   }
