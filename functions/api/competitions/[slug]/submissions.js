@@ -1,6 +1,9 @@
-import { authenticateRequest } from "../../../lib/auth.js";
 import { competitionsEnabled, hasCompetitionDatabase } from "../../../lib/competitions/access.js";
-import { competitionPlayerContext } from "../../../lib/competitions/bridge.js";
+import {
+  bridgeContextForLinkedAccount,
+  getCompetitionParticipantSession,
+  linkedMinecraftAccount
+} from "../../../lib/competitions/participant-auth.js";
 import { listEntrantModerationNotices } from "../../../lib/competitions/entrant-moderation.js";
 import { authorizeCompetitionRead } from "../../../lib/competitions/public-access.js";
 import { getPublicCompetitionBySlug } from "../../../lib/competitions/repository.js";
@@ -33,17 +36,21 @@ function cleanDescription(value, max) {
 
 function normalizeLinkedAccounts(playerContext, session) {
   const accounts = new Map();
-  for (const raw of playerContext?.linkedMinecraftAccounts ?? []) {
-    if (typeof raw === "string") {
-      const uuid = raw.trim().toLowerCase();
-      if (isCanonicalUuid(uuid) && uuid === session.player.uuid) accounts.set(uuid, session.player.name);
-      continue;
-    }
+  for (const raw of session?.linkedMinecraftAccounts ?? []) {
     const uuid = String(raw?.uuid ?? "").trim().toLowerCase();
     const name = String(raw?.name ?? "").trim();
     if (isCanonicalUuid(uuid) && /^[A-Za-z0-9_]{1,16}$/.test(name)) accounts.set(uuid, name);
   }
-  if (!accounts.has(session.player.uuid)) accounts.set(session.player.uuid, session.player.name);
+  // Preserve compatibility with earlier unit contracts; production ownership
+  // comes from the Discord identity link table above, not bridge-returned links.
+  for (const raw of playerContext?.linkedMinecraftAccounts ?? []) {
+    const uuid = String(typeof raw === "string" ? raw : raw?.uuid ?? "").trim().toLowerCase();
+    const name = String(typeof raw === "object" ? raw?.name ?? "" : "").trim();
+    if (isCanonicalUuid(uuid) && /^[A-Za-z0-9_]{1,16}$/.test(name)) accounts.set(uuid, name);
+  }
+  if (session?.player && isCanonicalUuid(session.player.uuid) && /^[A-Za-z0-9_]{1,16}$/.test(session.player.name)) {
+    accounts.set(session.player.uuid, session.player.name);
+  }
   return accounts;
 }
 
@@ -83,10 +90,13 @@ async function resolveEntrantContext(context) {
   }
   let session;
   try {
-    session = await authenticateRequest(context.request, context.env);
+    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
   } catch {
-    return { response: unauthorized() };
+    return { response: json({ error: "competition_identity_unavailable" }, 503) };
   }
+  if (!session) return { response: unauthorized() };
+  if (!session.linkedMinecraftAccounts.length) return { response: json({ error: "minecraft_link_required" }, 403) };
+
   const slug = slugValue(context);
   if (!slug || slug === "admin") return { response: json({ error: "competition_not_found" }, 404) };
   try {
@@ -152,16 +162,15 @@ export async function onRequestPost(context) {
     return json({ error: "invalid_submission_details" }, 400);
   }
 
+  const owner = linkedMinecraftAccount(session, input?.ownerUuid ?? null);
+  if (!owner) return json({ error: "minecraft_account_not_linked" }, 403);
+
   let playerContext;
   try {
-    playerContext = await competitionPlayerContext(context.env, session);
+    playerContext = await bridgeContextForLinkedAccount(context.env, session, owner);
   } catch {
     return json({ error: "competition_bridge_unavailable" }, 503);
   }
-  const linkedAccounts = normalizeLinkedAccounts(playerContext, session);
-  const ownerUuid = String(input?.ownerUuid ?? session.player.uuid).trim().toLowerCase();
-  const ownerName = linkedAccounts.get(ownerUuid);
-  if (!ownerName) return json({ error: "minecraft_account_not_linked" }, 403);
 
   let guildId = null;
   let guildName = null;
@@ -178,7 +187,7 @@ export async function onRequestPost(context) {
         return json({ error: "guild_entry_limit_reached" }, 409);
       }
     } else {
-      const count = await countPlayerEntrySlots(context.env.COMPETITIONS_DB, competition.id, ownerUuid);
+      const count = await countPlayerEntrySlots(context.env.COMPETITIONS_DB, competition.id, owner.uuid);
       if (count >= competition.config.entries.maxEntriesPerPlayer) {
         return json({ error: "player_entry_limit_reached" }, 409);
       }
@@ -191,8 +200,8 @@ export async function onRequestPost(context) {
       competitionId: competition.id,
       entryType,
       ownerSubject: session.subject,
-      ownerUuid,
-      ownerName,
+      ownerUuid: owner.uuid,
+      ownerName: owner.name,
       guildId,
       guildName,
       title,
@@ -207,8 +216,8 @@ export async function onRequestPost(context) {
         competitionId: competition.id,
         entryType,
         status: "DRAFT",
-        ownerUuid,
-        ownerName,
+        ownerUuid: owner.uuid,
+        ownerName: owner.name,
         guildId,
         guildName,
         title,
