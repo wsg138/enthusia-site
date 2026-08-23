@@ -5,7 +5,10 @@
   "compatibility_date": "2026-08-22",
   "workers_dev": false,
   "vars": {
-    "COMPETITION_JOBS_ENABLED": "true"
+    "COMPETITION_JOBS_ENABLED": "true",
+    "COMPETITIONS_SITE_ORIGIN": "https://REPLACE_WITH_PRIVATE_PREVIEW_HOST",
+    "COMPETITION_BRIDGE_ORIGIN": "https://REPLACE_WITH_PRIVATE_BRIDGE_HOST",
+    "COMPETITIONS_DISCORD_STAFF_ROLE_ID": "REPLACE_WITH_STAFF_ROLE_ID"
   },
   "d1_databases": [
     {
