@@ -77,6 +77,20 @@ for (const file of [
   }
 }
 
+for (const file of [
+  "competitions-admin.css",
+  "competitions-admin-operations.css",
+  "competitions.css",
+  "competitions-admin.js",
+  "competitions.js"
+]) {
+  try {
+    await access(path.join(publicDir, "assets", file));
+  } catch {
+    errors.push(`competitions: missing required asset ${file}`);
+  }
+}
+
 const marketDir = path.join(publicDir, "assets", "market");
 const marketRequired = [
   "market.js", "market-api-client.js", "market-adapter.js", "market-data.js", "market-layout.json", "sample-market-snapshot.json", "market.css",
