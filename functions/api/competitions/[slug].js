@@ -30,6 +30,8 @@ function groupRows(rows, key = "submissionId") {
   return grouped;
 }
 
+const groupParticipants = groupRows;
+
 export async function onRequestGet(context) {
   const authorized = await authorizeCompetitionRead(context);
   if (authorized.response) return authorized.response;
@@ -84,4 +86,4 @@ export function onRequest() {
   return methodNotAllowed(["GET"]);
 }
 
-export { competitionSlug, groupRows };
+export { competitionSlug, groupParticipants, groupRows };
