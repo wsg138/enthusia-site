@@ -33,6 +33,49 @@
   line-height:1.55;
 }
 
+.competition-nav-account{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  margin-left:6px;
+}
+
+.competition-nav-account a,
+.competition-nav-account button,
+.competition-nav-identity{
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  padding:7px 10px;
+  border:1px solid rgba(255,211,106,.18);
+  border-radius:8px;
+  color:var(--cream);
+  background:rgba(255,255,255,.035);
+  font:inherit;
+  font-size:.84rem;
+  font-weight:800;
+  line-height:1;
+  white-space:nowrap;
+}
+
+.competition-nav-account a:hover,
+.competition-nav-account button:hover{
+  border-color:rgba(255,138,0,.56);
+  color:var(--cream);
+  background:rgba(255,138,0,.12);
+  text-decoration:none;
+}
+
+.competition-nav-sign-in{color:#1a1008!important;background:var(--action-grad)!important;border-color:transparent!important}
+.competition-nav-staff{color:var(--gold)!important}
+.competition-nav-identity{max-width:13rem;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
+.competition-nav-sign-out{cursor:pointer}
+
+@media(max-width:700px){
+  .competition-nav-account{width:100%;margin:2px 0 0;justify-content:flex-start}
+  .competition-nav-account a,.competition-nav-account button,.competition-nav-identity{min-height:32px;padding:7px 9px;font-size:.78rem}
+}
+
 .competitions-main{
   position:relative;
   z-index:1;

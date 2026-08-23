@@ -782,14 +782,15 @@ async function init() {
   let publicPayload;
   try { publicPayload = await api(`${API_ROOT}/${encodeURIComponent(slug)}`); } catch { return; }
   const state = { slug, shell, competition: publicPayload.competition, publicPayload, panel: null, me: null, submissions: [], invites: [] };
-  addTab(state);
   await renderVote(state);
   try {
     state.me = await api(`${API_ROOT}/${encodeURIComponent(slug)}/me`);
+    addTab(state);
     await refreshOwn(state);
     renderWorkspace(state);
-  } catch (error) {
-    state.panel.replaceChildren(el("div", "competition-empty", humanError(error)));
+  } catch {
+    // Signed-out visitors see the persistent header sign-in control. Do not add
+    // a second empty workspace panel to an otherwise public competition page.
   }
 }
 

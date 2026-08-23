@@ -145,30 +145,25 @@
   }
 
   async function render({ refresh = false } = {}) {
-    const root = ensurePanel();
-    if (!root) return null;
-    root.replaceChildren(el("p", "competition-account-muted", "Loading competition account…"));
     let state;
     try {
       state = await session({ refresh });
     } catch {
+      const root = ensurePanel();
+      if (!root) return null;
       root.replaceChildren(el("p", "competition-account-error", "Competition account service is temporarily unavailable."));
       return null;
     }
 
     if (!state.authenticated) {
-      const copy = el("div", "competition-account-copy");
-      copy.append(
-        el("strong", "", "Competition account"),
-        el("span", "competition-account-muted", "Sign in with Discord to submit, vote, accept contributor invites, or judge.")
-      );
-      const signIn = document.createElement("a");
-      signIn.className = "competition-primary-action";
-      signIn.href = signInUrl();
-      signIn.textContent = "Sign in with Discord";
-      root.replaceChildren(copy, signIn);
+      panel?.remove();
+      panel = null;
       return state;
     }
+
+    const root = ensurePanel();
+    if (!root) return null;
+    root.replaceChildren(el("p", "competition-account-muted", "Loading competition account…"));
 
     const heading = el("div", "competition-account-heading");
     const identity = el("div", "competition-account-copy");
