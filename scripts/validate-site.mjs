@@ -77,14 +77,30 @@ for (const file of [
   }
 }
 
-for (const file of [
+const competitionRequiredAssets = [
   "competitions-admin.css",
   "competitions-admin-operations.css",
+  "competitions-admin-workspace.css",
+  "competitions-admin-tools.css",
   "competitions.css",
+  "competitions-auth.css",
+  "competitions-participant.css",
+  "competitions-judge.css",
+  "gallery-competitions.css",
   "competitions-admin.js",
   "competitions-admin-media.js",
-  "competitions.js"
-]) {
+  "competitions-admin-workspace.js",
+  "competitions-admin-tools.js",
+  "competitions-admin-bootstrap.js",
+  "competitions-admin-flags.js",
+  "competitions.js",
+  "competitions-auth.js",
+  "competitions-identity-refresh.js",
+  "competitions-participant-v2.js",
+  "competitions-judge.js",
+  "gallery-competitions.js"
+];
+for (const file of competitionRequiredAssets) {
   try {
     await access(path.join(publicDir, "assets", file));
   } catch {
@@ -135,8 +151,9 @@ for (const file of ["market.js", "market-api-client.js", "market-adapter.js", "m
   if (result.status !== 0) errors.push(`market: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }
 
-for (const file of ["competitions-admin.js", "competitions-admin-media.js", "competitions.js"]) {
-  const result = spawnSync(process.execPath, ["--check", path.join(publicDir, "assets", file)], {encoding: "utf8"});
+const competitionJavaScript = competitionRequiredAssets.filter((file) => file.endsWith(".js"));
+for (const file of competitionJavaScript) {
+  const result = spawnSync(process.execPath, ["--check", path.join(publicDir, "assets", file)], { encoding: "utf8" });
   if (result.status !== 0) errors.push(`competitions: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }
 
