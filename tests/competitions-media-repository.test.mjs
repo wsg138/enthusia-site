@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createAndAttachCompetitionBanner,
   createCompetitionMediaRecord,
   getCompetitionMediaForManager,
   getPublicCompetitionMedia
@@ -27,7 +28,7 @@ function fakeReadable(firstValue = null) {
   };
 }
 
-function fakeWritable() {
+function fakeWritable(changes = [1, 1]) {
   const calls = [];
   return {
     calls,
@@ -42,11 +43,19 @@ function fakeWritable() {
       };
     },
     async batch(statements) {
-      assert.equal(statements.length, 2);
-      return [{ meta: { changes: 1 } }, { meta: { changes: 1 } }];
+      assert.equal(statements.length, changes.length);
+      return changes.map((value) => ({ meta: { changes: value } }));
     }
   };
 }
+
+const moderation = {
+  provider: "openai",
+  model: "omni-moderation-latest",
+  categories: { violence: false },
+  scores: { violence: 0.001 },
+  appliedInputTypes: { violence: ["image"] }
+};
 
 test("generic media insert persists full moderation evidence and audit event", async () => {
   const db = fakeWritable();
@@ -60,13 +69,7 @@ test("generic media insert persists full moderation evidence and audit event", a
     byteSize: 123,
     width: 1280,
     height: 720,
-    moderation: {
-      provider: "openai",
-      model: "omni-moderation-latest",
-      categories: { violence: false },
-      scores: { violence: 0.001 },
-      appliedInputTypes: { violence: ["image"] }
-    },
+    moderation,
     createdByUuid: "player-1",
     actorSubject: "discord-subject",
     createdAt: "2026-08-23T00:00:00.000Z",
@@ -78,6 +81,60 @@ test("generic media insert persists full moderation evidence and audit event", a
   assert.match(db.calls[0].sql, /moderation_scores_json/);
   assert.match(db.calls[1].sql, /COMPETITION_MEDIA_CREATED/);
   assert.equal(db.calls[0].bindings.includes(JSON.stringify({ violence: false })), true);
+});
+
+test("banner attach is guarded by expected draft version in the same D1 batch", async () => {
+  const db = fakeWritable([1, 1, 1]);
+  const result = await createAndAttachCompetitionBanner(db, {
+    id: "media-2",
+    competitionId: "competition-1",
+    expectedVersion: 4,
+    storageKey: "private/banner.png",
+    sha256: "b".repeat(64),
+    mimeType: "image/png",
+    byteSize: 456,
+    width: 1920,
+    height: 1080,
+    moderation,
+    config: { schemaVersion: 1, appearance: { bannerImageId: "media-2" } },
+    actorSubject: "discord-subject",
+    actorUuid: "player-1",
+    createdAt: "2026-08-23T00:05:00.000Z",
+    operationId: "operation-1",
+    auditEventId: "audit-2"
+  });
+
+  assert.equal(result.status, "UPDATED");
+  assert.equal(result.configVersion, 5);
+  assert.match(db.calls[0].sql, /lifecycle_state = 'DRAFT'/);
+  assert.match(db.calls[0].sql, /current_config_version = \?/);
+  assert.match(db.calls[1].sql, /competition_config_versions/);
+  assert.match(db.calls[2].sql, /COMPETITION_BANNER_UPDATED/);
+  assert.equal(db.calls[1].bindings.includes(5), true);
+  assert.equal(db.calls[1].bindings.includes("operation-1"), true);
+});
+
+test("banner attach reports a conflict when the expected version no longer matches", async () => {
+  const db = fakeWritable([0, 0, 0]);
+  const result = await createAndAttachCompetitionBanner(db, {
+    id: "media-2",
+    competitionId: "competition-1",
+    expectedVersion: 4,
+    storageKey: "private/banner.png",
+    sha256: "b".repeat(64),
+    mimeType: "image/png",
+    byteSize: 456,
+    width: 1920,
+    height: 1080,
+    moderation,
+    config: {},
+    actorSubject: "discord-subject",
+    actorUuid: "player-1",
+    createdAt: "2026-08-23T00:05:00.000Z",
+    operationId: "operation-1",
+    auditEventId: "audit-2"
+  });
+  assert.deepEqual(result, { status: "CONFLICT" });
 });
 
 test("manager media lookup is scoped to one competition and passed nonremoved assets", async () => {
