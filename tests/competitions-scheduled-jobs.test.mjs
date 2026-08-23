@@ -31,21 +31,21 @@ function competition(lifecycleState, overrides = {}) {
   };
 }
 
-test("scheduled lifecycle advances ordinary date-driven stages", () => {
+test("scheduled lifecycle advances only safe date-driven opening/hand-off stages", () => {
   assert.equal(automaticCompetitionTarget(competition("UPCOMING"), NOW), "SUBMISSIONS_OPEN");
   assert.equal(automaticCompetitionTarget(competition("SUBMISSIONS_OPEN"), NOW), "REVIEW");
   assert.equal(automaticCompetitionTarget(competition("REVIEW"), NOW), "VOTING");
   assert.equal(automaticCompetitionTarget(competition("VOTING"), NOW), "JUDGING");
-  assert.equal(automaticCompetitionTarget(competition("JUDGING"), NOW), "RESULTS_READY");
 });
 
-test("scheduled lifecycle never publishes final results or drafts", () => {
+test("scheduled lifecycle never claims scoring is complete or publishes results", () => {
   assert.equal(automaticCompetitionTarget(competition("DRAFT"), NOW), null);
+  assert.equal(automaticCompetitionTarget(competition("JUDGING"), NOW), null);
   assert.equal(automaticCompetitionTarget(competition("RESULTS_READY"), NOW), null);
   assert.equal(automaticCompetitionTarget(competition("COMPLETED"), NOW), null);
 });
 
-test("review and voting skip disabled scoring stages safely", () => {
+test("disabled scoring stages stay at the last reviewable stage for staff completion", () => {
   assert.equal(
     automaticCompetitionTarget(competition("REVIEW", { voting: { enabled: false } }), NOW),
     "JUDGING"
@@ -55,11 +55,11 @@ test("review and voting skip disabled scoring stages safely", () => {
       voting: { enabled: false },
       judging: { enabled: false }
     }), NOW),
-    "RESULTS_READY"
+    null
   );
   assert.equal(
     automaticCompetitionTarget(competition("VOTING", { judging: { enabled: false } }), NOW),
-    "RESULTS_READY"
+    null
   );
 });
 
