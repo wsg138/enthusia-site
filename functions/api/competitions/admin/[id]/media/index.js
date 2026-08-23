@@ -7,7 +7,7 @@ import {
 } from "../../../../../lib/competitions/access.js";
 import { getAdminCompetition } from "../../../../../lib/competitions/drafts.js";
 import { competitionImageLimits } from "../../../../../lib/competitions/media-policy.js";
-import { createAndAttachCompetitionBanner } from "../../../../../lib/competitions/media-repository.js";
+import { createAndAttachCompetitionAppearanceMedia } from "../../../../../lib/competitions/media-repository.js";
 import {
   deleteCompetitionImage,
   prepareCompetitionImage,
@@ -17,9 +17,20 @@ import { json, methodNotAllowed, unauthorized } from "../../../../../lib/respons
 import { requireSameOrigin } from "../../../../../lib/security.js";
 import { isCanonicalUuid } from "../../../../../lib/validation.js";
 
+const APPEARANCE_PURPOSES = Object.freeze({
+  banner: Object.freeze({ database: "BANNER", storage: "banner", field: "bannerImageId" }),
+  icon: Object.freeze({ database: "ICON", storage: "icon", field: "iconImageId" }),
+  category: Object.freeze({ database: "CATEGORY", storage: "category", field: "categoryImageId" })
+});
+
 function competitionId(context) {
   const value = typeof context?.params?.id === "string" ? context.params.id.trim().toLowerCase() : "";
   return isCanonicalUuid(value) ? value : null;
+}
+
+function appearancePurpose(request) {
+  const value = String(request.headers.get("x-competition-media-purpose") ?? "banner").trim().toLowerCase();
+  return APPEARANCE_PURPOSES[value] ?? null;
 }
 
 async function authorizeManager(context) {
@@ -85,6 +96,8 @@ export async function onRequestPost(context) {
 
   const version = expectedVersion(context.request);
   if (!version) return json({ error: "expected_version_required" }, 400);
+  const purpose = appearancePurpose(context.request);
+  if (!purpose) return json({ error: "invalid_competition_media_purpose" }, 400);
 
   const authorized = await authorizeManager(context);
   if (authorized.response) return authorized.response;
@@ -126,7 +139,7 @@ export async function onRequestPost(context) {
       data,
       competitionId: id,
       mediaId,
-      purpose: "banner",
+      purpose: purpose.storage,
       env: context.env
     });
   } catch {
@@ -154,13 +167,14 @@ export async function onRequestPost(context) {
   const config = structuredClone(competition.config);
   config.appearance = {
     ...(config.appearance ?? {}),
-    bannerImageId: mediaId
+    [purpose.field]: mediaId
   };
 
   try {
-    const attached = await createAndAttachCompetitionBanner(context.env.COMPETITIONS_DB, {
+    const attached = await createAndAttachCompetitionAppearanceMedia(context.env.COMPETITIONS_DB, {
       id: mediaId,
       competitionId: id,
+      purpose: purpose.database,
       expectedVersion: version,
       storageKey: stored.key,
       sha256: stored.sha256,
@@ -186,6 +200,7 @@ export async function onRequestPost(context) {
       media: {
         id: attached.media.id,
         purpose: attached.media.purpose,
+        appearanceField: attached.appearanceField,
         mimeType: attached.media.mimeType,
         byteSize: attached.media.byteSize,
         width: attached.media.width,
@@ -209,4 +224,4 @@ export function onRequest() {
   return methodNotAllowed(["POST"]);
 }
 
-export { expectedVersion, readLimitedBody };
+export { appearancePurpose, expectedVersion, readLimitedBody };
