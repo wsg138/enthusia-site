@@ -31,6 +31,8 @@ export function publicCompetitionConfig(config = {}) {
     },
     appearance: {
       bannerImageId: config.appearance?.bannerImageId ?? null,
+      iconImageId: config.appearance?.iconImageId ?? null,
+      categoryImageId: config.appearance?.categoryImageId ?? null,
       accent: config.appearance?.accent ?? null
     },
     schedule: {
