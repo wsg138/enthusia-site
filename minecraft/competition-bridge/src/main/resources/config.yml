@@ -1,0 +1,53 @@
+# Enthusia Competition Bridge
+# Keep the listener private (normally loopback) and expose it through a protected HTTPS reverse proxy/tunnel.
+server:
+  bind-host: "127.0.0.1"
+  port: 8765
+  worker-threads: 4
+  max-request-bytes: 65536
+  main-thread-timeout-ms: 4000
+
+security:
+  # Prefer environment variables ENTHUSIA_COMPETITION_BRIDGE_BEARER_TOKEN and
+  # ENTHUSIA_COMPETITION_BRIDGE_HMAC_SECRET. Values shorter than 32 characters disable the listener.
+  bearer-token: ""
+  hmac-secret: ""
+  max-clock-skew-seconds: 90
+  nonce-retention-seconds: 300
+
+integrations:
+  playtime-plugin: "EnthusiaPlaytime"
+  guilds-plugin: "LumaGuilds"
+  # Website permission key. The bridge maps this to the LumaGuilds enum permission below.
+  website-guild-submit-permission: "competition.submit"
+  lumaguilds-submit-permission: "ENTER_COMPETITIONS"
+
+staff:
+  review-permission: "enthusia.competitions.review"
+
+notifications:
+  contributor-login-reminders: true
+  staff-prefix: "&6[Competitions]&r "
+  contributor-prefix: "&d[Competition Invite]&r "
+
+rewards:
+  # Command rewards are powerful and therefore opt-in + prefix restricted.
+  commands:
+    enabled: false
+    allowed-prefixes:
+      - "give "
+      - "minecraft:give "
+  permissions:
+    permanent-command: "lp user {player} permission set {permission} true"
+    temporary-command: "lp user {player} permission settemp {permission} true {durationSeconds}s"
+  ranks:
+    permanent-command: "lp user {player} parent add {rank}"
+    temporary-command: "lp user {player} parent addtemp {rank} {durationSeconds}s"
+  lore-items:
+    # Used only when the stable EnthusiaLoreItems service API is unavailable.
+    # Leave blank to fail closed rather than guessing a command.
+    fallback-command: ""
+
+logging:
+  log-successful-requests: false
+  log-rejected-requests: true
