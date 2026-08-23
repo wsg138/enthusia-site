@@ -91,8 +91,9 @@ function sanitizePayload(rewardType, payload) {
   }
 
   if (rewardType === "COMMAND") {
+    if (typeof source.command !== "string" || /[\r\n]/.test(source.command)) return null;
     const command = text(source.command, 500, { required: true });
-    if (!command || /[\r\n]/.test(command)) return null;
+    if (!command) return null;
     return { command };
   }
 
