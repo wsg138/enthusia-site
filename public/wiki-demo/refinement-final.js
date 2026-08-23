@@ -1,0 +1,1 @@
+(()=>{const p=window.WIKI_DEMO_DATA.pages.commands;if(p&&typeof p.body==='string')p.body=p.body.replace('<details class="command-group" open>','<details class="command-group">');})();
