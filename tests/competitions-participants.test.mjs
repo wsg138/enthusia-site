@@ -20,7 +20,7 @@ test("solo/group owners and main members consume player entry slots, helpers and
   assert.equal(countsTowardPlayerEntryLimit("GUILD", "OWNER"), false);
 });
 
-test("ordinary helpers receive the configured partial reward while assigned judges remain unrewarded", () => {
+test("helpers receive nothing by default and only receive an explicitly configured reward", () => {
   assert.equal(judgeCanHoldParticipantRole("HELPER"), true);
   assert.equal(judgeCanHoldParticipantRole("MAIN"), false);
   assert.equal(judgeCanHoldParticipantRole("OWNER"), false);
@@ -30,23 +30,30 @@ test("ordinary helpers receive the configured partial reward while assigned judg
     entryType: "GROUP",
     role: "HELPER",
     isAssignedJudge: false
+  }), false);
+  assert.equal(participantCanReceiveRewards({
+    entryType: "GROUP",
+    role: "HELPER",
+    isAssignedJudge: false,
+    includeHelpers: true
   }), true);
   assert.equal(participantRewardWeight({
     entryType: "GROUP",
     role: "HELPER",
     isAssignedJudge: false,
-    helperRewardMultiplier: 0.5
+    includeHelpers: true,
+    helperWeight: 0.5
   }), 0.5);
   assert.equal(participantRewardWeight({
     entryType: "GROUP",
     role: "MAIN",
-    isAssignedJudge: false,
-    helperRewardMultiplier: 0.5
+    isAssignedJudge: false
   }), 1);
   assert.equal(participantCanReceiveRewards({
     entryType: "GROUP",
     role: "HELPER",
-    isAssignedJudge: true
+    isAssignedJudge: true,
+    includeHelpers: true
   }), false);
 });
 
@@ -71,6 +78,7 @@ test("accepting a pending invite after rewards were delivered gives credit but n
   assert.equal(participantCanReceiveRewards({
     entryType: "GROUP",
     role: "HELPER",
+    includeHelpers: true,
     acceptedAt: "2026-09-15T00:00:00Z",
     rewardsDeliveredAt: "2026-09-14T00:00:00Z"
   }), false);
