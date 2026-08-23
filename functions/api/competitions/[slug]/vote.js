@@ -1,7 +1,11 @@
-import { authenticateRequest } from "../../../lib/auth.js";
 import { competitionsEnabled, hasCompetitionDatabase } from "../../../lib/competitions/access.js";
-import { competitionPlayerContext } from "../../../lib/competitions/bridge.js";
 import { isActiveCompetitionJudge } from "../../../lib/competitions/judges.js";
+import {
+  bridgeContextsForAllLinkedAccounts,
+  getCompetitionParticipantSession,
+  linkedMinecraftUuids,
+  maxLinkedActiveMinutes
+} from "../../../lib/competitions/participant-auth.js";
 import { canVoterVoteForSubmission, voterMeetsActivePlaytime } from "../../../lib/competitions/participants.js";
 import { authorizeCompetitionRead } from "../../../lib/competitions/public-access.js";
 import {
@@ -34,6 +38,21 @@ function guildIds(context) {
     .filter(Boolean));
 }
 
+function allGuildIds(contexts) {
+  const ids = new Set();
+  for (const item of contexts ?? []) {
+    for (const id of guildIds(item?.context)) ids.add(id);
+  }
+  return ids;
+}
+
+function votingWindowOpen(competition, now = Date.now()) {
+  if (competition?.lifecycleState !== "VOTING" || !competition?.config?.voting?.enabled) return false;
+  const openAt = Date.parse(competition.config?.schedule?.votingOpenAt ?? "");
+  const closeAt = Date.parse(competition.config?.schedule?.votingCloseAt ?? "");
+  return Number.isFinite(openAt) && Number.isFinite(closeAt) && now >= openAt && now < closeAt;
+}
+
 async function authenticatedCompetitionContext(context) {
   if (!competitionsEnabled(context.env)) return { response: json({ error: "not_found" }, 404) };
   const readAuthorization = await authorizeCompetitionRead(context);
@@ -44,10 +63,12 @@ async function authenticatedCompetitionContext(context) {
 
   let session;
   try {
-    session = await authenticateRequest(context.request, context.env);
+    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
   } catch {
-    return { response: unauthorized() };
+    return { response: json({ error: "competition_identity_unavailable" }, 503) };
   }
+  if (!session) return { response: unauthorized() };
+  if (!session.linkedMinecraftAccounts.length) return { response: json({ error: "minecraft_link_required" }, 403) };
 
   const slug = slugValue(context);
   if (!slug || slug === "admin") return { response: json({ error: "competition_not_found" }, 404) };
@@ -62,46 +83,46 @@ async function authenticatedCompetitionContext(context) {
 }
 
 async function eligibility(context, session, competition) {
-  let playerContext;
+  let linkedContexts;
   try {
-    playerContext = await competitionPlayerContext(context.env, session);
+    linkedContexts = await bridgeContextsForAllLinkedAccounts(context.env, session);
   } catch {
     return { error: "competition_bridge_unavailable", status: 503 };
   }
+  if (!linkedContexts.length) return { error: "minecraft_link_required", status: 403 };
 
-  const linked = playerContext.linkedMinecraftAccounts.some((account) => {
-    const uuid = typeof account === "string" ? account : account?.uuid;
-    return String(uuid ?? "").toLowerCase() === session.player.uuid;
-  });
-  if (!linked) return { error: "minecraft_account_not_linked", status: 403 };
-
+  const activeMinutes = maxLinkedActiveMinutes(linkedContexts);
   const requiredMinutes = competition.config?.voting?.minimumActiveMinutes ?? 0;
-  if (!voterMeetsActivePlaytime(playerContext.activeMinutes, requiredMinutes)) {
+  if (!voterMeetsActivePlaytime(activeMinutes, requiredMinutes)) {
     return {
       error: "insufficient_active_playtime",
       status: 403,
-      activeMinutes: playerContext.activeMinutes,
+      activeMinutes,
       requiredMinutes
     };
   }
 
-  const isJudge = await isActiveCompetitionJudge(
-    context.env.COMPETITIONS_DB,
-    competition.id,
-    session.player.uuid
-  );
-  if (isJudge) return { error: "judges_cannot_vote", status: 403 };
+  const linkedUuids = linkedMinecraftUuids(session);
+  const judgeChecks = await Promise.all(linkedUuids.map((uuid) =>
+    isActiveCompetitionJudge(context.env.COMPETITIONS_DB, competition.id, uuid)
+  ));
+  if (judgeChecks.some(Boolean)) return { error: "judges_cannot_vote", status: 403 };
 
-  return { playerContext, requiredMinutes };
+  return {
+    linkedContexts,
+    linkedUuids,
+    linkedUuidSet: new Set(linkedUuids),
+    voterGuilds: allGuildIds(linkedContexts),
+    activeMinutes,
+    requiredMinutes
+  };
 }
 
 export async function onRequestGet(context) {
   const resolved = await authenticatedCompetitionContext(context);
   if (resolved.response) return resolved.response;
   const { session, competition } = resolved;
-  if (competition.lifecycleState !== "VOTING" || !competition.config?.voting?.enabled) {
-    return json({ error: "voting_not_open" }, 409);
-  }
+  if (!votingWindowOpen(competition)) return json({ error: "voting_not_open" }, 409);
 
   let eligible;
   try {
@@ -117,7 +138,7 @@ export async function onRequestGet(context) {
       competitionId: competition.id,
       votesPerVoter: competition.config.voting.votesPerVoter,
       allowChangesUntilClose: Boolean(competition.config.voting.allowChangesUntilClose),
-      activeMinutes: eligible.playerContext.activeMinutes,
+      activeMinutes: eligible.activeMinutes,
       requiredActiveMinutes: eligible.requiredMinutes,
       selections: ballot.map((vote) => vote.submissionId)
     });
@@ -131,9 +152,7 @@ export async function onRequestPost(context) {
   const resolved = await authenticatedCompetitionContext(context);
   if (resolved.response) return resolved.response;
   const { session, competition } = resolved;
-  if (competition.lifecycleState !== "VOTING" || !competition.config?.voting?.enabled) {
-    return json({ error: "voting_not_open" }, 409);
-  }
+  if (!votingWindowOpen(competition)) return json({ error: "voting_not_open" }, 409);
 
   let input;
   try {
@@ -171,25 +190,28 @@ export async function onRequestPost(context) {
     ]);
     const byId = new Map(submissions.map((submission) => [submission.id, submission]));
     const participantsBySubmission = groupParticipants(participants);
-    const voterGuilds = guildIds(eligible.playerContext);
 
     for (const submissionId of submissionIds) {
       const submission = byId.get(submissionId);
       if (!submission) return json({ error: "ballot_entry_not_eligible", submissionId }, 409);
-      const allowed = canVoterVoteForSubmission({
-        entryType: submission.entryType,
-        voterUuid: session.player.uuid,
-        isAssignedJudge: false,
-        acceptedParticipants: participantsBySubmission.get(submission.id) ?? [],
-        voterIsGuildMember: submission.entryType === "GUILD" && voterGuilds.has(String(submission.guildId ?? ""))
-      });
-      if (!allowed) return json({ error: "cannot_vote_for_entry", submissionId }, 409);
+      const acceptedParticipants = participantsBySubmission.get(submission.id) ?? [];
+      for (const voterUuid of eligible.linkedUuids) {
+        const allowed = canVoterVoteForSubmission({
+          entryType: submission.entryType,
+          voterUuid,
+          isAssignedJudge: false,
+          acceptedParticipants,
+          voterIsGuildMember: submission.entryType === "GUILD" && eligible.voterGuilds.has(String(submission.guildId ?? ""))
+        });
+        if (!allowed) return json({ error: "cannot_vote_for_entry", submissionId }, 409);
+      }
     }
 
+    const canonicalVoterUuid = eligible.linkedUuids.slice().sort()[0];
     const selections = await replaceCompetitionBallot(context.env.COMPETITIONS_DB, {
       competitionId: competition.id,
       voterSubject: session.subject,
-      voterUuid: session.player.uuid,
+      voterUuid: canonicalVoterUuid,
       submissionIds,
       updatedAt: new Date().toISOString()
     });
@@ -207,4 +229,4 @@ export function onRequest() {
   return methodNotAllowed(["GET", "POST"]);
 }
 
-export { groupParticipants, guildIds, slugValue };
+export { allGuildIds, groupParticipants, guildIds, slugValue, votingWindowOpen };
