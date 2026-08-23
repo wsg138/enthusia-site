@@ -7,7 +7,7 @@ import {
 } from "../../../../../lib/competitions/access.js";
 import { getAdminCompetition } from "../../../../../lib/competitions/drafts.js";
 import { competitionImageLimits } from "../../../../../lib/competitions/media-policy.js";
-import { createCompetitionMediaRecord } from "../../../../../lib/competitions/media-repository.js";
+import { createAndAttachCompetitionBanner } from "../../../../../lib/competitions/media-repository.js";
 import {
   deleteCompetitionImage,
   prepareCompetitionImage,
@@ -73,10 +73,18 @@ async function readLimitedBody(request, limit) {
   return output;
 }
 
+function expectedVersion(request) {
+  const value = Number(request.headers.get("x-competition-version"));
+  return Number.isInteger(value) && value >= 1 ? value : null;
+}
+
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   const id = competitionId(context);
   if (!id) return json({ error: "competition_not_found" }, 404);
+
+  const version = expectedVersion(context.request);
+  if (!version) return json({ error: "expected_version_required" }, 400);
 
   const authorized = await authorizeManager(context);
   if (authorized.response) return authorized.response;
@@ -90,6 +98,9 @@ export async function onRequestPost(context) {
   if (!competition) return json({ error: "competition_not_found" }, 404);
   if (competition.lifecycleState !== "DRAFT") {
     return json({ error: "competition_media_locked" }, 409);
+  }
+  if (competition.configVersion !== version) {
+    return json({ error: "competition_version_conflict", currentVersion: competition.configVersion }, 409);
   }
 
   const requestedType = String(context.request.headers.get("content-type") ?? "")
@@ -140,11 +151,17 @@ export async function onRequestPost(context) {
   }
 
   const now = new Date().toISOString();
+  const config = structuredClone(competition.config);
+  config.appearance = {
+    ...(config.appearance ?? {}),
+    bannerImageId: mediaId
+  };
+
   try {
-    const media = await createCompetitionMediaRecord(context.env.COMPETITIONS_DB, {
+    const attached = await createAndAttachCompetitionBanner(context.env.COMPETITIONS_DB, {
       id: mediaId,
       competitionId: id,
-      purpose: "BANNER",
+      expectedVersion: version,
       storageKey: stored.key,
       sha256: stored.sha256,
       mimeType: stored.mimeType,
@@ -152,25 +169,38 @@ export async function onRequestPost(context) {
       width: stored.width,
       height: stored.height,
       moderation: stored.moderation,
-      createdByUuid: authorized.session.player.uuid,
+      config,
       actorSubject: authorized.session.subject,
+      actorUuid: authorized.session.player.uuid,
       createdAt: now,
+      operationId: crypto.randomUUID(),
       auditEventId: crypto.randomUUID()
     });
+
+    if (attached.status !== "UPDATED") {
+      await deleteCompetitionImage(context.env.COMPETITIONS_MEDIA, stored.key).catch(() => {});
+      return json({ error: "competition_version_conflict" }, 409);
+    }
+
     return json({
       media: {
-        id: media.id,
-        purpose: media.purpose,
-        mimeType: media.mimeType,
-        byteSize: media.byteSize,
-        width: media.width,
-        height: media.height,
-        sha256: media.sha256,
-        previewUrl: `/api/competitions/admin/${id}/media/${media.id}`
-      }
+        id: attached.media.id,
+        purpose: attached.media.purpose,
+        mimeType: attached.media.mimeType,
+        byteSize: attached.media.byteSize,
+        width: attached.media.width,
+        height: attached.media.height,
+        sha256: attached.media.sha256,
+        previewUrl: `/api/competitions/admin/${id}/media/${attached.media.id}`
+      },
+      configVersion: attached.configVersion
     }, 201);
-  } catch {
+  } catch (error) {
     await deleteCompetitionImage(context.env.COMPETITIONS_MEDIA, stored.key).catch(() => {});
+    const message = String(error?.message ?? error);
+    if (message.includes("stale_competition_config_version") || message.includes("UNIQUE constraint")) {
+      return json({ error: "competition_version_conflict" }, 409);
+    }
     return json({ error: "competition_media_record_failed" }, 503);
   }
 }
@@ -179,4 +209,4 @@ export function onRequest() {
   return methodNotAllowed(["POST"]);
 }
 
-export { readLimitedBody };
+export { expectedVersion, readLimitedBody };
