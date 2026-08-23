@@ -76,6 +76,25 @@ async function resolve(context, session) {
   }
 }
 
+async function approvalReadiness(db, competition, submissionId) {
+  const [images, location] = await Promise.all([
+    listSubmissionImages(db, submissionId),
+    getPrivateSubmissionLocation(db, submissionId)
+  ]);
+  const minImages = Number(competition.config?.entries?.minImages ?? 1);
+  const maxImages = Number(competition.config?.entries?.maxImages ?? 8);
+  if (images.length < minImages || images.length > maxImages) {
+    return { error: "submission_image_count_invalid", imageCount: images.length, minImages, maxImages };
+  }
+  if (images.some((image) => image.moderationState !== "PASSED")) {
+    return { error: "submission_image_moderation_incomplete" };
+  }
+  if (competition.config?.entries?.coordinatesRequested && (!location || !location.exactCoordinatesConfirmed)) {
+    return { error: "submission_coordinates_required" };
+  }
+  return null;
+}
+
 export async function onRequestGet(context) {
   const authorized = await authorize(context);
   if (authorized.response) return authorized.response;
@@ -136,6 +155,16 @@ export async function onRequestPost(context) {
     const privateNote = reason(input?.privateNote, 4000, false);
     if (action !== "APPROVE" && !publicReason) return json({ error: "public_reason_required" }, 400);
     if (input?.privateNote && !privateNote) return json({ error: "private_note_invalid" }, 400);
+
+    if (action === "APPROVE") {
+      try {
+        const readiness = await approvalReadiness(context.env.COMPETITIONS_DB, competition, submissionId);
+        if (readiness) return json(readiness, 409);
+      } catch {
+        return json({ error: "submission_readiness_unavailable" }, 503);
+      }
+    }
+
     try {
       const result = await moderateSubmission(context.env.COMPETITIONS_DB, {
         competitionId,
@@ -231,4 +260,4 @@ export function onRequest() {
   return methodNotAllowed(["GET", "POST"]);
 }
 
-export { cleanDescription, cleanTitle, paramUuid, reason };
+export { approvalReadiness, cleanDescription, cleanTitle, paramUuid, reason };
