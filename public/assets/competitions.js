@@ -35,10 +35,39 @@ function accent(competition) {
   return competition.config?.appearance?.accent || "#ff8a00";
 }
 
+function bannerMediaId(competition) {
+  const value = competition.config?.appearance?.bannerImageId;
+  return typeof value === "string" && /^[0-9a-f-]{36}$/i.test(value) ? value.toLowerCase() : null;
+}
+
+function bannerMediaUrl(competition) {
+  const id = bannerMediaId(competition);
+  return id ? `${API_ROOT}/media/${encodeURIComponent(id)}` : null;
+}
+
+function bannerImage(competition, className, alt = "") {
+  const url = bannerMediaUrl(competition);
+  if (!url) return null;
+  const image = document.createElement("img");
+  image.className = className;
+  image.src = url;
+  image.alt = alt;
+  image.loading = "lazy";
+  image.decoding = "async";
+  image.referrerPolicy = "same-origin";
+  image.addEventListener("error", () => image.remove(), { once: true });
+  return image;
+}
+
 function competitionCard(competition) {
   const article = document.createElement("article");
   article.className = "competition-card";
   article.style.setProperty("--competition-accent", accent(competition));
+
+  const image = bannerImage(competition, "competition-card-banner", "");
+
+  const body = document.createElement("div");
+  body.className = "competition-card-body";
 
   const meta = document.createElement("div");
   meta.className = "competition-card-meta";
@@ -60,7 +89,9 @@ function competitionCard(competition) {
     ? "View results"
     : "View competition";
 
-  article.append(meta, heading, summary, link);
+  body.append(meta, heading, summary, link);
+  if (image) article.append(image);
+  article.append(body);
   return article;
 }
 
@@ -90,6 +121,9 @@ function renderFeatured(root, competition) {
   const feature = document.createElement("article");
   feature.className = "competition-featured";
   feature.style.setProperty("--competition-accent", accent(competition));
+
+  const media = bannerImage(competition, "competition-featured-banner", "");
+  if (media) feature.classList.add("has-banner");
 
   const copy = document.createElement("div");
   copy.className = "competition-featured-copy";
@@ -124,6 +158,7 @@ function renderFeatured(root, competition) {
     side.append(item);
   }
 
+  if (media) feature.append(media);
   feature.append(copy, side);
   root.replaceChildren(feature);
 }
@@ -144,7 +179,10 @@ async function loadCatalog() {
   const upcoming = document.querySelector("#upcomingCompetitions");
   const history = document.querySelector("#competitionHistory");
   try {
-    const response = await fetch(API_ROOT, { headers: { accept: "application/json" } });
+    const response = await fetch(API_ROOT, {
+      credentials: "same-origin",
+      headers: { accept: "application/json" }
+    });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
     const competitions = Array.isArray(payload.competitions) ? payload.competitions : [];
@@ -320,7 +358,10 @@ async function loadDetail() {
   }
 
   try {
-    const response = await fetch(`${API_ROOT}/${encodeURIComponent(slug)}`, { headers: { accept: "application/json" } });
+    const response = await fetch(`${API_ROOT}/${encodeURIComponent(slug)}`, {
+      credentials: "same-origin",
+      headers: { accept: "application/json" }
+    });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
     const competition = payload.competition;
@@ -331,6 +372,15 @@ async function loadDetail() {
     const hero = document.createElement("header");
     hero.className = "competition-detail-hero";
     hero.style.setProperty("--competition-accent", accent(competition));
+
+    const heroBanner = bannerImage(competition, "competition-detail-banner", "");
+    if (heroBanner) {
+      hero.classList.add("has-banner");
+      hero.append(heroBanner);
+    }
+
+    const heroCopy = document.createElement("div");
+    heroCopy.className = "competition-detail-hero-copy";
     const kicker = document.createElement("p");
     kicker.className = "competitions-kicker";
     kicker.textContent = `${stateLabel(competition.lifecycleState)} · ${competition.category}`;
@@ -338,7 +388,8 @@ async function loadDetail() {
     heading.textContent = competition.title;
     const summary = document.createElement("p");
     summary.textContent = text(competition.config?.public?.summary, "Competition details");
-    hero.append(kicker, heading, summary);
+    heroCopy.append(kicker, heading, summary);
+    hero.append(heroCopy);
 
     const tabs = document.createElement("nav");
     tabs.className = "competition-detail-tabs";
