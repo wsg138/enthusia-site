@@ -82,6 +82,7 @@ for (const file of [
   "competitions-admin-operations.css",
   "competitions.css",
   "competitions-admin.js",
+  "competitions-admin-media.js",
   "competitions.js"
 ]) {
   try {
@@ -134,7 +135,7 @@ for (const file of ["market.js", "market-api-client.js", "market-adapter.js", "m
   if (result.status !== 0) errors.push(`market: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }
 
-for (const file of ["competitions-admin.js", "competitions.js"]) {
+for (const file of ["competitions-admin.js", "competitions-admin-media.js", "competitions.js"]) {
   const result = spawnSync(process.execPath, ["--check", path.join(publicDir, "assets", file)], {encoding: "utf8"});
   if (result.status !== 0) errors.push(`competitions: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }
