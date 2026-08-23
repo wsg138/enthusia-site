@@ -16,12 +16,13 @@ The worker may automatically advance:
 - `SUBMISSIONS_OPEN` → `REVIEW` when submissions close;
 - `REVIEW` → `VOTING` when voting opens;
 - `REVIEW` → `JUDGING` when voting is disabled and judging opens;
-- `REVIEW` → `RESULTS_READY` when neither voting nor judging is enabled;
-- `VOTING` → `JUDGING` after voting closes and judging has opened;
-- `VOTING` → `RESULTS_READY` when judging is disabled;
-- `JUDGING` → `RESULTS_READY` when judging closes.
+- `VOTING` → `JUDGING` after voting closes and judging has opened.
 
-It deliberately does **not** publish drafts, final results, rewards, or archives. `RESULTS_READY` → `COMPLETED` remains an explicit staff action through the dedicated results-publication endpoint.
+The worker deliberately does **not** transition a competition into `RESULTS_READY`. That state means staff has explicitly closed the scoring stage and is ready to construct/review the provisional result set. A clock expiring does not prove all required judging is complete, ties are resolved, abuse flags are handled, or the result set has been reviewed.
+
+It also never publishes drafts, final results, rewards, or archives. `RESULTS_READY` → `COMPLETED` remains an explicit staff action through the dedicated results-publication endpoint.
+
+Voting and judging API endpoints independently enforce their configured close timestamps, so leaving the lifecycle row in `VOTING` or `JUDGING` after its window closes does not allow late ballots or late score changes while staff performs the completion review.
 
 ## Development deployment
 
