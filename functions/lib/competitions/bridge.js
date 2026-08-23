@@ -31,10 +31,30 @@ function configuration(env) {
   const rawOrigin = typeof env?.COMPETITION_BRIDGE_ORIGIN === "string" ? env.COMPETITION_BRIDGE_ORIGIN.trim() : "";
   const bearer = typeof env?.COMPETITION_BRIDGE_BEARER_TOKEN === "string" ? env.COMPETITION_BRIDGE_BEARER_TOKEN : "";
   const secret = typeof env?.COMPETITION_BRIDGE_HMAC_SECRET === "string" ? env.COMPETITION_BRIDGE_HMAC_SECRET : "";
+  const accessClientId = typeof env?.COMPETITION_BRIDGE_ACCESS_CLIENT_ID === "string"
+    ? env.COMPETITION_BRIDGE_ACCESS_CLIENT_ID.trim()
+    : "";
+  const accessClientSecret = typeof env?.COMPETITION_BRIDGE_ACCESS_CLIENT_SECRET === "string"
+    ? env.COMPETITION_BRIDGE_ACCESS_CLIENT_SECRET.trim()
+    : "";
+
   if (!rawOrigin || bearer.length < 32 || secret.length < 32) throw new Error("Competition bridge is not configured");
+  if (Boolean(accessClientId) !== Boolean(accessClientSecret)) {
+    throw new Error("Competition bridge Access service credentials are incomplete");
+  }
+  if (accessClientId && (accessClientId.length > 256 || accessClientSecret.length < 16 || accessClientSecret.length > 512)) {
+    throw new Error("Competition bridge Access service credentials are invalid");
+  }
+
   const origin = new URL(rawOrigin).origin;
   if (!origin.startsWith("https://")) throw new Error("Competition bridge requires HTTPS");
-  return { origin, bearer, secret };
+  return {
+    origin,
+    bearer,
+    secret,
+    accessClientId: accessClientId || null,
+    accessClientSecret: accessClientSecret || null
+  };
 }
 
 function route(path) {
@@ -59,16 +79,21 @@ export async function signedCompetitionBridgeRequest(env, path, body) {
   const contentHash = base64Url(await sha256(payload));
   const canonical = `${method}\n${requestTarget}\n${timestamp}\n${nonce}\n${contentHash}`;
   const signature = base64Url(await hmacSha256(config.secret, canonical));
+  const headers = {
+    authorization: `Bearer ${config.bearer}`,
+    "content-type": "application/json",
+    "x-enthusia-timestamp": timestamp,
+    "x-enthusia-nonce": nonce,
+    "x-enthusia-content-sha256": contentHash,
+    "x-enthusia-signature": signature
+  };
+  if (config.accessClientId) {
+    headers["CF-Access-Client-Id"] = config.accessClientId;
+    headers["CF-Access-Client-Secret"] = config.accessClientSecret;
+  }
   return boundedFetch(`${config.origin}${requestTarget}`, {
     method,
-    headers: {
-      authorization: `Bearer ${config.bearer}`,
-      "content-type": "application/json",
-      "x-enthusia-timestamp": timestamp,
-      "x-enthusia-nonce": nonce,
-      "x-enthusia-content-sha256": contentHash,
-      "x-enthusia-signature": signature
-    },
+    headers,
     body: payload
   });
 }
