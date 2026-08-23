@@ -275,6 +275,43 @@
 .competition-reward-card p{margin:0;color:var(--muted);white-space:pre-wrap}
 .competition-reward-note{margin:-6px 0 0;color:var(--soft);font-size:.84rem}
 
+.competition-results-heading h2,.competition-results-heading p{margin:.1rem 0}
+.competition-results-heading p{color:var(--muted)}
+.competition-podium{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  align-items:end;
+}
+.competition-podium-card,
+.competition-result-row{
+  position:relative;
+  display:grid;
+  gap:10px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(12,10,8,.38);
+}
+.competition-podium-card{padding:20px;min-height:150px}
+.competition-podium-card[data-placement="1"]{
+  min-height:185px;
+  border-color:rgba(255,211,106,.5);
+  background:linear-gradient(145deg,rgba(255,211,106,.12),rgba(12,10,8,.48));
+}
+.competition-podium-card[data-placement="2"]{border-color:rgba(205,214,224,.34)}
+.competition-podium-card[data-placement="3"]{border-color:rgba(196,128,75,.38)}
+.competition-result-place{color:var(--orange);font-size:.82rem;text-transform:uppercase;letter-spacing:.08em}
+.competition-podium-card h3,.competition-result-row h3{margin:0}
+.competition-podium-card p,.competition-result-row p{margin:.25rem 0;color:var(--muted)}
+.competition-result-score{display:block;color:var(--cream);font-size:.82rem;font-weight:800}
+.competition-result-list{display:grid;gap:9px}
+.competition-result-row{
+  grid-template-columns:120px minmax(0,1fr) auto;
+  align-items:center;
+  padding:13px 15px;
+}
+.competition-result-row .staff-edited-label{justify-self:end}
+
 .submission-grid{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -314,6 +351,8 @@
   .competition-featured.has-banner{grid-template-columns:1fr}
   .competition-featured.has-banner .competition-featured-side{grid-column:auto;grid-template-columns:1fr}
   .competition-featured-banner{min-height:0;aspect-ratio:16/7}
+  .competition-podium{grid-template-columns:1fr}
+  .competition-podium-card,.competition-podium-card[data-placement="1"]{min-height:0}
 }
 
 @media(max-width:700px){
@@ -323,4 +362,6 @@
   .competition-featured,.competition-detail-hero,.competition-detail-content{padding:20px}
   .competition-featured-banner{aspect-ratio:16/9}
   .competition-detail-hero{min-height:200px}
+  .competition-result-row{grid-template-columns:1fr}
+  .competition-result-row .staff-edited-label{justify-self:start}
 }
