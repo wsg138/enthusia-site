@@ -25,6 +25,7 @@ function readyEnv() {
     DISCORD_OAUTH_REDIRECT_URI: "https://preview.example/api/competitions/auth/discord/callback",
     COMPETITIONS_DISCORD_STAFF_WEBHOOK: "https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyz123456",
     COMPETITIONS_DISCORD_STAFF_ROLE_ID: "234567890123456789",
+    COMPETITIONS_DISCORD_BOT_TOKEN: "t".repeat(60),
     COMPETITIONS_SITE_ORIGIN: "https://preview.example"
   };
 }
@@ -50,13 +51,18 @@ test("admin status snapshot exposes full readiness but never secret values", () 
     moderation: { configured: true, model: "omni-moderation-latest" },
     identity: { discordOAuthConfigured: true },
     bridge: { configured: true },
-    notifications: { minecraftConfigured: true, discordStaffConfigured: true },
+    notifications: {
+      minecraftConfigured: true,
+      discordStaffConfigured: true,
+      discordContributorDmConfigured: true
+    },
     siteOrigin: { configured: true }
   });
   const serialized = JSON.stringify(snapshot);
   assert.equal(serialized.includes("super-secret-value"), false);
   assert.equal(serialized.includes(env.DISCORD_CLIENT_SECRET), false);
   assert.equal(serialized.includes(env.COMPETITIONS_DISCORD_STAFF_WEBHOOK), false);
+  assert.equal(serialized.includes(env.COMPETITIONS_DISCORD_BOT_TOKEN), false);
 });
 
 test("admin status fails readiness when required integrations are missing", () => {
@@ -65,4 +71,13 @@ test("admin status fails readiness when required integrations are missing", () =
   const snapshot = buildStatusSnapshot(env, true);
   assert.equal(snapshot.ok, false);
   assert.equal(snapshot.notifications.discordStaffConfigured, false);
+  assert.equal(snapshot.notifications.discordContributorDmConfigured, true);
+});
+
+test("contributor Discord DMs remain optional for overall readiness", () => {
+  const env = readyEnv();
+  delete env.COMPETITIONS_DISCORD_BOT_TOKEN;
+  const snapshot = buildStatusSnapshot(env, true);
+  assert.equal(snapshot.ok, true);
+  assert.equal(snapshot.notifications.discordContributorDmConfigured, false);
 });
