@@ -1,10 +1,16 @@
 const AUTH_API = "/api/competitions/auth";
 
-function accountLabel(session) {
-  return session.linkedMinecraftAccounts?.[0]?.name
-    || session.discord?.globalName
-    || session.discord?.username
-    || "Account";
+function minecraftName(session) {
+  return session.linkedMinecraftAccounts?.[0]?.name || null;
+}
+
+function discordName(session) {
+  return session.discord?.globalName || session.discord?.username || "Discord account";
+}
+
+function avatarUrl(session) {
+  const { id, avatarHash } = session.discord ?? {};
+  return id && avatarHash ? `https://cdn.discordapp.com/avatars/${id}/${avatarHash}.png?size=64` : null;
 }
 
 function returnTo() {
@@ -108,8 +114,28 @@ async function renderAccount(root, session) {
   const details = document.createElement("details");
   details.className = "site-account-menu";
   const summary = document.createElement("summary");
-  summary.textContent = accountLabel(session);
-  summary.title = session.discord?.username || accountLabel(session);
+  summary.title = session.discord?.username || discordName(session);
+  const avatar = document.createElement("span");
+  avatar.className = "site-account-avatar";
+  const imageUrl = avatarUrl(session);
+  if (imageUrl) {
+    const image = document.createElement("img");
+    image.src = imageUrl;
+    image.alt = "";
+    avatar.append(image);
+  } else {
+    avatar.textContent = discordName(session).slice(0, 1).toUpperCase();
+  }
+  const identity = document.createElement("span");
+  identity.className = "site-account-identity";
+  const primary = document.createElement("strong");
+  primary.textContent = minecraftName(session) || discordName(session);
+  const secondary = document.createElement("small");
+  secondary.textContent = minecraftName(session)
+    ? `@${session.discord?.username || discordName(session)}`
+    : "Minecraft account not linked";
+  identity.append(primary, secondary);
+  summary.append(avatar, identity);
   const actions = document.createElement("div");
   actions.className = "site-account-actions";
   actions.append(menuLink("Competitions", "/competitions/"), menuLink("Appeal a punishment", "/appeal.html"));

@@ -404,7 +404,7 @@ summary:focus-visible{
   display:inline-flex;
   align-items:center;
   min-height:38px;
-  padding:9px 13px;
+  padding:6px 10px 6px 7px;
   border:1px solid rgba(255,211,106,.24);
   border-radius:8px;
   color:var(--cream);
@@ -423,10 +423,16 @@ summary:focus-visible{
 
 .site-account-sign-in:hover{text-decoration:none;filter:brightness(1.06)}
 .site-account-menu{position:relative}
-.site-account-menu>summary{max-width:180px;overflow:hidden;text-overflow:ellipsis;list-style:none}
+.site-account-menu>summary{max-width:240px;list-style:none;gap:8px}
 .site-account-menu>summary::-webkit-details-marker{display:none}
 .site-account-menu>summary::after{content:"⌄";margin-left:8px;color:var(--gold)}
 .site-account-menu[open]>summary{border-color:rgba(255,138,0,.6);background:rgba(255,138,0,.1)}
+.site-account-avatar{display:grid;place-items:center;flex:0 0 30px;width:30px;height:30px;overflow:hidden;border-radius:50%;color:#1a1008;background:var(--action-grad);font-size:.8rem;font-weight:900}
+.site-account-avatar img{display:block;width:100%;height:100%;object-fit:cover}
+.site-account-identity{display:grid;min-width:0;gap:1px;text-align:left}
+.site-account-identity strong,.site-account-identity small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.site-account-identity strong{color:var(--cream);font-size:.82rem;line-height:1.1}
+.site-account-identity small{max-width:145px;color:var(--muted);font-size:.67rem;font-weight:650;line-height:1.1}
 .site-account-actions{
   position:absolute;
   top:calc(100% + 9px);

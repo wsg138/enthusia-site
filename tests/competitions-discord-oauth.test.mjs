@@ -7,6 +7,7 @@ import {
   discordOAuthConfigured
 } from "../functions/lib/competitions/discord-oauth.js";
 import { safeReturnTo } from "../functions/lib/competitions/identity.js";
+import { authenticatedRedirect } from "../functions/api/competitions/auth/discord/callback.js";
 
 function writeOnlyDb() {
   return {
@@ -51,4 +52,15 @@ test("Discord OAuth returns to safe same-site pages", () => {
   assert.equal(safeReturnTo("/api/private"), "/");
   assert.equal(safeReturnTo("https://evil.example"), "/");
   assert.equal(safeReturnTo("/competitions\\evil"), "/");
+});
+
+test("Discord OAuth callback returns the session cookie with its redirect", () => {
+  const response = authenticatedRedirect(new URL("https://preview.example/api/callback"), {
+    returnTo: "/competitions/",
+    cookie: "__Host-test=session; Path=/; HttpOnly; Secure; SameSite=Lax"
+  });
+  assert.equal(response.status, 303);
+  assert.equal(response.headers.get("location"), "https://preview.example/competitions/");
+  assert.match(response.headers.get("set-cookie"), /__Host-test=session/);
+  assert.equal(response.headers.get("cache-control"), "no-store");
 });

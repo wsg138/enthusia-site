@@ -242,12 +242,9 @@ function renderFeatured(root, competition) {
   link.textContent = "Open competition";
   copy.append(kicker, heading, summary, link);
 
-  const side = document.createElement("div");
-  side.className = "competition-featured-side";
-  side.append(renderStagePanel(competition, { includeSchedule: false }));
-
   if (media) feature.append(media);
-  feature.append(copy, side);
+  feature.append(copy, renderStagePanel(competition, { includeSchedule: false }));
+  root.classList.remove("competition-loading");
   root.replaceChildren(feature);
 }
 

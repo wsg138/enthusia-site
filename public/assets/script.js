@@ -1853,7 +1853,7 @@ async function initSite(cfg) {
 
   setExternalLinkTargets(normalizedConfig);
   setContactEmail(normalizedConfig);
-  await import("./site-account.js");
+  await import("./site-account.js?v=2");
   initWorldEffects();
   initCinematicHeader();
   initDesktopDropdownGrace();

@@ -6,7 +6,7 @@
   <meta name="description" content="Ask Enthusia staff to review an eligible punishment on your linked Minecraft account.">
   <title>Appeal a punishment | Enthusia</title>
   <link rel="icon" href="assets/enthusia-logo-v2.png" type="image/png">
-  <link rel="stylesheet" href="assets/styles.css?v=vision65">
+  <link rel="stylesheet" href="assets/styles.css?v=vision66">
 </head>
 <body class="appeal-page">
   <header class="site-header">
@@ -28,7 +28,7 @@
       <div class="appeal-submit-row"><button class="btn" type="submit">Send appeal</button><p id="result" role="status"></p></div>
     </form>
   </main>
-  <script type="module" src="assets/site-account.js?v=1"></script>
+  <script type="module" src="assets/site-account.js?v=2"></script>
   <script type="module">
     const form=document.querySelector('#appeal-form');const result=document.querySelector('#result');const select=document.querySelector('#punishment');const sanction=document.querySelector('#sanction');let sanctions=[];
     function render(){const item=sanctions.find(x=>String(x.id)===select.value);sanction.hidden=!item;sanction.textContent=item?`${item.type??'Punishment'} · issued ${item.createdAt??'date unavailable'} · ${item.reason??'No public reason provided'}`:'';}
