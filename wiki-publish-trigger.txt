@@ -1,3 +1,3 @@
-Owner-authorized Enthusia wiki v2 final cleanup.
-Required gates: complete fresh live wiki backup, human-edit protection, canonical Events title move with redirect preservation, removal of obsolete movement-speed reputation wording, TemplateStyles availability, Miraheze parse validation, fresh-revision conflict checks, readback verification, Main Page last.
-Requested: 2026-08-24T11:58-04:00
+Owner-authorized Enthusia wiki v2 final cleanup retry.
+Required gates: complete fresh live wiki backup, human-edit protection, canonical Events title with Server Events redirect, removal of obsolete movement-speed reputation wording, TemplateStyles availability, Miraheze parse validation, exact post-move source acceptance only, fresh-revision conflict checks, readback verification, Main Page last.
+Requested: 2026-08-24T12:10-04:00
