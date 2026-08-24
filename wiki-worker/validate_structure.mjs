@@ -28,13 +28,15 @@ const requiredCss = [
   '.enthusia-wiki .topic-card',
   '.enthusia-wiki .topic-card span',
   '.enthusia-wiki .fact-grid span',
-  '.enthusia-drop summary',
-  '.enthusia-drop>div',
+  '.enthusia-drop-summary',
+  '.enthusia-drop-content',
   '.enthusia-wiki .enthusia-table td',
 ];
 for (const selector of requiredCss) {
   if (!css.includes(selector)) failures.push(`TemplateStyles is missing required selector: ${selector}`);
 }
+
+const unsupportedHtmlTags = ['details', 'summary', 'thead', 'tbody'];
 
 for (const [id, page] of Object.entries(sourcePages)) {
   if (!page?.title || typeof page.body !== 'string') continue;
@@ -53,6 +55,9 @@ for (const [id, page] of Object.entries(sourcePages)) {
 
   if (/\sdata-(?:page|special|community)=/i.test(rendered)) failures.push(`${id}: unresolved data-link attribute remains`);
   if (/<a\b[^>]*class="[^"]*\btopic-card\b/i.test(rendered)) failures.push(`${id}: preview topic-card anchor survived conversion`);
+  for (const tag of unsupportedHtmlTags) {
+    if (new RegExp(`<\\/?${tag}\\b`, 'i').test(rendered)) failures.push(`${id}: unsupported MediaWiki HTML tag <${tag}> survived conversion`);
+  }
 
   const expectedTopicCards = (page.body.match(/<a\b[^>]*class="[^"]*\btopic-card\b[^>]*>/gi) || []).length;
   const actualTopicCards = (rendered.match(/<div class="topic-card">/g) || []).length;
@@ -72,9 +77,15 @@ for (const [id, page] of Object.entries(sourcePages)) {
   if (actualFacts !== expectedFacts) failures.push(`${id}: fact-grid count ${actualFacts} != source ${expectedFacts}`);
 
   const expectedDrops = (page.body.match(/<details\b[^>]*class="[^"]*\bdrop\b/gi) || []).length;
-  const actualDrops = (rendered.match(/<details\b[^>]*class="enthusia-drop [^"]*\bdrop\b/gi) || []).length;
+  const actualDrops = (rendered.match(/<div class="enthusia-drop mw-collapsible mw-collapsed">/g) || []).length;
   stats.dropdowns += actualDrops;
   if (actualDrops !== expectedDrops) failures.push(`${id}: dropdown count ${actualDrops} != source ${expectedDrops}`);
+  if (actualDrops) {
+    const summaries = (rendered.match(/class="enthusia-drop-summary"/g) || []).length;
+    const contents = (rendered.match(/class="enthusia-drop-content mw-collapsible-content"/g) || []).length;
+    if (summaries !== actualDrops) failures.push(`${id}: dropdown summary count ${summaries} != dropdown count ${actualDrops}`);
+    if (contents !== actualDrops) failures.push(`${id}: dropdown content count ${contents} != dropdown count ${actualDrops}`);
+  }
 
   const expectedTables = (page.body.match(/<table\b/gi) || []).length;
   const actualTables = (rendered.match(/<table\b[^>]*class="[^"]*\benthusia-table\b/gi) || []).length;
