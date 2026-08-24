@@ -632,8 +632,8 @@ function renderResults(root, payload) {
 }
 
 function rewardIcon(reward) {
-  if (reward.rewardType === "LORE_ITEM") return "../assets/competitions/reward-lore-item.png";
-  if (reward.rewardType === "RANK") return "../assets/competitions/reward-profile-tag.png";
+  if (reward.rewardType === "LORE_ITEM") return "../assets/competitions/reward-lore-item.png?v=2";
+  if (reward.rewardType === "RANK") return "../assets/competitions/reward-profile-tag.png?v=2";
   const itemKey = reward.visual?.itemKey?.split(":").at(-1);
   const item = itemKey || (reward.rewardType === "MONEY" ? "raw_gold" : ["RANK", "PERMISSION"].includes(reward.rewardType) ? "name_tag" : reward.rewardType === "LORE_ITEM" ? "nether_star" : "emerald");
   return `../assets/market/minecraft/vanilla/textures/item/${encodeURIComponent(item)}.png`;
