@@ -1,2 +1,0 @@
-Persist the complete pre-publish and final post-publish Enthusia wiki snapshots on an immutable preservation branch.
-Triggered: 2026-08-24.
