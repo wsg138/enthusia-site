@@ -21,10 +21,11 @@ jobs:
   publish:
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     env:
       WIKI_API: https://enthusia.miraheze.org/w/api.php
       WIKI_WORKER_OUT: wiki-worker-output
+      WIKI_FULL_BACKUP_OUT: wiki-worker-output/full-backup
       WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME || secrets.MIRAHEZE_BOT_USERNAME || secrets.WIKI_USERNAME }}
       WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD || secrets.MIRAHEZE_BOT_PASSWORD || secrets.WIKI_PASSWORD }}
 
@@ -44,26 +45,29 @@ jobs:
           test -s public/wiki-demo/v2-detail.js
           test -s public/wiki-demo/v2-reputation.js
 
-      - name: Compare live Miraheze revisions with preserved baseline
-        id: preflight
+      - name: Capture complete live wiki before publication
         shell: bash
         run: |
-          set +e
-          python3 wiki-worker/preflight.py | tee preflight.log
-          status=${PIPESTATUS[0]}
-          set -e
-          echo "status=$status" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          python3 wiki-worker/full_backup.py | tee full-backup.log
+          test -s wiki-worker-output/full-backup/manifest.json
+          test -s wiki-worker-output/full-backup/comparison-to-old-baseline.json
+          test -d wiki-worker-output/full-backup/pages
+          test -d wiki-worker-output/full-backup/history
+          pages="$(find wiki-worker-output/full-backup/pages -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find wiki-worker-output/full-backup/history -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
 
-      - name: Upload preflight comparison
-        if: always()
+      - name: Upload immutable full pre-publish backup
         uses: actions/upload-artifact@v4
         with:
-          name: enthusia-wiki-preflight-${{ github.run_id }}
+          name: enthusia-wiki-full-pre-publish-backup-${{ github.run_id }}
           path: |
-            preflight.log
-            wiki-worker-output/preflight-current.json
-            wiki-worker-output/preflight-comparison.json
-          if-no-files-found: warn
+            full-backup.log
+            wiki-worker-output/full-backup/
+          if-no-files-found: error
           retention-days: 90
 
       - name: Render MediaWiki pages from approved v2 demo
@@ -90,25 +94,34 @@ jobs:
           set -euo pipefail
           python3 wiki-worker/validate_rendered.py | tee wiki-worker-output/parse-validation.log
 
-      - name: Preserve unrelated edits and block target-page drift
+      - name: Review all live changes since original preservation baseline
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import json, sys
-          comp=json.load(open('wiki-worker-output/preflight-comparison.json'))
+          comp=json.load(open('wiki-worker-output/full-backup/comparison-to-old-baseline.json'))
           rendered=json.load(open('wiki-worker-output/rendered/manifest.json'))
           targets={p['title'] for p in rendered['pages']}
           target_changed=[p for p in comp['changedPages'] if p['title'] in targets]
           target_added=[p for p in comp['addedPages'] if p in targets]
           target_removed=[p for p in comp['removedPages'] if p in targets]
           unrelated=[p for p in comp['changedPages'] if p['title'] not in targets]
-          print('Unrelated live edits preserved:', json.dumps(unrelated, indent=2))
+          report={
+            'allChangedPages': comp['changedPages'],
+            'allAddedPages': comp['addedPages'],
+            'allRemovedPages': comp['removedPages'],
+            'changedPublishTargets': target_changed,
+            'addedPublishTargets': target_added,
+            'removedPublishTargets': target_removed,
+            'preservedUnrelatedChanges': unrelated,
+          }
+          open('wiki-worker-output/change-review.json','w').write(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report, indent=2))
           if target_changed or target_added or target_removed:
-              print('Refusing to overwrite changed target pages.', file=sys.stderr)
-              print(json.dumps({'changed':target_changed,'added':target_added,'removed':target_removed}, indent=2), file=sys.stderr)
+              print('A page targeted by the redesign changed after the original preservation snapshot. Full backup is complete; stopping for review before overwrite.', file=sys.stderr)
               sys.exit(1)
-          print('No publish target changed since the preserved baseline.')
+          print('All post-baseline edits are outside publish targets and will be preserved.')
           PY
 
       - name: Require configured wiki credentials
@@ -118,17 +131,17 @@ jobs:
           test -n "$WIKI_BOT_USERNAME" || { echo 'Missing WIKI_BOT_USERNAME/MIRAHEZE_BOT_USERNAME/WIKI_USERNAME secret'; exit 1; }
           test -n "$WIKI_BOT_PASSWORD" || { echo 'Missing WIKI_BOT_PASSWORD/MIRAHEZE_BOT_PASSWORD/WIKI_PASSWORD secret'; exit 1; }
 
-      - name: Publish to Miraheze with per-page conflict checks
+      - name: Publish to Miraheze from fresh backup revision set
         shell: bash
         run: |
           set -euo pipefail
           python3 wiki-worker/publish.py | tee wiki-worker-output/publish.log
 
-      - name: Upload pre-edit backups and publish report
+      - name: Upload publish evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: enthusia-wiki-publish-${{ github.run_id }}
+          name: enthusia-wiki-publish-evidence-${{ github.run_id }}
           path: wiki-worker-output/
           if-no-files-found: warn
           retention-days: 90
