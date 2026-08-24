@@ -19,9 +19,16 @@ test("competition tabs follow lifecycle visibility", async () => {
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
   assert.match(source, /const tabDefinitions = \[\["overview", "Overview"\], \["rules", "Rules"\]\]/);
   assert.match(source, /if \(!completed\) tabDefinitions\.push\(\["guide", "How to enter"\]\)/);
-  assert.match(source, /if \(payload\.entriesVisible\) tabDefinitions\.push\(\["entries", "Entries"\]\)/);
+  assert.match(source, /if \(payload\.entriesVisible && !completed\) tabDefinitions\.push\(\["entries", "Entries"\]\)/);
   assert.match(source, /if \(completed && payload\.results\?\.length\) tabDefinitions\.push\(\["results", "Results"\]\)/);
   assert.match(source, /slide-01\.webp/);
+});
+
+test("result scores follow enabled voting and judging modes", async () => {
+  const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
+  assert.match(source, /competition\.config\?\.voting\?\.enabled && result\.communityComponent/);
+  assert.match(source, /competition\.config\?\.judging\?\.enabled && result\.judgeComponent/);
+  assert.match(source, /competition-score-breakdown/);
 });
 
 test("rules guide winner members and entry viewer use structured layouts", async () => {
@@ -38,7 +45,7 @@ test("rules guide winner members and entry viewer use structured layouts", async
 test("detail view includes responsive skins, gallery lightbox, two-column rules, and rewards", async () => {
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
   const styles = await readFile(new URL("../public/assets/competitions.css", import.meta.url), "utf8");
-  for (const marker of ["mc-heads.net/body", "renderRewardsTab", "competition-image-lightbox", "Awarded to", "rewardIcon", "raw_gold", "showRewardItemDialog", "competition-result-head", "competition-result-skin", "competition-entry-member"]) assert.match(source, new RegExp(marker));
+  for (const marker of ["mc-heads.net/body", "renderRewardsTab", "competition-image-lightbox", "Awarded to", "rewardIcon", "raw_gold", "showRewardDetailDialog", "competition-result-head", "competition-result-skin", "competition-entry-member"]) assert.match(source, new RegExp(marker));
   assert.match(styles, /competition-rules-list\{grid-template-columns:repeat\(2/);
   assert.match(styles, /competition-entry-gallery\{display:grid;grid-template-columns:repeat\(3/);
   assert.match(styles, /competition-winner-members\[data-count="1"\]/);

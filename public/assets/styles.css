@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Manrope:wght@400;500;600;700;800&family=Rye&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Manrope:wght@400;500;600;700;800&family=Pixelify+Sans:wght@400..700&family=Rye&display=swap');
 
 :root{
   --bg:#100d0a;
@@ -5017,3 +5017,7 @@ h1,h2,h3,
 .appeal-submit-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .appeal-submit-row p{margin:0;color:var(--muted)}
 @media(max-width:560px){.appeal-main{padding-top:38px}.appeal-form{padding:19px}}
+
+/* Minecraft-inspired interface type, with the Enthusia wordmark left unchanged. */
+body,button,input,select,textarea{font-family:"Pixelify Sans",Inter,system-ui,sans-serif!important}
+.brand-name,.hero h1{font-family:Rye,Georgia,serif!important}

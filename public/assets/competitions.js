@@ -360,15 +360,16 @@ function renderOverview(root, payload) {
     image.src = winnerEntry?.coverImageUrl || "../assets/screenshots/slide-01.webp";
     image.alt = winnerEntry?.coverImageUrl ? `${winnerEntry.title} cover image` : "Placeholder winning entry image";
     winner.append(image);
-    const copy = document.createElement("div");
+    const copy = document.createElement("div"); copy.className = "competition-winner-copy";
+    const intro = document.createElement("div"); intro.className = "competition-winner-intro";
     const eyebrow = document.createElement("p"); eyebrow.className = "competitions-kicker"; eyebrow.textContent = "Winner";
     const heading = document.createElement("h2"); heading.textContent = winnerResult.title;
-    copy.append(eyebrow, heading);
+    intro.append(eyebrow, heading);
     const teamLabel = document.createElement("strong"); teamLabel.className = "competition-winner-team-label"; teamLabel.textContent = "Winning team";
     const playerNames = participantNames(winnerEntry);
     const members = document.createElement("div"); members.className = "competition-winner-members"; members.dataset.count = String(playerNames.length);
-    for (const playerName of playerNames) { const member = document.createElement("div"); member.className = "competition-winner-member"; const skin = document.createElement("img"); skin.src = `https://mc-heads.net/body/${encodeURIComponent(playerName)}/right`; skin.alt = `${playerName} Minecraft skin`; skin.addEventListener("error", () => { skin.src = `https://mc-heads.net/avatar/${encodeURIComponent(playerName)}/96`; }, { once: true }); const name = document.createElement("strong"); name.textContent = playerName; member.append(skin, name); members.append(member); }
-    if (members.children.length) copy.append(teamLabel, members);
+    for (const playerName of playerNames) { const member = document.createElement("div"); member.className = "competition-winner-member"; const skin = document.createElement("img"); skin.src = `https://mc-heads.net/body/${encodeURIComponent(playerName)}/180`; skin.alt = `${playerName} Minecraft skin`; skin.addEventListener("error", () => { skin.src = `https://mc-heads.net/avatar/${encodeURIComponent(playerName)}/96`; }, { once: true }); const name = document.createElement("strong"); name.textContent = playerName; member.append(skin, name); members.append(member); }
+    intro.append(teamLabel); copy.append(intro); if (members.children.length) copy.append(members);
     const view = document.createElement("button"); view.type = "button"; view.className = "competition-primary-action"; view.textContent = "View winning entry"; view.addEventListener("click", () => showEntryDialog(payload.submissions, winnerEntry?.id)); copy.append(view);
     winner.append(copy); summary.append(winner); section.append(dates, summary);
   }
@@ -537,15 +538,13 @@ function renderEntries(root, payload) {
   root.append(section);
 }
 
-function scoreText(result) {
-  const parts = [`Final ${Number(result.finalScore).toFixed(2)}`];
-  if (result.communityComponent !== null && result.communityComponent !== undefined) {
-    parts.push(`Community ${Number(result.communityComponent).toFixed(2)}`);
-  }
-  if (result.judgeComponent !== null && result.judgeComponent !== undefined) {
-    parts.push(`Judges ${Number(result.judgeComponent).toFixed(2)}`);
-  }
-  return parts.join(" · ");
+function scoreBreakdown(result, competition) {
+  const scores = [["Final", result.finalScore]];
+  if (competition.config?.voting?.enabled && result.communityComponent != null) scores.push(["Community", result.communityComponent]);
+  if (competition.config?.judging?.enabled && result.judgeComponent != null) scores.push(["Judges", result.judgeComponent]);
+  const list = document.createElement("div"); list.className = "competition-score-breakdown";
+  for (const [label, value] of scores) { const item = document.createElement("span"); const name = document.createElement("small"); name.textContent = label; const number = document.createElement("strong"); number.textContent = Number(value).toFixed(2); item.append(name, number); list.append(item); }
+  return list;
 }
 
 function resultName(result) {
@@ -554,7 +553,7 @@ function resultName(result) {
     : result.ownerName;
 }
 
-function resultCard(result, submissions, podium = false) {
+function resultCard(result, submissions, competition, podium = false) {
   const entry = submissions?.find((submission) => submission.id === result.submissionId);
   const card = document.createElement("article");
   card.className = `${podium ? "competition-podium-card" : "competition-result-row"} is-clickable`;
@@ -568,15 +567,13 @@ function resultCard(result, submissions, podium = false) {
   const playerName = entry?.participants?.[0]?.playerName || result.ownerName;
   const playerVisual = document.createElement("img");
   playerVisual.className = podium ? "competition-result-skin" : "competition-result-head";
-  playerVisual.src = podium ? `https://mc-heads.net/body/${encodeURIComponent(playerName)}/right` : `https://mc-heads.net/avatar/${encodeURIComponent(playerName)}/64`;
+  playerVisual.src = podium ? `https://mc-heads.net/body/${encodeURIComponent(playerName)}/180` : `https://mc-heads.net/avatar/${encodeURIComponent(playerName)}/64`;
   playerVisual.alt = `${playerName} Minecraft ${podium ? "skin" : "head"}`;
   const copy = document.createElement("div");
   const heading = document.createElement("h3");
   heading.textContent = result.title;
   const players = document.createElement("p"); players.className = "competition-result-players"; players.textContent = participantNames(entry).join(" · ");
-  const score = document.createElement("span");
-  score.className = "competition-result-score";
-  score.textContent = scoreText(result);
+  const score = scoreBreakdown(result, competition);
   copy.append(heading, players, score);
   card.append(place, playerVisual, copy);
   if (result.staffEdited) {
@@ -619,14 +616,14 @@ function renderResults(root, payload) {
   const podium = document.createElement("div");
   podium.className = "competition-podium";
   for (const result of results.filter((item) => item.placement <= 3)) {
-    podium.append(resultCard(result, payload.submissions, true));
+    podium.append(resultCard(result, payload.submissions, payload.competition, true));
   }
 
   const allHeading = document.createElement("h2");
   allHeading.textContent = "All placements";
   const list = document.createElement("div");
   list.className = "competition-result-list";
-  for (const result of results) list.append(resultCard(result, payload.submissions));
+  for (const result of results) list.append(resultCard(result, payload.submissions, payload.competition));
 
   section.append(heading);
   if (podium.children.length) section.append(podium);
@@ -640,12 +637,15 @@ function rewardIcon(reward) {
   return `../assets/market/minecraft/vanilla/textures/item/${encodeURIComponent(item)}.png`;
 }
 
-function showRewardItemDialog(reward, iconUrl) {
+function showRewardDetailDialog(reward, iconUrl) {
   const dialog = document.createElement("dialog"); dialog.className = "competition-reward-dialog";
-  const card = document.createElement("div"); card.className = "competition-reward-item-detail";
+  const card = document.createElement("div"); card.className = `competition-reward-item-detail${reward.rewardType === "RANK" ? " is-tag" : ""}`;
   const close = document.createElement("button"); close.type = "button"; close.className = "competition-entry-dialog-close"; close.setAttribute("aria-label", "Close reward details"); close.textContent = "×"; close.addEventListener("click", () => dialog.close());
-  const icon = document.createElement("img"); icon.src = iconUrl; icon.alt = ""; icon.className = "is-enchanted";
-  const copy = document.createElement("div"); const type = document.createElement("small"); type.textContent = "Lore item"; const title = document.createElement("h2"); title.textContent = reward.publicLabel; const lore = document.createElement("p"); lore.textContent = reward.publicDescription; copy.append(type, title, lore); card.append(close, icon, copy); dialog.append(card); document.body.append(dialog);
+  const icon = document.createElement("img"); icon.src = iconUrl; icon.alt = ""; icon.className = reward.rewardType === "LORE_ITEM" ? "is-enchanted" : "";
+  const copy = document.createElement("div");
+  if (reward.rewardType === "RANK") { const type = document.createElement("small"); type.textContent = "Profile tag"; const tag = document.createElement("strong"); tag.className = `competition-reward-tag-preview tag-${String(reward.visual?.rank || "default").replace(/[^a-z0-9_-]/gi, "-")}`; tag.textContent = reward.publicLabel; const note = document.createElement("p"); note.textContent = reward.publicDescription; copy.append(type, tag, note); card.append(close, copy); }
+  else { const title = document.createElement("h2"); title.textContent = reward.publicLabel; const lore = document.createElement("p"); lore.textContent = reward.publicDescription; const key = document.createElement("code"); key.textContent = reward.visual?.itemKey || "minecraft:item"; copy.append(title, lore, key); card.append(close, icon, copy); }
+  dialog.append(card); document.body.append(dialog);
   dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); }); dialog.addEventListener("close", () => dialog.remove(), { once: true }); dialog.showModal();
 }
 
@@ -667,8 +667,8 @@ function renderRewardsTab(root, payload) {
     const icon = document.createElement("img"); icon.src = rewardIcon(reward); icon.alt = ""; icon.addEventListener("error", () => { icon.src = "../assets/market/minecraft/vanilla/textures/item/name_tag.png"; }, { once: true });
     const amount = document.createElement("span"); amount.textContent = reward.visual?.amount ? `×${reward.visual.amount.toLocaleString()}` : ""; iconWrap.append(icon, amount);
     const copy = document.createElement("div"); const place = document.createElement("span"); place.className = "competition-reward-placement"; place.textContent = placementLabel(reward.placement); const label = document.createElement("strong"); label.textContent = reward.rewardType === "LORE_ITEM" ? "Lore item" : reward.publicLabel; const description = document.createElement("p"); description.textContent = reward.publicDescription; copy.append(place, label, description);
-    if (reward.rewardType === "RANK") { const tag = document.createElement("span"); tag.className = "competition-reward-tag"; tag.textContent = reward.publicLabel; copy.append(tag); }
-    if (reward.rewardType === "LORE_ITEM") iconWrap.addEventListener("click", () => showRewardItemDialog(reward, icon.src));
+    if (reward.rewardType === "RANK") { const tag = document.createElement("button"); tag.type = "button"; tag.className = "competition-reward-tag"; tag.textContent = reward.publicLabel; tag.addEventListener("click", () => showRewardDetailDialog(reward, icon.src)); copy.append(tag); }
+    if (["LORE_ITEM", "RANK"].includes(reward.rewardType)) { iconWrap.classList.add("is-clickable"); iconWrap.addEventListener("click", () => showRewardDetailDialog(reward, icon.src)); }
     const result = payload.results?.find((item) => item.placement === reward.placement); const entry = payload.submissions?.find((item) => item.id === result?.submissionId); const recipients = participantNames(entry);
     if (recipients.length) { const awarded = document.createElement("div"); awarded.className = "competition-reward-recipients"; const recipientLabel = document.createElement("small"); recipientLabel.textContent = "Awarded to"; const names = document.createElement("span"); names.textContent = recipients.join(" · "); awarded.append(recipientLabel, names); copy.append(awarded); }
     card.append(iconWrap, copy); grid.append(card);
@@ -807,7 +807,7 @@ async function loadDetail() {
     const tabDefinitions = [["overview", "Overview"], ["rules", "Rules"]];
     tabDefinitions.push(["rewards", "Rewards"]);
     if (!completed) tabDefinitions.push(["guide", "How to enter"]);
-    if (payload.entriesVisible) tabDefinitions.push(["entries", "Entries"]);
+    if (payload.entriesVisible && !completed) tabDefinitions.push(["entries", "Entries"]);
     if (competition.config?.voting?.enabled && competition.lifecycleState === "VOTING") tabDefinitions.push(["vote", "Vote"]);
     if (competition.config?.judging?.enabled) tabDefinitions.push(["judges", "Judges"]);
     if (completed && payload.results?.length) tabDefinitions.push(["results", "Results"]);
@@ -827,7 +827,7 @@ async function loadDetail() {
     renderRulesTab(content, competition);
     renderRewardsTab(content, payload);
     if (!completed) renderGuideTab(content);
-    if (payload.entriesVisible) renderEntries(content, payload);
+    if (payload.entriesVisible && !completed) renderEntries(content, payload);
     if (competition.config?.voting?.enabled && competition.lifecycleState === "VOTING") renderPlaceholderPanel(content, "vote", "Voting is open. Sign in to review approved entries and submit your ballot.");
     if (competition.config?.judging?.enabled) renderJudges(content, payload);
     if (completed && payload.results?.length) renderResults(content, payload);
