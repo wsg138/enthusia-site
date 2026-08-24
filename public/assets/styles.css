@@ -5047,12 +5047,11 @@ p,li,dd,.muted,.soft{font-synthesis-weight:none}
 .competition-rank-reward-previews h3{margin:0 0 14px}
 .competition-rank-reward-grid{display:grid;grid-template-columns:repeat(5,minmax(110px,1fr));gap:12px}
 .competition-rank-reward{display:flex;align-items:center;gap:10px;min-width:0;padding:12px;border:1px solid var(--line);border-radius:10px;background:rgba(9,7,5,.62)}
-.competition-rank-reward-glyph{display:grid;place-items:center;width:42px;aspect-ratio:1;flex:0 0 auto;border:2px solid rgba(255,255,255,.3);border-radius:5px;color:#130d08;font-family:Inter,system-ui,sans-serif;font-size:1.2rem;font-weight:900;box-shadow:inset 0 -5px 0 rgba(0,0,0,.16);image-rendering:pixelated}
+.competition-rank-emblem{--rank-light:#ffd36a;--rank-dark:#ff8a00;position:relative;display:block;width:46px;height:52px;flex:0 0 auto;filter:drop-shadow(0 5px 2px #0008);image-rendering:pixelated}
+.competition-rank-emblem::before{content:"";position:absolute;left:5px;top:3px;width:36px;height:38px;background:linear-gradient(135deg,var(--rank-light),var(--rank-dark));clip-path:polygon(0 0,100% 0,100% 68%,50% 100%,0 68%);box-shadow:inset 4px 4px #ffffff45,inset -4px -4px #0004}
+.competition-rank-emblem::after{content:"";position:absolute;left:16px;top:13px;width:14px;height:14px;border:3px solid #fff9;background:#1b1007;box-shadow:0 0 0 3px #0004;transform:rotate(45deg)}
+.competition-rank-emblem.rank-founder{--rank-light:#ffd36a;--rank-dark:#ff6a00}.competition-rank-emblem.rank-admin{--rank-light:#ff7d9b;--rank-dark:#ff4f67}.competition-rank-emblem.rank-developer{--rank-light:#6fe0ff;--rank-dark:#56e38e}.competition-rank-emblem.rank-moderator{--rank-light:#9cc9ff;--rank-dark:#5b86ff}.competition-rank-emblem.rank-helper{--rank-light:#ffd76a;--rank-dark:#cea130}.competition-rank-emblem.rank-default{--rank-light:#c78cff;--rank-dark:#7654d8}
+.competition-rank-detail{display:flex;align-items:center;justify-content:center;gap:14px;margin:12px auto;padding:12px 16px;border:2px solid #707070;background:#202020;box-shadow:inset 2px 2px #fff4,inset -2px -2px #0008;font-size:1.25rem}
 .competition-rank-reward strong{overflow:hidden;text-overflow:ellipsis;font-family:Inter,system-ui,sans-serif;white-space:nowrap}
-.competition-rank-reward.rank-founder .competition-rank-reward-glyph{background:var(--brand-grad)}
-.competition-rank-reward.rank-admin .competition-rank-reward-glyph{background:linear-gradient(135deg,#ff7d9b,#ff4f67)}
-.competition-rank-reward.rank-developer .competition-rank-reward-glyph{background:linear-gradient(135deg,#6fe0ff,#56e38e)}
-.competition-rank-reward.rank-moderator .competition-rank-reward-glyph{background:linear-gradient(135deg,#9cc9ff,#5b86ff)}
-.competition-rank-reward.rank-helper .competition-rank-reward-glyph{background:linear-gradient(135deg,#cea130,#ffd76a)}
 @media(max-width:920px){.competition-winner-members,.competition-winner-copy{transform:none}.competition-rank-reward-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.competition-rank-reward-grid{grid-template-columns:1fr}}

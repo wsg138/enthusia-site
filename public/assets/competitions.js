@@ -654,13 +654,30 @@ function rewardIcon(reward) {
   return `../assets/market/minecraft/vanilla/textures/item/${encodeURIComponent(item)}.png`;
 }
 
+function rankRewardStyle(rank) {
+  const value = String(rank || "").toLowerCase();
+  if (value.includes("founder")) return "founder";
+  if (value.includes("admin")) return "admin";
+  if (value.includes("developer") || value.includes("dev")) return "developer";
+  if (value.includes("moderator") || value.includes("mod")) return "moderator";
+  if (value.includes("helper")) return "helper";
+  return "default";
+}
+
 function showRewardDetailDialog(reward, iconUrl) {
   const dialog = document.createElement("dialog"); dialog.className = "competition-reward-dialog";
   const card = document.createElement("div"); card.className = `competition-reward-item-detail${reward.rewardType === "RANK" ? " is-tag" : ""}`;
   const close = document.createElement("button"); close.type = "button"; close.className = "competition-entry-dialog-close"; close.setAttribute("aria-label", "Close reward details"); close.textContent = "×"; close.addEventListener("click", () => dialog.close());
   const icon = document.createElement("img"); icon.src = iconUrl; icon.alt = "";
   const copy = document.createElement("div");
-  if (reward.rewardType === "RANK") { const type = document.createElement("small"); type.textContent = "Profile tag"; const tag = document.createElement("strong"); tag.className = `competition-reward-tag-preview tag-${String(reward.visual?.rank || "default").replace(/[^a-z0-9_-]/gi, "-")}`; tag.textContent = reward.publicLabel; const note = document.createElement("p"); note.textContent = reward.publicDescription; copy.append(type, tag, note); card.append(close, copy); }
+  if (reward.rewardType === "RANK") {
+    const rankStyle = rankRewardStyle(reward.visual?.rank);
+    const type = document.createElement("small"); type.textContent = rankStyle === "default" ? "Profile tag" : "Rank reward";
+    const preview = document.createElement("strong");
+    if (rankStyle === "default") { preview.className = `competition-reward-tag-preview tag-${String(reward.visual?.rank || "default").replace(/[^a-z0-9_-]/gi, "-")}`; preview.textContent = reward.publicLabel; }
+    else { preview.className = "competition-rank-detail"; const emblem = document.createElement("span"); emblem.className = `competition-rank-emblem rank-${rankStyle}`; emblem.setAttribute("aria-hidden", "true"); const name = document.createElement("span"); name.textContent = reward.publicLabel; preview.append(emblem, name); }
+    const note = document.createElement("p"); note.textContent = reward.publicDescription; copy.append(type, preview, note); card.append(close, copy);
+  }
   else { const title = document.createElement("h2"); title.textContent = reward.publicLabel; const lore = document.createElement("p"); lore.textContent = reward.publicDescription; const key = document.createElement("code"); key.textContent = reward.visual?.itemKey || "minecraft:item"; copy.append(title, lore, key); card.append(close, icon, copy); }
   dialog.append(card); document.body.append(dialog);
   dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); }); dialog.addEventListener("close", () => dialog.remove(), { once: true }); dialog.showModal();
@@ -671,7 +688,10 @@ function renderRewardsTab(root, payload) {
   section.className = "competition-tab-panel competition-rewards-panel";
   section.dataset.tabPanel = "rewards";
   section.hidden = true;
-  const definitions = payload.competition.config?.rewards?.definitions ?? [];
+  const definitions = [...(payload.competition.config?.rewards?.definitions ?? [])];
+  if (payload.competition.slug === "skyline-archives" && !definitions.some((reward) => rankRewardStyle(reward.visual?.rank) === "helper")) {
+    definitions.push({ id: "placeholder-helper-rank", placement: 1, rewardType: "RANK", publicLabel: "Helper rank", publicDescription: "A placeholder rank reward for previewing the completed competition layout.", visual: { rank: "helper" } });
+  }
   const heading = document.createElement("div"); heading.className = "competition-results-heading";
   const title = document.createElement("h2"); title.textContent = "Competition rewards";
   const intro = document.createElement("p"); intro.textContent = ["COMPLETED", "ARCHIVED"].includes(payload.competition.lifecycleState) ? "The rewards assigned to each placed team." : "Rewards available for this competition.";
@@ -681,10 +701,12 @@ function renderRewardsTab(root, payload) {
   for (const reward of definitions) {
     const card = document.createElement("article"); card.className = "competition-reward-card";
     const iconWrap = document.createElement("button"); iconWrap.type = "button"; iconWrap.className = `competition-reward-icon reward-type-${reward.rewardType.toLowerCase().replaceAll("_", "-")}`;
-    const icon = document.createElement("img"); icon.src = rewardIcon(reward); icon.alt = ""; icon.addEventListener("error", () => { icon.src = "../assets/market/minecraft/vanilla/textures/item/name_tag.png"; }, { once: true });
+    let icon;
+    if (reward.rewardType === "RANK") { icon = document.createElement("span"); icon.className = `competition-rank-emblem rank-${rankRewardStyle(reward.visual?.rank)}`; icon.setAttribute("aria-hidden", "true"); }
+    else { icon = document.createElement("img"); icon.src = rewardIcon(reward); icon.alt = ""; icon.addEventListener("error", () => { icon.src = "../assets/market/minecraft/vanilla/textures/item/name_tag.png"; }, { once: true }); }
     const amount = document.createElement("span"); amount.textContent = reward.visual?.amount ? `×${reward.visual.amount.toLocaleString()}` : ""; iconWrap.append(icon, amount);
-    const copy = document.createElement("div"); const place = document.createElement("span"); place.className = "competition-reward-placement"; place.textContent = placementLabel(reward.placement); const label = document.createElement("strong"); label.textContent = reward.rewardType === "LORE_ITEM" ? "Lore item" : reward.rewardType === "RANK" ? "Profile tag" : reward.publicLabel; const description = document.createElement("p"); description.textContent = reward.rewardType === "LORE_ITEM" ? "Awarded to the winning team members for this placement." : reward.rewardType === "RANK" ? "Granted to the winning team members for this placement." : reward.publicDescription; copy.append(place, label, description);
-    if (["LORE_ITEM", "RANK"].includes(reward.rewardType)) { iconWrap.classList.add("is-clickable"); iconWrap.addEventListener("click", () => showRewardDetailDialog(reward, icon.src)); }
+    const copy = document.createElement("div"); const place = document.createElement("span"); place.className = "competition-reward-placement"; place.textContent = placementLabel(reward.placement); const label = document.createElement("strong"); const styledRank = reward.rewardType === "RANK" && rankRewardStyle(reward.visual?.rank) !== "default"; label.textContent = reward.rewardType === "LORE_ITEM" ? "Lore item" : styledRank ? reward.publicLabel : reward.rewardType === "RANK" ? "Profile tag" : reward.publicLabel; const description = document.createElement("p"); description.textContent = reward.rewardType === "LORE_ITEM" ? "Awarded to the winning team members for this placement." : reward.rewardType === "RANK" ? "Granted to the winning team members for this placement." : reward.publicDescription; copy.append(place, label, description);
+    if (["LORE_ITEM", "RANK"].includes(reward.rewardType)) { iconWrap.classList.add("is-clickable"); iconWrap.addEventListener("click", () => showRewardDetailDialog(reward, icon.src || "")); }
     const result = payload.results?.find((item) => item.placement === reward.placement); const entry = payload.submissions?.find((item) => item.id === result?.submissionId); const recipients = participantNames(entry);
     if (recipients.length) { const awarded = document.createElement("div"); awarded.className = "competition-reward-recipients"; const recipientLabel = document.createElement("small"); recipientLabel.textContent = "Awarded to"; const names = document.createElement("span"); names.textContent = recipients.join(" · "); awarded.append(recipientLabel, names); copy.append(awarded); }
     card.append(iconWrap, copy); grid.append(card);
@@ -699,7 +721,7 @@ function renderRewardsTab(root, payload) {
       ["Moderator", "moderator"], ["Helper", "helper"],
     ]) {
       const badge = document.createElement("div"); badge.className = `competition-rank-reward rank-${rank[1]}`;
-      const glyph = document.createElement("span"); glyph.className = "competition-rank-reward-glyph"; glyph.setAttribute("aria-hidden", "true"); glyph.textContent = rank[0].slice(0, 1);
+      const glyph = document.createElement("span"); glyph.className = `competition-rank-emblem rank-${rank[1]}`; glyph.setAttribute("aria-hidden", "true");
       const name = document.createElement("strong"); name.textContent = rank[0];
       badge.append(glyph, name); previewGrid.append(badge);
     }
