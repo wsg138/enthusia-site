@@ -119,7 +119,6 @@ def main():
 
     csrf, who = login()
     targets = manifest['pages']
-    # CSS first; Main Page last. Existing community/history articles are never target entries.
     targets = sorted(targets, key=lambda p: (0 if p['title'] == 'MediaWiki:Common.css' else 2 if p['title'] == 'Main Page' else 1, p['title']))
 
     plan = []
@@ -130,7 +129,6 @@ def main():
         if expected_revid is not None and before.get('revid') != expected_revid:
             raise RuntimeError(f'Race detected before publish: {title} changed from expected rev {expected_revid} to {before.get("revid")}')
         if expected_revid is None and not before.get('missing'):
-            # A page appeared after the global preflight.
             raise RuntimeError(f'Race detected before publish: new target page now exists: {title} rev {before.get("revid")}')
         source = (RENDERED / item['filename']).read_text(encoding='utf-8')
         text = merge_managed_css(before['content'], source) if item.get('managedSection') else source
@@ -147,6 +145,8 @@ def main():
         edit = edit_page(csrf, title, text, before, 'Update Enthusia player wiki documentation')
         after = get_page(title)
         (post_dir / f'{safe_file(title)}.json').write_text(json.dumps(after, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        if after.get('content', '').rstrip() != text.rstrip():
+            raise RuntimeError(f'Readback verification failed for {title} at rev {after.get("revid")}')
         report['edits'].append({'title': title, 'result': 'published', 'oldrevid': edit.get('oldrevid'), 'newrevid': edit.get('newrevid')})
         print(f'PUBLISHED {title}: {edit.get("oldrevid")} -> {edit.get("newrevid")}')
 
