@@ -1,0 +1,55 @@
+/* Private staging pass 3: compact Explore cards and padded Vector tabs. */
+
+/* Remove the oversized minimum height that left a large empty area below each Explore icon. */
+.enthusia-home-card {
+  min-height: 0 !important;
+  padding: 12px 12px 13px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.enthusia-stage-icon {
+  margin: 0 auto 7px !important;
+}
+
+/* Give the Vector page/action tabs real button breathing room. */
+body.skin-vector-2022 .mw-article-toolbar-container .vector-menu-tabs .mw-list-item > a,
+body.skin-vector-2022 .vector-page-toolbar .vector-menu-tabs .mw-list-item > a,
+body.skin-vector-2022 .vector-page-toolbar .vector-menu-content-list > .mw-list-item > a {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 34px !important;
+  padding: 7px 10px !important;
+  margin: 2px 1px !important;
+  box-sizing: border-box !important;
+  border: 1px solid transparent !important;
+  border-radius: 7px !important;
+  line-height: 1.15 !important;
+  text-decoration: none !important;
+}
+
+body.skin-vector-2022 .mw-article-toolbar-container .vector-menu-tabs .mw-list-item > a:hover,
+body.skin-vector-2022 .vector-page-toolbar .vector-menu-tabs .mw-list-item > a:hover,
+body.skin-vector-2022 .vector-page-toolbar .vector-menu-content-list > .mw-list-item > a:hover {
+  background: #171d22 !important;
+  border-color: #2f3941 !important;
+  color: #f1f3f4 !important;
+}
+
+body.skin-vector-2022 .mw-article-toolbar-container .vector-menu-tabs .selected > a,
+body.skin-vector-2022 .vector-page-toolbar .vector-menu-tabs .selected > a,
+body.skin-vector-2022 .vector-page-toolbar .vector-menu-content-list > .selected > a {
+  background: rgba(154, 203, 112, 0.10) !important;
+  border-color: #6f9555 !important;
+  color: var(--enth-accent-2) !important;
+  box-shadow: none !important;
+}
+
+body.skin-vector-2022 .mw-article-toolbar-container .vector-menu-tabs,
+body.skin-vector-2022 .vector-page-toolbar .vector-menu-tabs,
+body.skin-vector-2022 .vector-page-toolbar .vector-menu-content-list {
+  align-items: center !important;
+}
