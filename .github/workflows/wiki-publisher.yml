@@ -66,13 +66,6 @@ jobs:
           if-no-files-found: warn
           retention-days: 90
 
-      - name: Refuse to publish over newer wiki edits
-        if: steps.preflight.outputs.status != '0'
-        shell: bash
-        run: |
-          echo "The live wiki differs from the preserved baseline. No wiki edit was attempted."
-          exit 1
-
       - name: Render MediaWiki pages from approved v2 demo
         shell: bash
         run: |
@@ -90,6 +83,34 @@ jobs:
           ! grep -R -E -i '\+1% movement speed|\+3% movement speed|\+5% movement speed|-1% movement speed|-3% movement speed|-5% movement speed|-10% movement speed' wiki-worker-output/rendered
           grep -R -q 'PieCloak' wiki-worker-output/rendered
           grep -R -q 'outside Spawn and the Warzone' wiki-worker-output/rendered || grep -R -q 'Outside Spawn and the Warzone' wiki-worker-output/rendered
+
+      - name: Preserve unrelated edits and block target-page drift
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, sys
+          comp=json.load(open('wiki-worker-output/preflight-comparison.json'))
+          rendered=json.load(open('wiki-worker-output/rendered/manifest.json'))
+          targets={p['title'] for p in rendered['pages']}
+          target_changed=[p for p in comp['changedPages'] if p['title'] in targets]
+          target_added=[p for p in comp['addedPages'] if p in targets]
+          target_removed=[p for p in comp['removedPages'] if p in targets]
+          unrelated=[p for p in comp['changedPages'] if p['title'] not in targets]
+          print('Unrelated live edits preserved:', json.dumps(unrelated, indent=2))
+          if target_changed or target_added or target_removed:
+              print('Refusing to overwrite changed target pages.', file=sys.stderr)
+              print(json.dumps({'changed':target_changed,'added':target_added,'removed':target_removed}, indent=2), file=sys.stderr)
+              sys.exit(1)
+          print('No publish target changed since the preserved baseline.')
+          PY
+
+      - name: Require configured wiki credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME" || { echo 'Missing WIKI_BOT_USERNAME/MIRAHEZE_BOT_USERNAME/WIKI_USERNAME secret'; exit 1; }
+          test -n "$WIKI_BOT_PASSWORD" || { echo 'Missing WIKI_BOT_PASSWORD/MIRAHEZE_BOT_PASSWORD/WIKI_PASSWORD secret'; exit 1; }
 
       - name: Publish to Miraheze with per-page conflict checks
         shell: bash
