@@ -13,6 +13,40 @@
     '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M27 8h10l2 7 6 3 7-3 5 9-5 5v7l5 5-5 9-7-3-6 3-2 7H27l-2-7-6-3-7 3-5-9 5-5v-7l-5-5 5-9 7 3 6-3z"/><circle cx="32" cy="32" r="9"/></svg>'
   ];
 
+  const navGroups = [
+    {
+      title: 'Community',
+      links: [
+        ['Noteable Players', 'Players'],
+        ['Noteable Guilds', 'Guilds'],
+        ['Staff', 'Staff'],
+        ['History & Lore', 'History & Lore'],
+        ['Builds', 'Builds'],
+        ['Maparts', 'Mapart']
+      ]
+    },
+    {
+      title: 'Gameplay',
+      links: [
+        ['Commands', 'Commands'],
+        ['Mechanics', 'Mechanics'],
+        ['Events', 'Events'],
+        ['Warzone', 'Warzone'],
+        ['Death Duels', 'Death Duels'],
+        ['Reputation', 'Reputation'],
+        ['Playtime', 'Playtime']
+      ]
+    },
+    {
+      title: 'Economy',
+      links: [
+        ['Market', 'Market'],
+        ['Raw Gold', 'Raw Gold'],
+        ['Voting', 'Voting']
+      ]
+    }
+  ];
+
   function stageExploreIcons(root) {
     const cards = root.querySelectorAll('.enthusia-home-grid > .enthusia-home-card');
     cards.forEach(function (card, index) {
@@ -72,14 +106,92 @@
     drop.dataset.enthusiaStageBound = '1';
   }
 
+  function stageSidebar() {
+    if (!document.body.classList.contains('skin-vector-2022')) return;
+    const menu = document.querySelector('#vector-main-menu-pinned-container .vector-main-menu');
+    if (!menu || menu.querySelector('.enthusia-stage-sidebar-extra')) return;
+
+    const extra = document.createElement('div');
+    extra.className = 'enthusia-stage-sidebar-extra';
+    const pageName = window.mw && mw.config ? String(mw.config.get('wgPageName') || '').replace(/_/g, ' ') : '';
+
+    navGroups.forEach(function (group) {
+      const section = document.createElement('div');
+      section.className = 'enthusia-stage-sidebar-section';
+
+      const heading = document.createElement('div');
+      heading.className = 'enthusia-stage-sidebar-title';
+      heading.textContent = group.title;
+      section.appendChild(heading);
+
+      group.links.forEach(function (pair) {
+        const target = pair[0];
+        const label = pair[1];
+        const link = document.createElement('a');
+        link.className = 'enthusia-stage-sidebar-link';
+        if (pageName === target) link.classList.add('is-active');
+        link.href = window.mw && mw.util ? mw.util.getUrl(target) : '/wiki/' + encodeURIComponent(target.replace(/ /g, '_'));
+        link.textContent = label;
+        section.appendChild(link);
+      });
+
+      extra.appendChild(section);
+    });
+
+    menu.appendChild(extra);
+  }
+
+  function findUnpinButton(container, featureName) {
+    if (!container) return null;
+    return container.querySelector('[data-event-name="pinnable-header.' + featureName + '.unpin"]') ||
+      container.querySelector('[data-event-name$=".unpin"]') ||
+      Array.from(container.querySelectorAll('button')).find(function (button) {
+        return button.textContent.trim().toLowerCase() === 'hide';
+      }) || null;
+  }
+
+  function simplifyVectorLayout() {
+    if (!document.body.classList.contains('skin-vector-2022')) return;
+    if (window.sessionStorage && sessionStorage.getItem('enthusia-vector-layout-v2') === 'done') return;
+
+    const targets = [
+      ['vector-toc-pinned-container', 'vector-toc'],
+      ['vector-page-tools-pinned-container', 'vector-page-tools'],
+      ['vector-appearance-pinned-container', 'vector-appearance']
+    ];
+
+    let changed = false;
+    targets.forEach(function (target) {
+      const container = document.getElementById(target[0]);
+      const button = findUnpinButton(container, target[1]);
+      if (container && button && container.offsetParent !== null) {
+        button.click();
+        changed = true;
+      }
+    });
+
+    if (window.sessionStorage) sessionStorage.setItem('enthusia-vector-layout-v2', 'done');
+
+    /* Vector persists the unpin choices as user preferences. Give it time to save,
+       then reload once so its server-rendered grid no longer reserves those columns. */
+    if (changed) {
+      window.setTimeout(function () {
+        window.location.reload();
+      }, 900);
+    }
+  }
+
   function apply(root) {
     const node = root && root.nodeType ? root : document;
     stageExploreIcons(node);
     node.querySelectorAll('.enthusia-drop').forEach(stageDropdown);
+    stageSidebar();
   }
 
   function start() {
+    simplifyVectorLayout();
     apply(document);
+
     if (window.mw && mw.hook) {
       mw.hook('wikipage.content').add(function ($content) {
         const root = $content && $content[0] ? $content[0] : document;
@@ -89,7 +201,7 @@
   }
 
   if (window.mw && mw.loader) {
-    mw.loader.using('jquery.makeCollapsible').then(start);
+    mw.loader.using(['jquery.makeCollapsible', 'mediawiki.util']).then(start);
   } else if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', start);
   } else {
