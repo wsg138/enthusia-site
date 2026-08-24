@@ -4,7 +4,8 @@ import { readFile } from "node:fs/promises";
 
 test("completed competition overview includes winner dates prizes members and entry viewer", async () => {
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
-  for (const marker of ["competition-completed-summary", "Started", "Ended", "competition-winner-prizes", "participantLabel", "showEntryDialog", "Previous entry", "Next entry", "openImageLightbox", "competition-entry-gallery"]) assert.match(source, new RegExp(marker));
+  for (const marker of ["competition-completed-summary", "Started", "Ended", "participantLabel", "showEntryDialog", "Previous entry", "Next entry", "openImageLightbox", "competition-entry-gallery"]) assert.match(source, new RegExp(marker));
+  assert.doesNotMatch(source, /competition-winner-prizes/);
 });
 
 test("voting and judging tabs are conditional", async () => {
@@ -37,10 +38,12 @@ test("rules guide winner members and entry viewer use structured layouts", async
 test("detail view includes responsive skins, gallery lightbox, two-column rules, and rewards", async () => {
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
   const styles = await readFile(new URL("../public/assets/competitions.css", import.meta.url), "utf8");
-  for (const marker of ["mc-heads.net/body", "renderRewardsTab", "competition-image-lightbox", "Awarded to", "rewardIcon"]) assert.match(source, new RegExp(marker));
+  for (const marker of ["mc-heads.net/body", "renderRewardsTab", "competition-image-lightbox", "Awarded to", "rewardIcon", "raw_gold", "showRewardItemDialog", "competition-result-head", "competition-result-skin", "competition-entry-member"]) assert.match(source, new RegExp(marker));
   assert.match(styles, /competition-rules-list\{grid-template-columns:repeat\(2/);
   assert.match(styles, /competition-entry-gallery\{display:grid;grid-template-columns:repeat\(3/);
   assert.match(styles, /competition-winner-members\[data-count="1"\]/);
+  assert.match(styles, /competition-reward-tag/);
+  assert.match(styles, /competition-reward-icon\.is-enchanted/);
 });
 
 test("about documentation explains PieCloak from its public contract", async () => {
@@ -51,6 +54,9 @@ test("about documentation explains PieCloak from its public contract", async () 
   assert.match(page, /does not hide players or ordinary base blocks/);
   assert.match(page, /enthusia\.miraheze\.org\/wiki\/Main_Page/);
   assert.doesNotMatch(page, /Managed clues|base clues/);
+  assert.match(page, /build underground/);
+  assert.doesNotMatch(page, /exterior wall/);
+  assert.match(page, /copper golems/);
 });
 
 test("completed entry cards show equal player lists and podium styling", async () => {
