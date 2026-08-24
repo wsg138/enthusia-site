@@ -5,6 +5,7 @@ import os
 import re
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -15,27 +16,46 @@ PASSWORD = os.environ.get('WIKI_BOT_PASSWORD', '')
 OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
 RENDERED = OUT / 'rendered'
 FULL_BACKUP = OUT / 'full-backup' / 'manifest.json'
-UA = 'EnthusiaWikiPublisher/2.2 (owner-authorized documentation publisher)'
+UA = 'EnthusiaWikiPublisher/2.3 (owner-authorized documentation publisher)'
+EDIT_DELAY_SECONDS = float(os.environ.get('WIKI_EDIT_DELAY_SECONDS', '8.5'))
 
 jar = http.cookiejar.CookieJar()
 opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
 
 
-def request(params, method='POST'):
+def request(params, method='POST', retries=6):
     full = {'format': 'json', 'formatversion': '2', 'maxlag': '5', **params}
     headers = {'User-Agent': UA, 'Accept': 'application/json'}
     if method == 'GET':
         url = API + '?' + urllib.parse.urlencode(full)
-        req = urllib.request.Request(url, headers=headers)
+        data = None
     else:
+        url = API
         data = urllib.parse.urlencode(full).encode('utf-8')
         headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-        req = urllib.request.Request(API, data=data, headers=headers)
-    with opener.open(req, timeout=60) as response:
-        result = json.loads(response.read().decode('utf-8'))
-    if 'error' in result:
-        raise RuntimeError(f"MediaWiki API error: {result['error']}")
-    return result
+    for attempt in range(retries):
+        req = urllib.request.Request(url, data=data, headers=headers, method=method)
+        try:
+            with opener.open(req, timeout=60) as response:
+                result = json.loads(response.read().decode('utf-8'))
+        except urllib.error.HTTPError as exc:
+            if exc.code in (429, 500, 502, 503, 504) and attempt + 1 < retries:
+                delay = min(15 + attempt * 10, 60)
+                print(f'HTTP {exc.code}; retrying in {delay}s', flush=True)
+                time.sleep(delay)
+                continue
+            raise
+        error = result.get('error')
+        if error:
+            code = error.get('code')
+            if code in ('ratelimited', 'maxlag') and attempt + 1 < retries:
+                delay = 35 if code == 'ratelimited' else min(5 + attempt * 5, 30)
+                print(f'MediaWiki {code}; retrying in {delay}s', flush=True)
+                time.sleep(delay)
+                continue
+            raise RuntimeError(f'MediaWiki API error: {error}')
+        return result
+    raise RuntimeError('MediaWiki API retries exhausted')
 
 
 def login():
@@ -126,9 +146,9 @@ def main():
     }
     for item, before, text in plan:
         title = item['title']
-        if before.get('content') == text:
-            report['edits'].append({'title': title, 'result': 'unchanged', 'revid': before.get('revid')})
-            print(f'UNCHANGED {title}')
+        if before.get('content', '').rstrip() == text.rstrip():
+            report['edits'].append({'title': title, 'result': 'already-current', 'revid': before.get('revid')})
+            print(f'ALREADY CURRENT {title}', flush=True)
             continue
         edit = edit_page(csrf, title, text, before, 'Update Enthusia player wiki documentation', item.get('contentModel'))
         after = get_page(title)
@@ -138,11 +158,12 @@ def main():
         if item.get('contentModel') and after.get('contentmodel') != item.get('contentModel'):
             raise RuntimeError(f'Content model verification failed for {title}: {after.get("contentmodel")}')
         report['edits'].append({'title': title, 'result': 'published', 'oldrevid': edit.get('oldrevid'), 'newrevid': edit.get('newrevid')})
-        print(f'PUBLISHED {title}: {edit.get("oldrevid")} -> {edit.get("newrevid")}')
+        print(f'PUBLISHED {title}: {edit.get("oldrevid")} -> {edit.get("newrevid")}', flush=True)
+        time.sleep(EDIT_DELAY_SECONDS)
 
     report['finishedAtUtc'] = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
     (OUT / 'publish-report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print(f"Publish complete: {len(report['edits'])} targets")
+    print(f"Publish complete: {len(report['edits'])} targets", flush=True)
 
 
 if __name__ == '__main__':
