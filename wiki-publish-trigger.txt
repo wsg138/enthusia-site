@@ -1,0 +1,2 @@
+Publish the verified wiki formatting-translation repair.
+Preservation backup verified before this repair: 2026-08-24T12:36:44Z, 167 pages and 167 histories, SHA-256 7f0313996157ed1fc763818ec7fa83d388e5a451ad7d0cd0fd196c0a2bf08ddc.

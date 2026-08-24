@@ -36,11 +36,18 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test -s public/wiki-demo/v2-core.js
-          test -s public/wiki-demo/v2-support.js
-          test -s public/wiki-demo/v2-commands.js
-          test -s public/wiki-demo/v2-detail.js
-          test -s public/wiki-demo/v2-reputation.js
+          for file in \
+            public/wiki-demo/v2-core.js \
+            public/wiki-demo/v2-support.js \
+            public/wiki-demo/v2-commands.js \
+            public/wiki-demo/v2-detail.js \
+            public/wiki-demo/v2-final.js \
+            public/wiki-demo/v2-polish.js \
+            public/wiki-demo/v2-reputation.js \
+            wiki-worker/wiki-template.css \
+            wiki-worker/validate_structure.mjs; do
+            test -s "$file"
+          done
 
       - name: Capture complete live wiki before publication
         shell: bash
@@ -76,6 +83,15 @@ jobs:
           test -s wiki-worker-output/rendered/manifest.json
           grep -q '"title": "Events"' wiki-worker-output/rendered/manifest.json
           ! grep -q '"title": "Server Events"' wiki-worker-output/rendered/manifest.json
+
+      - name: Validate rendered component structure
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wiki-worker/validate_structure.mjs
+          node wiki-worker/validate_structure.mjs | tee wiki-worker-output/structure-validation.log
+          test -s wiki-worker-output/structure-validation.json
+          grep -q '"ok": true' wiki-worker-output/structure-validation.json
 
       - name: Player-facing content guardrails
         shell: bash
