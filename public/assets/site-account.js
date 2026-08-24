@@ -73,13 +73,30 @@ function ensureBrandLogo() {
   brand.prepend(image);
 }
 
-function ensureCompetitionLink() {
-  const menu = document.querySelector(".site-header .nav-menu");
-  if (!menu || menu.querySelector('[href="/competitions/"], [href="competitions/"]')) return;
-  const link = document.createElement("a");
-  link.href = "/competitions/";
-  link.textContent = "Competitions";
-  menu.prepend(link);
+function normalizeCommunityLinks() {
+  const nav = document.querySelector(".site-header .nav");
+  const menu = nav?.querySelector(".nav-menu");
+  if (!nav || !menu) return;
+
+  let competition = menu.querySelector('[href="/competitions/"], [href="competitions/"]');
+  if (!competition) {
+    competition = document.createElement("a");
+    competition.href = "/competitions/";
+    competition.textContent = "Competitions";
+  }
+
+  let market = menu.querySelector('a[href$="market.html"]');
+  const topLevelMarket = [...nav.children].find((item) => item.matches?.('a[href$="market.html"]'));
+  if (!market && topLevelMarket) market = topLevelMarket;
+  if (!market) {
+    market = document.createElement("a");
+    market.href = "/market.html";
+    market.textContent = "Market";
+  }
+
+  const wiki = menu.querySelector("a[data-link-target='wiki']");
+  menu.insertBefore(market, wiki ?? null);
+  menu.insertBefore(competition, wiki ?? null);
 }
 
 function ensureRoot() {
@@ -156,7 +173,7 @@ document.addEventListener("click", (event) => {
 
 export async function initSiteAccount() {
   ensureBrandLogo();
-  ensureCompetitionLink();
+  normalizeCommunityLinks();
   const root = ensureRoot();
   if (!root) return;
   root.setAttribute("aria-label", "Site account");
