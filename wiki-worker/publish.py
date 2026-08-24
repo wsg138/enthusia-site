@@ -16,7 +16,7 @@ PASSWORD = os.environ.get('WIKI_BOT_PASSWORD', '')
 OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
 RENDERED = OUT / 'rendered'
 FULL_BACKUP = OUT / 'full-backup' / 'manifest.json'
-UA = 'EnthusiaWikiPublisher/2.3 (owner-authorized documentation publisher)'
+UA = 'EnthusiaWikiPublisher/2.4 (owner-authorized documentation publisher)'
 EDIT_DELAY_SECONDS = float(os.environ.get('WIKI_EDIT_DELAY_SECONDS', '8.5'))
 
 jar = http.cookiejar.CookieJar()
@@ -128,15 +128,19 @@ def main():
     plan = []
     for item in targets:
         title = item['title']
+        text = (RENDERED / item['filename']).read_text(encoding='utf-8')
         before = get_page(title)
         expected_revid = expected.get(title)
         if expected_revid is not None and before.get('revid') != expected_revid:
             raise RuntimeError(f'Race detected after full backup: {title} changed from rev {expected_revid} to {before.get("revid")}')
         if expected_revid is None and not before.get('missing'):
-            raise RuntimeError(f'Race detected after full backup: target page appeared after backup: {title} rev {before.get("revid")}')
+            # A workflow-owned migration may legitimately create/move the canonical target after the
+            # full backup. Accept it only when the live source is already exactly the approved source.
+            if before.get('content', '').rstrip() != text.rstrip():
+                raise RuntimeError(f'Race detected after full backup: target page appeared with unexpected content: {title} rev {before.get("revid")}')
+            print(f'POST-BACKUP EXACT MATCH {title} rev {before.get("revid")}', flush=True)
         if not before.get('missing') and item.get('contentModel') and before.get('contentmodel') not in (item.get('contentModel'), None):
             raise RuntimeError(f'Unexpected content model for {title}: {before.get("contentmodel")}')
-        text = (RENDERED / item['filename']).read_text(encoding='utf-8')
         (backup_dir / f'{safe_file(title)}.json').write_text(json.dumps(before, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         plan.append((item, before, text))
 
