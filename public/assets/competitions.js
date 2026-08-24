@@ -656,12 +656,25 @@ function rewardIcon(reward) {
 
 function rankRewardStyle(rank) {
   const value = String(rank || "").toLowerCase();
-  if (value.includes("founder")) return "founder";
-  if (value.includes("admin")) return "admin";
-  if (value.includes("developer") || value.includes("dev")) return "developer";
-  if (value.includes("moderator") || value.includes("mod")) return "moderator";
-  if (value.includes("helper")) return "helper";
+  if (value.includes("devotee")) return "devotee";
+  if (value.includes("avid")) return "avid";
   return "default";
+}
+
+function rankRewardDuration(reward) {
+  const minutes = reward.visual?.durationMinutes;
+  if (minutes === null || minutes === undefined) return "Permanent";
+  if (minutes % 525600 === 0) return `${minutes / 525600} year${minutes === 525600 ? "" : "s"}`;
+  if (minutes % 43200 === 0) return `${minutes / 43200} month${minutes === 43200 ? "" : "s"}`;
+  if (minutes % 10080 === 0) return `${minutes / 10080} week${minutes === 10080 ? "" : "s"}`;
+  if (minutes % 1440 === 0) return `${minutes / 1440} day${minutes === 1440 ? "" : "s"}`;
+  if (minutes % 60 === 0) return `${minutes / 60} hour${minutes === 60 ? "" : "s"}`;
+  return `${minutes} minutes`;
+}
+
+function rankRewardIcon(rank) {
+  const style = rankRewardStyle(rank);
+  return style === "devotee" ? "../assets/competitions/reward-rank-devotee.png?v=1" : style === "avid" ? "../assets/competitions/reward-rank-avid.png?v=1" : rewardIcon({ rewardType: "RANK" });
 }
 
 function showRewardDetailDialog(reward, iconUrl) {
@@ -675,8 +688,8 @@ function showRewardDetailDialog(reward, iconUrl) {
     const type = document.createElement("small"); type.textContent = rankStyle === "default" ? "Profile tag" : "Rank reward";
     const preview = document.createElement("strong");
     if (rankStyle === "default") { preview.className = `competition-reward-tag-preview tag-${String(reward.visual?.rank || "default").replace(/[^a-z0-9_-]/gi, "-")}`; preview.textContent = reward.publicLabel; }
-    else { preview.className = "competition-rank-detail"; const emblem = document.createElement("span"); emblem.className = `competition-rank-emblem rank-${rankStyle}`; emblem.setAttribute("aria-hidden", "true"); const name = document.createElement("span"); name.textContent = reward.publicLabel; preview.append(emblem, name); }
-    const note = document.createElement("p"); note.textContent = reward.publicDescription; copy.append(type, preview, note); card.append(close, copy);
+    else { preview.className = "competition-rank-detail"; const emblem = document.createElement("img"); emblem.src = rankRewardIcon(reward.visual?.rank); emblem.alt = ""; const name = document.createElement("span"); name.textContent = reward.publicLabel; preview.append(emblem, name); }
+    const note = document.createElement("p"); note.textContent = reward.publicDescription; copy.append(type, preview); if (rankStyle !== "default") { const duration = document.createElement("span"); duration.className = "competition-rank-duration"; duration.textContent = rankRewardDuration(reward); copy.append(duration); } copy.append(note); card.append(close, copy);
   }
   else { const title = document.createElement("h2"); title.textContent = reward.publicLabel; const lore = document.createElement("p"); lore.textContent = reward.publicDescription; const key = document.createElement("code"); key.textContent = reward.visual?.itemKey || "minecraft:item"; copy.append(title, lore, key); card.append(close, icon, copy); }
   dialog.append(card); document.body.append(dialog);
@@ -689,8 +702,9 @@ function renderRewardsTab(root, payload) {
   section.dataset.tabPanel = "rewards";
   section.hidden = true;
   const definitions = [...(payload.competition.config?.rewards?.definitions ?? [])];
-  if (payload.competition.slug === "skyline-archives" && !definitions.some((reward) => rankRewardStyle(reward.visual?.rank) === "helper")) {
-    definitions.push({ id: "placeholder-helper-rank", placement: 1, rewardType: "RANK", publicLabel: "Helper rank", publicDescription: "A placeholder rank reward for previewing the completed competition layout.", visual: { rank: "helper" } });
+  if (payload.competition.slug === "skyline-archives") {
+    if (!definitions.some((reward) => rankRewardStyle(reward.visual?.rank) === "devotee")) definitions.push({ id: "placeholder-devotee-rank", placement: 1, rewardType: "RANK", publicLabel: "Devotee rank", publicDescription: "The Devotee player rank for every member of the winning team.", visual: { rank: "devotee", durationMinutes: null } });
+    if (!definitions.some((reward) => rankRewardStyle(reward.visual?.rank) === "avid")) definitions.push({ id: "placeholder-avid-rank", placement: 2, rewardType: "RANK", publicLabel: "Avid rank", publicDescription: "The Avid player rank for every member of the second-place team.", visual: { rank: "avid", durationMinutes: 43200 } });
   }
   const heading = document.createElement("div"); heading.className = "competition-results-heading";
   const title = document.createElement("h2"); title.textContent = "Competition rewards";
@@ -702,32 +716,17 @@ function renderRewardsTab(root, payload) {
     const card = document.createElement("article"); card.className = "competition-reward-card";
     const iconWrap = document.createElement("button"); iconWrap.type = "button"; iconWrap.className = `competition-reward-icon reward-type-${reward.rewardType.toLowerCase().replaceAll("_", "-")}`;
     let icon;
-    if (reward.rewardType === "RANK") { icon = document.createElement("span"); icon.className = `competition-rank-emblem rank-${rankRewardStyle(reward.visual?.rank)}`; icon.setAttribute("aria-hidden", "true"); }
+    if (reward.rewardType === "RANK") { icon = document.createElement("img"); icon.src = rankRewardIcon(reward.visual?.rank); icon.alt = ""; icon.loading = "lazy"; if (rankRewardStyle(reward.visual?.rank) !== "default") iconWrap.classList.add("is-player-rank"); }
     else { icon = document.createElement("img"); icon.src = rewardIcon(reward); icon.alt = ""; icon.addEventListener("error", () => { icon.src = "../assets/market/minecraft/vanilla/textures/item/name_tag.png"; }, { once: true }); }
     iconWrap.append(icon);
     if (reward.visual?.amount) { const amount = document.createElement("span"); amount.textContent = `×${reward.visual.amount.toLocaleString()}`; iconWrap.append(amount); }
-    const copy = document.createElement("div"); const place = document.createElement("span"); place.className = "competition-reward-placement"; place.textContent = placementLabel(reward.placement); const label = document.createElement("strong"); const styledRank = reward.rewardType === "RANK" && rankRewardStyle(reward.visual?.rank) !== "default"; label.textContent = reward.rewardType === "LORE_ITEM" ? "Lore item" : styledRank ? reward.publicLabel : reward.rewardType === "RANK" ? "Profile tag" : reward.publicLabel; const description = document.createElement("p"); description.textContent = reward.rewardType === "LORE_ITEM" ? "Awarded to the winning team members for this placement." : reward.rewardType === "RANK" ? "Granted to the winning team members for this placement." : reward.publicDescription; copy.append(place, label, description);
+    const copy = document.createElement("div"); const place = document.createElement("span"); place.className = "competition-reward-placement"; place.textContent = placementLabel(reward.placement); const label = document.createElement("strong"); const styledRank = reward.rewardType === "RANK" && rankRewardStyle(reward.visual?.rank) !== "default"; label.textContent = reward.rewardType === "LORE_ITEM" ? "Lore item" : styledRank ? reward.publicLabel : reward.rewardType === "RANK" ? "Profile tag" : reward.publicLabel; const description = document.createElement("p"); description.textContent = reward.rewardType === "LORE_ITEM" ? "Awarded to the winning team members for this placement." : reward.rewardType === "RANK" ? "Granted to the winning team members for this placement." : reward.publicDescription; copy.append(place, label, description); if (styledRank) { const duration = document.createElement("span"); duration.className = "competition-rank-duration"; duration.textContent = rankRewardDuration(reward); copy.append(duration); }
     if (["LORE_ITEM", "RANK"].includes(reward.rewardType)) { iconWrap.classList.add("is-clickable"); iconWrap.addEventListener("click", () => showRewardDetailDialog(reward, icon.src || "")); }
     const result = payload.results?.find((item) => item.placement === reward.placement); const entry = payload.submissions?.find((item) => item.id === result?.submissionId); const recipients = participantNames(entry);
     if (recipients.length) { const awarded = document.createElement("div"); awarded.className = "competition-reward-recipients"; const recipientLabel = document.createElement("small"); recipientLabel.textContent = "Awarded to"; const names = document.createElement("span"); names.textContent = recipients.join(" · "); awarded.append(recipientLabel, names); copy.append(awarded); }
     card.append(iconWrap, copy); grid.append(card);
   }
   section.append(grid);
-  if (definitions.some((reward) => reward.rewardType === "RANK")) {
-    const previews = document.createElement("section"); previews.className = "competition-rank-reward-previews";
-    const previewTitle = document.createElement("h3"); previewTitle.textContent = "Rank reward styles";
-    const previewGrid = document.createElement("div"); previewGrid.className = "competition-rank-reward-grid";
-    for (const rank of [
-      ["Founder", "founder"], ["Admin", "admin"], ["Developer", "developer"],
-      ["Moderator", "moderator"], ["Helper", "helper"],
-    ]) {
-      const badge = document.createElement("div"); badge.className = `competition-rank-reward rank-${rank[1]}`;
-      const glyph = document.createElement("span"); glyph.className = `competition-rank-emblem rank-${rank[1]}`; glyph.setAttribute("aria-hidden", "true");
-      const name = document.createElement("strong"); name.textContent = rank[0];
-      badge.append(glyph, name); previewGrid.append(badge);
-    }
-    previews.append(previewTitle, previewGrid); section.append(previews);
-  }
   root.append(section);
 }
 
