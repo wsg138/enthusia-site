@@ -1,0 +1,4 @@
+Enthusia Wiki Demo v2
+Validated source base: 331f92b1edb346d9bfd2244e71f16df3fa1a8e6c
+Previous demo preserved at branch: wiki-demo-backup-2026-08-23
+This branch is review-only and must not be merged as the production website/wiki implementation.
