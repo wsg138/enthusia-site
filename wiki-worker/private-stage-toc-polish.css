@@ -1,0 +1,94 @@
+/* Private staging pass 4: polish Vector 2022 contents links. */
+
+/* Give the Contents/TOC links the same deliberate spacing as the rest of the redesign. */
+body.skin-vector-2022 .vector-toc .vector-toc-list-item {
+  position: relative;
+  margin: 2px 0 !important;
+  background: transparent !important;
+}
+
+body.skin-vector-2022 .vector-toc .vector-toc-link {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 34px !important;
+  margin: 0 !important;
+  padding: 6px 10px !important;
+  border-radius: 7px !important;
+  line-height: 1.35 !important;
+  color: #c6ced5 !important;
+  transition: background-color .12s ease, color .12s ease, box-shadow .12s ease !important;
+}
+
+body.skin-vector-2022 .vector-toc .vector-toc-link:hover {
+  background: #171d22 !important;
+  color: #f1f3f4 !important;
+  text-decoration: none !important;
+}
+
+body.skin-vector-2022 .vector-toc .vector-toc-list-item-active > .vector-toc-link,
+body.skin-vector-2022 .vector-toc .vector-toc-link[aria-current="true"] {
+  background: var(--enth-accent-bg) !important;
+  color: var(--enth-accent-2) !important;
+  box-shadow: inset 2px 0 0 var(--enth-accent) !important;
+}
+
+body.skin-vector-2022 .vector-toc .vector-toc-text {
+  display: block !important;
+  min-width: 0 !important;
+  line-height: 1.35 !important;
+}
+
+/* Nested entries such as Explore Enthusia, Community and Gameplay get clean indentation
+   instead of looking like loose text under the parent heading. */
+body.skin-vector-2022 .vector-toc .vector-toc-level-2 > .vector-toc-link {
+  padding-left: 18px !important;
+  font-size: 13px !important;
+}
+
+body.skin-vector-2022 .vector-toc .vector-toc-level-3 > .vector-toc-link,
+body.skin-vector-2022 .vector-toc .vector-toc-level-4 > .vector-toc-link {
+  padding-left: 28px !important;
+  font-size: 12.5px !important;
+  color: #aeb8c0 !important;
+}
+
+/* Vector's disclosure control can otherwise sit on its own visual line and resemble a stray dash.
+   Keep it compact and aligned with the parent TOC row. */
+body.skin-vector-2022 .vector-toc .vector-toc-toggle {
+  position: absolute !important;
+  top: 5px !important;
+  right: 5px !important;
+  width: 24px !important;
+  min-width: 24px !important;
+  height: 24px !important;
+  min-height: 24px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 5px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body.skin-vector-2022 .vector-toc .vector-toc-toggle:hover {
+  background: #20272e !important;
+}
+
+body.skin-vector-2022 .vector-toc .vector-toc-list-item:has(> .vector-toc-toggle) > .vector-toc-link {
+  padding-right: 36px !important;
+}
+
+body.skin-vector-2022 .vector-toc .vector-toc-toggle .vector-icon,
+body.skin-vector-2022 .vector-toc .vector-toc-toggle .mw-ui-icon,
+body.skin-vector-2022 .vector-toc .vector-toc-toggle .cdx-icon {
+  color: #9aa5ad !important;
+}
+
+/* Avoid extra separator/bullet spacing inherited from the stock TOC. */
+body.skin-vector-2022 .vector-toc .vector-toc-list,
+body.skin-vector-2022 .vector-toc .vector-toc-list-item,
+body.skin-vector-2022 .vector-toc .vector-toc-list-item > ul {
+  list-style: none !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
