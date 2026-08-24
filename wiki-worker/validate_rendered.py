@@ -11,17 +11,13 @@ from pathlib import Path
 API = os.environ.get('WIKI_API', 'https://enthusia.miraheze.org/w/api.php')
 OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
 RENDERED = OUT / 'rendered'
-UA = 'EnthusiaWikiValidator/2.0 (read-only parser validation)'
+UA = 'EnthusiaWikiValidator/2.1 (read-only parser validation)'
 
 
 def api(params, retries=4):
     full = {'format': 'json', 'formatversion': '2', 'maxlag': '5', **params}
     body = urllib.parse.urlencode(full).encode('utf-8')
-    headers = {
-        'User-Agent': UA,
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-    }
+    headers = {'User-Agent': UA, 'Accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
     for attempt in range(retries):
         try:
             req = urllib.request.Request(API, data=body, headers=headers)
@@ -32,7 +28,7 @@ def api(params, retries=4):
                 time.sleep(2 + attempt * 2)
                 continue
             if error:
-                raise RuntimeError(f"MediaWiki parser error: {error}")
+                raise RuntimeError(f'MediaWiki parser error: {error}')
             return result
         except (urllib.error.URLError, TimeoutError) as exc:
             if attempt + 1 < retries:
@@ -46,23 +42,25 @@ def main():
     if not manifest_path.exists():
         raise RuntimeError('Rendered manifest missing')
     manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
-    report = {'validated': [], 'warnings': []}
-    failures = []
 
+    site = api({'action': 'query', 'meta': 'siteinfo', 'siprop': 'extensions'})
+    extension_names = {e.get('name') for e in site.get('query', {}).get('extensions', [])}
+    if 'TemplateStyles' not in extension_names:
+        raise RuntimeError('TemplateStyles is not enabled on this Miraheze wiki; refusing to publish unstyled v2 pages')
+    print('TemplateStyles extension is enabled.')
+
+    report = {'templateStylesEnabled': True, 'validated': [], 'warnings': []}
+    failures = []
     for item in manifest.get('pages', []):
-        if item.get('contentModel') == 'css' or item['title'].startswith('MediaWiki:') and item['filename'].endswith('.css'):
+        if item.get('contentModel') == 'sanitized-css':
             continue
         title = item['title']
         text = (RENDERED / item['filename']).read_text(encoding='utf-8')
         try:
             parsed = api({
-                'action': 'parse',
-                'title': title,
-                'text': text,
-                'contentmodel': 'wikitext',
+                'action': 'parse', 'title': title, 'text': text, 'contentmodel': 'wikitext',
                 'prop': 'text|wikitext|categories|links|templates|modules|jsconfigvars',
-                'disablelimitreport': '1',
-                'disableeditsection': '1',
+                'disablelimitreport': '1', 'disableeditsection': '1'
             })
             warnings = parsed.get('warnings') or {}
             if warnings:
