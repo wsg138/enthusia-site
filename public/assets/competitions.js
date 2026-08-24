@@ -471,6 +471,15 @@ function showEntryDialog(submissions, selectedId) {
   dialog.append(view); document.body.append(dialog); dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); }); dialog.addEventListener("close", () => dialog.remove(), { once: true }); render(); dialog.showModal();
 }
 
+function warmEntryImages(entry, limit = 3) {
+  for (const item of (entry?.images ?? []).slice(0, limit)) {
+    if (!item?.url) continue;
+    const image = new Image();
+    image.decoding = "async";
+    image.src = item.url;
+  }
+}
+
 function renderEntries(root, payload) {
   const section = document.createElement("section");
   section.className = "competition-tab-panel";
@@ -532,6 +541,9 @@ function renderEntries(root, payload) {
     }
     card.addEventListener("click", (event) => { if (!event.target.closest("button,a")) showEntryDialog(submissions, submission.id); });
     card.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); showEntryDialog(submissions, submission.id); } });
+    card.addEventListener("pointerenter", () => warmEntryImages(submission), { once: true });
+    card.addEventListener("focus", () => warmEntryImages(submission), { once: true });
+    card.addEventListener("pointerdown", () => warmEntryImages(submission), { once: true });
     grid.append(card);
   }
   section.append(grid);
@@ -574,8 +586,8 @@ function resultCard(result, submissions, competition, podium = false) {
   heading.textContent = result.title;
   const players = document.createElement("p"); players.className = "competition-result-players"; players.textContent = participantNames(entry).join(" · ");
   const score = scoreBreakdown(result, competition);
-  copy.append(heading, players, score);
-  card.append(place, playerVisual, copy);
+  copy.append(heading, players);
+  card.append(place, playerVisual, copy, score);
   if (result.staffEdited) {
     const edited = document.createElement("span");
     edited.className = "staff-edited-label";
@@ -584,6 +596,9 @@ function resultCard(result, submissions, competition, podium = false) {
   }
   card.addEventListener("click", (event) => { if (!event.target.closest("button,a")) showEntryDialog(submissions, result.submissionId); });
   card.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); showEntryDialog(submissions, result.submissionId); } });
+  card.addEventListener("pointerenter", () => warmEntryImages(entry), { once: true });
+  card.addEventListener("focus", () => warmEntryImages(entry), { once: true });
+  card.addEventListener("pointerdown", () => warmEntryImages(entry), { once: true });
   return card;
 }
 
