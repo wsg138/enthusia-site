@@ -643,7 +643,7 @@ function showRewardDetailDialog(reward, iconUrl) {
   const dialog = document.createElement("dialog"); dialog.className = "competition-reward-dialog";
   const card = document.createElement("div"); card.className = `competition-reward-item-detail${reward.rewardType === "RANK" ? " is-tag" : ""}`;
   const close = document.createElement("button"); close.type = "button"; close.className = "competition-entry-dialog-close"; close.setAttribute("aria-label", "Close reward details"); close.textContent = "×"; close.addEventListener("click", () => dialog.close());
-  const icon = document.createElement("img"); icon.src = iconUrl; icon.alt = ""; icon.className = reward.rewardType === "LORE_ITEM" ? "is-enchanted" : "";
+  const icon = document.createElement("img"); icon.src = iconUrl; icon.alt = "";
   const copy = document.createElement("div");
   if (reward.rewardType === "RANK") { const type = document.createElement("small"); type.textContent = "Profile tag"; const tag = document.createElement("strong"); tag.className = `competition-reward-tag-preview tag-${String(reward.visual?.rank || "default").replace(/[^a-z0-9_-]/gi, "-")}`; tag.textContent = reward.publicLabel; const note = document.createElement("p"); note.textContent = reward.publicDescription; copy.append(type, tag, note); card.append(close, copy); }
   else { const title = document.createElement("h2"); title.textContent = reward.publicLabel; const lore = document.createElement("p"); lore.textContent = reward.publicDescription; const key = document.createElement("code"); key.textContent = reward.visual?.itemKey || "minecraft:item"; copy.append(title, lore, key); card.append(close, icon, copy); }
@@ -665,7 +665,7 @@ function renderRewardsTab(root, payload) {
   const grid = document.createElement("div"); grid.className = "competition-reward-grid competition-reward-showcase";
   for (const reward of definitions) {
     const card = document.createElement("article"); card.className = "competition-reward-card";
-    const iconWrap = document.createElement("button"); iconWrap.type = "button"; iconWrap.className = `competition-reward-icon${reward.rewardType === "LORE_ITEM" ? " is-enchanted" : ""}`;
+    const iconWrap = document.createElement("button"); iconWrap.type = "button"; iconWrap.className = `competition-reward-icon reward-type-${reward.rewardType.toLowerCase().replaceAll("_", "-")}`;
     const icon = document.createElement("img"); icon.src = rewardIcon(reward); icon.alt = ""; icon.addEventListener("error", () => { icon.src = "../assets/market/minecraft/vanilla/textures/item/name_tag.png"; }, { once: true });
     const amount = document.createElement("span"); amount.textContent = reward.visual?.amount ? `×${reward.visual.amount.toLocaleString()}` : ""; iconWrap.append(icon, amount);
     const copy = document.createElement("div"); const place = document.createElement("span"); place.className = "competition-reward-placement"; place.textContent = placementLabel(reward.placement); const label = document.createElement("strong"); label.textContent = reward.rewardType === "LORE_ITEM" ? "Lore item" : reward.rewardType === "RANK" ? "Profile tag" : reward.publicLabel; const description = document.createElement("p"); description.textContent = reward.rewardType === "LORE_ITEM" ? "Awarded to the winning team members for this placement." : reward.rewardType === "RANK" ? "Granted to the winning team members for this placement." : reward.publicDescription; copy.append(place, label, description);

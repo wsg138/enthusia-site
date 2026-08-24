@@ -1,5 +1,5 @@
 .competitions-page{
-  font-family:"Pixelify Sans",Inter,system-ui,sans-serif;
+  font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   font-size:17px;
   font-weight:500;
   line-height:1.55;
@@ -574,3 +574,8 @@
 .competition-winner{grid-template-columns:minmax(260px,1.25fr) minmax(150px,.62fr) minmax(210px,.78fr);gap:26px;align-items:start}.competition-winner-copy{display:flex;flex-direction:column;gap:20px;align-items:flex-start;padding-top:4px}.competition-winner-copy>.competition-primary-action{margin-top:0}.competition-winner-members{display:grid;grid-template-columns:repeat(var(--winner-columns),minmax(0,1fr));align-content:start;justify-items:center;width:100%;gap:12px}.competition-winner-member,.competition-winner-members[data-count="1"] .competition-winner-member{width:100%;min-width:0}.competition-winner-member img{height:132px;max-width:100%}.competition-winner-members[data-count="1"] .competition-winner-member img{height:190px}.competition-winner-members[data-count="2"] .competition-winner-member img{height:155px}.competition-winner-members[data-count="4"] .competition-winner-member img,.competition-winner-members[data-count="5"] .competition-winner-member img,.competition-winner-members[data-count="6"] .competition-winner-member img{height:112px}
 @media(max-width:920px){.competition-winner{grid-template-columns:minmax(220px,1fr) minmax(150px,.7fr)}.competition-winner-copy{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;align-items:end}.competition-winner-copy>.competition-primary-action{justify-self:end}}
 @media(max-width:700px){.competition-winner{grid-template-columns:1fr}.competition-winner-copy{grid-column:auto;display:flex;align-items:center;text-align:center}.competition-winner-copy>.competition-primary-action{align-self:stretch}.competition-winner-members{width:min(100%,430px);margin-inline:auto}}
+
+/* Center all three completed-winner columns around the cover image. */
+.competition-winner{align-items:center}.competition-winner-members{align-self:center;transform:translateY(12px)}.competition-winner-copy{align-self:center;padding-top:0}
+.competition-reward-icon.reward-type-lore-item,.competition-reward-icon.reward-type-rank{overflow:visible}.competition-reward-icon.reward-type-lore-item img{width:72px;height:72px;transform:scale(1.18)}.competition-reward-icon.reward-type-rank img{width:76px;height:76px;transform:scale(1.28)}
+@media(max-width:700px){.competition-winner-members{transform:none}.competition-reward-icon.reward-type-lore-item img{width:60px;height:60px}.competition-reward-icon.reward-type-rank img{width:64px;height:64px}}

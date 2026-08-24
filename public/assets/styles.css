@@ -5028,3 +5028,6 @@ p,li,dd,.muted,.soft{font-synthesis-weight:none}
 /* Market keeps its original type system; only its search prompt uses the site font. */
 .market-page,.market-page button,.market-page select,.market-page textarea,.market-page input{font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
 .market-page .market-intro .intro-row>div:first-child>p,.market-page #item-search{font-family:"Pixelify Sans",Inter,system-ui,sans-serif!important}
+
+/* Dense navigation and server facts use the clearer interface typeface. */
+.nav,.nav *,.nav-toggle,.site-account-control,.site-account-menu,.status-label,.status-value,.status-note,.status-badge,.status-meta{font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
