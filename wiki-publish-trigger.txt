@@ -1,3 +1,0 @@
-Verify the wiki formatting-translation repair idempotently after publication.
-First guarded repair publication run 32753027611 succeeded and changed exactly three managed targets: Template:EnthusiaWiki/styles.css 605->640, History & Lore 616->641, and Mechanics 638->642. Events content remained already current at revision 636.
-Run a fresh full backup and all existing safety/structure/parser/human-edit gates again; the expected publish result is all 31 managed targets ALREADY CURRENT with zero edits.
