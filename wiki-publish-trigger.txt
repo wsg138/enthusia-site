@@ -1,0 +1,3 @@
+Publish MediaWiki-native component repair after read-only validation and migration-lineage guard verification.
+Read-only validation run 32757182882 passed unsupported-tag rejection and Miraheze parser validation.
+Events ownership is accepted only when the live latest revision is the canonical Server Events to Events move whose parent is the normal publisher-created revision.
