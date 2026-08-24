@@ -15,9 +15,7 @@ PASSWORD = os.environ.get('WIKI_BOT_PASSWORD', '')
 OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
 RENDERED = OUT / 'rendered'
 FULL_BACKUP = OUT / 'full-backup' / 'manifest.json'
-UA = 'EnthusiaWikiPublisher/2.1 (owner-authorized documentation publisher)'
-BEGIN = '/* BEGIN ENTHUSIA WIKI V2 */'
-END = '/* END ENTHUSIA WIKI V2 */'
+UA = 'EnthusiaWikiPublisher/2.2 (owner-authorized documentation publisher)'
 
 jar = http.cookiejar.CookieJar()
 opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
@@ -58,7 +56,7 @@ def login():
 def get_page(title):
     data = request({
         'action': 'query', 'prop': 'revisions|info', 'titles': title,
-        'rvprop': 'ids|timestamp|user|comment|content', 'rvslots': 'main', 'curtimestamp': '1'
+        'rvprop': 'ids|timestamp|user|comment|content|contentmodel', 'rvslots': 'main', 'curtimestamp': '1'
     }, 'GET')
     page = data.get('query', {}).get('pages', [{}])[0]
     rev = (page.get('revisions') or [{}])[0]
@@ -66,19 +64,12 @@ def get_page(title):
     return {
         'title': title, 'missing': bool(page.get('missing')), 'pageid': page.get('pageid'),
         'revid': rev.get('revid'), 'timestamp': rev.get('timestamp'), 'user': rev.get('user'),
-        'comment': rev.get('comment'), 'content': slot.get('content', ''), 'curtimestamp': data.get('curtimestamp')
+        'comment': rev.get('comment'), 'content': slot.get('content', ''),
+        'contentmodel': slot.get('contentmodel') or rev.get('contentmodel'), 'curtimestamp': data.get('curtimestamp')
     }
 
 
-def merge_managed_css(existing, managed):
-    block_re = re.compile(re.escape(BEGIN) + r'.*?' + re.escape(END), re.S)
-    block = managed.strip()
-    if block_re.search(existing):
-        return block_re.sub(block, existing).rstrip() + '\n'
-    return ((existing.rstrip() + '\n\n') if existing.rstrip() else '') + block + '\n'
-
-
-def edit_page(csrf, title, text, before, summary):
+def edit_page(csrf, title, text, before, summary, content_model=None):
     params = {
         'action': 'edit', 'title': title, 'text': text, 'token': csrf,
         'summary': summary, 'assert': 'user', 'watchlist': 'nochange',
@@ -86,6 +77,8 @@ def edit_page(csrf, title, text, before, summary):
     }
     if not before.get('missing') and before.get('timestamp'):
         params['basetimestamp'] = before['timestamp']
+    elif content_model:
+        params['contentmodel'] = content_model
     result = request(params)
     edit = result.get('edit', {})
     if edit.get('result') != 'Success':
@@ -110,7 +103,7 @@ def main():
     post_dir.mkdir(parents=True, exist_ok=True)
 
     csrf, who = login()
-    targets = sorted(manifest['pages'], key=lambda p: (0 if p['title'] == 'MediaWiki:Common.css' else 2 if p['title'] == 'Main Page' else 1, p['title']))
+    targets = sorted(manifest['pages'], key=lambda p: (0 if p.get('contentModel') == 'sanitized-css' else 2 if p['title'] == 'Main Page' else 1, p['title']))
 
     plan = []
     for item in targets:
@@ -121,8 +114,9 @@ def main():
             raise RuntimeError(f'Race detected after full backup: {title} changed from rev {expected_revid} to {before.get("revid")}')
         if expected_revid is None and not before.get('missing'):
             raise RuntimeError(f'Race detected after full backup: target page appeared after backup: {title} rev {before.get("revid")}')
-        source = (RENDERED / item['filename']).read_text(encoding='utf-8')
-        text = merge_managed_css(before['content'], source) if item.get('managedSection') else source
+        if not before.get('missing') and item.get('contentModel') and before.get('contentmodel') not in (item.get('contentModel'), None):
+            raise RuntimeError(f'Unexpected content model for {title}: {before.get("contentmodel")}')
+        text = (RENDERED / item['filename']).read_text(encoding='utf-8')
         (backup_dir / f'{safe_file(title)}.json').write_text(json.dumps(before, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         plan.append((item, before, text))
 
@@ -136,11 +130,13 @@ def main():
             report['edits'].append({'title': title, 'result': 'unchanged', 'revid': before.get('revid')})
             print(f'UNCHANGED {title}')
             continue
-        edit = edit_page(csrf, title, text, before, 'Update Enthusia player wiki documentation')
+        edit = edit_page(csrf, title, text, before, 'Update Enthusia player wiki documentation', item.get('contentModel'))
         after = get_page(title)
         (post_dir / f'{safe_file(title)}.json').write_text(json.dumps(after, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         if after.get('content', '').rstrip() != text.rstrip():
             raise RuntimeError(f'Readback verification failed for {title} at rev {after.get("revid")}')
+        if item.get('contentModel') and after.get('contentmodel') != item.get('contentModel'):
+            raise RuntimeError(f'Content model verification failed for {title}: {after.get("contentmodel")}')
         report['edits'].append({'title': title, 'result': 'published', 'oldrevid': edit.get('oldrevid'), 'newrevid': edit.get('newrevid')})
         print(f'PUBLISHED {title}: {edit.get("oldrevid")} -> {edit.get("newrevid")}')
 
