@@ -1,0 +1,107 @@
+name: Publish Enthusia wiki
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-publish-trigger.txt'
+      - 'public/wiki-demo/**'
+      - 'wiki-worker/**'
+      - '.github/workflows/wiki-publisher.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enthusia-wiki-publisher
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_WORKER_OUT: wiki-worker-output
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME || secrets.MIRAHEZE_BOT_USERNAME || secrets.WIKI_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD || secrets.MIRAHEZE_BOT_PASSWORD || secrets.WIKI_PASSWORD }}
+
+    steps:
+      - name: Check out proposed wiki source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Confirm final preview source is present
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s public/wiki-demo/v2-core.js
+          test -s public/wiki-demo/v2-support.js
+          test -s public/wiki-demo/v2-commands.js
+          test -s public/wiki-demo/v2-detail.js
+          test -s public/wiki-demo/v2-reputation.js
+
+      - name: Compare live Miraheze revisions with preserved baseline
+        id: preflight
+        shell: bash
+        run: |
+          set +e
+          python3 wiki-worker/preflight.py | tee preflight.log
+          status=${PIPESTATUS[0]}
+          set -e
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+
+      - name: Upload preflight comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-preflight-${{ github.run_id }}
+          path: |
+            preflight.log
+            wiki-worker-output/preflight-current.json
+            wiki-worker-output/preflight-comparison.json
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Refuse to publish over newer wiki edits
+        if: steps.preflight.outputs.status != '0'
+        shell: bash
+        run: |
+          echo "The live wiki differs from the preserved baseline. No wiki edit was attempted."
+          exit 1
+
+      - name: Render MediaWiki pages from approved v2 demo
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wiki-worker/render_pages.mjs
+          node wiki-worker/render_pages.mjs
+          test -s wiki-worker-output/rendered/manifest.json
+
+      - name: Player-facing content guardrails
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -R -E -i '(/casino|/spin|/arm)([^a-z]|$)' wiki-worker-output/rendered
+          ! grep -R -E -i 'velocity\.hub|/gmc([^a-z]|$)' wiki-worker-output/rendered
+          ! grep -R -E -i '\+1% movement speed|\+3% movement speed|\+5% movement speed|-1% movement speed|-3% movement speed|-5% movement speed|-10% movement speed' wiki-worker-output/rendered
+          grep -R -q 'PieCloak' wiki-worker-output/rendered
+          grep -R -q 'outside Spawn and the Warzone' wiki-worker-output/rendered || grep -R -q 'Outside Spawn and the Warzone' wiki-worker-output/rendered
+
+      - name: Publish to Miraheze with per-page conflict checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/publish.py | tee wiki-worker-output/publish.log
+
+      - name: Upload pre-edit backups and publish report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-publish-${{ github.run_id }}
+          path: wiki-worker-output/
+          if-no-files-found: warn
+          retention-days: 90
