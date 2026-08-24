@@ -14,12 +14,24 @@ test("voting and judging tabs are conditional", async () => {
   assert.match(source, /mc-heads\.net\/avatar/);
 });
 
-test("future competitions show overview rules and guide without empty entry or result tabs", async () => {
+test("competition tabs follow lifecycle visibility", async () => {
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
-  assert.match(source, /\[\["overview", "Overview"\], \["rules", "Rules"\], \["guide", "How to enter"\]\]/);
+  assert.match(source, /const tabDefinitions = \[\["overview", "Overview"\], \["rules", "Rules"\]\]/);
+  assert.match(source, /if \(!completed\) tabDefinitions\.push\(\["guide", "How to enter"\]\)/);
   assert.match(source, /if \(payload\.entriesVisible\) tabDefinitions\.push\(\["entries", "Entries"\]\)/);
   assert.match(source, /if \(completed && payload\.results\?\.length\) tabDefinitions\.push\(\["results", "Results"\]\)/);
   assert.match(source, /slide-01\.webp/);
+});
+
+test("rules guide winner members and entry viewer use structured layouts", async () => {
+  const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../public/assets/competitions.css", import.meta.url), "utf8");
+  for (const marker of ["Submit original work", "Enter accurate information", "Follow the deadline", "competition-guide-topic-number", "competition-entry-thumbs", "event.target === dialog"]) {
+    assert.match(source, new RegExp(marker));
+  }
+  for (const marker of ["competition-document-panel", "margin-inline:\\s*auto", "competition-winner-member", "competition-entry-thumbs"]) {
+    assert.match(styles, new RegExp(marker));
+  }
 });
 
 test("about documentation explains PieCloak from its public contract", async () => {
