@@ -5031,3 +5031,4 @@ p,li,dd,.muted,.soft{font-synthesis-weight:none}
 
 /* Dense navigation and server facts use the clearer interface typeface. */
 .nav,.nav *,.nav-toggle,.site-account-control,.site-account-menu,.status-label,.status-value,.status-note,.status-badge,.status-meta{font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
+.about-page .quick-list,.about-page .quick-list dt,.about-page .quick-list dd{font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
