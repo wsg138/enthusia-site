@@ -1,3 +1,0 @@
-Publish MediaWiki-native component repair after read-only validation.
-Read-only validation run 32756558993 passed rendering, structural checks, unsupported-tag rejection, and Miraheze parser validation for all 30 wikitext pages.
-The candidate contains no details, summary, thead, or tbody tags in rendered wiki output.
