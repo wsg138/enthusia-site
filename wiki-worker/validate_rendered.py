@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -11,7 +12,8 @@ from pathlib import Path
 API = os.environ.get('WIKI_API', 'https://enthusia.miraheze.org/w/api.php')
 OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
 RENDERED = OUT / 'rendered'
-UA = 'EnthusiaWikiValidator/2.1 (read-only parser validation)'
+UA = 'EnthusiaWikiValidator/2.2 (read-only parser validation)'
+UNSUPPORTED_TAGS = ('details', 'summary', 'thead', 'tbody')
 
 
 def api(params, retries=4):
@@ -35,6 +37,14 @@ def api(params, retries=4):
                 time.sleep(2 + attempt * 2)
                 continue
             raise RuntimeError(f'Unable to reach Miraheze parser: {exc}') from exc
+
+
+def escaped_unsupported_tags(parsed_html):
+    found = []
+    for tag in UNSUPPORTED_TAGS:
+        if re.search(rf'&lt;/?{tag}\b', parsed_html, re.IGNORECASE):
+            found.append(tag)
+    return found
 
 
 def main():
@@ -65,6 +75,10 @@ def main():
             warnings = parsed.get('warnings') or {}
             if warnings:
                 report['warnings'].append({'title': title, 'warnings': warnings})
+            parsed_html = parsed.get('parse', {}).get('text') or ''
+            escaped = escaped_unsupported_tags(parsed_html)
+            if escaped:
+                raise RuntimeError(f'MediaWiki escaped unsupported HTML tag(s): {", ".join(escaped)}')
             report['validated'].append({'title': title, 'ok': True})
             print(f'PARSE OK {title}')
         except Exception as exc:
