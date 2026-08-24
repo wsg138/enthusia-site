@@ -14,8 +14,8 @@ USERNAME = os.environ.get('WIKI_BOT_USERNAME', '').strip()
 PASSWORD = os.environ.get('WIKI_BOT_PASSWORD', '')
 OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
 RENDERED = OUT / 'rendered'
-PREFLIGHT = OUT / 'preflight-current.json'
-UA = 'EnthusiaWikiPublisher/2.0 (owner-authorized documentation publisher)'
+FULL_BACKUP = OUT / 'full-backup' / 'manifest.json'
+UA = 'EnthusiaWikiPublisher/2.1 (owner-authorized documentation publisher)'
 BEGIN = '/* BEGIN ENTHUSIA WIKI V2 */'
 END = '/* END ENTHUSIA WIKI V2 */'
 
@@ -45,8 +45,7 @@ def login():
         raise RuntimeError('Missing WIKI_BOT_USERNAME or WIKI_BOT_PASSWORD repository secret')
     token = request({'action': 'query', 'meta': 'tokens', 'type': 'login'}, 'GET')['query']['tokens']['logintoken']
     result = request({'action': 'login', 'lgname': USERNAME, 'lgpassword': PASSWORD, 'lgtoken': token})
-    status = result.get('login', {}).get('result')
-    if status != 'Success':
+    if result.get('login', {}).get('result') != 'Success':
         raise RuntimeError(f'Wiki login failed: {result.get("login")}')
     csrf = request({'action': 'query', 'meta': 'tokens'}, 'GET')['query']['tokens']['csrftoken']
     who = request({'action': 'query', 'meta': 'userinfo', 'uiprop': 'rights'}, 'GET')['query']['userinfo']
@@ -65,32 +64,25 @@ def get_page(title):
     rev = (page.get('revisions') or [{}])[0]
     slot = (rev.get('slots') or {}).get('main') or {}
     return {
-        'title': title,
-        'missing': bool(page.get('missing')),
-        'pageid': page.get('pageid'),
-        'revid': rev.get('revid'),
-        'timestamp': rev.get('timestamp'),
-        'user': rev.get('user'),
-        'comment': rev.get('comment'),
-        'content': slot.get('content', ''),
-        'curtimestamp': data.get('curtimestamp'),
+        'title': title, 'missing': bool(page.get('missing')), 'pageid': page.get('pageid'),
+        'revid': rev.get('revid'), 'timestamp': rev.get('timestamp'), 'user': rev.get('user'),
+        'comment': rev.get('comment'), 'content': slot.get('content', ''), 'curtimestamp': data.get('curtimestamp')
     }
 
 
 def merge_managed_css(existing, managed):
     block_re = re.compile(re.escape(BEGIN) + r'.*?' + re.escape(END), re.S)
-    managed_block = managed.strip()
+    block = managed.strip()
     if block_re.search(existing):
-        return block_re.sub(managed_block, existing).rstrip() + '\n'
-    prefix = existing.rstrip()
-    return (prefix + '\n\n' if prefix else '') + managed_block + '\n'
+        return block_re.sub(block, existing).rstrip() + '\n'
+    return ((existing.rstrip() + '\n\n') if existing.rstrip() else '') + block + '\n'
 
 
 def edit_page(csrf, title, text, before, summary):
     params = {
         'action': 'edit', 'title': title, 'text': text, 'token': csrf,
         'summary': summary, 'assert': 'user', 'watchlist': 'nochange',
-        'starttimestamp': before.get('curtimestamp') or time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+        'starttimestamp': before.get('curtimestamp') or time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
     }
     if not before.get('missing') and before.get('timestamp'):
         params['basetimestamp'] = before['timestamp']
@@ -106,11 +98,11 @@ def safe_file(title):
 
 
 def main():
-    if not (RENDERED / 'manifest.json').exists() or not PREFLIGHT.exists():
-        raise RuntimeError('Rendered source or preflight state is missing')
+    if not (RENDERED / 'manifest.json').exists() or not FULL_BACKUP.exists():
+        raise RuntimeError('Rendered source or fresh full backup is missing')
     manifest = json.loads((RENDERED / 'manifest.json').read_text(encoding='utf-8'))
-    preflight = json.loads(PREFLIGHT.read_text(encoding='utf-8'))
-    expected = {p['title']: (p.get('currentRevision') or {}).get('revid') for p in preflight.get('pages', [])}
+    backup = json.loads(FULL_BACKUP.read_text(encoding='utf-8'))
+    expected = {p['title']: (p.get('currentRevision') or {}).get('revid') for p in backup.get('pages', [])}
 
     backup_dir = OUT / 'pre-edit'
     post_dir = OUT / 'post-edit'
@@ -118,8 +110,7 @@ def main():
     post_dir.mkdir(parents=True, exist_ok=True)
 
     csrf, who = login()
-    targets = manifest['pages']
-    targets = sorted(targets, key=lambda p: (0 if p['title'] == 'MediaWiki:Common.css' else 2 if p['title'] == 'Main Page' else 1, p['title']))
+    targets = sorted(manifest['pages'], key=lambda p: (0 if p['title'] == 'MediaWiki:Common.css' else 2 if p['title'] == 'Main Page' else 1, p['title']))
 
     plan = []
     for item in targets:
@@ -127,15 +118,18 @@ def main():
         before = get_page(title)
         expected_revid = expected.get(title)
         if expected_revid is not None and before.get('revid') != expected_revid:
-            raise RuntimeError(f'Race detected before publish: {title} changed from expected rev {expected_revid} to {before.get("revid")}')
+            raise RuntimeError(f'Race detected after full backup: {title} changed from rev {expected_revid} to {before.get("revid")}')
         if expected_revid is None and not before.get('missing'):
-            raise RuntimeError(f'Race detected before publish: new target page now exists: {title} rev {before.get("revid")}')
+            raise RuntimeError(f'Race detected after full backup: target page appeared after backup: {title} rev {before.get("revid")}')
         source = (RENDERED / item['filename']).read_text(encoding='utf-8')
         text = merge_managed_css(before['content'], source) if item.get('managedSection') else source
         (backup_dir / f'{safe_file(title)}.json').write_text(json.dumps(before, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         plan.append((item, before, text))
 
-    report = {'wikiUser': who.get('name'), 'startedAtUtc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), 'edits': []}
+    report = {
+        'wikiUser': who.get('name'), 'fullBackupCreatedAtUtc': backup.get('createdAtUtc'),
+        'startedAtUtc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), 'edits': []
+    }
     for item, before, text in plan:
         title = item['title']
         if before.get('content') == text:
