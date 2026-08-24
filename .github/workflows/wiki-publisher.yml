@@ -124,15 +124,37 @@ jobs:
           rmap={p['title']:p for p in rendered['pages']}
           targets=set(rmap)
           WORKER_COMMENT='Update Enthusia player wiki documentation'
+          EVENTS_MOVE_MARKER='moved page [[Server Events]] to [[Events]]'
+          EVENTS_MOVE_REASON='Use the canonical Events page title'
           def exact(title):
               b=bmap.get(title); r=rmap.get(title)
               if not b or not r: return False
               current=(root/'full-backup'/b['backupFile']).read_text(encoding='utf-8').rstrip()
               desired=(root/'rendered'/r['filename']).read_text(encoding='utf-8').rstrip()
               return current == desired
+          def migrated_worker_owned_events(title):
+              if title != 'Events': return False
+              b=bmap.get(title)
+              if not b: return False
+              current=b.get('currentRevision') or {}
+              comment=current.get('comment') or ''
+              if EVENTS_MOVE_MARKER not in comment or EVENTS_MOVE_REASON not in comment:
+                  return False
+              history_file=b.get('historyFile')
+              if not history_file: return False
+              history=json.load(open(root/'full-backup'/history_file))
+              parent_id=current.get('parentid')
+              parent=next((rev for rev in history if rev.get('revid') == parent_id), None)
+              return bool(
+                  parent and
+                  parent.get('comment') == WORKER_COMMENT and
+                  parent.get('user') == current.get('user') and
+                  current.get('revid') == history[-1].get('revid')
+              )
           def worker_owned(title):
               b=bmap.get(title)
-              return bool(b and (b.get('currentRevision') or {}).get('comment') == WORKER_COMMENT)
+              standard=bool(b and (b.get('currentRevision') or {}).get('comment') == WORKER_COMMENT)
+              return standard or migrated_worker_owned_events(title)
           candidate_changed=[p for p in comp['changedPages'] if p['title'] in targets]
           candidate_added=[t for t in comp['addedPages'] if t in targets]
           already_current=[]
