@@ -1,0 +1,3 @@
+Publish MediaWiki-native component repair after read-only validation and migration idempotency repair.
+Read-only validation run 32757560693 passed unsupported-tag rejection and Miraheze parser validation.
+The human-edit guard recognizes Events only through its verified publisher-parent title-migration lineage; the title migration helper is now a no-op once the canonical Events page exists.
