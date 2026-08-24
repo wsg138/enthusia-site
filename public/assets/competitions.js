@@ -711,7 +711,15 @@ function renderRewardsTab(root, payload) {
   const intro = document.createElement("p"); intro.textContent = ["COMPLETED", "ARCHIVED"].includes(payload.competition.lifecycleState) ? "The rewards assigned to each placed team." : "Rewards available for this competition.";
   heading.append(title, intro); section.append(heading);
   if (!definitions.length) { const empty = document.createElement("div"); empty.className = "competition-empty"; empty.textContent = "No rewards have been announced yet."; section.append(empty); root.append(section); return; }
-  const grid = document.createElement("div"); grid.className = "competition-reward-grid competition-reward-showcase";
+  const groups = document.createElement("div"); groups.className = "competition-reward-place-groups";
+  const placementGrids = new Map();
+  for (const placement of [...new Set(definitions.map((reward) => reward.placement))].sort((a, b) => a - b)) {
+    const rewardsForPlacement = definitions.filter((reward) => reward.placement === placement);
+    const group = document.createElement("details"); group.className = `competition-reward-place-group place-${placement}`;
+    const summary = document.createElement("summary"); const placeName = document.createElement("strong"); placeName.textContent = placementLabel(placement); const count = document.createElement("span"); count.textContent = `${rewardsForPlacement.length} reward${rewardsForPlacement.length === 1 ? "" : "s"}`; summary.append(placeName, count);
+    const grid = document.createElement("div"); grid.className = "competition-reward-grid competition-reward-showcase";
+    group.append(summary, grid); groups.append(group); placementGrids.set(placement, grid);
+  }
   for (const reward of definitions) {
     const card = document.createElement("article"); card.className = "competition-reward-card";
     const iconWrap = document.createElement("button"); iconWrap.type = "button"; iconWrap.className = `competition-reward-icon reward-type-${reward.rewardType.toLowerCase().replaceAll("_", "-")}`;
@@ -726,9 +734,9 @@ function renderRewardsTab(root, payload) {
     if (["LORE_ITEM", "RANK"].includes(reward.rewardType)) { iconWrap.classList.add("is-clickable"); iconWrap.addEventListener("click", () => showRewardDetailDialog(reward, icon.src || "")); }
     const result = payload.results?.find((item) => item.placement === reward.placement); const entry = payload.submissions?.find((item) => item.id === result?.submissionId); const recipients = participantNames(entry);
     if (recipients.length) { const awarded = document.createElement("div"); awarded.className = "competition-reward-recipients"; const recipientLabel = document.createElement("small"); recipientLabel.textContent = "Awarded to"; const names = document.createElement("span"); names.textContent = recipients.join(" · "); awarded.append(recipientLabel, names); copy.append(awarded); }
-    card.append(iconWrap, copy); grid.append(card);
+    card.append(iconWrap, copy); placementGrids.get(reward.placement)?.append(card);
   }
-  section.append(grid);
+  section.append(groups);
   root.append(section);
 }
 
