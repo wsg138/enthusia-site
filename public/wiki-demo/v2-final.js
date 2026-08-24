@@ -9,5 +9,8 @@ if(P.mechanics){
   if(P.mechanics.body.includes(java)&&!P.mechanics.body.includes('data-page="supporters"')) P.mechanics.body=P.mechanics.body.replace(java,java+supporters);
 }
 if(P.leaderboards&&typeof P.leaderboards.body==='string') P.leaderboards.body=P.leaderboards.body.replace('Public donor/support rankings are displayed through the server website and in-game presentation.','See <a data-page="supporters">Supporters & Donors</a> for public donor/support rankings and in-game displays.');
-if(P.events&&typeof P.events.body==='string') P.events.body=P.events.body.replace('<div class="status"><b>Server Events is currently in development and is not enabled on the SMP.</b></div>\n','');
+if(P.events){
+  P.events.title='Events';
+  if(typeof P.events.body==='string') P.events.body=P.events.body.replace('<div class="status"><b>Server Events is currently in development and is not enabled on the SMP.</b></div>\n','');
+}
 })();
