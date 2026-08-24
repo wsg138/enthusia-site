@@ -1,3 +1,3 @@
 Owner-authorized Enthusia wiki v2 publication.
-Required gates: complete fresh live wiki backup, comparison against original preservation baseline, changed-target review, player-facing guardrails, TemplateStyles availability, Miraheze parse validation, credential check, fresh-revision conflict checks, pre-edit backups, readback verification, Main Page last.
-Requested: 2026-08-24T08:34-04:00
+Required gates: complete fresh live wiki backup, comparison against original preservation baseline, exact-match resume check for prior worker edits, preserved unrelated community changes, player-facing guardrails, TemplateStyles availability, Miraheze parse validation, credential check, fresh-revision conflict checks, paced rate-limit-safe edits, pre-edit backups, readback verification, Main Page last.
+Requested: 2026-08-24T08:39-04:00
