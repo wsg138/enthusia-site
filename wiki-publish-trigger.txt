@@ -1,3 +1,3 @@
-Publish MediaWiki-native component repair after read-only validation and migration idempotency repair.
-Read-only validation run 32757560693 passed unsupported-tag rejection and Miraheze parser validation.
-The human-edit guard recognizes Events only through its verified publisher-parent title-migration lineage; the title migration helper is now a no-op once the canonical Events page exists.
+Verify MediaWiki-native component repair idempotently after successful publication run 32757635183.
+Events was updated from revision 636 to 649 with native MediaWiki collapsible/table markup; candidate validation rejects escaped details, summary, thead, and tbody tags.
+This verification pass must report all 31 managed targets already current and perform zero edits.
