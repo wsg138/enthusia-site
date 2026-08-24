@@ -1,0 +1,50 @@
+/* Private staging pass 6: real Enthusia brand treatment and player-grid normalization. */
+
+/* Brand block inserted by the private JavaScript below. */
+.mw-logo{
+  display:flex !important;
+  align-items:center !important;
+  gap:9px !important;
+}
+
+.enthusia-private-brand-logo{
+  width:32px;
+  height:32px;
+  object-fit:contain;
+  flex:0 0 auto;
+  filter:drop-shadow(0 0 8px rgba(255,138,0,.30));
+}
+
+.enthusia-private-brand-name{
+  display:inline-block;
+  font-weight:900;
+  letter-spacing:-.01em;
+  line-height:1;
+  background:linear-gradient(90deg,#ff4b12 0%,#ff8a00 46%,#ffd36a 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent !important;
+  white-space:nowrap;
+}
+
+/* Hide the old wordmark only after JS has installed the staged replacement. */
+.mw-logo.enthusia-private-brand-ready .mw-logo-wordmark{
+  display:none !important;
+}
+
+/* Normalized DPL player cards. JS adds this class only on Noteable Players. */
+.enthusia-player-card-normalized{
+  vertical-align:top !important;
+}
+
+.enthusia-player-card-normalized .enthusia-player-image-link{
+  display:block !important;
+  width:100% !important;
+  margin:0 auto 4px !important;
+  text-align:center !important;
+}
+
+.enthusia-player-card-normalized .enthusia-player-image-link img{
+  display:block !important;
+  margin:0 auto !important;
+}
