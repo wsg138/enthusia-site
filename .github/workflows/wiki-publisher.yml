@@ -94,34 +94,52 @@ jobs:
           set -euo pipefail
           python3 wiki-worker/validate_rendered.py | tee wiki-worker-output/parse-validation.log
 
-      - name: Review all live changes since original preservation baseline
+      - name: Review all live changes and resume only exact prior worker edits
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import json, sys
-          comp=json.load(open('wiki-worker-output/full-backup/comparison-to-old-baseline.json'))
-          rendered=json.load(open('wiki-worker-output/rendered/manifest.json'))
-          targets={p['title'] for p in rendered['pages']}
-          target_changed=[p for p in comp['changedPages'] if p['title'] in targets]
-          target_added=[p for p in comp['addedPages'] if p in targets]
-          target_removed=[p for p in comp['removedPages'] if p in targets]
-          unrelated=[p for p in comp['changedPages'] if p['title'] not in targets]
+          from pathlib import Path
+          root=Path('wiki-worker-output')
+          comp=json.load(open(root/'full-backup/comparison-to-old-baseline.json'))
+          backup=json.load(open(root/'full-backup/manifest.json'))
+          rendered=json.load(open(root/'rendered/manifest.json'))
+          bmap={p['title']:p for p in backup['pages']}
+          rmap={p['title']:p for p in rendered['pages']}
+          targets=set(rmap)
+          def exact(title):
+              b=bmap.get(title); r=rmap.get(title)
+              if not b or not r: return False
+              current=(root/'full-backup'/b['backupFile']).read_text(encoding='utf-8').rstrip()
+              desired=(root/'rendered'/r['filename']).read_text(encoding='utf-8').rstrip()
+              return current == desired
+          candidate_changed=[p for p in comp['changedPages'] if p['title'] in targets]
+          candidate_added=[t for t in comp['addedPages'] if t in targets]
+          already_current=[]
+          conflicts=[]
+          for p in candidate_changed:
+              (already_current if exact(p['title']) else conflicts).append(p)
+          for t in candidate_added:
+              item={'title':t,'kind':'added-after-baseline'}
+              (already_current if exact(t) else conflicts).append(item)
+          target_removed=[t for t in comp['removedPages'] if t in targets]
+          conflicts.extend({'title':t,'kind':'removed-after-baseline'} for t in target_removed)
+          unrelated_changed=[p for p in comp['changedPages'] if p['title'] not in targets]
+          unrelated_added=[t for t in comp['addedPages'] if t not in targets]
+          unrelated_removed=[t for t in comp['removedPages'] if t not in targets]
           report={
-            'allChangedPages': comp['changedPages'],
-            'allAddedPages': comp['addedPages'],
-            'allRemovedPages': comp['removedPages'],
-            'changedPublishTargets': target_changed,
-            'addedPublishTargets': target_added,
-            'removedPublishTargets': target_removed,
-            'preservedUnrelatedChanges': unrelated,
+            'allChangedPages':comp['changedPages'],'allAddedPages':comp['addedPages'],'allRemovedPages':comp['removedPages'],
+            'alreadyCurrentPublishTargets':already_current,'conflictingPublishTargets':conflicts,
+            'preservedUnrelatedChanges':unrelated_changed,'preservedUnrelatedAddedPages':unrelated_added,
+            'preservedUnrelatedRemovedPages':unrelated_removed,
           }
-          open('wiki-worker-output/change-review.json','w').write(json.dumps(report,indent=2)+'\n')
-          print(json.dumps(report, indent=2))
-          if target_changed or target_added or target_removed:
-              print('A page targeted by the redesign changed after the original preservation snapshot. Full backup is complete; stopping for review before overwrite.', file=sys.stderr)
+          (root/'change-review.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+          print(json.dumps(report,indent=2))
+          if conflicts:
+              print('A redesign target differs from the approved source. Full backup is complete; refusing to overwrite it.',file=sys.stderr)
               sys.exit(1)
-          print('All post-baseline edits are outside publish targets and will be preserved.')
+          print('Changed redesign targets are exact matches from prior worker progress; unrelated community changes will be preserved.')
           PY
 
       - name: Require configured wiki credentials
