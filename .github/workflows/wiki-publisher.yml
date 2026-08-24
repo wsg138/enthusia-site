@@ -84,6 +84,12 @@ jobs:
           grep -R -q 'PieCloak' wiki-worker-output/rendered
           grep -R -q 'outside Spawn and the Warzone' wiki-worker-output/rendered || grep -R -q 'Outside Spawn and the Warzone' wiki-worker-output/rendered
 
+      - name: Validate rendered pages with Miraheze parser
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/validate_rendered.py | tee wiki-worker-output/parse-validation.log
+
       - name: Preserve unrelated edits and block target-page drift
         shell: bash
         run: |
