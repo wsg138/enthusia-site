@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/validate-site.mjs && npm run check:wiki-demo",
-    "check:wiki-demo": "node --check public/wiki-demo/v2-core.js && node --check public/wiki-demo/v2-support.js && node --check public/wiki-demo/v2-commands.js && node --check public/wiki-demo/v2-detail.js && node --check public/wiki-demo/v2-final.js && node --check public/wiki-demo/v2-app.js",
+    "check:wiki-demo": "node --check public/wiki-demo/v2-core.js && node --check public/wiki-demo/v2-support.js && node --check public/wiki-demo/v2-commands.js && node --check public/wiki-demo/v2-detail.js && node --check public/wiki-demo/v2-final.js && node --check public/wiki-demo/v2-polish.js && node --check public/wiki-demo/v2-app.js",
     "test:appeals": "node --test tests/appeal-auth.test.mjs",
     "test:potions": "node --test tests/potion-preview.test.mjs",
     "mask-editor": "python scripts/cinematic-mask-editor.py",
