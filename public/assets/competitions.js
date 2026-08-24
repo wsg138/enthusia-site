@@ -674,7 +674,23 @@ function renderRewardsTab(root, payload) {
     if (recipients.length) { const awarded = document.createElement("div"); awarded.className = "competition-reward-recipients"; const recipientLabel = document.createElement("small"); recipientLabel.textContent = "Awarded to"; const names = document.createElement("span"); names.textContent = recipients.join(" · "); awarded.append(recipientLabel, names); copy.append(awarded); }
     card.append(iconWrap, copy); grid.append(card);
   }
-  section.append(grid); root.append(section);
+  section.append(grid);
+  if (definitions.some((reward) => reward.rewardType === "RANK")) {
+    const previews = document.createElement("section"); previews.className = "competition-rank-reward-previews";
+    const previewTitle = document.createElement("h3"); previewTitle.textContent = "Rank reward styles";
+    const previewGrid = document.createElement("div"); previewGrid.className = "competition-rank-reward-grid";
+    for (const rank of [
+      ["Founder", "founder"], ["Admin", "admin"], ["Developer", "developer"],
+      ["Moderator", "moderator"], ["Helper", "helper"],
+    ]) {
+      const badge = document.createElement("div"); badge.className = `competition-rank-reward rank-${rank[1]}`;
+      const glyph = document.createElement("span"); glyph.className = "competition-rank-reward-glyph"; glyph.setAttribute("aria-hidden", "true"); glyph.textContent = rank[0].slice(0, 1);
+      const name = document.createElement("strong"); name.textContent = rank[0];
+      badge.append(glyph, name); previewGrid.append(badge);
+    }
+    previews.append(previewTitle, previewGrid); section.append(previews);
+  }
+  root.append(section);
 }
 
 function renderJudges(root, payload) {

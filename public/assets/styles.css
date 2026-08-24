@@ -5032,3 +5032,27 @@ p,li,dd,.muted,.soft{font-synthesis-weight:none}
 /* Dense navigation and server facts use the clearer interface typeface. */
 .nav,.nav *,.nav-toggle,.site-account-control,.site-account-menu,.status-label,.status-value,.status-note,.status-badge,.status-meta{font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
 .about-page .quick-list,.about-page .quick-list dt,.about-page .quick-list dd{font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
+.about-page .side-rail,.about-page .side-rail a,.home-page .live-layer-card strong{font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
+.rules-page,.rules-page button,.rules-page input,.rules-page select,.rules-page textarea{font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
+.rules-page .brand-name{font-family:Rye,Georgia,serif!important}
+.gallery-page .gallery-tabs,.gallery-page .gallery-tabs button,.gallery-page .gallery-actions,.gallery-page .gallery-actions .btn,.gallery-page .gallery-guide,.gallery-page .gallery-rules{font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
+.staff-info dd,.staff-role,.staff-name{font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
+.staff-info dt{font-family:"Pixelify Sans",Inter,system-ui,sans-serif!important}
+.staff-role.role-helper{background:linear-gradient(90deg,#cea130,#ffd76a)}
+
+/* Completed competition winner alignment and rank reward previews. */
+.competition-winner-members{transform:translate(14px,4px)}
+.competition-winner-copy{transform:translateX(14px)}
+.competition-rank-reward-previews{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.competition-rank-reward-previews h3{margin:0 0 14px}
+.competition-rank-reward-grid{display:grid;grid-template-columns:repeat(5,minmax(110px,1fr));gap:12px}
+.competition-rank-reward{display:flex;align-items:center;gap:10px;min-width:0;padding:12px;border:1px solid var(--line);border-radius:10px;background:rgba(9,7,5,.62)}
+.competition-rank-reward-glyph{display:grid;place-items:center;width:42px;aspect-ratio:1;flex:0 0 auto;border:2px solid rgba(255,255,255,.3);border-radius:5px;color:#130d08;font-family:Inter,system-ui,sans-serif;font-size:1.2rem;font-weight:900;box-shadow:inset 0 -5px 0 rgba(0,0,0,.16);image-rendering:pixelated}
+.competition-rank-reward strong{overflow:hidden;text-overflow:ellipsis;font-family:Inter,system-ui,sans-serif;white-space:nowrap}
+.competition-rank-reward.rank-founder .competition-rank-reward-glyph{background:var(--brand-grad)}
+.competition-rank-reward.rank-admin .competition-rank-reward-glyph{background:linear-gradient(135deg,#ff7d9b,#ff4f67)}
+.competition-rank-reward.rank-developer .competition-rank-reward-glyph{background:linear-gradient(135deg,#6fe0ff,#56e38e)}
+.competition-rank-reward.rank-moderator .competition-rank-reward-glyph{background:linear-gradient(135deg,#9cc9ff,#5b86ff)}
+.competition-rank-reward.rank-helper .competition-rank-reward-glyph{background:linear-gradient(135deg,#cea130,#ffd76a)}
+@media(max-width:920px){.competition-winner-members,.competition-winner-copy{transform:none}.competition-rank-reward-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.competition-rank-reward-grid{grid-template-columns:1fr}}
