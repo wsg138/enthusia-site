@@ -530,5 +530,10 @@
   .competition-entry-view{padding:18px 14px}
   .competition-entry-record-nav{align-items:stretch;flex-direction:column}
   .competition-breadcrumbs{align-items:stretch;flex-direction:column;gap:10px}
-  .competition-guide-link{padding-left:2px}
+.competition-guide-link{padding-left:2px}
 }
+
+.competition-overview-glance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.competition-overview-glance>div{padding:14px;border:1px solid var(--line);border-radius:11px;background:rgba(8,7,5,.24)}.competition-overview-glance strong,.competition-overview-glance span{display:block}.competition-overview-glance span{margin-top:4px;color:var(--muted)}
+.submission-card-cover{width:calc(100% + 34px);max-width:none;aspect-ratio:16/9;margin:-17px -17px 5px;object-fit:cover;border-bottom:1px solid var(--line);background:#0b0806}
+.competition-document-panel{max-width:900px}.competition-document-panel>h2{margin:.1rem 0 .5rem}.competition-document-panel>p{color:var(--muted)}.competition-rules-document{margin-top:10px;padding:22px;border-left:4px solid var(--orange);border-radius:0 12px 12px 0;background:rgba(255,138,0,.06);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--cream);line-height:1.7}.competition-guide-topics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}.competition-guide-topics section{padding:17px;border:1px solid var(--line);border-radius:12px;background:rgba(8,7,5,.24)}.competition-guide-topics h3,.competition-guide-topics p{margin:0}.competition-guide-topics p{margin-top:6px;color:var(--muted)}
+@media(max-width:700px){.competition-overview-glance,.competition-guide-topics{grid-template-columns:1fr}}

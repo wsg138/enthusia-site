@@ -6,9 +6,11 @@ import test from "node:test";
 const mediaUrl = new URL("../public/assets/competitions-public-media.js", import.meta.url);
 const detailUrl = new URL("../public/competitions/detail.html", import.meta.url);
 
-test("competition detail loads the public media enhancement", async () => {
+test("competition detail uses the integrated entry viewer instead of duplicate media enhancement", async () => {
   const html = await readFile(detailUrl, "utf8");
-  assert.match(html, /competitions-public-media\.js\?v=1/);
+  assert.doesNotMatch(html, /competitions-public-media\.js/);
+  const detail = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
+  assert.match(detail, /showEntryDialog/);
 });
 
 test("public media enhancement is valid JavaScript and uses approved submission-media URLs only", async () => {

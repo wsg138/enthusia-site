@@ -156,8 +156,7 @@ function bannerMediaUrl(competition) {
 }
 
 function bannerImage(competition, className, alt = "") {
-  const url = bannerMediaUrl(competition);
-  if (!url) return null;
+  const url = bannerMediaUrl(competition) ?? "../assets/screenshots/slide-01.webp";
   const image = document.createElement("img");
   image.className = className;
   image.src = url;
@@ -165,7 +164,7 @@ function bannerImage(competition, className, alt = "") {
   image.loading = "lazy";
   image.decoding = "async";
   image.referrerPolicy = "same-origin";
-  image.addEventListener("error", () => image.remove(), { once: true });
+  image.addEventListener("error", () => { image.src = "../assets/enthusia-logo-v2.png"; }, { once: true });
   return image;
 }
 
@@ -357,12 +356,10 @@ function renderOverview(root, payload) {
     dates.innerHTML = `<span><strong>Started</strong> ${formatDate(competition.config?.schedule?.submissionsOpenAt)}</span><span><strong>Ended</strong> ${formatDate(winnerResult.publishedAt)}</span>`;
     const winner = document.createElement("div");
     winner.className = "competition-winner";
-    if (winnerEntry?.coverImageUrl) {
-      const image = document.createElement("img");
-      image.src = winnerEntry.coverImageUrl;
-      image.alt = `${winnerEntry.title} cover image`;
-      winner.append(image);
-    }
+    const image = document.createElement("img");
+    image.src = winnerEntry?.coverImageUrl || "../assets/screenshots/slide-01.webp";
+    image.alt = winnerEntry?.coverImageUrl ? `${winnerEntry.title} cover image` : "Placeholder winning entry image";
+    winner.append(image);
     const copy = document.createElement("div");
     const eyebrow = document.createElement("p"); eyebrow.className = "competitions-kicker"; eyebrow.textContent = "Winner";
     const heading = document.createElement("h2"); heading.textContent = winnerResult.title;
@@ -381,65 +378,15 @@ function renderOverview(root, payload) {
   description.className = "competition-copy";
   description.textContent = text(config.public?.description, config.public?.summary || "No description has been published yet.");
 
-  const guide = document.createElement("div");
-  guide.className = "competition-guide-callout";
-  const guideCopy = document.createElement("div");
-  const guideHeading = document.createElement("h2");
-  guideHeading.textContent = "New to competitions?";
-  const guideText = document.createElement("p");
-  guideText.textContent = "Read the competition guide for entry steps, screenshots, voting, judging, schedules, and results.";
-  guideCopy.append(guideHeading, guideText);
-  const guideLink = document.createElement("a");
-  guideLink.className = "competition-primary-action";
-  guideLink.href = "guide.html";
-  guideLink.textContent = "Read the competition guide";
-  guide.append(guideCopy, guideLink);
-
-  section.append(description, guide);
-
-  const fullDetails = document.createElement("details");
-  fullDetails.className = "competition-full-details";
-  const fullDetailsSummary = document.createElement("summary");
-  fullDetailsSummary.textContent = "View all competition settings";
-  const detailList = document.createElement("dl");
-  const addDetail = (label, value) => {
-    const row = document.createElement("div");
-    const term = document.createElement("dt");
-    term.textContent = label;
-    const description = document.createElement("dd");
-    description.textContent = value;
-    row.append(term, description);
-    detailList.append(row);
-  };
-  const entries = config.entries ?? {};
-  const voting = config.voting ?? {};
-  const judging = config.judging ?? {};
-  addDetail("Entry types", (entries.allowedTypes ?? []).map((type) => type.toLowerCase()).join(", ") || "Not listed");
-  addDetail("Entries per player", String(entries.maxEntriesPerPlayer ?? "Not listed"));
-  if ((entries.allowedTypes ?? []).includes("GUILD")) addDetail("Entries per guild", String(entries.maxEntriesPerGuild ?? "Not listed"));
-  if ((entries.allowedTypes ?? []).includes("GROUP")) addDetail("Main group members", entries.maxMainMembers ? `Up to ${entries.maxMainMembers}` : "Not listed");
-  addDetail("Screenshots", `At least ${entries.minImages ?? 1}; no maximum. PNG or JPEG, up to 8 MB each.`);
-  addDetail("Community voting", voting.enabled ? `${voting.votesPerVoter ?? "Published"} choices per voter` : "Not used for this competition");
-  if (voting.enabled) addDetail("Voting eligibility", `${voting.minimumActiveMinutes ?? 0} active minutes required`);
-  addDetail("Judging", judging.enabled ? `${(judging.criteria ?? []).length} published scoring criteria` : "Not used for this competition");
-  addDetail("Private coordinates", entries.coordinatesRequested ? "Requested for staff review" : "Not requested");
-  fullDetails.append(fullDetailsSummary, detailList);
-  section.append(fullDetails);
-  if (config.entries?.coordinatesRequested && config.entries?.judgesCanViewCoordinates) {
-    const warning = document.createElement("div");
-    warning.className = "competition-private-warning";
-    warning.textContent = "This competition requests private build coordinates. Assigned judges will be allowed to see those coordinates for judging.";
-    section.append(warning);
-  }
-
-  renderRewards(section, competition);
-
-  const rulesHeading = document.createElement("h2");
-  rulesHeading.textContent = "Rules";
-  const rules = document.createElement("div");
-  rules.className = "competition-copy";
-  rules.textContent = text(config.public?.rules, "No additional rules have been published.");
-  section.append(rulesHeading, rules);
+  const glance = document.createElement("div");
+  glance.className = "competition-overview-glance";
+  const facts = [
+    ["Entries open", formatDate(schedule.submissionsOpenAt)],
+    ["Entries close", formatDate(schedule.submissionsCloseAt)],
+    ["Entry types", (config.entries?.allowedTypes ?? []).map((type) => type.toLowerCase()).join(", ") || "To be announced"]
+  ];
+  for (const [label, value] of facts) { const fact = document.createElement("div"); const strong = document.createElement("strong"); strong.textContent = label; const span = document.createElement("span"); span.textContent = value; fact.append(strong, span); glance.append(fact); }
+  section.append(description, glance);
   root.append(section);
 }
 
@@ -513,6 +460,10 @@ function renderEntries(root, payload) {
     card.className = "submission-card is-clickable";
     card.tabIndex = 0;
     card.setAttribute("role", "button");
+    const preview = document.createElement("img");
+    preview.className = "submission-card-cover";
+    preview.src = submission.coverImageUrl || "../assets/screenshots/slide-01.webp";
+    preview.alt = submission.coverImageUrl ? `${submission.title} cover image` : "Placeholder competition entry image";
     const type = document.createElement("span");
     type.className = "competition-badge";
     type.textContent = submission.entryType;
@@ -532,7 +483,7 @@ function renderEntries(root, payload) {
       member.textContent = participantLabel(participant);
       members.append(member);
     }
-    card.append(type, heading, owner, description);
+    card.append(preview, type, heading, owner, description);
     if (members.children.length) card.append(members);
     if (submission.staffEdited) {
       const edited = document.createElement("span");
@@ -652,12 +603,40 @@ function renderJudges(root, payload) {
   const grid = document.createElement("div"); grid.className = "competition-judges-grid";
   for (const judge of payload.judges ?? []) {
     const card = document.createElement("article"); card.className = "competition-judge-card";
-    const image = document.createElement("img"); image.src = `https://mc-heads.net/avatar/${encodeURIComponent(judge.playerName)}/128`; image.alt = `${judge.playerName} Minecraft head`; image.loading = "lazy";
+    const image = document.createElement("img"); image.src = `https://mc-heads.net/avatar/${encodeURIComponent(judge.playerName)}/128`; image.alt = `${judge.playerName} Minecraft head`; image.loading = "lazy"; image.addEventListener("error", () => { image.src = "../assets/enthusia-logo-v2.png"; }, { once: true });
     const copy = document.createElement("div"); const name = document.createElement("strong"); name.textContent = judge.playerName; const role = document.createElement("span"); role.textContent = "Competition judge"; copy.append(name, role); card.append(image, copy); grid.append(card);
   }
   section.append(title, intro);
   if (grid.children.length) section.append(grid); else { const empty = document.createElement("div"); empty.className = "competition-empty"; empty.textContent = "No judges have been assigned yet."; section.append(empty); }
   root.append(section);
+}
+
+function renderRulesTab(root, competition) {
+  const section = document.createElement("section"); section.className = "competition-tab-panel competition-document-panel"; section.dataset.tabPanel = "rules"; section.hidden = true;
+  const kicker = document.createElement("p"); kicker.className = "competitions-kicker"; kicker.textContent = "Competition rules";
+  const heading = document.createElement("h2"); heading.textContent = `Rules for ${competition.title}`;
+  const intro = document.createElement("p"); intro.textContent = "These rules apply specifically to this competition. The main server rules still apply everywhere.";
+  const rules = document.createElement("div"); rules.className = "competition-rules-document"; rules.textContent = text(competition.config?.public?.rules, "No additional competition-specific rules have been published yet.");
+  section.append(kicker, heading, intro, rules); root.append(section);
+}
+
+function renderGuideTab(root) {
+  const section = document.createElement("section"); section.className = "competition-tab-panel competition-document-panel"; section.dataset.tabPanel = "guide"; section.hidden = true;
+  const kicker = document.createElement("p"); kicker.className = "competitions-kicker"; kicker.textContent = "Competition guide";
+  const heading = document.createElement("h2"); heading.textContent = "How competitions work";
+  const intro = document.createElement("p"); intro.textContent = "A quick reference for entering, screenshots, review, voting, judging, and results.";
+  const topics = [
+    ["Before you enter", "Read the description, rules, dates, allowed entry types, and rewards. Competition-specific rules take priority over this general guide."],
+    ["Making an entry", "Sign in with Discord, choose a linked Minecraft account, select an allowed entry type, add your title and description, include contributors, upload screenshots, and send the entry for review."],
+    ["Screenshots", "There is no screenshot-count limit. Each PNG or JPEG may be up to 8 MB. Remove coordinates, waypoints, private chat, hidden base locations, and anything else you do not want published."],
+    ["Staff review", "Staff checks entries against the published rules and image requirements. If changes are requested, the entry reopens for correction during the allowed period."],
+    ["Voting", "When community voting is enabled and open, eligible signed-in players can review approved entries and submit the number of choices shown on the ballot."],
+    ["Judging", "Assigned judges score approved entries using the published criteria. Private notes remain private; deliberately published feedback appears with the results."],
+    ["Results", "Results appear only after final checks. Completed pages retain placements, entries, member rosters, public feedback, and prizes."]
+  ];
+  const list = document.createElement("div"); list.className = "competition-guide-topics";
+  for (const [title, body] of topics) { const item = document.createElement("section"); const h3 = document.createElement("h3"); h3.textContent = title; const p = document.createElement("p"); p.textContent = body; item.append(h3, p); list.append(item); }
+  section.append(kicker, heading, intro, list); root.append(section);
 }
 
 function renderPlaceholderPanel(root, name, message) {
@@ -728,10 +707,11 @@ async function loadDetail() {
     tabs.className = "competition-detail-tabs";
     tabs.setAttribute("aria-label", "Competition sections");
     const completed = ["COMPLETED", "ARCHIVED"].includes(competition.lifecycleState);
-    const tabDefinitions = [["overview", "Overview"], ["entries", "Entries"]];
-    if (competition.config?.voting?.enabled && !completed) tabDefinitions.push(["vote", "Vote"]);
+    const tabDefinitions = [["overview", "Overview"], ["rules", "Rules"], ["guide", "How to enter"]];
+    if (payload.entriesVisible) tabDefinitions.push(["entries", "Entries"]);
+    if (competition.config?.voting?.enabled && competition.lifecycleState === "VOTING") tabDefinitions.push(["vote", "Vote"]);
     if (competition.config?.judging?.enabled) tabDefinitions.push(["judges", "Judges"]);
-    tabDefinitions.push(["results", "Results"]);
+    if (completed && payload.results?.length) tabDefinitions.push(["results", "Results"]);
     const buttons = tabDefinitions.map(([name, label], index) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -745,10 +725,12 @@ async function loadDetail() {
     const content = document.createElement("div");
     content.className = "competition-detail-content";
     renderOverview(content, payload);
-    renderEntries(content, payload);
-    if (competition.config?.voting?.enabled && !completed) renderPlaceholderPanel(content, "vote", "Voting controls will appear here when the authenticated voting flow is enabled.");
+    renderRulesTab(content, competition);
+    renderGuideTab(content);
+    if (payload.entriesVisible) renderEntries(content, payload);
+    if (competition.config?.voting?.enabled && competition.lifecycleState === "VOTING") renderPlaceholderPanel(content, "vote", "Voting is open. Sign in to review approved entries and submit your ballot.");
     if (competition.config?.judging?.enabled) renderJudges(content, payload);
-    renderResults(content, payload);
+    if (completed && payload.results?.length) renderResults(content, payload);
 
     shell.append(hero, tabs, content);
     root.replaceChildren(shell);

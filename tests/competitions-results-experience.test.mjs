@@ -9,9 +9,26 @@ test("completed competition overview includes winner dates prizes members and en
 
 test("voting and judging tabs are conditional", async () => {
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
-  assert.match(source, /voting\?\.enabled && !completed/);
+  assert.match(source, /voting\?\.enabled && competition\.lifecycleState === "VOTING"/);
   assert.match(source, /judging\?\.enabled\) tabDefinitions\.push\(\["judges", "Judges"\]\)/);
   assert.match(source, /mc-heads\.net\/avatar/);
+});
+
+test("future competitions show overview rules and guide without empty entry or result tabs", async () => {
+  const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
+  assert.match(source, /\[\["overview", "Overview"\], \["rules", "Rules"\], \["guide", "How to enter"\]\]/);
+  assert.match(source, /if \(payload\.entriesVisible\) tabDefinitions\.push\(\["entries", "Entries"\]\)/);
+  assert.match(source, /if \(completed && payload\.results\?\.length\) tabDefinitions\.push\(\["results", "Results"\]\)/);
+  assert.match(source, /slide-01\.webp/);
+});
+
+test("about documentation explains PieCloak from its public contract", async () => {
+  const page = await readFile(new URL("../public/plugins.html", import.meta.url), "utf8");
+  assert.match(page, /id="piecloak"/);
+  assert.match(page, /Within 24 blocks/);
+  assert.match(page, /From 24–48 blocks/);
+  assert.match(page, /does not hide players or ordinary base blocks/);
+  assert.match(page, /github\.com\/wsg138\/PieCloak/);
 });
 
 test("competition navigation separates back and guide actions", async () => {
