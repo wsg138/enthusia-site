@@ -1,0 +1,335 @@
+/* Private staging pass 6: restore native light/dark/automatic theme behavior. */
+
+/* The existing private redesign is dark-first. This late override supplies the light palette
+   whenever private-stage-theme.js resolves Vector's native Appearance preference to light. */
+html[data-enthusia-color-scheme="light"] {
+  color-scheme: light;
+  --enth-bg: #f6f8f5;
+  --enth-bg-elev: #ffffff;
+  --enth-panel: #ffffff;
+  --enth-panel-2: #f3f6f1;
+  --enth-panel-3: #eaf0e7;
+  --enth-line: #c6d0c3;
+  --enth-line-soft: #dce4da;
+  --enth-text: #202722;
+  --enth-muted: #5d6961;
+  --enth-faint: #7a857e;
+  --enth-accent: #5f8f43;
+  --enth-accent-2: #3f702b;
+  --enth-link: #397a24;
+  --enth-accent-bg: rgba(95, 143, 67, 0.11);
+}
+
+html[data-enthusia-color-scheme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-enthusia-color-scheme="light"],
+html[data-enthusia-color-scheme="light"] body,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 {
+  background: var(--enth-bg) !important;
+  color: var(--enth-text) !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 {
+  background-image: radial-gradient(900px 420px at 78% -10%, rgba(95, 143, 67, 0.10), transparent 60%) !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-container,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-header-container {
+  --background-color-base: #ffffff;
+  --background-color-base-fixed: #ffffff;
+  --background-color-neutral: #eaf0e7;
+  --background-color-neutral-subtle: #f3f6f1;
+  --background-color-interactive: #f0f4ee;
+  --background-color-interactive-subtle: #f7f9f6;
+  --background-color-progressive-subtle: #edf5e9;
+  --background-color-disabled-subtle: #f0f2ef;
+  --border-color-base: #aeb9ab;
+  --border-color-subtle: #c6d0c3;
+  --border-color-muted: #dce4da;
+  --color-base: #202722;
+  --color-subtle: #5d6961;
+  --color-placeholder: #7a857e;
+  --color-disabled: #929b95;
+  --color-progressive: #397a24;
+  --color-progressive--hover: #2f681d;
+  --color-progressive--active: #285819;
+  --color-visited: #5d6f55;
+}
+
+html[data-enthusia-color-scheme="light"] a:visited,
+html[data-enthusia-color-scheme="light"] .mw-parser-output a:visited {
+  color: #5d6f55 !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-header-container,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-sticky-header,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-header {
+  background: rgba(255, 255, 255, 0.97) !important;
+  color: var(--enth-text) !important;
+  border-color: var(--enth-line-soft) !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-pinnable-header,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-menu-heading,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-main-menu .vector-menu-heading,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc .vector-pinnable-header,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-tools .vector-pinnable-header,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-appearance .vector-pinnable-header,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-pinnable-header-label,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-menu-heading-label,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-main-menu .vector-menu-heading,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc .vector-pinnable-header-label,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-tools .vector-pinnable-header-label,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-appearance .vector-pinnable-header-label {
+  color: #68746c !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-menu-content-list .mw-list-item > a,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-main-menu .mw-list-item > a,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-tools .mw-list-item > a,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc-link,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .enthusia-stage-sidebar-link {
+  color: #465149 !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-main-menu .mw-list-item > a:hover,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-tools .mw-list-item > a:hover,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc-link:hover,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .enthusia-stage-sidebar-link:hover {
+  background: #eaf0e7 !important;
+  color: #1f2821 !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .enthusia-stage-sidebar-title {
+  color: #6b766f !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .firstHeading,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-first-heading,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 #firstHeading,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-titlebar,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-toolbar,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-article-toolbar-container {
+  color: #202722 !important;
+  border-color: var(--enth-line) !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-menu-tabs .mw-list-item a,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-toolbar a,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-titlebar a {
+  color: #465149 !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-search-box-input,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .cdx-text-input__input,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-ui-input,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 input[type="search"],
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 input[type="text"] {
+  background: #ffffff !important;
+  border-color: var(--enth-line) !important;
+  color: var(--enth-text) !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .cdx-button,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-ui-button,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 button,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 input[type="submit"] {
+  background-color: #f7f9f6 !important;
+  border-color: var(--enth-line) !important;
+  color: #283129 !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .cdx-button:hover,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-ui-button:hover,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 button:hover,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 input[type="submit"]:hover {
+  background-color: #eaf0e7 !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .cdx-button--weight-primary,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .cdx-button--action-progressive {
+  color: #ffffff !important;
+  background: var(--enth-accent) !important;
+  border-color: var(--enth-accent) !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .cdx-icon,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-icon,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-ui-icon {
+  color: #536058 !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 #content,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 #bodyContent,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-parser-output,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-body-content,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-content-ltr,
+html[data-enthusia-color-scheme="light"] .enthusia-wiki {
+  color: #2b332d !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-parser-output h1,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-parser-output h2,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-parser-output h3,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-parser-output h4 {
+  color: #202722 !important;
+  border-color: var(--enth-line) !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-parser-output code,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-code,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 pre,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-highlight {
+  background: #f1f5ef !important;
+  border-color: #d2dbcf !important;
+  color: #30412d !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .toc,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 #toc,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-warning,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-message-box,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .catlinks,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-editform,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-search-profile-tabs,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-changeslist-legend,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .oo-ui-window-frame,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .oo-ui-panelLayout-framed {
+  background: #ffffff !important;
+  color: var(--enth-text) !important;
+  border-color: var(--enth-line) !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-hero,
+html[data-enthusia-color-scheme="light"] .enthusia-cross,
+html[data-enthusia-color-scheme="light"] .enthusia-wiki .status,
+html[data-enthusia-color-scheme="light"] .enthusia-wiki .callout {
+  border-color: #c8d3c5 !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 248, 243, 0.96)) !important;
+  color: #2b332d !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-hero {
+  border-color: #bfd0b8 !important;
+  background: radial-gradient(520px 200px at 86% 20%, rgba(95, 143, 67, 0.10), transparent 68%), linear-gradient(180deg, #ffffff, #f2f6f0) !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-cross {
+  background: #f4f7f2 !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-home-card,
+html[data-enthusia-color-scheme="light"] .enthusia-home-columns > div,
+html[data-enthusia-color-scheme="light"] .enthusia-wiki .fact-grid > div,
+html[data-enthusia-color-scheme="light"] .enthusia-wiki .topic-card {
+  border-color: #cbd5c8 !important;
+  background: #ffffff !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-home-card:hover,
+html[data-enthusia-color-scheme="light"] .enthusia-wiki .topic-card:hover {
+  background: #f0f5ed !important;
+  border-color: #9eb594 !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-stage-icon {
+  border-color: #b8c9b2 !important;
+  background: linear-gradient(145deg, rgba(95, 143, 67, .11), rgba(95, 143, 67, .035)) !important;
+  color: var(--enth-accent-2) !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-wiki .fact-grid span,
+html[data-enthusia-color-scheme="light"] .enthusia-wiki .topic-card span {
+  color: #68736c !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-drop {
+  border-color: #cbd5c8 !important;
+  background: #ffffff !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-drop-summary:hover {
+  background: #f0f5ed !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-drop-summary b {
+  color: #273028 !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-drop-summary span {
+  color: #68736c !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-drop-content {
+  border-color: #d4ddd1 !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-table,
+html[data-enthusia-color-scheme="light"] .wikitable {
+  border-color: #cbd5c8 !important;
+  background: #ffffff !important;
+  color: #2b332d !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-table th,
+html[data-enthusia-color-scheme="light"] .enthusia-table td,
+html[data-enthusia-color-scheme="light"] .wikitable th,
+html[data-enthusia-color-scheme="light"] .wikitable td {
+  border-color: #d4ddd1 !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-table th,
+html[data-enthusia-color-scheme="light"] .wikitable th {
+  background: #edf2ea !important;
+  color: #273028 !important;
+}
+
+html[data-enthusia-color-scheme="light"] .enthusia-table tr:nth-child(even) td,
+html[data-enthusia-color-scheme="light"] .wikitable tr:nth-child(even) td {
+  background: rgba(34, 52, 37, 0.025) !important;
+}
+
+/* Pass 3 toolbar polish also contained dark hard-coded hover colors. */
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-article-toolbar-container .vector-menu-tabs .mw-list-item > a:hover,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-toolbar .vector-menu-tabs .mw-list-item > a:hover,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-toolbar .vector-menu-content-list > .mw-list-item > a:hover {
+  background: #eaf0e7 !important;
+  border-color: #c3cec0 !important;
+  color: #202722 !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .mw-article-toolbar-container .vector-menu-tabs .selected > a,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-toolbar .vector-menu-tabs .selected > a,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-page-toolbar .vector-menu-content-list > .selected > a {
+  background: var(--enth-accent-bg) !important;
+  border-color: #7fa367 !important;
+  color: var(--enth-accent-2) !important;
+}
+
+/* Pass 4 TOC polish follows the same resolved theme. */
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc .vector-toc-link {
+  color: #465149 !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc .vector-toc-link:hover {
+  background: #eaf0e7 !important;
+  color: #202722 !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc .vector-toc-level-3 > .vector-toc-link,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc .vector-toc-level-4 > .vector-toc-link {
+  color: #667169 !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc .vector-toc-toggle:hover {
+  background: #e2e9df !important;
+}
+
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc .vector-toc-toggle .vector-icon,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc .vector-toc-toggle .mw-ui-icon,
+html[data-enthusia-color-scheme="light"] body.skin-vector-2022 .vector-toc .vector-toc-toggle .cdx-icon {
+  color: #68736c !important;
+}
