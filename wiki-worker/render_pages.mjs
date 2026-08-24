@@ -85,11 +85,19 @@ function addTableClass(attrs) {
   return `<table${replaced}>`;
 }
 
+function translateDetails(html) {
+  return String(html).replace(
+    /<details\b[^>]*>\s*<summary\b[^>]*>([\s\S]*?)<\/summary>\s*<div>([\s\S]*?)<\/div>\s*<\/details>/gi,
+    (_, summary, body) => `<div class="enthusia-drop mw-collapsible mw-collapsed"><div class="enthusia-drop-summary">${summary}</div><div class="enthusia-drop-content mw-collapsible-content">${body}</div></div>`
+  );
+}
+
 function sanitize(html) {
   let out = internalLinks(html);
   out = out.replace(/\sdata-(?:page|special|community)="[^"]*"/g, '');
   out = out.replace(/<button[^>]*>([\s\S]*?)<\/button>/g, '$1');
-  out = out.replace(/<details([^>]*)class="([^"]*)"([^>]*)>/g, '<details$1class="enthusia-drop $2"$3>');
+  out = translateDetails(out);
+  out = out.replace(/<\/?(?:thead|tbody)\b[^>]*>/gi, '');
   out = out.replace(/<table([^>]*)>/g, (_, attrs) => addTableClass(attrs));
   return `${STYLE_TAG}\n<div class="enthusia-wiki">\n${out.trim()}\n</div>\n`;
 }
