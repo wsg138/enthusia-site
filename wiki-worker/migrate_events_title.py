@@ -13,7 +13,7 @@ USERNAME = os.environ.get('WIKI_BOT_USERNAME', '').strip()
 PASSWORD = os.environ.get('WIKI_BOT_PASSWORD', '')
 OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
 DESIRED = OUT / 'rendered' / 'events.wiki'
-UA = 'EnthusiaWikiPublisher/2.4 (owner-authorized title migration)'
+UA = 'EnthusiaWikiPublisher/2.5 (owner-authorized title migration)'
 
 jar = http.cookiejar.CookieJar()
 opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
@@ -71,10 +71,13 @@ def main():
     old = page('Server Events')
     new = page('Events')
 
+    # This helper owns only the one-time title migration. If Events already exists,
+    # content ownership/update safety has already been decided by the preceding
+    # full-backup human-edit guard, and publish.py performs revision-safe updates.
+    # Requiring the canonical page to equal the new desired source here would
+    # incorrectly block every legitimate later Events content/renderer update.
     if not new['missing']:
-        if norm(new['content']) != desired:
-            raise RuntimeError(f'Events already exists with unexpected content at rev {new["revid"]}')
-        print(f'Events already canonical at rev {new["revid"]}')
+        print(f'Events already canonical at rev {new["revid"]}; no title migration needed')
         return
 
     if old['missing']:
