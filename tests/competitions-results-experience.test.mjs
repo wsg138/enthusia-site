@@ -40,7 +40,17 @@ test("about documentation explains PieCloak from its public contract", async () 
   assert.match(page, /Within 24 blocks/);
   assert.match(page, /From 24–48 blocks/);
   assert.match(page, /does not hide players or ordinary base blocks/);
-  assert.match(page, /github\.com\/wsg138\/PieCloak/);
+  assert.match(page, /enthusia\.miraheze\.org\/wiki\/Main_Page/);
+  assert.doesNotMatch(page, /Managed clues|base clues/);
+});
+
+test("completed entry cards show equal player lists and podium styling", async () => {
+  const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../public/assets/competitions.css", import.meta.url), "utf8");
+  assert.match(source, /participantNames/);
+  assert.match(source, /submission-podium-mark/);
+  assert.match(source, /is-place-\$\{placement\}/);
+  for (const marker of ["is-place-1", "is-place-2", "is-place-3"]) assert.match(styles, new RegExp(marker));
 });
 
 test("competition navigation separates back and guide actions", async () => {

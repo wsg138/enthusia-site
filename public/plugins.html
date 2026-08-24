@@ -160,18 +160,18 @@
         <section id="piecloak" class="content-panel card">
           <p class="eyebrow">Base privacy</p>
           <h2>How PieCloak works</h2>
-          <p>PieCloak reduces information exposed to client-side ESP, pie-chart, and block-entity base-finding tools. It hides selected clues from a player's client when terrain or walls block legitimate visibility. The entities and blocks still exist and continue working normally on the server.</p>
+          <p>PieCloak reduces information exposed to client-side ESP, pie-chart, and block-entity base-finding tools. It hides selected entities and blocks from a player's client when terrain or walls block legitimate visibility. They still exist and continue working normally on the server.</p>
           <div class="detail-grid">
-            <div><strong>Within 24 blocks</strong><span>Managed clues are always shown. PieCloak does not conceal nearby activity.</span></div>
-            <div><strong>From 24–48 blocks</strong><span>The server checks the view through terrain. Three occluding block samples are enough to hide a managed clue.</span></div>
-            <div><strong>Beyond 48 blocks</strong><span>Managed clues remain outside the visibility radius until the player moves close enough.</span></div>
+            <div><strong>Within 24 blocks</strong><span>Managed entities and blocks are always shown. PieCloak does not conceal nearby activity.</span></div>
+            <div><strong>From 24–48 blocks</strong><span>The server checks the view through terrain. Three occluding block samples are enough to hide a managed entity or block.</span></div>
+            <div><strong>Beyond 48 blocks</strong><span>Managed entities and blocks remain outside the visibility radius until the player moves close enough.</span></div>
           </div>
           <h3>What it protects</h3>
-          <p>The current allowlist covers common base clues including villagers, pets, golems, bees, item frames, armor stands, paintings, campfires, bells, jukeboxes, conduits, beacons, shulker boxes, signs, banners, beds, heads, and skulls.</p>
+          <p>The current allowlist covers villagers, pets, golems, bees, item frames, armor stands, paintings, campfires, bells, jukeboxes, conduits, beacons, shulker boxes, signs, banners, beds, heads, and skulls.</p>
           <h3>What it does not do</h3>
           <ul class="clean-list"><li>It does not hide players or ordinary base blocks.</li><li>It does not stop mob AI, farms, breeding, villagers, trades, or block behavior.</li><li>It does not protect exposed builds, player trails, shared coordinates, maps, or normal exploration.</li></ul>
           <p>For the best protection, build revealing entities and block entities inside terrain or behind several solid blocks instead of directly against an exterior wall.</p>
-          <p><a class="btn quiet" href="https://github.com/wsg138/PieCloak" target="_blank" rel="noopener">View PieCloak source and technical details</a></p>
+          <p><a class="btn quiet" href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Read the Enthusia wiki</a></p>
         </section>
 
         <section id="events" class="content-panel card">

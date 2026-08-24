@@ -363,11 +363,10 @@ function renderOverview(root, payload) {
     const copy = document.createElement("div");
     const eyebrow = document.createElement("p"); eyebrow.className = "competitions-kicker"; eyebrow.textContent = "Winner";
     const heading = document.createElement("h2"); heading.textContent = winnerResult.title;
-    const owner = document.createElement("p"); owner.textContent = winnerResult.entryType === "GUILD" && winnerResult.guildName ? `${winnerResult.guildName} · submitted by ${winnerResult.ownerName}` : `By ${winnerResult.ownerName}`;
-    copy.append(eyebrow, heading, owner);
+    copy.append(eyebrow, heading);
     const teamLabel = document.createElement("strong"); teamLabel.className = "competition-winner-team-label"; teamLabel.textContent = "Winning team";
     const members = document.createElement("div"); members.className = "competition-winner-members";
-    for (const participant of winnerEntry?.participants ?? []) { const member = document.createElement("div"); member.className = "competition-winner-member"; const head = document.createElement("img"); head.src = `https://mc-heads.net/avatar/${encodeURIComponent(participant.playerName)}/64`; head.alt = ""; head.addEventListener("error", () => { head.src = "../assets/enthusia-logo-v2.png"; }, { once: true }); const memberCopy = document.createElement("span"); const name = document.createElement("strong"); name.textContent = participant.playerName; const role = document.createElement("small"); role.textContent = participantLabel(participant).split(" · ").at(-1); memberCopy.append(name, role); member.append(head, memberCopy); members.append(member); }
+    for (const playerName of participantNames(winnerEntry)) { const member = document.createElement("div"); member.className = "competition-winner-member"; const head = document.createElement("img"); head.src = `https://mc-heads.net/avatar/${encodeURIComponent(playerName)}/64`; head.alt = ""; head.addEventListener("error", () => { head.src = "../assets/enthusia-logo-v2.png"; }, { once: true }); const name = document.createElement("strong"); name.textContent = playerName; member.append(head, name); members.append(member); }
     if (members.children.length) copy.append(teamLabel, members);
     const prizes = (competition.config?.rewards?.definitions ?? []).filter((reward) => reward.placement === 1);
     if (prizes.length) { const prizeList = document.createElement("div"); prizeList.className = "competition-winner-prizes"; for (const prize of prizes) { const item = document.createElement("span"); item.textContent = `${prize.publicLabel}: ${prize.publicDescription}`; prizeList.append(item); } copy.append(prizeList); }
@@ -394,6 +393,12 @@ function renderOverview(root, payload) {
 function participantLabel(participant) {
   const role = ({ OWNER: "Owner", MAIN: "Main", HELPER: "Helper", GUILD_WORKER: "Guild worker" })[participant.role] ?? participant.role;
   return `${participant.playerName} · ${role}`;
+}
+
+function participantNames(entry) {
+  const names = [...new Set((entry?.participants ?? []).map((participant) => participant.playerName).filter(Boolean))];
+  if (!names.length && entry?.ownerName) names.push(entry.ownerName);
+  return names;
 }
 
 function showEntryDialog(submissions, selectedId) {
@@ -457,11 +462,16 @@ function renderEntries(root, payload) {
     return;
   }
 
+  const completed = ["COMPLETED", "ARCHIVED"].includes(payload.competition.lifecycleState);
+  const placements = new Map((payload.results ?? []).map((result) => [result.submissionId, result.placement]));
   const grid = document.createElement("div");
   grid.className = "submission-grid";
-  for (const submission of submissions) {
+  const orderedSubmissions = [...submissions].sort((a, b) => (placements.get(a.id) ?? 999) - (placements.get(b.id) ?? 999));
+  for (const submission of orderedSubmissions) {
     const card = document.createElement("article");
     card.className = "submission-card is-clickable";
+    const placement = completed ? placements.get(submission.id) : null;
+    if (placement && placement <= 3) card.classList.add("is-podium", `is-place-${placement}`);
     card.tabIndex = 0;
     card.setAttribute("role", "button");
     const preview = document.createElement("img");
@@ -473,22 +483,13 @@ function renderEntries(root, payload) {
     type.textContent = submission.entryType;
     const heading = document.createElement("h3");
     heading.textContent = submission.title;
-    const owner = document.createElement("p");
-    owner.textContent = submission.entryType === "GUILD" && submission.guildName
-      ? `${submission.guildName} · submitted by ${submission.ownerName}`
-      : `By ${submission.ownerName}`;
+    const names = document.createElement("p");
+    names.className = "submission-player-names";
+    names.textContent = participantNames(submission).join(" · ");
     const description = document.createElement("p");
     description.textContent = submission.description;
-    const members = document.createElement("div");
-    members.className = "submission-members";
-    for (const participant of submission.participants ?? []) {
-      const member = document.createElement("span");
-      member.className = "submission-member";
-      member.textContent = participantLabel(participant);
-      members.append(member);
-    }
-    card.append(preview, type, heading, owner, description);
-    if (members.children.length) card.append(members);
+    card.append(preview, type, heading, names, description);
+    if (placement && placement <= 3) { const place = document.createElement("span"); place.className = "submission-podium-mark"; place.textContent = placementLabel(placement); card.append(place); }
     if (submission.staffEdited) {
       const edited = document.createElement("span");
       edited.className = "staff-edited-label";
