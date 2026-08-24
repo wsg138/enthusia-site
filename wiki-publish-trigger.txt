@@ -1,3 +1,3 @@
 Owner-authorized Enthusia wiki v2 publication.
-Required gates: preserved-baseline comparison, render guardrails, per-page race checks, pre-edit backups, Main Page last.
-Requested: 2026-08-24T04:40-04:00
+Required gates: preserved-baseline comparison, unrelated community edits preserved, render guardrails, Miraheze parse validation, per-page race checks, pre-edit backups, readback verification, Main Page last.
+Requested: 2026-08-24T04:54-04:00
