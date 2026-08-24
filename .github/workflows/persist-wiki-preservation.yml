@@ -1,0 +1,103 @@
+name: Persist wiki preservation snapshot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'wiki-worker/preservation-trigger.txt'
+
+permissions:
+  contents: write
+
+env:
+  PRESERVATION_BRANCH: wiki-preservation-2026-08-24
+  PRE_PUBLISH_ARTIFACT_ID: '9520265442'
+  PRE_PUBLISH_SHA256: '7f0313996157ed1fc763818ec7fa83d388e5a451ad7d0cd0fd196c0a2bf08ddc'
+  FINAL_ARTIFACT_ID: '9522250476'
+  FINAL_SHA256: 'f0f4a43f987ab4a1ce96d3a8f0ca4ffd813513b403879f8bf2b37a9f4de599d1'
+
+jobs:
+  preserve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download and verify complete wiki backups
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/enthusia-wiki/pre /tmp/enthusia-wiki/final
+          curl --fail --location --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${PRE_PUBLISH_ARTIFACT_ID}/zip" \
+            -o /tmp/enthusia-wiki/pre.zip
+          curl --fail --location --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${FINAL_ARTIFACT_ID}/zip" \
+            -o /tmp/enthusia-wiki/final.zip
+          echo "${PRE_PUBLISH_SHA256}  /tmp/enthusia-wiki/pre.zip" | sha256sum -c -
+          echo "${FINAL_SHA256}  /tmp/enthusia-wiki/final.zip" | sha256sum -c -
+          unzip -q /tmp/enthusia-wiki/pre.zip -d /tmp/enthusia-wiki/pre
+          unzip -q /tmp/enthusia-wiki/final.zip -d /tmp/enthusia-wiki/final
+          test -s /tmp/enthusia-wiki/pre/wiki-worker-output/full-backup/manifest.json
+          test -s /tmp/enthusia-wiki/final/wiki-worker-output/full-backup/manifest.json
+
+      - name: Create immutable preservation branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --heads origin "$PRESERVATION_BRANCH" >/dev/null 2>&1; then
+            echo "Preservation branch already exists; refusing to rewrite it."
+            exit 1
+          fi
+          git config user.name "Enthusia Wiki Preservation"
+          git config user.email "actions@users.noreply.github.com"
+          git checkout --orphan "$PRESERVATION_BRANCH"
+          git rm -rf .
+          mkdir -p pre-publish final-post-publish
+          cp /tmp/enthusia-wiki/pre.zip pre-publish/full-backup.zip
+          cp -a /tmp/enthusia-wiki/pre/. pre-publish/extracted/
+          cp /tmp/enthusia-wiki/final.zip final-post-publish/full-backup.zip
+          cp -a /tmp/enthusia-wiki/final/. final-post-publish/extracted/
+          cat > README.md <<'EOF'
+          # Enthusia wiki preservation — 2026-08-24
+
+          This branch is a preservation record. Do not merge it into `main` and do not rewrite its history.
+
+          ## Pre-publish snapshot
+
+          The final complete live-wiki backup captured before the successful redesign publication.
+
+          - Captured: 2026-08-24T12:36:44Z
+          - Live pages: 167
+          - Complete per-page histories: 167
+          - Includes the post-original-baseline `SonOfBlood` edit at revision 604
+          - Artifact ID: 9520265442
+          - SHA-256: `7f0313996157ed1fc763818ec7fa83d388e5a451ad7d0cd0fd196c0a2bf08ddc`
+
+          ## Final post-publish snapshot
+
+          A complete final-state backup captured after publication and used for the successful idempotency verification.
+
+          - Captured: 2026-08-24T13:33:21Z
+          - Live pages: 197
+          - Complete per-page histories: 197
+          - All 31 managed publication targets exactly matched approved source
+          - `SonOfBlood` remained preserved at revision 604
+          - Main Page revision: 635
+          - Artifact ID: 9522250476
+          - SHA-256: `f0f4a43f987ab4a1ce96d3a8f0ca4ffd813513b403879f8bf2b37a9f4de599d1`
+
+          Both original ZIP archives and their fully extracted contents are stored in this branch.
+          EOF
+          git add -A
+          git commit -m "Preserve complete Enthusia wiki before and after v2 publication"
+          git push origin "HEAD:refs/heads/$PRESERVATION_BRANCH"
