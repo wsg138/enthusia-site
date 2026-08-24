@@ -1,1 +1,1 @@
-Private P2wn-only visual staging pass 2 after screenshot review.
+Private P2wn-only visual staging pass 2 idempotency verification.
