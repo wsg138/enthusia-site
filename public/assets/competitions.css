@@ -1,5 +1,5 @@
 .competitions-page{
-  font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important;
   font-size:17px;
   font-weight:500;
   line-height:1.55;
@@ -9,6 +9,7 @@
     radial-gradient(circle at 88% 18%,rgba(255,211,106,.06),transparent 28rem),
     var(--bg);
 }
+.competitions-page button,.competitions-page input,.competitions-page select,.competitions-page textarea{font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
 
 /*
   The main site has a number of intentionally expressive homepage type rules.
