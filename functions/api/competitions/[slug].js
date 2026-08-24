@@ -12,6 +12,7 @@ import {
   listApprovedPublicSubmissions
 } from "../../lib/competitions/repository.js";
 import { listPublicResults } from "../../lib/competitions/results.js";
+import { listCompetitionJudges } from "../../lib/competitions/judges.js";
 import { json, methodNotAllowed } from "../../lib/responses.js";
 
 function competitionSlug(context) {
@@ -49,20 +50,26 @@ export async function onRequestGet(context) {
 
     const entriesVisible = publicEntriesVisibleInState(competition.lifecycleState);
     if (!entriesVisible) {
+      const judges = competition.config?.judging?.enabled
+        ? await listCompetitionJudges(context.env.COMPETITIONS_DB, competition.id)
+        : [];
       return json({
         competition: publicCompetitionDetail(competition),
         entriesVisible: false,
         submissions: [],
-        results: []
+        results: [],
+        judges: judges.map((judge) => ({ playerUuid: judge.judgeUuid, playerName: judge.judgeName, assignedAt: judge.assignedAt }))
       });
     }
 
     const resultsVisible = ["COMPLETED", "ARCHIVED"].includes(competition.lifecycleState);
-    const [submissions, participants, images, results] = await Promise.all([
+    const judgingEnabled = Boolean(competition.config?.judging?.enabled);
+    const [submissions, participants, images, results, judges] = await Promise.all([
       listApprovedPublicSubmissions(context.env.COMPETITIONS_DB, competition.id),
       listAcceptedPublicParticipantsByCompetition(context.env.COMPETITIONS_DB, competition.id),
       listPublicSubmissionImages(context.env.COMPETITIONS_DB, competition.id),
-      resultsVisible ? listPublicResults(context.env.COMPETITIONS_DB, competition.id) : Promise.resolve([])
+      resultsVisible ? listPublicResults(context.env.COMPETITIONS_DB, competition.id) : Promise.resolve([]),
+      judgingEnabled ? listCompetitionJudges(context.env.COMPETITIONS_DB, competition.id) : Promise.resolve([])
     ]);
     const participantsBySubmission = groupRows(participants);
     const imagesBySubmission = groupRows(images);
@@ -75,7 +82,12 @@ export async function onRequestGet(context) {
         participantsBySubmission.get(submission.id) ?? [],
         imagesBySubmission.get(submission.id) ?? []
       )),
-      results
+      results,
+      judges: judges.map((judge) => ({
+        playerUuid: judge.judgeUuid,
+        playerName: judge.judgeName,
+        assignedAt: judge.assignedAt
+      }))
     });
   } catch {
     return json({ error: "competition_detail_unavailable" }, 503);

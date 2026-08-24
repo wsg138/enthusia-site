@@ -55,7 +55,18 @@ export async function onRequestGet(context) {
     const competition = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
     if (!competition) return json({ error: "competition_not_found" }, 404);
     const judges = await listCompetitionJudges(context.env.COMPETITIONS_DB, id, { includeRemoved: true });
-    return json({ competitionId: id, lifecycleState: competition.lifecycleState, judges });
+    const linked = await context.env.COMPETITIONS_DB.prepare(`
+      SELECT minecraft_uuid AS uuid, minecraft_name AS name
+      FROM competition_minecraft_links
+      ORDER BY minecraft_name COLLATE NOCASE ASC, minecraft_uuid ASC
+      LIMIT 500
+    `).all();
+    return json({
+      competitionId: id,
+      lifecycleState: competition.lifecycleState,
+      judges,
+      linkedPlayers: (linked.results ?? []).map((player) => ({ uuid: player.uuid, name: player.name }))
+    });
   } catch {
     return json({ error: "competition_judges_unavailable" }, 503);
   }

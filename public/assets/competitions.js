@@ -337,7 +337,8 @@ function renderRewards(section, competition) {
   section.append(heading, grid, note);
 }
 
-function renderOverview(root, competition) {
+function renderOverview(root, payload) {
+  const competition = payload.competition;
   const config = competition.config ?? {};
   const schedule = config.schedule ?? {};
   const section = document.createElement("section");
@@ -345,6 +346,36 @@ function renderOverview(root, competition) {
   section.dataset.tabPanel = "overview";
 
   section.append(renderStagePanel(competition));
+
+  if (["COMPLETED", "ARCHIVED"].includes(competition.lifecycleState) && payload.results?.length) {
+    const winnerResult = payload.results.find((result) => result.placement === 1) ?? payload.results[0];
+    const winnerEntry = payload.submissions?.find((entry) => entry.id === winnerResult.submissionId);
+    const summary = document.createElement("section");
+    summary.className = "competition-completed-summary";
+    const dates = document.createElement("div");
+    dates.className = "competition-completed-dates";
+    dates.innerHTML = `<span><strong>Started</strong> ${formatDate(competition.config?.schedule?.submissionsOpenAt)}</span><span><strong>Ended</strong> ${formatDate(winnerResult.publishedAt)}</span>`;
+    const winner = document.createElement("div");
+    winner.className = "competition-winner";
+    if (winnerEntry?.coverImageUrl) {
+      const image = document.createElement("img");
+      image.src = winnerEntry.coverImageUrl;
+      image.alt = `${winnerEntry.title} cover image`;
+      winner.append(image);
+    }
+    const copy = document.createElement("div");
+    const eyebrow = document.createElement("p"); eyebrow.className = "competitions-kicker"; eyebrow.textContent = "Winner";
+    const heading = document.createElement("h2"); heading.textContent = winnerResult.title;
+    const owner = document.createElement("p"); owner.textContent = winnerResult.entryType === "GUILD" && winnerResult.guildName ? `${winnerResult.guildName} · submitted by ${winnerResult.ownerName}` : `By ${winnerResult.ownerName}`;
+    copy.append(eyebrow, heading, owner);
+    const members = document.createElement("div"); members.className = "competition-entry-members";
+    for (const participant of winnerEntry?.participants ?? []) { const member = document.createElement("span"); member.className = "submission-member"; member.textContent = participantLabel(participant); members.append(member); }
+    if (members.children.length) copy.append(members);
+    const prizes = (competition.config?.rewards?.definitions ?? []).filter((reward) => reward.placement === 1);
+    if (prizes.length) { const prizeList = document.createElement("div"); prizeList.className = "competition-winner-prizes"; for (const prize of prizes) { const item = document.createElement("span"); item.textContent = `${prize.publicLabel}: ${prize.publicDescription}`; prizeList.append(item); } copy.append(prizeList); }
+    const view = document.createElement("button"); view.type = "button"; view.className = "competition-primary-action"; view.textContent = "View winning entry"; view.addEventListener("click", () => showEntryDialog(payload.submissions, winnerEntry?.id)); copy.append(view);
+    winner.append(copy); summary.append(dates, winner); section.append(summary);
+  }
 
   const description = document.createElement("div");
   description.className = "competition-copy";
@@ -417,6 +448,39 @@ function participantLabel(participant) {
   return `${participant.playerName} · ${role}`;
 }
 
+function showEntryDialog(submissions, selectedId) {
+  const entries = Array.isArray(submissions) ? submissions : [];
+  let entryIndex = Math.max(0, entries.findIndex((entry) => entry.id === selectedId));
+  let imageIndex = 0;
+  const dialog = document.createElement("dialog");
+  dialog.className = "competition-entry-dialog";
+  const view = document.createElement("div"); view.className = "competition-entry-view";
+  const close = document.createElement("button"); close.type = "button"; close.className = "competition-entry-dialog-close"; close.setAttribute("aria-label", "Close entry"); close.textContent = "×"; close.addEventListener("click", () => dialog.close());
+  const render = () => {
+    const entry = entries[entryIndex]; if (!entry) { dialog.close(); return; }
+    imageIndex = Math.min(imageIndex, Math.max(0, (entry.images?.length ?? 1) - 1));
+    const header = document.createElement("header");
+    const type = document.createElement("p"); type.className = "competitions-kicker"; type.textContent = entry.entryType;
+    const heading = document.createElement("h2"); heading.textContent = entry.title;
+    const owner = document.createElement("p"); owner.textContent = entry.entryType === "GUILD" && entry.guildName ? `${entry.guildName} · submitted by ${entry.ownerName}` : `By ${entry.ownerName}`;
+    const description = document.createElement("p"); description.textContent = entry.description;
+    header.append(type, heading, owner, description);
+    const members = document.createElement("div"); members.className = "competition-entry-members";
+    for (const participant of entry.participants ?? []) { const item = document.createElement("span"); item.className = "submission-member"; item.textContent = participantLabel(participant); members.append(item); }
+    const media = document.createElement("div");
+    const images = entry.images ?? [];
+    if (images.length) {
+      const image = document.createElement("img"); image.className = "competition-entry-image"; image.src = images[imageIndex].url; image.alt = `${entry.title}, image ${imageIndex + 1} of ${images.length}`; media.append(image);
+      if (images.length > 1) { const imageNav = document.createElement("div"); imageNav.className = "competition-entry-image-nav"; const previous = document.createElement("button"); previous.className = "competition-back-link"; previous.textContent = "← Previous image"; previous.disabled = imageIndex === 0; previous.addEventListener("click", () => { imageIndex--; render(); }); const count = document.createElement("span"); count.textContent = `${imageIndex + 1} of ${images.length}`; const next = document.createElement("button"); next.className = "competition-back-link"; next.textContent = "Next image →"; next.disabled = imageIndex === images.length - 1; next.addEventListener("click", () => { imageIndex++; render(); }); imageNav.append(previous, count, next); media.append(imageNav); }
+    }
+    const recordNav = document.createElement("div"); recordNav.className = "competition-entry-record-nav";
+    const previousEntry = document.createElement("button"); previousEntry.className = "competition-back-link"; previousEntry.textContent = "← Previous entry"; previousEntry.disabled = entryIndex === 0; previousEntry.addEventListener("click", () => { entryIndex--; imageIndex = 0; render(); });
+    const nextEntry = document.createElement("button"); nextEntry.className = "competition-back-link"; nextEntry.textContent = "Next entry →"; nextEntry.disabled = entryIndex === entries.length - 1; nextEntry.addEventListener("click", () => { entryIndex++; imageIndex = 0; render(); }); recordNav.append(previousEntry, nextEntry);
+    view.replaceChildren(close, header); if (members.children.length) view.append(members); view.append(media, recordNav);
+  };
+  dialog.append(view); document.body.append(dialog); dialog.addEventListener("close", () => dialog.remove(), { once: true }); render(); dialog.showModal();
+}
+
 function renderEntries(root, payload) {
   const section = document.createElement("section");
   section.className = "competition-tab-panel";
@@ -446,7 +510,9 @@ function renderEntries(root, payload) {
   grid.className = "submission-grid";
   for (const submission of submissions) {
     const card = document.createElement("article");
-    card.className = "submission-card";
+    card.className = "submission-card is-clickable";
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
     const type = document.createElement("span");
     type.className = "competition-badge";
     type.textContent = submission.entryType;
@@ -474,6 +540,8 @@ function renderEntries(root, payload) {
       edited.textContent = "Edited by staff";
       card.append(edited);
     }
+    card.addEventListener("click", (event) => { if (!event.target.closest("button,a")) showEntryDialog(submissions, submission.id); });
+    card.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); showEntryDialog(submissions, submission.id); } });
     grid.append(card);
   }
   section.append(grid);
@@ -497,9 +565,11 @@ function resultName(result) {
     : result.ownerName;
 }
 
-function resultCard(result, podium = false) {
+function resultCard(result, submissions, podium = false) {
   const card = document.createElement("article");
-  card.className = podium ? "competition-podium-card" : "competition-result-row";
+  card.className = `${podium ? "competition-podium-card" : "competition-result-row"} is-clickable`;
+  card.tabIndex = 0;
+  card.setAttribute("role", "button");
   card.dataset.placement = String(result.placement);
 
   const place = document.createElement("strong");
@@ -523,6 +593,8 @@ function resultCard(result, podium = false) {
     edited.textContent = "Edited by staff";
     card.append(edited);
   }
+  card.addEventListener("click", (event) => { if (!event.target.closest("button,a")) showEntryDialog(submissions, result.submissionId); });
+  card.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); showEntryDialog(submissions, result.submissionId); } });
   return card;
 }
 
@@ -555,18 +627,36 @@ function renderResults(root, payload) {
   const podium = document.createElement("div");
   podium.className = "competition-podium";
   for (const result of results.filter((item) => item.placement <= 3)) {
-    podium.append(resultCard(result, true));
+    podium.append(resultCard(result, payload.submissions, true));
   }
 
   const allHeading = document.createElement("h2");
   allHeading.textContent = "All placements";
   const list = document.createElement("div");
   list.className = "competition-result-list";
-  for (const result of results) list.append(resultCard(result));
+  for (const result of results) list.append(resultCard(result, payload.submissions));
 
   section.append(heading);
   if (podium.children.length) section.append(podium);
   section.append(allHeading, list);
+  root.append(section);
+}
+
+function renderJudges(root, payload) {
+  const section = document.createElement("section");
+  section.className = "competition-tab-panel";
+  section.dataset.tabPanel = "judges";
+  section.hidden = true;
+  const title = document.createElement("h2"); title.textContent = "Competition judges";
+  const intro = document.createElement("p"); intro.className = "competition-copy"; intro.textContent = "These players were assigned to score entries using the published judging criteria.";
+  const grid = document.createElement("div"); grid.className = "competition-judges-grid";
+  for (const judge of payload.judges ?? []) {
+    const card = document.createElement("article"); card.className = "competition-judge-card";
+    const image = document.createElement("img"); image.src = `https://mc-heads.net/avatar/${encodeURIComponent(judge.playerName)}/128`; image.alt = `${judge.playerName} Minecraft head`; image.loading = "lazy";
+    const copy = document.createElement("div"); const name = document.createElement("strong"); name.textContent = judge.playerName; const role = document.createElement("span"); role.textContent = "Competition judge"; copy.append(name, role); card.append(image, copy); grid.append(card);
+  }
+  section.append(title, intro);
+  if (grid.children.length) section.append(grid); else { const empty = document.createElement("div"); empty.className = "competition-empty"; empty.textContent = "No judges have been assigned yet."; section.append(empty); }
   root.append(section);
 }
 
@@ -637,12 +727,11 @@ async function loadDetail() {
     const tabs = document.createElement("nav");
     tabs.className = "competition-detail-tabs";
     tabs.setAttribute("aria-label", "Competition sections");
-    const tabDefinitions = [
-      ["overview", "Overview"],
-      ["entries", "Entries"],
-      ["vote", "Vote"],
-      ["results", "Results"]
-    ];
+    const completed = ["COMPLETED", "ARCHIVED"].includes(competition.lifecycleState);
+    const tabDefinitions = [["overview", "Overview"], ["entries", "Entries"]];
+    if (competition.config?.voting?.enabled && !completed) tabDefinitions.push(["vote", "Vote"]);
+    if (competition.config?.judging?.enabled) tabDefinitions.push(["judges", "Judges"]);
+    tabDefinitions.push(["results", "Results"]);
     const buttons = tabDefinitions.map(([name, label], index) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -655,11 +744,10 @@ async function loadDetail() {
 
     const content = document.createElement("div");
     content.className = "competition-detail-content";
-    renderOverview(content, competition);
+    renderOverview(content, payload);
     renderEntries(content, payload);
-    renderPlaceholderPanel(content, "vote", competition.config?.voting?.enabled
-      ? "Voting controls will appear here when the authenticated voting flow is enabled."
-      : "This competition does not use community voting.");
+    if (competition.config?.voting?.enabled && !completed) renderPlaceholderPanel(content, "vote", "Voting controls will appear here when the authenticated voting flow is enabled.");
+    if (competition.config?.judging?.enabled) renderJudges(content, payload);
     renderResults(content, payload);
 
     shell.append(hero, tabs, content);

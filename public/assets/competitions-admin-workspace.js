@@ -494,6 +494,15 @@ async function loadJudges() {
     const assign = el("div", "judge-admin-assign");
     const name = textInput("", 16);
     name.placeholder = "Minecraft username";
+    const linked = document.createElement("select");
+    linked.innerHTML = '<option value="">Select a linked player…</option>';
+    for (const player of payload.linkedPlayers ?? []) {
+      const option = document.createElement("option");
+      option.value = player.name;
+      option.textContent = player.name;
+      linked.append(option);
+    }
+    linked.addEventListener("change", () => { if (linked.value) name.value = linked.value; });
     const add = el("button", "button-secondary", "Assign judge");
     add.type = "button";
     const result = el("span", "admin-form-result");
@@ -516,7 +525,7 @@ async function loadJudges() {
         add.disabled = false;
       }
     });
-    assign.append(field("Minecraft username", name), add, result);
+    assign.append(field("Minecraft username", name), field("Or choose a linked player", linked), add, result);
 
     const list = el("div", "judge-admin-list");
     const active = workspaceState.judges.filter((judge) => !judge.removedAt);

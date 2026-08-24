@@ -1,4 +1,4 @@
-import "./competitions-admin-workspace.js";
+import "./competitions-admin-workspace.js?v=2";
 import "./competitions-admin-tools.js";
 import "./competitions-admin-bootstrap.js";
 

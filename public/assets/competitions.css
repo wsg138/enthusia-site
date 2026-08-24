@@ -60,8 +60,12 @@
 
 .competitions-intro h1{margin:.1rem 0 .5rem;font-size:clamp(2rem,5vw,4rem);line-height:1.04}
 .competitions-intro p{max-width:720px;margin:0;color:var(--muted)}
-.competitions-intro a,.competition-breadcrumbs a{color:var(--gold);font-weight:800}
-.competition-breadcrumbs{display:flex;gap:20px;flex-wrap:wrap;margin:0 0 24px}
+.competitions-intro a{color:var(--gold);font-weight:800}
+.competition-breadcrumbs{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin:0 0 24px}
+.competition-breadcrumbs a{font-weight:850;text-decoration:none}
+.competition-back-link{display:inline-flex;align-items:center;min-height:40px;padding:8px 13px;border:1px solid var(--line-strong);border-radius:10px;color:var(--cream);background:rgba(255,138,0,.1)}
+.competition-back-link:hover{background:rgba(255,138,0,.18);text-decoration:none}
+.competition-guide-link{color:var(--gold)}
 
 .competition-section{
   position:relative;
@@ -499,4 +503,32 @@
   .competition-detail-content{padding:14px 12px}
   .competition-stage-panel{padding:14px 12px}
   .competition-countdown strong{font-size:1.45rem;white-space:normal}
+}
+
+/* Rich public results and entry browser */
+.submission-card.is-clickable{width:100%;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.submission-card.is-clickable:hover,.submission-card.is-clickable:focus-visible{border-color:var(--orange);background:rgba(255,138,0,.08);outline:none}
+.competition-completed-summary{display:grid;gap:18px;padding:22px;border:1px solid rgba(255,211,106,.35);border-radius:15px;background:linear-gradient(135deg,rgba(255,211,106,.1),rgba(8,7,5,.26))}
+.competition-completed-dates{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted)}
+.competition-completed-dates strong{color:var(--cream)}
+.competition-winner{display:grid;grid-template-columns:minmax(180px,.65fr) minmax(0,1fr);gap:20px;align-items:center}
+.competition-winner img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;background:#0b0806}
+.competition-winner h2,.competition-winner p{margin:.2rem 0}
+.competition-winner-prizes{display:grid;gap:6px;margin-top:12px}.competition-winner-prizes span{color:var(--gold);font-weight:800}
+.competition-result-row.is-clickable,.competition-podium-card.is-clickable{width:100%;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.competition-result-row.is-clickable:hover,.competition-podium-card.is-clickable:hover{border-color:var(--orange)}
+.competition-judges-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.competition-judge-card{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--line);border-radius:13px;background:rgba(12,10,8,.4)}
+.competition-judge-card img{width:64px;height:64px;border-radius:8px;image-rendering:pixelated;background:#0a0806}.competition-judge-card strong,.competition-judge-card span{display:block}.competition-judge-card span{color:var(--muted);font-size:.84rem}
+.competition-entry-dialog{width:min(960px,calc(100% - 24px));max-height:calc(100vh - 24px);padding:0;border:1px solid var(--line-strong);border-radius:18px;color:var(--cream);background:#17110d;box-shadow:0 28px 90px #000;overflow:auto}.competition-entry-dialog::backdrop{background:rgba(0,0,0,.78);backdrop-filter:blur(5px)}
+.competition-entry-view{display:grid;gap:18px;padding:24px}.competition-entry-view header{padding-right:48px}.competition-entry-view h2,.competition-entry-view p{margin:.25rem 0}.competition-entry-view header p{color:var(--muted)}
+.competition-entry-image{display:block;width:100%;max-height:62vh;object-fit:contain;border-radius:12px;background:#090705}.competition-entry-image-nav,.competition-entry-record-nav{display:flex;align-items:center;justify-content:space-between;gap:12px}.competition-entry-thumbs{display:flex;gap:8px;overflow-x:auto}.competition-entry-thumbs button{flex:0 0 72px;padding:0;border:2px solid transparent;border-radius:8px;overflow:hidden;background:#0a0806}.competition-entry-thumbs button.is-active{border-color:var(--orange)}.competition-entry-thumbs img{display:block;width:72px;height:52px;object-fit:cover}.competition-entry-dialog-close{position:absolute;right:16px;top:12px;width:40px;height:40px;border:0;color:var(--cream);background:transparent;font-size:2rem;cursor:pointer}.competition-entry-members{display:flex;gap:7px;flex-wrap:wrap}
+
+@media(max-width:700px){
+  .competition-winner{grid-template-columns:1fr}
+  .competition-judges-grid{grid-template-columns:1fr}
+  .competition-entry-view{padding:18px 14px}
+  .competition-entry-record-nav{align-items:stretch;flex-direction:column}
+  .competition-breadcrumbs{align-items:stretch;flex-direction:column;gap:10px}
+  .competition-guide-link{padding-left:2px}
 }
