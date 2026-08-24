@@ -15,15 +15,16 @@ ${details('Negative categories','open list',table([
 ['Scammed','Scammed or deliberately misled another player.'],['Spawn Killed','Killed players unfairly around spawn.'],['Griefed','Damaged/destroyed another player\'s build.'],['Trapped','Used a trap unfairly against another player.'],['Scam Stall','Ran a misleading/dishonest Market stall.']],'Category|Use'))}
 <h2>Profiles and commands</h2>${table([
 ['<code>/rep</code>','Open your reputation profile.'],['<code>/rep &lt;player&gt;</code>','Open another player\'s profile and leave/edit a review.'],['<code>/rep give &lt;player&gt; &lt;category&gt; &lt;reason&gt;</code>','Give reputation directly without using the profile menu.'],['<code>/rep top</code> / <code>bottom</code>','Open reputation leaderboards.'],['<code>/rep reviews [player]</code>','View recent reviews.']])}
-<h2>Reputation effects</h2><p>Reputation can change gameplay at certain scores. Open the lists below for the current effects.</p>
-${details('Positive effects','+5 to +15',table([
-['+5','+1% movement speed'],['+10','+3% movement speed; +5% potion duration'],['+15','+5% movement speed; +10% potion duration']],'Reputation|Effects'))}
-${details('Negative effects','-5 to -20',table([
-['-5','-1% movement speed'],['-6','3s Ender Pearl cooldown; -5% Elytra-rocket flight duration'],['-7','-3% movement speed; 2s Wind Charge cooldown; -10% rocket duration'],['-10','-5% movement speed; 5s Ender Pearl cooldown; glowing'],['-12','Becomes stalkable; -10% potion duration'],['-15','7s Ender Pearl cooldown; 5s Wind Charge cooldown; -15% rocket duration'],['-20','10s Pearl cooldown; 10s Wind Charge cooldown; -10% movement speed; -15% potion duration; -25% rocket duration; red glow']],'Reputation|Effects'))}
+<h2>Reputation effects</h2><p>Movement-speed reputation effects are disabled. Older movement-speed values still exist in the server config for compatibility, but they do not affect players.</p>
+${details('Positive effects','current active effects',table([
+['+10','+5% beneficial potion duration'],['+15','+10% beneficial potion duration']],'Reputation|Effect'))}
+${details('Negative effects','effects added at each threshold',table([
+['-6','3s Ender Pearl cooldown; -5% Elytra-rocket duration'],['-7','2s Wind Charge cooldown; rocket penalty increases to -10%'],['-10','Glowing'],['-12','Becomes stalkable; -10% beneficial potion duration'],['-15','Pearl cooldown increases to 7s; Wind Charge cooldown to 5s; rocket penalty to -15%'],['-20','Pearl cooldown increases to 10s; Wind Charge cooldown to 10s; potion penalty to -15%; rocket penalty to -25%; red glow']],'Reputation|Effect added'))}
+<p>There is no 5-second Pearl tier at -10. The Pearl penalty stays at 3 seconds from -6 through -14, becomes 7 seconds at -15, and 10 seconds at -20.</p>
 <h2>Where effects apply</h2>${list([
-'Movement-speed and glow effects apply in Spawn/Warzone effect areas.',
-'Potion-duration modifiers apply in Spawn or the Warzone.',
+'Glow and beneficial-potion duration effects apply in Spawn/Warzone effect areas.',
 'Ender Pearl and Wind Charge reputation cooldowns apply in the Warzone.',
+'Elytra-rocket duration penalties apply while gliding.',
 'Death Duel participants are exempt from reputation effects that would change the duel rules.'
 ])}
 <h2>Stalking</h2><p>At <strong>-12 or lower</strong>, a player becomes eligible for reputation stalking. A subscription costs <strong>100 per day</strong> for 1–7 days.</p>
