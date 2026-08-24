@@ -1,0 +1,167 @@
+name: Stage Enthusia wiki private clickable cards
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-private-clickable-cards-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enthusia-wiki-private-clickable-cards
+  cancel-in-progress: false
+
+jobs:
+  stage:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_FULL_BACKUP_OUT: wiki-private-clickable-cards-output/full-backup
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD }}
+    steps:
+      - name: Check out private clickable-card source
+        uses: actions/checkout@v4
+
+      - name: Validate private clickable-card JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s wiki-worker/private-stage-clickable-cards.js
+          node --check wiki-worker/private-stage-clickable-cards.js
+          python3 - <<'PY'
+          from pathlib import Path
+          js = Path('wiki-worker/private-stage-clickable-cards.js').read_text(encoding='utf-8')
+          assert 'Private staging pass 5' in js
+          assert '.enthusia-home-card' in js
+          assert '.topic-card' in js
+          assert '.fact-grid > div' in js
+          assert "destinations.length === 1" in js
+          print('Private clickable-card JS validation passed.')
+          PY
+
+      - name: Capture complete live wiki before private clickable-card stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p wiki-private-clickable-cards-output
+          python3 wiki-worker/full_backup.py | tee wiki-private-clickable-cards-output/full-backup.log
+          test -s wiki-private-clickable-cards-output/full-backup/manifest.json
+          pages="$(find wiki-private-clickable-cards-output/full-backup/pages -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find wiki-private-clickable-cards-output/full-backup/history -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+
+      - name: Upload immutable pre-stage backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-private-clickable-cards-backup-${{ github.run_id }}
+          path: wiki-private-clickable-cards-output/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Publish P2wn-only clickable-card JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+          python3 - <<'PY'
+          import http.cookiejar, json, os, time, urllib.parse, urllib.request
+          from pathlib import Path
+
+          API = os.environ['WIKI_API']
+          USERNAME = os.environ['WIKI_BOT_USERNAME'].strip()
+          PASSWORD = os.environ['WIKI_BOT_PASSWORD']
+          TARGET = 'User:P2wn/common.js'
+          EXPECTED_USER = 'P2wn'
+          EXPECTED_BASE_REVID = 665
+          COMMENT = 'Private clickable-card staging for Enthusia wiki redesign'
+          BLOCK_PATH = Path('wiki-worker/private-stage-clickable-cards.js')
+          OUT = Path('wiki-private-clickable-cards-output')
+          MARKER = '/* Private staging pass 5: make single-destination wiki cards fully clickable. */'
+
+          jar = http.cookiejar.CookieJar()
+          opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
+
+          def api(params, method='POST'):
+              full = {'format':'json','formatversion':'2','maxlag':'5', **params}
+              headers = {'User-Agent':'EnthusiaWikiPrivateClickableCards/1.0','Accept':'application/json'}
+              if method == 'GET':
+                  req = urllib.request.Request(API + '?' + urllib.parse.urlencode(full), headers=headers)
+              else:
+                  headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+                  req = urllib.request.Request(API, data=urllib.parse.urlencode(full).encode(), headers=headers)
+              with opener.open(req, timeout=60) as response:
+                  result = json.loads(response.read().decode())
+              if result.get('error'):
+                  raise RuntimeError(f"MediaWiki API error: {result['error']}")
+              return result
+
+          token = api({'action':'query','meta':'tokens','type':'login'}, 'GET')['query']['tokens']['logintoken']
+          login = api({'action':'login','lgname':USERNAME,'lgpassword':PASSWORD,'lgtoken':token})
+          if login.get('login',{}).get('result') != 'Success':
+              raise RuntimeError(f'Wiki login failed: {login.get("login")}')
+          csrf = api({'action':'query','meta':'tokens'}, 'GET')['query']['tokens']['csrftoken']
+          who = api({'action':'query','meta':'userinfo'}, 'GET')['query']['userinfo']
+          if who.get('name') != EXPECTED_USER:
+              raise RuntimeError(f'Private clickable-card stage requires {EXPECTED_USER}; authenticated as {who.get("name")}')
+
+          def read_page():
+              result = api({'action':'query','prop':'revisions|info','titles':TARGET,'rvprop':'ids|timestamp|user|comment|content|contentmodel','rvslots':'main','curtimestamp':'1'}, 'GET')
+              page = result['query']['pages'][0]
+              if page.get('missing'):
+                  raise RuntimeError(f'{TARGET} is unexpectedly missing')
+              rev = page['revisions'][0]
+              slot = rev['slots']['main']
+              return {'revid':rev['revid'],'timestamp':rev['timestamp'],'comment':rev.get('comment') or '','content':slot.get('content',''),'contentmodel':slot.get('contentmodel') or rev.get('contentmodel'),'curtimestamp':result.get('curtimestamp')}
+
+          before = read_page()
+          if before['contentmodel'] not in ('javascript','text/javascript'):
+              raise RuntimeError(f'Unexpected content model: {before["contentmodel"]}')
+          block = BLOCK_PATH.read_text(encoding='utf-8').rstrip()
+          current = before['content'].rstrip()
+          report = {'target':TARGET,'beforeRevid':before['revid']}
+
+          if MARKER in current:
+              if current.count(MARKER) != 1:
+                  raise RuntimeError('Private clickable-card marker appears more than once')
+              existing = current[current.index(MARKER):].rstrip()
+              if existing != block:
+                  raise RuntimeError('Private clickable-card marker exists but live block differs from approved source')
+              print(f'PRIVATE CLICKABLE CARDS ALREADY CURRENT {TARGET} rev {before["revid"]}')
+              report.update({'result':'already-current','afterRevid':before['revid']})
+          else:
+              if before['revid'] != EXPECTED_BASE_REVID:
+                  raise RuntimeError(f'Expected private JS stage rev {EXPECTED_BASE_REVID}; found {before["revid"]}')
+              desired = current + '\n\n' + block + '\n'
+              edit = api({'action':'edit','title':TARGET,'text':desired,'token':csrf,'summary':COMMENT,'assert':'user','watchlist':'nochange','basetimestamp':before['timestamp'],'starttimestamp':before['curtimestamp']})
+              e = edit.get('edit') or {}
+              if e.get('result') != 'Success':
+                  raise RuntimeError(f'Private clickable-card edit failed: {e}')
+              time.sleep(1)
+              after = read_page()
+              if after['content'].rstrip() != desired.rstrip():
+                  raise RuntimeError('Private clickable-card exact readback failed')
+              if after['comment'] != COMMENT:
+                  raise RuntimeError('Private clickable-card edit summary readback mismatch')
+              print(f'PRIVATE CLICKABLE CARDS PUBLISHED {TARGET}: {before["revid"]} -> {after["revid"]}')
+              report.update({'result':'published','afterRevid':after['revid']})
+
+          OUT.mkdir(parents=True, exist_ok=True)
+          (OUT / 'private-clickable-cards-report.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
+          print('PRIVATE CLICKABLE CARDS verified by exact API readback')
+          PY
+
+      - name: Upload private clickable-card evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-private-clickable-cards-evidence-${{ github.run_id }}
+          path: wiki-private-clickable-cards-output/
+          if-no-files-found: warn
+          retention-days: 90
