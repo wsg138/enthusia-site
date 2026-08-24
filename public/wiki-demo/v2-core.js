@@ -144,7 +144,7 @@ P.homes={title:'Homes & Teleportation',section:'Mechanics',summary:'TPA, persona
 ['<code>/tpahere &lt;player&gt;</code>','Ask another player to teleport to you.'],
 ['<code>/tpaccept [player]</code> / <code>/tpadeny [player]</code>','Accept or deny a request.'],
 ['<code>/tpacancel</code>','Cancel your outgoing request.'],
-['<code>/tpignore &lt;player|list&gt;</code>','Ignore a player's TPA requests or view your TPA ignore list.']])}
+['<code>/tpignore &lt;player|list&gt;</code>','Ignore a player\'s TPA requests or view your TPA ignore list.']])}
 <p>Requests expire after 60 seconds.</p>
 <h2>Personal homes</h2><p>Players start with one home slot. Ranks can increase the limit.</p>
 ${table([
