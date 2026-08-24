@@ -1,0 +1,13 @@
+{{Player
+|title      = '''Kavebo'''
+|class      = infobox-default
+|image      = File:Kavebo.png
+|rank       = [Avid]
+|status     = Active
+|join       = 11 May 2026
+|region     = Europe
+|teams      = [[Everlights]]
+|former     = [[Personalized Task Coalition (PTC)]]
+|alts       = N/A
+}}
+[[Category:Players]]

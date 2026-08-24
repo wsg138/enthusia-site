@@ -1,0 +1,59 @@
+{
+  "oldBaselineCreatedAtUtc": "2026-08-23T04:29:21Z",
+  "newBackupCreatedAtUtc": "2026-08-24T13:33:21Z",
+  "oldPageCount": 167,
+  "currentPageCount": 197,
+  "addedPages": [
+    "AutoClicker",
+    "Betas",
+    "Builds",
+    "Chat & Messaging",
+    "Combat & PvP",
+    "Commands",
+    "Death Duels",
+    "Diaries",
+    "Giveaways",
+    "Guilds",
+    "History & Lore",
+    "Homes & Teleportation",
+    "Java & Bedrock",
+    "Leaderboards",
+    "Market",
+    "Mechanics",
+    "PieCloak",
+    "Playtime",
+    "Raw Gold",
+    "Reputation",
+    "Server Events",
+    "Server Information",
+    "Sleep",
+    "Spawn",
+    "Supporters & Donors",
+    "Tags, Rewards & Cosmetics",
+    "Template:EnthusiaWiki/styles.css",
+    "Trivia",
+    "Voting",
+    "Warzone"
+  ],
+  "removedPages": [],
+  "changedPages": [
+    {
+      "title": "Main Page",
+      "baselineRevid": 449,
+      "currentRevid": 635,
+      "baselineTimestamp": "2026-07-23T17:07:57Z",
+      "currentTimestamp": "2026-08-24T12:44:05Z",
+      "currentUser": "P2wn",
+      "currentComment": "Update Enthusia player wiki documentation"
+    },
+    {
+      "title": "SonOfBlood",
+      "baselineRevid": 498,
+      "currentRevid": 604,
+      "baselineTimestamp": "2026-07-30T15:26:25Z",
+      "currentTimestamp": "2026-08-23T11:39:04Z",
+      "currentUser": "SonOfBlood",
+      "currentComment": ""
+    }
+  ]
+}

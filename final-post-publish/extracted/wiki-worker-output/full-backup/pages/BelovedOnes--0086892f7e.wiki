@@ -1,0 +1,12 @@
+{{Guild
+|name       = '''BelovedOnes'''
+|class      = infobox-default
+|image      = File:Logo.jpg
+|status     = Active
+|founded    = Founded between the closing of the last open beta and the full release.
+|owner      = [[LavKun]]
+|count      = 8
+|alliances  = [[Kirky]]
+|enemies    = [[tuff]], [[BoopGang]], [[V]], [[Qubo]], [[Newwind]]
+}}
+[[Category:Guilds]]

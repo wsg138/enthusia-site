@@ -1,0 +1,7 @@
+{{Mapart
+|title      = I miss my sister
+|authors    = [[Currut]]
+|size       = 1x1
+|technique  = flat, carpet
+|notes      =
+}}

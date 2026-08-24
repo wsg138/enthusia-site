@@ -1,0 +1,9 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<div class="callout"><b>Wilderness PvP is vanilla.</b> Outside Spawn and the Warzone, combat is completely unrestricted vanilla combat.</div>
+<h2>Wilderness</h2><p>There are no rotating Warzone kits, special weapon cooldowns or Warzone-only item restrictions in ordinary wilderness combat.</p>
+<h2>Combat tag</h2><p>When you are in combat, <strong>Elytra use is blocked</strong> and <strong>logging out is not allowed as an escape from combat</strong>. These restrictions follow the combat tag rather than changing normal weapon behavior.</p>
+<h2>Spawn</h2><p>Spawn is protected and does not use wilderness PvP rules. See [[Spawn|Spawn]] for spawn-specific behavior.</p>
+<h2>Warzone</h2><p>The [[Warzone|Warzone]] is the exception: it intentionally rotates kits/modifiers and can change cooldowns or item availability inside that PvP area.</p>
+<h2>Death Duels</h2><p>[[Death Duels|Death Duels]] are consensual 1v1 fights with their own rule builder, optional wagers and victor's-spoils system.</p>
+</div>

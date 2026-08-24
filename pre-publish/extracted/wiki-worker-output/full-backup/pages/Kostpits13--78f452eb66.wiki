@@ -1,0 +1,14 @@
+{{Player
+|title      = '''Kostpits13_'''
+|class      = infobox-default
+|image      = File:Kostpits13 .png
+|rank       = ⟢[Helper]
+|status     = Active
+|join       = 2 May 2026
+|region     = Europe
+|teams      = [[Everlights]]
+|former     = [[Enthusiast]]
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Helpers]]

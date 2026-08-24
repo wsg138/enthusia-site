@@ -1,0 +1,6 @@
+<includeonly>
+	<div style="width: 120px; text-align:center; display:inline-block;">
+		[[{{{image|}}}|120x120px]]
+		[[%PAGE%|{{{title|%TITLE%}}}]]
+	</div>
+</includeonly>

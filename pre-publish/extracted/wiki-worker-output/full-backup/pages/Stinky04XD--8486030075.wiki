@@ -1,0 +1,15 @@
+{{Player
+|title      = '''Stinky04XD'''
+|class      = infobox-default
+|image      = File:Stinky04XD.png
+|rank       = ⟢[Avid]
+|status     = Inactive
+|join       = First Open Beta
+|region     = North America
+|teams      = [[ScarEye]]
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Former]]

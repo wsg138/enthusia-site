@@ -1,0 +1,7 @@
+{{Mapart
+|title      = You are here
+|authors    = [[Arsi_20]]
+|size       = 1x1
+|technique  = staircased, full
+|notes      =
+}}

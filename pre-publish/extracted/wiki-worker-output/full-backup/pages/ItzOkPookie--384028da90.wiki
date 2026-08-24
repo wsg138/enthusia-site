@@ -1,0 +1,13 @@
+{{Player
+|title      = '''ItzOkPookie'''
+|class      = infobox-default
+|image      = File:ItzOkPookie.png
+|rank       = [Member]
+|status     = Active
+|join       = 3 May 2026
+|region     = N/A
+|teams      = N/A
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]

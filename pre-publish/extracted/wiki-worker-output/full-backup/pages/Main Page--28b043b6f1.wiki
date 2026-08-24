@@ -1,0 +1,15 @@
+__NOTOC__
+== Welcome to {{SITENAME}}! ==
+Before making any edits to this wiki please make an account or else your ip will be attributed to that pages change. 
+
+<gallery mode="packed" heights="50" widths="144">
+File:Staff.png|link=Staff
+File:Guilds.png|link=Noteable Guilds
+File:Players.png|link=Noteable Players
+File:Betas.png|link=Betas
+File:Builds.png|link=Builds
+File:Mapart.png|link=Maparts
+File:Events.png|link=Events
+File:Mechanics2.png|link=Mechanics
+File:Templates.png|link=Templates
+</gallery>

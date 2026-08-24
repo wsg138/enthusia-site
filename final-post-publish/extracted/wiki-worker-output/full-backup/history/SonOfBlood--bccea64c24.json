@@ -1,0 +1,29 @@
+[
+  {
+    "revid": 498,
+    "parentid": 0,
+    "minor": false,
+    "user": "ToxikFlame11",
+    "userid": 4,
+    "timestamp": "2026-07-30T15:26:25Z",
+    "size": 331,
+    "comment": "Created page with \"{{Player |title      = '''SonOfBlood''' |class      = infobox-default |image      = File:SonOfblood.png |rank       = [Helper] |status     = Active |join       = 23rd June 2026 |region     = North America |teams      = [[Chillage]] |former     = N/A |alts       = N/A }} [[Category:Players]] [[Category:Staff]] [[Category:Helpers]]\"",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 604,
+    "parentid": 498,
+    "minor": false,
+    "user": "SonOfBlood",
+    "userid": 18,
+    "timestamp": "2026-08-23T11:39:04Z",
+    "size": 324,
+    "comment": "",
+    "tags": [
+      "mobile web edit",
+      "mobile edit"
+    ]
+  }
+]

@@ -1,0 +1,7 @@
+{{Mapart
+|title      = ♥︎ MY COMPUTER
+|authors    = [[summars]]
+|size       = 2x2
+|technique  = flat, full
+|notes      =
+}}

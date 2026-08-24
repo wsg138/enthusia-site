@@ -1,0 +1,13 @@
+{{Guild
+|name       = '''Everlights'''
+|class      = infobox-default
+|image      = File:TheEverlights.png
+|status     = Active
+|founded    = Founded sometime during the first closed beta.
+|owner      = [[ToxikFlame11]]
+|count      = 16
+|members    = [[ToxikFlame11]], [[Aquaticcs]], [[ToxikXI]], [[damlano]], [[_Riasz]], [[Everlights]] [[Quinnbodine]], [[Kavebo]], [[Xx_salmongod_xX]], [[Kostpits13_]], [[TafetaWolf]], [[imdahcat]], [[GodOfSharks]], [[FiireFlyy]], [[]]
+|alliances  = [[Fishing]]
+|enemies    = N/A
+}}
+[[Category:Guilds]]

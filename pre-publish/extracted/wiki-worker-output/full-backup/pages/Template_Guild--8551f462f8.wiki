@@ -1,0 +1,38 @@
+<div class="{{{class|}}}">
+	<infobox>
+		<title source="name">
+			<default>{{PAGENAME}}</default>
+		</title>
+		<image source="image">
+			<default>File:NoLogo.png</default>
+		</image>/
+		<data source="status">
+			<label>Status:</label>
+			<default>N/A</default>
+		</data>
+		<data source="founded">
+			<label>Founded:</label>
+			<default>N/A</default>
+		</data>
+		<data source="owner">
+			<label>Owner:</label>
+			<default>N/A</default>
+		</data>
+		<data source="count">
+			<label>Members:</label>
+			<default>N/A</default>
+		</data>
+		<data source="discord">
+			<label>Discord:</label>
+			<default>N/A</default>
+		</data>
+		<data source="alliances">
+			<label>Allies:</label>
+			<default>N/A</default>
+		</data>
+		<data source="enemies">
+			<label>Enemies:</label>
+			<default>N/A</default>
+		</data>
+	</infobox>
+</div>

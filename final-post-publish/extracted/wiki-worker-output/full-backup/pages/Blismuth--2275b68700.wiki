@@ -1,0 +1,13 @@
+{{Player
+|title      = '''Blismuth'''
+|class      = infobox-default
+|image      = File:Blismuth.png
+|rank       = [Devotee]
+|status     = Active
+|join       = sometime in beta idk
+|region     = North America
+|teams      = [[We On Top (WOT)]]
+|former     = N/A
+|alts       = StepGoy, FarexLover67, FemboyThighHigh, Estosterone, CSE2, Spectrogram, LeakingCoords
+}}
+[[Category:Players]]

@@ -1,0 +1,7 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Public donor rankings are based on completed Tebex payments with a positive amount. Zero-value/manual records and refunded or charged-back payments do not count toward the supporter totals.</p>
+<h2>Rankings</h2><p>All-time and monthly top-supporter rankings are available through the public presentation systems. Monthly totals use the server's configured calendar timezone.</p>
+<h2>In-game presentation</h2><p>NPC displays can show the top three all-time donors and top three monthly donors, alongside separate #1 displays for selected gameplay statistics such as balance, active playtime and kills.</p>
+<p>For rank benefits, see [[Ranks|Ranks]] or the official store.</p>
+</div>

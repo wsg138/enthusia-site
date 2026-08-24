@@ -1,0 +1,6 @@
+* [[Template:Player]]
+* [[Template:Player.dpl]]
+* [[Template:Guild]]
+* [[Template:Guild.dpl]]
+* [[Template:Mapart]]
+* [[Template:Mapart.dpl]]

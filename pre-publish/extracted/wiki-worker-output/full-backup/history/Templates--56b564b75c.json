@@ -1,0 +1,93 @@
+[
+  {
+    "revid": 120,
+    "parentid": 0,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-15T18:20:28Z",
+    "size": 42,
+    "comment": "Add templates.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 230,
+    "parentid": 120,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-18T19:32:51Z",
+    "size": 42,
+    "comment": "Link to proper templates.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 307,
+    "parentid": 230,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T13:34:30Z",
+    "size": 104,
+    "comment": "Add player dynamic lists template.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 308,
+    "parentid": 307,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T13:34:44Z",
+    "size": 68,
+    "comment": "Whoops",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 329,
+    "parentid": 308,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T14:17:42Z",
+    "size": 93,
+    "comment": "",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 524,
+    "parentid": 329,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-08-08T13:29:47Z",
+    "size": 115,
+    "comment": "Add mapart template.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 571,
+    "parentid": 524,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-08-14T22:57:51Z",
+    "size": 141,
+    "comment": "Add missing mapart.dpl",
+    "tags": [
+      "wikieditor"
+    ]
+  }
+]

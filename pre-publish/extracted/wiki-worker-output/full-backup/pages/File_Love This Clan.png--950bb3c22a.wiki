@@ -1,0 +1,7 @@
+{{Mapart
+|title      = Love This Clan
+|authors    = [[CheddarManPro]], [[la1x]], [[x21le]]
+|size       = 1x1
+|technique  = flat, carpet
+|notes      =
+}}

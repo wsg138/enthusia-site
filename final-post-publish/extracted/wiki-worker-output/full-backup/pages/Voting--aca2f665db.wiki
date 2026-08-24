@@ -1,0 +1,9 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Voting gives direct Raw Gold and can temporarily increase the Raw Gold you earn from mining gold ore.</p>
+<h2>Direct rewards</h2><p>Each configured vote site gives a random <strong>1–10 Raw Gold</strong>. Completing all vote sites gives an additional <strong>20 Raw Gold</strong>.</p>
+<h2>Vote streak mining multiplier</h2><p>The streak multiplier applies to extra Raw Gold from mining gold ore for <strong>20 minutes after a qualifying vote</strong>. It does not multiply the direct vote payout.</p>
+<div class="fact-grid"><div><b>1–2 day streak</b><span>1× mining bonus</span></div><div><b>3–6 days</b><span>1.5×</span></div><div><b>7–29 days</b><span>2×</span></div><div><b>30+ days</b><span>3×</span></div></div>
+<h2>Vote Party</h2><p>A Vote Party triggers at 100 server votes within the configured 30-minute window. During Vote Party, the mining bonus is doubled multiplicatively.</p>
+<h2>Commands</h2><p><code>/vote</code> opens voting information. <code>/votesites</code> lists the available vote sites.</p>
+</div>

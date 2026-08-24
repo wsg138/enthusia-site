@@ -1,0 +1,26 @@
+[
+  {
+    "revid": 188,
+    "parentid": 0,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-15T23:17:26Z",
+    "size": 7,
+    "comment": "",
+    "tags": []
+  },
+  {
+    "revid": 536,
+    "parentid": 188,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-08-08T15:56:10Z",
+    "size": 114,
+    "comment": "Update metadata.",
+    "tags": [
+      "wikieditor"
+    ]
+  }
+]

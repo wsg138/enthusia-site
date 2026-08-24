@@ -1,0 +1,7 @@
+{{Mapart
+|title       = I was here
+|authors    = [[MBelloc]]
+|size       = 1x1
+|technique  = flat, carpet
+|notes      =
+}}

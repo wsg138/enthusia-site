@@ -1,0 +1,14 @@
+{{Guild
+|name       = '''Architects'''
+|class      = infobox-default
+|image      = File:ArchitectsLogo.webp
+|status     = Active
+|founded    = 2 May 2026
+|owner      = [[Pbe]]
+|count      = 18
+|alliances  = [[WeOnTop]], [[Frezhate]], [[Qubo]]
+|enemies    = [[tuff]], [[IndianDefenseForces]], [[V]], [[Boopgang]]
+}}
+[[Category:Guilds]]
+
+<!-- members = [[Pbe]], [[HappyPcFulchamp]], [[MrBoom420]], [[Zom_B_Kitty_26]], [[IdotMaster]], [[Shoo]], [[MBelloc]], [[snickered]], [[saintnepeta]], [[Fwig]], [[Zatherah]], [[Summars]], [[Tezim]], [[Lepodite]], [[Bigbadcuff]], [[Chromatic_Prism]], [[Arsi_20]], [[DigiverseDragon]] --!>

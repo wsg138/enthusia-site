@@ -1,0 +1,93 @@
+[
+  {
+    "revid": 94,
+    "parentid": 0,
+    "minor": false,
+    "user": "ToxikFlame11",
+    "userid": 4,
+    "timestamp": "2026-07-14T06:26:42Z",
+    "size": 603,
+    "comment": "Created page with \"{{Team |team       = '''Architects''' |class      = infobox-default |image      = [Placeholder] |info       = [Placeholder]  |status     = Active |founded    = Architects was founded on the 2nd of May 2025.  |count      = 18 |members    = [[Pbe]], [[HappyPcFulchamp]], [[MrBoom420]], [[Zom_B_Kitty_26]], [[IdotMaster]], [[Shoo]], [[MBelloc]], [[snickered]], [[saintnepeta]], [[Fwig]], [[Zatherah]], [[Summars]], [[Tezim]], [[Lepodite]], [[Bigbadcuff]], [[Chromatic_Prism]], [...\"",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 328,
+    "parentid": 94,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T14:09:38Z",
+    "size": 623,
+    "comment": "Add category.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 346,
+    "parentid": 328,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T18:00:08Z",
+    "size": 623,
+    "comment": "Change from team to guild.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 349,
+    "parentid": 346,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T18:03:42Z",
+    "size": 595,
+    "comment": "Fix, clean up.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 368,
+    "parentid": 349,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T18:44:46Z",
+    "size": 599,
+    "comment": "Clean up.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 380,
+    "parentid": 368,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T19:02:49Z",
+    "size": 584,
+    "comment": "Remove image field until an actual image can be added.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 393,
+    "parentid": 380,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T19:44:36Z",
+    "size": 623,
+    "comment": "Update logo.",
+    "tags": [
+      "wikieditor"
+    ]
+  }
+]

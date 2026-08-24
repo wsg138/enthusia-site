@@ -1,0 +1,6 @@
+<includeonly>
+	<div style="width: 200px; text-align:center; display:inline-block;">
+		[[{{{image|File:NoLogo.png}}}|200x200px]]
+		[[%PAGE%|{{{title|%TITLE%}}}]]
+	</div>
+</includeonly>

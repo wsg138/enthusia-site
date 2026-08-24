@@ -1,0 +1,16 @@
+{{Player
+|title      = '''BobSuit   '''
+|class      = infobox-default
+|image      = File:Placeholder.png
+|rank       = ⟢[Mod]
+|status     = Active
+|join       = 2 May 2026
+|region     = Europe
+|teams      = [[Fishing]]
+|former     = [[Everlights]]
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Moderators]]
+[[Category:Builders]]

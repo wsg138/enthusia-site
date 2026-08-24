@@ -1,0 +1,8 @@
+== Summary ==
+{{Mapart
+|title      = WOT
+|authors    = [[H3dge5]], [[Aquariom]], [[mifftyy]], [[timbob82]]
+|size       = 1x1
+|technique  = flat, carpet
+|notes      =
+}}

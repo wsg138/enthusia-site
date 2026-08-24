@@ -1,0 +1,12 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Enthusia is a permanent semi-anarchy survival world. The world is meant to last, bases are not protected by land claims, and Java and Bedrock players share the same SMP.</p>
+<div class="fact-grid"><div><b>Java</b><span>enthusia.net</span></div><div><b>Bedrock</b><span>enthusia.net · port 19132</span></div><div><b>World</b><span>Permanent SMP</span></div><div><b>Land claims</b><span>None</span></div></div>
+<h2>No land claims</h2><div class="callout"><b>Bases can be found, raided and griefed.</b> There are no automatic claim borders protecting your builds.</div>
+<p>Location privacy, trust and how much information your base exposes matter. [[PieCloak|PieCloak]] reduces several client-side base-finding methods, but it does not make a base invulnerable or impossible to find.</p>
+<h2>PvP</h2><p><strong>Outside Spawn and the Warzone, combat is unrestricted vanilla PvP.</strong> The normal wilderness does not use Warzone kits or rotating weapon rules.</p>
+<p>While combat-tagged, two important restrictions still apply: <strong>you cannot use an Elytra and you cannot log out to escape combat.</strong> The [[Combat & PvP|Combat & PvP]] page explains this separately from the Warzone.</p>
+<h2>Economy</h2><p>[[Raw Gold|Raw Gold]] is the server currency. It can exist physically in your inventory or as a bank balance. The [[Market|Market]] provides protected stalls, shops and auctions for player trading.</p>
+<h2>Guilds and community</h2><p>[[Guilds|Guilds]] are the main group system. You can also browse [[Noteable Players|Player Pages]], [[Noteable Guilds|Guild Pages]] and [[History & Lore|History & Lore]].</p>
+<h2>Useful first commands</h2><table class="wikitable enthusia-table"><tbody><tr><td><code>/rules</code></td><td>View the server rules.</td></tr><tr><td><code>/newbie</code></td><td>View new-player information.</td></tr><tr><td><code>/tps</code></td><td>Show accurate TPS and current server information.</td></tr><tr><td><code>/spawn</code></td><td>Teleport to spawn.</td></tr><tr><td><code>/discord</code></td><td>Get the Discord link.</td></tr><tr><td><code>/website</code></td><td>Get the website link.</td></tr><tr><td><code>/store</code></td><td>Get the store link.</td></tr></tbody></table>
+</div>

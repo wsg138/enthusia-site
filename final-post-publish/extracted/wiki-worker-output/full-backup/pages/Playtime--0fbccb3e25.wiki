@@ -1,0 +1,9 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Enthusia separates <strong>total time</strong> from <strong>active time</strong> and <strong>AFK/non-active time</strong>. This keeps active-play leaderboards from simply rewarding leaving Minecraft open.</p>
+<div class="fact-grid"><div><b>Idle starts</b><span>after 60 seconds</span></div><div><b>AFK starts</b><span>after 5 minutes</span></div><div><b>Leaderboard ranges</b><span>today / 7d / 30d / all</span></div><div><b>Leaderboard metrics</b><span>active / AFK / total</span></div></div>
+<h2>Your stats</h2><p><code>/playtime</code> or <code>/pt</code> opens your playtime information. <code>/playtime top [active|afk|total] [today|7d|30d|all] [page]</code> opens a filtered leaderboard.</p>
+<h2>Numerals</h2><p>Active playtime unlocks numeral tiers that can be viewed with <code>/playtime numerals</code>, <code>/roman</code> or <code>/numerals</code>.</p>
+<details class="enthusia-drop drop"><summary><b>Numeral thresholds</b><span>active hours</span></summary><div><table class="wikitable enthusia-table"><thead><tr><th>Tier</th><th>Active hours</th></tr></thead><tbody><tr><td>I</td><td>1</td></tr><tr><td>II</td><td>8</td></tr><tr><td>III</td><td>20</td></tr><tr><td>IV</td><td>45</td></tr><tr><td>V</td><td>90</td></tr><tr><td>VI</td><td>170</td></tr><tr><td>VII</td><td>320</td></tr><tr><td>VIII</td><td>580</td></tr><tr><td>IX</td><td>1,090</td></tr><tr><td>X</td><td>2,000</td></tr><tr><td>Y</td><td>5,000</td></tr><tr><td>Z</td><td>15,000</td></tr></tbody></table></div></details>
+<h2>First join and seen</h2><p><code>/firstjoin [player]</code> (alias <code>/fj</code>) shows first-join information. <code>/seen &lt;player&gt;</code> shows last-seen information where available.</p>
+</div>

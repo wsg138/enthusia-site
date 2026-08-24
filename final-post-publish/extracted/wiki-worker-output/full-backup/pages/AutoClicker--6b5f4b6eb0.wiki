@@ -1,0 +1,8 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p><code>/autoclick</code> runs a server-side attack helper intended for stationary hostile-mob farming. It does not require a client mod and works for both Java and Bedrock players.</p>
+<h2>Using it</h2><table class="wikitable enthusia-table"><tbody><tr><td><code>/autoclick</code></td><td>Toggle normal cooldown-based attacks.</td></tr><tr><td><code>/autoclick &lt;ticks&gt;</code></td><td>Use a fixed attack interval. The minimum is 1 tick.</td></tr><tr><td><code>/autoclick status</code></td><td>Show whether AutoClicker is active and its current mode.</td></tr></tbody></table>
+<h2>Targeting</h2><p>AutoClicker attacks valid hostile mobs within about 3 blocks and respects walls/collision. It does not deliberately target players, pets or passive animals.</p>
+<h2>When it stops</h2><ul><li>Moving too far from the point where you activated it.</li><li>Entering PvP combat.</li><li>Opening menus or starting teleports.</li><li>Changing world, dying or disconnecting.</li><li>Entering an invalid game mode.</li></ul>
+<p>If there is no valid target, the attack animation can continue without damaging anything.</p>
+</div>

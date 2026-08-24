@@ -1,0 +1,8 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<div class="fact-grid"><div><b>Java</b><span>enthusia.net</span></div><div><b>Bedrock</b><span>enthusia.net · port 19132</span></div><div><b>World</b><span>Shared</span></div><div><b>Economy/progression</b><span>Shared</span></div></div>
+<p>Java and Bedrock players play together on the same SMP. Bedrock is not a separate server or separate economy.</p>
+<h2>Menus</h2><p>Some systems show Java players an inventory GUI while Bedrock players receive a Bedrock-friendly form. The buttons may look different, but they control the same server data.</p>
+<h2>Commands</h2><p>The normal slash commands in this wiki generally work on both editions unless a page explicitly says otherwise.</p>
+<h2>AutoClicker</h2><p>[[AutoClicker|AutoClicker]] is server-side, so Bedrock players do not need a Java client mod to use it.</p>
+</div>

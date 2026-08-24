@@ -1,0 +1,13 @@
+{{Player
+|title      = '''LulzEnjoyer'''
+|class      = infobox-default
+|image      = File:Lulzenjoyerplayerskin.png
+|rank       = [Avid]
+|status     = Semi-active
+|join       = N/A
+|region     = N/A
+|teams      = Vibe
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]

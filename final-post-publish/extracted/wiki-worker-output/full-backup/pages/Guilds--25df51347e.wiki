@@ -1,0 +1,12 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Guilds are player-created groups with their own name, members, ranks, homes, chat, shared money/storage and relationships with other guilds.</p>
+<div class="fact-grid"><div><b>Creation cost</b><span>Free</span></div><div><b>Guild name</b><span>5–32 characters</span></div><div><b>Maximum members</b><span>20</span></div><div><b>Custom ranks</b><span>Up to 10</span></div><div><b>Guild bank maximum</b><span>1,000,000</span></div><div><b>Vault size</b><span>Can grow to 54 slots</span></div></div>
+<h2>Creating and managing a guild</h2><table class="wikitable enthusia-table"><tbody><tr><td><code>/guild</code></td><td>Open the guild system. Alias: <code>/g</code>.</td></tr><tr><td><code>/guild create &lt;name&gt;</code></td><td>Create a guild.</td></tr><tr><td><code>/guild invite &lt;player&gt;</code></td><td>Invite a player if your rank allows it.</td></tr><tr><td><code>/guild leave</code></td><td>Leave your guild.</td></tr><tr><td><code>/guild kick/promote/demote ...</code></td><td>Member-management actions available to ranks with the required permission.</td></tr></tbody></table>
+<h2>Guild homes</h2><p>Guilds can set named shared homes. Teleporting to a guild home uses a 3-second warmup and 5-second cooldown; setting a guild home has a 10-minute cooldown.</p>
+<table class="wikitable enthusia-table"><tbody><tr><td><code>/guild sethome [name]</code></td><td>Set a shared home.</td></tr><tr><td><code>/guild home [name]</code></td><td>Teleport to a shared home your rank can use.</td></tr><tr><td><code>/guild homes</code></td><td>List guild homes.</td></tr><tr><td><code>/guild removehome &lt;name&gt;</code></td><td>Remove a guild home if your rank allows it.</td></tr></tbody></table>
+<h2>Chat</h2><p><code>/gc &lt;message&gt;</code> sends guild chat. <code>/gac &lt;message&gt;</code> sends ally chat; <code>/ga</code> is an alias.</p>
+<h2>Bank and vault</h2><p>Guild ranks control who can view/use shared funds and storage. Being a member does not automatically grant management or withdrawal permissions.</p>
+<h2>Relationships</h2><p>Guilds can maintain ally, enemy, truce and neutral relationships. Other server systems can use those relationships for chat and guild-aware behavior.</p>
+<p>Looking for actual guilds and their history? Open [[Noteable Guilds|Guild Pages]].</p>
+</div>

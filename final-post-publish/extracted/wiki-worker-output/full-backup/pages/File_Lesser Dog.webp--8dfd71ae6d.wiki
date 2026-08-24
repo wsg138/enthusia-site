@@ -1,0 +1,8 @@
+== Summary ==
+{{Mapart
+|title      = Lesser Dog
+|authors    = [[snickered]]
+|size       = Other
+|technique  = flat, carpet
+|notes      = Can be extended infinitely.
+}}

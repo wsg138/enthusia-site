@@ -1,0 +1,17 @@
+{{Player
+|title      = '''ToxikFlame11'''
+|class      = infobox-default
+|image      = File:ToxikFlame11.png
+|rank       = ⟢[Admin]
+|status     = Active
+|join       = Joined on the first closed beta. 
+|region     = Europe
+|teams      = [[Everlights]]
+|former     = [[We On Top (WOT)]], [[Scareye]], [[Enthusiast]], [[BelovedOnes]], [[Personalized Task Coalition (PTC)]]
+|alts       = ToxikXI, Aquaticcs, damlano, _Riasz, Everlights
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Admins]]
+[[Category:Moderators]]
+[[Category:Builders]]

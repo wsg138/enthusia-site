@@ -1,0 +1,6 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Enthusia has several public leaderboards. Use the table below to find the one you want.</p>
+<table class="wikitable enthusia-table"><thead><tr><th>Leaderboard</th><th>Where to find it</th></tr></thead><tbody><tr><td>Balance</td><td><code>/baltop [page]</code> — combined wealth leaderboard.</td></tr><tr><td>Playtime</td><td><code>/playtime top ...</code> — active, AFK or total time over multiple date ranges.</td></tr><tr><td>Reputation</td><td><code>/rep top</code> and <code>/rep bottom</code>.</td></tr><tr><td>Trivia</td><td><code>/trivia top</code>.</td></tr><tr><td>Death Duels</td><td><code>/stats</code> and duel statistics where available.</td></tr><tr><td>Donors/supporters</td><td>See [[Supporters & Donors|Supporters & Donors]] for public donor/support rankings and in-game displays.</td></tr></tbody></table>
+<h2>In-game displays</h2><p>Some top statistics are also presented by NPCs around the server, including donor rankings and selected #1 player statistics.</p>
+</div>

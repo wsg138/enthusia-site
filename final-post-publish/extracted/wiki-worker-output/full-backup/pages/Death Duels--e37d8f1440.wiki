@@ -1,0 +1,11 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Death Duels are consensual 1v1 fights in a dedicated arena. They are <strong>not keep-inventory duels</strong>: the loser risks the gear they bring.</p>
+<h2>Starting a duel</h2><p><code>/duel &lt;player&gt;</code> opens the duel setup. The challenger chooses the rules and the challenged player reviews them before accepting. Requests last 120 seconds.</p>
+<h2>Rule options</h2><p>Duels can control building, explosives and combat items such as Ender Pearls, Wind Charges, Maces, Chorus Fruit, Spears, Elytras and Ender Chests. Some items can use duel-specific cooldowns.</p>
+<h2>Wagers</h2><p>Each player can wager up to 100,000. The winner receives the combined pot. A mutual draw refunds held wagers.</p>
+<h2>Victor's spoils</h2><p>The loser's dropped items are stored for the winner instead of being scattered around the arena. Use <code>/vault</code> to claim them. Unclaimed spoils last 24 hours, and items that do not fit stay in the vault.</p>
+<h2>Disconnecting</h2><p>A disconnected player has 30 seconds to reconnect before forfeiting.</p>
+<h2>Draws</h2><p><code>/draw</code> requests a mutual draw. The duel only ends as a draw when both players agree.</p>
+<details class="enthusia-drop drop"><summary><b>Useful duel commands</b><span>open command list</span></summary><div><table class="wikitable enthusia-table"><tbody><tr><td><code>/duel &lt;player&gt;</code></td><td>Challenge a player.</td></tr><tr><td><code>/duel review</code></td><td>Review an incoming challenge.</td></tr><tr><td><code>/duel accept</code> / <code>deny</code></td><td>Accept or deny it.</td></tr><tr><td><code>/duel info</code> / <code>settings</code></td><td>View duel rules.</td></tr><tr><td><code>/draw</code></td><td>Request a mutual draw.</td></tr><tr><td><code>/vault</code></td><td>Claim victor's spoils.</td></tr><tr><td><code>/stats</code></td><td>View duel statistics where available.</td></tr></tbody></table></div></details>
+</div>

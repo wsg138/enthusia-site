@@ -1,0 +1,7 @@
+<dpl>
+  category = Guilds
+  uses = Template:Guild
+  include = {Guild}.dpl
+  mode = userformat
+  listseparators = <div style="display: flex; flex-wrap: wrap; gap: 5px;">\n,,\n,</div>
+</dpl>

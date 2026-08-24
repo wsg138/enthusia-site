@@ -1,0 +1,98 @@
+namespace 0 (Main): 88 pages
+namespace 1 (Talk): 0 pages
+namespace 2 (User): 0 pages
+namespace 3 (User talk): 0 pages
+namespace 4 (Project): 0 pages
+namespace 5 (Project talk): 0 pages
+namespace 6 (File): 99 pages
+namespace 7 (File talk): 0 pages
+namespace 8 (MediaWiki): 1 pages
+namespace 9 (MediaWiki talk): 0 pages
+namespace 10 (Template): 9 pages
+namespace 11 (Template talk): 0 pages
+namespace 12 (Help): 0 pages
+namespace 13 (Help talk): 0 pages
+namespace 14 (Category): 0 pages
+namespace 15 (Category talk): 0 pages
+namespace 828 (Module): 0 pages
+namespace 829 (Module talk): 0 pages
+backed up 10/197 pages
+backed up 20/197 pages
+backed up 30/197 pages
+backed up 40/197 pages
+backed up 50/197 pages
+backed up 60/197 pages
+backed up 70/197 pages
+backed up 80/197 pages
+backed up 90/197 pages
+backed up 100/197 pages
+backed up 110/197 pages
+backed up 120/197 pages
+backed up 130/197 pages
+backed up 140/197 pages
+backed up 150/197 pages
+backed up 160/197 pages
+backed up 170/197 pages
+backed up 180/197 pages
+backed up 190/197 pages
+backed up 197/197 pages
+{
+  "oldBaselineCreatedAtUtc": "2026-08-23T04:29:21Z",
+  "newBackupCreatedAtUtc": "2026-08-24T13:33:21Z",
+  "oldPageCount": 167,
+  "currentPageCount": 197,
+  "addedPages": [
+    "AutoClicker",
+    "Betas",
+    "Builds",
+    "Chat & Messaging",
+    "Combat & PvP",
+    "Commands",
+    "Death Duels",
+    "Diaries",
+    "Giveaways",
+    "Guilds",
+    "History & Lore",
+    "Homes & Teleportation",
+    "Java & Bedrock",
+    "Leaderboards",
+    "Market",
+    "Mechanics",
+    "PieCloak",
+    "Playtime",
+    "Raw Gold",
+    "Reputation",
+    "Server Events",
+    "Server Information",
+    "Sleep",
+    "Spawn",
+    "Supporters & Donors",
+    "Tags, Rewards & Cosmetics",
+    "Template:EnthusiaWiki/styles.css",
+    "Trivia",
+    "Voting",
+    "Warzone"
+  ],
+  "removedPages": [],
+  "changedPages": [
+    {
+      "title": "Main Page",
+      "baselineRevid": 449,
+      "currentRevid": 635,
+      "baselineTimestamp": "2026-07-23T17:07:57Z",
+      "currentTimestamp": "2026-08-24T12:44:05Z",
+      "currentUser": "P2wn",
+      "currentComment": "Update Enthusia player wiki documentation"
+    },
+    {
+      "title": "SonOfBlood",
+      "baselineRevid": 498,
+      "currentRevid": 604,
+      "baselineTimestamp": "2026-07-30T15:26:25Z",
+      "currentTimestamp": "2026-08-23T11:39:04Z",
+      "currentUser": "SonOfBlood",
+      "currentComment": ""
+    }
+  ]
+}
+FULL_BACKUP_COMPLETE pages=197 contributors=21

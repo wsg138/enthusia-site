@@ -1,0 +1,78 @@
+[
+  {
+    "revid": 47,
+    "parentid": 0,
+    "minor": false,
+    "user": "ToxikFlame11",
+    "userid": 4,
+    "timestamp": "2026-05-13T21:54:51Z",
+    "size": 851,
+    "comment": "Created page with \"<div class=\"{{{class|}}}\"> <infobox>  \t<title source=\"team\"> \t\t<default>{{PAGENAME}}</default> \t</title> \t<image source=\"image\"/>     <header>Information</header>      <data source=\"info\"> \t\t<label></label> \t\t<default>N/A</default> \t</data>     <header>Statistics</header> \t<data source=\"status\"> \t\t<label>Status:</label> \t\t<default>N/A</default> \t</data> \t<data source=\"founded\"> \t\t<label>Founded:</label> \t\t<default>N/A</default> \t</data>     <data source=\"count\"> \t\t<label...\"",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 228,
+    "parentid": 47,
+    "minor": true,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-18T19:32:31Z",
+    "size": 851,
+    "comment": "Kavebo moved page [[Template:Team]] to [[Template:Guild]]: Change to proper name.",
+    "tags": []
+  },
+  {
+    "revid": 257,
+    "parentid": 228,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-18T23:27:40Z",
+    "size": 728,
+    "comment": "Revamp a bit im too lazy to summarize.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 345,
+    "parentid": 257,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T17:59:52Z",
+    "size": 729,
+    "comment": "Change internal name from team to guild for consistency.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 348,
+    "parentid": 345,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T18:01:58Z",
+    "size": 728,
+    "comment": "im going crazy im going crazy im going crazy - changing back from guild to name since this is the data that the infobox has not what the infobox is actually internally called i THINK???",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 475,
+    "parentid": 348,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-28T23:39:39Z",
+    "size": 817,
+    "comment": "Add discord link category.",
+    "tags": [
+      "wikieditor"
+    ]
+  }
+]

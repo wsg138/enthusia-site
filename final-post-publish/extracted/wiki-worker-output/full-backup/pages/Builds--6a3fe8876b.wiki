@@ -1,0 +1,5 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Because Enthusia is a permanent world, places can become part of server history. This page can index notable public builds, market/spawn landmarks, ruins, large community projects and bases or locations that became historically important.</p>
+<p>Community-written build pages can be linked here as they are documented.</p>
+</div>

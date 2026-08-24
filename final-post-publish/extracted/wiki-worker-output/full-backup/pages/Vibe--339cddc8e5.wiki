@@ -1,0 +1,16 @@
+{{Guild
+|name       = '''Vibe'''
+|class      = infobox-default
+|image      = File:Vibe Square.webp
+|status     = Active
+|owner    = [[StepSoy]], [[Wouter222]]
+|founded    = December 2020
+|count      = 22
+|alliances  = [[Boop Gang]], Florb
+}}
+'''VIBE''' is a group of exceedingly amazing people working together to make the world a vibier place. 
+
+== Vibe Tope ==
+This is simply the truth. 
+
+[[Category:Guilds]]

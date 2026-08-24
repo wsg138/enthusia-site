@@ -1,0 +1,8 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Sleeping speeds up the Overworld night instead of requiring a fixed percentage of online players to sleep.</p>
+<div class="fact-grid"><div><b>1 active sleeper</b><span>about 2.5× normal night speed</span></div><div><b>2 sleepers</b><span>about 4×</span></div><div><b>3 sleepers</b><span>about 5.5×</span></div><div><b>Phantom rest reset</b><span>after 10 real seconds sleeping</span></div></div>
+<h2>Night speed</h2><p>Each active sleeper adds more time acceleration. You do not need everyone—or a percentage of the server—to get into bed.</p>
+<h2>Phantoms</h2><p>You must actually stay asleep for about 10 real seconds during the night before your vanilla time-since-rest is reset. Briefly entering and leaving a bed is not enough.</p>
+<h2>Where it applies</h2><p>Night acceleration applies to the main Overworld. Daytime is not accelerated.</p>
+</div>

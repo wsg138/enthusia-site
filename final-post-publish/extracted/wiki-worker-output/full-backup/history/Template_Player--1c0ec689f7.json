@@ -1,0 +1,106 @@
+[
+  {
+    "revid": 7,
+    "parentid": 0,
+    "minor": false,
+    "user": "ToxikFlame11",
+    "userid": 4,
+    "timestamp": "2026-01-27T07:20:27Z",
+    "size": 643,
+    "comment": "Created page with \"{{Player |title      = '''Username''' |class      = infobox-default |image      = [[File:image.png]] |bio        = A short bio of yourself |rank       = Your rank, use Avid or Devotee |status     = How active you are: Inactive, Rarely Active, Somewhat Active, Active, Banned, etc. |join       = When you first joined the server |play       = Check your scoreboard |guilds      = Your teams, use 2 brackets on each side of the team name. Make sure you correctly type the name,...\"",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 8,
+    "parentid": 7,
+    "minor": false,
+    "user": "ToxikFlame11",
+    "userid": 4,
+    "timestamp": "2026-01-27T07:21:16Z",
+    "size": 0,
+    "comment": "Blanked the page",
+    "tags": []
+  },
+  {
+    "revid": 21,
+    "parentid": 8,
+    "minor": true,
+    "user": "ToxikFlame11",
+    "userid": 4,
+    "timestamp": "2026-02-05T03:38:47Z",
+    "size": 836,
+    "comment": "",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 22,
+    "parentid": 21,
+    "minor": false,
+    "user": "ToxikFlame11",
+    "userid": 4,
+    "timestamp": "2026-02-05T03:39:08Z",
+    "size": 0,
+    "comment": "Blanked the page",
+    "tags": [
+      "wikieditor",
+      "mw-blank",
+      "mw-manual-revert"
+    ]
+  },
+  {
+    "revid": 43,
+    "parentid": 22,
+    "minor": true,
+    "user": "ToxikFlame11",
+    "userid": 4,
+    "timestamp": "2026-05-12T01:57:00Z",
+    "size": 357,
+    "comment": "",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 44,
+    "parentid": 43,
+    "minor": false,
+    "user": "ToxikFlame11",
+    "userid": 4,
+    "timestamp": "2026-05-13T21:37:50Z",
+    "size": 1072,
+    "comment": "",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 231,
+    "parentid": 44,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-18T20:22:06Z",
+    "size": 818,
+    "comment": "Clean up, remove unnecessary info, remove playtime cuz it's never gonna be accurate and takes a lot of effort to update, get rid of headers since there are only a few elements so the headers took almost as much space as the info itself, add default skin.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 575,
+    "parentid": 231,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-08-15T11:29:01Z",
+    "size": 859,
+    "comment": "Make the rank link into the rank article",
+    "tags": [
+      "wikieditor"
+    ]
+  }
+]

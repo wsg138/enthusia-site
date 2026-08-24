@@ -1,0 +1,8 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p><code>/spawn</code> teleports to server spawn after the normal teleport warmup. Moving or taking damage cancels it.</p>
+<h2>Death respawns</h2><p>Normal deaths currently respawn at server spawn. Sleeping in a bed still sets a bed-spawn location that you can reach with <code>/bed</code>.</p>
+<h2>PvP</h2><p>Spawn is protected and does not use normal wilderness PvP rules. Once you leave Spawn and the Warzone, combat is normal unrestricted vanilla PvP.</p>
+<h2>Ender Pearls</h2><p>Pearl glitching through protected spawn geometry is blocked. Unsafe/glitching pearl positions are corrected instead of letting the pearl clip you through protected blocks.</p>
+<h2>New players</h2><p>First-time players receive a small stone-tool starter kit with food when they join.</p>
+</div>

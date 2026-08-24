@@ -1,0 +1,39 @@
+<div class="{{{class|}}}">
+	<infobox>
+		<title source="title">
+			<default>{{PAGENAME}}</default>
+		</title>
+		<image source="image">
+			<default>File:Placeholder.png</default>
+		</image>
+		<data source="rank">
+			<label>Rank:</label>
+			<default>N/A</default>
+			<format>[[Ranks|{{{rank}}}]]</format>
+		</data>
+		<data source="status">
+			<label>Status:</label>
+			<default>N/A</default>
+		</data>
+		<data source="join">
+			<label>Join Date:</label>
+			<default>N/A</default>
+		</data>
+		<data source="region">
+			<label>Region:</label>
+			<default>N/A</default>
+		</data>
+		<data source="teams">
+			<label>Guilds:</label>
+			<default>N/A</default>
+		</data>
+		<data source="former">
+			<label>Former Guilds:</label>
+			<default>N/A</default>
+		</data>
+		<data source="alts">
+			<label>Accounts:</label>
+			<default>N/A</default>
+		</data>
+	</infobox>
+</div>

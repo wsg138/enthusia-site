@@ -1,0 +1,11 @@
+<includeonly>
+<div class="{{{class|}}}">
+  <div><strong>Title:</strong> {{{title|}}}</div>
+  <div><strong>Authors:</strong> {{{authors|}}}</div>
+  <div><strong>Size:</strong> {{{size|}}}</div>
+  <div><strong>Technique:</strong> {{{technique|}}}</div>
+  {{#if:{{{notes|}}}|
+    <div><strong>Notes:</strong> {{{notes}}}</div>
+  }}
+</div>
+</includeonly>

@@ -1,0 +1,69 @@
+{{Guild
+|name       = '''Enthusiast'''
+|class      = infobox-default
+|image      = File:Enthusiast_Enthusia.png
+|status     = Active
+|founded    = May 2nd, 2026
+|owner      = [[FainNeito]]
+|count      = 38
+|alliances  = [[Ascend]], [[Personalized Task Coalition (PTC)]], [[Armateth]], [[Traders]]
+|enemies    = The Lenovo Enterprise, [[IndianDefenseForces]]
+}}
+'''Enthusiasts''' is one of the most active guilds on Enthusia.
+
+Please proceed with caution with interaction of the members as they tend to be pretty enthusiastic.
+
+== Guild Ranks ==
+
+'''<big>Arrival</big>'''
+
+Arrival is the first rank in Enthusiast and considered a trial period in the guild, during which the activity of new guild members will be assessed. Players are invited to join in on smaller projects concerning the guild. At the end of the trial period, a vote will be held on whether or not the Arrival member will be promoted. If a player is deemed problematic or inactive, they will be removed from the guild. Of course, your personal life comes first: please make sure to tell a staff member if you will be unable to play for a while!
+ 
+'''<big>Outer</big>'''
+
+The second rank in the Enthusiast ranks, Outer, is attained when an Arrival member completes the trial period and is promoted. As an Outer, you are officially part of the guild and have proven to be active and get along with your fellow guild members. Outers can also participate in voting players into Enthusiast.
+
+'''<big>Inner</big>'''
+
+The third rank in Enthusiast, Inner, is achieved when an Outer member has significantly contributed to the guild and is deemed trustworthy. Inners may also be given the responsibility to lead projects and - once sufficient funding is established during this season - gain access to funding through EnthusiastsBank as well as be provided with resources.
+
+== Leadership Ranks ==
+
+'''<big>Overseer</big>'''
+
+The fourth rank in Enthusiast, Overseer, is the first of the staff ranks. They act as moderators for the guild, ensure guild rules are enforced and that conflicts within the guild are resolved properly. They also manage guild applications and are in charge when a Crowned member or higher is unavailable. To obtain Overseer the player will have to lead at least 1 project and pass a staff vote. To maintain Overseer the player will have to continuously lead and/or participate in projects. As a perk, Overseers will also gain access to all farms the guild creates.
+
+'''<big>Crowned</big>'''
+
+The fifth rank in Enthusiast, Crowned, act as administrators for the guild. They perform all Overseer duties, plus additional responsibilities. They help create rules, channels, and maintain guild organization. Specifically, the Crowned will be responsible for one of the large guild bases (Arrival, Outer, Inner). As a perk, Crowned will gain access to the guilds bots once they are set up properly. 
+
+'''<big>Brigadier</big>'''
+
+The sixth rank in Enthusiast, Brigadier, are the most trusted members and essentially run the guild when the Founders are unavailable. They host guild events, manage the guild alongside Fain and spearhead large projects. 
+
+'''<big>Founder</big>'''
+
+The seventh and final rank in Enthusiast, Founder, are the members who established the guild's foundation in its early days. Founders have the ultimate say in guild decisions and are responsible for every member and guild action. If Enthusiast were to branch off, they would be present in all branches and involved with guild decisions and structure.
+
+==Members==
+;Founder
+[[FainNeito]]
+
+;Honored
+
+;Brigadier
+[[Kostpits13_]]
+
+;Crowned
+Ayn4rch
+
+;Inner
+ShieldSpammer, guardian10_, TownieLol, [[BoggersTheFish]], [[SarahNovaSpring]]
+
+;Outer
+EyedDevotee896, Zagthrax, AFKWaffle, CorpseFish, S2ebastian, Performmatcha,  arifgoktug, Josedagoat_, Skelebone2_0, deimoscm, CharonLD, Trexdeal, ZombieEason, RealReloadCoded
+
+;Arrival
+frogdyl, BelobLV, Fille21, DoggoCraft, BladeSlayr, LIFEATUL, ___Numb___, covenanttt, FaZespark52
+
+[[Category:Guilds]]

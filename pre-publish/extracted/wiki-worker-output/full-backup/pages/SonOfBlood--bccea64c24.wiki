@@ -1,0 +1,15 @@
+{{Player
+|title      = '''SonOfBlood'''
+|class      = infobox-default
+|image      = File:SonOfblood.png
+|rank       = [Helper]
+|status     = Active
+|join       = 23rd June 2026
+|region     = Europe
+|teams      = [[Chillage]]
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Helpers]]

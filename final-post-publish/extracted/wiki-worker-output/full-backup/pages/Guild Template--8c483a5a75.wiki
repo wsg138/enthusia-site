@@ -1,0 +1,12 @@
+{{Team
+|team       = '''Guild'''
+|class      = infobox-default
+|image      = Image
+|info       = Info
+|status     = Status
+|founded    = Date
+|count      = Count
+|members    = Members
+|alliances  = Alliances
+|enemies    = Enemies
+}}

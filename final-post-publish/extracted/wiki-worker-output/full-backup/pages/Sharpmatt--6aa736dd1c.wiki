@@ -1,0 +1,15 @@
+{{Player
+|title      = '''sharpmatt'''
+|class      = infobox-default
+|image      = File:Sharpmatt.png
+|rank       = ⟢[Admin]
+|status     = Active
+|join       = 2 May 2026
+|region     = N/A
+|teams      = N/A
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Founders]]

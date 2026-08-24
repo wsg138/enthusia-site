@@ -1,0 +1,14 @@
+{{Guild
+|name       = '''Imperials'''
+|class      = infobox-default
+|image      = File:Imperials.webp
+|info       = Imperials is a guild led by Shotu_Y. We are a group of conquerers who like to conquer Minecraft servers. 
+|status     = Active
+|founded    = Founded 26th of June.
+|owner      = [[Shotu_Y]]
+|count      = 12
+|members    = [[YariQ2010]], [[Jakkapvp]], [[Shotu_Y]], [[Parthenos11]], [[c0pe_exe]], [[_nyxeclipse]], [[TheRealImperial]], [[Wicksome]], [[SilverAshesWorld]], [[Cube1ber]], [[Fr0stDraws]], [[SoluctionDaPanin]],
+|alliances  = N/A
+|enemies    = [[Dragons]], [[BoopGang]],
+}}
+[[Category:Guilds]]

@@ -1,0 +1,8 @@
+<includeonly>
+<div style="margin: 5px; display: inline-block; width: min-content; max-width: 100%; text-align: center; overflow-wrap: anywhere; vertical-align: top; padding: 1rem" class="minecraft-border">
+	[[%PAGE%]]<br>
+	"{{{title|}}}"<br>
+	by {{{authors|}}}<br>
+	{{{notes|}}}
+</div>
+</includeonly>

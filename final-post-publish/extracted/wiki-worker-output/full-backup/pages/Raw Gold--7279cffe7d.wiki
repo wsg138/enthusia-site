@@ -1,0 +1,10 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Enthusia's economy is backed by ordinary Minecraft <strong>Raw Gold</strong>. Money can be carried physically or stored in your bank.</p>
+<div class="fact-grid"><div><b>1 Raw Gold</b><span>1 currency</span></div><div><b>1 Raw Gold Block</b><span>9 currency</span></div><div><b>Starting bank balance</b><span>0</span></div><div><b>Decimals</b><span>Not used</span></div></div>
+<h2>Checking your money</h2><table class="wikitable enthusia-table"><tbody><tr><td><code>/balance</code></td><td>Shows your total wealth, bank balance and physical Raw Gold. Aliases: <code>/bal</code>, <code>/money</code>.</td></tr><tr><td><code>/baltop [page]</code></td><td>Shows the balance leaderboard.</td></tr></tbody></table>
+<h2>Depositing and withdrawing</h2><table class="wikitable enthusia-table"><tbody><tr><td><code>/deposit [amount|all]</code></td><td>Deposit a specific amount, or use <code>/deposit</code>/<code>/deposit all</code> to deposit all physical Raw Gold.</td></tr><tr><td><code>/withdraw &lt;amount&gt;</code></td><td>Turn bank balance back into physical Raw Gold.</td></tr></tbody></table>
+<h2>Paying another player</h2><p><code>/pay &lt;player&gt; &lt;amount&gt;</code> uses your bank balance first, then physical Raw Gold you are carrying. The recipient receives the payment in their bank balance.</p>
+<p>If physical denominations do not match the exact amount cleanly, any necessary overage is returned to your bank rather than simply lost.</p>
+<h2>Physical money is still an item</h2><p>Raw Gold in your inventory can be traded, dropped, lost or stolen like other items. Banking it removes that inventory risk.</p>
+</div>

@@ -1,0 +1,7 @@
+{{Mapart
+|title      = Scav Prototype
+|authors    = [[Zatherah]]
+|size       = 1x1
+|technique  = unknown
+|notes      =
+}}

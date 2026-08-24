@@ -1,0 +1,15 @@
+{{Player
+|title      = '''Player'''
+|class      = infobox-default
+|image      = Image
+|bio        = Bio
+|rank       = Rank
+|status     = Status
+|join       = Date
+|play       = Time
+|region     = Region
+|teams      = Guild
+|alliances  = Alliances
+|former     = Former guilds
+|alts       = Alts
+}}

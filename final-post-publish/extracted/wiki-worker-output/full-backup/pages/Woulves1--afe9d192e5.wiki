@@ -1,0 +1,13 @@
+{{Player
+|title      = '''Woulves1'''
+|class      = infobox-default
+|image      = File:Woulves1skin.png
+|rank       = [Member]
+|status     = Active
+|join       = 2nd May 2026
+|region     = Europe
+|teams      = [[Vibe]]
+|former     = N/A
+|alts       = Woulves2
+}}
+[[Category:Players]]

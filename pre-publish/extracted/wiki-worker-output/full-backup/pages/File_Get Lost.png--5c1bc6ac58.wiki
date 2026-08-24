@@ -1,0 +1,7 @@
+{{Mapart
+|title      = Get Lost
+|authors    = [[Shoo]]
+|size       = 1x1
+|technique  = flat, full
+|notes      =
+}}

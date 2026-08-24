@@ -1,0 +1,55 @@
+namespace 0 (Main): 59 pages
+namespace 1 (Talk): 0 pages
+namespace 2 (User): 0 pages
+namespace 3 (User talk): 0 pages
+namespace 4 (Project): 0 pages
+namespace 5 (Project talk): 0 pages
+namespace 6 (File): 99 pages
+namespace 7 (File talk): 0 pages
+namespace 8 (MediaWiki): 1 pages
+namespace 9 (MediaWiki talk): 0 pages
+namespace 10 (Template): 8 pages
+namespace 11 (Template talk): 0 pages
+namespace 12 (Help): 0 pages
+namespace 13 (Help talk): 0 pages
+namespace 14 (Category): 0 pages
+namespace 15 (Category talk): 0 pages
+namespace 828 (Module): 0 pages
+namespace 829 (Module talk): 0 pages
+backed up 10/167 pages
+backed up 20/167 pages
+backed up 30/167 pages
+backed up 40/167 pages
+backed up 50/167 pages
+backed up 60/167 pages
+backed up 70/167 pages
+backed up 80/167 pages
+backed up 90/167 pages
+backed up 100/167 pages
+backed up 110/167 pages
+backed up 120/167 pages
+backed up 130/167 pages
+backed up 140/167 pages
+backed up 150/167 pages
+backed up 160/167 pages
+backed up 167/167 pages
+{
+  "oldBaselineCreatedAtUtc": "2026-08-23T04:29:21Z",
+  "newBackupCreatedAtUtc": "2026-08-24T12:36:44Z",
+  "oldPageCount": 167,
+  "currentPageCount": 167,
+  "addedPages": [],
+  "removedPages": [],
+  "changedPages": [
+    {
+      "title": "SonOfBlood",
+      "baselineRevid": 498,
+      "currentRevid": 604,
+      "baselineTimestamp": "2026-07-30T15:26:25Z",
+      "currentTimestamp": "2026-08-23T11:39:04Z",
+      "currentUser": "SonOfBlood",
+      "currentComment": ""
+    }
+  ]
+}
+FULL_BACKUP_COMPLETE pages=167 contributors=20

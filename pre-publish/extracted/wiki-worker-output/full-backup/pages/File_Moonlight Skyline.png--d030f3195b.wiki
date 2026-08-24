@@ -1,0 +1,7 @@
+{{Mapart
+|title      = Moonlight Skyline
+|authors    = [[DigiverseDragon]]
+|size       = 1x1
+|technique  = flat, carpet
+|notes      =
+}}

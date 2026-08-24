@@ -1,0 +1,23 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki enthusia-home">
+<div class="enthusia-hero">
+<div class="enthusia-eyebrow">Enthusia SMP</div>
+<h1>Welcome to the Enthusia Wiki</h1>
+<p>Guides for Enthusia's permanent semi-anarchy world, Raw Gold economy, guilds, PvP, progression, base privacy and community history.</p>
+<div class="enthusia-quick">[[Server Information|Start here]] · [[Mechanics|Browse mechanics]] · [[Commands|Commands]] · [[History & Lore|History & Lore]]</div>
+</div>
+<div class="enthusia-cross"><strong>Cross-platform</strong><br>Java and Bedrock players can both join and play together on the same SMP.<br><code>enthusia.net</code> · Bedrock port <code>19132</code></div>
+<h2>Explore Enthusia</h2>
+<div class="enthusia-home-grid"><div class="enthusia-home-card">[[File:Staff.png|220px|link=Staff]]<div>'''[[Staff|Staff]]'''</div></div>
+<div class="enthusia-home-card">[[File:Guilds.png|220px|link=Noteable Guilds]]<div>'''[[Noteable Guilds|Guilds]]'''</div></div>
+<div class="enthusia-home-card">[[File:Players.png|220px|link=Noteable Players]]<div>'''[[Noteable Players|Players]]'''</div></div>
+<div class="enthusia-home-card">[[File:Betas.png|220px|link=Betas]]<div>'''[[Betas|Betas]]'''</div></div>
+<div class="enthusia-home-card">[[File:Builds.png|220px|link=Builds]]<div>'''[[Builds|Builds]]'''</div></div>
+<div class="enthusia-home-card">[[File:Mapart.png|220px|link=Maparts]]<div>'''[[Maparts|Mapart]]'''</div></div>
+<div class="enthusia-home-card">[[File:Events.png|220px|link=Events]]<div>'''[[Events|Events]]'''</div></div>
+<div class="enthusia-home-card">[[File:Mechanics2.png|220px|link=Mechanics]]<div>'''[[Mechanics|Mechanics]]'''</div></div></div>
+<div class="enthusia-home-columns">
+<div><h2>Community</h2><p>[[Noteable Players|Player pages]], [[Noteable Guilds|guild pages]], [[History & Lore|server history]], [[Builds|builds]] and [[Maparts|mapart]].</p></div>
+<div><h2>Gameplay</h2><p>[[PieCloak]], [[Raw Gold]], [[Market]], [[Guilds]], [[Homes & Teleportation]], [[Combat & PvP]], [[Warzone]], [[Playtime]], [[Reputation]] and more.</p></div>
+</div>
+</div>

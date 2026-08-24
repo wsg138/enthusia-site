@@ -1,0 +1,153 @@
+[
+  {
+    "revid": 90,
+    "parentid": 0,
+    "minor": false,
+    "user": "2A02:1810:1C0E:1700:2315:266F:8F75:2E3",
+    "anon": true,
+    "userid": 0,
+    "timestamp": "2026-07-01T22:28:18Z",
+    "size": 511,
+    "comment": "Created page with \"{{Team |team       = '''Imperials''' |class      = infobox-default |image      = [[File:Logo.jpg|thumb]] |info       = Imperials is a guild led by JakkaPVP. We are a group of conquerers who like to conquer Minecraft servers.  |status     = Active |founded    = Founded 26th of June.  |count      = 9 |members    = [[YariQ2010]], [[ChrisD343]], [[Jakkapvp]], [[Shotu_Y]], [[Parthenos11]], [[c0pe_exe]], [[_nyxeclipse]], [[TheRealImperial]], [[Wicksome]] |alliances  = [[None]]...\"",
+    "tags": [
+      "mobile web edit",
+      "mobile edit"
+    ]
+  },
+  {
+    "revid": 91,
+    "parentid": 90,
+    "minor": false,
+    "user": "2A02:1810:1C0E:1700:5005:4A8:B0BF:5A39",
+    "anon": true,
+    "userid": 0,
+    "timestamp": "2026-07-01T22:33:12Z",
+    "size": 537,
+    "comment": "",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 92,
+    "parentid": 91,
+    "minor": false,
+    "user": "2A02:1810:1C0E:1700:5005:4A8:B0BF:5A39",
+    "anon": true,
+    "userid": 0,
+    "timestamp": "2026-07-01T22:33:44Z",
+    "size": 511,
+    "comment": "",
+    "tags": [
+      "wikieditor",
+      "mw-manual-revert"
+    ]
+  },
+  {
+    "revid": 336,
+    "parentid": 92,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T15:46:59Z",
+    "size": 552,
+    "comment": "Clean up a bit.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 356,
+    "parentid": 336,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T18:06:32Z",
+    "size": 553,
+    "comment": "Fix",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 370,
+    "parentid": 356,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-07-19T18:49:44Z",
+    "size": 543,
+    "comment": "Fix.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 450,
+    "parentid": 370,
+    "minor": false,
+    "user": "Shotu",
+    "userid": 19,
+    "timestamp": "2026-07-27T01:25:25Z",
+    "size": 527,
+    "comment": "",
+    "tags": [
+      "mobile web edit",
+      "mobile edit"
+    ]
+  },
+  {
+    "revid": 469,
+    "parentid": 450,
+    "minor": true,
+    "user": "ToxikFlame11",
+    "userid": 4,
+    "timestamp": "2026-07-27T12:42:36Z",
+    "size": 517,
+    "comment": "",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 472,
+    "parentid": 469,
+    "minor": true,
+    "user": "ToxikFlame11",
+    "userid": 4,
+    "timestamp": "2026-07-27T12:49:47Z",
+    "size": 533,
+    "comment": "",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 476,
+    "parentid": 472,
+    "minor": false,
+    "user": "SilverAshesWorld",
+    "userid": 20,
+    "timestamp": "2026-07-29T05:27:08Z",
+    "size": 617,
+    "comment": "Updated informations.",
+    "tags": [
+      "mobile web edit",
+      "mobile edit"
+    ]
+  },
+  {
+    "revid": 477,
+    "parentid": 476,
+    "minor": false,
+    "user": "SilverAshesWorld",
+    "userid": 20,
+    "timestamp": "2026-07-29T05:31:40Z",
+    "size": 616,
+    "comment": "A bit of further updating.",
+    "tags": [
+      "mobile web edit",
+      "mobile edit"
+    ]
+  }
+]

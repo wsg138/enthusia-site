@@ -1,0 +1,13 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<div class="callout"><b>These rules apply to the Warzone.</b> Outside Spawn and the Warzone, PvP is normal unrestricted vanilla combat.</div>
+<p>The Warzone changes its combat setup on a weekly rotation. Use <code>/warzone</code> to check the current rules instead of assuming the previous week's setup is still active.</p>
+<h2>Rotation</h2><ol><li><b>SMP</b></li><li><b>Random modifiers</b></li><li><b>Vanilla</b></li><li><b>Random modifiers</b></li></ol>
+<h2>Fixed setups</h2><details class="enthusia-drop drop"><summary><b>SMP</b><span>Warzone setup</span></summary><div><ul><li>Cobwebs enabled (temporary).</li><li>Wind Charge cooldown: 5 seconds.</li><li>Ender Pearl cooldown: 5 seconds.</li><li>Spear Lunge cooldown: 5 seconds.</li><li>Maces disabled.</li></ul></div></details>
+<details class="enthusia-drop drop"><summary><b>Mace Nerf</b><span>Warzone setup</span></summary><div><ul><li>Successful Mace hit cooldown: 10 seconds.</li><li>Spear Lunge cooldown: 5 seconds.</li></ul></div></details>
+<details class="enthusia-drop drop"><summary><b>Spear</b><span>Warzone setup</span></summary><div><ul><li>Spear damage cooldown: 10 seconds.</li><li>Spear Lunge cooldown: 10 seconds.</li></ul></div></details>
+<details class="enthusia-drop drop"><summary><b>Vanilla</b><span>Warzone setup</span></summary><div><p>No rotating Warzone modifiers are active.</p></div></details>
+<h2>Random weeks</h2><p>Random weeks choose one to three compatible modifiers. Possible changes include cobwebs, disabling/cooling down Maces, Spears, Spear Lunge, Ender Pearls or Wind Charges, and an Elytra mode where gliding is allowed but rocket boosting is disabled.</p>
+<h2>End island</h2><p>Maces and Spears are blocked within 1,024 blocks of the center of the main End island. This rule is separate from the weekly Warzone rotation.</p>
+<details class="enthusia-drop drop"><summary><b>Warzone commands</b><span>open command list</span></summary><div><table class="wikitable enthusia-table"><tbody><tr><td><code>/warzone</code></td><td>Open the Warzone menu.</td></tr><tr><td><code>/warzone info</code></td><td>Show the active setup.</td></tr><tr><td><code>/warzone modifiers</code></td><td>Show active modifiers.</td></tr><tr><td><code>/warzone modifier list</code></td><td>Browse modifiers.</td></tr><tr><td><code>/warzone kit</code> / <code>kits</code></td><td>View the current kit or browse kits.</td></tr><tr><td><code>/warzone items</code></td><td>Show item restrictions.</td></tr><tr><td><code>/warzone next</code> / <code>schedule</code></td><td>Show the next change or schedule.</td></tr></tbody></table></div></details>
+</div>

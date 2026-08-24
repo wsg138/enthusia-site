@@ -1,0 +1,7 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Giveaways are server-wide free-entry prize drawings. When one is active, players can enter without paying an entry fee.</p>
+<h2>Joining</h2><p>Use <code>/giveaway</code> during an active giveaway to open or join the current drawing.</p>
+<h2>Winner</h2><p>When the giveaway closes, the winner is selected and announced/celebrated by the server.</p>
+<p>Giveaways are separate from voting rewards, trivia and Server Events.</p>
+</div>

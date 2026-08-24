@@ -1,0 +1,11 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Every player receives a personal diary when they first join. The diary is a writable collectible tied to its owner, with identifying lore and a unique diary ID.</p>
+<h2>Editing and ownership</h2><p>The owner can write in their diary. Other players can hold, trade or collect someone else's diary, but they cannot edit it. Signing the book is disabled so the diary stays writable by its owner.</p>
+<h2>Storage rules</h2><p>Diaries are intentionally blocked from storage that would make them easy to lose or duplicate through nested containers.</p>
+<details class="enthusia-drop drop"><summary><b>Blocked storage</b><span>open list</span></summary><div><ul><li>Ender Chests</li><li>Bundles</li><li>Shulker Boxes</li><li>Guild vaults</li><li>Nested versions of those storage types</li></ul></div></details>
+<p>Normal containers such as regular chests, barrels and hoppers are allowed.</p>
+<h2>Dropped diaries</h2><p>Dropped diaries are protected from fire, lava, explosions, contact damage and normal item despawning.</p>
+<h2>Void recovery</h2><p>If a protected diary falls into the void, the system keeps a durable return record and attempts to return it to the player who last dropped it.</p>
+<h2>Anvils and grindstones</h2><p>Diaries cannot be modified through anvils or grindstones.</p>
+</div>

@@ -1,0 +1,13 @@
+{{Player
+|title      = '''Currut'''
+|class      = infobox-default
+|image      = File:Currutskin.png
+|rank       = N/A
+|status     = Active
+|join       = 3 May 2026
+|region     = N/A
+|teams      = [[Vibe]]
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]

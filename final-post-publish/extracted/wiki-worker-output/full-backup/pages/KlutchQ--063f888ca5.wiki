@@ -1,0 +1,13 @@
+{{Player
+|title      = '''KlutchQ'''
+|class      = infobox-default
+|image      = File:KlutchQskin.png
+|rank       = N/A
+|status     = Active
+|join       = N/A
+|region     = N/A
+|teams      = Vibe
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]

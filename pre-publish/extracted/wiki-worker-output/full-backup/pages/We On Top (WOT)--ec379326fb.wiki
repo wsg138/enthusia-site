@@ -1,0 +1,46 @@
+{{Guild
+|name       = '''We On Top (WOT)'''
+|class      = infobox-default
+|image      = File:Original wot logo file.webp
+|status     = Active
+|founded    = December 17th, 2024.
+|owner      = [[Aquariom]]
+|count      = 31
+|alliances  = [[Architects]], Primavera, [[Bed]], [[Newwind]], Goons, MyNameIsOptimusPrime, Overheaven, The Lenovo Enterprise.
+|enemies    = Union, [[BoopGang]], [[The Law]], [[Vibe]], [[Imperials]]
+}}
+We On Top is a general guild that has PvP'ers, builders, mapartists, and basehunters.
+
+==Recruitment==
+
+If you are interested in joining WOT message any guild elder or captain in game or join the Discord server, applications are currently closed.
+
+==Lore==
+
+We On Top was active early in the beta and participated in the beta end fight, and EOTW event, though did not win either. When the server fully launched We On Top was one of the largest guilds, quickly gaining the highest guild level, though being overtaken by  [[BelovedOnes]] and [[Vibe]] a week later, it still remains one of the largest and most active guilds on the server.
+
+On August 13th Blismuth and SoulVvy were removed from We On Top for betraying the guild
+
+On August 15th Dracokagomen and Averality leaked many farms and bases and left the guild.
+
+On August 21st Flashstrength gave ownership of We On Top to Aquariom.
+
+==Members==
+;King
+[[Aquariom]]
+
+;Elders
+[[Flashstrength]], Tangent_Snap, *Smacksom1, AstralPioneer
+
+;Captains
+Volkswagen_, Judedirt, Aquapapr1ka, BasedNOTCH_, Cheddarmanpro
+
+;Knights
+Aquaholic14, *Bluwhaleking, MrSnowman_YT, Thatoneguy_guy, FireLordIroh420, SuperGG15, Droctopus812660, Ddog18Dakota, SomniumSoftware, Chomboid, *Mynameisfakher, OrcaLeft, Insane823, Ekalor, Gussybacka, I_try2getlow, [[Lanceam_]], Mifftyy, rizzgodvix, purestealthy, La1x, WardenSteve
+
+;Recruits
+YariQ2010, Reroutedata, capweez, dimplicity, c00l_mee, tazlo88, Exp1ry, DUSTPYNT0, H3DGE5, populi_gamer, Timbob82
+
+;Former Members
+Arspect, [[MeatballDevv]], RealReloadCoded, [[ToxikFlame11]], [[BobSuit]], averality, dracokagomen, soulvvy, ammilyn, j4ckielul, x21le, blismuth.
+[[Category:Guilds]]

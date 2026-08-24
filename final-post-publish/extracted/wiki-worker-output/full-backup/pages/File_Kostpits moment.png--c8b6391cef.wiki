@@ -1,0 +1,7 @@
+{{Mapart
+|title      = Kostpits moment
+|authors    = [[Kavebo]], [[Kostpits13_]], [[ToxikFlame11]]
+|size       = 2x1
+|technique  = flat, full
+|notes      =
+}}

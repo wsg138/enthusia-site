@@ -1,0 +1,15 @@
+{{Player
+|title      = '''FainNeito'''
+|class      = infobox-default
+|image      = File:FainNeito.png
+|rank       = ✦[Founder]
+|status     = Active
+|join       = N/A
+|region     = N/A
+|teams      = [[Enthusiast]], [[EnthOpen]]
+|former     = N/A
+|alts       = FainNoir, FainEntity, *FainNeito,
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Founders]]

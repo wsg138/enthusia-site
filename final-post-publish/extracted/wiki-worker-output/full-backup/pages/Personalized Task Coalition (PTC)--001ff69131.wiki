@@ -1,0 +1,12 @@
+{{Guild
+|name       = '''PTC'''
+|class      = infobox-default
+|image      = File:NoLogo.png
+|status     = Active
+|founded    = PTC was founded on the 17th of May 2026.
+|count      = 9
+|members    = [[Imaginaryy_]], [[Qaysoz]], [[Uneducated_Cardb]], [[SquashMan2010]], [[*Qaysoz]], [[Kavebo]], [[Xiffrent_]], [[ToxikFlame11]], [[Quinnbodine]]
+|alliances  = [[Enthusiast]]
+|enemies    = [[IndianDefenseForces]]
+}}
+[[Category:Guilds]]

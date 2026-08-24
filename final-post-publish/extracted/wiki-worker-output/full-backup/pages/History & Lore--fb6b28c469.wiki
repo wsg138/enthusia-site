@@ -1,0 +1,11 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>This is the community-history side of the wiki: major wars, alliances, betrayals, important eras, notable incidents, guild history and other stories that became part of Enthusia.</p>
+<div class="topic-grid">
+[[Noteable Players|Player Pagesplayers and their individual history]]
+[[Noteable Guilds|Guild Pagesguild identities, members and history]]
+[[Betas|Betasbeta-era records, players, guilds and events]]
+[[Builds|Buildsimportant places and community projects]]
+[[Maparts|Mapartthe existing community mapart collection]]
+</div>
+</div>

@@ -1,0 +1,10 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Most player teleports use a short warmup. <strong>Moving or taking damage cancels the teleport.</strong> Teleport commands are also unavailable while you are in PvP combat.</p>
+<h2>Player teleport requests</h2><table class="wikitable enthusia-table"><tbody><tr><td><code>/tpa &lt;player&gt;</code></td><td>Ask to teleport to another player.</td></tr><tr><td><code>/tpahere &lt;player&gt;</code></td><td>Ask another player to teleport to you.</td></tr><tr><td><code>/tpaccept [player]</code> / <code>/tpadeny [player]</code></td><td>Accept or deny a request.</td></tr><tr><td><code>/tpacancel</code></td><td>Cancel your outgoing request.</td></tr><tr><td><code>/tpignore &lt;player|list&gt;</code></td><td>Ignore a player's TPA requests or view your TPA ignore list.</td></tr></tbody></table>
+<p>Requests expire after 60 seconds.</p>
+<h2>Personal homes</h2><p>Players start with one home slot. Ranks can increase the limit.</p>
+<table class="wikitable enthusia-table"><tbody><tr><td><code>/sethome &lt;name&gt;</code></td><td>Save your current location.</td></tr><tr><td><code>/home [name]</code></td><td>Teleport to a saved home.</td></tr><tr><td><code>/homes</code></td><td>View your homes.</td></tr><tr><td><code>/delhome &lt;name&gt;</code></td><td>Delete a home.</td></tr></tbody></table>
+<p>If a saved home has become unsafe, the server warns you rather than immediately sending you into danger.</p>
+<h2>Bed and spawn</h2><p><code>/bed</code> teleports to your Minecraft bed-spawn location. <code>/spawn</code> teleports to server spawn. Normal deaths currently respawn at server spawn even if you have a bed spawn set.</p>
+</div>

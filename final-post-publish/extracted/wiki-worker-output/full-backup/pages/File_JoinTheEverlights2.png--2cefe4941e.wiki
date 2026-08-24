@@ -1,0 +1,7 @@
+{{Mapart
+|title      = Join The Everlights!
+|authors    = [[Kavebo]], [[ToxikFlame11]]
+|size       = 1x2
+|technique  = flat, carpet
+|notes      =
+}}

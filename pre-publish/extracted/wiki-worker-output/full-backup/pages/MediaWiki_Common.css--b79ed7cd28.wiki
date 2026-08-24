@@ -1,0 +1,4 @@
+.minecraft-border {
+border-image: url(https://static.wikitide.net/enthusiawiki/c/c5/Frame.png) 12 12 12 12 fill / 12px 12px 12px 12px;
+padding: 12px 12px 12px 12px;
+}

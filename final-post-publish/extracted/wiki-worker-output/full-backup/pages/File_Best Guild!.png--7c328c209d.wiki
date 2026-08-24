@@ -1,0 +1,7 @@
+{{Mapart
+|title      = Best Guild!
+|authors    = [[summars]]
+|size       = 1x1
+|technique  = flat, carpet
+|notes      = Tileable
+}}

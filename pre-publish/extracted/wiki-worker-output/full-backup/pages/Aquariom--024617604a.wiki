@@ -1,0 +1,15 @@
+{{Player
+|title      = '''Aquariom'''
+|class      = infobox-default
+|image      = File:Aquariom.png
+|rank       = [Helper]
+|status     = Active
+|join       = 2 May 2026
+|region     = North America
+|teams      = [[We On Top (WOT)]]
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Helpers]]

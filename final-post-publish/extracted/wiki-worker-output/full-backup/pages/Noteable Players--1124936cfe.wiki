@@ -1,0 +1,7 @@
+<dpl>
+  category = Players
+  uses = Template:Player
+  include = {Player}.dpl
+  mode = userformat
+  listseparators = <div style="display: flex; flex-wrap: wrap; gap: 5px;">\n,,\n,</div>
+</dpl>

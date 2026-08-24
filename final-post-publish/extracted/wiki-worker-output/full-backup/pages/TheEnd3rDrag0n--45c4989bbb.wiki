@@ -1,0 +1,13 @@
+{{Player
+|title      = '''TheEnd3rDrag0n'''
+|class      = infobox-default
+|image      = File:TheEnd3rDrag0n.png
+|rank       = [Avid]
+|status     = Active
+|join       = 11 May 2026
+|region     = N/A
+|teams      = N/A
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]

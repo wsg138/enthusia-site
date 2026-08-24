@@ -1,0 +1,15 @@
+{{Player
+|title      = '''Zom_B_Kitty_26'''
+|class      = infobox-default
+|image      = File:Zom B Kitty 26.png
+|rank       = N/A
+|status     = N/A
+|join       = N/A
+|region     = N/A
+|teams      = [[Architects]]
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Builders]]

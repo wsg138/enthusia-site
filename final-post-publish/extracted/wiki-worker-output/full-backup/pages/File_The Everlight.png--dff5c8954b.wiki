@@ -1,0 +1,8 @@
+by ToxikFlame11
+{{Mapart
+|title      = The Everlight
+|authors    = [[ToxikFlame11]]
+|size       = 1x1
+|technique  = flat, full
+|notes      = First mapart on the server.
+}}

@@ -1,0 +1,64 @@
+List of all current and previous staff on the Enthusia SMP.
+
+== Founders ==
+<dpl>
+  category = Founders
+  uses = Template:Player
+  include = {Player}.dpl
+  mode = userformat
+  listseparators = <div style="display: flex; flex-wrap: wrap; gap: 5px;">\n,,\n,</div>
+</dpl>
+
+== Admins ==
+<dpl>
+  category = Admins
+  uses = Template:Player
+  include = {Player}.dpl
+  mode = userformat
+  listseparators = <div style="display: flex; flex-wrap: wrap; gap: 5px;">\n,,\n,</div>
+</dpl>
+
+== Developers ==
+<dpl>
+  category = Developers
+  uses = Template:Player
+  include = {Player}.dpl
+  mode = userformat
+  listseparators = <div style="display: flex; flex-wrap: wrap; gap: 5px;">\n,,\n,</div>
+</dpl>
+
+== Moderators ==
+<dpl>
+  category = Moderators
+  uses = Template:Player
+  include = {Player}.dpl
+  mode = userformat
+  listseparators = <div style="display: flex; flex-wrap: wrap; gap: 5px;">\n,,\n,</div>
+</dpl>
+
+== Helpers ==
+<dpl>
+  category = Helpers
+  uses = Template:Player
+  include = {Player}.dpl
+  mode = userformat
+  listseparators = <div style="display: flex; flex-wrap: wrap; gap: 5px;">\n,,\n,</div>
+</dpl>
+
+== Builders ==
+<dpl>
+  category = Builders
+  uses = Template:Player
+  include = {Player}.dpl
+  mode = userformat
+  listseparators = <div style="display: flex; flex-wrap: wrap; gap: 5px;">\n,,\n,</div>
+</dpl>
+
+== Former ==
+<dpl>
+  category = Former
+  uses = Template:Player
+  include = {Player}.dpl
+  mode = userformat
+  listseparators = <div style="display: flex; flex-wrap: wrap; gap: 5px;">\n,,\n,</div>
+</dpl>

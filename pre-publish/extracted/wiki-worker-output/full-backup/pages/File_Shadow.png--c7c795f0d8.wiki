@@ -1,0 +1,7 @@
+{{Mapart
+|title      = Shadow
+|authors    = [[summars]]
+|size       = 4x4
+|technique  = flat, full
+|notes      =
+}}

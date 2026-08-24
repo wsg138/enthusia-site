@@ -1,0 +1,67 @@
+[
+  {
+    "revid": 577,
+    "parentid": 0,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-08-15T12:19:34Z",
+    "size": 1449,
+    "comment": "Create ranks page.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 584,
+    "parentid": 577,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-08-15T13:59:08Z",
+    "size": 1603,
+    "comment": "Change normal text to images to represent the ranks in-game better",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 587,
+    "parentid": 584,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-08-15T18:55:47Z",
+    "size": 1627,
+    "comment": "Add builder title screenshot.",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 591,
+    "parentid": 587,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-08-15T20:14:47Z",
+    "size": 1657,
+    "comment": "Fix dark theme, make screenshots a title thingy so it auto does the margins and stuff, add founder and stuff",
+    "tags": [
+      "wikieditor"
+    ]
+  },
+  {
+    "revid": 595,
+    "parentid": 591,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-08-18T14:38:19Z",
+    "size": 1677,
+    "comment": "Add admin title photo, change description.",
+    "tags": [
+      "wikieditor"
+    ]
+  }
+]

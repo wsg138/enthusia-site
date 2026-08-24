@@ -1,0 +1,15 @@
+{{Player
+|title      = '''RadiOwO_'''
+|class      = infobox-default
+|image      = File:RadiOwO_.png
+|rank       = ⟢[Avid]
+|status     = Inactive
+|join       = First Open Beta
+|region     = North America
+|teams      = [[ScarEye]]
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Former]]

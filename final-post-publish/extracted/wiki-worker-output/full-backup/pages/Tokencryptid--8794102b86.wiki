@@ -1,0 +1,14 @@
+{{Player
+|title      = '''Tokencryptid'''
+|class      = infobox-default
+|image      = File:TokenCryptid.png
+|rank       = [Member]
+|status     = Inactive
+|join       = N/A
+|region     = N/A
+|teams      = N/A
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Former]]

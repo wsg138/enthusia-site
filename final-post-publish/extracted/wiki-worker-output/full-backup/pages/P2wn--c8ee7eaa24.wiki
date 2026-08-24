@@ -1,0 +1,15 @@
+{{Player
+|title      = '''p2wn'''
+|class      = infobox-default
+|image      = File:P2wn.png
+|rank       = ✦[Founder]
+|status     = Active
+|join       = N/A
+|region     = N/A
+|teams      = N/A
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Founders]]

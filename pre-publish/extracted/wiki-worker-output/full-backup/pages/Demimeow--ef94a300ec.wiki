@@ -1,0 +1,15 @@
+{{Player
+|title      = '''demimeow'''
+|class      = infobox-default
+|image      = File:Demimeow.png
+|rank       = ⟢[Dev]
+|status     = Active
+|join       = 2 May 2026
+|region     = N/A
+|teams      = [[Everlights]]
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Developers]]

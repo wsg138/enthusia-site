@@ -1,0 +1,13 @@
+{{Player
+|title      = '''KILLTEAM'''
+|class      = infobox-default
+|image      = File:KILLTEAMskin.png
+|rank       = N/A
+|status     = Active
+|join       = N/A
+|region     = N/A
+|teams      = Vibe
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]

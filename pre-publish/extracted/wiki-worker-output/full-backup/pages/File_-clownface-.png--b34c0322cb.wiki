@@ -1,0 +1,7 @@
+{{Mapart
+|title      = 🤡
+|authors    = [[summars]]
+|size       = 2x2
+|technique  = flat, carpet
+|notes      =
+}}

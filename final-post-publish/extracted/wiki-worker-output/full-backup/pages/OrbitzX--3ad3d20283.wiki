@@ -1,0 +1,15 @@
+{{Player
+|title      = '''OrbitzX'''
+|class      = infobox-default
+|image      = File:OrbitzX.png
+|rank       = ⟢[Dev]
+|status     = Active
+|join       = 2 May 2026
+|region     = Europe
+|teams      = N/A
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Developers]]

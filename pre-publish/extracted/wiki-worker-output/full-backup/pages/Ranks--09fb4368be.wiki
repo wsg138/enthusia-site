@@ -1,0 +1,50 @@
+=== [[File:Member.webp]] ===
+Default rank given to everybody.
+
+=== [[File:Avid.webp]] ===
+Single purchase rank giving a few abilities on the SMP:
+* Custom prefix in chat [Avid]
+* Ability to use /sit and /lay
+* Ability to use colors in chat and format [Bold, italic or underlined]
+* Ability to showcase items in chat with [item]
+* Ability to use /seen command [used to see when a player was last logged in]
+* Access to Donor Chat on discord
+And on Discord:
+* Access to Donor Chat
+* View in-game-chat channel
+
+=== [[File:Devotee.webp]] ===
+Monthly payment rank giving all the benefits of Avid along with some extra ones on the SMP:
+* Custom prefix in chat [Devotee]
+* Ability to use /spin
+* Ability to showcase your inventory and enderchest in chat with [inv] and [ender]
+* Ability to start any event by doing /events*
+* Ability to start any KOTH by doing /start koth*
+And on Discord:
+* Access to Donor Chat on discord
+* View in-game-chat channel
+* Ability to send messages through the in-game-chat channel
+* Avatar head emoji
+<br>
+&#42;Not yet implemented
+
+=== [[File:Media.webp]] ===
+Makes content about the server to advertise.
+
+=== [[File:Helper.webp]] ===
+Helpers answer questions, mute, warn and kick people.
+
+=== [[File:Builder.webp]] ===
+Builds structures to be used in new updates.
+
+=== [[File:Mod.webp]] ===
+Moderates the server, looks for cheaters, warns, mutes, kicks, bans.
+
+=== [[File:Admin.webp]] ===
+General server management, events etc.
+
+=== [[File:Founder.webp]] ===
+Highest rank, created the server.
+
+=== Donators Star [[File:Donators Star.webp|frameless]] ===
+No longer attainable. Received by buying a rank during the beta or first month after full release.

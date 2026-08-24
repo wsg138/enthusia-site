@@ -1,0 +1,7 @@
+{{Mapart
+|title      = Sleepy Kitty
+|authors    = [[Kavebo]], [[Averality]], [[H3dge5]]
+|size       = 1x1
+|technique  = flat, carpet
+|notes      =
+}}

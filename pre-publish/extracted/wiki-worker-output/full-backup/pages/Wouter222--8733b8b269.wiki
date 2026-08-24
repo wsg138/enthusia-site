@@ -1,0 +1,13 @@
+{{Player
+|title      = '''wouter222'''
+|class      = infobox-default
+|image      = File:Wouter222skin.png
+|rank       = N/A
+|status     = Active
+|join       = N/A
+|region     = N/A
+|teams      = Vibe
+|former     = N/A
+|alts       = N/A
+}}
+[[Category:Players]]

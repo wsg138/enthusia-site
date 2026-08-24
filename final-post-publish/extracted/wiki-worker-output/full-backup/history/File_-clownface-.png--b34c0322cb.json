@@ -1,0 +1,26 @@
+[
+  {
+    "revid": 512,
+    "parentid": 0,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-08-06T15:48:35Z",
+    "size": 10,
+    "comment": "",
+    "tags": []
+  },
+  {
+    "revid": 546,
+    "parentid": 512,
+    "minor": false,
+    "user": "Kavebo",
+    "userid": 13,
+    "timestamp": "2026-08-08T16:09:29Z",
+    "size": 115,
+    "comment": "",
+    "tags": [
+      "wikieditor"
+    ]
+  }
+]

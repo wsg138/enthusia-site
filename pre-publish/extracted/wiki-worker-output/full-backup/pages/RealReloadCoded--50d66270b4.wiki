@@ -1,0 +1,15 @@
+{{Player
+|title      = '''RealReloadCoded'''
+|class      = infobox-default
+|image      = File:RealReloadCoded.png
+|rank       = [Helper]
+|status     = Active
+|join       = 2 May 2026
+|region     = North America
+|teams      = [[Enthusiast]]
+|former     = [[We On Top (WOT)]]
+|alts       = N/A
+}}
+[[Category:Players]]
+[[Category:Staff]]
+[[Category:Helpers]]

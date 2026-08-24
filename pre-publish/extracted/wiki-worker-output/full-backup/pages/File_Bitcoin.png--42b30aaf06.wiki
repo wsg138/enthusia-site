@@ -1,0 +1,7 @@
+{{Mapart
+|title      = Bitcoin
+|authors    = [[CheddarManPro]]
+|size       = 1x1
+|technique  = flat, carpet
+|notes      =
+}}

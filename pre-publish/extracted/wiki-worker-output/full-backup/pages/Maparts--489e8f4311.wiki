@@ -1,0 +1,67 @@
+Various mapart created by the players on Enthusia SMP.
+
+== 1x1 ==
+{{#dpl:
+  |namespace=File
+  |uses=Template:Mapart
+  |include={Mapart¦Mapart.dpl}
+  |includematch=/size\s*=\s*1x1/
+  |mode=userformat
+  |escapelinks=false
+  |listseparators=,,,
+}}
+
+== 1x2 ==
+{{#dpl:
+  |namespace=File
+  |uses=Template:Mapart
+  |include={Mapart¦Mapart.dpl}
+  |includematch=/size\s*=\s*1x2/
+  |mode=userformat
+  |escapelinks=false
+  |listseparators=,,,
+}}
+
+== 2x1 ==
+{{#dpl:
+  |namespace=File
+  |uses=Template:Mapart
+  |include={Mapart¦Mapart.dpl}
+  |includematch=/size\s*=\s*2x1/
+  |mode=userformat
+  |escapelinks=false
+  |listseparators=,,,
+}}
+
+== 2x2 ==
+{{#dpl:
+  |namespace=File
+  |uses=Template:Mapart
+  |include={Mapart¦Mapart.dpl}
+  |includematch=/size\s*=\s*2x2/
+  |mode=userformat
+  |escapelinks=false
+  |listseparators=,,,
+}}
+
+== 4x4 ==
+{{#dpl:
+  |namespace=File
+  |uses=Template:Mapart
+  |include={Mapart¦Mapart.dpl}
+  |includematch=/size\s*=\s*4x4/
+  |mode=userformat
+  |escapelinks=false
+  |listseparators=,,,
+}}
+
+== Other ==
+{{#dpl:
+  |namespace=File
+  |uses=Template:Mapart
+  |include={Mapart¦Mapart.dpl}
+  |includematch=/size\s*=\s*Other/
+  |mode=userformat
+  |escapelinks=false
+  |listseparators=,,,
+}}

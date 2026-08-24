@@ -1,0 +1,7 @@
+<infobox>
+  <title>Tag test</title>
+  <data>
+    <label>A</label>
+    <value>B</value>
+  </data>
+</infobox>

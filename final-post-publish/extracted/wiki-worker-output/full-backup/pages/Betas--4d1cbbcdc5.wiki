@@ -1,0 +1,4 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>This page covers Enthusia's beta-era history: players, guilds, builds, conflicts and major moments from before the permanent SMP.</p><p>[[We On Top (WOT)|We On Top (WOT)]] records participation in the beta End fight and EOTW. Other beta-era player and guild articles can be connected here as that history is documented.</p>
+</div>

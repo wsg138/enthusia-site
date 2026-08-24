@@ -1,0 +1,7 @@
+<templatestyles src="Template:EnthusiaWiki/styles.css" />
+<div class="enthusia-wiki">
+<p>Trivia asks scheduled questions in chat. Correct answers can give Raw Gold and add to your trivia statistics.</p>
+<h2>Playing</h2><p>When a question appears, answer it in chat before someone else gets the correct answer. Reward amounts depend on the question's configured difficulty.</p>
+<h2>Stats</h2><table class="wikitable enthusia-table"><tbody><tr><td><code>/trivia stats</code></td><td>View your trivia statistics.</td></tr><tr><td><code>/trivia top</code></td><td>View the trivia leaderboard.</td></tr></tbody></table>
+<p>Trivia is a separate activity from Server Events and does not require joining an event arena.</p>
+</div>
