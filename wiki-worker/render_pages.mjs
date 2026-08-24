@@ -27,11 +27,15 @@ function stripTags(s) {
   return String(s).replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim();
 }
 
+function replaceDataLink(html, attr, resolve) {
+  const re = new RegExp(`<a\\b[^>]*\\b${attr}="([^"]+)"[^>]*>([\\s\\S]*?)<\\/a>`, 'g');
+  return html.replace(re, (_, value, label) => `[[${resolve(value)}|${stripTags(label)}]]`);
+}
+
 function internalLinks(html) {
-  let out = html;
-  out = out.replace(/<a\s+data-page="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g, (_, id, label) => `[[${pageTitle(id)}|${stripTags(label)}]]`);
-  out = out.replace(/<a\s+data-special="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g, (_, id, label) => `[[${specials[id] || id}|${stripTags(label)}]]`);
-  out = out.replace(/<a\s+data-community="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g, (_, title, label) => `[[${title}|${stripTags(label)}]]`);
+  let out = replaceDataLink(html, 'data-page', pageTitle);
+  out = replaceDataLink(out, 'data-special', id => specials[id] || id);
+  out = replaceDataLink(out, 'data-community', title => title);
   return out;
 }
 
