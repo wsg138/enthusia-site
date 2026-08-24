@@ -6,8 +6,8 @@
   --panel:#1b1713;
   --panel-2:#221c16;
   --text:#fff8ed;
-  --muted:#c9b9a2;
-  --soft:#958774;
+  --muted:#dfd0bc;
+  --soft:#b9aa96;
   --line:#3a2c20;
   --line-strong:#6a4526;
   --ember:#ff4b12;
@@ -5020,4 +5020,7 @@ h1,h2,h3,
 
 /* Minecraft-inspired interface type, with the Enthusia wordmark left unchanged. */
 body,button,input,select,textarea{font-family:"Pixelify Sans",Inter,system-ui,sans-serif!important}
+body{font-weight:500}
+.nav a,.nav-drop-trigger,.btn,button,input,select,textarea{font-weight:600}
+p,li,dd,.muted,.soft{font-synthesis-weight:none}
 .brand-name,.hero h1{font-family:Rye,Georgia,serif!important}
