@@ -1,0 +1,85 @@
+name: Validate Enthusia wiki preview
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/wiki-demo/**'
+      - 'wiki-worker/render_pages.mjs'
+      - 'wiki-worker/wiki-template.css'
+      - 'wiki-worker/validate_structure.mjs'
+      - '.github/workflows/wiki-preview-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_WORKER_OUT: wiki-worker-output
+
+    steps:
+      - name: Check out candidate
+        uses: actions/checkout@v4
+
+      - name: Confirm source set
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in \
+            public/wiki-demo/v2-core.js \
+            public/wiki-demo/v2-support.js \
+            public/wiki-demo/v2-commands.js \
+            public/wiki-demo/v2-detail.js \
+            public/wiki-demo/v2-final.js \
+            public/wiki-demo/v2-polish.js \
+            public/wiki-demo/v2-reputation.js \
+            wiki-worker/wiki-template.css \
+            wiki-worker/validate_structure.mjs; do
+            test -s "$file"
+          done
+
+      - name: Render candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wiki-worker/render_pages.mjs
+          node wiki-worker/render_pages.mjs
+          test -s wiki-worker-output/rendered/manifest.json
+
+      - name: Validate translated component structure
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wiki-worker/validate_structure.mjs
+          node wiki-worker/validate_structure.mjs | tee wiki-worker-output/structure-validation.log
+          grep -q '"ok": true' wiki-worker-output/structure-validation.json
+
+      - name: Player-facing content guardrails
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -R -E -i '(/casino|/spin|/arm)([^a-z]|$)' wiki-worker-output/rendered
+          ! grep -R -E -i 'velocity\.hub|/gmc([^a-z]|$)' wiki-worker-output/rendered
+          ! grep -R -E -i 'movement[- ]speed|speed boost' wiki-worker-output/rendered
+          grep -R -q 'PieCloak' wiki-worker-output/rendered
+          grep -R -q 'outside Spawn and the Warzone' wiki-worker-output/rendered || grep -R -q 'Outside Spawn and the Warzone' wiki-worker-output/rendered
+
+      - name: Validate candidate with Miraheze parser
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/validate_rendered.py | tee wiki-worker-output/parse-validation.log
+
+      - name: Upload read-only validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-readonly-validation-${{ github.run_id }}
+          path: wiki-worker-output/
+          if-no-files-found: warn
+          retention-days: 30
