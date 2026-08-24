@@ -14,7 +14,7 @@ ${details('Negative categories','open list',table([
 ['Scammed','Scammed or deliberately misled another player.'],['Spawn Killed','Killed players unfairly around spawn.'],['Griefed','Damaged or destroyed another player\'s build.'],['Trapped','Used a trap unfairly against another player.'],['Scam Stall','Ran a misleading or dishonest Market stall.']],'Category|Use'))}
 <h2>Profiles and commands</h2>${table([
 ['<code>/rep</code>','Open your reputation profile.'],['<code>/rep &lt;player&gt;</code>','Open another player\'s profile and leave or edit a review.'],['<code>/rep give &lt;player&gt; &lt;category&gt; &lt;reason&gt;</code>','Give reputation directly without using the profile menu.'],['<code>/rep top</code> / <code>bottom</code>','Open reputation leaderboards.'],['<code>/rep reviews [player]</code>','View recent reviews.']])}
-<h2>Reputation effects</h2><p>Movement-speed reputation effects are disabled and do not affect players.</p>
+<h2>Reputation effects</h2>
 ${details('Positive effects','current active effects',table([
 ['+10','+5% beneficial potion duration'],['+15','+10% beneficial potion duration']],'Reputation|Effect'))}
 ${details('Negative effects','effects added at each threshold',table([
