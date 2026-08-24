@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 
 test("completed competition overview includes winner dates prizes members and entry viewer", async () => {
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
-  for (const marker of ["competition-completed-summary", "Started", "Ended", "competition-winner-prizes", "participantLabel", "showEntryDialog", "Previous entry", "Next entry", "Previous image", "Next image"]) assert.match(source, new RegExp(marker));
+  for (const marker of ["competition-completed-summary", "Started", "Ended", "competition-winner-prizes", "participantLabel", "showEntryDialog", "Previous entry", "Next entry", "openImageLightbox", "competition-entry-gallery"]) assert.match(source, new RegExp(marker));
 });
 
 test("voting and judging tabs are conditional", async () => {
@@ -26,12 +26,21 @@ test("competition tabs follow lifecycle visibility", async () => {
 test("rules guide winner members and entry viewer use structured layouts", async () => {
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
   const styles = await readFile(new URL("../public/assets/competitions.css", import.meta.url), "utf8");
-  for (const marker of ["Submit original work", "Enter accurate information", "Follow the deadline", "competition-guide-topic-number", "competition-entry-thumbs", "event.target === dialog"]) {
+  for (const marker of ["Submit original work", "Enter accurate information", "Follow the deadline", "competition-guide-topic-number", "competition-entry-gallery", "event.target === dialog"]) {
     assert.match(source, new RegExp(marker));
   }
-  for (const marker of ["competition-document-panel", "margin-inline:\\s*auto", "competition-winner-member", "competition-entry-thumbs"]) {
+  for (const marker of ["competition-document-panel", "margin-inline:\\s*auto", "competition-winner-member", "competition-entry-gallery"]) {
     assert.match(styles, new RegExp(marker));
   }
+});
+
+test("detail view includes responsive skins, gallery lightbox, two-column rules, and rewards", async () => {
+  const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../public/assets/competitions.css", import.meta.url), "utf8");
+  for (const marker of ["mc-heads.net/body", "renderRewardsTab", "competition-image-lightbox", "Awarded to", "rewardIcon"]) assert.match(source, new RegExp(marker));
+  assert.match(styles, /competition-rules-list\{grid-template-columns:repeat\(2/);
+  assert.match(styles, /competition-entry-gallery\{display:grid;grid-template-columns:repeat\(3/);
+  assert.match(styles, /competition-winner-members\[data-count="1"\]/);
 });
 
 test("about documentation explains PieCloak from its public contract", async () => {

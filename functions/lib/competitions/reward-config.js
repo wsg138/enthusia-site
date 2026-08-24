@@ -215,7 +215,14 @@ export function publicCompetitionRewards(rewards) {
       includeHelpers: definition.includeHelpers,
       helperWeight: definition.includeHelpers ? definition.helperWeight : null,
       publicLabel: definition.publicLabel,
-      publicDescription: definition.publicDescription
+      publicDescription: definition.publicDescription,
+      visual: definition.rewardType === "MONEY"
+        ? { amount: definition.payload.amount, currency: definition.payload.currency }
+        : definition.rewardType === "ITEM" || definition.rewardType === "LORE_ITEM"
+          ? { itemKey: definition.payload.itemKey, amount: definition.payload.amount }
+          : definition.rewardType === "RANK"
+            ? { rank: definition.payload.rank }
+            : null
     }))
   };
 }

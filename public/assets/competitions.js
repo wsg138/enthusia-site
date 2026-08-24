@@ -365,8 +365,9 @@ function renderOverview(root, payload) {
     const heading = document.createElement("h2"); heading.textContent = winnerResult.title;
     copy.append(eyebrow, heading);
     const teamLabel = document.createElement("strong"); teamLabel.className = "competition-winner-team-label"; teamLabel.textContent = "Winning team";
-    const members = document.createElement("div"); members.className = "competition-winner-members";
-    for (const playerName of participantNames(winnerEntry)) { const member = document.createElement("div"); member.className = "competition-winner-member"; const head = document.createElement("img"); head.src = `https://mc-heads.net/avatar/${encodeURIComponent(playerName)}/64`; head.alt = ""; head.addEventListener("error", () => { head.src = "../assets/enthusia-logo-v2.png"; }, { once: true }); const name = document.createElement("strong"); name.textContent = playerName; member.append(head, name); members.append(member); }
+    const playerNames = participantNames(winnerEntry);
+    const members = document.createElement("div"); members.className = "competition-winner-members"; members.dataset.count = String(playerNames.length);
+    for (const playerName of playerNames) { const member = document.createElement("div"); member.className = "competition-winner-member"; const skin = document.createElement("img"); skin.src = `https://mc-heads.net/body/${encodeURIComponent(playerName)}/right`; skin.alt = `${playerName} Minecraft skin`; skin.addEventListener("error", () => { skin.src = `https://mc-heads.net/avatar/${encodeURIComponent(playerName)}/96`; }, { once: true }); const name = document.createElement("strong"); name.textContent = playerName; member.append(skin, name); members.append(member); }
     if (members.children.length) copy.append(teamLabel, members);
     const prizes = (competition.config?.rewards?.definitions ?? []).filter((reward) => reward.placement === 1);
     if (prizes.length) { const prizeList = document.createElement("div"); prizeList.className = "competition-winner-prizes"; for (const prize of prizes) { const item = document.createElement("span"); item.textContent = `${prize.publicLabel}: ${prize.publicDescription}`; prizeList.append(item); } copy.append(prizeList); }
@@ -401,17 +402,58 @@ function participantNames(entry) {
   return names;
 }
 
+function openImageLightbox(images, selectedIndex, title) {
+  let imageIndex = selectedIndex;
+  const dialog = document.createElement("dialog");
+  dialog.className = "competition-image-lightbox";
+  const frame = document.createElement("div");
+  frame.className = "competition-image-lightbox-frame";
+  const render = () => {
+    const image = document.createElement("img");
+    image.src = images[imageIndex].url;
+    image.alt = `${title}, image ${imageIndex + 1} of ${images.length}`;
+    const close = document.createElement("button");
+    close.type = "button";
+    close.className = "competition-image-lightbox-close";
+    close.setAttribute("aria-label", "Close enlarged image");
+    close.textContent = "×";
+    close.addEventListener("click", () => dialog.close());
+    const controls = document.createElement("div");
+    controls.className = "competition-image-lightbox-controls";
+    const previous = document.createElement("button");
+    previous.type = "button";
+    previous.className = "competition-back-link";
+    previous.textContent = "← Previous";
+    previous.disabled = imageIndex === 0;
+    previous.addEventListener("click", () => { imageIndex -= 1; render(); });
+    const count = document.createElement("span");
+    count.textContent = `${imageIndex + 1} of ${images.length}`;
+    const next = document.createElement("button");
+    next.type = "button";
+    next.className = "competition-back-link";
+    next.textContent = "Next →";
+    next.disabled = imageIndex === images.length - 1;
+    next.addEventListener("click", () => { imageIndex += 1; render(); });
+    controls.append(previous, count, next);
+    frame.replaceChildren(close, image, controls);
+  };
+  dialog.append(frame);
+  document.body.append(dialog);
+  dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });
+  dialog.addEventListener("close", () => dialog.remove(), { once: true });
+  render();
+  dialog.showModal();
+}
+
 function showEntryDialog(submissions, selectedId) {
   const entries = Array.isArray(submissions) ? submissions : [];
   let entryIndex = Math.max(0, entries.findIndex((entry) => entry.id === selectedId));
-  let imageIndex = 0;
   const dialog = document.createElement("dialog");
   dialog.className = "competition-entry-dialog";
   const view = document.createElement("div"); view.className = "competition-entry-view";
   const close = document.createElement("button"); close.type = "button"; close.className = "competition-entry-dialog-close"; close.setAttribute("aria-label", "Close entry"); close.textContent = "×"; close.addEventListener("click", () => dialog.close());
   const render = () => {
     const entry = entries[entryIndex]; if (!entry) { dialog.close(); return; }
-    imageIndex = Math.min(imageIndex, Math.max(0, (entry.images?.length ?? 1) - 1));
     const header = document.createElement("header");
     const type = document.createElement("p"); type.className = "competitions-kicker"; type.textContent = entry.entryType;
     const heading = document.createElement("h2"); heading.textContent = entry.title;
@@ -420,18 +462,12 @@ function showEntryDialog(submissions, selectedId) {
     header.append(type, heading, owner, description);
     const members = document.createElement("div"); members.className = "competition-entry-members";
     for (const participant of entry.participants ?? []) { const item = document.createElement("span"); item.className = "submission-member"; item.textContent = participantLabel(participant); members.append(item); }
-    const media = document.createElement("div");
+    const media = document.createElement("div"); media.className = "competition-entry-gallery";
     const images = entry.images ?? [];
-    if (images.length) {
-      const image = document.createElement("img"); image.className = "competition-entry-image"; image.src = images[imageIndex].url; image.alt = `${entry.title}, image ${imageIndex + 1} of ${images.length}`; media.append(image);
-      const thumbs = document.createElement("div"); thumbs.className = "competition-entry-thumbs";
-      images.forEach((item, index) => { const thumb = document.createElement("button"); thumb.type = "button"; thumb.classList.toggle("is-active", index === imageIndex); thumb.setAttribute("aria-label", `Show image ${index + 1}`); const thumbImage = document.createElement("img"); thumbImage.src = item.url; thumbImage.alt = ""; thumb.append(thumbImage); thumb.addEventListener("click", () => { imageIndex = index; render(); }); thumbs.append(thumb); });
-      media.append(thumbs);
-      if (images.length > 1) { const imageNav = document.createElement("div"); imageNav.className = "competition-entry-image-nav"; const previous = document.createElement("button"); previous.className = "competition-back-link"; previous.textContent = "← Previous image"; previous.disabled = imageIndex === 0; previous.addEventListener("click", () => { imageIndex--; render(); }); const count = document.createElement("span"); count.textContent = `${imageIndex + 1} of ${images.length}`; const next = document.createElement("button"); next.className = "competition-back-link"; next.textContent = "Next image →"; next.disabled = imageIndex === images.length - 1; next.addEventListener("click", () => { imageIndex++; render(); }); imageNav.append(previous, count, next); media.append(imageNav); }
-    }
+    images.forEach((item, index) => { const button = document.createElement("button"); button.type = "button"; button.setAttribute("aria-label", `Enlarge image ${index + 1}`); const image = document.createElement("img"); image.src = item.url; image.alt = `${entry.title}, image ${index + 1} of ${images.length}`; button.append(image); button.addEventListener("click", () => openImageLightbox(images, index, entry.title)); media.append(button); });
     const recordNav = document.createElement("div"); recordNav.className = "competition-entry-record-nav";
-    const previousEntry = document.createElement("button"); previousEntry.className = "competition-back-link"; previousEntry.textContent = "← Previous entry"; previousEntry.disabled = entryIndex === 0; previousEntry.addEventListener("click", () => { entryIndex--; imageIndex = 0; render(); });
-    const nextEntry = document.createElement("button"); nextEntry.className = "competition-back-link"; nextEntry.textContent = "Next entry →"; nextEntry.disabled = entryIndex === entries.length - 1; nextEntry.addEventListener("click", () => { entryIndex++; imageIndex = 0; render(); }); recordNav.append(previousEntry, nextEntry);
+    const previousEntry = document.createElement("button"); previousEntry.className = "competition-back-link"; previousEntry.textContent = "← Previous entry"; previousEntry.disabled = entryIndex === 0; previousEntry.addEventListener("click", () => { entryIndex--; render(); });
+    const nextEntry = document.createElement("button"); nextEntry.className = "competition-back-link"; nextEntry.textContent = "Next entry →"; nextEntry.disabled = entryIndex === entries.length - 1; nextEntry.addEventListener("click", () => { entryIndex++; render(); }); recordNav.append(previousEntry, nextEntry);
     view.replaceChildren(close, header); if (members.children.length) view.append(members); view.append(media, recordNav);
   };
   dialog.append(view); document.body.append(dialog); dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); }); dialog.addEventListener("close", () => dialog.remove(), { once: true }); render(); dialog.showModal();
@@ -598,6 +634,37 @@ function renderResults(root, payload) {
   root.append(section);
 }
 
+function rewardIcon(reward) {
+  const itemKey = reward.visual?.itemKey?.split(":").at(-1);
+  const item = itemKey || (reward.rewardType === "MONEY" ? "gold_ingot" : ["RANK", "PERMISSION"].includes(reward.rewardType) ? "name_tag" : reward.rewardType === "LORE_ITEM" ? "nether_star" : "emerald");
+  return `../assets/market/minecraft/vanilla/textures/item/${encodeURIComponent(item)}.png`;
+}
+
+function renderRewardsTab(root, payload) {
+  const section = document.createElement("section");
+  section.className = "competition-tab-panel competition-rewards-panel";
+  section.dataset.tabPanel = "rewards";
+  section.hidden = true;
+  const definitions = payload.competition.config?.rewards?.definitions ?? [];
+  const heading = document.createElement("div"); heading.className = "competition-results-heading";
+  const title = document.createElement("h2"); title.textContent = "Competition rewards";
+  const intro = document.createElement("p"); intro.textContent = ["COMPLETED", "ARCHIVED"].includes(payload.competition.lifecycleState) ? "The rewards assigned to each placed team." : "Rewards available for this competition.";
+  heading.append(title, intro); section.append(heading);
+  if (!definitions.length) { const empty = document.createElement("div"); empty.className = "competition-empty"; empty.textContent = "No rewards have been announced yet."; section.append(empty); root.append(section); return; }
+  const grid = document.createElement("div"); grid.className = "competition-reward-grid competition-reward-showcase";
+  for (const reward of definitions) {
+    const card = document.createElement("article"); card.className = "competition-reward-card";
+    const iconWrap = document.createElement("div"); iconWrap.className = "competition-reward-icon";
+    const icon = document.createElement("img"); icon.src = rewardIcon(reward); icon.alt = ""; icon.addEventListener("error", () => { icon.src = "../assets/market/minecraft/vanilla/textures/item/name_tag.png"; }, { once: true });
+    const amount = document.createElement("span"); amount.textContent = reward.visual?.amount ? `×${reward.visual.amount.toLocaleString()}` : ""; iconWrap.append(icon, amount);
+    const copy = document.createElement("div"); const place = document.createElement("span"); place.className = "competition-reward-placement"; place.textContent = placementLabel(reward.placement); const label = document.createElement("strong"); label.textContent = reward.publicLabel; const description = document.createElement("p"); description.textContent = reward.publicDescription; copy.append(place, label, description);
+    const result = payload.results?.find((item) => item.placement === reward.placement); const entry = payload.submissions?.find((item) => item.id === result?.submissionId); const recipients = participantNames(entry);
+    if (recipients.length) { const awarded = document.createElement("div"); awarded.className = "competition-reward-recipients"; const recipientLabel = document.createElement("small"); recipientLabel.textContent = "Awarded to"; const names = document.createElement("span"); names.textContent = recipients.join(" · "); awarded.append(recipientLabel, names); copy.append(awarded); }
+    card.append(iconWrap, copy); grid.append(card);
+  }
+  section.append(grid); root.append(section);
+}
+
 function renderJudges(root, payload) {
   const section = document.createElement("section");
   section.className = "competition-tab-panel";
@@ -727,6 +794,7 @@ async function loadDetail() {
     tabs.setAttribute("aria-label", "Competition sections");
     const completed = ["COMPLETED", "ARCHIVED"].includes(competition.lifecycleState);
     const tabDefinitions = [["overview", "Overview"], ["rules", "Rules"]];
+    tabDefinitions.push(["rewards", "Rewards"]);
     if (!completed) tabDefinitions.push(["guide", "How to enter"]);
     if (payload.entriesVisible) tabDefinitions.push(["entries", "Entries"]);
     if (competition.config?.voting?.enabled && competition.lifecycleState === "VOTING") tabDefinitions.push(["vote", "Vote"]);
@@ -746,6 +814,7 @@ async function loadDetail() {
     content.className = "competition-detail-content";
     renderOverview(content, payload);
     renderRulesTab(content, competition);
+    renderRewardsTab(content, payload);
     if (!completed) renderGuideTab(content);
     if (payload.entriesVisible) renderEntries(content, payload);
     if (competition.config?.voting?.enabled && competition.lifecycleState === "VOTING") renderPlaceholderPanel(content, "vote", "Voting is open. Sign in to review approved entries and submit your ballot.");
