@@ -111,7 +111,9 @@
   function bottomMenuButton() {
     const buttons = Array.from(document.querySelectorAll('.enthusia-mobile-quickbar .enthusia-mobile-quickbutton'));
     return buttons.find(function (button) {
-      return /^menu$/i.test((button.textContent || '').trim());
+      return Array.from(button.querySelectorAll('span')).some(function (span) {
+        return /^menu$/i.test((span.textContent || '').trim());
+      });
     }) || null;
   }
 
