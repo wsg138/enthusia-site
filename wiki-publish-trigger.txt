@@ -1,1 +1,0 @@
-Second guarded publication pass: verify the icon-refreshed Main Page and all generated wiki targets are already current.
