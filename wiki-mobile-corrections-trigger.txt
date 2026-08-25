@@ -1,1 +1,1 @@
-mobile-brand-polish=1
+mobile-brand-polish=2
