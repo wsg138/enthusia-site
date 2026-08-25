@@ -1,6 +1,6 @@
 /* Corrections for the public mobile Vector experience.
- * Loaded after the existing Enthusia global behavior so it can safely repair
- * the anonymous mobile theme fallback and enrich Vector's own hamburger menu.
+ * Keeps the anonymous mobile theme fallback authoritative, repairs branding,
+ * and makes MediaWiki's native sidebar the single mobile navigation surface.
  */
 (function () {
   'use strict';
@@ -10,36 +10,27 @@
   const LOGO_URL = '/wiki/Special:Redirect/file/Enthusia-logo-v2.png';
   const mobileMedia = window.matchMedia ? window.matchMedia('(max-width: 800px)') : null;
 
-  const NAV_GROUPS = [
-    ['Main Menu', [
-      ['Main Page', 'Main Page'],
-      ['Server Information', 'Server Information'],
-      ['Commands', 'Commands'],
-      ['Mechanics', 'Mechanics']
-    ]],
-    ['Community', [
-      ['Players', 'Noteable Players'],
-      ['Guilds', 'Noteable Guilds'],
-      ['Staff', 'Staff'],
-      ['History & Lore', 'History & Lore'],
-      ['Builds', 'Builds'],
-      ['Mapart', 'Maparts']
-    ]],
-    ['Gameplay', [
-      ['Commands', 'Commands'],
-      ['Mechanics', 'Mechanics'],
-      ['Events', 'Events'],
-      ['Warzone', 'Warzone'],
-      ['Death Duels', 'Death Duels'],
-      ['Reputation', 'Reputation'],
-      ['Playtime', 'Playtime']
-    ]],
-    ['Economy', [
-      ['Market', 'Market'],
-      ['Raw Gold', 'Raw Gold'],
-      ['Voting', 'Voting']
-    ]]
-  ];
+  const NATIVE_MENU_CONTROL_SELECTOR = [
+    '#mw-mf-main-menu-button',
+    '.main-menu-button',
+    '.mw-ui-icon-minerva-mainmenu',
+    '.mw-ui-icon-wikimedia-menu-base20',
+    '.minerva-header .mw-ui-icon-menu',
+    '.minerva-header [aria-label*="main menu" i]',
+    '.minerva-header [title*="main menu" i]',
+    'header.header-container [aria-label*="main menu" i]',
+    'header.header-container [title*="main menu" i]',
+    'label[for="main-menu-input"]',
+    'label[for="mw-mf-main-menu-input"]',
+    'label[for="vector-main-menu-dropdown-checkbox"]',
+    '#vector-main-menu-dropdown-label',
+    '#vector-main-menu-dropdown > .vector-dropdown-label',
+    '.vector-main-menu-dropdown > .vector-dropdown-label'
+  ].join(',');
+
+  function isMobile() {
+    return !mobileMedia || mobileMedia.matches;
+  }
 
   function storageGet() {
     try { return window.localStorage ? localStorage.getItem(THEME_KEY) : null; } catch (e) { return null; }
@@ -103,14 +94,9 @@
     applyTheme(current === 'dark' ? 'light' : 'dark', true);
   }, true);
 
-  function wikiUrl(title) {
-    if (window.mw && mw.util && typeof mw.util.getUrl === 'function') return mw.util.getUrl(title);
-    return '/wiki/' + String(title).replace(/ /g, '_');
-  }
-
   function repairMobileBrand() {
-    if (mobileMedia && !mobileMedia.matches) return;
-    document.querySelectorAll('.enthusia-site-brand img, .enthusia-mobile-drawer-brand img').forEach(function (image) {
+    if (!isMobile()) return;
+    document.querySelectorAll('.enthusia-site-brand img, .enthusia-mobile-drawer-brand img, .enthusia-native-sidebar-brand img').forEach(function (image) {
       const current = image.getAttribute('src') || '';
       if (current !== LOGO_URL) image.setAttribute('src', LOGO_URL);
       image.removeAttribute('hidden');
@@ -119,70 +105,141 @@
     });
   }
 
-  function makeNativeMenuSections() {
-    const wrap = document.createElement('div');
-    wrap.className = 'enthusia-native-menu-sections';
-    NAV_GROUPS.forEach(function (group) {
-      const section = document.createElement('section');
-      section.className = 'enthusia-native-menu-section';
-      const heading = document.createElement('h3');
-      heading.textContent = group[0];
-      section.appendChild(heading);
-      group[1].forEach(function (item) {
-        const link = document.createElement('a');
-        link.href = wikiUrl(item[1]);
-        link.textContent = item[0];
-        section.appendChild(link);
-      });
-      wrap.appendChild(section);
-    });
-    return wrap;
+  function wikiUrl(title) {
+    if (window.mw && mw.util && typeof mw.util.getUrl === 'function') return mw.util.getUrl(title);
+    return '/wiki/' + String(title).replace(/ /g, '_');
   }
 
-  function nativeHamburgerContent() {
+  function nativeSidebarContent() {
     return document.querySelector('#vector-main-menu-dropdown .vector-dropdown-content') ||
       document.querySelector('.vector-main-menu-dropdown .vector-dropdown-content') ||
       document.querySelector('#vector-main-menu-dropdown .vector-menu-content') ||
       document.querySelector('.vector-main-menu-dropdown .vector-menu-content');
   }
 
-  function enrichNativeHamburger() {
-    if (mobileMedia && !mobileMedia.matches) return false;
-    if (document.querySelector('.enthusia-native-menu-sections')) return true;
-    const content = nativeHamburgerContent();
+  function ensureNativeSidebarBrand() {
+    if (!isMobile()) return false;
+    const content = nativeSidebarContent();
     if (!content) return false;
-    content.appendChild(makeNativeMenuSections());
+
+    content.classList.add('enthusia-native-sidebar');
+    if (content.querySelector('.enthusia-native-sidebar-brand')) return true;
+
+    const brand = document.createElement('a');
+    brand.className = 'enthusia-native-sidebar-brand';
+    brand.href = wikiUrl('Main Page');
+    brand.setAttribute('aria-label', 'Enthusia SMP home');
+
+    const image = document.createElement('img');
+    image.src = LOGO_URL;
+    image.alt = '';
+    image.width = 30;
+    image.height = 30;
+
+    const words = document.createElement('span');
+    words.className = 'enthusia-brand-words';
+    const name = document.createElement('strong');
+    name.textContent = 'Enthusia';
+    const smp = document.createElement('span');
+    smp.textContent = 'SMP';
+    words.append(name, smp);
+    brand.append(image, words);
+    content.prepend(brand);
     return true;
+  }
+
+  function nativeMenuControl() {
+    if (!isMobile()) return null;
+    return Array.from(document.querySelectorAll(NATIVE_MENU_CONTROL_SELECTOR)).find(function (node) {
+      return !node.closest('.enthusia-mobile-quickbar, .enthusia-mobile-drawer');
+    }) || null;
+  }
+
+  function openNativeMenu() {
+    const control = nativeMenuControl();
+    if (control) {
+      control.click();
+      return true;
+    }
+
+    const toggle = document.querySelector('#vector-main-menu-dropdown-checkbox, #main-menu-input, #mw-mf-main-menu-input');
+    if (toggle && typeof toggle.click === 'function') {
+      toggle.click();
+      return true;
+    }
+    return false;
+  }
+
+  function bottomMenuButton() {
+    const buttons = Array.from(document.querySelectorAll('.enthusia-mobile-quickbar .enthusia-mobile-quickbutton'));
+    return buttons.find(function (button) {
+      return Array.from(button.querySelectorAll('span')).some(function (span) {
+        return /^menu$/i.test((span.textContent || '').trim());
+      });
+    }) || null;
+  }
+
+  function bindBottomMenuToNativeSidebar() {
+    if (!isMobile()) return false;
+    const button = bottomMenuButton();
+    if (!button || button.dataset.enthusiaNativeMenuBound === '1') return Boolean(button);
+
+    button.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      openNativeMenu();
+      button.blur();
+    }, true);
+    button.dataset.enthusiaNativeMenuBound = '1';
+    return true;
+  }
+
+  function removeLegacyCustomDrawer() {
+    if (!isMobile()) return;
+    document.querySelectorAll('.enthusia-mobile-drawer, .enthusia-mobile-shade').forEach(function (node) {
+      node.remove();
+    });
+    root.classList.remove('enthusia-mobile-menu-open');
+  }
+
+  function normalizeMobileNavigation() {
+    if (!isMobile()) return;
+    removeLegacyCustomDrawer();
+    bindBottomMenuToNativeSidebar();
+    ensureNativeSidebarBrand();
+    repairMobileBrand();
   }
 
   function start() {
     restoreStoredTheme();
-    repairMobileBrand();
-    enrichNativeHamburger();
+    normalizeMobileNavigation();
 
     /* Vector can update its client-preference classes after Common.js starts.
        Keep an explicit mobile choice authoritative when that happens. */
-    const observer = new MutationObserver(function () {
+    const themeObserver = new MutationObserver(function () {
       window.setTimeout(function () {
         restoreStoredTheme();
-        repairMobileBrand();
-        enrichNativeHamburger();
+        normalizeMobileNavigation();
       }, 0);
     });
-    observer.observe(root, { attributes: true, attributeFilter: ['class'] });
-    if (document.body) observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    themeObserver.observe(root, { attributes: true, attributeFilter: ['class'] });
+    if (document.body) themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
+    let scheduled = false;
     const domObserver = new MutationObserver(function () {
-      repairMobileBrand();
-      enrichNativeHamburger();
+      if (scheduled) return;
+      scheduled = true;
+      window.setTimeout(function () {
+        scheduled = false;
+        normalizeMobileNavigation();
+      }, 0);
     });
     if (document.body) domObserver.observe(document.body, { childList: true, subtree: true });
 
     if (mobileMedia) {
       const onMobileChange = function () {
         restoreStoredTheme();
-        repairMobileBrand();
-        enrichNativeHamburger();
+        normalizeMobileNavigation();
       };
       if (typeof mobileMedia.addEventListener === 'function') mobileMedia.addEventListener('change', onMobileChange);
       else if (typeof mobileMedia.addListener === 'function') mobileMedia.addListener(onMobileChange);

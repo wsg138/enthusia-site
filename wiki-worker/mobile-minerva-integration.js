@@ -1,26 +1,12 @@
-/* Mobile-only integration for Miraheze's Minerva-style header.
- * Keeps the existing Enthusia drawer as the single mobile navigation surface.
+/* Mobile-only header branding for Miraheze/Vector/Minerva.
+ * Navigation is intentionally left native: the top-left hamburger must keep
+ * MediaWiki's own click, animation, focus, backdrop, and sidebar behavior.
  */
 (function () {
   'use strict';
 
-  const root = document.documentElement;
   const mobileMedia = window.matchMedia ? window.matchMedia('(max-width: 800px)') : null;
   const LOGO_URL = '/wiki/Special:Redirect/file/Enthusia-logo-v2.png';
-  const HAMBURGER_SELECTOR = [
-    '#mw-mf-main-menu-button',
-    '.main-menu-button',
-    '.mw-ui-icon-minerva-mainmenu',
-    '.mw-ui-icon-wikimedia-menu-base20',
-    '.minerva-header .mw-ui-icon-menu',
-    '.minerva-header [aria-label*="menu" i]',
-    '.minerva-header [title*="menu" i]',
-    'header.header-container [aria-label*="menu" i]',
-    'header.header-container [title*="menu" i]',
-    'label[for="main-menu-input"]',
-    'label[for="mw-mf-main-menu-input"]',
-    '#vector-main-menu-dropdown > .vector-dropdown-label'
-  ].join(',');
 
   function isMobile() {
     return !mobileMedia || mobileMedia.matches;
@@ -93,61 +79,18 @@
     return true;
   }
 
-  function openEnthusiaDrawer() {
-    const drawer = document.querySelector('.enthusia-mobile-drawer');
-    const shade = document.querySelector('.enthusia-mobile-shade');
-    if (!drawer) return false;
-
-    const nativeToggle = document.querySelector('#main-menu-input, #mw-mf-main-menu-input');
-    if (nativeToggle && 'checked' in nativeToggle) nativeToggle.checked = false;
-
-    drawer.classList.add('is-open');
-    if (shade) shade.classList.add('is-open');
-    root.classList.add('enthusia-mobile-menu-open');
-    const close = drawer.querySelector('.enthusia-mobile-drawer-close');
-    if (close) window.setTimeout(function () { close.focus(); }, 0);
-    return true;
-  }
-
-  function nativeHamburger(target) {
-    if (!target || !target.closest) return null;
-    const button = target.closest(HAMBURGER_SELECTOR);
-    if (!button) return null;
-    if (button.closest('.enthusia-mobile-drawer, .enthusia-mobile-quickbar')) return null;
-    return button;
-  }
-
-  /* Intercept before Minerva/Vector handles its own toggle so the top-left
-     hamburger opens the exact same Enthusia drawer as the bottom Menu button. */
-  document.addEventListener('click', function (event) {
-    if (!isMobile()) return;
-    const button = nativeHamburger(event.target);
-    if (!button || !document.querySelector('.enthusia-mobile-drawer')) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    openEnthusiaDrawer();
-  }, true);
-
-  document.addEventListener('keydown', function (event) {
-    if (!isMobile() || (event.key !== 'Enter' && event.key !== ' ')) return;
-    const button = nativeHamburger(event.target);
-    if (!button || !document.querySelector('.enthusia-mobile-drawer')) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    openEnthusiaDrawer();
-  }, true);
-
-  function refresh() {
-    ensureMobileBrand();
-  }
-
   function start() {
-    refresh();
+    ensureMobileBrand();
+
     if (document.body) {
-      const observer = new MutationObserver(function () { refresh(); });
+      const observer = new MutationObserver(function () {
+        ensureMobileBrand();
+      });
       observer.observe(document.body, { childList: true, subtree: true });
     }
+
     if (mobileMedia) {
+      const refresh = function () { ensureMobileBrand(); };
       if (typeof mobileMedia.addEventListener === 'function') mobileMedia.addEventListener('change', refresh);
       else if (typeof mobileMedia.addListener === 'function') mobileMedia.addListener(refresh);
     }
