@@ -1,0 +1,119 @@
+/* Mobile-only styling for MediaWiki/Vector's native main-menu sidebar.
+ * The native hamburger owns opening/closing, focus, animation and backdrop.
+ */
+
+@media (max-width: 800px) {
+  /* The old Enthusia drawer is no longer part of the mobile navigation path.
+     Keep it suppressed even if a cached older Common.js briefly creates it. */
+  .enthusia-mobile-drawer,
+  .enthusia-mobile-shade {
+    display: none !important;
+  }
+
+  html.enthusia-mobile-menu-open,
+  html.enthusia-mobile-menu-open body {
+    overflow: auto !important;
+  }
+
+  #vector-main-menu-dropdown .vector-dropdown-content,
+  .vector-main-menu-dropdown .vector-dropdown-content,
+  #vector-main-menu-dropdown .vector-menu-content,
+  .vector-main-menu-dropdown .vector-menu-content {
+    background: var(--enth-bg-elev, #11161a) !important;
+    color: var(--enth-text, #e8ecf0) !important;
+    border-color: var(--enth-line, #343d46) !important;
+  }
+
+  #vector-main-menu-dropdown .vector-main-menu,
+  .vector-main-menu-dropdown .vector-main-menu,
+  #vector-main-menu-dropdown .vector-menu-content,
+  .vector-main-menu-dropdown .vector-menu-content {
+    box-sizing: border-box;
+  }
+
+  .enthusia-native-sidebar {
+    padding-top: calc(10px + env(safe-area-inset-top, 0px)) !important;
+  }
+
+  .enthusia-native-sidebar-brand {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin: 0 10px 10px;
+    padding: 3px 2px 12px;
+    border-bottom: 1px solid var(--enth-line-soft, #293139);
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  .enthusia-native-sidebar-brand img {
+    display: block;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 auto;
+    object-fit: contain;
+  }
+
+  #vector-main-menu-dropdown .vector-menu-heading,
+  .vector-main-menu-dropdown .vector-menu-heading {
+    display: block !important;
+    margin: 15px 11px 5px !important;
+    padding: 0 !important;
+    color: var(--enth-muted, #a7b0b8) !important;
+    font-size: .72rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .1em;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
+
+  #vector-main-menu-dropdown .vector-menu-content-list,
+  .vector-main-menu-dropdown .vector-menu-content-list {
+    margin: 0 !important;
+    padding: 0 6px 10px !important;
+  }
+
+  #vector-main-menu-dropdown .mw-list-item,
+  .vector-main-menu-dropdown .mw-list-item {
+    display: block !important;
+    margin: 1px 0 !important;
+  }
+
+  #vector-main-menu-dropdown .mw-list-item > a,
+  .vector-main-menu-dropdown .mw-list-item > a {
+    display: flex !important;
+    align-items: center;
+    min-height: 42px;
+    box-sizing: border-box;
+    padding: 9px 10px !important;
+    border-radius: 10px;
+    color: var(--enth-text, #e8ecf0) !important;
+    font-size: .93rem !important;
+    font-weight: 600;
+    line-height: 1.25;
+    text-decoration: none !important;
+  }
+
+  #vector-main-menu-dropdown .mw-list-item > a:active,
+  #vector-main-menu-dropdown .mw-list-item > a:focus-visible,
+  .vector-main-menu-dropdown .mw-list-item > a:active,
+  .vector-main-menu-dropdown .mw-list-item > a:focus-visible {
+    background: var(--enth-panel-3, #242b31) !important;
+    color: var(--enth-accent, #9acb70) !important;
+    outline: none;
+  }
+
+  #vector-main-menu-dropdown .vector-pinnable-header,
+  .vector-main-menu-dropdown .vector-pinnable-header,
+  #vector-main-menu-dropdown .vector-pinnable-element-unpin-button,
+  .vector-main-menu-dropdown .vector-pinnable-element-unpin-button {
+    display: none !important;
+  }
+
+  html[data-enthusia-color-scheme="light"] #vector-main-menu-dropdown .vector-dropdown-content,
+  html[data-enthusia-color-scheme="light"] .vector-main-menu-dropdown .vector-dropdown-content,
+  html[data-enthusia-color-scheme="light"] #vector-main-menu-dropdown .vector-menu-content,
+  html[data-enthusia-color-scheme="light"] .vector-main-menu-dropdown .vector-menu-content {
+    box-shadow: 10px 0 30px rgba(38,54,40,.14);
+  }
+}
