@@ -5,7 +5,7 @@
   "icons": [
     {"label":"Staff","wikiFile":"EnthusiaIconStaff.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/ItemSprite_nether-star.png"},
     {"label":"Guilds","wikiFile":"EnthusiaIconGuilds.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/White_Banner.png"},
-    {"label":"Players","wikiFile":"EnthusiaIconPlayers.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/Player_Head_%288%29_JE5.png"},
+    {"label":"Players","wikiFile":"EnthusiaIconPlayers.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/ItemSprite_name-tag.png"},
     {"label":"Betas","wikiFile":"EnthusiaIconBetas.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/ItemSprite_water-bottle.png"},
     {"label":"Builds","wikiFile":"EnthusiaIconBuilds.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/Bricks_JE5_BE3.png"},
     {"label":"Mapart","wikiFile":"EnthusiaIconMapart.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/ItemSprite_map.png"},
