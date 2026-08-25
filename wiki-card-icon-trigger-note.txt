@@ -1,1 +1,0 @@
-One-time icon publication is gated by wiki-card-icon-trigger.txt on this PR.
