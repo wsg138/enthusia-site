@@ -54,6 +54,38 @@
     line-height: 1.3 !important;
   }
 
+  /* Match the desktop/server branding instead of the temporary green mobile wordmark. */
+  .enthusia-site-brand img,
+  .enthusia-mobile-drawer-brand img {
+    display: block !important;
+    opacity: 1 !important;
+  }
+
+  .enthusia-brand-words strong {
+    display: inline-block !important;
+    font-weight: 900 !important;
+    letter-spacing: -.02em !important;
+    background: linear-gradient(90deg, #ff4b12 0%, #ff8a00 46%, #ffd36a 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+  }
+
+  .enthusia-brand-words > span {
+    color: #f0b24f !important;
+    font-weight: 800 !important;
+  }
+
+  /* Make an explicit mobile dark choice visually authoritative even if Vector
+     still carries its anonymous day-preference class. */
+  html[data-enthusia-color-scheme="dark"] body.skin-vector-2022,
+  html[data-enthusia-color-scheme="dark"] body.skin-vector-2022 .vector-page-container,
+  html[data-enthusia-color-scheme="dark"] body.skin-vector-2022 .vector-header-container,
+  html[data-enthusia-color-scheme="dark"] body.skin-vector-2022 .mw-page-container {
+    background-color: var(--enth-bg, #0d1013) !important;
+    color: var(--enth-text, #e8ecf0) !important;
+  }
+
   /* Add the full wiki navigation to Vector's own hamburger dropdown too. */
   .enthusia-native-menu-sections {
     margin: 10px 0 2px;
@@ -94,12 +126,14 @@
 }
 
 @media (max-width: 390px) {
-  .enthusia-home-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
   .enthusia-wiki .fact-grid,
   .enthusia-wiki .topic-grid {
     grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 340px) {
+  .enthusia-home-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
