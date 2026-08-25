@@ -614,3 +614,65 @@
 .competitions-page,.competitions-page :where(button,input,select,textarea,a,p,span,strong,small,label,li,dt,dd,h1,h2,h3,h4,h5,h6,summary,code){font-family:"Enthusia Minecraft",Inter,system-ui,sans-serif!important}
 .competitions-page :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt,.eyebrow,.nav,.nav *,.competition-card-context,.competitions-kicker,.competition-stage-label,.competition-result-place,.competition-winner-team-label,.staff-edited-label,.competition-detail-tabs,.competition-back-link,.competition-guide-link,.competition-primary-action,.competition-card-link,.competition-reward-placement,.competition-countdown strong,.competition-score-breakdown small,.competition-score-breakdown strong){font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
 .competitions-page .brand-name{font-family:Rye,Georgia,serif!important}
+
+/* Give the all-placements list a purpose-built mobile card layout. */
+@media(max-width:700px){
+  .competition-result-list{width:100%;gap:14px}
+  .competition-result-row{
+    grid-template-columns:64px minmax(0,1fr);
+    grid-template-rows:auto auto auto;
+    gap:14px 16px;
+    width:100%;
+    max-width:none;
+    padding:18px;
+    align-items:center;
+    overflow:hidden;
+  }
+  .competition-result-row>.competition-result-place{
+    grid-column:1/-1;
+    grid-row:1;
+    justify-self:start;
+  }
+  .competition-result-row>.competition-result-head{
+    grid-column:1;
+    grid-row:2;
+    justify-self:center;
+    width:56px;
+    height:56px;
+  }
+  .competition-result-row>div:not(.competition-score-breakdown){
+    grid-column:2;
+    grid-row:2;
+    min-width:0;
+    align-self:center;
+  }
+  .competition-result-row h3,
+  .competition-result-row .competition-result-players{
+    overflow-wrap:anywhere;
+    word-break:normal;
+  }
+  .competition-result-row>.competition-score-breakdown{
+    display:grid;
+    grid-template-columns:1fr;
+    grid-column:1/-1;
+    grid-row:3;
+    justify-self:stretch;
+    width:100%;
+    gap:8px;
+    margin:0;
+  }
+  .competition-result-row>.competition-score-breakdown>span{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+    min-width:0;
+    padding:11px 13px;
+  }
+  .competition-result-row>.competition-score-breakdown small{
+    white-space:nowrap;
+    overflow-wrap:normal;
+  }
+  .competition-result-row>.competition-score-breakdown strong{white-space:nowrap}
+  .competition-result-row>.staff-edited-label{grid-column:1/-1;grid-row:4;justify-self:start}
+}
