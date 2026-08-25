@@ -1,0 +1,57 @@
+/* Enthusia wiki shell branding. Appended to MediaWiki:Common.css by the guarded publisher. */
+body.skin-vector-2022 .mw-logo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  min-height: 40px;
+  text-decoration: none !important;
+}
+
+body.skin-vector-2022 .mw-logo-icon,
+body.skin-vector-2022 .mw-logo-wordmark {
+  display: none !important;
+}
+
+body.skin-vector-2022 .mw-logo::before {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  background: url("/wiki/Special:Redirect/file/Enthusia-logo-v2.png") center / contain no-repeat;
+  filter: drop-shadow(0 0 8px rgba(255, 138, 0, 0.28));
+}
+
+body.skin-vector-2022 .mw-logo::after {
+  content: "Enthusia";
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  background: linear-gradient(90deg, #ff4b12 0%, #ff8a00 46%, #ffd36a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Keep DPL player cards deterministic even when an image is narrower than 120px. */
+.enthusia-player-dpl-card {
+  box-sizing: border-box;
+}
+
+.enthusia-player-dpl-image,
+.enthusia-player-dpl-name {
+  box-sizing: border-box;
+}
+
+.enthusia-player-dpl-image > a,
+.enthusia-player-dpl-image img {
+  display: block;
+  margin: 0 auto;
+}
+
+.enthusia-player-dpl-name {
+  overflow-wrap: anywhere;
+}
