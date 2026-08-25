@@ -64,6 +64,12 @@ test("every numbered competition migration applies cleanly to SQLite", async () 
   assert.ok(tables.some((row) => row.name === "competition_audit_events"));
   assert.ok(tables.some((row) => row.name === "competition_media"));
 
+  const appealTables = database.prepare(`
+    SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE 'appeal_%'
+  `).all();
+  assert.ok(appealTables.some((row) => row.name === "appeal_submissions"));
+  assert.ok(appealTables.some((row) => row.name === "appeal_attachments"));
+
   const competitionColumns = database.prepare("PRAGMA table_info(competitions)").all();
   assert.ok(competitionColumns.some((column) => column.name === "last_lifecycle_operation_id"));
   database.close();

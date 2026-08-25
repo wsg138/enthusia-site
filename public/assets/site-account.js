@@ -107,7 +107,7 @@ async function renderAccount(root, session) {
   const details = document.createElement("details");
   details.className = "site-account-menu";
   const summary = document.createElement("summary");
-  summary.title = session.discord?.username || discordName(session);
+  summary.title = "Open account menu";
   const avatar = document.createElement("span");
   avatar.className = "site-account-avatar";
   const imageUrl = avatarUrl(session);
@@ -122,16 +122,18 @@ async function renderAccount(root, session) {
   const identity = document.createElement("span");
   identity.className = "site-account-identity";
   const primary = document.createElement("strong");
-  primary.textContent = minecraftName(session) || discordName(session);
+  primary.textContent = discordName(session);
   const secondary = document.createElement("small");
-  secondary.textContent = minecraftName(session)
-    ? `@${session.discord?.username || discordName(session)}`
-    : "Minecraft account not linked";
+  secondary.textContent = minecraftName(session) || "No Minecraft account linked";
   identity.append(primary, secondary);
   summary.append(avatar, identity);
   const actions = document.createElement("div");
   actions.className = "site-account-actions";
-  actions.append(menuLink("Competitions", "/competitions/"), menuLink("Appeal a punishment", "/appeal.html"));
+  actions.append(
+    menuLink("Account and links", "/account.html"),
+    menuLink("Appeals", "/appeal.html"),
+    menuLink("Competitions", "/competitions/")
+  );
   if (await isStaffMember()) actions.append(menuLink("Staff workspace", "/competitions/admin/"));
   const logout = document.createElement("button");
   logout.type = "button";

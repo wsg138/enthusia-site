@@ -1,102 +1,98 @@
-import { authenticateAppealRequest } from "../lib/appeal-session.js";
-import { claimPunishment, sanitizeClaim } from "../lib/appeal-claim.js";
+import {
+  appealSubmissionHash,
+  sanitizeAppealSubmission,
+  staffAppealIdempotencyKey
+} from "../lib/appeal-content.js";
+import { requestEligiblePunishments } from "../lib/appeal-eligibility.js";
+import { finalizeAppealSubmission, prepareAppealSubmission } from "../lib/appeal-repository.js";
+import { authenticateLinkedAppealRequest, linkedMinecraftAccount } from "../lib/appeal-session.js";
 import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../lib/responses.js";
-import { appealIdempotencyKey, requireSameOrigin } from "../lib/security.js";
+import { requireSameOrigin } from "../lib/security.js";
 import { signedStaffRequest, staffApiResponse } from "../lib/staff-api.js";
 import { isCanonicalUuid } from "../lib/validation.js";
 
-const MAX_REASON_LENGTH = 1000;
-
-const ANSWER_RULES = Object.freeze({
-  whatHappened: Object.freeze({ min: 100, max: 260 }),
-  whyReview: Object.freeze({ min: 100, max: 260 }),
-  futureSteps: Object.freeze({ min: 75, max: 180 }),
-  additionalContext: Object.freeze({ min: 0, max: 100 })
-});
-
-function answerText(input, field) {
-  return typeof input?.[field] === "string" ? input[field].replace(/\r\n?/g, "\n").trim() : "";
-}
-
-function meaningfulLength(value) {
-  return value.replace(/\s+/g, " ").length;
-}
-
-function sanitizeAnswers(input) {
-  const answers = {};
-  for (const [field, rule] of Object.entries(ANSWER_RULES)) {
-    const value = answerText(input, field);
-    const length = meaningfulLength(value);
-    if (length < rule.min || value.length > rule.max) return null;
-    if (/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/.test(value)) return null;
-    answers[field] = value;
-  }
-  return Object.freeze(answers);
-}
-
-function buildReason(answers) {
-  const sections = [
-    `What happened?\n${answers.whatHappened}`,
-    `Why should the punishment be reconsidered?\n${answers.whyReview}`,
-    `What will you do differently?\n${answers.futureSteps}`
-  ];
-  if (answers.additionalContext) sections.push(`Additional context\n${answers.additionalContext}`);
-  return sections.join("\n\n");
-}
-
-function sanitizeSubmission(input) {
-  const claim = sanitizeClaim(input);
-  if (!claim) return null;
-  const answers = sanitizeAnswers(input);
-  if (!answers) return null;
-  const reason = buildReason(answers);
-  if (reason.length > MAX_REASON_LENGTH) return null;
-  return { ...claim, answers, reason };
-}
-
-function verifiedBinding(input, claim) {
-  const punishmentId = typeof input?.punishmentId === "string" ? input.punishmentId.trim() : "";
-  const username = typeof input?.boundUsername === "string" ? input.boundUsername.trim() : "";
-  if (!isCanonicalUuid(punishmentId) || username.toLowerCase() !== claim.username.toLowerCase()) return null;
-  return { punishmentId, username };
-}
-
-function buildAppealPayload(submission, session, binding) {
+function buildAppealPayload(submission, account, payloadHash) {
   return {
-    punishmentId: binding.punishmentId,
-    reason: submission.reason,
-    accountId: session.accountId,
-    username: binding.username
+    punishmentId: submission.punishmentId,
+    reason: submission.staffReason,
+    accountId: account.uuid,
+    username: account.name,
+    idempotencyKey: staffAppealIdempotencyKey(payloadHash)
   };
+}
+
+async function linkedSession(context) {
+  if (!context.env?.COMPETITIONS_DB) return { response: serviceUnavailable() };
+  let session;
+  try { session = await authenticateLinkedAppealRequest(context.request, context.env); }
+  catch { return { response: serviceUnavailable() }; }
+  if (!session) return { response: unauthorized() };
+  if (!session.linkedMinecraftAccounts.length) {
+    return { response: json({ error: "minecraft_link_required" }, 403) };
+  }
+  return { session };
+}
+
+async function staffSubmission(context, payload) {
+  const upstream = await signedStaffRequest(
+    context.env,
+    "/v1/website/appeals/submit",
+    payload
+  );
+  if (!upstream.ok) return { response: staffApiResponse(upstream, "private, no-store") };
+  let appeal;
+  try { appeal = await upstream.json(); } catch { return { response: serviceUnavailable() }; }
+  if (!isCanonicalUuid(appeal?.id) || appeal.punishmentId?.toLowerCase() !== payload.punishmentId) {
+    return { response: serviceUnavailable() };
+  }
+  return { appeal };
 }
 
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-  let session;
-  try { session = await authenticateAppealRequest(context.request, context.env); } catch { return unauthorized(); }
+  const authenticated = await linkedSession(context);
+  if (authenticated.response) return authenticated.response;
 
   let submission;
-  try { submission = sanitizeSubmission(await context.request.json()); } catch { submission = null; }
+  try { submission = sanitizeAppealSubmission(await context.request.json()); }
+  catch { submission = null; }
   if (!submission) return json({ error: "invalid_appeal" }, 400);
+  const account = linkedMinecraftAccount(authenticated.session, submission.minecraftUuid);
+  if (!account) return json({ error: "linked_minecraft_account_required" }, 400);
 
   try {
-    const claimResponse = await claimPunishment(context.env, session, submission);
-    if (!claimResponse.ok) return staffApiResponse(claimResponse, "private, no-store");
-    const binding = verifiedBinding(await claimResponse.json(), submission);
-    if (!binding) return serviceUnavailable();
-    const payload = buildAppealPayload(submission, session, binding);
-    payload.idempotencyKey = await appealIdempotencyKey(session, {
-      punishmentId: binding.punishmentId,
-      reason: submission.reason
+    const eligible = await requestEligiblePunishments(context.env, account.uuid);
+    if (eligible.upstream) return staffApiResponse(eligible.upstream, "private, no-store");
+    if (!eligible.punishments.some((candidate) => candidate.id === submission.punishmentId)) {
+      return json({ error: "punishment_not_appealable" }, 409);
+    }
+
+    const payloadHash = await appealSubmissionHash(authenticated.session, submission);
+    const prepared = await prepareAppealSubmission(context.env.COMPETITIONS_DB, {
+      session: authenticated.session,
+      account,
+      submission,
+      payloadHash
     });
-    return staffApiResponse(
-      await signedStaffRequest(context.env, "/v1/website/appeals/submit", payload),
-      "private, no-store"
-    );
+    if (prepared.status === "CONFLICT") return json({ error: "appeal_draft_conflict" }, 409);
+    if (prepared.status === "ATTACHMENT_CONFLICT") return json({ error: "appeal_attachment_conflict" }, 409);
+
+    const payload = buildAppealPayload(submission, account, payloadHash);
+    const submitted = await staffSubmission(context, payload);
+    if (submitted.response) return submitted.response;
+    await finalizeAppealSubmission(context.env.COMPETITIONS_DB, {
+      ownerDiscordId: authenticated.session.discord.id,
+      draftId: submission.draftId,
+      payloadHash,
+      appealId: submitted.appeal.id,
+      attachmentIds: submission.attachmentIds
+    });
+    return json(submitted.appeal, 200, { "cache-control": "private, no-store" });
   } catch {
     return serviceUnavailable();
   }
 }
 
 export function onRequest() { return methodNotAllowed(["POST"]); }
-export { buildAppealPayload, buildReason, sanitizeAnswers, sanitizeSubmission, verifiedBinding };
+
+export { buildAppealPayload, linkedSession, staffSubmission };

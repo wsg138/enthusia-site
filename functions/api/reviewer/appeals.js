@@ -1,5 +1,6 @@
 import { authenticateRequest, canReview } from "../../lib/auth.js";
-import { forbidden, methodNotAllowed, serviceUnavailable, unauthorized } from "../../lib/responses.js";
+import { appealDetailsByIds } from "../../lib/appeal-repository.js";
+import { forbidden, json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../lib/responses.js";
 import { reviewerRank, signedStaffRequest, staffApiResponse } from "../../lib/staff-api.js";
 
 export async function onRequestGet(context) {
@@ -21,7 +22,33 @@ export async function onRequestGet(context) {
       cursor,
       limit: 50,
     });
-    return staffApiResponse(upstream);
+    if (!upstream.ok) return staffApiResponse(upstream);
+    let payload;
+    try { payload = await upstream.json(); } catch { return serviceUnavailable(); }
+    if (!Array.isArray(payload?.appeals)) return serviceUnavailable();
+
+    let details = null;
+    if (context.env?.COMPETITIONS_DB) {
+      try {
+        details = await appealDetailsByIds(
+          context.env.COMPETITIONS_DB,
+          payload.appeals.map((appeal) => appeal.id)
+        );
+      } catch {
+        details = null;
+      }
+    }
+    const detailsAvailable = details !== null;
+    return json({
+      ...payload,
+      appeals: payload.appeals.map((appeal) => {
+        const full = details?.get(appeal.id);
+        if (full) {
+          return { ...appeal, structuredAnswers: full.answers, attachments: full.attachments, detailsState: "COMPLETE" };
+        }
+        return { ...appeal, structuredAnswers: null, attachments: [], detailsState: detailsAvailable ? "LEGACY" : "UNAVAILABLE" };
+      })
+    });
   } catch {
     return serviceUnavailable();
   }

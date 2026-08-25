@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Privately ask Enthusia staff to review an eligible Minecraft punishment.">
+  <meta name="description" content="Ask Enthusia staff to review an eligible Minecraft punishment.">
   <meta name="theme-color" content="#100d0a">
   <title>Appeal a punishment | Enthusia SMP</title>
   <link rel="icon" href="assets/enthusia-logo-v2.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=vision84">
+  <link rel="stylesheet" href="assets/styles.css?v=vision85">
 </head>
 <body class="appeal-page moderation-page">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -31,43 +31,120 @@
 <main id="main-content" class="page-main moderation-main">
   <section class="moderation-hero container" aria-labelledby="appeal-title">
     <div class="moderation-hero-copy">
-      <p class="eyebrow">Appeal process</p>
+      <p class="eyebrow">Punishment appeals</p>
       <h1 id="appeal-title">Appeal a punishment</h1>
-      <p class="page-lead">Sign in, confirm the punishment you want reviewed, and answer each question in your own words. Staff will only see the information needed to review your appeal.</p>
+      <p class="page-lead">Select the punishment you want reviewed and give staff the details they need to check the case.</p>
     </div>
     <aside class="card moderation-help-card" aria-labelledby="appeal-help-title">
-      <p class="card-kicker">Before you appeal</p>
-      <h2 id="appeal-help-title">Be specific and honest</h2>
-      <p>Focus on the punishment you selected. Explain what happened, what staff should reconsider, and what you will do differently.</p>
-      <a href="rules.html">Review the server rules</a>
+      <p class="card-kicker">Before you start</p>
+      <h2 id="appeal-help-title">Read the rule first</h2>
+      <p>Look over the rule connected to your punishment. Gather any dates, messages, screenshots, or logs that could help staff check the case.</p>
+      <a href="rules.html">Open the server rules</a>
     </aside>
   </section>
 
   <section class="container moderation-workspace" aria-label="Appeal form">
-    <div class="appeal-progress" aria-label="Appeal steps">
-      <div><span>1</span><strong>Sign in</strong><small>Confirm your Discord account</small></div>
-      <div><span>2</span><strong>Choose the punishment</strong><small>Confirm the username and code</small></div>
-      <div><span>3</span><strong>Complete the appeal</strong><small>Answer every required question</small></div>
-    </div>
-    <div id="appeal-auth" class="appeal-auth-panel card" aria-live="polite"><div><p class="card-kicker">Your account</p><h2>Checking your Discord session…</h2><p>Discord sign-in identifies who is submitting the appeal. You do not need to be a member of the Enthusia Discord.</p></div></div>
-    <form id="appeal-form" class="appeal-form card" novalidate>
-      <fieldset id="appeal-fields" disabled>
-        <div class="appeal-form-heading"><div><p class="card-kicker">Punishment</p><h2>Confirm what you are appealing</h2></div><p>Both details must match the punishment record.</p></div>
+    <ol class="appeal-progress" aria-label="Appeal steps">
+      <li data-appeal-step="account"><span>1</span><div><strong>Account</strong><small>Sign in and check your Minecraft link</small></div></li>
+      <li data-appeal-step="punishment"><span>2</span><div><strong>Punishment</strong><small>Select the case you want reviewed</small></div></li>
+      <li data-appeal-step="appeal"><span>3</span><div><strong>Appeal</strong><small>Answer the questions and add evidence</small></div></li>
+    </ol>
+
+    <section id="appeal-auth" class="appeal-auth-panel card" aria-live="polite">
+      <div><p class="card-kicker">Your account</p><h2>Checking your sign-in…</h2></div>
+    </section>
+
+    <form id="appeal-form" class="appeal-form card" novalidate hidden>
+      <fieldset id="appeal-fields">
+        <div class="appeal-form-heading">
+          <div><p class="card-kicker">Punishment</p><h2>What are you appealing?</h2></div>
+          <p>Only active punishments that can be appealed are shown.</p>
+        </div>
+
         <div class="appeal-identity-grid">
-          <label class="appeal-field">Minecraft username<input name="username" id="appeal-username" autocomplete="off" minlength="3" maxlength="16" pattern="[A-Za-z0-9_]{3,16}" spellcheck="false" required placeholder="Your in-game name"></label>
-          <label class="appeal-field">Private punishment code<input name="punishmentCode" id="appeal-code" autocomplete="one-time-code" minlength="6" maxlength="64" spellcheck="false" required placeholder="Code shown with the punishment"><small>Do not post this code or send it to another player.</small></label>
+          <label class="appeal-field" for="appeal-account">Minecraft account
+            <select name="minecraftUuid" id="appeal-account" required></select>
+          </label>
+          <label class="appeal-field" for="appeal-punishment">Punishment
+            <select name="punishmentId" id="appeal-punishment" required disabled><option value="">Choose a Minecraft account first</option></select>
+          </label>
         </div>
-        <div class="appeal-verify-row"><button class="btn ghost" id="verify-punishment" type="button">Confirm punishment</button><p id="verify-result" role="status"></p></div>
-        <section id="verified-punishment" class="appeal-sanction" aria-live="polite" hidden></section>
-        <div class="appeal-form-heading appeal-answer-heading"><div><p class="card-kicker">Your appeal</p><h2>Give staff the full context</h2></div><p>Short or incomplete answers cannot be submitted.</p></div>
-        <div class="appeal-guidance" role="note"><strong>Take your time.</strong><span>Answer in your own words and stay focused on this punishment. Copied, unrelated, or low-effort responses may be denied.</span></div>
-        <div class="appeal-question-list">
-          <label class="appeal-field appeal-question"><span class="appeal-question-title">What happened?</span><span class="appeal-question-hint">Describe the events that led to the punishment. Include details staff may need to understand the situation.</span><textarea name="whatHappened" id="appeal-what-happened" minlength="100" maxlength="260" rows="5" required placeholder="Explain what happened in your own words."></textarea><small><span id="appeal-what-happened-count">0</span> / 260 · 100 minimum</small></label>
-          <label class="appeal-field appeal-question"><span class="appeal-question-title">Why should the punishment be reconsidered?</span><span class="appeal-question-hint">Explain what you believe staff should review, including any mistake or important missing context.</span><textarea name="whyReview" id="appeal-why-review" minlength="100" maxlength="260" rows="5" required placeholder="Explain why you are asking staff to reconsider the decision."></textarea><small><span id="appeal-why-review-count">0</span> / 260 · 100 minimum</small></label>
-          <label class="appeal-field appeal-question"><span class="appeal-question-title">What will you do differently?</span><span class="appeal-question-hint">Tell staff how you will avoid the same problem if the punishment is changed.</span><textarea name="futureSteps" id="appeal-future-steps" minlength="75" maxlength="180" rows="4" required placeholder="Describe the specific changes you will make."></textarea><small><span id="appeal-future-steps-count">0</span> / 180 · 75 minimum</small></label>
-          <label class="appeal-field appeal-question"><span class="appeal-question-title">Anything else staff should know? <em>Optional</em></span><span class="appeal-question-hint">Add a short piece of relevant context that does not fit above.</span><textarea name="additionalContext" id="appeal-additional-context" maxlength="100" rows="4" placeholder="Optional additional context."></textarea><small><span id="appeal-additional-context-count">0</span> / 100</small></label>
+        <p id="punishment-result" class="appeal-selection-status" role="status"></p>
+        <section id="selected-punishment" class="appeal-sanction" aria-live="polite" hidden></section>
+
+        <div id="appeal-questions" hidden>
+          <div class="appeal-form-heading appeal-answer-heading">
+            <div><p class="card-kicker">Your appeal</p><h2>Tell us what staff should review</h2></div>
+            <p>Short, copied, or incomplete appeals are denied.</p>
+          </div>
+
+          <div class="appeal-guidance" role="note"><strong>Write in your own words.</strong><span>Give enough detail for staff to check your account of what happened. Formatting does not count toward the minimum length.</span></div>
+
+          <div class="appeal-question-list">
+            <section class="appeal-question" data-answer-field="whatHappened">
+              <label for="appeal-what-happened"><span class="appeal-question-title">What happened?</span><span class="appeal-question-hint">Start before the incident and explain the events in order. Include names, dates, or messages when they matter.</span></label>
+              <div class="appeal-editor-toolbar" aria-label="Format the answer to What happened">
+                <button type="button" data-format="bold" title="Bold"><strong>B</strong></button><button type="button" data-format="italic" title="Italic"><em>I</em></button><button type="button" data-format="heading" title="Heading">Title</button><button type="button" data-format="list" title="Bulleted list">List</button><button type="button" data-format="quote" title="Quote">Quote</button><button type="button" class="appeal-preview-button" data-preview>Preview</button>
+              </div>
+              <textarea name="whatHappened" id="appeal-what-happened" minlength="150" maxlength="4000" rows="9" required placeholder="Explain what happened from your point of view."></textarea>
+              <div class="appeal-answer-preview" data-answer-preview hidden></div>
+              <small><span id="appeal-what-happened-count">0</span> / 4,000 · 150 minimum</small>
+            </section>
+
+            <section class="appeal-question" data-answer-field="whyReview">
+              <label for="appeal-why-review"><span class="appeal-question-title">What should staff reconsider?</span><span class="appeal-question-hint">Point to the part of the decision you believe is wrong, too severe, or missing important context.</span></label>
+              <div class="appeal-editor-toolbar" aria-label="Format the answer to What should staff reconsider">
+                <button type="button" data-format="bold" title="Bold"><strong>B</strong></button><button type="button" data-format="italic" title="Italic"><em>I</em></button><button type="button" data-format="heading" title="Heading">Title</button><button type="button" data-format="list" title="Bulleted list">List</button><button type="button" data-format="quote" title="Quote">Quote</button><button type="button" class="appeal-preview-button" data-preview>Preview</button>
+              </div>
+              <textarea name="whyReview" id="appeal-why-review" minlength="120" maxlength="3000" rows="8" required placeholder="Explain exactly what you want staff to review."></textarea>
+              <div class="appeal-answer-preview" data-answer-preview hidden></div>
+              <small><span id="appeal-why-review-count">0</span> / 3,000 · 120 minimum</small>
+            </section>
+
+            <section class="appeal-question" data-answer-field="ruleUnderstanding">
+              <label for="appeal-rule-understanding"><span class="appeal-question-title">What do you understand about the rule involved?</span><span class="appeal-question-hint">Explain the rule in your own words and how it applies to the situation.</span></label>
+              <div class="appeal-editor-toolbar" aria-label="Format the answer about the rule">
+                <button type="button" data-format="bold" title="Bold"><strong>B</strong></button><button type="button" data-format="italic" title="Italic"><em>I</em></button><button type="button" data-format="heading" title="Heading">Title</button><button type="button" data-format="list" title="Bulleted list">List</button><button type="button" data-format="quote" title="Quote">Quote</button><button type="button" class="appeal-preview-button" data-preview>Preview</button>
+              </div>
+              <textarea name="ruleUnderstanding" id="appeal-rule-understanding" minlength="100" maxlength="2500" rows="7" required placeholder="Explain what the rule requires and what you understand now."></textarea>
+              <div class="appeal-answer-preview" data-answer-preview hidden></div>
+              <small><span id="appeal-rule-understanding-count">0</span> / 2,500 · 100 minimum</small>
+            </section>
+
+            <section class="appeal-question" data-answer-field="futureSteps">
+              <label for="appeal-future-steps"><span class="appeal-question-title">What will you do differently?</span><span class="appeal-question-hint">List specific changes you will make if the punishment is shortened or removed.</span></label>
+              <div class="appeal-editor-toolbar" aria-label="Format the answer about future steps">
+                <button type="button" data-format="bold" title="Bold"><strong>B</strong></button><button type="button" data-format="italic" title="Italic"><em>I</em></button><button type="button" data-format="heading" title="Heading">Title</button><button type="button" data-format="list" title="Bulleted list">List</button><button type="button" data-format="quote" title="Quote">Quote</button><button type="button" class="appeal-preview-button" data-preview>Preview</button>
+              </div>
+              <textarea name="futureSteps" id="appeal-future-steps" minlength="100" maxlength="2500" rows="7" required placeholder="Describe the steps you will take to avoid the same problem."></textarea>
+              <div class="appeal-answer-preview" data-answer-preview hidden></div>
+              <small><span id="appeal-future-steps-count">0</span> / 2,500 · 100 minimum</small>
+            </section>
+
+            <section class="appeal-question appeal-question-wide" data-answer-field="additionalContext">
+              <label for="appeal-additional-context"><span class="appeal-question-title">Is there anything else staff should check? <em>Optional</em></span><span class="appeal-question-hint">Add relevant context that does not fit above. Do not repeat your other answers.</span></label>
+              <div class="appeal-editor-toolbar" aria-label="Format additional context">
+                <button type="button" data-format="bold" title="Bold"><strong>B</strong></button><button type="button" data-format="italic" title="Italic"><em>I</em></button><button type="button" data-format="heading" title="Heading">Title</button><button type="button" data-format="list" title="Bulleted list">List</button><button type="button" data-format="quote" title="Quote">Quote</button><button type="button" class="appeal-preview-button" data-preview>Preview</button>
+              </div>
+              <textarea name="additionalContext" id="appeal-additional-context" maxlength="3000" rows="6" placeholder="Add any other details staff should check."></textarea>
+              <div class="appeal-answer-preview" data-answer-preview hidden></div>
+              <small><span id="appeal-additional-context-count">0</span> / 3,000</small>
+            </section>
+          </div>
+
+          <section class="appeal-evidence" aria-labelledby="appeal-evidence-title">
+            <div><p class="card-kicker">Evidence</p><h3 id="appeal-evidence-title">Add screenshots or logs</h3><p>Attach up to five PNG, JPG, TXT, or LOG files. Images may be up to 8 MB; text files may be up to 1 MB.</p></div>
+            <label class="btn ghost appeal-file-button" for="appeal-files">Choose files</label>
+            <input id="appeal-files" type="file" accept="image/png,image/jpeg,text/plain,.txt,.log" multiple hidden>
+            <p id="attachment-status" class="appeal-attachment-status" role="status"></p>
+            <ul id="appeal-attachments" class="appeal-attachment-list"></ul>
+          </section>
+
+          <div class="appeal-submit-row">
+            <button class="btn" id="submit-appeal" type="submit" disabled>Send appeal</button>
+            <p id="appeal-result" role="status"></p>
+          </div>
         </div>
-        <div class="appeal-submit-row"><button class="btn" id="submit-appeal" type="submit" disabled>Send appeal</button><p id="appeal-result" role="status"></p></div>
       </fieldset>
     </form>
   </section>
@@ -76,7 +153,7 @@
 <footer class="site-footer"><div class="container footer-inner"><p>&copy; <span id="year"></span> Enthusia SMP</p><p><a href="punishments.html">Punishments</a> · Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p></div></footer>
 <script src="assets/site-config.js?v=vision43" defer></script>
 <script src="assets/script.js?v=vision69" defer></script>
-<script type="module" src="assets/site-account.js?v=5"></script>
-<script type="module" src="assets/appeals.js?v=2"></script>
+<script type="module" src="assets/site-account.js?v=6"></script>
+<script type="module" src="assets/appeals.js?v=3"></script>
 </body>
 </html>

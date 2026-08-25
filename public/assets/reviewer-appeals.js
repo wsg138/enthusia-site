@@ -1,3 +1,5 @@
+import { renderAppealMarkup } from "./appeal-markup.js";
+
 const root = document.querySelector("#appeals");
 const statusFilter = document.querySelector("#status");
 const refreshButton = document.querySelector("#refresh");
@@ -38,6 +40,13 @@ function metadata(label, value) {
   const wrapper = document.createElement("div");
   wrapper.append(element("dt", "", label), element("dd", "", value));
   return wrapper;
+}
+
+function humanBytes(value) {
+  const bytes = Number(value) || 0;
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 function setActionsDisabled(container, disabled) {
@@ -83,7 +92,7 @@ async function decide(appeal, decision, note, actionRoot, actionStatus) {
 function decisionActions(appeal) {
   const section = element("section", "reviewer-decision");
   const heading = element("div", "reviewer-decision-heading");
-  heading.append(element("h3", "", "Record a decision"), element("p", "", "The note is kept with the appeal history."));
+  heading.append(element("h3", "", "Decision"), element("p", "", "Explain the decision for the case history."));
   const label = element("label", "reviewer-note");
   label.append(element("span", "", "Staff note"));
   const note = document.createElement("textarea");
@@ -109,6 +118,69 @@ function decisionActions(appeal) {
   return section;
 }
 
+const answerLabels = Object.freeze({
+  whatHappened: "What happened?",
+  whyReview: "What should staff reconsider?",
+  ruleUnderstanding: "What does the player understand about the rule?",
+  futureSteps: "What will the player do differently?",
+  additionalContext: "Other context"
+});
+
+function structuredResponse(answers) {
+  const response = element("section", "reviewer-response reviewer-structured-response");
+  response.append(element("h3", "", "Appeal response"));
+  for (const [field, label] of Object.entries(answerLabels)) {
+    const value = String(answers?.[field] ?? "").trim();
+    if (!value) continue;
+    const answer = element("section", "reviewer-answer");
+    answer.append(element("h4", "", label));
+    const content = element("div", "reviewer-answer-content");
+    renderAppealMarkup(content, value);
+    answer.append(content);
+    response.append(answer);
+  }
+  return response;
+}
+
+function legacyResponse(appeal) {
+  const response = element("section", "reviewer-response");
+  response.append(element("h3", "", "Appeal response"));
+  response.append(element("pre", "", text(appeal.reason, "No response was provided.")));
+  return response;
+}
+
+function evidence(attachments) {
+  if (!attachments?.length) return null;
+  const section = element("section", "reviewer-evidence");
+  section.append(element("h3", "", "Evidence"));
+  const list = element("ul", "reviewer-evidence-list");
+  for (const attachment of attachments) {
+    const item = element("li", "reviewer-evidence-item");
+    const link = element("a", "reviewer-evidence-preview");
+    link.href = attachment.previewUrl;
+    link.target = "_blank";
+    link.rel = "noopener";
+    if (attachment.mimeType?.startsWith("image/")) {
+      const image = document.createElement("img");
+      image.src = attachment.previewUrl;
+      image.alt = "";
+      link.append(image);
+    } else {
+      link.textContent = "TXT";
+    }
+    const copy = element("div");
+    copy.append(element("strong", "", attachment.name), element("span", "", humanBytes(attachment.byteSize)));
+    const open = element("a", "reviewer-evidence-open", "Open");
+    open.href = attachment.previewUrl;
+    open.target = "_blank";
+    open.rel = "noopener";
+    item.append(link, copy, open);
+    list.append(item);
+  }
+  section.append(list);
+  return section;
+}
+
 function appealCard(appeal) {
   const article = element("article", "card reviewer-appeal-card");
   const status = text(appeal.status, "UNKNOWN").toUpperCase();
@@ -125,18 +197,23 @@ function appealCard(appeal) {
     metadata("Version", String(appeal.version ?? 0))
   );
 
-  const response = element("section", "reviewer-response");
-  response.append(element("h3", "", "Player response"));
-  const reason = element("pre", "", text(appeal.reason, "No response was provided."));
-  response.append(reason);
-  article.append(header, details, response);
+  const response = appeal.structuredAnswers ? structuredResponse(appeal.structuredAnswers) : legacyResponse(appeal);
+  article.append(header, details);
+  if (appeal.detailsState === "UNAVAILABLE") {
+    const warning = element("div", "reviewer-details-warning");
+    warning.append(element("strong", "", "Full response unavailable"), element("p", "", "Wait for the appeal site to recover before deciding this case."));
+    article.append(warning);
+  }
+  article.append(response);
+  const attachments = evidence(appeal.attachments);
+  if (attachments) article.append(attachments);
 
   if (appeal.decisionNote) {
     const prior = element("section", "reviewer-prior-note");
     prior.append(element("strong", "", "Latest staff note"), element("p", "", appeal.decisionNote));
     article.append(prior);
   }
-  if (status === "OPEN") article.append(decisionActions(appeal));
+  if (status === "OPEN" && appeal.detailsState !== "UNAVAILABLE") article.append(decisionActions(appeal));
   return article;
 }
 

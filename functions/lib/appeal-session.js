@@ -1,5 +1,6 @@
 import { authenticateRequest } from "./auth.js";
 import { getCompetitionIdentitySession } from "./competitions/identity.js";
+import { isCanonicalUuid } from "./validation.js";
 
 function bytesToUuid(bytes) {
   const value = new Uint8Array(bytes.slice(0, 16));
@@ -43,4 +44,21 @@ export async function authenticateAppealRequest(request, env) {
     // Cloudflare Access remains a compatibility path for existing staff-site sessions.
   }
   return accessAppealSession(await authenticateRequest(request, env));
+}
+
+export async function authenticateLinkedAppealRequest(request, env) {
+  const session = await getCompetitionIdentitySession(request, env?.COMPETITIONS_DB);
+  if (!session) return null;
+  return Object.freeze({
+    subject: session.subject,
+    discord: session.discord,
+    linkedMinecraftAccounts: session.linkedMinecraftAccounts,
+    expiresAt: session.expiresAt
+  });
+}
+
+export function linkedMinecraftAccount(session, uuid) {
+  const candidate = String(uuid ?? "").trim().toLowerCase();
+  if (!isCanonicalUuid(candidate)) return null;
+  return session?.linkedMinecraftAccounts?.find((account) => account.uuid.toLowerCase() === candidate) ?? null;
 }
