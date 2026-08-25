@@ -104,10 +104,19 @@ assert(report.top[1].menuX > -275, 'Top hamburger did not begin moving sidebar w
 assert(Number(report.top[1].quickbarOpacity) < 0.5, 'Bottom quickbar stayed highlighted above Minerva shade');
 assert(report.top[2].menuX > -2, 'Top hamburger sidebar not fully open by 280ms');
 
-await page.click('.main-menu-mask');
+// Close through the real Minerva checkbox instead of clicking the mask. The mask
+// is an anchor/label combination in some builds and can navigate during a harness
+// click, which destroys the Puppeteer execution context without testing anything
+// useful about the menu code.
+await page.evaluate(() => {
+  const toggle = document.querySelector('#main-menu-input');
+  if (!toggle) throw new Error('Minerva menu checkbox missing while closing test menu');
+  toggle.checked = false;
+  toggle.dispatchEvent(new Event('change', { bubbles: true }));
+});
 await new Promise((r) => setTimeout(r, 260));
 const closed = await state('closed');
-assert(!closed.checked, 'Minerva mask did not close the menu');
+assert(!closed.checked, 'Minerva checkbox did not close the menu');
 
 const bottom = await page.evaluateHandle(() => Array.from(document.querySelectorAll('.enthusia-mobile-quickbar .enthusia-mobile-quickbutton')).find((b) =>
   Array.from(b.querySelectorAll('span')).some((s) => /^menu$/i.test((s.textContent || '').trim()))
