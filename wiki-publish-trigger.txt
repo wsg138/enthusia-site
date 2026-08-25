@@ -1,0 +1,1 @@
+Publish the validated 64x64 Explore Enthusia icon sizing after the four SVG replacements succeeded.
