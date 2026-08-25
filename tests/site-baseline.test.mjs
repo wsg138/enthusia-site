@@ -31,7 +31,14 @@ test("local Cloudflare and API secret files are ignored", async () => {
       .filter(Boolean)
   );
 
-  for (const pattern of [".dev.vars", ".dev.vars.*", ".env", ".env.*"]) {
+  for (const pattern of [
+    ".dev.vars",
+    ".dev.vars.*",
+    ".env",
+    ".env.*",
+    "cloudflare/competition-jobs/wrangler.dev.jsonc",
+    "cloudflare/competition-preview/wrangler.dev.jsonc"
+  ]) {
     assert.ok(ignored.has(pattern), `.gitignore must contain ${pattern}`);
   }
 });

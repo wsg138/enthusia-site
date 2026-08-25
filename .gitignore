@@ -7,3 +7,5 @@ __pycache__/
 .dev.vars.*
 .env
 .env.*
+cloudflare/competition-jobs/wrangler.dev.jsonc
+cloudflare/competition-preview/wrangler.dev.jsonc
