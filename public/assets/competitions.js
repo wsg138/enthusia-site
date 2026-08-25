@@ -826,6 +826,7 @@ async function loadDetail() {
   const root = document.querySelector("#competitionDetail");
   const slug = new URLSearchParams(window.location.search).get("competition")?.trim().toLowerCase();
   if (!slug) {
+    root.classList.remove("competition-loading");
     root.innerHTML = '<div class="competition-error">No competition was selected.</div>';
     return;
   }
@@ -897,12 +898,14 @@ async function loadDetail() {
     if (completed && payload.results?.length) renderResults(content, payload);
 
     shell.append(hero, tabs, content);
+    root.classList.remove("competition-loading");
     root.replaceChildren(shell);
     setupTabs(buttons, [...content.querySelectorAll("[data-tab-panel]")]);
   } catch {
     const error = document.createElement("div");
     error.className = "competition-error";
     error.textContent = "This competition could not be loaded.";
+    root.classList.remove("competition-loading");
     root.replaceChildren(error);
   }
 }
