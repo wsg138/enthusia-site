@@ -1,0 +1,89 @@
+/* Mobile-only integration for Miraheze's Minerva-style header. */
+@media (max-width: 800px) {
+  .enthusia-minerva-brand {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    max-width: 188px !important;
+    margin: 0 auto 0 6px !important;
+    color: inherit !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+  }
+
+  .enthusia-minerva-brand img {
+    display: block !important;
+    width: 30px !important;
+    height: 30px !important;
+    flex: 0 0 30px !important;
+    margin: 0 !important;
+    object-fit: contain !important;
+    opacity: 1 !important;
+  }
+
+  .enthusia-minerva-brand .enthusia-brand-words {
+    display: inline-flex !important;
+    align-items: baseline !important;
+    gap: 5px !important;
+    min-width: 0 !important;
+  }
+
+  .enthusia-minerva-brand .enthusia-brand-words strong {
+    display: inline-block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 1rem !important;
+    font-weight: 900 !important;
+    letter-spacing: -.02em !important;
+    background: linear-gradient(90deg, #ff4b12 0%, #ff8a00 46%, #ffd36a 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+  }
+
+  .enthusia-minerva-brand .enthusia-brand-words > span {
+    display: inline !important;
+    color: #f0b24f !important;
+    font-size: .64rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .1em !important;
+  }
+
+  /* Hide Minerva's plain green wordmark only after the replacement was created. */
+  body.enthusia-minerva-brand-ready .minerva-header .branding-box,
+  body.enthusia-minerva-brand-ready header.header-container .branding-box,
+  body.enthusia-minerva-brand-ready .header-container .branding-box,
+  body.enthusia-minerva-brand-ready .minerva-header > .mw-logo {
+    display: none !important;
+  }
+
+  /* The native hamburger is retained visually but its click is routed to the
+     same Enthusia drawer used by the bottom Menu button. */
+  body.enthusia-minerva-brand-ready .minerva-header,
+  body.enthusia-minerva-brand-ready header.header-container {
+    align-items: center !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .enthusia-minerva-brand {
+    max-width: 156px !important;
+    gap: 6px !important;
+  }
+
+  .enthusia-minerva-brand img {
+    width: 27px !important;
+    height: 27px !important;
+    flex-basis: 27px !important;
+  }
+
+  .enthusia-minerva-brand .enthusia-brand-words strong {
+    font-size: .92rem !important;
+  }
+
+  .enthusia-minerva-brand .enthusia-brand-words > span {
+    font-size: .58rem !important;
+  }
+}
