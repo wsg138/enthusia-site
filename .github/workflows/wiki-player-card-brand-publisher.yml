@@ -1,0 +1,81 @@
+name: Publish wiki player card and brand fixes
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-player-card-brand-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enthusia-wiki-player-card-brand
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_FULL_BACKUP_OUT: wiki-player-brand-output/full-backup
+      WIKI_BRAND_OUT: wiki-player-brand-output
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME || secrets.MIRAHEZE_BOT_USERNAME || secrets.WIKI_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD || secrets.MIRAHEZE_BOT_PASSWORD || secrets.WIKI_PASSWORD }}
+
+    steps:
+      - name: Check out candidate
+        uses: actions/checkout@v4
+
+      - name: Validate candidate sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile wiki-worker/player-card-and-brand/publish.py
+          test -s wiki-worker/player-card-and-brand/Template_Player.dpl.wiki
+          test -s wiki-worker/player-card-and-brand/common-brand.css
+          test -s public/assets/enthusia-logo-v2.png
+          grep -q 'flex-direction:column' wiki-worker/player-card-and-brand/Template_Player.dpl.wiki
+          grep -q '#ff4b12' wiki-worker/player-card-and-brand/common-brand.css
+          grep -q '#ff8a00' wiki-worker/player-card-and-brand/common-brand.css
+          grep -q '#ffd36a' wiki-worker/player-card-and-brand/common-brand.css
+
+      - name: Capture complete live wiki before edits
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p wiki-player-brand-output
+          python3 wiki-worker/full_backup.py | tee wiki-player-brand-output/full-backup.log
+          test -s wiki-player-brand-output/full-backup/manifest.json
+          pages="$(find wiki-player-brand-output/full-backup/pages -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find wiki-player-brand-output/full-backup/history -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+
+      - name: Upload immutable pre-edit backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-player-brand-backup-${{ github.run_id }}
+          path: wiki-player-brand-output/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Publish guarded template and brand changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+          python3 wiki-worker/player-card-and-brand/publish.py | tee wiki-player-brand-output/publish.log
+
+      - name: Upload publication evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-player-brand-evidence-${{ github.run_id }}
+          path: wiki-player-brand-output/
+          if-no-files-found: warn
+          retention-days: 90
