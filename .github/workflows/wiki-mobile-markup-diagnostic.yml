@@ -6,6 +6,9 @@ on:
     paths:
       - 'wiki-mobile-markup-diagnostic-trigger.txt'
       - 'wiki-worker/diagnose_mobile_runtime.mjs'
+      - 'wiki-worker/preview_mobile_candidate.mjs'
+      - 'wiki-worker/mobile-corrections.js'
+      - 'wiki-worker/mobile-native-sidebar.css'
       - '.github/workflows/wiki-mobile-markup-diagnostic.yml'
 
 permissions:
@@ -51,14 +54,25 @@ jobs:
           Path('mobile-markup-diagnostic/summary.txt').write_text('\n'.join(out), encoding='utf-8')
           PY
           cat mobile-markup-diagnostic/summary.txt
-      - name: Inspect live mobile behavior in Chrome
+      - name: Install browser harness
         shell: bash
         run: |
           set -euo pipefail
           command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser
           npm install --no-save --ignore-scripts puppeteer-core@24.16.0
+      - name: Inspect current live mobile behavior
+        shell: bash
+        run: |
+          set -euo pipefail
           node wiki-worker/diagnose_mobile_runtime.mjs
+      - name: Acceptance-test candidate on live Minerva DOM
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wiki-worker/mobile-corrections.js
+          node wiki-worker/preview_mobile_candidate.mjs
       - name: Upload diagnostic markup
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: wiki-mobile-markup-diagnostic-${{ github.run_id }}
