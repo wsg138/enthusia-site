@@ -192,7 +192,7 @@
 
   function refresh() {
     ensureMobileBrand();
-    closeNativeMenu();
+    if (isMobile()) closeNativeMenu();
   }
 
   function start() {
