@@ -107,6 +107,7 @@ function mainPage() {
     ['Staff.png','Staff','Staff'], ['Guilds.png','Guilds','Noteable Guilds'], ['Players.png','Players','Noteable Players'],
     ['Betas.png','Betas','Betas'], ['Builds.png','Builds','Builds'], ['Mapart.png','Mapart','Maparts'],
     ['Events.png','Events','Events'], ['Mechanics2.png','Mechanics','Mechanics'],
+    ['Templates.png','Commands','Commands'], ['Economy.png','Market','Market'], ['Mechanics.png','Warzone','Warzone'], ['Betas.png','History & Lore','History & Lore'],
   ];
   const cardHtml = cards.map(([img,label,target]) => `<div class="enthusia-home-card">[[File:${img}|220px|link=${target}]]<div>'''[[${target}|${label}]]'''</div></div>`).join('\n');
   return `${STYLE_TAG}\n<div class="enthusia-wiki enthusia-home">
