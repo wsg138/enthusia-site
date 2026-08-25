@@ -22,6 +22,7 @@ function readyEnv() {
     COMPETITION_BRIDGE_HMAC_SECRET: "h".repeat(32),
     DISCORD_CLIENT_ID: "123456789012345678",
     DISCORD_CLIENT_SECRET: "d".repeat(32),
+    DISCORD_GUILD_ID: "1410303324745371709",
     DISCORD_OAUTH_REDIRECT_URI: "https://preview.example/api/competitions/auth/discord/callback",
     COMPETITIONS_DISCORD_STAFF_WEBHOOK: "https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyz123456",
     COMPETITIONS_DISCORD_STAFF_ROLE_ID: "234567890123456789",

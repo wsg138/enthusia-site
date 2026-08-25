@@ -8,7 +8,7 @@
     "check": "node scripts/validate-site.mjs",
     "test:baseline": "node --test tests/site-baseline.test.mjs",
     "test:competitions": "node --test tests/competitions-*.test.mjs",
-    "test:appeals": "node --test tests/appeal-auth.test.mjs",
+    "test:appeals": "node --test tests/appeal-*.test.mjs tests/punishment-site.test.mjs tests/site-community-navigation.test.mjs",
     "test:potions": "node --test tests/potion-preview.test.mjs",
     "mask-editor": "python scripts/cinematic-mask-editor.py",
     "validate:cinematic": "python scripts/generate-terrain-mask.py --validate-only",

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 const mediaUrl = new URL("../public/assets/competitions-public-media.js", import.meta.url);
 const detailUrl = new URL("../public/competitions/detail.html", import.meta.url);
@@ -14,7 +15,7 @@ test("competition detail uses the integrated entry viewer instead of duplicate m
 });
 
 test("public media enhancement is valid JavaScript and uses approved submission-media URLs only", async () => {
-  const result = spawnSync(process.execPath, ["--check", mediaUrl.pathname], { encoding: "utf8" });
+  const result = spawnSync(process.execPath, ["--check", fileURLToPath(mediaUrl)], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr);
   const source = await readFile(mediaUrl, "utf8");
   assert.match(source, /startsWith\("\/api\/competitions\/submission-media\/"\)/);

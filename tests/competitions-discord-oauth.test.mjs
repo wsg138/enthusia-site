@@ -4,7 +4,8 @@ import test from "node:test";
 import {
   beginDiscordOAuth,
   discordOAuthConfiguration,
-  discordOAuthConfigured
+  discordOAuthConfigured,
+  fetchDiscordMembership
 } from "../functions/lib/competitions/discord-oauth.js";
 import { safeReturnTo } from "../functions/lib/competitions/identity.js";
 import { authenticatedRedirect } from "../functions/api/competitions/auth/discord/callback.js";
@@ -24,6 +25,7 @@ function writeOnlyDb() {
 const ENV = {
   DISCORD_CLIENT_ID: "123456789012345678",
   DISCORD_CLIENT_SECRET: "0123456789abcdef0123456789abcdef",
+  DISCORD_GUILD_ID: "1410303324745371709",
   DISCORD_OAUTH_REDIRECT_URI: "https://competitions-dev.example.com/api/competitions/auth/discord/callback"
 };
 
@@ -43,6 +45,7 @@ test("Discord competition OAuth uses identify and allows interactive first-time 
 test("Discord OAuth configuration fails closed for missing secret or insecure redirect", () => {
   assert.equal(discordOAuthConfigured(ENV), true);
   assert.throws(() => discordOAuthConfiguration({ ...ENV, DISCORD_CLIENT_SECRET: "" }), /not configured/);
+  assert.throws(() => discordOAuthConfiguration({ ...ENV, DISCORD_GUILD_ID: "" }), /not configured/);
   assert.throws(() => discordOAuthConfiguration({ ...ENV, DISCORD_OAUTH_REDIRECT_URI: "http://example.com/callback" }), /HTTPS/);
 });
 
@@ -63,4 +66,21 @@ test("Discord OAuth callback returns the session cookie with its redirect", () =
   assert.equal(response.headers.get("location"), "https://preview.example/competitions/");
   assert.match(response.headers.get("set-cookie"), /__Host-test=session/);
   assert.equal(response.headers.get("cache-control"), "no-store");
+});
+
+test("Discord membership lookup distinguishes roleless members from non-members", async () => {
+  const env = { DISCORD_GUILD_ID: "1410303324745371709" };
+  let requestedUrl;
+  const member = await fetchDiscordMembership("access-token", env, async (url) => {
+    requestedUrl = String(url);
+    return new Response(JSON.stringify({ roles: [] }), { status: 200, headers: { "content-type": "application/json" } });
+  });
+  assert.equal(requestedUrl, "https://discord.com/api/v10/users/@me/guilds/1410303324745371709/member");
+  assert.deepEqual(member, { member: true, roleIds: [] });
+
+  const outsider = await fetchDiscordMembership("access-token", env, async () => new Response(null, { status: 404 }));
+  assert.deepEqual(outsider, { member: false, roleIds: [] });
+  assert.deepEqual(await fetchDiscordMembership("access-token", {}, async () => {
+    throw new Error("must not fetch");
+  }), { member: false, roleIds: [] });
 });

@@ -2,11 +2,12 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { buildSession, canReview } from "../functions/lib/auth.js";
 import { buildAppealPayload, sanitizeSubmission } from "../functions/api/appeals.js";
+import { sanitizeClaim } from "../functions/lib/appeal-claim.js";
+import { discordAppealAccountId } from "../functions/lib/appeal-session.js";
 import { sanitizeDecision } from "../functions/api/reviewer/appeals/[id].js";
 import { boundedIdempotencyKey, requireSameOrigin } from "../functions/lib/security.js";
-import { reviewerRank, signedStaffRequest, staffRoute } from "../functions/lib/staff-api.js";
+import { publicStaffRoute, reviewerRank, signedStaffRequest, staffRoute } from "../functions/lib/staff-api.js";
 import { isCanonicalUuid } from "../functions/lib/validation.js";
-import { discordPlayerSession } from "../functions/lib/player-session.js";
 
 const playerClaims = {
   sub: "access-user-1",
@@ -21,18 +22,12 @@ test("buildSession requires a linked canonical player", () => {
   assert.throws(() => buildSession({ sub: "user-1", email: "player@example.com" }), /not linked/);
 });
 
-test("Discord sessions use the first linked Minecraft account for appeals", () => {
-  const session = discordPlayerSession({
-    subject: "discord:123",
-    linkedMinecraftAccounts: [{ uuid: "123e4567-e89b-12d3-a456-426614174000", name: "Lincoln" }]
-  });
-  assert.deepEqual(session.player, {
-    uuid: "123e4567-e89b-12d3-a456-426614174000",
-    name: "Lincoln"
-  });
-  assert.deepEqual(session.roles, []);
-  assert.throws(() => { session.player.name = "Impostor"; }, TypeError);
-  assert.throws(() => discordPlayerSession({ linkedMinecraftAccounts: [] }), /no linked Minecraft account/);
+test("Discord appeal accounts are stable and do not require a Minecraft link", async () => {
+  const accountId = await discordAppealAccountId("discord:123456789012345678");
+  assert.match(accountId, /^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+  assert.equal(await discordAppealAccountId("discord:123456789012345678"), accountId);
+  assert.notEqual(await discordAppealAccountId("discord:123456789012345679"), accountId);
+  await assert.rejects(() => discordAppealAccountId("discord:short"), /invalid/);
 });
 
 test("buildSession accepts canonical Floodgate identity claims", () => {
@@ -61,15 +56,16 @@ test("verified claims become immutable canonical identity", () => {
 });
 
 test("browser identity fields cannot override appeal identity", () => {
-  const session = buildSession(playerClaims);
+  const session = { subject: "discord:123456789012345678", accountId: "123e4567-e89b-12d3-a456-426614174000" };
   const punishmentId = "123e4567-e89b-12d3-a456-426614174099";
   const submission = sanitizeSubmission({
-    punishmentId,
+    punishmentCode: "ABCD-EFGH-JKLM-NPQR-STUV-WXYZ",
+    username: "Lincoln",
     reason: "Please review this exact punishment.",
     playerName: "Impostor",
     uuid: "bad"
   });
-  assert.deepEqual(buildAppealPayload(submission, session), {
+  assert.deepEqual(buildAppealPayload(submission, session, { punishmentId, username: "Lincoln" }), {
     punishmentId,
     reason: "Please review this exact punishment.",
     accountId: "123e4567-e89b-12d3-a456-426614174000",
@@ -131,10 +127,12 @@ test("strict UUID validation supports Java and Floodgate identities", () => {
 });
 
 test("invalid and oversized submissions are rejected", () => {
-  const punishmentId = "123e4567-e89b-12d3-a456-426614174099";
-  assert.equal(sanitizeSubmission({ punishmentId: "ban", reason: "Please review" }), null);
-  assert.equal(sanitizeSubmission({ punishmentId, reason: "short" }), null);
-  assert.equal(sanitizeSubmission({ punishmentId, reason: "x".repeat(1001) }), null);
+  const claim = { punishmentCode: "ABCDEFGHJKLMNPQRSTUVWXYZ", username: "Lincoln" };
+  assert.deepEqual(sanitizeClaim({ ...claim, punishmentCode: "ABCD-EFGH-JKLM-NPQR-STUV-WXYZ" }), claim);
+  assert.equal(sanitizeClaim({ punishmentCode: "bad code", username: "Lincoln" }), null);
+  assert.equal(sanitizeClaim({ punishmentCode: claim.punishmentCode, username: "Invalid name" }), null);
+  assert.equal(sanitizeSubmission({ ...claim, reason: "short" }), null);
+  assert.equal(sanitizeSubmission({ ...claim, reason: "x".repeat(1001) }), null);
 });
 
 test("private Staff API requests carry a valid replay-protected signature", async () => {
@@ -165,6 +163,9 @@ test("private Staff API requests carry a valid replay-protected signature", asyn
 
 test("private Staff API rejects routes outside the appeal allowlist", () => {
   assert.throws(() => staffRoute("/v1/public/punishments"), /Invalid Staff API route/);
+  assert.equal(staffRoute("/v1/website/punishment-codes/claim"), "/v1/website/punishment-codes/claim");
+  assert.equal(publicStaffRoute("/v1/public/punishments"), "/v1/public/punishments");
+  assert.throws(() => publicStaffRoute("/v1/website/appeals/eligible"), /Invalid public Staff API route/);
   assert.equal(
     staffRoute("/v1/website/appeals/reviewer/123e4567-e89b-12d3-a456-426614174099/decision"),
     "/v1/website/appeals/reviewer/123e4567-e89b-12d3-a456-426614174099/decision"

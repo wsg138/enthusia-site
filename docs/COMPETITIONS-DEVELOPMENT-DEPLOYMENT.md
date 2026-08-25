@@ -38,7 +38,7 @@ Use distinct preview resources for:
 
 The existing production leaderboard R2 bindings remain read-only dependencies of unrelated site functionality and are not competition storage.
 
-Local secrets belong in `.dev.vars` or `.env` files and are gitignored. Cloudflare-hosted secrets must be configured as Preview environment secrets. Never commit API keys or bearer tokens.
+Local secrets belong in `.dev.vars` or `.env` files and are gitignored. Cloudflare-hosted secrets must be configured in the exact environment used by the protected development deployment. Never commit API keys or bearer tokens.
 
 ## Required competition feature gates
 
@@ -58,9 +58,9 @@ Only the OpenAI Moderation API is part of the automatic content-screening design
 - Competition-specific checks such as Minecraft relevance, visible coordinates, waypoints, minimaps, private chat, or other base-discovery risks remain staff review responsibilities.
 - An OpenAI API failure must not silently approve content. The submission should remain pending/retryable or be routed to staff review.
 
-## Preview bindings
+## Development bindings
 
-Cloudflare Pages supports separate Production and Preview bindings. When competition resources are created, bind only the development D1/R2 resources to Preview first. Production competition bindings are intentionally absent until launch preparation.
+Cloudflare Pages supports separate Production and Preview bindings. The dedicated `enthusia-competitions-dev` project may use its primary environment for the stable Access-protected test site; that Cloudflare environment is still isolated from the production `enthusia-site` project. Bind only development D1/R2 resources and development credentials to it. Production-site competition bindings remain intentionally absent until launch preparation.
 
 Recommended binding names:
 
@@ -69,8 +69,9 @@ Recommended binding names:
 
 Recommended non-secret environment variables:
 
-- `COMPETITIONS_ENABLED=true` in Preview only during development
+- `COMPETITIONS_ENABLED=true` only in the isolated development project during development
 - `APP_ENV=preview`
+- `DISCORD_GUILD_ID=<Enthusia Discord server ID>`
 
 Recommended secret names:
 
@@ -84,7 +85,7 @@ Before each wider test:
 
 1. Confirm the deployment is from `dev/competitions`, not `main`.
 2. Confirm Cloudflare Access blocks an unauthenticated browser.
-3. Confirm Preview uses development-only D1/R2 resources.
+3. Confirm the development deployment uses development-only D1/R2 resources.
 4. Confirm no competition navigation/link is present on production.
 5. Run repository validation/tests/build.
 6. Test existing Home, Rules, Market, Leaderboards, Gallery, Staff, Vote, Appeals, and reviewer behavior relevant to the changed files.

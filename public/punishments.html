@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" id="top">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Search Enthusia SMP's public-safe punishment history and active moderation decisions.">
+  <meta name="theme-color" content="#100d0a">
+  <title>Punishments | Enthusia SMP</title>
+  <link rel="icon" href="assets/enthusia-logo-v2.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css?v=vision83">
+</head>
+<body class="punishments-page moderation-page">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="bg" aria-hidden="true"><div class="bg-grid"></div><div class="bg-vignette"></div><div class="bg-heat"></div></div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Enthusia SMP home"><img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="46" height="46"><span class="brand-name">Enthusia SMP</span></a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html">Home</a><a href="plugins.html">About</a><a href="rules.html">Rules</a><a href="appeal.html">Appeals</a>
+      <div class="nav-dropdown"><button class="nav-drop-trigger active" type="button" aria-current="page">Community</button><div class="nav-menu" aria-label="Community links"><a href="leaderboards.html">Leaderboards</a><a href="staff.html">Staff</a><a href="gallery.html">Gallery</a><a href="vote.html">Vote</a><a href="punishments.html" class="active" aria-current="page">Punishments</a><a href="market.html">Market</a><a href="competitions/">Competitions</a><a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a></div></div>
+      <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a><a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a><span class="site-account" data-site-account></span>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-main moderation-main">
+  <section class="moderation-hero container" aria-labelledby="punishments-title">
+    <div class="moderation-hero-copy"><p class="eyebrow">Public moderation record</p><h1 id="punishments-title">Punishments</h1><p class="page-lead">Search public-safe bans, mutes, and warnings. Private evidence, reports, staff notes, network information, and linked-account data are never shown here.</p></div>
+    <aside class="card moderation-help-card"><p class="card-kicker">Need another review?</p><h2>Appeal privately</h2><p>If your punishment is eligible, use the private code shown to you. Minecraft account linking is not required.</p><a class="btn" href="appeal.html">Start an appeal</a></aside>
+  </section>
+
+  <section class="container punishment-browser" aria-labelledby="history-title">
+    <div class="punishment-controls card">
+      <div><p class="card-kicker">Search records</p><h2 id="history-title">Moderation history</h2></div>
+      <form id="punishment-search" class="punishment-search" role="search"><label for="punishment-query">Username or case ID</label><div><input id="punishment-query" name="q" maxlength="80" autocomplete="off" placeholder="Search a player or case"><button class="btn" type="submit">Search</button></div></form>
+      <div class="punishment-filters" role="group" aria-label="Punishment type"><button class="active" type="button" data-punishment-filter="ALL" aria-pressed="true">All</button><button type="button" data-punishment-filter="BAN" aria-pressed="false">Bans</button><button type="button" data-punishment-filter="MUTE" aria-pressed="false">Mutes</button><button type="button" data-punishment-filter="WARNING" aria-pressed="false">Warnings</button></div>
+    </div>
+    <div class="punishment-results-heading"><p id="punishment-summary" role="status">Loading public records…</p><button id="punishment-clear-search" class="text-button" type="button" hidden>Clear search</button></div>
+    <div id="punishment-results" class="punishment-results" aria-live="polite" aria-busy="true"></div>
+    <div class="punishment-load-more"><button id="punishment-load-more" class="btn ghost" type="button" hidden>Load more</button></div>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner"><p>&copy; <span id="year"></span> Enthusia SMP</p><p><a href="appeal.html">Appeals</a> · Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p></div></footer>
+<script src="assets/site-config.js?v=vision43" defer></script>
+<script src="assets/script.js?v=vision69" defer></script>
+<script type="module" src="assets/site-account.js?v=5"></script>
+<script type="module" src="assets/punishments.js?v=1"></script>
+</body>
+</html>

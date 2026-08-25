@@ -1,40 +1,76 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" id="top">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Ask Enthusia staff to review an eligible punishment on your linked Minecraft account.">
-  <title>Appeal a punishment | Enthusia</title>
+  <meta name="description" content="Privately ask Enthusia staff to review an eligible Minecraft punishment.">
+  <meta name="theme-color" content="#100d0a">
+  <title>Appeal a punishment | Enthusia SMP</title>
   <link rel="icon" href="assets/enthusia-logo-v2.png" type="image/png">
-  <link rel="stylesheet" href="assets/styles.css?v=vision81">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css?v=vision83">
 </head>
-<body class="appeal-page">
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html" aria-label="Enthusia SMP home"><img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="46" height="46"><span class="brand-name">Enthusia SMP</span></a>
-      <nav class="nav" aria-label="Primary navigation"><a href="index.html">Home</a><a href="rules.html">Rules</a><a href="market.html">Market</a><a href="competitions/">Competitions</a><span class="site-account" data-site-account></span></nav>
+<body class="appeal-page moderation-page">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="bg" aria-hidden="true"><div class="bg-grid"></div><div class="bg-vignette"></div><div class="bg-heat"></div></div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Enthusia SMP home"><img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="46" height="46"><span class="brand-name">Enthusia SMP</span></a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html">Home</a><a href="plugins.html">About</a><a href="rules.html">Rules</a>
+      <a href="appeal.html" class="active" aria-current="page">Appeals</a>
+      <div class="nav-dropdown"><button class="nav-drop-trigger" type="button">Community</button><div class="nav-menu" aria-label="Community links"><a href="leaderboards.html">Leaderboards</a><a href="staff.html">Staff</a><a href="gallery.html">Gallery</a><a href="vote.html">Vote</a><a href="punishments.html">Punishments</a><a href="market.html">Market</a><a href="competitions/">Competitions</a><a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a></div></div>
+      <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a><a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a><span class="site-account" data-site-account></span>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-main moderation-main">
+  <section class="moderation-hero container" aria-labelledby="appeal-title">
+    <div class="moderation-hero-copy">
+      <p class="eyebrow">Private staff review</p>
+      <h1 id="appeal-title">Appeal a punishment</h1>
+      <p class="page-lead">Use the private code shown with your punishment to prove which decision belongs to you. You do not need to link Discord to Minecraft.</p>
+      <div class="moderation-assurances" aria-label="Appeal privacy and access"><span>Discord sign-in</span><span>No Minecraft link</span><span>Private review</span></div>
     </div>
-  </header>
-  <main class="page-main container appeal-main">
-    <section class="appeal-intro">
-      <p class="eyebrow">Account support</p>
-      <h1>Appeal a punishment</h1>
-      <p>Choose an eligible punishment from your linked Minecraft account and tell staff what they should review.</p>
-    </section>
-    <form id="appeal-form" class="appeal-form card">
-      <label class="appeal-field">Punishment<select name="punishmentId" id="punishment" required><option value="">Loading your punishments…</option></select></label>
-      <section id="sanction" class="appeal-sanction" aria-live="polite" hidden></section>
-      <label class="appeal-field">What should staff reconsider?<textarea name="reason" minlength="10" maxlength="1000" rows="8" required placeholder="Explain what happened and why you are asking for another review."></textarea></label>
-      <div class="appeal-submit-row"><button class="btn" type="submit">Send appeal</button><p id="result" role="status"></p></div>
+    <aside class="card moderation-help-card" aria-labelledby="appeal-help-title">
+      <p class="card-kicker">Before you start</p>
+      <h2 id="appeal-help-title">Find your punishment code</h2>
+      <p>The code is shown with an eligible ban or mute. It is private and should not be posted in Discord or shared with another player.</p>
+      <a href="punishments.html">View public punishment history</a>
+    </aside>
+  </section>
+
+  <section class="container moderation-workspace" aria-label="Appeal form">
+    <div class="appeal-progress" aria-label="Appeal steps">
+      <div><span>1</span><strong>Sign in</strong><small>Use Discord</small></div>
+      <div><span>2</span><strong>Verify</strong><small>Code and username</small></div>
+      <div><span>3</span><strong>Explain</strong><small>Send for review</small></div>
+    </div>
+    <div id="appeal-auth" class="appeal-auth-panel card" aria-live="polite"><div><p class="card-kicker">Account</p><h2>Checking your Discord session…</h2><p>Discord identifies your website account. A Minecraft account link is not required for an appeal.</p></div></div>
+    <form id="appeal-form" class="appeal-form card" novalidate>
+      <fieldset id="appeal-fields" disabled>
+        <div class="appeal-form-heading"><div><p class="card-kicker">Punishment details</p><h2>Verify the decision</h2></div><p>Both values must match the punishment.</p></div>
+        <div class="appeal-identity-grid">
+          <label class="appeal-field">Minecraft username<input name="username" id="appeal-username" autocomplete="off" minlength="3" maxlength="16" pattern="[A-Za-z0-9_]{3,16}" spellcheck="false" required placeholder="Your in-game name"></label>
+          <label class="appeal-field">Punishment code<input name="punishmentCode" id="appeal-code" autocomplete="one-time-code" minlength="6" maxlength="64" spellcheck="false" required placeholder="Enter the private code"></label>
+        </div>
+        <div class="appeal-verify-row"><button class="btn ghost" id="verify-punishment" type="button">Verify punishment</button><p id="verify-result" role="status"></p></div>
+        <section id="verified-punishment" class="appeal-sanction" aria-live="polite" hidden></section>
+        <label class="appeal-field appeal-reason">What should staff reconsider?<textarea name="reason" id="appeal-reason" minlength="10" maxlength="1000" rows="8" required placeholder="Explain what happened, what you understand now, and why the decision should be reviewed."></textarea><small><span id="appeal-character-count">0</span> / 1000 characters</small></label>
+        <div class="appeal-submit-row"><button class="btn" id="submit-appeal" type="submit" disabled>Send appeal</button><p id="appeal-result" role="status"></p></div>
+      </fieldset>
     </form>
-  </main>
-  <script type="module" src="assets/site-account.js?v=4"></script>
-  <script type="module">
-    const form=document.querySelector('#appeal-form');const result=document.querySelector('#result');const select=document.querySelector('#punishment');const sanction=document.querySelector('#sanction');let sanctions=[];
-    function render(){const item=sanctions.find(x=>String(x.id)===select.value);sanction.hidden=!item;sanction.textContent=item?`${item.type??'Punishment'} · issued ${item.createdAt??'date unavailable'} · ${item.reason??'No public reason provided'}`:'';}
-    function loadError(status){sanctions=[];select.innerHTML=`<option value="">${status===401?'Sign in and link your Minecraft account to continue':'Unable to load punishments — try again later'}</option>`;sanction.hidden=true;}
-    async function load(){select.innerHTML='<option value="">Loading your punishments…</option>';try{const response=await fetch('/api/appeals/eligible');if(!response.ok){loadError(response.status);return;}const payload=await response.json();sanctions=Array.isArray(payload)?payload:payload.punishments??[];select.replaceChildren(new Option(sanctions.length?'Choose a punishment':'No punishments are currently eligible',''));for(const item of sanctions)select.add(new Option(`${item.type??'Punishment'} — ${item.createdAt??item.id}`,item.id));render();}catch{loadError();}}
-    select.addEventListener('change',render);form.addEventListener('submit',async(event)=>{event.preventDefault();result.textContent='Sending…';const data=Object.fromEntries(new FormData(form));try{const response=await fetch('/api/appeals',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});const payload=await response.json().catch(()=>({}));result.textContent=response.ok?'Appeal sent to staff.':payload.error==='rate_limited'?`Too many attempts. Try again in ${payload.retryAfter} seconds.`:response.status===401?'Sign in and link your Minecraft account first.':`Unable to send the appeal (${response.status}).`;if(response.ok){form.reset();await load();}}catch{result.textContent='Unable to reach the appeal service. Try again in a moment.';}});load();
-  </script>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner"><p>&copy; <span id="year"></span> Enthusia SMP</p><p><a href="punishments.html">Punishments</a> · Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p></div></footer>
+<script src="assets/site-config.js?v=vision43" defer></script>
+<script src="assets/script.js?v=vision69" defer></script>
+<script type="module" src="assets/site-account.js?v=5"></script>
+<script type="module" src="assets/appeals.js?v=1"></script>
 </body>
 </html>

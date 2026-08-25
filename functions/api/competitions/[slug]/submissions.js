@@ -1,6 +1,7 @@
 import { competitionsEnabled, hasCompetitionDatabase } from "../../../lib/competitions/access.js";
 import {
   bridgeContextForLinkedAccount,
+  discordMembershipError,
   getCompetitionParticipantSession,
   linkedMinecraftAccount,
   linkedMinecraftUuids
@@ -96,6 +97,8 @@ async function resolveEntrantContext(context) {
     return { response: json({ error: "competition_identity_unavailable" }, 503) };
   }
   if (!session) return { response: unauthorized() };
+  const membershipError = discordMembershipError(session);
+  if (membershipError) return { response: json({ error: membershipError }, 403) };
   if (!session.linkedMinecraftAccounts.length) return { response: json({ error: "minecraft_link_required" }, 403) };
 
   const slug = slugValue(context);

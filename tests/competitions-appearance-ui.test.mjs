@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 const publicScriptUrl = new URL("../public/assets/competitions-appearance.js", import.meta.url);
 const adminScriptUrl = new URL("../public/assets/competitions-admin-media.js", import.meta.url);
@@ -11,7 +12,7 @@ const publicSource = await readFile(publicScriptUrl, "utf8");
 const adminSource = await readFile(adminScriptUrl, "utf8");
 
 function syntaxCheck(url) {
-  const result = spawnSync(process.execPath, ["--check", url.pathname], { encoding: "utf8" });
+  const result = spawnSync(process.execPath, ["--check", fileURLToPath(url)], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr || result.stdout);
 }
 

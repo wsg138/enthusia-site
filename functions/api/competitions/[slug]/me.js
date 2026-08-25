@@ -1,6 +1,7 @@
 import { competitionsEnabled, hasCompetitionDatabase } from "../../../lib/competitions/access.js";
 import {
   bridgeContextsForAllLinkedAccounts,
+  discordMembershipError,
   getCompetitionParticipantSession,
   linkedMinecraftAccount
 } from "../../../lib/competitions/participant-auth.js";
@@ -73,6 +74,8 @@ export async function onRequestGet(context) {
     return json({ error: "competition_identity_unavailable" }, 503);
   }
   if (!session) return unauthorized();
+  const membershipError = discordMembershipError(session);
+  if (membershipError) return json({ error: membershipError }, 403);
   if (!session.linkedMinecraftAccounts.length) {
     return json({ error: "minecraft_link_required", linkedMinecraftAccounts: [] }, 403);
   }

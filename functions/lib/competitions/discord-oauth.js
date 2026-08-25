@@ -12,8 +12,9 @@ const DISCORD_USER_URL = "https://discord.com/api/v10/users/@me";
 function configuration(env) {
   const clientId = String(env?.DISCORD_CLIENT_ID ?? "").trim();
   const clientSecret = String(env?.DISCORD_CLIENT_SECRET ?? "").trim();
+  const guildId = String(env?.DISCORD_GUILD_ID ?? "").trim();
   const redirectUri = String(env?.DISCORD_OAUTH_REDIRECT_URI ?? "").trim();
-  if (!/^\d{16,22}$/.test(clientId) || clientSecret.length < 16) {
+  if (!/^\d{16,22}$/.test(clientId) || clientSecret.length < 16 || !/^\d{16,22}$/.test(guildId)) {
     throw new Error("Discord OAuth is not configured");
   }
   let redirect;
@@ -25,7 +26,7 @@ function configuration(env) {
   if (redirect.protocol !== "https:" && redirect.hostname !== "localhost") {
     throw new Error("Discord OAuth redirect URI must use HTTPS");
   }
-  return { clientId, clientSecret, redirectUri: redirect.toString() };
+  return { clientId, clientSecret, guildId, redirectUri: redirect.toString() };
 }
 
 export async function beginDiscordOAuth(db, env, returnTo) {
@@ -38,8 +39,8 @@ export async function beginDiscordOAuth(db, env, returnTo) {
   url.searchParams.set("state", state);
   url.searchParams.set("redirect_uri", config.redirectUri);
   // Do not force prompt=none: first-time users must be allowed to see Discord's
-  // normal authorization/login UI. Returning users can still complete the flow
-  // without granting any scope beyond identify.
+  // normal authorization/login UI. The requested scopes are limited to identity
+  // and membership in the configured server.
   return { url: url.toString(), expiresAt };
 }
 
@@ -74,16 +75,19 @@ async function fetchDiscordUser(accessToken, fetchImpl = fetch) {
   return body;
 }
 
-async function fetchDiscordMemberRoles(accessToken, env, fetchImpl = fetch) {
+async function fetchDiscordMembership(accessToken, env, fetchImpl = fetch) {
   const guildId = String(env?.DISCORD_GUILD_ID ?? "").trim();
-  if (!/^\d{16,22}$/.test(guildId)) return [];
+  if (!/^\d{16,22}$/.test(guildId)) return { member: false, roleIds: [] };
   const response = await fetchImpl(`${DISCORD_USER_URL}/guilds/${guildId}/member`, {
     headers: { authorization: `Bearer ${accessToken}` }
   });
-  if (response.status === 404) return [];
+  if (response.status === 404) return { member: false, roleIds: [] };
   const body = await response.json().catch(() => null);
   if (!response.ok || !Array.isArray(body?.roles)) throw new Error(`Discord member lookup failed: ${response.status}`);
-  return body.roles.map(String).filter((role) => /^\d{16,22}$/.test(role));
+  return {
+    member: true,
+    roleIds: body.roles.map(String).filter((role) => /^\d{16,22}$/.test(role))
+  };
 }
 
 export async function completeDiscordOAuth(db, env, { code, state }, fetchImpl = fetch) {
@@ -97,8 +101,8 @@ export async function completeDiscordOAuth(db, env, { code, state }, fetchImpl =
 
   const accessToken = await exchangeAuthorizationCode(env, safeCode, fetchImpl);
   const user = await fetchDiscordUser(accessToken, fetchImpl);
-  const roleIds = await fetchDiscordMemberRoles(accessToken, env, fetchImpl);
-  const session = await createIdentitySession(db, { ...user, roleIds });
+  const membership = await fetchDiscordMembership(accessToken, env, fetchImpl);
+  const session = await createIdentitySession(db, { ...user, guildMember: membership.member, roleIds: membership.roleIds });
   return {
     returnTo: oauthState.returnTo,
     cookie: competitionSessionCookie(session.token),
@@ -122,5 +126,6 @@ export {
   DISCORD_USER_URL,
   configuration as discordOAuthConfiguration,
   exchangeAuthorizationCode,
+  fetchDiscordMembership,
   fetchDiscordUser
 };

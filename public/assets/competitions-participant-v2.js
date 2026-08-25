@@ -34,8 +34,11 @@ async function api(path, options = {}) {
 function humanError(error) {
   const code = error?.code ?? error?.message ?? "unknown_error";
   const labels = {
-    unauthorized: "Sign in with your linked Enthusia account to use this feature.",
+    unauthorized: "Sign in with Discord to use this feature.",
+    discord_membership_required: "Join the Enthusia Discord before entering or voting in a competition.",
+    discord_reauthentication_required: "Sign out and sign in with Discord again so membership can be checked.",
     competition_bridge_unavailable: "Minecraft account data is temporarily unavailable.",
+    minecraft_link_required: "Link a Minecraft account before entering or voting in a competition.",
     minecraft_account_not_linked: "That Minecraft account is not linked to your website account.",
     submissions_not_open: "Submissions are not open right now.",
     player_entry_limit_reached: "You have reached this competition's entry limit.",

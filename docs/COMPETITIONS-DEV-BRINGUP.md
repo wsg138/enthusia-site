@@ -12,7 +12,7 @@ Use completely separate development resources:
 - scheduled Worker: `enthusia-competition-jobs-dev`
 - bridge hostname: a dedicated Cloudflare Tunnel hostname
 
-The development Pages deployment must be protected by Cloudflare Access before the first Competition preview is deployed. The bridge hostname must use an Access **Service Auth** policy plus the bridge's independent bearer/HMAC/replay protection.
+The development Pages deployment must be protected by Cloudflare Access before the first Competition build is deployed. The bridge hostname must use an Access **Service Auth** policy plus the bridge's independent bearer/HMAC/replay protection.
 
 Do not bind any development resource to the production `enthusia-site` Pages project.
 
@@ -40,21 +40,21 @@ npx wrangler r2 bucket create enthusia-competitions-media-dev
 npx wrangler pages project create enthusia-competitions-dev --production-branch main --compatibility-date 2026-08-22
 ```
 
-`main` is intentionally the new dev project's production branch. Do **not** deploy `main` to this project. `dev/competitions` will be deployed as a Pages preview branch so Cloudflare's preview Access policy can protect it before the first deployment.
+`main` is intentionally the new dev project's nominal production branch. Build from `dev/competitions`, then deploy that exact green commit to the dedicated development project's Access-protected primary environment. This uses Cloudflare's Production environment only inside `enthusia-competitions-dev`; it does not deploy to the production `enthusia-site` project or change `enthusia.info`.
 
 Record the D1 database ID printed by Wrangler.
 
-## 3. Enable Access for Pages previews before deploying
+## 3. Enable Access for the development site before deploying
 
 In Cloudflare Dashboard:
 
 1. Go to **Workers & Pages** → `enthusia-competitions-dev` → **Settings** → **General**.
-2. Select **Enable access policy** for preview deployments.
+2. Protect the primary `enthusia-competitions-dev.pages.dev` hostname with a deny-by-default Access application.
 3. Open/manage the generated Access application.
 4. Keep it deny-by-default and add an Allow policy containing only founders/admins during initial development.
 5. Record the Access team domain and the application audience (`aud`) value.
 
-Do not deploy the Competition preview until this policy exists.
+Do not deploy the development build until this policy exists.
 
 ## 4. Create the bridge Access Service Auth policy
 
@@ -82,7 +82,7 @@ Copy:
 
 Both `.dev` files are local/ignored files. Replace the development D1 ID and placeholders. Do not commit secrets.
 
-For the Pages preview, set non-secret variables:
+For the Pages development environment, set non-secret variables:
 
 - `APP_ENV=preview`
 - `COMPETITIONS_ENABLED=true`
@@ -95,6 +95,7 @@ For the Pages preview, set non-secret variables:
 - `COMPETITION_BRIDGE_ACCESS_REQUIRED=true`
 - `COMPETITION_BRIDGE_ACCESS_CLIENT_ID=<bridge-service-token-client-id>`
 - `DISCORD_CLIENT_ID=<Discord application ID>`
+- `DISCORD_GUILD_ID=<Enthusia Discord server ID>`
 - `DISCORD_OAUTH_REDIRECT_URI=https://<Access-protected-preview-host>/api/competitions/auth/discord/callback`
 - `COMPETITIONS_DISCORD_STAFF_ROLE_ID=<Discord staff role ID>`
 - `CF_ACCESS_TEAM_DOMAIN=<team>.cloudflareaccess.com`
@@ -156,19 +157,18 @@ Verify `/competitionbridge status` before continuing.
 
 Do not directly port-forward the bridge. `cloudflared` should be the only path from Cloudflare to `127.0.0.1:8765`.
 
-## 9. Deploy the Access-protected Pages preview
+## 9. Deploy the Access-protected development site
 
-Deploy `dev/competitions` as a preview branch, not as this project's production branch:
+Deploy the exact green `dev/competitions` commit to the primary environment of the dedicated development project. Omit `--branch` so the deployment uses that environment's bindings and encrypted secrets:
 
 ```bash
 npx wrangler pages deploy dist/client \
   --project-name enthusia-competitions-dev \
-  --branch dev/competitions \
   --commit-hash <EXACT_GREEN_DEV_SHA> \
   --config cloudflare/competition-preview/wrangler.dev.jsonc
 ```
 
-Use the stable branch preview alias Cloudflare reports for `dev/competitions` as the preview origin/OAuth callback host. If those values were not known before the first deploy, keep OAuth unavailable for the bootstrap deployment, record the Access-protected preview alias, configure the final origin/callback variables, and redeploy the same exact SHA.
+Use `https://enthusia-competitions-dev.pages.dev` as the stable development origin and OAuth callback host. Deployment-specific aliases are diagnostic links, not OAuth origins. Configure the origin, callback, D1/R2 bindings and secrets in this dedicated environment before testing authenticated flows.
 
 Confirm an unauthenticated browser cannot view the preview.
 
@@ -182,7 +182,7 @@ It may advance only safe clock-driven lifecycle transitions and retry notificati
 
 Before inviting normal-player testers, verify all of the following:
 
-1. Unauthenticated preview requests are blocked by Cloudflare Access.
+1. Unauthenticated requests to the stable development hostname are blocked by Cloudflare Access.
 2. Production `https://enthusia.info/` still has no Competition navigation item or Competition D1/R2 binding.
 3. `/api/competitions/admin/status` returns `ok: true` for an authorized founder/admin.
 4. The bridge hostname rejects ordinary browser/curl traffic without the Access service token, and valid service-token requests still require the bridge HMAC/bearer checks.
@@ -204,4 +204,4 @@ The Competition Bridge expects the LumaGuilds permission `SUBMIT_COMPETITION_ENT
 
 ## Production launch remains separate
 
-Production requires separate production D1/R2/jobs bindings, production OAuth/Access/bridge configuration, a completed player beta/security review, and explicit founder approval. Community → Competitions navigation is a launch change, not part of this private preview deployment.
+Production requires separate production D1/R2/jobs bindings, production OAuth/Access/bridge configuration, a completed player beta/security review, and explicit founder approval. Development navigation on `enthusia-competitions-dev` does not authorize or imply a production-site navigation change.

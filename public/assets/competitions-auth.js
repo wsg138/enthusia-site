@@ -170,7 +170,7 @@
     const displayName = state.discord?.globalName || state.discord?.username || "Discord account";
     identity.append(
       el("strong", "", displayName),
-      el("span", "competition-account-muted", `${state.linkedMinecraftAccounts?.length ?? 0} linked Minecraft account${state.linkedMinecraftAccounts?.length === 1 ? "" : "s"}`)
+      el("span", "competition-account-muted", `${state.discordGuildMember ? "Discord member" : "Discord membership required"} · ${state.linkedMinecraftAccounts?.length ?? 0} linked Minecraft account${state.linkedMinecraftAccounts?.length === 1 ? "" : "s"}`)
     );
     const logoutButton = el("button", "competition-account-secondary", "Sign out");
     logoutButton.type = "button";
@@ -189,6 +189,10 @@
     }
     if (!(state.linkedMinecraftAccounts ?? []).length) {
       links.append(el("p", "competition-account-warning", "Link at least one Minecraft account before submitting or voting."));
+    }
+    if (!state.discordGuildMember) {
+      const warning = el("p", "competition-account-warning", "Join the Enthusia Discord, then sign out and sign in again before entering or voting.");
+      links.prepend(warning);
     }
 
     const linker = el("div", "competition-linker");

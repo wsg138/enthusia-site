@@ -2,6 +2,7 @@ import { competitionsEnabled, hasCompetitionDatabase } from "../../../lib/compet
 import { isActiveCompetitionJudge } from "../../../lib/competitions/judges.js";
 import {
   bridgeContextsForAllLinkedAccounts,
+  discordMembershipError,
   getCompetitionParticipantSession,
   linkedMinecraftUuids,
   maxLinkedActiveMinutes
@@ -69,6 +70,8 @@ async function authenticatedCompetitionContext(context) {
     return { response: json({ error: "competition_identity_unavailable" }, 503) };
   }
   if (!session) return { response: unauthorized() };
+  const membershipError = discordMembershipError(session);
+  if (membershipError) return { response: json({ error: membershipError }, 403) };
   if (!session.linkedMinecraftAccounts.length) return { response: json({ error: "minecraft_link_required" }, 403) };
 
   const slug = slugValue(context);

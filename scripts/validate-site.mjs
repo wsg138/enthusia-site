@@ -54,6 +54,7 @@ for (const file of htmlFiles) {
 
 for (const file of [
   "appeal.html",
+  "punishments.html",
   path.join("reviewer", "appeals.html"),
   path.join("competitions", "admin", "index.html"),
   path.join("competitions", "index.html"),
@@ -153,6 +154,11 @@ const competitionJavaScript = competitionRequiredAssets.filter((file) => file.en
 for (const file of competitionJavaScript) {
   const result = spawnSync(process.execPath, ["--check", path.join(publicDir, "assets", file)], { encoding: "utf8" });
   if (result.status !== 0) errors.push(`competitions: invalid JavaScript ${file}: ${result.stderr.trim()}`);
+}
+
+for (const file of ["appeals.js", "punishments.js", "site-account.js", "site-navigation.js"]) {
+  const result = spawnSync(process.execPath, ["--check", path.join(publicDir, "assets", file)], { encoding: "utf8" });
+  if (result.status !== 0) errors.push(`site: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }
 
 if (errors.length) {

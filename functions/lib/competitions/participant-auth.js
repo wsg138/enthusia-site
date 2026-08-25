@@ -3,6 +3,7 @@ import { getCompetitionIdentitySession } from "./identity.js";
 import { isCanonicalUuid } from "../validation.js";
 
 const MAX_LINKED_ACCOUNTS = 16;
+const MEMBERSHIP_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 function normalizedLinks(session) {
   const links = new Map();
@@ -23,6 +24,15 @@ export async function getCompetitionParticipantSession(request, db) {
     ...session,
     linkedMinecraftAccounts: Object.freeze([...links.values()].map((account) => Object.freeze(account)))
   });
+}
+
+export function discordMembershipError(session, now = Date.now()) {
+  if (session?.discordGuildMember !== true) return "discord_membership_required";
+  const checkedAt = Date.parse(session.discordRolesCheckedAt ?? "");
+  if (!Number.isFinite(checkedAt) || now - checkedAt > MEMBERSHIP_MAX_AGE_MS) {
+    return "discord_reauthentication_required";
+  }
+  return null;
 }
 
 export function linkedMinecraftAccount(session, requestedUuid = null) {
@@ -65,4 +75,4 @@ export function maxLinkedActiveMinutes(contexts) {
   return maximum;
 }
 
-export { MAX_LINKED_ACCOUNTS, normalizedLinks };
+export { MAX_LINKED_ACCOUNTS, MEMBERSHIP_MAX_AGE_MS, normalizedLinks };

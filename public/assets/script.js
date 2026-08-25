@@ -1,3 +1,5 @@
+import("./site-navigation.js").catch(() => {});
+
 const STATUS_REFRESH_INTERVAL_MS = 60000;
 const SCREENSHOT_AUTOPLAY_MS = 3000;
 const SCREENSHOT_MANUAL_PAUSE_MS = 7000;

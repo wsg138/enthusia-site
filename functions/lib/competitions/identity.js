@@ -125,7 +125,8 @@ function normalizeDiscordUser(raw) {
   const roleIds = Array.isArray(raw?.roleIds)
     ? [...new Set(raw.roleIds.map(String).filter((role) => /^\d{16,22}$/.test(role)))]
     : [];
-  return { id, username: username.slice(0, 80), globalName, avatarHash, roleIds };
+  const guildMember = raw?.guildMember === true;
+  return { id, username: username.slice(0, 80), globalName, avatarHash, guildMember, roleIds };
 }
 
 export async function createIdentitySession(db, rawDiscordUser, now = new Date()) {
@@ -147,7 +148,15 @@ export async function createIdentitySession(db, rawDiscordUser, now = new Date()
         avatar_hash = excluded.avatar_hash,
         guild_role_ids_json = excluded.guild_role_ids_json,
         updated_at = excluded.updated_at
-    `).bind(user.id, user.username, user.globalName, user.avatarHash, JSON.stringify(user.roleIds), createdAt, createdAt),
+    `).bind(
+      user.id,
+      user.username,
+      user.globalName,
+      user.avatarHash,
+      JSON.stringify({ member: user.guildMember, roleIds: user.roleIds }),
+      createdAt,
+      createdAt
+    ),
     database.prepare(`
       INSERT INTO competition_identity_sessions (
         session_hash, discord_user_id, created_at, expires_at, last_seen_at
@@ -206,8 +215,20 @@ export async function getCompetitionIdentitySession(request, db, now = new Date(
       AND last_seen_at < ?
   `).bind(nowIso, sessionHash, new Date(timestamp(now) - 15 * 60 * 1000).toISOString()).run().catch(() => {});
   const links = await listDiscordMinecraftLinks(database, row.discordUserId);
+  let discordGuildMember = false;
   let guildRoleIds = [];
-  try { guildRoleIds = JSON.parse(row.guildRoleIdsJson ?? "[]"); } catch { guildRoleIds = []; }
+  try {
+    const membership = JSON.parse(row.guildRoleIdsJson ?? "[]");
+    if (Array.isArray(membership)) {
+      guildRoleIds = membership;
+      discordGuildMember = membership.length > 0;
+    } else if (membership && typeof membership === "object") {
+      guildRoleIds = Array.isArray(membership.roleIds) ? membership.roleIds : [];
+      discordGuildMember = membership.member === true;
+    }
+  } catch {
+    guildRoleIds = [];
+  }
   return Object.freeze({
     subject: `discord:${row.discordUserId}`,
     discord: Object.freeze({
@@ -217,6 +238,7 @@ export async function getCompetitionIdentitySession(request, db, now = new Date(
       avatarHash: row.avatarHash
     }),
     linkedMinecraftAccounts: Object.freeze(links.map((link) => Object.freeze({ ...link }))),
+    discordGuildMember,
     guildRoleIds: Object.freeze(Array.isArray(guildRoleIds) ? guildRoleIds.map(String) : []),
     discordRolesCheckedAt: row.discordRolesCheckedAt,
     expiresAt: row.expiresAt,

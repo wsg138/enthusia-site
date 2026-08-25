@@ -1,3 +1,5 @@
+import { normalizeSiteNavigation } from "./site-navigation.js";
+
 const AUTH_API = "/api/competitions/auth";
 
 function minecraftName(session) {
@@ -71,69 +73,6 @@ function ensureBrandLogo() {
   image.width = 46;
   image.height = 46;
   brand.prepend(image);
-}
-
-function normalizeCommunityLinks() {
-  const nav = document.querySelector(".site-header .nav");
-  const menu = nav?.querySelector(".nav-menu");
-  if (!nav || !menu) return;
-
-  let competition = menu.querySelector('[href="/competitions/"], [href="competitions/"]');
-  if (!competition) {
-    competition = document.createElement("a");
-    competition.href = "/competitions/";
-    competition.textContent = "Competitions";
-  }
-
-  let market = menu.querySelector('a[href$="market.html"]');
-  const topLevelMarket = [...nav.children].find((item) => item.matches?.('a[href$="market.html"]'));
-  if (!market && topLevelMarket) market = topLevelMarket;
-  if (!market) {
-    market = document.createElement("a");
-    market.href = "/market.html";
-    market.textContent = "Market";
-  }
-
-  const wiki = menu.querySelector("a[data-link-target='wiki']");
-  menu.insertBefore(market, wiki ?? null);
-  menu.insertBefore(competition, wiki ?? null);
-}
-
-function normalizeActiveNavigation() {
-  const nav = document.querySelector(".site-header .nav");
-  if (!nav) return;
-
-  const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
-  const currentSection = currentPath === "/index.html" ? "/" : currentPath;
-  let activeLink = null;
-
-  nav.querySelectorAll("a.active, a[aria-current='page']").forEach((link) => {
-    link.classList.remove("active");
-    link.removeAttribute("aria-current");
-  });
-
-  nav.querySelectorAll("a[href]").forEach((link) => {
-    const target = new URL(link.href, window.location.href);
-    if (target.origin !== window.location.origin) return;
-    const targetPath = target.pathname.replace(/\/+$/, "") || "/";
-    const targetSection = targetPath === "/index.html" ? "/" : targetPath;
-    const matchesCompetition = currentSection.startsWith("/competitions") && targetSection === "/competitions";
-    if (targetSection === currentSection || matchesCompetition) activeLink = link;
-  });
-
-  if (activeLink) {
-    activeLink.classList.add("active");
-    activeLink.setAttribute("aria-current", "page");
-  }
-
-  const dropdown = nav.querySelector(".nav-dropdown");
-  const trigger = dropdown?.querySelector(".nav-drop-trigger");
-  const hasActiveCommunityLink = Boolean(dropdown?.querySelector(".nav-menu a.active"));
-  if (trigger) {
-    trigger.classList.toggle("active", hasActiveCommunityLink);
-    if (hasActiveCommunityLink) trigger.setAttribute("aria-current", "page");
-    else trigger.removeAttribute("aria-current");
-  }
 }
 
 function ensureRoot() {
@@ -210,8 +149,7 @@ document.addEventListener("click", (event) => {
 
 export async function initSiteAccount() {
   ensureBrandLogo();
-  normalizeCommunityLinks();
-  normalizeActiveNavigation();
+  normalizeSiteNavigation();
   const root = ensureRoot();
   if (!root) return;
   root.setAttribute("aria-label", "Site account");

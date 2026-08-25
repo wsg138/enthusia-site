@@ -12,6 +12,7 @@ export async function onRequestGet(context) {
       authenticated: true,
       accountSubject: session.subject,
       discord: session.discord,
+      discordGuildMember: session.discordGuildMember,
       linkedMinecraftAccounts: session.linkedMinecraftAccounts,
       expiresAt: session.expiresAt
     });
