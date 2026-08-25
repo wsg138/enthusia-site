@@ -2,7 +2,6 @@
  * This file is published inside a managed block in MediaWiki:Common.css.
  */
 
-.enthusia-site-brand,
 .enthusia-mobile-drawer-brand {
   display: inline-flex;
   align-items: center;
@@ -10,6 +9,10 @@
   min-width: 0;
   text-decoration: none !important;
   white-space: nowrap;
+}
+
+.enthusia-site-brand {
+  display: none;
 }
 
 .enthusia-site-brand img,
@@ -64,6 +67,7 @@
   }
 
   .enthusia-site-brand {
+    display: inline-flex;
     max-width: 170px;
     margin-left: 1px;
   }
