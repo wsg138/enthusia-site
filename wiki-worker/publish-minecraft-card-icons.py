@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, hashlib, http.cookiejar, json, mimetypes, os, sys, time, urllib.error, urllib.parse, urllib.request, uuid
+import argparse, hashlib, http.cookiejar, json, os, sys, time, urllib.error, urllib.parse, urllib.request, uuid
 from pathlib import Path
 
 API = os.environ.get('WIKI_API', 'https://enthusia.miraheze.org/w/api.php')
@@ -8,7 +8,7 @@ PASSWORD = os.environ.get('WIKI_BOT_PASSWORD', '')
 OUT = Path(os.environ.get('WIKI_MINECRAFT_OUT', 'wiki-minecraft-output'))
 BACKUP_MANIFEST = OUT / 'full-backup' / 'manifest.json'
 ICON_MAP = Path('wiki-worker/minecraft-card-icons.json')
-UA = 'EnthusiaWikiMinecraftIcons/1.0 (owner-authorized wiki publisher)'
+UA = 'EnthusiaWikiMinecraftIcons/1.1 (owner-authorized wiki publisher)'
 RETIRED_CSS = '/* Private staging retired. The approved theme is now site-wide in MediaWiki:Common.css. */\n'
 RETIRED_JS = '// Private staging retired. The approved behavior is now site-wide in MediaWiki:Common.js.\n'
 
@@ -42,20 +42,22 @@ def request(params, method='POST', retries=6):
 
 def download_icons():
     cfg = json.loads(ICON_MAP.read_text())
-    base = cfg['sourceBase']
+    base = cfg.get('sourceBase', '')
     dest = OUT / 'icons'; dest.mkdir(parents=True, exist_ok=True)
     rows = []
     for item in cfg['icons']:
-        url = base + urllib.parse.quote(item['sourceFile'])
-        req = urllib.request.Request(url, headers={'User-Agent':UA})
-        with urllib.request.urlopen(req, timeout=45) as r: data = r.read()
+        url = item.get('sourceUrl') or (base + urllib.parse.quote(item['sourceFile']))
+        req = urllib.request.Request(url, headers={'User-Agent':UA, 'Accept':'image/png,image/*;q=0.9,*/*;q=0.1'})
+        with urllib.request.urlopen(req, timeout=45) as r:
+            data = r.read()
+            final_url = r.geturl()
         if not data.startswith(b'\x89PNG\r\n\x1a\n'):
             raise RuntimeError(f'Not a PNG: {url}')
         if len(data) < 80:
             raise RuntimeError(f'Implausibly small icon: {url} ({len(data)} bytes)')
         path = dest / item['wikiFile']; path.write_bytes(data)
-        rows.append({**item, 'sourceUrl':url, 'bytes':len(data), 'sha1':hashlib.sha1(data).hexdigest(), 'sha256':hashlib.sha256(data).hexdigest()})
-        print(f"ICON OK {item['label']}: {item['sourceFile']} ({len(data)} bytes)")
+        rows.append({**item, 'sourceUrl':url, 'resolvedUrl':final_url, 'bytes':len(data), 'sha1':hashlib.sha1(data).hexdigest(), 'sha256':hashlib.sha256(data).hexdigest()})
+        print(f"ICON OK {item['label']}: {url} ({len(data)} bytes)")
     (OUT / 'icon-source-report.json').write_text(json.dumps(rows, indent=2) + '\n')
     return rows
 
@@ -94,7 +96,7 @@ def multipart(fields, file_field, filename, data, content_type='image/png'):
 
 
 def upload(csrf, filename, data):
-    fields = {'action':'upload','format':'json','formatversion':'2','filename':filename,'token':csrf,'comment':'Use vanilla Minecraft item art for Explore Enthusia navigation','ignorewarnings':'1','assert':'user'}
+    fields = {'action':'upload','format':'json','formatversion':'2','filename':filename,'token':csrf,'comment':'Use Minecraft item art for Explore Enthusia navigation','ignorewarnings':'1','assert':'user'}
     body, boundary = multipart(fields, 'file', filename, data)
     req = urllib.request.Request(API, data=body, headers={'User-Agent':UA,'Accept':'application/json','Content-Type':f'multipart/form-data; boundary={boundary}'}, method='POST')
     with opener.open(req, timeout=90) as r: result = json.loads(r.read().decode())
@@ -133,7 +135,6 @@ def main():
     csrf, who = login()
     report = {'wikiUser':who.get('name'),'backupCreatedAtUtc':backup.get('createdAtUtc'),'icons':[],'userPages':[]}
 
-    # Verify both private staging pages against the fresh backup before changing either.
     for title in ('User:P2wn/common.css','User:P2wn/common.js'):
         live = page(title); exp = expected.get(title)
         target = RETIRED_CSS if title.endswith('.css') else RETIRED_JS
