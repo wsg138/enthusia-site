@@ -68,13 +68,14 @@ for (const file of [
 }
 
 for (const file of [
+  path.join("reviewer", "appeals.html"),
   path.join("competitions", "admin", "index.html"),
   path.join("competitions", "index.html"),
   path.join("competitions", "detail.html")
 ]) {
   const html = await readFile(path.join(publicDir, file), "utf8");
   if (!html.includes('name="robots" content="noindex,nofollow,noarchive"')) {
-    errors.push(`${file}: development competition pages must remain noindex`);
+    errors.push(`${file}: private and development pages must remain noindex`);
   }
 }
 
@@ -156,7 +157,7 @@ for (const file of competitionJavaScript) {
   if (result.status !== 0) errors.push(`competitions: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }
 
-for (const file of ["appeals.js", "punishments.js", "site-account.js", "site-navigation.js"]) {
+for (const file of ["appeals.js", "punishments.js", "reviewer-appeals.js", "site-account.js", "site-navigation.js"]) {
   const result = spawnSync(process.execPath, ["--check", path.join(publicDir, "assets", file)], { encoding: "utf8" });
   if (result.status !== 0) errors.push(`site: invalid JavaScript ${file}: ${result.stderr.trim()}`);
 }

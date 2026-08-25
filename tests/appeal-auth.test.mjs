@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { buildSession, canReview } from "../functions/lib/auth.js";
-import { buildAppealPayload, sanitizeSubmission } from "../functions/api/appeals.js";
+import { buildAppealPayload, buildReason, sanitizeSubmission } from "../functions/api/appeals.js";
 import { sanitizeClaim } from "../functions/lib/appeal-claim.js";
 import { discordAppealAccountId } from "../functions/lib/appeal-session.js";
 import { sanitizeDecision } from "../functions/api/reviewer/appeals/[id].js";
@@ -16,6 +16,13 @@ const playerClaims = {
     minecraft_name: "Lincoln",
     roles: ["player"]
   }
+};
+
+const appealAnswers = {
+  whatHappened: "I joined the conversation after it had already become heated and continued arguing instead of stepping away when staff told everyone to stop.",
+  whyReview: "I understand why staff acted, but I would like the duration reviewed because I stopped after the final warning and have no recent history of the same behavior.",
+  futureSteps: "I will leave heated conversations, use the report tools, and contact staff privately instead of continuing an argument in public chat.",
+  additionalContext: "The relevant messages were all sent within the same short conversation."
 };
 
 test("buildSession requires a linked canonical player", () => {
@@ -61,13 +68,13 @@ test("browser identity fields cannot override appeal identity", () => {
   const submission = sanitizeSubmission({
     punishmentCode: "ABCD-EFGH-JKLM-NPQR-STUV-WXYZ",
     username: "Lincoln",
-    reason: "Please review this exact punishment.",
+    ...appealAnswers,
     playerName: "Impostor",
     uuid: "bad"
   });
   assert.deepEqual(buildAppealPayload(submission, session, { punishmentId, username: "Lincoln" }), {
     punishmentId,
-    reason: "Please review this exact punishment.",
+    reason: buildReason(appealAnswers),
     accountId: "123e4567-e89b-12d3-a456-426614174000",
     username: "Lincoln"
   });
@@ -131,8 +138,11 @@ test("invalid and oversized submissions are rejected", () => {
   assert.deepEqual(sanitizeClaim({ ...claim, punishmentCode: "ABCD-EFGH-JKLM-NPQR-STUV-WXYZ" }), claim);
   assert.equal(sanitizeClaim({ punishmentCode: "bad code", username: "Lincoln" }), null);
   assert.equal(sanitizeClaim({ punishmentCode: claim.punishmentCode, username: "Invalid name" }), null);
-  assert.equal(sanitizeSubmission({ ...claim, reason: "short" }), null);
-  assert.equal(sanitizeSubmission({ ...claim, reason: "x".repeat(1001) }), null);
+  assert.equal(sanitizeSubmission({ ...claim, ...appealAnswers, whatHappened: "short" }), null);
+  assert.equal(sanitizeSubmission({ ...claim, ...appealAnswers, whyReview: "x".repeat(261) }), null);
+  assert.equal(sanitizeSubmission({ ...claim, ...appealAnswers, futureSteps: " ".repeat(100) }), null);
+  assert.equal(sanitizeSubmission({ ...claim, ...appealAnswers, additionalContext: "x".repeat(101) }), null);
+  assert.equal(sanitizeSubmission({ ...claim, ...appealAnswers }).reason, buildReason(appealAnswers));
 });
 
 test("private Staff API requests carry a valid replay-protected signature", async () => {

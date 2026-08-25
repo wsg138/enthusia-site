@@ -5,15 +5,53 @@ import { appealIdempotencyKey, requireSameOrigin } from "../lib/security.js";
 import { signedStaffRequest, staffApiResponse } from "../lib/staff-api.js";
 import { isCanonicalUuid } from "../lib/validation.js";
 
-const MIN_REASON_LENGTH = 10;
 const MAX_REASON_LENGTH = 1000;
+
+const ANSWER_RULES = Object.freeze({
+  whatHappened: Object.freeze({ min: 100, max: 260 }),
+  whyReview: Object.freeze({ min: 100, max: 260 }),
+  futureSteps: Object.freeze({ min: 75, max: 180 }),
+  additionalContext: Object.freeze({ min: 0, max: 100 })
+});
+
+function answerText(input, field) {
+  return typeof input?.[field] === "string" ? input[field].replace(/\r\n?/g, "\n").trim() : "";
+}
+
+function meaningfulLength(value) {
+  return value.replace(/\s+/g, " ").length;
+}
+
+function sanitizeAnswers(input) {
+  const answers = {};
+  for (const [field, rule] of Object.entries(ANSWER_RULES)) {
+    const value = answerText(input, field);
+    const length = meaningfulLength(value);
+    if (length < rule.min || value.length > rule.max) return null;
+    if (/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/.test(value)) return null;
+    answers[field] = value;
+  }
+  return Object.freeze(answers);
+}
+
+function buildReason(answers) {
+  const sections = [
+    `What happened?\n${answers.whatHappened}`,
+    `Why should the punishment be reconsidered?\n${answers.whyReview}`,
+    `What will you do differently?\n${answers.futureSteps}`
+  ];
+  if (answers.additionalContext) sections.push(`Additional context\n${answers.additionalContext}`);
+  return sections.join("\n\n");
+}
 
 function sanitizeSubmission(input) {
   const claim = sanitizeClaim(input);
-  const reason = typeof input?.reason === "string" ? input.reason.trim() : "";
   if (!claim) return null;
-  if (reason.length < MIN_REASON_LENGTH || reason.length > MAX_REASON_LENGTH) return null;
-  return { ...claim, reason };
+  const answers = sanitizeAnswers(input);
+  if (!answers) return null;
+  const reason = buildReason(answers);
+  if (reason.length > MAX_REASON_LENGTH) return null;
+  return { ...claim, answers, reason };
 }
 
 function verifiedBinding(input, claim) {
@@ -61,4 +99,4 @@ export async function onRequestPost(context) {
 }
 
 export function onRequest() { return methodNotAllowed(["POST"]); }
-export { buildAppealPayload, sanitizeSubmission, verifiedBinding };
+export { buildAppealPayload, buildReason, sanitizeAnswers, sanitizeSubmission, verifiedBinding };

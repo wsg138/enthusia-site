@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=vision83">
+  <link rel="stylesheet" href="assets/styles.css?v=vision84">
 </head>
 <body class="appeal-page moderation-page">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -31,36 +31,42 @@
 <main id="main-content" class="page-main moderation-main">
   <section class="moderation-hero container" aria-labelledby="appeal-title">
     <div class="moderation-hero-copy">
-      <p class="eyebrow">Private staff review</p>
+      <p class="eyebrow">Appeal process</p>
       <h1 id="appeal-title">Appeal a punishment</h1>
-      <p class="page-lead">Use the private code shown with your punishment to prove which decision belongs to you. You do not need to link Discord to Minecraft.</p>
-      <div class="moderation-assurances" aria-label="Appeal privacy and access"><span>Discord sign-in</span><span>No Minecraft link</span><span>Private review</span></div>
+      <p class="page-lead">Sign in, confirm the punishment you want reviewed, and answer each question in your own words. Staff will only see the information needed to review your appeal.</p>
     </div>
     <aside class="card moderation-help-card" aria-labelledby="appeal-help-title">
-      <p class="card-kicker">Before you start</p>
-      <h2 id="appeal-help-title">Find your punishment code</h2>
-      <p>The code is shown with an eligible ban or mute. It is private and should not be posted in Discord or shared with another player.</p>
-      <a href="punishments.html">View public punishment history</a>
+      <p class="card-kicker">Before you appeal</p>
+      <h2 id="appeal-help-title">Be specific and honest</h2>
+      <p>Focus on the punishment you selected. Explain what happened, what staff should reconsider, and what you will do differently.</p>
+      <a href="rules.html">Review the server rules</a>
     </aside>
   </section>
 
   <section class="container moderation-workspace" aria-label="Appeal form">
     <div class="appeal-progress" aria-label="Appeal steps">
-      <div><span>1</span><strong>Sign in</strong><small>Use Discord</small></div>
-      <div><span>2</span><strong>Verify</strong><small>Code and username</small></div>
-      <div><span>3</span><strong>Explain</strong><small>Send for review</small></div>
+      <div><span>1</span><strong>Sign in</strong><small>Confirm your Discord account</small></div>
+      <div><span>2</span><strong>Choose the punishment</strong><small>Confirm the username and code</small></div>
+      <div><span>3</span><strong>Complete the appeal</strong><small>Answer every required question</small></div>
     </div>
-    <div id="appeal-auth" class="appeal-auth-panel card" aria-live="polite"><div><p class="card-kicker">Account</p><h2>Checking your Discord session…</h2><p>Discord identifies your website account. A Minecraft account link is not required for an appeal.</p></div></div>
+    <div id="appeal-auth" class="appeal-auth-panel card" aria-live="polite"><div><p class="card-kicker">Your account</p><h2>Checking your Discord session…</h2><p>Discord sign-in identifies who is submitting the appeal. You do not need to be a member of the Enthusia Discord.</p></div></div>
     <form id="appeal-form" class="appeal-form card" novalidate>
       <fieldset id="appeal-fields" disabled>
-        <div class="appeal-form-heading"><div><p class="card-kicker">Punishment details</p><h2>Verify the decision</h2></div><p>Both values must match the punishment.</p></div>
+        <div class="appeal-form-heading"><div><p class="card-kicker">Punishment</p><h2>Confirm what you are appealing</h2></div><p>Both details must match the punishment record.</p></div>
         <div class="appeal-identity-grid">
           <label class="appeal-field">Minecraft username<input name="username" id="appeal-username" autocomplete="off" minlength="3" maxlength="16" pattern="[A-Za-z0-9_]{3,16}" spellcheck="false" required placeholder="Your in-game name"></label>
-          <label class="appeal-field">Punishment code<input name="punishmentCode" id="appeal-code" autocomplete="one-time-code" minlength="6" maxlength="64" spellcheck="false" required placeholder="Enter the private code"></label>
+          <label class="appeal-field">Private punishment code<input name="punishmentCode" id="appeal-code" autocomplete="one-time-code" minlength="6" maxlength="64" spellcheck="false" required placeholder="Code shown with the punishment"><small>Do not post this code or send it to another player.</small></label>
         </div>
-        <div class="appeal-verify-row"><button class="btn ghost" id="verify-punishment" type="button">Verify punishment</button><p id="verify-result" role="status"></p></div>
+        <div class="appeal-verify-row"><button class="btn ghost" id="verify-punishment" type="button">Confirm punishment</button><p id="verify-result" role="status"></p></div>
         <section id="verified-punishment" class="appeal-sanction" aria-live="polite" hidden></section>
-        <label class="appeal-field appeal-reason">What should staff reconsider?<textarea name="reason" id="appeal-reason" minlength="10" maxlength="1000" rows="8" required placeholder="Explain what happened, what you understand now, and why the decision should be reviewed."></textarea><small><span id="appeal-character-count">0</span> / 1000 characters</small></label>
+        <div class="appeal-form-heading appeal-answer-heading"><div><p class="card-kicker">Your appeal</p><h2>Give staff the full context</h2></div><p>Short or incomplete answers cannot be submitted.</p></div>
+        <div class="appeal-guidance" role="note"><strong>Take your time.</strong><span>Answer in your own words and stay focused on this punishment. Copied, unrelated, or low-effort responses may be denied.</span></div>
+        <div class="appeal-question-list">
+          <label class="appeal-field appeal-question"><span class="appeal-question-title">What happened?</span><span class="appeal-question-hint">Describe the events that led to the punishment. Include details staff may need to understand the situation.</span><textarea name="whatHappened" id="appeal-what-happened" minlength="100" maxlength="260" rows="5" required placeholder="Explain what happened in your own words."></textarea><small><span id="appeal-what-happened-count">0</span> / 260 · 100 minimum</small></label>
+          <label class="appeal-field appeal-question"><span class="appeal-question-title">Why should the punishment be reconsidered?</span><span class="appeal-question-hint">Explain what you believe staff should review, including any mistake or important missing context.</span><textarea name="whyReview" id="appeal-why-review" minlength="100" maxlength="260" rows="5" required placeholder="Explain why you are asking staff to reconsider the decision."></textarea><small><span id="appeal-why-review-count">0</span> / 260 · 100 minimum</small></label>
+          <label class="appeal-field appeal-question"><span class="appeal-question-title">What will you do differently?</span><span class="appeal-question-hint">Tell staff how you will avoid the same problem if the punishment is changed.</span><textarea name="futureSteps" id="appeal-future-steps" minlength="75" maxlength="180" rows="4" required placeholder="Describe the specific changes you will make."></textarea><small><span id="appeal-future-steps-count">0</span> / 180 · 75 minimum</small></label>
+          <label class="appeal-field appeal-question"><span class="appeal-question-title">Anything else staff should know? <em>Optional</em></span><span class="appeal-question-hint">Add a short piece of relevant context that does not fit above.</span><textarea name="additionalContext" id="appeal-additional-context" maxlength="100" rows="4" placeholder="Optional additional context."></textarea><small><span id="appeal-additional-context-count">0</span> / 100</small></label>
+        </div>
         <div class="appeal-submit-row"><button class="btn" id="submit-appeal" type="submit" disabled>Send appeal</button><p id="appeal-result" role="status"></p></div>
       </fieldset>
     </form>
@@ -71,6 +77,6 @@
 <script src="assets/site-config.js?v=vision43" defer></script>
 <script src="assets/script.js?v=vision69" defer></script>
 <script type="module" src="assets/site-account.js?v=5"></script>
-<script type="module" src="assets/appeals.js?v=1"></script>
+<script type="module" src="assets/appeals.js?v=2"></script>
 </body>
 </html>
