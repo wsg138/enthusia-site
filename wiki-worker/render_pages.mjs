@@ -104,12 +104,12 @@ function sanitize(html) {
 
 function mainPage() {
   const cards = [
-    ['Staff.png','Staff','Staff'], ['Guilds.png','Guilds','Noteable Guilds'], ['Players.png','Players','Noteable Players'],
-    ['Betas.png','Betas','Betas'], ['Builds.png','Builds','Builds'], ['Mapart.png','Mapart','Maparts'],
-    ['Events.png','Events','Events'], ['Mechanics2.png','Mechanics','Mechanics'],
-    ['Commands.svg','Commands','Commands'], ['Market.svg','Market','Market'], ['Warzone.svg','Warzone','Warzone'], ['HistoryLore.svg','History & Lore','History & Lore'],
+    ['EnthusiaIconStaff.png','Staff','Staff'], ['EnthusiaIconGuilds.png','Guilds','Noteable Guilds'], ['EnthusiaIconPlayers.png','Players','Noteable Players'],
+    ['EnthusiaIconBetas.png','Betas','Betas'], ['EnthusiaIconBuilds.png','Builds','Builds'], ['EnthusiaIconMapart.png','Mapart','Maparts'],
+    ['EnthusiaIconEvents.png','Events','Events'], ['EnthusiaIconMechanics.png','Mechanics','Mechanics'],
+    ['EnthusiaIconCommands.png','Commands','Commands'], ['EnthusiaIconMarket.png','Market','Market'], ['EnthusiaIconWarzone.png','Warzone','Warzone'], ['EnthusiaIconHistory.png','History & Lore','History & Lore'],
   ];
-  const cardHtml = cards.map(([img,label,target]) => `<div class="enthusia-home-card">[[File:${img}|220px|link=${target}]]<div>'''[[${target}|${label}]]'''</div></div>`).join('\n');
+  const cardHtml = cards.map(([img,label,target]) => `<div class="enthusia-home-card">[[File:${img}|64px|link=${target}]]<div>'''[[${target}|${label}]]'''</div></div>`).join('\n');
   return `${STYLE_TAG}\n<div class="enthusia-wiki enthusia-home">
 <div class="enthusia-hero">
 <div class="enthusia-eyebrow">Enthusia SMP</div>
