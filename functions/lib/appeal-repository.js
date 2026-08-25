@@ -11,6 +11,25 @@ function changes(result) {
   return Number(result?.meta?.changes ?? 0);
 }
 
+function parseAnswers(value) {
+  let answers;
+  try { answers = JSON.parse(value); } catch { throw new Error("Stored appeal response is invalid"); }
+  if (!answers || typeof answers !== "object" || Array.isArray(answers)) {
+    throw new Error("Stored appeal response is invalid");
+  }
+  return answers;
+}
+
+function comment(row) {
+  return Object.freeze({
+    id: row.id,
+    authorType: row.authorType,
+    authorName: row.authorName,
+    body: row.body,
+    createdAt: row.createdAt
+  });
+}
+
 function attachment(row, previewBase = "/api/appeals/attachments") {
   return Object.freeze({
     id: row.id,
@@ -172,6 +191,10 @@ export async function finalizeAppealSubmission(db, {
   draftId,
   payloadHash,
   appealId,
+  caseId = null,
+  punishmentType = null,
+  currentStatus = "OPEN",
+  currentVersion = 1,
   attachmentIds,
   now = new Date()
 }) {
@@ -179,10 +202,25 @@ export async function finalizeAppealSubmission(db, {
   const nowIso = now.toISOString();
   const operations = [store.prepare(`
     UPDATE appeal_submissions
-    SET appeal_id = ?, status = 'SUBMITTED', submitted_at = COALESCE(submitted_at, ?), updated_at = ?
+    SET appeal_id = ?, case_id = ?, punishment_type = ?, current_status = ?,
+        current_version = ?, status_updated_at = ?, status = 'SUBMITTED',
+        submitted_at = COALESCE(submitted_at, ?), updated_at = ?
     WHERE draft_id = ? AND owner_discord_id = ? AND payload_hash = ?
       AND (appeal_id IS NULL OR appeal_id = ?)
-  `).bind(appealId, nowIso, nowIso, draftId, ownerDiscordId, payloadHash, appealId)];
+  `).bind(
+    appealId,
+    caseId,
+    punishmentType,
+    currentStatus,
+    currentVersion,
+    nowIso,
+    nowIso,
+    nowIso,
+    draftId,
+    ownerDiscordId,
+    payloadHash,
+    appealId
+  )];
   for (const attachmentId of attachmentIds) {
     operations.push(store.prepare(`
       UPDATE appeal_attachments
@@ -197,7 +235,7 @@ export async function finalizeAppealSubmission(db, {
   }
 }
 
-export async function appealDetailsByIds(db, appealIds) {
+async function appealContentByIds(db, appealIds, previewBase) {
   const ids = [...new Set(appealIds.filter((id) => typeof id === "string" && id))];
   if (!ids.length) return new Map();
   const store = database(db);
@@ -210,18 +248,144 @@ export async function appealDetailsByIds(db, appealIds) {
   const evidence = rows(await store.prepare(`${ATTACHMENT_SELECT}
     WHERE appeal_id IN (${placeholders}) ORDER BY created_at ASC
   `).bind(...ids).all());
+  const comments = rows(await store.prepare(`
+    SELECT id, appeal_id AS appealId, author_type AS authorType,
+           author_name AS authorName, body, created_at AS createdAt
+    FROM appeal_comments
+    WHERE appeal_id IN (${placeholders})
+    ORDER BY created_at ASC, id ASC
+  `).bind(...ids).all());
   const byAppeal = new Map();
   for (const row of submissions) {
-    let answers;
-    try { answers = JSON.parse(row.answersJson); } catch { throw new Error("Stored appeal response is invalid"); }
-    if (!answers || typeof answers !== "object") throw new Error("Stored appeal response is invalid");
-    byAppeal.set(row.appealId, { answers, attachments: [] });
+    byAppeal.set(row.appealId, {
+      answers: parseAnswers(row.answersJson),
+      attachments: [],
+      comments: []
+    });
   }
   for (const row of evidence) {
     const details = byAppeal.get(row.appealId);
-    if (details) details.attachments.push(attachment(row, "/api/reviewer/appeals/attachments"));
+    if (details) details.attachments.push(attachment(row, previewBase));
+  }
+  for (const row of comments) {
+    const details = byAppeal.get(row.appealId);
+    if (details) details.comments.push(comment(row));
   }
   return byAppeal;
+}
+
+export async function appealDetailsByIds(db, appealIds) {
+  return appealContentByIds(db, appealIds, "/api/reviewer/appeals/attachments");
+}
+
+export async function listOwnedAppeals(db, ownerDiscordId) {
+  const store = database(db);
+  const submissions = rows(await store.prepare(`
+    SELECT s.appeal_id AS id, s.punishment_id AS punishmentId,
+           s.minecraft_name AS minecraftName, s.case_id AS caseId,
+           s.punishment_type AS punishmentType, s.current_status AS status,
+           s.current_version AS version, s.created_at AS createdAt,
+           s.submitted_at AS submittedAt,
+           COALESCE(s.status_updated_at, s.submitted_at, s.updated_at) AS updatedAt
+    FROM appeal_submissions AS s
+    WHERE s.owner_discord_id = ? AND s.status = 'SUBMITTED' AND s.appeal_id IS NOT NULL
+    ORDER BY s.submitted_at DESC, s.created_at DESC
+    LIMIT 100
+  `).bind(ownerDiscordId).all());
+  const content = await appealContentByIds(
+    store,
+    submissions.map((submission) => submission.id),
+    "/api/appeals/attachments"
+  );
+  return submissions.map((submission) => ({
+    ...submission,
+    ...(content.get(submission.id) ?? { answers: {}, attachments: [], comments: [] })
+  }));
+}
+
+export async function findOwnedAppeal(db, ownerDiscordId, appealId) {
+  return database(db).prepare(`
+    SELECT s.appeal_id AS id, s.current_status AS status, s.current_version AS version
+    FROM appeal_submissions AS s
+    WHERE s.owner_discord_id = ? AND s.appeal_id = ? AND s.status = 'SUBMITTED'
+    LIMIT 1
+  `).bind(ownerDiscordId, appealId).first();
+}
+
+export async function findAppeal(db, appealId) {
+  return database(db).prepare(`
+    SELECT s.appeal_id AS id, s.current_status AS status, s.current_version AS version
+    FROM appeal_submissions AS s
+    WHERE s.appeal_id = ? AND s.status = 'SUBMITTED'
+    LIMIT 1
+  `).bind(appealId).first();
+}
+
+export async function recordAppealComment(db, record) {
+  const store = database(db);
+  const existing = await store.prepare(`
+    SELECT id, appeal_id AS appealId, author_type AS authorType,
+           author_id AS authorId, author_name AS authorName, body,
+           idempotency_key AS idempotencyKey, created_at AS createdAt
+    FROM appeal_comments
+    WHERE appeal_id = ? AND author_type = ? AND author_id = ? AND idempotency_key = ?
+    LIMIT 1
+  `).bind(record.appealId, record.authorType, record.authorId, record.idempotencyKey).first();
+  if (existing) {
+    if (existing.body !== record.body || existing.authorName !== record.authorName) {
+      return { status: "CONFLICT" };
+    }
+    return { status: "REPLAYED", comment: comment(existing) };
+  }
+  try {
+    const result = await store.prepare(`
+      INSERT INTO appeal_comments (
+        id, appeal_id, author_type, author_id, author_name,
+        body, idempotency_key, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      record.id,
+      record.appealId,
+      record.authorType,
+      record.authorId,
+      record.authorName,
+      record.body,
+      record.idempotencyKey,
+      record.createdAt
+    ).run();
+    if (changes(result) !== 1) throw new Error("Appeal comment was not recorded");
+    return { status: "CREATED", comment: comment({
+      id: record.id,
+      authorType: record.authorType,
+      authorName: record.authorName,
+      body: record.body,
+      createdAt: record.createdAt
+    }) };
+  } catch (error) {
+    const replay = await store.prepare(`
+      SELECT id, author_type AS authorType, author_name AS authorName, body,
+             created_at AS createdAt
+      FROM appeal_comments
+      WHERE appeal_id = ? AND author_type = ? AND author_id = ? AND idempotency_key = ?
+      LIMIT 1
+    `).bind(record.appealId, record.authorType, record.authorId, record.idempotencyKey).first();
+    if (!replay || replay.body !== record.body || replay.authorName !== record.authorName) throw error;
+    return { status: "REPLAYED", comment: comment(replay) };
+  }
+}
+
+export async function recordAppealStatus(db, {
+  appealId,
+  status,
+  version,
+  updatedAt
+}) {
+  const result = await database(db).prepare(`
+    UPDATE appeal_submissions
+    SET current_status = ?, current_version = ?, status_updated_at = ?, updated_at = ?
+    WHERE appeal_id = ? AND appeal_submissions.status = 'SUBMITTED' AND current_version <= ?
+  `).bind(status, version, updatedAt, updatedAt, appealId, version).run();
+  return changes(result) === 1;
 }
 
 export async function findReviewerAppealAttachment(db, attachmentId) {

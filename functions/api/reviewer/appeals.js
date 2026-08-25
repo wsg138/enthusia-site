@@ -44,9 +44,21 @@ export async function onRequestGet(context) {
       appeals: payload.appeals.map((appeal) => {
         const full = details?.get(appeal.id);
         if (full) {
-          return { ...appeal, structuredAnswers: full.answers, attachments: full.attachments, detailsState: "COMPLETE" };
+          return {
+            ...appeal,
+            structuredAnswers: full.answers,
+            attachments: full.attachments,
+            comments: full.comments,
+            detailsState: "COMPLETE"
+          };
         }
-        return { ...appeal, structuredAnswers: null, attachments: [], detailsState: detailsAvailable ? "LEGACY" : "UNAVAILABLE" };
+        return {
+          ...appeal,
+          structuredAnswers: null,
+          attachments: [],
+          comments: [],
+          detailsState: detailsAvailable ? "LEGACY" : "UNAVAILABLE"
+        };
       })
     });
   } catch {

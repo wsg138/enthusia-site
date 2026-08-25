@@ -88,11 +88,27 @@ function ensureRoot() {
   return root;
 }
 
-function menuLink(label, href) {
+function menuLink(label, href, description) {
   const link = document.createElement("a");
   link.href = href;
-  link.textContent = label;
+  if (!description) {
+    link.textContent = label;
+    return link;
+  }
+  const copy = document.createElement("span");
+  const title = document.createElement("strong");
+  const detail = document.createElement("small");
+  title.textContent = label;
+  detail.textContent = description;
+  copy.append(title, detail);
+  link.append(copy);
   return link;
+}
+
+function closeAccountMenus(except = null) {
+  for (const menu of document.querySelectorAll(".site-account-menu[open]")) {
+    if (menu !== except) menu.removeAttribute("open");
+  }
 }
 
 async function renderAccount(root, session) {
@@ -130,24 +146,42 @@ async function renderAccount(root, session) {
   const actions = document.createElement("div");
   actions.className = "site-account-actions";
   actions.append(
-    menuLink("Account and links", "/account.html"),
-    menuLink("Appeals", "/appeal.html"),
-    menuLink("Competitions", "/competitions/")
+    menuLink("Profile", "/account.html", "Discord and Minecraft links"),
+    menuLink("Appeals", "/appeal.html#history", "Status and staff replies"),
+    menuLink("Competitions", "/competitions/", "Entries, voting, and results")
   );
-  if (await isStaffMember()) actions.append(menuLink("Staff workspace", "/competitions/admin/"));
   const logout = document.createElement("button");
   logout.type = "button";
   logout.textContent = "Sign out";
+  logout.className = "site-account-sign-out";
   logout.dataset.siteSignOut = "";
   actions.append(logout);
   details.append(summary, actions);
   root.append(details);
+  if (await isStaffMember()) {
+    actions.insertBefore(
+      menuLink("Review appeals", "/reviewer/appeals.html", "Open the staff appeal queue"),
+      logout
+    );
+    actions.insertBefore(
+      menuLink("Competition tools", "/competitions/admin/", "Manage competitions"),
+      logout
+    );
+  }
 }
 
 document.addEventListener("click", (event) => {
   const button = event.target.closest?.("[data-site-sign-out]");
   if (button) signOut(button);
+  const currentMenu = event.target.closest?.(".site-account-menu") ?? null;
+  closeAccountMenus(currentMenu);
 });
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeAccountMenus();
+});
+
+window.addEventListener("scroll", () => closeAccountMenus(), { passive: true });
 
 export async function initSiteAccount() {
   ensureBrandLogo();

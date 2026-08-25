@@ -427,6 +427,8 @@ summary:focus-visible{
 .site-account-menu>summary{max-width:240px;list-style:none;gap:8px}
 .site-account-menu>summary::-webkit-details-marker{display:none}
 .site-account-menu>summary::after{content:"⌄";margin-left:8px;color:var(--gold)}
+.site-account-menu>summary::after{transition:transform .16s ease}
+.site-account-menu[open]>summary::after{transform:rotate(180deg)}
 .site-account-menu[open]>summary{border-color:rgba(255,138,0,.6);background:rgba(255,138,0,.1)}
 .site-account-avatar{display:grid;place-items:center;flex:0 0 30px;width:30px;height:30px;overflow:hidden;border-radius:50%;color:#1a1008;background:var(--action-grad);font-size:.8rem;font-weight:900}
 .site-account-avatar img{display:block;width:100%;height:100%;object-fit:cover}
@@ -440,19 +442,21 @@ summary:focus-visible{
   right:0;
   z-index:120;
   display:grid;
-  min-width:220px;
-  padding:7px;
+  min-width:276px;
+  padding:8px;
   border:1px solid rgba(255,211,106,.22);
-  border-radius:10px;
-  background:rgba(18,12,9,.98);
-  box-shadow:0 18px 48px rgba(0,0,0,.46);
+  border-radius:14px;
+  background:linear-gradient(155deg,rgba(28,19,13,.99),rgba(12,10,8,.99));
+  box-shadow:0 24px 64px rgba(0,0,0,.54);
 }
 .site-account-actions a,
 .site-account-actions button{
+  display:flex;
+  align-items:center;
   justify-content:flex-start;
   width:100%;
-  min-height:38px;
-  padding:9px 10px;
+  min-height:48px;
+  padding:10px 11px;
   border:0;
   border-radius:7px;
   color:var(--cream);
@@ -462,8 +466,13 @@ summary:focus-visible{
   text-align:left;
   cursor:pointer;
 }
+.site-account-actions a>span{display:grid;gap:2px}
+.site-account-actions a strong{color:var(--cream);font-size:.84rem;line-height:1.2}
+.site-account-actions a small{color:var(--soft);font-size:.68rem;font-weight:600;line-height:1.3}
+.site-account-actions .site-account-sign-out{min-height:40px;margin-top:5px;border-top:1px solid rgba(255,255,255,.08);border-radius:0 0 7px 7px;color:#ffb0a6}
 .site-account-actions a:hover,
 .site-account-actions button:hover{color:var(--cream);background:rgba(255,138,0,.11);text-decoration:none}
+.site-account-actions a:hover small{color:#d8c5ad}
 
 @media(max-width:780px){
   .site-account{width:100%;margin:0}
@@ -5192,7 +5201,9 @@ html body :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt
 .reviewer-toolbar{display:grid;grid-template-columns:minmax(220px,310px) auto 1fr;align-items:end;gap:14px;padding:20px 22px;border-radius:16px;background:rgba(18,15,12,.93)}
 .reviewer-toolbar label{display:grid;gap:7px;color:var(--cream);font-size:.8rem;font-weight:800}
 .reviewer-toolbar select{min-height:46px;border:1px solid rgba(255,172,60,.3);border-radius:10px;padding:9px 12px;color:var(--text);background:#0d0b09;outline:none}
+.reviewer-toolbar input{width:100%;min-height:46px;border:1px solid rgba(255,172,60,.3);border-radius:10px;padding:9px 12px;color:var(--text);background:#0d0b09;outline:none}
 .reviewer-toolbar select:focus{border-color:#ffad45;box-shadow:0 0 0 3px rgba(255,142,31,.13)}
+.reviewer-toolbar input:focus{border-color:#ffad45;box-shadow:0 0 0 3px rgba(255,142,31,.13)}
 .reviewer-toolbar .btn{min-height:46px}
 .reviewer-toolbar>p{justify-self:end;margin:0 0 12px;color:var(--soft)}
 .reviewer-appeals{display:grid;gap:20px}
@@ -5247,6 +5258,80 @@ html body :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt
 .reviewer-action-status{margin:0;color:var(--muted)}
 .reviewer-empty{padding:42px;border-radius:16px;color:var(--muted);text-align:center}
 
+/* Appeal history and conversations */
+.appeal-view-tabs{display:flex;gap:8px;max-width:1080px;margin-bottom:24px;padding:6px;border:1px solid rgba(255,168,55,.18);border-radius:14px;background:rgba(17,13,10,.78)}
+.appeal-view-tabs button{flex:1;min-height:48px;border:0;border-radius:9px;padding:10px 18px;color:var(--muted);background:transparent;font:inherit;font-weight:800;cursor:pointer}
+.appeal-view-tabs button:hover{color:var(--cream);background:rgba(255,255,255,.04)}
+.appeal-view-tabs button.is-active{color:#1a1008;background:var(--action-grad);box-shadow:0 8px 26px rgba(255,138,0,.18)}
+.appeal-history-panel{display:grid;gap:20px;max-width:1080px}
+.appeal-new-panel{display:grid;gap:20px}
+.appeal-section-heading{display:flex;align-items:end;justify-content:space-between;gap:28px;max-width:1080px;padding:8px 2px 2px}
+.appeal-section-heading h2{margin:4px 0 0;font-size:clamp(1.8rem,4vw,2.8rem)}
+.appeal-section-heading>p{max-width:390px;margin:0;color:var(--soft);line-height:1.55;text-align:right}
+.appeal-new-heading{margin-bottom:0}
+.appeal-history{display:grid;gap:18px}
+.appeal-history[aria-busy="true"]{opacity:.62}
+.appeal-history-card{overflow:hidden;padding:0;border-radius:18px;background:rgba(12,10,9,.95);box-shadow:0 24px 68px rgba(0,0,0,.23)}
+.appeal-history-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:24px 26px 18px;background:linear-gradient(120deg,rgba(45,25,14,.66),rgba(15,13,11,.28))}
+.appeal-history-card-header h2{margin:4px 0 0;font-size:clamp(1.38rem,3vw,2rem)}
+.appeal-history-state{flex:none;border:1px solid rgba(255,183,76,.32);border-radius:999px;padding:7px 11px;color:#ffd69a;background:rgba(48,24,11,.78);font-size:.71rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.appeal-history-state-applied,.appeal-history-state-approval-pending{border-color:rgba(130,202,93,.42);color:#c9eba9;background:rgba(42,86,31,.3)}
+.appeal-history-state-denied{border-color:rgba(240,91,72,.4);color:#ffaaa0;background:rgba(103,30,25,.3)}
+.appeal-history-state-information-requested{border-color:rgba(112,166,224,.4);color:#b8d8ff;background:rgba(24,55,88,.35)}
+.appeal-history-state-rejected{border-color:rgba(234,164,65,.42);color:#ffd699;background:rgba(94,55,21,.32)}
+.appeal-history-summary{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 26px 21px;border-bottom:1px solid rgba(255,255,255,.08)}
+.appeal-history-summary p{margin:0;color:var(--muted);line-height:1.5}
+.appeal-history-summary time{flex:none;color:var(--soft);font-size:.76rem}
+.appeal-thread{display:grid;gap:14px;padding:23px 26px}
+.appeal-thread-heading,.reviewer-conversation-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.appeal-thread-heading h3,.reviewer-conversation-heading h3{margin:0;font-size:1.08rem}
+.appeal-thread-heading span,.reviewer-conversation-heading span{color:var(--soft);font-size:.75rem}
+.appeal-thread-list,.reviewer-conversation-list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.appeal-thread-message,.reviewer-message{max-width:82%;border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:13px 15px;background:rgba(255,255,255,.035)}
+.appeal-thread-staff,.reviewer-message-staff{border-color:rgba(255,163,49,.2);background:rgba(255,138,0,.07)}
+.appeal-thread-player,.reviewer-message-player{justify-self:end;border-color:rgba(105,161,220,.22);background:rgba(41,78,117,.17)}
+.appeal-thread-meta,.reviewer-message-meta{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:6px}
+.appeal-thread-meta strong,.reviewer-message-meta strong{color:var(--cream);font-size:.78rem}
+.appeal-thread-meta span,.reviewer-message-meta span{color:var(--soft);font-size:.68rem}
+.appeal-thread-message p,.reviewer-message p{margin:0;color:var(--muted);line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.appeal-thread-empty,.reviewer-conversation-empty{border:1px dashed rgba(255,255,255,.12);border-radius:11px;padding:18px;color:var(--soft);text-align:center}
+.appeal-reply-form,.reviewer-comment-form{display:grid;gap:10px;margin-top:2px;padding-top:17px;border-top:1px solid rgba(255,255,255,.08)}
+.appeal-reply-form label,.reviewer-comment-form label{display:grid;gap:8px;color:var(--cream);font-size:.8rem;font-weight:800}
+.appeal-reply-form textarea,.reviewer-comment-form textarea{width:100%;resize:vertical;border:1px solid rgba(255,172,60,.26);border-radius:10px;padding:12px 13px;color:var(--text);background:rgba(4,6,5,.82);font:inherit;line-height:1.55;outline:none}
+.appeal-reply-form textarea:focus,.reviewer-comment-form textarea:focus{border-color:#ffad45;box-shadow:0 0 0 3px rgba(255,142,31,.13)}
+.appeal-reply-controls,.reviewer-comment-controls{display:flex;align-items:center;gap:14px}
+.appeal-reply-controls p,.reviewer-comment-controls p{margin:0;color:var(--muted)}
+.appeal-original{border-top:1px solid rgba(255,255,255,.08)}
+.appeal-original>summary{padding:17px 26px;color:#f3c377;font-size:.82rem;font-weight:800;cursor:pointer;list-style-position:inside}
+.appeal-original[open]>summary{border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,138,0,.035)}
+.appeal-original-answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:22px 26px}
+.appeal-original-answer{min-width:0;border:1px solid rgba(255,172,60,.14);border-radius:11px;padding:16px;background:rgba(6,6,5,.48)}
+.appeal-original-answer h4,.appeal-original-evidence h4{margin:0 0 9px;color:#f4c47d;font-size:.79rem}
+.appeal-original-content{color:var(--muted);line-height:1.65;overflow-wrap:anywhere}
+.appeal-original-content>*:first-child{margin-top:0}.appeal-original-content>*:last-child{margin-bottom:0}
+.appeal-original-evidence{padding:0 26px 24px}
+.appeal-original-evidence ul{display:grid;gap:6px;margin:0;padding-left:20px}
+.appeal-history-empty,.appeal-history-error{padding:32px;border-radius:16px}
+.appeal-history-empty{display:grid;justify-items:start;gap:10px}
+.appeal-history-empty h2{margin:0;font-size:clamp(1.45rem,3vw,2.1rem)}
+.appeal-history-empty p:not(.card-kicker){margin:0 0 6px;color:var(--muted)}
+.appeal-history-error{color:#ffb4a8}
+
+/* Reviewer card disclosure and player-visible messages */
+.reviewer-toolbar{grid-template-columns:minmax(190px,260px) minmax(230px,1fr) auto auto}
+.reviewer-toolbar>p{min-width:95px}
+.reviewer-card-disclosure{border-top:1px solid rgba(255,255,255,.08)}
+.reviewer-card-disclosure>summary{position:relative;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:17px 27px;color:#f2c17a;cursor:pointer;list-style:none}
+.reviewer-card-disclosure>summary::-webkit-details-marker{display:none}
+.reviewer-card-disclosure>summary::after{content:"Open";border:1px solid rgba(255,172,60,.22);border-radius:999px;padding:5px 9px;color:var(--muted);font-size:.67rem;text-transform:uppercase;letter-spacing:.05em}
+.reviewer-card-disclosure[open]>summary::after{content:"Close"}
+.reviewer-card-disclosure>summary span{color:var(--soft);font-size:.75rem}
+.reviewer-card-disclosure[open]>summary{border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,138,0,.035)}
+.reviewer-card-content{display:grid}
+.reviewer-conversation{display:grid;gap:14px;padding:24px 27px;border-top:1px solid rgba(255,255,255,.08)}
+.reviewer-comment-form{margin-top:4px}
+.reviewer-decision-limit{margin:0;color:var(--soft);font-size:.76rem}
+
 @media(max-width:900px){
   .moderation-hero{grid-template-columns:1fr;align-items:start}
   .moderation-help-card{max-width:650px}
@@ -5254,6 +5339,8 @@ html body :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt
   .reviewer-hero{grid-template-columns:1fr;align-items:start}
   .reviewer-safety{max-width:650px}
   .reviewer-meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .reviewer-toolbar{grid-template-columns:1fr 1fr auto}
+  .reviewer-toolbar>p{grid-column:1/-1;justify-self:start;margin:0}
 }
 @media(max-width:680px){
   .moderation-main{padding-top:46px}
@@ -5269,8 +5356,13 @@ html body :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt
   .punishment-meta{grid-template-columns:1fr 1fr}
   .reviewer-main{padding-top:44px}
   .reviewer-toolbar{grid-template-columns:1fr auto}
+  .reviewer-toolbar label{grid-column:1/-1}
   .reviewer-toolbar>p{grid-column:1/-1;justify-self:start;margin:0}
   .reviewer-decision-heading{align-items:flex-start;flex-direction:column}
+  .appeal-section-heading{align-items:flex-start;flex-direction:column;gap:8px}
+  .appeal-section-heading>p{text-align:left}
+  .appeal-history-card-header,.appeal-history-summary{align-items:flex-start;flex-direction:column}
+  .appeal-original-answers{grid-template-columns:1fr}
 }
 @media(max-width:460px){
   .moderation-main{padding-bottom:64px}
@@ -5298,6 +5390,13 @@ html body :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt
   .reviewer-prior-note{margin:0 20px 20px}
   .reviewer-decision-buttons .btn{width:100%}
   .reviewer-decision-buttons .reviewer-deny{margin-left:0}
+  .appeal-view-tabs{flex-direction:column}
+  .appeal-history-card-header,.appeal-history-summary,.appeal-thread,.appeal-original-answers,.reviewer-conversation{padding-left:20px;padding-right:20px}
+  .appeal-thread-message,.reviewer-message{max-width:94%}
+  .appeal-original>summary{padding:16px 20px}
+  .appeal-original-evidence{padding:0 20px 20px}
+  .reviewer-card-disclosure>summary{align-items:flex-start;flex-direction:column;padding:16px 20px}
+  .reviewer-card-disclosure>summary::after{position:absolute;right:20px}
 }
 
 /* Account and Minecraft linking */

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { buildSession, canReview } from "../functions/lib/auth.js";
+import { sanitizeAppealComment } from "../functions/lib/appeal-comments.js";
 import {
   appealSubmissionHash,
   buildStaffReason,
@@ -161,6 +162,19 @@ test("review decisions require version, bounded note, and replay key", () => {
     idempotencyKey: "decision-123"
   }), null);
   assert.equal(boundedIdempotencyKey("short"), null);
+});
+
+test("appeal comments require bounded text and an idempotency key", () => {
+  assert.deepEqual(sanitizeAppealComment({
+    body: "  Here is the missing context.  ",
+    idempotencyKey: "comment-123"
+  }), {
+    body: "Here is the missing context.",
+    idempotencyKey: "comment-123"
+  });
+  assert.equal(sanitizeAppealComment({ body: "x", idempotencyKey: "comment-123" }), null);
+  assert.equal(sanitizeAppealComment({ body: "Useful reply", idempotencyKey: "short" }), null);
+  assert.equal(sanitizeAppealComment({ body: "x".repeat(2001), idempotencyKey: "comment-123" }), null);
 });
 
 test("invalid, duplicate, and oversized submissions are rejected", () => {

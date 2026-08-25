@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/styles.css?v=vision85">
+  <link rel="stylesheet" href="../assets/styles.css?v=vision86">
 </head>
 <body class="appeal-review-page moderation-page">
 <a class="skip-link" href="#main-content">Skip to appeals</a>
@@ -26,12 +26,13 @@
 
 <main id="main-content" class="page-main reviewer-main">
   <section class="container reviewer-hero" aria-labelledby="reviewer-title">
-    <div><p class="eyebrow">Staff workspace</p><h1 id="reviewer-title">Review punishment appeals</h1><p>Read the full response and any attached evidence before recording a decision.</p></div>
+    <div><p class="eyebrow">Staff workspace</p><h1 id="reviewer-title">Appeal reviews</h1><p>Open a case, read the appeal and conversation, then record the outcome.</p></div>
   </section>
 
   <section class="container reviewer-workspace" aria-label="Appeal queue">
     <div class="card reviewer-toolbar">
       <label for="status"><span>Show appeals</span><select id="status"><option value="OPEN">Open</option><option value="INFORMATION_REQUESTED">Waiting for player</option><option value="APPROVAL_PENDING">Approval pending</option><option value="APPLIED">Approved</option><option value="DENIED">Denied</option><option value="REJECTED">Approval failed</option><option value="ALL">All</option></select></label>
+      <label for="review-search"><span>Find in this list</span><input id="review-search" type="search" maxlength="80" autocomplete="off" placeholder="Player, case, or appeal ID"></label>
       <button id="refresh" class="btn ghost" type="button">Refresh</button>
       <p id="reviewer-status" role="status">Loading appeals…</p>
     </div>
@@ -40,7 +41,7 @@
 </main>
 
 <footer class="site-footer"><div class="container footer-inner"><p>&copy; <span id="year"></span> Enthusia SMP</p><p>Authorized staff access only</p></div></footer>
-<script src="../assets/script.js?v=vision69" defer></script>
-<script type="module" src="../assets/reviewer-appeals.js?v=2"></script>
+<script src="../assets/script.js?v=vision70" defer></script>
+<script type="module" src="../assets/reviewer-appeals.js?v=3"></script>
 </body>
 </html>

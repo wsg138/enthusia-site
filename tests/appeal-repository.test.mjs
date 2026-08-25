@@ -6,7 +6,10 @@ import {
   appealDetailsByIds,
   finalizeAppealSubmission,
   insertAppealAttachment,
-  prepareAppealSubmission
+  listOwnedAppeals,
+  prepareAppealSubmission,
+  recordAppealComment,
+  recordAppealStatus
 } from "../functions/lib/appeal-repository.js";
 import { sanitizeAppealSubmission } from "../functions/lib/appeal-content.js";
 
@@ -143,5 +146,75 @@ test("an appeal draft cannot be reused with a different payload", async () => {
     await prepareAppealSubmission(db, { session, account, submission, payloadHash: "d".repeat(64), now: NOW }),
     { status: "CONFLICT" }
   );
+  database.close();
+});
+
+test("players can read status and ordered appeal messages without seeing another account", async () => {
+  const database = await migratedDatabase();
+  const db = d1(database);
+  const submission = sanitizeAppealSubmission({
+    draftId: DRAFT_ID,
+    minecraftUuid: PLAYER_ID,
+    punishmentId: PUNISHMENT_ID,
+    attachmentIds: [],
+    ...answers()
+  });
+  const session = { discord: { id: OWNER_ID } };
+  const account = { uuid: PLAYER_ID, name: "P2wn" };
+  const payloadHash = "e".repeat(64);
+  await prepareAppealSubmission(db, { session, account, submission, payloadHash, now: NOW });
+  await finalizeAppealSubmission(db, {
+    ownerDiscordId: OWNER_ID,
+    draftId: DRAFT_ID,
+    payloadHash,
+    appealId: APPEAL_ID,
+    caseId: "E-1042",
+    punishmentType: "MUTE",
+    currentStatus: "OPEN",
+    currentVersion: 1,
+    attachmentIds: [],
+    now: NOW
+  });
+
+  const staffComment = {
+    id: "66666666-6666-4666-8666-666666666666",
+    appealId: APPEAL_ID,
+    authorType: "STAFF",
+    authorId: "77777777-7777-4777-8777-777777777777",
+    authorName: "Moderator",
+    body: "Please explain which message you believe was taken out of context.",
+    idempotencyKey: "comment-staff-1",
+    createdAt: "2026-08-25T12:05:00.000Z"
+  };
+  assert.equal((await recordAppealComment(db, staffComment)).status, "CREATED");
+  assert.equal((await recordAppealComment(db, staffComment)).status, "REPLAYED");
+  assert.equal((await recordAppealComment(db, { ...staffComment, body: "Different message" })).status, "CONFLICT");
+  assert.equal(await recordAppealStatus(db, {
+    appealId: APPEAL_ID,
+    status: "INFORMATION_REQUESTED",
+    version: 2,
+    updatedAt: "2026-08-25T12:05:00.000Z"
+  }), true);
+  await recordAppealComment(db, {
+    id: "88888888-8888-4888-8888-888888888888",
+    appealId: APPEAL_ID,
+    authorType: "PLAYER",
+    authorId: OWNER_ID,
+    authorName: "P2wn",
+    body: "It was the second message in the attached conversation.",
+    idempotencyKey: "comment-player-1",
+    createdAt: "2026-08-25T12:10:00.000Z"
+  });
+
+  const appeals = await listOwnedAppeals(db, OWNER_ID);
+  assert.equal(appeals.length, 1);
+  assert.equal(appeals[0].caseId, "E-1042");
+  assert.equal(appeals[0].punishmentType, "MUTE");
+  assert.equal(appeals[0].status, "INFORMATION_REQUESTED");
+  assert.equal(appeals[0].version, 2);
+  assert.equal(appeals[0].comments.length, 2);
+  assert.equal(appeals[0].comments[0].authorType, "STAFF");
+  assert.equal(appeals[0].comments[1].authorType, "PLAYER");
+  assert.deepEqual(await listOwnedAppeals(db, "999999999999999999"), []);
   database.close();
 });

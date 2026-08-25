@@ -39,21 +39,23 @@ Appeals are now implemented as a **website workflow**, replacing the old directi
 
 `public/punishments.html` provides public-safe punishment history and search. It proxies only the Staff API's explicitly public fields and never exposes evidence, reports, staff notes, network identity, linked-account data or private appeal state.
 
-`public/appeal.html` provides the private player workflow. Discord sign-in secures the website account, while the punishment code and matching Minecraft username prove ownership of the punishment. A Discord-to-Minecraft account link is not required.
+`public/appeal.html` provides the private player workflow. Discord sign-in secures the website account, and a linked Minecraft account determines which punishments the player can appeal. The same page shows submitted appeals, their current status, staff messages, player replies, original answers and attached files.
 
 Flow:
 
-1. The player signs in with Discord and enters the private punishment code plus the matching Minecraft username.
-2. `POST /api/appeals/claim` derives a stable website account ID from the authenticated Discord session and asks EnthusiaStaff to verify and first-claim the code.
-3. The player submits a reason between **10 and 1000 characters**.
-4. `POST /api/appeals` revalidates the code, derives all account identity server-side, generates an idempotency key and sends a signed server-to-server request to EnthusiaStaff.
-5. The browser receives only the public-safe result returned through the website API layer.
+1. The player signs in with Discord. Current Discord membership is not required, so a Discord-banned player can still appeal.
+2. The player links a Minecraft account through the normal server or the separate linking server.
+3. The site loads the active punishments available for that linked account.
+4. The player selects a punishment, answers the appeal questions and may attach screenshots or text logs.
+5. `POST /api/appeals` rechecks the linked identity and punishment, records the complete submission and sends the bounded appeal summary to EnthusiaStaff through the signed server-to-server API.
+6. The appeal history page shows status changes and player-visible messages. Authorized staff use the private reviewer workspace to reply, request information, accept or deny.
 
 Security properties include:
 
 - same-origin enforcement on submissions,
 - Discord account-derived website identity,
-- private first-claim punishment codes with matching usernames,
+- server-verified Discord-to-Minecraft links,
+- owner-scoped appeal history, messages and attachments,
 - server-side request signing to the Staff API,
 - idempotency protection,
 - private/no-store API responses,
@@ -68,7 +70,7 @@ Public competition pages remain viewable without an account when public access i
 - current membership in the configured Enthusia Discord, rechecked at least every 24 hours; and
 - a Minecraft account linked to that Discord website session.
 
-Discord membership and linked Minecraft identity are separate checks. Appeal access does not reuse the competition Minecraft-link requirement.
+Discord membership and linked Minecraft identity are separate checks. Appeals require a linked Minecraft account but do not require the Discord account to remain in the server.
 
 ## Leaderboards
 

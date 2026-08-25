@@ -54,6 +54,7 @@ test("every numbered competition migration applies cleanly to SQLite", async () 
   const files = await migrationFiles();
   assert.ok(files.includes("0005_competition_lifecycle_operations.sql"));
   assert.ok(files.includes("0006_competition_media.sql"));
+  assert.ok(files.includes("0030_appeal_history_and_comments.sql"));
 
   const database = await migratedDatabase();
   const tables = database.prepare(`
@@ -69,6 +70,11 @@ test("every numbered competition migration applies cleanly to SQLite", async () 
   `).all();
   assert.ok(appealTables.some((row) => row.name === "appeal_submissions"));
   assert.ok(appealTables.some((row) => row.name === "appeal_attachments"));
+  assert.ok(appealTables.some((row) => row.name === "appeal_comments"));
+
+  const appealColumns = database.prepare("PRAGMA table_info(appeal_submissions)").all();
+  assert.ok(appealColumns.some((column) => column.name === "current_status"));
+  assert.ok(appealColumns.some((column) => column.name === "current_version"));
 
   const competitionColumns = database.prepare("PRAGMA table_info(competitions)").all();
   assert.ok(competitionColumns.some((column) => column.name === "last_lifecycle_operation_id"));

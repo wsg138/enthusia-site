@@ -4,7 +4,11 @@ import {
   staffAppealIdempotencyKey
 } from "../lib/appeal-content.js";
 import { requestEligiblePunishments } from "../lib/appeal-eligibility.js";
-import { finalizeAppealSubmission, prepareAppealSubmission } from "../lib/appeal-repository.js";
+import {
+  finalizeAppealSubmission,
+  listOwnedAppeals,
+  prepareAppealSubmission
+} from "../lib/appeal-repository.js";
 import { authenticateLinkedAppealRequest, linkedMinecraftAccount } from "../lib/appeal-session.js";
 import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../lib/responses.js";
 import { requireSameOrigin } from "../lib/security.js";
@@ -85,6 +89,10 @@ export async function onRequestPost(context) {
       draftId: submission.draftId,
       payloadHash,
       appealId: submitted.appeal.id,
+      caseId: submitted.appeal.caseId ?? null,
+      punishmentType: submitted.appeal.punishmentType ?? null,
+      currentStatus: submitted.appeal.status ?? "OPEN",
+      currentVersion: Number(submitted.appeal.version) || 1,
       attachmentIds: submission.attachmentIds
     });
     return json(submitted.appeal, 200, { "cache-control": "private, no-store" });
@@ -93,6 +101,23 @@ export async function onRequestPost(context) {
   }
 }
 
-export function onRequest() { return methodNotAllowed(["POST"]); }
+export async function onRequestGet(context) {
+  if (!context.env?.COMPETITIONS_DB) return serviceUnavailable();
+  let session;
+  try { session = await authenticateLinkedAppealRequest(context.request, context.env); }
+  catch { return serviceUnavailable(); }
+  if (!session) return unauthorized();
+  try {
+    return json(
+      { appeals: await listOwnedAppeals(context.env.COMPETITIONS_DB, session.discord.id) },
+      200,
+      { "cache-control": "private, no-store" }
+    );
+  } catch {
+    return serviceUnavailable();
+  }
+}
+
+export function onRequest() { return methodNotAllowed(["GET", "POST"]); }
 
 export { buildAppealPayload, linkedSession, staffSubmission };

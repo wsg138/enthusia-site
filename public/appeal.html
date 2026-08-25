@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Ask Enthusia staff to review an eligible Minecraft punishment.">
+  <meta name="description" content="Track an Enthusia punishment appeal or ask staff to review a current punishment.">
   <meta name="theme-color" content="#100d0a">
-  <title>Appeal a punishment | Enthusia SMP</title>
+  <title>Appeals | Enthusia SMP</title>
   <link rel="icon" href="assets/enthusia-logo-v2.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=vision85">
+  <link rel="stylesheet" href="assets/styles.css?v=vision86">
 </head>
 <body class="appeal-page moderation-page">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -32,17 +32,38 @@
   <section class="moderation-hero container" aria-labelledby="appeal-title">
     <div class="moderation-hero-copy">
       <p class="eyebrow">Punishment appeals</p>
-      <h1 id="appeal-title">Appeal a punishment</h1>
-      <p class="page-lead">Select the punishment you want reviewed and give staff the details they need to check the case.</p>
+      <h1 id="appeal-title">Appeals</h1>
+      <p class="page-lead">Check an appeal, read staff replies, or ask for a new review.</p>
     </div>
     <aside class="card moderation-help-card" aria-labelledby="appeal-help-title">
-      <p class="card-kicker">Before you start</p>
-      <h2 id="appeal-help-title">Read the rule first</h2>
-      <p>Look over the rule connected to your punishment. Gather any dates, messages, screenshots, or logs that could help staff check the case.</p>
-      <a href="rules.html">Open the server rules</a>
+      <p class="card-kicker">New appeal</p>
+      <h2 id="appeal-help-title">Ask for a review</h2>
+      <p>Choose a current punishment and explain what staff should reconsider.</p>
+      <a class="btn" href="#new" data-open-appeal>Start an appeal</a>
     </aside>
   </section>
 
+  <nav class="container appeal-view-tabs" aria-label="Appeal pages" role="tablist">
+    <button id="appeal-history-tab" type="button" role="tab" class="is-active" data-appeal-view="history" aria-controls="appeal-history-panel" aria-selected="true">Your appeals</button>
+    <button id="appeal-new-tab" type="button" role="tab" data-appeal-view="new" aria-controls="appeal-new-panel" aria-selected="false" tabindex="-1">New appeal</button>
+  </nav>
+
+  <section id="appeal-history-panel" class="container appeal-history-panel" role="tabpanel" aria-labelledby="appeal-history-tab">
+    <header class="appeal-section-heading">
+      <div><p class="card-kicker">Your appeals</p><h2 id="appeal-history-title">Appeal history</h2></div>
+      <p>Open an appeal to read its status, messages, and original answers.</p>
+    </header>
+    <section id="appeal-history-auth" class="appeal-auth-panel card" aria-live="polite">
+      <div><p class="card-kicker">Your account</p><h2>Checking your sign-in…</h2></div>
+    </section>
+    <div id="appeal-history" class="appeal-history" aria-live="polite" aria-busy="true"></div>
+  </section>
+
+  <section id="appeal-new-panel" class="appeal-new-panel" role="tabpanel" aria-labelledby="appeal-new-tab" hidden>
+    <header class="container appeal-section-heading appeal-new-heading">
+      <div><p class="card-kicker">New appeal</p><h2 id="appeal-new-title">Ask staff to review a punishment</h2></div>
+      <p>Read the rule first and gather anything that helps explain the case.</p>
+    </header>
   <section class="container moderation-workspace" aria-label="Appeal form">
     <ol class="appeal-progress" aria-label="Appeal steps">
       <li data-appeal-step="account"><span>1</span><div><strong>Account</strong><small>Sign in and check your Minecraft link</small></div></li>
@@ -148,12 +169,12 @@
       </fieldset>
     </form>
   </section>
+  </section>
 </main>
 
 <footer class="site-footer"><div class="container footer-inner"><p>&copy; <span id="year"></span> Enthusia SMP</p><p><a href="punishments.html">Punishments</a> · Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p></div></footer>
 <script src="assets/site-config.js?v=vision43" defer></script>
-<script src="assets/script.js?v=vision69" defer></script>
-<script type="module" src="assets/site-account.js?v=6"></script>
-<script type="module" src="assets/appeals.js?v=3"></script>
+<script src="assets/script.js?v=vision70" defer></script>
+<script type="module" src="assets/appeals.js?v=4"></script>
 </body>
 </html>

@@ -66,7 +66,7 @@ function punishmentCard(item) {
   if (item.appealAvailable) {
     const link = document.createElement("a");
     link.className = "text-button punishment-appeal-link";
-    link.href = "/appeal.html";
+    link.href = "/appeal.html#new";
     link.textContent = "Appeal this punishment";
     article.append(link);
   }

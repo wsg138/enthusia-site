@@ -2,8 +2,10 @@ import { renderAppealMarkup } from "./appeal-markup.js";
 
 const root = document.querySelector("#appeals");
 const statusFilter = document.querySelector("#status");
+const searchInput = document.querySelector("#review-search");
 const refreshButton = document.querySelector("#refresh");
 const queueStatus = document.querySelector("#reviewer-status");
+let loadedAppeals = [];
 
 const statusNames = Object.freeze({
   OPEN: "Open",
@@ -58,6 +60,11 @@ async function decide(appeal, decision, note, actionRoot, actionStatus) {
     actionStatus.textContent = "Add a short note explaining the decision.";
     return;
   }
+  const confirmation = {
+    approve: "Accept this appeal and remove the punishment?",
+    deny: "Deny this appeal?"
+  }[decision];
+  if (confirmation && !window.confirm(confirmation)) return;
   actionStatus.textContent = "Saving decision…";
   setActionsDisabled(actionRoot, true);
   try {
@@ -92,21 +99,21 @@ async function decide(appeal, decision, note, actionRoot, actionStatus) {
 function decisionActions(appeal) {
   const section = element("section", "reviewer-decision");
   const heading = element("div", "reviewer-decision-heading");
-  heading.append(element("h3", "", "Decision"), element("p", "", "Explain the decision for the case history."));
+  heading.append(element("h3", "", "Resolve appeal"), element("p", "", "The message is shown to the player."));
   const label = element("label", "reviewer-note");
-  label.append(element("span", "", "Staff note"));
+  label.append(element("span", "", "Message to player"));
   const note = document.createElement("textarea");
   note.minLength = 3;
   note.maxLength = 1000;
   note.rows = 4;
-  note.placeholder = "Explain the decision or what information is still needed.";
+  note.placeholder = "Explain the outcome or what information you need.";
   label.append(note);
   const buttons = element("div", "reviewer-decision-buttons");
   const actionStatus = element("p", "reviewer-action-status");
   actionStatus.setAttribute("role", "status");
   for (const action of [
-    { label: "Approve appeal", value: "approve", className: "reviewer-approve" },
-    { label: "Request information", value: "request_information", className: "reviewer-request" },
+    { label: "Accept and remove punishment", value: "approve", className: "reviewer-approve" },
+    { label: "Ask for more information", value: "request_information", className: "reviewer-request" },
     { label: "Deny appeal", value: "deny", className: "reviewer-deny" }
   ]) {
     const button = element("button", `btn ${action.className}`, action.label);
@@ -114,7 +121,8 @@ function decisionActions(appeal) {
     button.addEventListener("click", () => decide(appeal, action.value, note.value, section, actionStatus));
     buttons.append(button);
   }
-  section.append(heading, label, buttons, actionStatus);
+  const limitation = element("p", "reviewer-decision-limit", "Shortening a punishment still has to be done with the in-game staff command.");
+  section.append(heading, label, buttons, limitation, actionStatus);
   return section;
 }
 
@@ -181,16 +189,96 @@ function evidence(attachments) {
   return section;
 }
 
+async function postComment(appeal, body, button, input, result) {
+  const message = body.trim();
+  if (message.length < 3) {
+    result.textContent = "Write a message before sending it.";
+    input.focus();
+    return;
+  }
+  button.disabled = true;
+  input.disabled = true;
+  result.textContent = "Sending…";
+  try {
+    const response = await fetch(`/api/reviewer/appeals/${encodeURIComponent(appeal.id)}/comments`, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "content-type": "application/json", accept: "application/json" },
+      body: JSON.stringify({ body: message, idempotencyKey: crypto.randomUUID() })
+    });
+    if (!response.ok) {
+      result.textContent = response.status === 404
+        ? "Messages are not available for this older appeal."
+        : `The message could not be sent (${response.status}).`;
+      return;
+    }
+    await load();
+  } catch {
+    result.textContent = "The message could not be sent.";
+  } finally {
+    button.disabled = false;
+    input.disabled = false;
+  }
+}
+
+function conversation(appeal) {
+  const section = element("section", "reviewer-conversation");
+  const heading = element("div", "reviewer-conversation-heading");
+  const comments = Array.isArray(appeal.comments) ? appeal.comments : [];
+  heading.append(element("h3", "", "Conversation"), element("span", "", `${comments.length} message${comments.length === 1 ? "" : "s"}`));
+  const list = element("ol", "reviewer-conversation-list");
+  if (!comments.length) {
+    list.append(element("li", "reviewer-conversation-empty", "No messages yet."));
+  } else {
+    for (const message of comments) {
+      const item = element("li", `reviewer-message reviewer-message-${String(message.authorType).toLowerCase()}`);
+      const meta = element("div", "reviewer-message-meta");
+      meta.append(element("strong", "", text(message.authorName, message.authorType === "STAFF" ? "Staff" : "Player")), element("span", "", dateTime(message.createdAt)));
+      item.append(meta, element("p", "", text(message.body, "No message provided.")));
+      list.append(item);
+    }
+  }
+  section.append(heading, list);
+
+  const form = element("form", "reviewer-comment-form");
+  const label = element("label");
+  label.append(element("span", "", "Message player"));
+  const input = document.createElement("textarea");
+  input.minLength = 3;
+  input.maxLength = 2000;
+  input.rows = 4;
+  input.required = true;
+  input.placeholder = "Write a message the player can read with this appeal.";
+  label.append(input);
+  const controls = element("div", "reviewer-comment-controls");
+  const button = element("button", "btn ghost", "Send message");
+  button.type = "submit";
+  const result = element("p");
+  result.setAttribute("role", "status");
+  controls.append(button, result);
+  form.append(label, controls);
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    postComment(appeal, input.value, button, input, result);
+  });
+  section.append(form);
+  return section;
+}
+
 function appealCard(appeal) {
   const article = element("article", "card reviewer-appeal-card");
   const status = text(appeal.status, "UNKNOWN").toUpperCase();
   const header = element("header", "reviewer-card-header");
   const heading = document.createElement("div");
   heading.append(element("p", "card-kicker", `Case ${text(appeal.caseId, shortId(appeal.id))}`), element("h2", "", text(appeal.player ?? appeal.username, "Unknown player")));
-  header.append(heading, element("span", `reviewer-state reviewer-state-${status.toLowerCase().replaceAll("_", "-")}`, statusNames[status] ?? status));
+  const lastComment = appeal.comments?.at(-1);
+  const displayedStatus = status === "INFORMATION_REQUESTED" && lastComment?.authorType === "PLAYER"
+    ? "Player replied"
+    : statusNames[status] ?? status;
+  header.append(heading, element("span", `reviewer-state reviewer-state-${status.toLowerCase().replaceAll("_", "-")}`, displayedStatus));
 
-  const details = element("dl", "reviewer-meta");
-  details.append(
+  const meta = element("dl", "reviewer-meta");
+  meta.append(
     metadata("Punishment", text(appeal.punishmentType, "Punishment")),
     metadata("Punishment ID", shortId(appeal.punishmentId)),
     metadata("Submitted", dateTime(appeal.createdAt ?? appeal.submittedAt)),
@@ -198,23 +286,58 @@ function appealCard(appeal) {
   );
 
   const response = appeal.structuredAnswers ? structuredResponse(appeal.structuredAnswers) : legacyResponse(appeal);
-  article.append(header, details);
+  const disclosure = element("details", "reviewer-card-disclosure");
+  const disclosureSummary = element("summary");
+  disclosureSummary.append(element("strong", "", "Open appeal"), element("span", "", "Response, evidence, messages, and actions"));
+  disclosure.append(disclosureSummary);
+  const content = element("div", "reviewer-card-content");
   if (appeal.detailsState === "UNAVAILABLE") {
     const warning = element("div", "reviewer-details-warning");
     warning.append(element("strong", "", "Full response unavailable"), element("p", "", "Wait for the appeal site to recover before deciding this case."));
-    article.append(warning);
+    content.append(warning);
   }
-  article.append(response);
+  content.append(response);
   const attachments = evidence(appeal.attachments);
-  if (attachments) article.append(attachments);
+  if (attachments) content.append(attachments);
 
-  if (appeal.decisionNote) {
+  if (appeal.detailsState === "COMPLETE") content.append(conversation(appeal));
+
+  const noteInConversation = appeal.comments?.some((comment) => comment.authorType === "STAFF" && comment.body === appeal.decisionNote);
+  if (appeal.decisionNote && !noteInConversation) {
     const prior = element("section", "reviewer-prior-note");
     prior.append(element("strong", "", "Latest staff note"), element("p", "", appeal.decisionNote));
-    article.append(prior);
+    content.append(prior);
   }
-  if (status === "OPEN" && appeal.detailsState !== "UNAVAILABLE") article.append(decisionActions(appeal));
+  if (["OPEN", "INFORMATION_REQUESTED"].includes(status) && appeal.detailsState !== "UNAVAILABLE") {
+    content.append(decisionActions(appeal));
+  }
+  disclosure.append(content);
+  article.append(header, meta, disclosure);
   return article;
+}
+
+function filteredAppeals() {
+  const search = searchInput.value.trim().toLowerCase();
+  if (!search) return loadedAppeals;
+  return loadedAppeals.filter((appeal) => [
+    appeal.player,
+    appeal.username,
+    appeal.caseId,
+    appeal.id,
+    appeal.punishmentId,
+    appeal.punishmentType
+  ].some((value) => String(value ?? "").toLowerCase().includes(search)));
+}
+
+function renderQueue() {
+  const appeals = filteredAppeals();
+  root.replaceChildren(...appeals.map(appealCard));
+  if (searchInput.value.trim()) {
+    queueStatus.textContent = `${appeals.length} of ${loadedAppeals.length} appeal${loadedAppeals.length === 1 ? "" : "s"}`;
+  } else {
+    queueStatus.textContent = appeals.length === 1 ? "1 appeal" : `${appeals.length} appeals`;
+  }
+  if (!appeals.length) root.append(element("div", "card reviewer-empty", "No appeals match this filter."));
 }
 
 async function load() {
@@ -227,6 +350,7 @@ async function load() {
       headers: { accept: "application/json" }
     });
     if (!response.ok) {
+      loadedAppeals = [];
       root.replaceChildren();
       queueStatus.textContent = response.status === 401 || response.status === 403
         ? "Your account is not authorized to review appeals."
@@ -234,11 +358,10 @@ async function load() {
       return;
     }
     const payload = await response.json();
-    const appeals = Array.isArray(payload) ? payload : payload.appeals ?? [];
-    root.replaceChildren(...appeals.map(appealCard));
-    queueStatus.textContent = appeals.length === 1 ? "1 appeal" : `${appeals.length} appeals`;
-    if (!appeals.length) root.append(element("div", "card reviewer-empty", "No appeals match this filter."));
+    loadedAppeals = Array.isArray(payload) ? payload : payload.appeals ?? [];
+    renderQueue();
   } catch {
+    loadedAppeals = [];
     root.replaceChildren();
     queueStatus.textContent = "The appeal service is not responding. Use Refresh to try again.";
   } finally {
@@ -249,4 +372,5 @@ async function load() {
 
 refreshButton.addEventListener("click", load);
 statusFilter.addEventListener("change", load);
+searchInput.addEventListener("input", renderQueue);
 load();
