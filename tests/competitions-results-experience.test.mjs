@@ -94,6 +94,8 @@ test("public preview uses the self-hosted Minecraft font and contains mobile pod
   const competitionStyles = await readFile(new URL("../public/assets/competitions.css", import.meta.url), "utf8");
   const config = await readFile(new URL("../public/assets/site-config.js", import.meta.url), "utf8");
   assert.match(siteStyles, /@font-face\{font-family:"Enthusia Minecraft"/);
+  assert.match(siteStyles, /html body :where\(h1,h2,h3,h4,h5,h6,button/);
+  assert.match(siteStyles, /font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important/);
   assert.match(siteStyles, /html body \.brand-name,html body \.hero h1,html body \.hero h1 span,html body \.hero h1 strong\{font-family:Rye/);
   assert.match(competitionStyles, /grid-template-columns:repeat\(auto-fit,minmax\(104px,1fr\)\)/);
   assert.match(competitionStyles, /\.competition-podium-card h3,\.competition-result-players\{overflow-wrap:anywhere/);

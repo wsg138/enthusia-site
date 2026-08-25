@@ -5060,6 +5060,7 @@ p,li,dd,.muted,.soft{font-synthesis-weight:none}
 @font-face{font-family:"Enthusia Minecraft";src:url("fonts/minecraft-jdgraphics-italic.otf") format("opentype");font-style:italic;font-weight:400;font-display:swap}
 @font-face{font-family:"Enthusia Minecraft";src:url("fonts/minecraft-jdgraphics-bold-italic.otf") format("opentype");font-style:italic;font-weight:700 1000;font-display:swap}
 html body,html body :where(button,input,select,textarea,a,p,span,strong,small,label,li,dt,dd,h1,h2,h3,h4,h5,h6,summary,code){font-family:"Enthusia Minecraft",Inter,system-ui,sans-serif!important}
+html body :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt,.eyebrow,.nav,.nav *,.home-page-links,.home-page-links *,.btn,.join-action,.scroll-cue,.text-button,.competition-detail-tabs,.competition-detail-tabs *,.competition-back-link,.competition-guide-link,.competition-primary-action,.competition-card-link,.competition-result-place,.competition-reward-placement,.gallery-tabs,.gallery-tabs *,.staff-role,.staff-name,.staff-info dd,.status-label,.status-value,.status-note,.status-badge){font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
 html body .brand-name,html body .hero h1,html body .hero h1 span,html body .hero h1 strong{font-family:Rye,Georgia,serif!important}
 @media(max-width:920px){.competition-winner-members,.competition-winner-copy{transform:none}.competition-rank-reward-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.competition-rank-reward-grid{grid-template-columns:1fr}}
