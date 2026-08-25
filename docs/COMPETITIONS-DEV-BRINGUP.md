@@ -159,11 +159,12 @@ Do not directly port-forward the bridge. `cloudflared` should be the only path f
 
 ## 9. Deploy the Access-protected development site
 
-Deploy the exact green `dev/competitions` commit to the primary environment of the dedicated development project. Omit `--branch` so the deployment uses that environment's bindings and encrypted secrets:
+Deploy the exact green `dev/competitions` commit to the primary environment of the dedicated development project. Pass `--branch main` because `main` is this dev project's configured production-branch selector; the supplied commit hash still records the reviewed `dev/competitions` source:
 
 ```bash
 npx wrangler pages deploy dist/client \
   --project-name enthusia-competitions-dev \
+  --branch main \
   --commit-hash <EXACT_GREEN_DEV_SHA> \
   --config cloudflare/competition-preview/wrangler.dev.jsonc
 ```
