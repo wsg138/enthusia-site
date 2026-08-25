@@ -55,3 +55,10 @@ body.skin-vector-2022 .mw-logo::after {
 .enthusia-player-dpl-name {
   overflow-wrap: anywhere;
 }
+
+/* Player names should not become darker merely because a profile was visited. */
+.enthusia-player-dpl-name a,
+.enthusia-player-dpl-name a:visited {
+  color: #a9d884 !important;
+  font-weight: 600;
+}
