@@ -1,0 +1,132 @@
+name: Publish real Minerva mobile sidebar
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-minerva-mobile-sidebar-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enthusia-wiki-minerva-mobile-sidebar
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_MINERVA_MENU_OUT: wiki-minerva-mobile-sidebar-output
+      WIKI_FULL_BACKUP_OUT: wiki-minerva-mobile-sidebar-output/full-backup
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME || secrets.MIRAHEZE_BOT_USERNAME || secrets.WIKI_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD || secrets.MIRAHEZE_BOT_PASSWORD || secrets.WIKI_PASSWORD }}
+
+    steps:
+      - name: Check out proposed source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate Minerva source and sidebar mapping
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wiki-worker/mobile-corrections.js
+          python3 -m py_compile wiki-worker/publish-minerva-mobile-sidebar.py
+          test -s wiki-worker/mobile-native-sidebar.css
+          test -s wiki-worker/public-sidebar.wiki
+          grep -q '#mw-mf-page-left' wiki-worker/mobile-corrections.js
+          grep -q '#main-menu-input' wiki-worker/mobile-corrections.js
+          grep -q 'body.skin-minerva:has(#main-menu-input:checked)' wiki-worker/mobile-native-sidebar.css
+          node <<'NODE'
+          const fs = require('fs');
+          const js = fs.readFileSync('wiki-worker/mobile-corrections.js', 'utf8');
+          const source = fs.readFileSync('wiki-worker/public-sidebar.wiki', 'utf8');
+          const match = js.match(/const SIDEBAR_GROUPS = (\[[\s\S]*?\n  \]);\n\n  const VECTOR_MENU_CONTROL_SELECTOR/);
+          if (!match) throw new Error('Could not extract SIDEBAR_GROUPS');
+          const groups = Function(`"use strict"; return (${match[1]});`)();
+          const parsed = [];
+          let current = null;
+          for (const raw of source.split(/\r?\n/)) {
+            const line = raw.trim();
+            if (!line) continue;
+            if (line.startsWith('* ') && !line.startsWith('** ')) {
+              current = [line.slice(2), []];
+              parsed.push(current);
+              continue;
+            }
+            if (line.startsWith('** ')) {
+              if (!current) throw new Error('Sidebar item before heading');
+              const [targetRaw, labelRaw] = line.slice(3).split('|');
+              const target = targetRaw === 'mainpage' ? 'Main Page' : targetRaw;
+              current[1].push([labelRaw, target]);
+            }
+          }
+          if (JSON.stringify(groups) !== JSON.stringify(parsed)) {
+            console.error('JS groups:', JSON.stringify(groups));
+            console.error('Sidebar:', JSON.stringify(parsed));
+            throw new Error('SIDEBAR_GROUPS no longer matches public-sidebar.wiki');
+          }
+          console.log('SIDEBAR_GROUPS exactly matches public-sidebar.wiki');
+          NODE
+
+      - name: Capture complete live wiki before edit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$WIKI_MINERVA_MENU_OUT"
+          python3 wiki-worker/full_backup.py | tee "$WIKI_MINERVA_MENU_OUT/full-backup.log"
+          test -s "$WIKI_MINERVA_MENU_OUT/full-backup/manifest.json"
+          pages="$(find "$WIKI_MINERVA_MENU_OUT/full-backup/pages" -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find "$WIKI_MINERVA_MENU_OUT/full-backup/history" -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+
+      - name: Upload immutable pre-edit backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-minerva-sidebar-backup-${{ github.run_id }}
+          path: wiki-minerva-mobile-sidebar-output/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Require wiki credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+
+      - name: Publish Minerva mobile sidebar integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/publish-minerva-mobile-sidebar.py | tee "$WIKI_MINERVA_MENU_OUT/publish.log"
+
+      - name: Install browser acceptance harness
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser
+          npm install --no-save --ignore-scripts puppeteer-core@24.16.0
+
+      - name: Acceptance-test the live mobile wiki
+        shell: bash
+        run: |
+          set -euo pipefail
+          node wiki-worker/validate-live-minerva-mobile.mjs | tee "$WIKI_MINERVA_MENU_OUT/live-mobile-acceptance.log"
+
+      - name: Upload publication and live-browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-minerva-sidebar-evidence-${{ github.run_id }}
+          path: wiki-minerva-mobile-sidebar-output/
+          if-no-files-found: warn
+          retention-days: 90
