@@ -1,0 +1,56 @@
+name: Publish global wiki theme
+
+on:
+  pull_request:
+    paths:
+      - 'wiki-global-theme-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_FULL_BACKUP_OUT: wiki-global-theme-output/full-backup
+      WIKI_GLOBAL_THEME_OUT: wiki-global-theme-output
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME || secrets.MIRAHEZE_BOT_USERNAME || secrets.WIKI_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD || secrets.MIRAHEZE_BOT_PASSWORD || secrets.WIKI_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate publisher
+        run: |
+          set -euo pipefail
+          python3 -m py_compile wiki-worker/publish-global-theme.py
+          test -s wiki-worker/player-card-and-brand/common-brand.css
+      - name: Capture complete live wiki before edits
+        run: |
+          set -euo pipefail
+          mkdir -p wiki-global-theme-output
+          python3 wiki-worker/full_backup.py | tee wiki-global-theme-output/full-backup.log
+          test -s wiki-global-theme-output/full-backup/manifest.json
+          pages="$(find wiki-global-theme-output/full-backup/pages -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find wiki-global-theme-output/full-backup/history -type f -name '*.json' | wc -l | tr -d ' ')"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+      - name: Upload immutable pre-edit backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-global-theme-backup-${{ github.run_id }}
+          path: wiki-global-theme-output/
+          retention-days: 90
+      - name: Publish approved global theme
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+          python3 wiki-worker/publish-global-theme.py | tee wiki-global-theme-output/publish.log
+      - name: Upload publication evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-global-theme-evidence-${{ github.run_id }}
+          path: wiki-global-theme-output/
+          if-no-files-found: warn
+          retention-days: 90
