@@ -1,0 +1,83 @@
+name: Publish Minecraft wiki card icons
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-minecraft-icons-trigger.txt'
+      - '.github/workflows/wiki-minecraft-icons.yml'
+      - 'wiki-worker/publish-minecraft-card-icons.py'
+      - 'wiki-worker/minecraft-card-icons.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enthusia-wiki-minecraft-icons
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_MINECRAFT_OUT: wiki-minecraft-output
+      WIKI_FULL_BACKUP_OUT: wiki-minecraft-output/full-backup
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME || secrets.MIRAHEZE_BOT_USERNAME || secrets.WIKI_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD || secrets.MIRAHEZE_BOT_PASSWORD || secrets.WIKI_PASSWORD }}
+
+    steps:
+      - name: Check out proposed source
+        uses: actions/checkout@v4
+
+      - name: Validate publisher and all Minecraft asset URLs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile wiki-worker/publish-minecraft-card-icons.py
+          python3 wiki-worker/publish-minecraft-card-icons.py --validate-only
+          test -s wiki-minecraft-output/icon-source-report.json
+
+      - name: Capture complete live wiki before edits
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/full_backup.py | tee wiki-minecraft-output/full-backup.log
+          test -s wiki-minecraft-output/full-backup/manifest.json
+          pages="$(find wiki-minecraft-output/full-backup/pages -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find wiki-minecraft-output/full-backup/history -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+
+      - name: Upload immutable pre-edit backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-minecraft-icons-backup-${{ github.run_id }}
+          path: wiki-minecraft-output/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Require configured wiki credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+
+      - name: Upload Minecraft icons and retire private staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/publish-minecraft-card-icons.py | tee wiki-minecraft-output/publish-minecraft-icons.log
+
+      - name: Upload publication evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-minecraft-icons-evidence-${{ github.run_id }}
+          path: wiki-minecraft-output/
+          if-no-files-found: warn
+          retention-days: 90
