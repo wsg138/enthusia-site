@@ -88,3 +88,16 @@ test("judge assignment supports username lookup and linked-player selection", as
   assert.match(endpoint, /linkedPlayers/);
   assert.match(workspace, /Select a linked player/);
 });
+
+test("public preview uses the self-hosted Minecraft font and contains mobile podium scores", async () => {
+  const siteStyles = await readFile(new URL("../public/assets/styles.css", import.meta.url), "utf8");
+  const competitionStyles = await readFile(new URL("../public/assets/competitions.css", import.meta.url), "utf8");
+  const config = await readFile(new URL("../public/assets/site-config.js", import.meta.url), "utf8");
+  assert.match(siteStyles, /@font-face\{font-family:"Enthusia Minecraft"/);
+  assert.match(siteStyles, /html body \.brand-name\{font-family:Rye/);
+  assert.match(competitionStyles, /grid-template-columns:repeat\(auto-fit,minmax\(104px,1fr\)\)/);
+  assert.match(competitionStyles, /\.competition-podium-card h3,\.competition-result-players\{overflow-wrap:anywhere/);
+  assert.match(config, /statLabel: "Raw Gold"/);
+  const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
+  assert.match(source, /reward\.rewardType === "MONEY" \? `\$\{Number\(reward\.visual\?\.amount \?\? 0\)\.toLocaleString\(\)\} Raw Gold`/);
+});

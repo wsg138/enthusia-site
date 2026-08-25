@@ -22,7 +22,7 @@ window.ENTHUSIA = {
         id: "balance-active-all",
         label: "Balance",
         title: "Balance",
-        statLabel: "Dollars",
+        statLabel: "Raw Gold",
         summary: "Richest players on the server.",
         limit: 10,
         source: "balance-active-all",

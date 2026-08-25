@@ -595,3 +595,21 @@
 .competition-reward-icon.reward-type-rank.is-player-rank{margin-bottom:32px}.competition-reward-icon.reward-type-rank.is-player-rank img{width:72px;height:72px;object-fit:contain;transform:none}.competition-rank-duration{display:block;width:max-content;margin-top:8px;padding:4px 8px;border:1px solid var(--line);border-radius:999px;color:var(--gold);background:#0b080655;font-family:Inter,system-ui,sans-serif!important;font-size:.78rem;font-weight:800}.competition-reward-icon>.competition-rank-duration.is-on-icon{position:absolute;right:auto;bottom:-32px;left:50%;z-index:2;margin:0;transform:translateX(-50%);white-space:nowrap;text-shadow:none}.competition-rank-detail img{width:62px;height:76px;object-fit:contain;image-rendering:pixelated}.competition-rank-detail+.competition-rank-duration{margin:0 auto 10px}
 .competition-reward-place-groups{display:grid;gap:12px}.competition-reward-place-group{overflow:hidden;border:1px solid var(--line);border-radius:14px;background:rgba(12,10,8,.42)}.competition-reward-place-group>summary{display:flex;align-items:center;gap:18px;padding:18px 20px;color:var(--cream);cursor:pointer;list-style:none}.competition-reward-place-group>summary::-webkit-details-marker{display:none}.competition-reward-place-group>summary::after{content:"+";display:grid;place-items:center;width:28px;height:28px;border:1px solid var(--line);border-radius:7px;color:var(--gold);font-size:1.25rem}.competition-reward-place-group[open]>summary::after{content:"−"}.competition-reward-place-group>summary strong{font-size:1.18rem}.competition-reward-place-group>summary span{margin-left:auto;color:var(--muted);font-family:Inter,system-ui,sans-serif!important;font-size:.85rem}.competition-reward-place-group>.competition-reward-grid{padding:4px 18px 18px;border-top:1px solid var(--line)}.competition-reward-place-group.place-1{border-color:#e9c85a88}.competition-reward-place-group.place-2{border-color:#b8c3ca77}.competition-reward-place-group.place-3{border-color:#b67a4a88}
 @media(max-width:700px){.competition-winner-members{transform:none}.competition-reward-icon.reward-type-lore-item img{width:60px;height:60px}.competition-reward-icon.reward-type-rank img{width:64px;height:64px}}
+
+/* Keep the completed-results layout contained on narrow screens. */
+@media(max-width:700px){
+  .competition-winner-members,.competition-winner-copy{justify-self:center;align-items:center;text-align:center}
+  .competition-winner-copy>.competition-primary-action{width:min(100%,430px);align-self:center}
+  .competition-podium-card,.competition-podium-card[data-placement="1"]{grid-template-columns:72px minmax(0,1fr);grid-template-rows:auto auto;align-items:center;min-height:0;padding:64px 16px 16px;overflow:hidden}
+  .competition-podium-card>.competition-result-place{left:16px;top:18px}
+  .competition-podium-card>.competition-result-skin{grid-column:1;grid-row:1;align-self:center;width:68px;height:128px}
+  .competition-podium-card[data-placement="1"] .competition-result-skin{height:138px}
+  .competition-podium-card>div:not(.competition-score-breakdown){grid-column:2;grid-row:1;align-self:center;min-width:0}
+  .competition-podium-card h3,.competition-result-players{overflow-wrap:anywhere;word-break:normal}
+  .competition-podium-card>.competition-score-breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));grid-column:1/-1;grid-row:2;width:100%;margin-top:14px}
+  .competition-score-breakdown>span{min-width:0}
+  .competition-score-breakdown small{overflow-wrap:anywhere}
+}
+
+.competitions-page,.competitions-page :where(button,input,select,textarea,a,p,span,strong,small,label,li,dt,dd,h1,h2,h3,h4,h5,h6,summary,code){font-family:"Enthusia Minecraft",Inter,system-ui,sans-serif!important}
+.competitions-page .brand-name{font-family:Rye,Georgia,serif!important}

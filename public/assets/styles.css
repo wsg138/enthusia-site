@@ -5053,5 +5053,10 @@ p,li,dd,.muted,.soft{font-synthesis-weight:none}
 .competition-rank-emblem.rank-founder{--rank-light:#ffd36a;--rank-dark:#ff6a00}.competition-rank-emblem.rank-admin{--rank-light:#ff7d9b;--rank-dark:#ff4f67}.competition-rank-emblem.rank-developer{--rank-light:#6fe0ff;--rank-dark:#56e38e}.competition-rank-emblem.rank-moderator{--rank-light:#9cc9ff;--rank-dark:#5b86ff}.competition-rank-emblem.rank-helper{--rank-light:#ffd76a;--rank-dark:#cea130}.competition-rank-emblem.rank-default{--rank-light:#c78cff;--rank-dark:#7654d8}
 .competition-rank-detail{display:flex;align-items:center;justify-content:center;gap:14px;margin:12px auto;padding:12px 16px;border:2px solid #707070;background:#202020;box-shadow:inset 2px 2px #fff4,inset -2px -2px #0008;font-size:1.25rem}
 .competition-rank-reward strong{overflow:hidden;text-overflow:ellipsis;font-family:Inter,system-ui,sans-serif;white-space:nowrap}
+
+/* Public preview: Minecraft by Craftron Gaming, listed as 100% Free on DaFont. */
+@font-face{font-family:"Enthusia Minecraft";src:url("fonts/minecraft.ttf") format("truetype");font-style:normal;font-weight:400;font-display:swap}
+html body,html body :where(button,input,select,textarea,a,p,span,strong,small,label,li,dt,dd,h1,h2,h3,h4,h5,h6,summary,code){font-family:"Enthusia Minecraft",Inter,system-ui,sans-serif!important}
+html body .brand-name{font-family:Rye,Georgia,serif!important}
 @media(max-width:920px){.competition-winner-members,.competition-winner-copy{transform:none}.competition-rank-reward-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.competition-rank-reward-grid{grid-template-columns:1fr}}

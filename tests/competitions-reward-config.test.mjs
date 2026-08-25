@@ -41,7 +41,7 @@ test("reward config accepts supported definitions and sorts by placement", () =>
         includeHelpers: true,
         helperWeight: 0.5,
         publicLabel: "$10,000",
-        publicDescription: "Ten thousand Enthusia dollars split between eligible participants.",
+        publicDescription: "Ten thousand Raw Gold split between eligible participants.",
         payload: { amount: 10000, currency: "balance" }
       }
     ]
