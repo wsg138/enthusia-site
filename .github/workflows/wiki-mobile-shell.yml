@@ -1,0 +1,87 @@
+name: Publish Enthusia mobile wiki shell
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-mobile-shell-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enthusia-wiki-mobile-shell
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_MOBILE_OUT: wiki-mobile-output
+      WIKI_FULL_BACKUP_OUT: wiki-mobile-output/full-backup
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME || secrets.MIRAHEZE_BOT_USERNAME || secrets.WIKI_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD || secrets.MIRAHEZE_BOT_PASSWORD || secrets.WIKI_PASSWORD }}
+
+    steps:
+      - name: Check out proposed source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate mobile sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wiki-worker/public-common.js
+          python3 -m py_compile wiki-worker/publish-mobile-shell.py
+          test -s wiki-worker/mobile-shell.css
+          grep -q 'enthusia-mobile-quickbar' wiki-worker/mobile-shell.css
+          grep -q 'enthusia-site-brand' wiki-worker/public-common.js
+          grep -q 'nativeThemeInput' wiki-worker/public-common.js
+
+      - name: Capture complete live wiki before mobile edits
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p wiki-mobile-output
+          python3 wiki-worker/full_backup.py | tee wiki-mobile-output/full-backup.log
+          test -s wiki-mobile-output/full-backup/manifest.json
+          pages="$(find wiki-mobile-output/full-backup/pages -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find wiki-mobile-output/full-backup/history -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+
+      - name: Upload immutable pre-edit backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-mobile-backup-${{ github.run_id }}
+          path: wiki-mobile-output/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Require configured wiki credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+
+      - name: Publish responsive shell additions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/publish-mobile-shell.py | tee wiki-mobile-output/publish-mobile-shell.log
+
+      - name: Upload mobile publication evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-mobile-evidence-${{ github.run_id }}
+          path: wiki-mobile-output/
+          if-no-files-found: warn
+          retention-days: 90
