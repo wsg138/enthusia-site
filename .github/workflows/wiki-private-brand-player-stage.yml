@@ -27,24 +27,21 @@ jobs:
       - name: Check out private stage source
         uses: actions/checkout@v4
 
-      - name: Validate private CSS and JavaScript
+      - name: Validate CSS-only private stage
         shell: bash
         run: |
           set -euo pipefail
-          test -s wiki-worker/private-stage-brand-and-players.css
-          test -s wiki-worker/private-stage-brand-and-players.js
-          node --check wiki-worker/private-stage-brand-and-players.js
+          test -s wiki-worker/private-stage-brand-and-players-css-only.css
           python3 - <<'PY'
           from pathlib import Path
-          css = Path('wiki-worker/private-stage-brand-and-players.css').read_text(encoding='utf-8')
-          js = Path('wiki-worker/private-stage-brand-and-players.js').read_text(encoding='utf-8')
+          css = Path('wiki-worker/private-stage-brand-and-players-css-only.css').read_text(encoding='utf-8')
           assert css.count('{') == css.count('}'), 'unbalanced CSS braces'
-          assert 'Private staging pass 6' in css and 'Private staging pass 6' in js
+          assert 'Private staging pass 6.1' in css
           assert '#ff4b12' in css and '#ff8a00' in css and '#ffd36a' in css
-          assert 'enthusia-logo-v2.png' in js
-          assert 'Noteable_Players' in js
-          assert 'enthusia-player-image-link' in js
-          print('Private brand/player stage validation passed.')
+          assert 'enthusia-logo-v2.png' in css
+          assert 'page-Noteable_Players' in css
+          assert 'flex-direction:column' in css
+          print('CSS-only brand/player stage validation passed.')
           PY
 
       - name: Capture complete live wiki before private stage
@@ -68,12 +65,10 @@ jobs:
           if-no-files-found: error
           retention-days: 90
 
-      - name: Publish P2wn-only brand/player CSS and JS
+      - name: Publish P2wn-only CSS addition
         shell: bash
         run: |
           set -euo pipefail
-          test -n "$WIKI_BOT_USERNAME"
-          test -n "$WIKI_BOT_PASSWORD"
           python3 - <<'PY'
           import http.cookiejar, json, os, time, urllib.parse, urllib.request
           from pathlib import Path
@@ -81,100 +76,56 @@ jobs:
           API = os.environ['WIKI_API']
           USERNAME = os.environ['WIKI_BOT_USERNAME'].strip()
           PASSWORD = os.environ['WIKI_BOT_PASSWORD']
-          EXPECTED_USER = 'P2wn'
+          TITLE = 'User:P2wn/common.css'
+          BASE = 671
+          MARKER = '/* Private staging pass 6.1: CSS-only real brand + deterministic player-card layout. */'
+          COMMENT = 'Private CSS-only brand/player staging for Enthusia wiki redesign'
+          BLOCK = Path('wiki-worker/private-stage-brand-and-players-css-only.css').read_text(encoding='utf-8').rstrip()
           OUT = Path('wiki-private-brand-player-output')
-          targets = [
-              {
-                  'title':'User:P2wn/common.css',
-                  'path':Path('wiki-worker/private-stage-brand-and-players.css'),
-                  'marker':'/* Private staging pass 6: real Enthusia brand treatment and player-grid normalization. */',
-                  'base':669,
-                  'contentmodels':('css',),
-                  'comment':'Private brand/player staging for Enthusia wiki redesign',
-              },
-              {
-                  'title':'User:P2wn/common.js',
-                  'path':Path('wiki-worker/private-stage-brand-and-players.js'),
-                  'marker':'/* Private staging pass 6: install real Enthusia brand and normalize player cards. */',
-                  'base':670,
-                  'contentmodels':('javascript','text/javascript'),
-                  'comment':'Private brand/player staging for Enthusia wiki redesign',
-              },
-          ]
 
           jar = http.cookiejar.CookieJar()
           opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
-
           def api(params, method='POST'):
-              full = {'format':'json','formatversion':'2','maxlag':'5', **params}
-              headers = {'User-Agent':'EnthusiaWikiPrivateBrandPlayer/1.0','Accept':'application/json'}
+              full={'format':'json','formatversion':'2','maxlag':'5',**params}
+              headers={'User-Agent':'EnthusiaWikiPrivateBrandPlayerCssOnly/1.0','Accept':'application/json'}
               if method == 'GET':
-                  req = urllib.request.Request(API + '?' + urllib.parse.urlencode(full), headers=headers)
+                  req=urllib.request.Request(API+'?'+urllib.parse.urlencode(full),headers=headers)
               else:
-                  headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-                  req = urllib.request.Request(API, data=urllib.parse.urlencode(full).encode(), headers=headers)
-              with opener.open(req, timeout=60) as response:
-                  result = json.loads(response.read().decode())
-              if result.get('error'):
-                  raise RuntimeError(f"MediaWiki API error: {result['error']}")
+                  headers['Content-Type']='application/x-www-form-urlencoded;charset=UTF-8'
+                  req=urllib.request.Request(API,data=urllib.parse.urlencode(full).encode(),headers=headers)
+              with opener.open(req,timeout=60) as response:
+                  result=json.loads(response.read().decode())
+              if result.get('error'): raise RuntimeError(result['error'])
               return result
-
-          token = api({'action':'query','meta':'tokens','type':'login'}, 'GET')['query']['tokens']['logintoken']
-          login = api({'action':'login','lgname':USERNAME,'lgpassword':PASSWORD,'lgtoken':token})
-          if login.get('login',{}).get('result') != 'Success':
-              raise RuntimeError(f'Wiki login failed: {login.get("login")}')
-          csrf = api({'action':'query','meta':'tokens'}, 'GET')['query']['tokens']['csrftoken']
-          who = api({'action':'query','meta':'userinfo'}, 'GET')['query']['userinfo']
-          if who.get('name') != EXPECTED_USER:
-              raise RuntimeError(f'Private stage requires {EXPECTED_USER}; authenticated as {who.get("name")}')
-
-          def read_page(title):
-              result = api({'action':'query','prop':'revisions|info','titles':title,'rvprop':'ids|timestamp|user|comment|content|contentmodel','rvslots':'main','curtimestamp':'1'}, 'GET')
-              page = result['query']['pages'][0]
-              if page.get('missing'):
-                  raise RuntimeError(f'{title} is unexpectedly missing')
-              rev = page['revisions'][0]
-              slot = rev['slots']['main']
-              return {'revid':rev['revid'],'timestamp':rev['timestamp'],'comment':rev.get('comment') or '','content':slot.get('content',''),'contentmodel':slot.get('contentmodel') or rev.get('contentmodel'),'curtimestamp':result.get('curtimestamp')}
-
-          reports=[]
-          for target in targets:
-              before = read_page(target['title'])
-              if before['contentmodel'] not in target['contentmodels']:
-                  raise RuntimeError(f"Unexpected content model for {target['title']}: {before['contentmodel']}")
-              block = target['path'].read_text(encoding='utf-8').rstrip()
-              current = before['content'].rstrip()
-              report={'target':target['title'],'beforeRevid':before['revid']}
-
-              if target['marker'] in current:
-                  if current.count(target['marker']) != 1:
-                      raise RuntimeError(f"Marker appears more than once in {target['title']}")
-                  existing=current[current.index(target['marker']):].rstrip()
-                  if existing != block:
-                      raise RuntimeError(f"Live staged block differs from approved source in {target['title']}")
-                  print(f"PRIVATE BRAND/PLAYER ALREADY CURRENT {target['title']} rev {before['revid']}")
-                  report.update({'result':'already-current','afterRevid':before['revid']})
-              else:
-                  if before['revid'] != target['base']:
-                      raise RuntimeError(f"Expected {target['title']} rev {target['base']}; found {before['revid']}")
-                  desired=current + '\n\n' + block + '\n'
-                  edit=api({'action':'edit','title':target['title'],'text':desired,'token':csrf,'summary':target['comment'],'assert':'user','watchlist':'nochange','basetimestamp':before['timestamp'],'starttimestamp':before['curtimestamp']})
-                  e=edit.get('edit') or {}
-                  if e.get('result') != 'Success':
-                      raise RuntimeError(f"Private stage edit failed for {target['title']}: {e}")
-                  time.sleep(1)
-                  after=read_page(target['title'])
-                  if after['content'].rstrip() != desired.rstrip():
-                      raise RuntimeError(f"Exact readback failed for {target['title']}")
-                  if after['comment'] != target['comment']:
-                      raise RuntimeError(f"Edit-summary readback mismatch for {target['title']}")
-                  print(f"PRIVATE BRAND/PLAYER PUBLISHED {target['title']}: {before['revid']} -> {after['revid']}")
-                  report.update({'result':'published','afterRevid':after['revid']})
-              reports.append(report)
-
-          OUT.mkdir(parents=True, exist_ok=True)
-          (OUT/'private-brand-player-report.json').write_text(json.dumps(reports, indent=2)+'\n',encoding='utf-8')
-          print('PRIVATE BRAND/PLAYER verified by exact API readback')
+          token=api({'action':'query','meta':'tokens','type':'login'},'GET')['query']['tokens']['logintoken']
+          login=api({'action':'login','lgname':USERNAME,'lgpassword':PASSWORD,'lgtoken':token})
+          if login.get('login',{}).get('result')!='Success': raise RuntimeError(login.get('login'))
+          who=api({'action':'query','meta':'userinfo'},'GET')['query']['userinfo']
+          if who.get('name')!='P2wn': raise RuntimeError(f"authenticated as {who.get('name')}")
+          csrf=api({'action':'query','meta':'tokens'},'GET')['query']['tokens']['csrftoken']
+          def read_page():
+              result=api({'action':'query','prop':'revisions|info','titles':TITLE,'rvprop':'ids|timestamp|user|comment|content|contentmodel','rvslots':'main','curtimestamp':'1'},'GET')
+              rev=result['query']['pages'][0]['revisions'][0]; slot=rev['slots']['main']
+              return {'revid':rev['revid'],'timestamp':rev['timestamp'],'comment':rev.get('comment') or '','content':slot.get('content',''),'curtimestamp':result.get('curtimestamp')}
+          before=read_page(); current=before['content'].rstrip()
+          if MARKER in current:
+              existing=current[current.index(MARKER):].rstrip()
+              if existing != BLOCK: raise RuntimeError('live pass 6.1 block differs from approved source')
+              print(f'PRIVATE CSS BRAND/PLAYER ALREADY CURRENT {TITLE} rev {before["revid"]}')
+              report={'target':TITLE,'result':'already-current','beforeRevid':before['revid'],'afterRevid':before['revid']}
+          else:
+              if before['revid'] != BASE: raise RuntimeError(f'Expected {TITLE} rev {BASE}; found {before["revid"]}')
+              desired=current+'\n\n'+BLOCK+'\n'
+              edit=api({'action':'edit','title':TITLE,'text':desired,'token':csrf,'summary':COMMENT,'assert':'user','watchlist':'nochange','basetimestamp':before['timestamp'],'starttimestamp':before['curtimestamp']})
+              e=edit.get('edit') or {}
+              if e.get('result')!='Success': raise RuntimeError(f'edit failed: {e}')
+              time.sleep(1); after=read_page()
+              if after['content'].rstrip()!=desired.rstrip(): raise RuntimeError('exact readback failed')
+              if after['comment']!=COMMENT: raise RuntimeError('edit-summary readback mismatch')
+              print(f'PRIVATE CSS BRAND/PLAYER PUBLISHED {TITLE}: {before["revid"]} -> {after["revid"]}')
+              report={'target':TITLE,'result':'published','beforeRevid':before['revid'],'afterRevid':after['revid']}
+          OUT.mkdir(parents=True,exist_ok=True)
+          (OUT/'private-brand-player-report.json').write_text(json.dumps([report],indent=2)+'\n',encoding='utf-8')
           PY
 
       - name: Upload private stage evidence
