@@ -1,0 +1,1 @@
+Publish the validated Main Page icon refresh after the new matching icon assets were uploaded successfully.
