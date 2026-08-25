@@ -134,16 +134,14 @@
   }
 
   /* Minerva's shade used to sit below our z-index:120 quickbar. Use Minerva's
-     checkbox itself as the authoritative menu-open state so no JS-synchronized
-     helper class can get out of step with the skin. */
-  .enthusia-mobile-quickbar {
-    transition: opacity .1s ease, transform .1s ease;
-  }
-
+     checkbox itself as the authoritative menu-open state. Hide the quickbar
+     immediately—without a fade—so it never appears highlighted through the mask. */
   body.skin-minerva:has(#main-menu-input:checked) .enthusia-mobile-quickbar {
     opacity: 0 !important;
+    visibility: hidden !important;
     pointer-events: none !important;
     transform: translate(-50%, 8px) !important;
+    transition: none !important;
   }
 
   html[data-enthusia-color-scheme="light"] body.skin-minerva #mw-mf-page-left.enthusia-minerva-sidebar {
