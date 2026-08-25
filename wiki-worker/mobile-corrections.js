@@ -7,6 +7,7 @@
 
   const root = document.documentElement;
   const THEME_KEY = 'enthusia-mobile-theme';
+  const LOGO_URL = '/wiki/Special:Redirect/file/Enthusia-logo-v2.png';
   const mobileMedia = window.matchMedia ? window.matchMedia('(max-width: 800px)') : null;
 
   const NAV_GROUPS = [
@@ -107,6 +108,17 @@
     return '/wiki/' + String(title).replace(/ /g, '_');
   }
 
+  function repairMobileBrand() {
+    if (mobileMedia && !mobileMedia.matches) return;
+    document.querySelectorAll('.enthusia-site-brand img, .enthusia-mobile-drawer-brand img').forEach(function (image) {
+      const current = image.getAttribute('src') || '';
+      if (current !== LOGO_URL) image.setAttribute('src', LOGO_URL);
+      image.removeAttribute('hidden');
+      image.style.display = 'block';
+      image.style.opacity = '1';
+    });
+  }
+
   function makeNativeMenuSections() {
     const wrap = document.createElement('div');
     wrap.className = 'enthusia-native-menu-sections';
@@ -145,6 +157,7 @@
 
   function start() {
     restoreStoredTheme();
+    repairMobileBrand();
     enrichNativeHamburger();
 
     /* Vector can update its client-preference classes after Common.js starts.
@@ -152,21 +165,27 @@
     const observer = new MutationObserver(function () {
       window.setTimeout(function () {
         restoreStoredTheme();
+        repairMobileBrand();
         enrichNativeHamburger();
       }, 0);
     });
     observer.observe(root, { attributes: true, attributeFilter: ['class'] });
     if (document.body) observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-    const domObserver = new MutationObserver(function () { enrichNativeHamburger(); });
+    const domObserver = new MutationObserver(function () {
+      repairMobileBrand();
+      enrichNativeHamburger();
+    });
     if (document.body) domObserver.observe(document.body, { childList: true, subtree: true });
 
     if (mobileMedia) {
-      if (typeof mobileMedia.addEventListener === 'function') {
-        mobileMedia.addEventListener('change', function () { enrichNativeHamburger(); });
-      } else if (typeof mobileMedia.addListener === 'function') {
-        mobileMedia.addListener(function () { enrichNativeHamburger(); });
-      }
+      const onMobileChange = function () {
+        restoreStoredTheme();
+        repairMobileBrand();
+        enrichNativeHamburger();
+      };
+      if (typeof mobileMedia.addEventListener === 'function') mobileMedia.addEventListener('change', onMobileChange);
+      else if (typeof mobileMedia.addListener === 'function') mobileMedia.addListener(onMobileChange);
     }
   }
 
