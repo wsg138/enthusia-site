@@ -1,0 +1,20 @@
+{
+  "sourceRepository": "PrismarineJS/minecraft-assets",
+  "sourceVersion": "1.21.8",
+  "sourceBase": "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.21.8/items/",
+  "note": "Extracted vanilla Minecraft item/block icons used only as wiki navigation artwork. Enthusia-specific wiki filenames avoid colliding with existing community files.",
+  "icons": [
+    {"label":"Staff","wikiFile":"EnthusiaIconStaff.png","sourceFile":"nether_star.png"},
+    {"label":"Guilds","wikiFile":"EnthusiaIconGuilds.png","sourceFile":"white_banner.png"},
+    {"label":"Players","wikiFile":"EnthusiaIconPlayers.png","sourceFile":"player_head.png"},
+    {"label":"Betas","wikiFile":"EnthusiaIconBetas.png","sourceFile":"potion.png"},
+    {"label":"Builds","wikiFile":"EnthusiaIconBuilds.png","sourceFile":"bricks.png"},
+    {"label":"Mapart","wikiFile":"EnthusiaIconMapart.png","sourceFile":"filled_map.png"},
+    {"label":"Events","wikiFile":"EnthusiaIconEvents.png","sourceFile":"firework_rocket.png"},
+    {"label":"Mechanics","wikiFile":"EnthusiaIconMechanics.png","sourceFile":"repeater.png"},
+    {"label":"Commands","wikiFile":"EnthusiaIconCommands.png","sourceFile":"command_block.png"},
+    {"label":"Market","wikiFile":"EnthusiaIconMarket.png","sourceFile":"emerald.png"},
+    {"label":"Warzone","wikiFile":"EnthusiaIconWarzone.png","sourceFile":"diamond_sword.png"},
+    {"label":"History & Lore","wikiFile":"EnthusiaIconHistory.png","sourceFile":"written_book.png"}
+  ]
+}
