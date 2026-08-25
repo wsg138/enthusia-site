@@ -56,6 +56,7 @@ async function state(label) {
     const toggle = document.querySelector('#main-menu-input');
     const menu = document.querySelector('#mw-mf-page-left');
     const quickbar = document.querySelector('.enthusia-mobile-quickbar');
+    const nav = document.querySelector('#mw-mf-page-left .enthusia-minerva-nav');
     const ms = menu ? getComputedStyle(menu) : null;
     const qs = quickbar ? getComputedStyle(quickbar) : null;
     const rect = menu ? menu.getBoundingClientRect() : null;
@@ -71,9 +72,9 @@ async function state(label) {
       customShade: Boolean(document.querySelector('.enthusia-mobile-shade')),
       minervaSidebarClass: Boolean(document.querySelector('#mw-mf-page-left.enthusia-minerva-sidebar')),
       brand: Boolean(document.querySelector('#mw-mf-page-left .enthusia-native-sidebar-brand')),
-      nav: Boolean(document.querySelector('#mw-mf-page-left .enthusia-minerva-nav')),
-      navText: document.querySelector('#mw-mf-page-left .enthusia-minerva-nav')?.innerText || '',
-      wholeMenuText: menu?.innerText || ''
+      nav: Boolean(nav),
+      navText: nav?.textContent || '',
+      wholeMenuText: menu?.textContent || ''
     };
   }, label);
 }
