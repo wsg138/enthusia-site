@@ -1,0 +1,88 @@
+name: Publish Enthusia public wiki shell
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-public-shell-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enthusia-wiki-public-shell
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_PUBLIC_SHELL_OUT: wiki-public-shell-output
+      WIKI_FULL_BACKUP_OUT: wiki-public-shell-output/full-backup
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME || secrets.MIRAHEZE_BOT_USERNAME || secrets.WIKI_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD || secrets.MIRAHEZE_BOT_PASSWORD || secrets.WIKI_PASSWORD }}
+
+    steps:
+      - name: Check out proposed source
+        uses: actions/checkout@v4
+
+      - name: Validate public shell sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile wiki-worker/publish-public-shell.py
+          node --check wiki-worker/public-common.js
+          test -s wiki-worker/public-sidebar.wiki
+          grep -q '^\* Main Menu' wiki-worker/public-sidebar.wiki
+          grep -q '^\* Community' wiki-worker/public-sidebar.wiki
+          grep -q '^\* Gameplay' wiki-worker/public-sidebar.wiki
+          grep -q '^\* Economy' wiki-worker/public-sidebar.wiki
+          ! grep -q 'stageExploreIcons' wiki-worker/public-common.js
+          ! grep -q 'simplifyVectorLayout' wiki-worker/public-common.js
+
+      - name: Capture complete live wiki before shell edits
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p wiki-public-shell-output
+          python3 wiki-worker/full_backup.py | tee wiki-public-shell-output/full-backup.log
+          test -s wiki-public-shell-output/full-backup/manifest.json
+          pages="$(find wiki-public-shell-output/full-backup/pages -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find wiki-public-shell-output/full-backup/history -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+
+      - name: Upload immutable pre-edit backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-public-shell-backup-${{ github.run_id }}
+          path: wiki-public-shell-output/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Require configured wiki credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+
+      - name: Publish sidebar and clean public behavior
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/publish-public-shell.py | tee wiki-public-shell-output/publish-public-shell.log
+
+      - name: Upload shell publication evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-public-shell-evidence-${{ github.run_id }}
+          path: wiki-public-shell-output/
+          if-no-files-found: warn
+          retention-days: 90
