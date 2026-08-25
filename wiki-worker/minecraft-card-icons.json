@@ -1,19 +1,19 @@
 {
   "sourceRepository": "Minecraft Wiki inventory/block art",
   "sourceVersion": "current",
-  "note": "Minecraft artwork used only as wiki navigation icons. Enthusia-specific wiki filenames avoid colliding with existing community files.",
+  "note": "Minecraft artwork used only as wiki navigation icons. Source URLs use MediaWiki Special:Redirect/file so renamed/hash-path storage does not break publication. Enthusia-specific wiki filenames avoid colliding with existing community files.",
   "icons": [
-    {"label":"Staff","wikiFile":"EnthusiaIconStaff.png","sourceUrl":"https://minecraft.wiki/images/ItemSprite_nether-star.png"},
-    {"label":"Guilds","wikiFile":"EnthusiaIconGuilds.png","sourceUrl":"https://minecraft.wiki/images/White_Banner.png"},
-    {"label":"Players","wikiFile":"EnthusiaIconPlayers.png","sourceUrl":"https://minecraft.wiki/images/Player_Head_%288%29_JE5.png"},
-    {"label":"Betas","wikiFile":"EnthusiaIconBetas.png","sourceUrl":"https://minecraft.wiki/images/ItemSprite_water-bottle.png"},
-    {"label":"Builds","wikiFile":"EnthusiaIconBuilds.png","sourceUrl":"https://minecraft.wiki/images/Bricks_JE5_BE3.png"},
-    {"label":"Mapart","wikiFile":"EnthusiaIconMapart.png","sourceUrl":"https://minecraft.wiki/images/ItemSprite_map.png"},
-    {"label":"Events","wikiFile":"EnthusiaIconEvents.png","sourceUrl":"https://minecraft.wiki/images/ItemSprite_firework-rocket.png"},
-    {"label":"Mechanics","wikiFile":"EnthusiaIconMechanics.png","sourceUrl":"https://minecraft.wiki/images/Redstone_Repeater_%28S%29_JE5_BE2.png"},
-    {"label":"Commands","wikiFile":"EnthusiaIconCommands.png","sourceUrl":"https://minecraft.wiki/images/Impulse_Command_Block_JE5_BE2.png"},
-    {"label":"Market","wikiFile":"EnthusiaIconMarket.png","sourceUrl":"https://minecraft.wiki/images/ItemSprite_emerald.png"},
-    {"label":"Warzone","wikiFile":"EnthusiaIconWarzone.png","sourceUrl":"https://minecraft.wiki/images/ItemSprite_diamond-sword.png"},
-    {"label":"History & Lore","wikiFile":"EnthusiaIconHistory.png","sourceUrl":"https://minecraft.wiki/images/ItemSprite_written-book.png"}
+    {"label":"Staff","wikiFile":"EnthusiaIconStaff.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/ItemSprite_nether-star.png"},
+    {"label":"Guilds","wikiFile":"EnthusiaIconGuilds.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/White_Banner.png"},
+    {"label":"Players","wikiFile":"EnthusiaIconPlayers.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/Player_Head_%288%29_JE5.png"},
+    {"label":"Betas","wikiFile":"EnthusiaIconBetas.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/ItemSprite_water-bottle.png"},
+    {"label":"Builds","wikiFile":"EnthusiaIconBuilds.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/Bricks_JE5_BE3.png"},
+    {"label":"Mapart","wikiFile":"EnthusiaIconMapart.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/ItemSprite_map.png"},
+    {"label":"Events","wikiFile":"EnthusiaIconEvents.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/ItemSprite_firework-rocket.png"},
+    {"label":"Mechanics","wikiFile":"EnthusiaIconMechanics.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/Redstone_Repeater_%28S%29_JE5_BE2.png"},
+    {"label":"Commands","wikiFile":"EnthusiaIconCommands.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/Impulse_Command_Block_JE5_BE2.png"},
+    {"label":"Market","wikiFile":"EnthusiaIconMarket.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/ItemSprite_emerald.png"},
+    {"label":"Warzone","wikiFile":"EnthusiaIconWarzone.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/ItemSprite_diamond-sword.png"},
+    {"label":"History & Lore","wikiFile":"EnthusiaIconHistory.png","sourceUrl":"https://minecraft.wiki/w/Special:Redirect/file/ItemSprite_written-book.png"}
   ]
 }
