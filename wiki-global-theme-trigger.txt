@@ -1,1 +1,1 @@
-Verify MediaWiki:Common.css and MediaWiki:Common.js are already current after the global rollout.
+Final idempotency check: verify Common.css rev 699 and Common.js rev 701 remain unchanged.
