@@ -1,0 +1,61 @@
+name: Publish final wiki branding
+
+on:
+  pull_request:
+    paths:
+      - 'wiki-final-brand-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_FULL_BACKUP_OUT: wiki-final-brand-output/full-backup
+      WIKI_FINAL_BRAND_OUT: wiki-final-brand-output
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME || secrets.MIRAHEZE_BOT_USERNAME || secrets.WIKI_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD || secrets.MIRAHEZE_BOT_PASSWORD || secrets.WIKI_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate sources
+        run: |
+          set -euo pipefail
+          python3 -m py_compile wiki-worker/publish-final-brand.py
+          test -s wiki-worker/player-card-and-brand/common-brand.css
+          grep -q 'Enthusia-logo-v2.png' wiki-worker/player-card-and-brand/common-brand.css
+          grep -q '#b6dd92' wiki-worker/card-icons/Commands.svg
+          grep -q '#b6dd92' wiki-worker/card-icons/Market.svg
+          grep -q '#b6dd92' wiki-worker/card-icons/Warzone.svg
+          grep -q '#b6dd92' wiki-worker/card-icons/HistoryLore.svg
+      - name: Capture complete live wiki before edits
+        run: |
+          set -euo pipefail
+          mkdir -p wiki-final-brand-output
+          python3 wiki-worker/full_backup.py | tee wiki-final-brand-output/full-backup.log
+          test -s wiki-final-brand-output/full-backup/manifest.json
+          pages="$(find wiki-final-brand-output/full-backup/pages -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find wiki-final-brand-output/full-backup/history -type f -name '*.json' | wc -l | tr -d ' ')"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+      - name: Upload immutable pre-edit backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-final-brand-backup-${{ github.run_id }}
+          path: wiki-final-brand-output/
+          retention-days: 90
+      - name: Publish approved branding and icon palette
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+          python3 wiki-worker/publish-final-brand.py | tee wiki-final-brand-output/publish.log
+      - name: Upload publication evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-final-brand-evidence-${{ github.run_id }}
+          path: wiki-final-brand-output/
+          if-no-files-found: warn
+          retention-days: 90
