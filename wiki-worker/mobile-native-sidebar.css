@@ -1,10 +1,10 @@
-/* Mobile-only styling for MediaWiki/Vector's native main-menu sidebar.
- * The native hamburger owns opening/closing, focus, animation and backdrop.
+/* Mobile-only styling for MediaWiki's native main-menu sidebar.
+ * Minerva is Miraheze's default mobile skin; Vector remains a fallback.
+ * The skin keeps ownership of opening/closing, focus, animation and backdrop.
  */
 
 @media (max-width: 800px) {
-  /* The old Enthusia drawer is no longer part of the mobile navigation path.
-     Keep it suppressed even if a cached older Common.js briefly creates it. */
+  /* The old Enthusia drawer is no longer part of the mobile navigation path. */
   .enthusia-mobile-drawer,
   .enthusia-mobile-shade {
     display: none !important;
@@ -14,6 +14,143 @@
   html.enthusia-mobile-menu-open body {
     overflow: auto !important;
   }
+
+  /* ---------- Real mobile path: Minerva / MobileFrontend ---------- */
+
+  body.skin-minerva #mw-mf-page-left.enthusia-minerva-sidebar {
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 8px calc(18px + env(safe-area-inset-bottom, 0px)) !important;
+    background: var(--enth-bg-elev, #11161a) !important;
+    color: var(--enth-text, #e8ecf0) !important;
+    border-right: 1px solid var(--enth-line, #343d46);
+    box-shadow: 10px 0 30px rgba(0,0,0,.34);
+    transition: transform .18s ease-out, visibility .18s ease-out !important;
+  }
+
+  body.skin-minerva .main-menu-mask {
+    transition: opacity .15s ease-out, visibility .15s ease-out !important;
+  }
+
+  .enthusia-native-sidebar-brand {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin: 0 4px 10px;
+    padding: 3px 5px 12px;
+    border-bottom: 1px solid var(--enth-line-soft, #293139);
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  .enthusia-native-sidebar-brand img {
+    display: block;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 auto;
+    object-fit: contain;
+  }
+
+  .enthusia-minerva-nav {
+    display: block;
+    margin: 0 0 10px;
+    padding: 0 0 8px;
+    border-bottom: 1px solid var(--enth-line-soft, #293139);
+  }
+
+  .enthusia-minerva-nav-section {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  .enthusia-minerva-nav-section > h3 {
+    margin: 15px 8px 5px !important;
+    padding: 0 !important;
+    color: var(--enth-muted, #a7b0b8) !important;
+    font-size: .7rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .1em;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
+
+  .enthusia-minerva-nav-list {
+    display: block;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  .enthusia-minerva-nav-list > li {
+    display: block;
+    margin: 1px 0 !important;
+    padding: 0 !important;
+  }
+
+  .enthusia-minerva-nav-list > li > a {
+    display: flex !important;
+    align-items: center;
+    min-height: 40px;
+    box-sizing: border-box;
+    padding: 9px 10px !important;
+    border-radius: 9px;
+    color: var(--enth-text, #e8ecf0) !important;
+    font-size: .92rem !important;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none !important;
+  }
+
+  .enthusia-minerva-nav-list > li > a:active,
+  .enthusia-minerva-nav-list > li > a:focus-visible {
+    background: var(--enth-panel-3, #242b31) !important;
+    color: var(--enth-accent, #9acb70) !important;
+    outline: none;
+  }
+
+  /* Keep Minerva's native Home/Random/account/settings links as a quieter
+     utility section beneath the server navigation. */
+  body.skin-minerva #mw-mf-page-left > .toggle-list__list,
+  body.skin-minerva #mw-mf-page-left > .hlist {
+    margin: 0 !important;
+    padding: 2px 4px !important;
+  }
+
+  body.skin-minerva #mw-mf-page-left > .toggle-list__list .toggle-list-item__anchor,
+  body.skin-minerva #mw-mf-page-left > .hlist .toggle-list-item__anchor {
+    min-height: 38px;
+    border-radius: 9px;
+    color: var(--enth-muted, #a7b0b8) !important;
+  }
+
+  body.skin-minerva #mw-mf-page-left > .toggle-list__list .toggle-list-item__anchor:active,
+  body.skin-minerva #mw-mf-page-left > .toggle-list__list .toggle-list-item__anchor:focus-visible,
+  body.skin-minerva #mw-mf-page-left > .hlist .toggle-list-item__anchor:active,
+  body.skin-minerva #mw-mf-page-left > .hlist .toggle-list-item__anchor:focus-visible {
+    background: var(--enth-panel-3, #242b31) !important;
+  }
+
+  /* Minerva's native shade used to sit below our z-index:120 quickbar, making
+     the bottom controls look highlighted while the menu was opening. Hide the
+     quickbar while the checkbox is open so the sidebar is the sole foreground. */
+  .enthusia-mobile-quickbar {
+    transition: opacity .1s ease, transform .1s ease;
+  }
+
+  html.enthusia-minerva-menu-open .enthusia-mobile-quickbar {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translate(-50%, 8px) !important;
+  }
+
+  html[data-enthusia-color-scheme="light"] body.skin-minerva #mw-mf-page-left.enthusia-minerva-sidebar {
+    box-shadow: 10px 0 30px rgba(38,54,40,.14);
+  }
+
+  /* ---------- Vector fallback / explicitly forced Vector mobile ---------- */
 
   #vector-main-menu-dropdown .vector-dropdown-content,
   .vector-main-menu-dropdown .vector-dropdown-content,
@@ -29,29 +166,6 @@
   #vector-main-menu-dropdown .vector-menu-content,
   .vector-main-menu-dropdown .vector-menu-content {
     box-sizing: border-box;
-  }
-
-  .enthusia-native-sidebar {
-    padding-top: calc(10px + env(safe-area-inset-top, 0px)) !important;
-  }
-
-  .enthusia-native-sidebar-brand {
-    display: flex !important;
-    align-items: center;
-    gap: 8px;
-    margin: 0 10px 10px;
-    padding: 3px 2px 12px;
-    border-bottom: 1px solid var(--enth-line-soft, #293139);
-    color: inherit !important;
-    text-decoration: none !important;
-  }
-
-  .enthusia-native-sidebar-brand img {
-    display: block;
-    width: 30px;
-    height: 30px;
-    flex: 0 0 auto;
-    object-fit: contain;
   }
 
   #vector-main-menu-dropdown .vector-menu-heading,
