@@ -99,6 +99,7 @@ test("public preview uses the self-hosted Minecraft font and contains mobile pod
   assert.match(siteStyles, /html body \.brand-name,html body \.hero h1,html body \.hero h1 span,html body \.hero h1 strong\{font-family:Rye/);
   assert.match(competitionStyles, /grid-template-columns:repeat\(auto-fit,minmax\(104px,1fr\)\)/);
   assert.match(competitionStyles, /\.competition-podium-card h3,\.competition-result-players\{overflow-wrap:anywhere/);
+  assert.match(competitionStyles, /\.competitions-page :where\(h1,h2,h3,h4,h5,h6,button/);
   assert.match(config, /statLabel: "Raw Gold"/);
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
   assert.match(source, /reward\.rewardType === "MONEY" \? `\$\{Number\(reward\.visual\?\.amount \?\? 0\)\.toLocaleString\(\)\} Raw Gold`/);

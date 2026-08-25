@@ -612,4 +612,5 @@
 }
 
 .competitions-page,.competitions-page :where(button,input,select,textarea,a,p,span,strong,small,label,li,dt,dd,h1,h2,h3,h4,h5,h6,summary,code){font-family:"Enthusia Minecraft",Inter,system-ui,sans-serif!important}
+.competitions-page :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt,.eyebrow,.nav,.nav *,.competition-card-context,.competitions-kicker,.competition-stage-label,.competition-result-place,.competition-winner-team-label,.staff-edited-label,.competition-detail-tabs,.competition-back-link,.competition-guide-link,.competition-primary-action,.competition-card-link,.competition-reward-placement,.competition-countdown strong,.competition-score-breakdown small,.competition-score-breakdown strong){font-family:Inter,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif!important}
 .competitions-page .brand-name{font-family:Rye,Georgia,serif!important}
