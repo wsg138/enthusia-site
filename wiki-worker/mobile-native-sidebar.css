@@ -133,14 +133,14 @@
     background: var(--enth-panel-3, #242b31) !important;
   }
 
-  /* Minerva's native shade used to sit below our z-index:120 quickbar, making
-     the bottom controls look highlighted while the menu was opening. Hide the
-     quickbar while the checkbox is open so the sidebar is the sole foreground. */
+  /* Minerva's shade used to sit below our z-index:120 quickbar. Use Minerva's
+     checkbox itself as the authoritative menu-open state so no JS-synchronized
+     helper class can get out of step with the skin. */
   .enthusia-mobile-quickbar {
     transition: opacity .1s ease, transform .1s ease;
   }
 
-  html.enthusia-minerva-menu-open .enthusia-mobile-quickbar {
+  body.skin-minerva:has(#main-menu-input:checked) .enthusia-mobile-quickbar {
     opacity: 0 !important;
     pointer-events: none !important;
     transform: translate(-50%, 8px) !important;
