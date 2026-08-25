@@ -1,1 +1,0 @@
-Final idempotency check: verify Common.css rev 699 and Common.js rev 701 remain unchanged.
