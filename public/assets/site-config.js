@@ -207,13 +207,22 @@ window.ENTHUSIA = {
       { name: "Sharpmatt", username: "Sharpmatt", role: "Founder" },
       { name: "Borlyn", username: "Borlyn", role: "Admin" },
       { name: "SarahNova", username: "SarahNovaSpring", role: "Admin" },
+      { name: "Toxik", username: "ToxikFlame11", role: "Admin" },
       { name: "Badger", username: "BadgersMC", role: "Developer" },
       { name: "Demimeow", username: "Demimeow", role: "Developer" },
       { name: "Orbitz", username: "OrbitzX", role: "Developer" },
       { name: "BoggersTheFish", username: "BoggersTheFish", role: "Developer" },
-      { name: "Toxic", username: "ToxikFlame11", role: "Mod" },
       { name: "Bob", username: "SirBobertt", role: "Mod" },
-      { name: "Rafffff", username: "Rafffff3282", role: "Mod" }
+      { name: "Rafffff", username: "Rafffff3282", role: "Mod" },
+      { name: "RealReloadCoded", username: "RealReloadCoded", role: "Helper" },
+      {
+        name: "aquariom",
+        username: "aquariom",
+        avatarUsername: "7ccc3217-21bb-4e61-a055-e756e29e2cc3",
+        role: "Helper"
+      },
+      { name: "SonOfBlood", username: "SonOfBlood", role: "Helper" },
+      { name: "Kostpits13_", username: "Kostpits13_", role: "Helper" }
     ],
     faq: [
       {

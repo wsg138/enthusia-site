@@ -744,18 +744,23 @@ function getRoleClassName(role) {
     return "role-mod";
   }
 
+  if (normalizedRole === "helper") {
+    return "role-helper";
+  }
+
   return "role-default";
 }
 
 function getStaffIdentity(member) {
   const username = normalizeText(member?.username);
+  const avatarUsername = normalizeText(member?.avatarUsername) || username;
   const displayName = normalizeText(member?.name) || username || "Staff";
   const role = normalizeText(member?.role) || "Staff";
-  return { username, displayName, role };
+  return { username, avatarUsername, displayName, role };
 }
 
 function createStaffVisual(identity, hidden) {
-  const { username, displayName } = identity;
+  const { username, avatarUsername, displayName } = identity;
   const profileUrl = username ? `https://laby.net/@${encodeURIComponent(username)}` : "";
 
   const visual = document.createElement(profileUrl ? "a" : "div");
@@ -769,7 +774,7 @@ function createStaffVisual(identity, hidden) {
 
   const avatar = document.createElement("img");
   avatar.className = "staff-avatar";
-  avatar.src = `https://minotar.net/helm/${encodeURIComponent(username || displayName)}/96`;
+  avatar.src = `https://minotar.net/helm/${encodeURIComponent(avatarUsername || displayName)}/96`;
   avatar.alt = hidden ? "" : `${displayName} Minecraft head`;
   avatar.width = 78;
   avatar.height = 78;
