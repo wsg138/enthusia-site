@@ -72,7 +72,7 @@ ${table([
 ],'Type|How it works')}
 
 <h2>Managing all of your shops</h2>
-<div class="callout"><b>The old ItemShops-style management workflow still exists in EnthusiaMarket.</b> <code>/shop edit</code> opens a GUI containing the shops you own, and there are bulk trust/delete tools.</div>
+<div class="callout"><b>The ItemShops-style management workflow is implemented by the current EnthusiaMarket plugin.</b> <code>/shop edit</code> opens a GUI containing the shops you own, and there are bulk trust/delete tools.</div>
 ${table([
 ['<code>/shop list</code>','List every shop you own with its location/item/price.'],
 ['<code>/shop edit</code>','Open the owned-shops GUI. Select a shop to edit its amount, price, search visibility or frozen state.'],
@@ -99,7 +99,7 @@ ${list([
 <p>Use <code>/em stall info &lt;stallId&gt;</code> or the stall purchase sign to check the current rent state. [https://badgersmc.github.io/EnthusiaMarket/players/rent/ Full rent guide]</p>
 
 <h2>Selling or transferring a stall</h2>
-<p>There is no need to hand staff the region manually. Use the Market ownership flows so shops, payments and ownership stay consistent.</p>
+<p>Use the Market ownership flows so shops, payments and ownership stay consistent.</p>
 ${table([
 ['<code>/em stall offer &lt;stallId&gt; &lt;price&gt;</code>','List the stall for a fixed-price sale.'],
 ['<code>/em stall offer cancel &lt;stallId&gt;</code>','Cancel your sale offer.'],
@@ -214,13 +214,18 @@ ${details('Guild command reference','established player-facing commands',table([
 ['<code>/g neutral &lt;guild&gt;</code>','Return a relation to neutral.']
 ]))}
 
-<div class="small-note"><strong>Update-spoiler boundary:</strong> this page intentionally documents the established production guild feature set only. New dashboard themes, new statistics interfaces, weekly quests and other current LumaGuilds development work are not described here.</div>
+<p class="small-note">This page is intentionally limited to established production-facing guild behavior.</p>
 `};
 
 if(P.commands&&typeof P.commands.body==='string'){
-  P.commands.body=P.commands.body.replace(
-    "['<code>/shop search &lt;item&gt;</code>','Search Market shops for an item. Alias: <code>/shopsearch</code>.'],",
-    "['<code>/shop list</code> / <code>edit</code>','List your Market shops or open the owned-shops editing GUI.'],\n['<code>/shop trust &lt;player&gt; [all]</code> / <code>untrust</code>','Share or remove management access across your shops.'],\n['<code>/shop delete [all]</code> / <code>breakdelete</code>','Delete selected/all owned shops or use temporary break-delete mode.'],\n['<code>/shop search &lt;item&gt;</code>','Search Market shops for an item. Alias: <code>/shopsearch</code>.'],"
-  );
+  P.commands.body += details('Market shop management','owned shops, sharing and bulk tools',table([
+    ['<code>/shop list</code>','List the Market shops you own.'],
+    ['<code>/shop edit</code>','Open the owned-shops editing GUI.'],
+    ['<code>/shop trust &lt;player&gt; [all]</code>','Choose shops to share or trust that player on all owned shops.'],
+    ['<code>/shop untrust &lt;player&gt; [all]</code>','Remove that player from your shops.'],
+    ['<code>/shop delete [all]</code>','Choose owned shops to delete or bulk-delete where permitted.'],
+    ['<code>/shop breakdelete [duration|off]</code>','Use temporary break-delete mode.'],
+    ['<code>/shop history [page]</code>','View recent shop transactions.']
+  ]));
 }
 })();
