@@ -1,0 +1,19 @@
+* Community
+** Noteable Players|Players
+** Noteable Guilds|Guilds
+** Staff|Staff
+** History & Lore|History & Lore
+** Builds|Builds
+** Maparts|Mapart
+* Gameplay
+** Commands|Commands
+** Mechanics|Mechanics
+** Events|Events
+** Warzone|Warzone
+** Death Duels|Death Duels
+** Reputation|Reputation
+** Playtime|Playtime
+* Economy
+** Market|Market
+** Raw Gold|Raw Gold
+** Voting|Voting
