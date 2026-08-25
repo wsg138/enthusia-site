@@ -9,6 +9,7 @@ ROOT=Path(__file__).resolve().parent.parent
 ICON_ROOT=ROOT/'wiki-worker'/'card-icons'
 BRAND_SOURCE=ROOT/'wiki-worker'/'player-card-and-brand'/'common-brand.css'
 OUT=Path(os.environ.get('WIKI_FINAL_BRAND_OUT','wiki-final-brand-output'))
+BACKUP_MANIFEST=Path(os.environ.get('WIKI_FULL_BACKUP_OUT','wiki-final-brand-output/full-backup'))/'manifest.json'
 OUT.mkdir(parents=True,exist_ok=True)
 FILES=['Commands.svg','Market.svg','Warzone.svg','HistoryLore.svg']
 START='/* BEGIN ENTHUSIA MANAGED BRAND */'
@@ -54,6 +55,15 @@ def get_page(title):
     slot=(rev.get('slots') or {}).get('main') or {}
     return {'title':title,'missing':bool(page.get('missing')),'revid':rev.get('revid'),'timestamp':rev.get('timestamp'),'user':rev.get('user'),'comment':rev.get('comment'),'content':slot.get('content',''),'contentmodel':slot.get('contentmodel') or rev.get('contentmodel'),'curtimestamp':data.get('curtimestamp')}
 
+def backup_expected_revid(title):
+    if not BACKUP_MANIFEST.exists():
+        raise RuntimeError('Fresh full-backup manifest is missing')
+    manifest=json.loads(BACKUP_MANIFEST.read_text(encoding='utf-8'))
+    for page in manifest.get('pages',[]):
+        if page.get('title')==title:
+            return (page.get('currentRevision') or {}).get('revid')
+    return None
+
 def managed_css(existing,block):
     block=block.strip()
     managed=f'{START}\n{block}\n{END}'
@@ -66,6 +76,9 @@ def managed_css(existing,block):
 def publish_common_css(csrf):
     title='MediaWiki:Common.css'
     before=get_page(title)
+    expected=backup_expected_revid(title)
+    if expected is not None and before.get('revid')!=expected:
+        raise RuntimeError(f'Race detected after backup: {title} changed from rev {expected} to {before.get("revid")}')
     source=BRAND_SOURCE.read_text(encoding='utf-8')
     target=managed_css(before.get('content',''),source)
     (OUT/'common-css-before.json').write_text(json.dumps(before,indent=2)+'\n',encoding='utf-8')
