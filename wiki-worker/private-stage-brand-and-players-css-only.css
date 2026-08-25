@@ -1,0 +1,64 @@
+/* Private staging pass 6.1: CSS-only real brand + deterministic player-card layout. */
+
+/* Vector 2022 brand: use the real Enthusia logo and exact main-site brand gradient. */
+.mw-logo{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:9px !important;
+  min-height:36px;
+  text-decoration:none !important;
+}
+
+.mw-logo > .mw-logo-icon,
+.mw-logo > .mw-logo-container,
+.mw-logo .mw-logo-wordmark,
+.mw-logo .mw-logo-tagline{
+  display:none !important;
+}
+
+.mw-logo::before{
+  content:"";
+  display:block;
+  width:31px;
+  height:31px;
+  flex:0 0 31px;
+  background-image:url("https://raw.githubusercontent.com/wsg138/enthusia-site/df15f1a7e819d240166c5d4a2a108058a83a05a4/public/assets/enthusia-logo-v2.png");
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:contain;
+  filter:drop-shadow(0 0 8px rgba(255,138,0,.30));
+}
+
+.mw-logo::after{
+  content:"Enthusia";
+  display:block;
+  font-size:1rem;
+  font-weight:900;
+  letter-spacing:-.01em;
+  line-height:1;
+  white-space:nowrap;
+  background:linear-gradient(90deg,#ff4b12 0%,#ff8a00 46%,#ffd36a 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+/*
+ * Template:Player.dpl currently renders the image and title as inline siblings
+ * in a 120px inline-block. Placeholder.png is narrow enough that BobSuit's
+ * title can fit beside it. Make every DPL player card a column so image width
+ * can never affect title placement.
+ */
+body.page-Noteable_Players .mw-parser-output div[style*="width: 120px"][style*="display:inline-block"],
+body.page-Noteable_Players .mw-parser-output div[style*="width: 120px"][style*="display: inline-block"]{
+  display:inline-flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  vertical-align:top !important;
+}
+
+body.page-Noteable_Players .mw-parser-output div[style*="width: 120px"] img{
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
