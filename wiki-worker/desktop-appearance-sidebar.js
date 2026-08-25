@@ -104,6 +104,11 @@
       subtree: true
     });
 
+    /* Vector normally finishes sidebar setup immediately. Do not leave a
+       repository-added observer running forever if this is a different skin or
+       a future Vector build changes the expected DOM. */
+    window.setTimeout(stopWatching, 10000);
+
     if (desktopMedia) {
       const onDesktopChange = function () {
         attempted = false;
