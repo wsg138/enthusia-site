@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'wiki-mobile-markup-diagnostic-trigger.txt'
+      - 'wiki-worker/diagnose_mobile_runtime.mjs'
+      - '.github/workflows/wiki-mobile-markup-diagnostic.yml'
 
 permissions:
   contents: read
@@ -12,7 +14,7 @@ permissions:
 jobs:
   inspect:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - name: Capture live mobile markup
@@ -49,6 +51,13 @@ jobs:
           Path('mobile-markup-diagnostic/summary.txt').write_text('\n'.join(out), encoding='utf-8')
           PY
           cat mobile-markup-diagnostic/summary.txt
+      - name: Inspect live mobile behavior in Chrome
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser
+          npm install --no-save --ignore-scripts puppeteer-core@24.16.0
+          node wiki-worker/diagnose_mobile_runtime.mjs
       - name: Upload diagnostic markup
         uses: actions/upload-artifact@v4
         with:
