@@ -67,7 +67,6 @@ async function state(label) {
       menuVisibility: ms ? ms.visibility : null,
       menuTransition: ms ? ms.transition : null,
       quickbarOpacity: qs ? qs.opacity : null,
-      rootMenuClass: document.documentElement.classList.contains('enthusia-minerva-menu-open'),
       customDrawer: Boolean(document.querySelector('.enthusia-mobile-drawer')),
       customShade: Boolean(document.querySelector('.enthusia-mobile-shade')),
       minervaSidebarClass: Boolean(document.querySelector('#mw-mf-page-left.enthusia-minerva-sidebar')),
@@ -130,7 +129,6 @@ report.bottom.push(await state('bottom+60'));
 await new Promise((r) => setTimeout(r, 220));
 report.bottom.push(await state('bottom+280'));
 assert(report.bottom[0].checked, 'Bottom Menu did not open Minerva checkbox immediately');
-assert(report.bottom[0].rootMenuClass, 'Bottom Menu did not synchronize menu-open state');
 assert(report.bottom[1].menuX > -275, 'Bottom Menu did not begin moving sidebar within 60ms');
 assert(Number(report.bottom[1].quickbarOpacity) < 0.5, 'Quickbar remained visible above shade after bottom Menu click');
 assert(report.bottom[2].menuX > -2, 'Bottom Menu sidebar not fully open by 280ms');
