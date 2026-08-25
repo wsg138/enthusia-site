@@ -13,13 +13,28 @@
     '.mw-ui-icon-minerva-mainmenu',
     '.mw-ui-icon-wikimedia-menu-base20',
     '.minerva-header .mw-ui-icon-menu',
-    '.minerva-header [aria-label*="menu" i]',
-    '.minerva-header [title*="menu" i]',
-    'header.header-container [aria-label*="menu" i]',
-    'header.header-container [title*="menu" i]',
+    '.minerva-header [aria-label*="main menu" i]',
+    '.minerva-header [title*="main menu" i]',
+    'header.header-container [aria-label*="main menu" i]',
+    'header.header-container [title*="main menu" i]',
     'label[for="main-menu-input"]',
     'label[for="mw-mf-main-menu-input"]',
-    '#vector-main-menu-dropdown > .vector-dropdown-label'
+    'label[for="vector-main-menu-dropdown-checkbox"]',
+    '#vector-main-menu-dropdown-label',
+    '#vector-main-menu-dropdown-checkbox',
+    '#vector-main-menu-dropdown .vector-dropdown-label',
+    '#vector-main-menu-dropdown label',
+    '#vector-main-menu-dropdown button',
+    '.vector-main-menu-dropdown .vector-dropdown-label',
+    '.vector-main-menu-dropdown label',
+    '.vector-main-menu-dropdown button'
+  ].join(',');
+
+  const NATIVE_TOGGLE_SELECTOR = [
+    '#main-menu-input',
+    '#mw-mf-main-menu-input',
+    '#vector-main-menu-dropdown-checkbox',
+    'input[type="checkbox"][id*="main-menu" i]'
   ].join(',');
 
   function isMobile() {
@@ -93,13 +108,35 @@
     return true;
   }
 
+  function bottomMenuButton() {
+    const buttons = Array.from(document.querySelectorAll('.enthusia-mobile-quickbar .enthusia-mobile-quickbutton'));
+    return buttons.find(function (button) {
+      return /^menu$/i.test((button.textContent || '').trim());
+    }) || null;
+  }
+
+  function closeNativeMenu() {
+    document.querySelectorAll(NATIVE_TOGGLE_SELECTOR).forEach(function (toggle) {
+      if ('checked' in toggle && toggle.checked) toggle.checked = false;
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  }
+
   function openEnthusiaDrawer() {
+    closeNativeMenu();
+
+    /* Delegate to the bottom Menu button whenever it exists. This deliberately
+       uses the exact same click handler instead of maintaining a second path. */
+    const bottomButton = bottomMenuButton();
+    if (bottomButton) {
+      bottomButton.click();
+      return true;
+    }
+
+    /* Early-load fallback if the responsive shell has not built the quickbar yet. */
     const drawer = document.querySelector('.enthusia-mobile-drawer');
     const shade = document.querySelector('.enthusia-mobile-shade');
     if (!drawer) return false;
-
-    const nativeToggle = document.querySelector('#main-menu-input, #mw-mf-main-menu-input');
-    if (nativeToggle && 'checked' in nativeToggle) nativeToggle.checked = false;
 
     drawer.classList.add('is-open');
     if (shade) shade.classList.add('is-open');
@@ -115,6 +152,11 @@
     if (!button) return null;
     if (button.closest('.enthusia-mobile-drawer, .enthusia-mobile-quickbar')) return null;
     return button;
+  }
+
+  function nativeMenuToggle(target) {
+    if (!target || !target.matches) return false;
+    return target.matches(NATIVE_TOGGLE_SELECTOR);
   }
 
   /* Intercept before Minerva/Vector handles its own toggle so the top-left
@@ -137,8 +179,20 @@
     openEnthusiaDrawer();
   }, true);
 
+  /* Vector variants that toggle a hidden checkbox can still reach a change
+     event even when their visible label markup changes. Treat that as a second
+     guardrail: immediately close the native dropdown and open our one drawer. */
+  document.addEventListener('change', function (event) {
+    if (!isMobile() || !nativeMenuToggle(event.target) || !event.target.checked) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    event.target.checked = false;
+    openEnthusiaDrawer();
+  }, true);
+
   function refresh() {
     ensureMobileBrand();
+    closeNativeMenu();
   }
 
   function start() {
