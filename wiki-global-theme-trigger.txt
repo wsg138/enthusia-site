@@ -1,1 +1,1 @@
-Publish the approved private Vector 2022 wiki design globally after a fresh full backup.
+Verify MediaWiki:Common.css and MediaWiki:Common.js are already current after the global rollout.
