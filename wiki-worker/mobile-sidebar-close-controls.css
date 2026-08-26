@@ -1,0 +1,50 @@
+/* Close affordances for the restored Minerva mobile sidebar. */
+@media (max-width: 800px) {
+  body.skin-minerva #mw-mf-page-left .enthusia-native-sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 4px 10px;
+    padding: 3px 5px 12px;
+    border-bottom: 1px solid var(--enth-line-soft, #293139);
+  }
+
+  body.skin-minerva #mw-mf-page-left .enthusia-native-sidebar-header > .enthusia-native-sidebar-brand {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  body.skin-minerva #mw-mf-page-left .enthusia-native-sidebar-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    margin: -2px -2px -2px 0;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--enth-muted, #a7b0b8);
+    font: 400 32px/1 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body.skin-minerva #mw-mf-page-left .enthusia-native-sidebar-close:active,
+  body.skin-minerva #mw-mf-page-left .enthusia-native-sidebar-close:focus-visible {
+    background: var(--enth-panel-3, #242b31);
+    color: var(--enth-text, #e8ecf0);
+    outline: none;
+  }
+
+  body.skin-minerva .main-menu-mask[data-enthusia-close-bound="1"] {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+}
