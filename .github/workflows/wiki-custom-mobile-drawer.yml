@@ -1,0 +1,103 @@
+name: Publish unified custom mobile drawer
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-worker/mobile-corrections.js'
+      - 'wiki-worker/mobile-native-sidebar.css'
+      - 'wiki-worker/publish-custom-mobile-drawer.py'
+      - 'wiki-worker/validate-live-custom-mobile-drawer.mjs'
+      - 'wiki-custom-mobile-drawer-trigger.txt'
+      - '.github/workflows/wiki-custom-mobile-drawer.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_CUSTOM_MENU_OUT: wiki-custom-mobile-drawer-output
+      WIKI_FULL_BACKUP_OUT: wiki-custom-mobile-drawer-output/full-backup
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD }}
+
+    steps:
+      - name: Check out exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Validate custom mobile source
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wiki-worker/mobile-corrections.js
+          node --check wiki-worker/validate-live-custom-mobile-drawer.mjs
+          python3 -m py_compile wiki-worker/publish-custom-mobile-drawer.py
+          test -s wiki-worker/mobile-native-sidebar.css
+          grep -q 'enthusia-custom-mobile-menu-ready' wiki-worker/mobile-corrections.js
+          grep -q 'openExactBottomMenu' wiki-worker/mobile-corrections.js
+          grep -q 'button.click()' wiki-worker/mobile-corrections.js
+          grep -q '#mw-mf-page-left' wiki-worker/mobile-native-sidebar.css
+          grep -q 'html.enthusia-mobile-menu-open .enthusia-mobile-quickbar' wiki-worker/mobile-native-sidebar.css
+
+      - name: Capture complete live wiki before edit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$WIKI_CUSTOM_MENU_OUT"
+          python3 wiki-worker/full_backup.py | tee "$WIKI_CUSTOM_MENU_OUT/full-backup.log"
+          test -s "$WIKI_FULL_BACKUP_OUT/manifest.json"
+          pages="$(find "$WIKI_FULL_BACKUP_OUT/pages" -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find "$WIKI_FULL_BACKUP_OUT/history" -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+
+      - name: Upload immutable pre-edit backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-custom-mobile-backup-${{ github.run_id }}
+          path: wiki-custom-mobile-drawer-output/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Require wiki credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+
+      - name: Publish unified custom mobile drawer
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/publish-custom-mobile-drawer.py | tee "$WIKI_CUSTOM_MENU_OUT/publish.log"
+
+      - name: Install browser acceptance harness
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser
+          npm install --no-save --ignore-scripts puppeteer-core@24.16.0
+
+      - name: Acceptance-test both live mobile menu buttons
+        shell: bash
+        run: |
+          set -euo pipefail
+          node wiki-worker/validate-live-custom-mobile-drawer.mjs | tee "$WIKI_CUSTOM_MENU_OUT/live-custom-mobile-acceptance.log"
+
+      - name: Upload publication and browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-custom-mobile-evidence-${{ github.run_id }}
+          path: wiki-custom-mobile-drawer-output/
+          if-no-files-found: warn
+          retention-days: 90
