@@ -1,4 +1,5 @@
 dist/
+minecraft/competition-bridge/target/
 .visual-test/
 .wrangler/
 __pycache__/
