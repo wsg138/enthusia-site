@@ -1,8 +1,8 @@
 /* Mobile-only styling for MediaWiki's native main-menu sidebar.
  * Minerva is Miraheze's default mobile skin; Vector remains a fallback.
- * The skin keeps ownership of opening/closing and focus. Enthusia keeps the
- * visual transition deliberately short so the menu responds immediately even
- * on slower mobile browsers.
+ * The skin keeps ownership of opening/closing and focus. Enthusia deliberately
+ * avoids expensive relational selectors or transitions on the menu state so
+ * the sidebar responds immediately on mobile Safari as well as Chromium.
  */
 
 @media (max-width: 800px) {
@@ -19,15 +19,11 @@
 
   /* ---------- Real mobile path: Minerva / MobileFrontend ---------- */
 
-  /* Apply the transition override to Minerva's native panel itself rather than
-     waiting for Common.js to add the Enthusia helper class. This keeps the very
-     first hamburger tap responsive too. Do not transition visibility: discrete
-     visibility transitions can feel delayed on mobile Safari. */
+  /* Keep the native panel state change immediate. A previous short transform
+     transition still left iOS Safari doing unnecessary compositor work while
+     opening and closing the large scrollable drawer. */
   body.skin-minerva #mw-mf-page-left {
-    transition: transform .1s ease-out !important;
-    will-change: transform;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    transition: none !important;
   }
 
   body.skin-minerva #mw-mf-page-left.enthusia-minerva-sidebar {
@@ -43,8 +39,7 @@
   }
 
   body.skin-minerva .main-menu-mask {
-    transition: opacity .08s ease-out !important;
-    will-change: opacity;
+    transition: none !important;
   }
 
   .enthusia-native-sidebar-brand {
@@ -146,10 +141,11 @@
     background: var(--enth-panel-3, #242b31) !important;
   }
 
-  /* Minerva's shade used to sit below our z-index:120 quickbar. Use Minerva's
-     checkbox itself as the authoritative menu-open state. Hide the quickbar
-     immediately—without a fade—so it never appears highlighted through the mask. */
-  body.skin-minerva:has(#main-menu-input:checked) .enthusia-mobile-quickbar {
+  /* Do not use body:has(#main-menu-input:checked) here. On iOS Safari that
+     relational selector can invalidate styles across the full page whenever
+     the menu checkbox changes. Common.js already mirrors the native checkbox
+     into this lightweight root class. */
+  html.enthusia-minerva-menu-open body.skin-minerva .enthusia-mobile-quickbar {
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
