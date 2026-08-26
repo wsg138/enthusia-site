@@ -148,8 +148,8 @@ def main():
     for marker in required:
         if marker not in css:
             raise RuntimeError(f'Safari performance CSS missing marker: {marker}')
-    if ':has(' in css:
-        raise RuntimeError('Safari performance CSS still contains :has()')
+    if 'body.skin-minerva:has(' in css:
+        raise RuntimeError('Safari performance CSS still contains the page-wide relational selector')
 
     target_css = replace_block(common_css['content'], CSS_START, CSS_END, css).rstrip() + '\n'
     css_result = edit(csrf, common_css, target_css)
