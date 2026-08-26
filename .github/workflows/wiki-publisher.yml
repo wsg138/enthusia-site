@@ -1,0 +1,196 @@
+name: Publish Enthusia wiki
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-publish-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enthusia-wiki-publisher
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_WORKER_OUT: wiki-worker-output
+      WIKI_FULL_BACKUP_OUT: wiki-worker-output/full-backup
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME || secrets.MIRAHEZE_BOT_USERNAME || secrets.WIKI_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD || secrets.MIRAHEZE_BOT_PASSWORD || secrets.WIKI_PASSWORD }}
+
+    steps:
+      - name: Check out proposed wiki source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Confirm final preview source is present
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in \
+            public/wiki-demo/v2-core.js \
+            public/wiki-demo/v2-support.js \
+            public/wiki-demo/v2-commands.js \
+            public/wiki-demo/v2-detail.js \
+            public/wiki-demo/v2-final.js \
+            public/wiki-demo/v2-polish.js \
+            public/wiki-demo/v2-reputation.js \
+            wiki-worker/wiki-template.css \
+            wiki-worker/validate_structure.mjs; do
+            test -s "$file"
+          done
+
+      - name: Capture complete live wiki before publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/full_backup.py | tee full-backup.log
+          test -s wiki-worker-output/full-backup/manifest.json
+          test -s wiki-worker-output/full-backup/comparison-to-old-baseline.json
+          test -d wiki-worker-output/full-backup/pages
+          test -d wiki-worker-output/full-backup/history
+          pages="$(find wiki-worker-output/full-backup/pages -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find wiki-worker-output/full-backup/history -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+
+      - name: Upload immutable full pre-publish backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-full-pre-publish-backup-${{ github.run_id }}
+          path: |
+            full-backup.log
+            wiki-worker-output/full-backup/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Render MediaWiki pages from approved v2 demo
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wiki-worker/render_pages.mjs
+          node wiki-worker/render_pages.mjs
+          test -s wiki-worker-output/rendered/manifest.json
+          grep -q '"title": "Events"' wiki-worker-output/rendered/manifest.json
+          ! grep -q '"title": "Server Events"' wiki-worker-output/rendered/manifest.json
+
+      - name: Validate rendered component structure
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wiki-worker/validate_structure.mjs
+          node wiki-worker/validate_structure.mjs | tee wiki-worker-output/structure-validation.log
+          test -s wiki-worker-output/structure-validation.json
+          grep -q '"ok": true' wiki-worker-output/structure-validation.json
+
+      - name: Player-facing content guardrails
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -R -E -i '(/casino|/spin|/arm)([^a-z]|$)' wiki-worker-output/rendered
+          ! grep -R -E -i 'velocity\.hub|/gmc([^a-z]|$)' wiki-worker-output/rendered
+          ! grep -R -E -i 'movement[- ]speed|speed boost' wiki-worker-output/rendered
+          grep -R -q 'PieCloak' wiki-worker-output/rendered
+          grep -R -q 'outside Spawn and the Warzone' wiki-worker-output/rendered || grep -R -q 'Outside Spawn and the Warzone' wiki-worker-output/rendered
+
+      - name: Validate rendered pages with Miraheze parser
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/validate_rendered.py | tee wiki-worker-output/parse-validation.log
+
+      - name: Review live changes and protect human edits
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, sys
+          from pathlib import Path
+          root=Path('wiki-worker-output')
+          comp=json.load(open(root/'full-backup/comparison-to-old-baseline.json'))
+          backup=json.load(open(root/'full-backup/manifest.json'))
+          rendered=json.load(open(root/'rendered/manifest.json'))
+          bmap={p['title']:p for p in backup['pages']}
+          rmap={p['title']:p for p in rendered['pages']}
+          targets=set(rmap)
+          WORKER_COMMENT='Update Enthusia player wiki documentation'
+          def exact(title):
+              b=bmap.get(title); r=rmap.get(title)
+              if not b or not r: return False
+              current=(root/'full-backup'/b['backupFile']).read_text(encoding='utf-8').rstrip()
+              desired=(root/'rendered'/r['filename']).read_text(encoding='utf-8').rstrip()
+              return current == desired
+          def worker_owned(title):
+              b=bmap.get(title)
+              return bool(b and (b.get('currentRevision') or {}).get('comment') == WORKER_COMMENT)
+          candidate_changed=[p for p in comp['changedPages'] if p['title'] in targets]
+          candidate_added=[t for t in comp['addedPages'] if t in targets]
+          already_current=[]
+          worker_updates=[]
+          conflicts=[]
+          for p in candidate_changed:
+              title=p['title']
+              if exact(title): already_current.append(p)
+              elif worker_owned(title): worker_updates.append({'title':title,'kind':'worker-authored-update'})
+              else: conflicts.append(p)
+          for title in candidate_added:
+              item={'title':title,'kind':'added-after-baseline'}
+              if exact(title): already_current.append(item)
+              elif worker_owned(title): worker_updates.append({'title':title,'kind':'worker-authored-update'})
+              else: conflicts.append(item)
+          target_removed=[t for t in comp['removedPages'] if t in targets]
+          conflicts.extend({'title':t,'kind':'removed-after-baseline'} for t in target_removed)
+          unrelated_changed=[p for p in comp['changedPages'] if p['title'] not in targets]
+          unrelated_added=[t for t in comp['addedPages'] if t not in targets]
+          unrelated_removed=[t for t in comp['removedPages'] if t not in targets]
+          report={
+            'allChangedPages':comp['changedPages'],'allAddedPages':comp['addedPages'],'allRemovedPages':comp['removedPages'],
+            'alreadyCurrentPublishTargets':already_current,'workerAuthoredUpdates':worker_updates,
+            'conflictingPublishTargets':conflicts,'preservedUnrelatedChanges':unrelated_changed,
+            'preservedUnrelatedAddedPages':unrelated_added,'preservedUnrelatedRemovedPages':unrelated_removed,
+          }
+          (root/'change-review.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+          print(json.dumps(report,indent=2))
+          if conflicts:
+              print('A target has human/unexpected changes. Full backup is complete; refusing to overwrite it.',file=sys.stderr)
+              sys.exit(1)
+          print('No human-edited publish target will be overwritten.')
+          PY
+
+      - name: Require configured wiki credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME" || { echo 'Missing WIKI_BOT_USERNAME/MIRAHEZE_BOT_USERNAME/WIKI_USERNAME secret'; exit 1; }
+          test -n "$WIKI_BOT_PASSWORD" || { echo 'Missing WIKI_BOT_PASSWORD/MIRAHEZE_BOT_PASSWORD/WIKI_PASSWORD secret'; exit 1; }
+
+      - name: Move Server Events to canonical Events title
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/migrate_events_title.py | tee wiki-worker-output/events-title-migration.log
+
+      - name: Publish to Miraheze from fresh backup revision set
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/publish.py | tee wiki-worker-output/publish.log
+
+      - name: Upload publish evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-publish-evidence-${{ github.run_id }}
+          path: wiki-worker-output/
+          if-no-files-found: warn
+          retention-days: 90

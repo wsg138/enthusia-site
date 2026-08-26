@@ -1,0 +1,139 @@
+/* Mobile corrections layered after the approved global theme.
+ * These rules intentionally use !important where the older global theme has
+ * mobile !important rules that otherwise force the Explore cards to one column.
+ */
+
+@media (max-width: 800px) {
+  .enthusia-home-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin: 10px 0 14px !important;
+  }
+
+  .enthusia-home-card {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 7px 4px 8px !important;
+    border-radius: 10px !important;
+    font-size: .82rem !important;
+    line-height: 1.15 !important;
+  }
+
+  .enthusia-home-card img,
+  .enthusia-home-card .mw-file-element {
+    width: 44px !important;
+    height: 44px !important;
+    margin: 0 auto 3px !important;
+    object-fit: contain !important;
+  }
+
+  .enthusia-wiki .fact-grid,
+  .enthusia-wiki .topic-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .enthusia-wiki .fact-grid > div,
+  .enthusia-wiki .topic-card {
+    min-width: 0 !important;
+    padding: 9px 10px !important;
+    border-radius: 9px !important;
+  }
+
+  .enthusia-wiki .fact-grid b,
+  .enthusia-wiki .topic-card b {
+    font-size: .9rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .enthusia-wiki .fact-grid span,
+  .enthusia-wiki .topic-card span {
+    max-height: 3.9em !important;
+    overflow: hidden !important;
+    font-size: .76rem !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Match the desktop/server branding instead of the temporary green mobile wordmark. */
+  .enthusia-site-brand img,
+  .enthusia-mobile-drawer-brand img {
+    display: block !important;
+    opacity: 1 !important;
+  }
+
+  .enthusia-brand-words strong {
+    display: inline-block !important;
+    font-weight: 900 !important;
+    letter-spacing: -.02em !important;
+    background: linear-gradient(90deg, #ff4b12 0%, #ff8a00 46%, #ffd36a 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+  }
+
+  .enthusia-brand-words > span {
+    color: #f0b24f !important;
+    font-weight: 800 !important;
+  }
+
+  /* Make an explicit mobile dark choice visually authoritative even if Vector
+     still carries its anonymous day-preference class. */
+  html[data-enthusia-color-scheme="dark"] body.skin-vector-2022,
+  html[data-enthusia-color-scheme="dark"] body.skin-vector-2022 .vector-page-container,
+  html[data-enthusia-color-scheme="dark"] body.skin-vector-2022 .vector-header-container,
+  html[data-enthusia-color-scheme="dark"] body.skin-vector-2022 .mw-page-container {
+    background-color: var(--enth-bg, #0d1013) !important;
+    color: var(--enth-text, #e8ecf0) !important;
+  }
+
+  /* Add the full wiki navigation to Vector's own hamburger dropdown too. */
+  .enthusia-native-menu-sections {
+    margin: 10px 0 2px;
+    padding: 10px 8px 2px;
+    border-top: 1px solid var(--enth-line-soft, #293139);
+  }
+
+  .enthusia-native-menu-section {
+    margin: 0 0 12px;
+  }
+
+  .enthusia-native-menu-section > h3 {
+    margin: 0 6px 4px !important;
+    padding: 0 !important;
+    color: var(--enth-muted, #a7b0b8) !important;
+    font-size: .7rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .09em !important;
+    text-transform: uppercase !important;
+  }
+
+  .enthusia-native-menu-section > a {
+    display: block !important;
+    min-height: 38px;
+    padding: 8px 9px !important;
+    border-radius: 8px;
+    color: var(--enth-text, #e8ecf0) !important;
+    font-size: .9rem !important;
+    line-height: 1.25 !important;
+    text-decoration: none !important;
+  }
+
+  .enthusia-native-menu-section > a:hover,
+  .enthusia-native-menu-section > a:focus-visible {
+    background: var(--enth-panel-3, #242b31) !important;
+    color: var(--enth-accent, #9acb70) !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .enthusia-wiki .fact-grid,
+  .enthusia-wiki .topic-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 340px) {
+  .enthusia-home-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}

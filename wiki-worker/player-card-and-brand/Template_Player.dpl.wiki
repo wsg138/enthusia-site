@@ -1,0 +1,6 @@
+<includeonly>
+	<div class="enthusia-player-dpl-card" style="width:120px; text-align:center; display:inline-flex; flex-direction:column; align-items:center; vertical-align:top;">
+		<div class="enthusia-player-dpl-image" style="width:120px; height:120px; display:flex; align-items:center; justify-content:center; overflow:hidden;">[[{{{image|}}}|120x120px]]</div>
+		<div class="enthusia-player-dpl-name" style="width:120px; margin-top:4px; text-align:center;">[[%PAGE%|{{{title|%TITLE%}}}]]</div>
+	</div>
+</includeonly>
