@@ -1,0 +1,102 @@
+name: Restore working native mobile menu
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-worker/mobile-corrections.js'
+      - 'wiki-worker/mobile-native-sidebar.css'
+      - 'wiki-worker/publish-mobile-native-restore.py'
+      - 'wiki-worker/validate-live-native-mobile-restore.mjs'
+      - 'wiki-mobile-native-restore-trigger.txt'
+      - '.github/workflows/wiki-mobile-native-restore.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_NATIVE_RESTORE_OUT: wiki-native-restore-output
+      WIKI_FULL_BACKUP_OUT: wiki-native-restore-output/full-backup
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD }}
+    steps:
+      - name: Check out exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Validate rollback sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check wiki-worker/mobile-corrections.js
+          node --check wiki-worker/validate-live-native-mobile-restore.mjs
+          python3 -m py_compile wiki-worker/publish-mobile-native-restore.py
+          grep -q 'openNativeMenu' wiki-worker/mobile-corrections.js
+          grep -q 'bindBottomMenuToNativeSidebar' wiki-worker/mobile-corrections.js
+          ! grep -q 'openExactBottomMenu' wiki-worker/mobile-corrections.js
+          ! grep -q 'enthusia-custom-mobile-menu-ready' wiki-worker/mobile-corrections.js
+          grep -q '.enthusia-minerva-nav' wiki-worker/mobile-native-sidebar.css
+          ! grep -q 'enthusia-custom-mobile-menu-ready' wiki-worker/mobile-native-sidebar.css
+
+      - name: Capture complete live wiki before edit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$WIKI_NATIVE_RESTORE_OUT"
+          python3 wiki-worker/full_backup.py | tee "$WIKI_NATIVE_RESTORE_OUT/full-backup.log"
+          test -s "$WIKI_FULL_BACKUP_OUT/manifest.json"
+          pages="$(find "$WIKI_FULL_BACKUP_OUT/pages" -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find "$WIKI_FULL_BACKUP_OUT/history" -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+
+      - name: Upload immutable pre-edit backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-native-restore-backup-${{ github.run_id }}
+          path: wiki-native-restore-output/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Require wiki credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+
+      - name: Publish native mobile restore
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/publish-mobile-native-restore.py | tee "$WIKI_NATIVE_RESTORE_OUT/publish.log"
+
+      - name: Install browser acceptance harness
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v google-chrome || command -v google-chrome-stable || command -v chromium
+          npm install --no-save --ignore-scripts puppeteer-core@24.16.0
+
+      - name: Acceptance-test restored mobile buttons
+        shell: bash
+        run: |
+          set -euo pipefail
+          node wiki-worker/validate-live-native-mobile-restore.mjs | tee "$WIKI_NATIVE_RESTORE_OUT/live-native-restore.log"
+
+      - name: Upload publication and browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-native-restore-evidence-${{ github.run_id }}
+          path: wiki-native-restore-output/
+          if-no-files-found: warn
+          retention-days: 90
