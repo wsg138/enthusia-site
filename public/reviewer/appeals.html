@@ -1,5 +1,84 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Appeal review | Enthusia Staff</title><link rel="stylesheet" href="../assets/styles.css?v=vision63"></head>
-<body><main class="page-main container"><h1>Appeal review</h1><p>Only authorized staff can access this page. Decisions use the appeal version shown when loaded; stale updates are rejected and must be refreshed.</p><label>Status <select id="status"><option value="OPEN">Open</option><option value="INFORMATION_REQUESTED">Waiting for player</option><option value="APPROVAL_PENDING">Approval pending</option><option value="APPLIED">Approved</option><option value="DENIED">Denied</option><option value="REJECTED">Approval failed</option><option value="ALL">All</option></select></label><button id="refresh">Refresh</button><div id="appeals" aria-live="polite"></div></main><script type="module">
-const root=document.querySelector('#appeals');const status=document.querySelector('#status');const key=()=>crypto.randomUUID();async function decide(appeal,decision,note,result){if(note.trim().length<3){result.textContent='Enter a decision note.';return;}result.textContent='Saving…';try{const response=await fetch(`/api/reviewer/appeals/${encodeURIComponent(appeal.id)}`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({decision,note,expectedVersion:appeal.version,idempotencyKey:key()})});if(response.status===409){result.textContent='This appeal changed. Refresh before deciding.';return;}result.textContent=response.ok?'Decision saved.':`Unable to save (${response.status}).`;if(response.ok)await load();}catch{result.textContent='Unable to reach the appeal service. Retry in a moment.';}}function card(appeal){const article=document.createElement('article');const heading=document.createElement('h2');heading.textContent=`Appeal ${appeal.id??''}`;const meta=document.createElement('p');meta.textContent=`${appeal.player??'Unknown player'} · ${appeal.status??'unknown'} · version ${appeal.version??0}`;const punishment=document.createElement('p');punishment.textContent=`${appeal.punishmentType??'Punishment'} ${appeal.punishmentId??'unknown'} · case ${appeal.caseId??'unknown'}`;const reason=document.createElement('p');reason.textContent=appeal.reason??'';article.append(heading,meta,punishment,reason);if(appeal.decisionNote){const prior=document.createElement('p');prior.textContent=`Latest decision note: ${appeal.decisionNote}`;article.append(prior);}if(appeal.status==='OPEN'){const note=document.createElement('textarea');note.minLength=3;note.maxLength=1000;note.placeholder='Decision reason';const result=document.createElement('p');result.setAttribute('role','status');for(const [label,value] of [['Approve','approve'],['Deny','deny'],['Request information','request_information']]){const button=document.createElement('button');button.textContent=label;button.addEventListener('click',()=>decide(appeal,value,note.value,result));article.append(button);}article.append(note,result);}return article;}async function load(){root.textContent='Loading…';try{const response=await fetch(`/api/reviewer/appeals?status=${encodeURIComponent(status.value)}`);if(!response.ok){root.textContent=`Unable to load appeals (${response.status}).`;return;}const payload=await response.json();const appeals=Array.isArray(payload)?payload:payload.appeals??[];root.replaceChildren(...appeals.map(card));if(!appeals.length)root.textContent='No appeals found.';}catch{root.textContent='Unable to reach the appeal service. Use Refresh to retry.';}}document.querySelector('#refresh').addEventListener('click',load);status.addEventListener('change',load);load();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appeal review | Enthusia Staff</title>
+  <meta name="description" content="Review and decide Enthusia SMP punishment appeals." />
+  <meta name="theme-color" content="#100d0a" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/styles.css?v=vision64" />
+  <link rel="stylesheet" href="../assets/appeals.css?v=1" />
+</head>
+<body class="reviewer-appeals-page">
+<a class="skip-link" href="#main-content">Skip to review queue</a>
+
+<div class="bg" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="bg-vignette"></div>
+  <div class="bg-heat"></div>
+</div>
+
+<header class="site-header review-header">
+  <div class="container header-inner">
+    <a class="brand" href="../index.html" aria-label="Enthusia SMP home">
+      <img class="brand-logo" src="../assets/enthusia-logo-v2.png" alt="" width="46" height="46" />
+      <span class="brand-name">Enthusia Staff</span>
+    </a>
+    <div class="review-header-actions">
+      <span class="review-restricted"><i aria-hidden="true"></i> Restricted workspace</span>
+      <a href="../appeal.html">Public appeal form</a>
+      <a href="../index.html">Return to site</a>
+    </div>
+  </div>
+</header>
+
+<main id="main-content" class="page-main review-page-main">
+  <section class="review-hero">
+    <div class="container review-hero-inner">
+      <div>
+        <p class="eyebrow">Moderation operations</p>
+        <h1>Appeal review queue</h1>
+        <p class="page-lead">Review player context, record a clear decision note, and move each eligible case to its next state.</p>
+      </div>
+      <div class="review-safety-note">
+        <span>Concurrency safeguard</span>
+        <p>Each decision uses the version loaded with the appeal. If another reviewer updates it first, this page will require a refresh.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container review-workspace" aria-labelledby="queue-title">
+    <header class="review-toolbar card">
+      <div class="review-toolbar-title">
+        <p class="appeal-card-kicker">Current queue</p>
+        <h2 id="queue-title">Cases requiring attention</h2>
+        <p id="queue-summary">Loading appeals&hellip;</p>
+      </div>
+      <div class="review-filters">
+        <label for="status">
+          <span>Case status</span>
+          <select id="status">
+            <option value="OPEN">Open</option>
+            <option value="INFORMATION_REQUESTED">Waiting for player</option>
+            <option value="APPROVAL_PENDING">Approval pending</option>
+            <option value="APPLIED">Approved</option>
+            <option value="DENIED">Denied</option>
+            <option value="REJECTED">Approval failed</option>
+            <option value="ALL">All statuses</option>
+          </select>
+        </label>
+        <button class="btn review-refresh" id="refresh" type="button">Refresh queue</button>
+      </div>
+    </header>
+
+    <div id="appeals" class="appeal-review-list" aria-live="polite" aria-busy="true"></div>
+  </section>
+</main>
+
+<script type="module" src="../assets/review-appeals.js?v=1"></script>
+</body>
+</html>
