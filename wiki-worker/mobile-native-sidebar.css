@@ -1,12 +1,10 @@
 /* Mobile-only styling for MediaWiki's native main-menu sidebar.
  * Minerva is Miraheze's default mobile skin; Vector remains a fallback.
- * The skin keeps ownership of opening/closing and focus. Enthusia deliberately
- * avoids expensive relational selectors or transitions on the menu state so
- * the sidebar responds immediately on mobile Safari as well as Chromium.
+ * Menu state stays entirely with the skin: no relational state selector, no
+ * Enthusia open/close class, and no compositor-heavy blur on the fixed bar.
  */
 
 @media (max-width: 800px) {
-  /* The old Enthusia drawer is no longer part of the mobile navigation path. */
   .enthusia-mobile-drawer,
   .enthusia-mobile-shade {
     display: none !important;
@@ -17,17 +15,14 @@
     overflow: auto !important;
   }
 
-  /* ---------- Real mobile path: Minerva / MobileFrontend ---------- */
-
-  /* Keep the native panel state change immediate. A previous short transform
-     transition still left iOS Safari doing unnecessary compositor work while
-     opening and closing the large scrollable drawer. */
   body.skin-minerva #mw-mf-page-left {
     transition: none !important;
+    will-change: transform;
   }
 
   body.skin-minerva #mw-mf-page-left.enthusia-minerva-sidebar {
     box-sizing: border-box;
+    contain: layout paint;
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -35,10 +30,20 @@
     background: var(--enth-bg-elev, #11161a) !important;
     color: var(--enth-text, #e8ecf0) !important;
     border-right: 1px solid var(--enth-line, #343d46);
-    box-shadow: 10px 0 30px rgba(0,0,0,.34);
+    box-shadow: none !important;
   }
 
   body.skin-minerva .main-menu-mask {
+    transition: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  body.skin-minerva .enthusia-mobile-quickbar {
+    z-index: 1 !important;
+    background: var(--enth-panel, #171c21) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     transition: none !important;
   }
 
@@ -119,8 +124,6 @@
     outline: none;
   }
 
-  /* Keep Minerva's native Home/Random/account/settings links as a quieter
-     utility section beneath the server navigation. */
   body.skin-minerva #mw-mf-page-left > .toggle-list__list,
   body.skin-minerva #mw-mf-page-left > .hlist {
     margin: 0 !important;
@@ -141,23 +144,9 @@
     background: var(--enth-panel-3, #242b31) !important;
   }
 
-  /* Do not use body:has(#main-menu-input:checked) here. On iOS Safari that
-     relational selector can invalidate styles across the full page whenever
-     the menu checkbox changes. Common.js already mirrors the native checkbox
-     into this lightweight root class. */
-  html.enthusia-minerva-menu-open body.skin-minerva .enthusia-mobile-quickbar {
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    transform: translate(-50%, 8px) !important;
-    transition: none !important;
-  }
-
   html[data-enthusia-color-scheme="light"] body.skin-minerva #mw-mf-page-left.enthusia-minerva-sidebar {
-    box-shadow: 10px 0 30px rgba(38,54,40,.14);
+    box-shadow: none !important;
   }
-
-  /* ---------- Vector fallback / explicitly forced Vector mobile ---------- */
 
   #vector-main-menu-dropdown .vector-dropdown-content,
   .vector-main-menu-dropdown .vector-dropdown-content,

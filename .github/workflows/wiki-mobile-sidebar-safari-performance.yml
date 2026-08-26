@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - 'wiki-worker/mobile-corrections.js'
+      - 'wiki-worker/mobile-minerva-integration.js'
+      - 'wiki-worker/mobile-sidebar-close-controls.js'
       - 'wiki-worker/mobile-native-sidebar.css'
       - 'wiki-worker/publish-mobile-sidebar-safari-performance.py'
       - 'wiki-worker/validate-live-mobile-sidebar-webkit.mjs'
@@ -38,11 +41,28 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m py_compile wiki-worker/publish-mobile-sidebar-safari-performance.py
+          node --check wiki-worker/mobile-corrections.js
+          node --check wiki-worker/mobile-minerva-integration.js
+          node --check wiki-worker/mobile-sidebar-close-controls.js
           node --check wiki-worker/validate-live-mobile-sidebar-webkit.mjs
-          grep -q 'html.enthusia-minerva-menu-open body.skin-minerva .enthusia-mobile-quickbar' wiki-worker/mobile-native-sidebar.css
-          test "$(grep -c 'transition: none !important;' wiki-worker/mobile-native-sidebar.css)" -ge 3
+          if grep -Fq 'enthusia-minerva-menu-open' wiki-worker/mobile-corrections.js wiki-worker/mobile-sidebar-close-controls.js wiki-worker/mobile-native-sidebar.css; then
+            echo 'native mobile menu state is still mirrored into custom code' >&2
+            exit 1
+          fi
+          if grep -Fq 'MutationObserver' wiki-worker/mobile-minerva-integration.js; then
+            echo 'Minerva branding still observes mobile DOM mutations' >&2
+            exit 1
+          fi
+          if grep -Fq 'input.checked =' wiki-worker/mobile-sidebar-close-controls.js || grep -Fq "dispatchEvent(new Event('change'" wiki-worker/mobile-sidebar-close-controls.js; then
+            echo 'close controls still synthesize native checkbox state' >&2
+            exit 1
+          fi
+          grep -q "document.createElement('label')" wiki-worker/mobile-sidebar-close-controls.js
+          grep -q 'body.skin-minerva .enthusia-mobile-quickbar' wiki-worker/mobile-native-sidebar.css
+          grep -q 'backdrop-filter: none !important;' wiki-worker/mobile-native-sidebar.css
+          grep -q 'will-change: transform;' wiki-worker/mobile-native-sidebar.css
           if grep -Fq 'body.skin-minerva:has(' wiki-worker/mobile-native-sidebar.css; then
-            echo 'mobile sidebar CSS still contains the page-wide relational selector' >&2
+            echo 'mobile sidebar CSS still contains a page-wide relational selector' >&2
             exit 1
           fi
 
@@ -74,7 +94,7 @@ jobs:
           test -n "$WIKI_BOT_USERNAME"
           test -n "$WIKI_BOT_PASSWORD"
 
-      - name: Publish Safari performance fix
+      - name: Publish native mobile performance fix
         shell: bash
         run: |
           set -euo pipefail
