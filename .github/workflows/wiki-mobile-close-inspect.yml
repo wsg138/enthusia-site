@@ -1,0 +1,27 @@
+name: Inspect Minerva mobile close controls
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-worker/inspect-live-minerva-close.mjs'
+      - '.github/workflows/wiki-mobile-close-inspect.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Install browser harness
+        run: |
+          set -euo pipefail
+          command -v google-chrome || command -v google-chrome-stable || command -v chromium
+          npm install --no-save --ignore-scripts puppeteer-core@24.16.0
+      - name: Inspect live Minerva controls
+        run: node wiki-worker/inspect-live-minerva-close.mjs
