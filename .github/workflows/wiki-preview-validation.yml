@@ -8,7 +8,6 @@ on:
       - 'wiki-worker/render_pages.mjs'
       - 'wiki-worker/wiki-template.css'
       - 'wiki-worker/validate_structure.mjs'
-      - 'wiki-mobile-markup-diagnostic-trigger.txt'
       - '.github/workflows/wiki-preview-validation.yml'
   workflow_dispatch:
 
@@ -75,43 +74,6 @@ jobs:
         run: |
           set -euo pipefail
           python3 wiki-worker/validate_rendered.py | tee wiki-worker-output/parse-validation.log
-
-      - name: Capture live mobile markup for this fix
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p wiki-worker-output/mobile-markup
-          UA='Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1'
-          for spec in \
-            'default|https://enthusia.miraheze.org/wiki/Main_Page' \
-            'minerva|https://enthusia.miraheze.org/wiki/Main_Page?useskin=minerva' \
-            'vector|https://enthusia.miraheze.org/wiki/Main_Page?useskin=vector-2022'; do
-            name="${spec%%|*}"
-            url="${spec#*|}"
-            curl --fail-with-body -L --compressed -A "$UA" -D "wiki-worker-output/mobile-markup/${name}.headers" -o "wiki-worker-output/mobile-markup/${name}.html" "$url"
-          done
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-          lines=[]
-          needles=['mw-mf-main-menu-button','main-menu-button','mw-mf-page-left','navigation-drawer','vector-main-menu-dropdown','vector-main-menu','minerva-header','header-container','menu__list','toggle-list','overlay','mw-mf-page-center']
-          for path in sorted(Path('wiki-worker-output/mobile-markup').glob('*.html')):
-              text=path.read_text(encoding='utf-8', errors='replace')
-              lines.append(f'=== {path.name} ===')
-              body=re.search(r'<body\b[^>]*>', text, re.I)
-              lines.append('BODY: ' + (re.sub(r'\s+',' ',body.group(0))[:1500] if body else 'not found'))
-              for needle in needles:
-                  found=[]
-                  for m in re.finditer(needle, text, re.I):
-                      s=max(0,m.start()-500); e=min(len(text),m.end()+900)
-                      found.append(re.sub(r'\s+',' ',text[s:e])[:1600])
-                      if len(found)>=4: break
-                  lines.append(f'-- {needle} ({len(found)}) --')
-                  lines.extend(found or ['none'])
-          out=Path('wiki-worker-output/mobile-markup/summary.txt')
-          out.write_text('\n'.join(lines), encoding='utf-8')
-          print(out.read_text())
-          PY
 
       - name: Upload read-only validation evidence
         if: always()
