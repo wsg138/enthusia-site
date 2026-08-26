@@ -1,6 +1,8 @@
 /* Mobile-only styling for MediaWiki's native main-menu sidebar.
  * Minerva is Miraheze's default mobile skin; Vector remains a fallback.
- * The skin keeps ownership of opening/closing, focus, animation and backdrop.
+ * The skin keeps ownership of opening/closing and focus. Enthusia keeps the
+ * visual transition deliberately short so the menu responds immediately even
+ * on slower mobile browsers.
  */
 
 @media (max-width: 800px) {
@@ -17,6 +19,17 @@
 
   /* ---------- Real mobile path: Minerva / MobileFrontend ---------- */
 
+  /* Apply the transition override to Minerva's native panel itself rather than
+     waiting for Common.js to add the Enthusia helper class. This keeps the very
+     first hamburger tap responsive too. Do not transition visibility: discrete
+     visibility transitions can feel delayed on mobile Safari. */
+  body.skin-minerva #mw-mf-page-left {
+    transition: transform .1s ease-out !important;
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
   body.skin-minerva #mw-mf-page-left.enthusia-minerva-sidebar {
     box-sizing: border-box;
     overflow-x: hidden;
@@ -27,11 +40,11 @@
     color: var(--enth-text, #e8ecf0) !important;
     border-right: 1px solid var(--enth-line, #343d46);
     box-shadow: 10px 0 30px rgba(0,0,0,.34);
-    transition: transform .18s ease-out, visibility .18s ease-out !important;
   }
 
   body.skin-minerva .main-menu-mask {
-    transition: opacity .15s ease-out, visibility .15s ease-out !important;
+    transition: opacity .08s ease-out !important;
+    will-change: opacity;
   }
 
   .enthusia-native-sidebar-brand {
