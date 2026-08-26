@@ -74,8 +74,11 @@ let ready = false;
 for (let attempt = 1; attempt <= 8; attempt += 1) {
   const url = `https://enthusia.miraheze.org/wiki/Main_Page?useskin=minerva&safari_perf=${Date.now()}-${attempt}`;
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
-  await page.waitForSelector('#main-menu-input', { timeout: 30000 });
-  await page.waitForSelector('#mw-mf-page-left', { timeout: 30000 });
+  await page.waitForSelector('#main-menu-input', { state: 'attached', timeout: 30000 });
+  /* The sidebar and mask are intentionally hidden while the native menu is
+     closed, so readiness must test DOM attachment rather than visibility. */
+  await page.waitForSelector('#mw-mf-page-left', { state: 'attached', timeout: 30000 });
+  await page.waitForSelector('.main-menu-mask', { state: 'attached', timeout: 30000 });
   await page.waitForTimeout(750);
   const current = await state();
   propagationAttempts.push({ attempt, url, state: current });
