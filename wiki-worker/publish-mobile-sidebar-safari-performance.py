@@ -126,11 +126,19 @@ def backup_revision(bmap, title):
 def validate_sources(corrections, minerva, close_controls, native_css):
     if 'SIDEBAR_GROUPS' not in corrections or 'toggle.click()' not in corrections:
         raise RuntimeError('Mobile corrections no longer contain the approved native-menu bridge')
+    forbidden_native_state_markers = [
+        "toggle.addEventListener('change'",
+        "input.addEventListener('change'",
+        "dispatchEvent(new Event('change'",
+        'toggle.checked =',
+        'input.checked ='
+    ]
     for source_name, source in [('mobile-corrections.js', corrections), ('mobile-sidebar-close-controls.js', close_controls)]:
         if 'enthusia-minerva-menu-open' in source:
             raise RuntimeError(f'{source_name} still mirrors native menu state into an Enthusia class')
-        if "addEventListener('change'" in source or "dispatchEvent(new Event('change'" in source or 'input.checked =' in source:
-            raise RuntimeError(f'{source_name} still synthesizes native menu state changes')
+        marker = next((item for item in forbidden_native_state_markers if item in source), None)
+        if marker:
+            raise RuntimeError(f'{source_name} still synthesizes native menu state changes: {marker}')
     if 'MutationObserver' in minerva:
         raise RuntimeError('Minerva branding still watches the whole mobile DOM')
     if "document.createElement('label')" not in close_controls or 'htmlFor = input.id' not in close_controls:
