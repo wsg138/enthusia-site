@@ -135,6 +135,18 @@ def edit(csrf, before, target, summary, contentmodel):
     }
 
 
+def purge_interface_cache():
+    result = api({
+        'action': 'purge',
+        'titles': 'MediaWiki:Common.js|MediaWiki:Common.css|Main Page',
+        'forcelinkupdate': '1'
+    })
+    pages = result.get('purge') or []
+    if not pages or any(not item.get('purged') for item in pages):
+        raise RuntimeError(f'Interface purge did not confirm every target: {result}')
+    return [{'title': item.get('title'), 'purged': bool(item.get('purged'))} for item in pages]
+
+
 def backup_revision(bmap, title):
     rec = bmap.get(title) or {}
     rev = rec.get('currentRevision') or {}
@@ -150,8 +162,6 @@ def main():
     guard(common_js, bmap)
     guard(common_css, bmap)
 
-    # The custom drawer itself is durable code in the existing public Common.js
-    # block. Refuse to publish the routing correction if that target disappeared.
     live_custom_markers = [
         'function openMobileDrawer()',
         "drawer.className = 'enthusia-mobile-drawer'",
@@ -193,6 +203,13 @@ def main():
     guard(css_now, bmap)
     css_result = edit(csrf, css_now, target_css, 'Suppress native mobile panels when the Enthusia drawer is ready', 'css')
 
+    # Miraheze/ResourceLoader can otherwise continue serving the previous site
+    # module after the interface revision itself has changed. Purge the interface
+    # pages and an actual content page before browser acceptance.
+    purge_result = purge_interface_cache()
+    time.sleep(2)
+    purge_result += purge_interface_cache()
+
     evidence = {
         'authenticatedAs': who.get('name'),
         'backupCreatedAtUtc': manifest.get('createdAtUtc'),
@@ -204,6 +221,7 @@ def main():
         },
         'commonJs': js_result,
         'commonCss': css_result,
+        'purges': purge_result,
         'finishedAtUtc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
     }
     (OUT / 'custom-mobile-drawer-evidence.json').write_text(json.dumps(evidence, indent=2) + '\n', encoding='utf-8')
