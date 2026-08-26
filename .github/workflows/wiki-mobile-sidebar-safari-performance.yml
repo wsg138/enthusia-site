@@ -41,8 +41,8 @@ jobs:
           node --check wiki-worker/validate-live-mobile-sidebar-webkit.mjs
           grep -q 'html.enthusia-minerva-menu-open body.skin-minerva .enthusia-mobile-quickbar' wiki-worker/mobile-native-sidebar.css
           test "$(grep -c 'transition: none !important;' wiki-worker/mobile-native-sidebar.css)" -ge 3
-          if grep -Fq ':has(' wiki-worker/mobile-native-sidebar.css; then
-            echo 'mobile sidebar CSS still contains :has()' >&2
+          if grep -Fq 'body.skin-minerva:has(' wiki-worker/mobile-native-sidebar.css; then
+            echo 'mobile sidebar CSS still contains the page-wide relational selector' >&2
             exit 1
           fi
 
