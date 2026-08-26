@@ -1,7 +1,7 @@
 /* Corrections for the public mobile wiki experience.
- * The custom Enthusia drawer is the single mobile navigation surface.
- * Native Minerva/Vector menu controls are intercepted and delegated to the
- * exact bottom Menu button so both entry points always open the same drawer.
+ * Minerva is Miraheze's real default mobile skin; Vector remains a fallback.
+ * Keep one native menu, repair mobile theme/branding, and bridge the bottom Menu
+ * button to the skin's own menu control without intercepting the top hamburger.
  */
 (function () {
   'use strict';
@@ -11,33 +11,53 @@
   const LOGO_URL = '/wiki/Special:Redirect/file/Enthusia-logo-v2.png';
   const mobileMedia = window.matchMedia ? window.matchMedia('(max-width: 800px)') : null;
 
-  const NATIVE_MENU_CONTROL_SELECTOR = [
-    '#mw-mf-main-menu-button',
-    '.main-menu-button',
-    '.mw-ui-icon-minerva-mainmenu',
-    '.mw-ui-icon-wikimedia-menu-base20',
-    '.minerva-header .mw-ui-icon-menu',
-    '.minerva-header [aria-label*="main menu" i]',
-    '.minerva-header [title*="main menu" i]',
-    'header.header-container [aria-label*="main menu" i]',
-    'header.header-container [title*="main menu" i]',
-    'label[for="main-menu-input"]',
-    'label[for="mw-mf-main-menu-input"]',
+  /* Kept in the same order as wiki-worker/public-sidebar.wiki. The guarded
+     publisher validates this list against that file before any live write. */
+  const SIDEBAR_GROUPS = [
+    ['Main Menu', [
+      ['Main Page', 'Main Page'],
+      ['Server Information', 'Server Information'],
+      ['Commands', 'Commands'],
+      ['Mechanics', 'Mechanics']
+    ]],
+    ['Community', [
+      ['Players', 'Noteable Players'],
+      ['Guilds', 'Noteable Guilds'],
+      ['Staff', 'Staff'],
+      ['History & Lore', 'History & Lore'],
+      ['Builds', 'Builds'],
+      ['Mapart', 'Maparts']
+    ]],
+    ['Gameplay', [
+      ['Commands', 'Commands'],
+      ['Mechanics', 'Mechanics'],
+      ['Events', 'Events'],
+      ['Warzone', 'Warzone'],
+      ['Death Duels', 'Death Duels'],
+      ['Reputation', 'Reputation'],
+      ['Playtime', 'Playtime']
+    ]],
+    ['Economy', [
+      ['Market', 'Market'],
+      ['Raw Gold', 'Raw Gold'],
+      ['Voting', 'Voting']
+    ]]
+  ];
+
+  const VECTOR_MENU_CONTROL_SELECTOR = [
     'label[for="vector-main-menu-dropdown-checkbox"]',
     '#vector-main-menu-dropdown-label',
     '#vector-main-menu-dropdown > .vector-dropdown-label',
     '.vector-main-menu-dropdown > .vector-dropdown-label'
   ].join(',');
 
-  const NATIVE_MENU_TOGGLE_SELECTOR = [
-    '#main-menu-input',
-    '#mw-mf-main-menu-input',
-    '#vector-main-menu-dropdown-checkbox',
-    'input[type="checkbox"][id*="main-menu" i]'
-  ].join(',');
-
   function isMobile() {
     return !mobileMedia || mobileMedia.matches;
+  }
+
+  function isMinerva() {
+    return Boolean(document.body && document.body.classList.contains('skin-minerva')) ||
+      Boolean(document.querySelector('#mw-mf-page-left'));
   }
 
   function storageGet() {
@@ -90,6 +110,9 @@
     return button.querySelector('[data-enthusia-theme-label]') ? button : null;
   }
 
+  /* Capture before the older target listener. Anonymous pages can expose a day
+     preference class without a usable native radio input; keep our explicit
+     mobile choice authoritative in that case. */
   document.addEventListener('click', function (event) {
     const button = isEnthusiaThemeButton(event.target);
     if (!button) return;
@@ -99,15 +122,168 @@
     applyTheme(current === 'dark' ? 'light' : 'dark', true);
   }, true);
 
+  function wikiUrl(title) {
+    if (window.mw && mw.util && typeof mw.util.getUrl === 'function') return mw.util.getUrl(title);
+    return '/wiki/' + String(title).replace(/ /g, '_');
+  }
+
+  function makeBrand() {
+    const brand = document.createElement('a');
+    brand.className = 'enthusia-native-sidebar-brand';
+    brand.href = wikiUrl('Main Page');
+    brand.setAttribute('aria-label', 'Enthusia SMP home');
+
+    const image = document.createElement('img');
+    image.src = LOGO_URL;
+    image.alt = '';
+    image.width = 30;
+    image.height = 30;
+
+    const words = document.createElement('span');
+    words.className = 'enthusia-brand-words';
+    const name = document.createElement('strong');
+    name.textContent = 'Enthusia';
+    const smp = document.createElement('span');
+    smp.textContent = 'SMP';
+    words.append(name, smp);
+    brand.append(image, words);
+    return brand;
+  }
+
   function repairMobileBrand() {
     if (!isMobile()) return;
-    document.querySelectorAll('.enthusia-site-brand img, .enthusia-mobile-drawer-brand img').forEach(function (image) {
+    document.querySelectorAll('.enthusia-site-brand img, .enthusia-mobile-drawer-brand img, .enthusia-native-sidebar-brand img').forEach(function (image) {
       const current = image.getAttribute('src') || '';
       if (current !== LOGO_URL) image.setAttribute('src', LOGO_URL);
       image.removeAttribute('hidden');
       image.style.display = 'block';
       image.style.opacity = '1';
     });
+  }
+
+  function makeMinervaNavigation() {
+    const nav = document.createElement('nav');
+    nav.className = 'enthusia-minerva-nav';
+    nav.setAttribute('aria-label', 'Enthusia navigation');
+
+    SIDEBAR_GROUPS.forEach(function (group) {
+      const section = document.createElement('section');
+      section.className = 'enthusia-minerva-nav-section';
+
+      const heading = document.createElement('h3');
+      heading.textContent = group[0];
+      section.appendChild(heading);
+
+      const list = document.createElement('ul');
+      list.className = 'enthusia-minerva-nav-list';
+      group[1].forEach(function (item) {
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = wikiUrl(item[1]);
+        link.textContent = item[0];
+        li.appendChild(link);
+        list.appendChild(li);
+      });
+      section.appendChild(list);
+      nav.appendChild(section);
+    });
+    return nav;
+  }
+
+  function ensureMinervaSidebar() {
+    if (!isMobile()) return false;
+    const menu = document.querySelector('#mw-mf-page-left');
+    if (!menu) return false;
+
+    menu.classList.add('enthusia-native-sidebar', 'enthusia-minerva-sidebar');
+    if (!menu.querySelector('.enthusia-native-sidebar-brand')) {
+      menu.prepend(makeBrand());
+    }
+    if (!menu.querySelector('.enthusia-minerva-nav')) {
+      const firstNativeList = menu.querySelector('.toggle-list__list, .hlist');
+      const nav = makeMinervaNavigation();
+      if (firstNativeList) menu.insertBefore(nav, firstNativeList);
+      else menu.appendChild(nav);
+    }
+    return true;
+  }
+
+  function vectorSidebarContent() {
+    return document.querySelector('#vector-main-menu-dropdown .vector-dropdown-content') ||
+      document.querySelector('.vector-main-menu-dropdown .vector-dropdown-content') ||
+      document.querySelector('#vector-main-menu-dropdown .vector-menu-content') ||
+      document.querySelector('.vector-main-menu-dropdown .vector-menu-content');
+  }
+
+  function ensureVectorSidebarBrand() {
+    if (!isMobile() || isMinerva()) return false;
+    const content = vectorSidebarContent();
+    if (!content) return false;
+    content.classList.add('enthusia-native-sidebar');
+    if (!content.querySelector('.enthusia-native-sidebar-brand')) content.prepend(makeBrand());
+    return true;
+  }
+
+  function minervaMenuToggle() {
+    return document.querySelector('#main-menu-input');
+  }
+
+  function syncMinervaMenuState() {
+    const toggle = minervaMenuToggle();
+    if (!toggle) {
+      root.classList.remove('enthusia-minerva-menu-open');
+      return;
+    }
+    const open = Boolean(toggle.checked);
+    root.classList.toggle('enthusia-minerva-menu-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    const label = document.querySelector('#mw-mf-main-menu-button, label[for="main-menu-input"]');
+    if (label) label.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  function bindMinervaMenuState() {
+    const toggle = minervaMenuToggle();
+    if (!toggle || toggle.dataset.enthusiaMenuStateBound === '1') return Boolean(toggle);
+    toggle.addEventListener('change', syncMinervaMenuState);
+    toggle.dataset.enthusiaMenuStateBound = '1';
+    syncMinervaMenuState();
+    return true;
+  }
+
+  function openMinervaMenu() {
+    const toggle = minervaMenuToggle();
+    if (!toggle) return false;
+    if (!toggle.checked) {
+      toggle.checked = true;
+      syncMinervaMenuState();
+      toggle.dispatchEvent(new Event('change', { bubbles: true }));
+    } else {
+      syncMinervaMenuState();
+    }
+    return true;
+  }
+
+  function vectorMenuControl() {
+    return Array.from(document.querySelectorAll(VECTOR_MENU_CONTROL_SELECTOR)).find(function (node) {
+      return !node.closest('.enthusia-mobile-quickbar, .enthusia-mobile-drawer');
+    }) || null;
+  }
+
+  function openNativeMenu() {
+    if (isMinerva() && openMinervaMenu()) return true;
+
+    const control = vectorMenuControl();
+    if (control) {
+      control.click();
+      return true;
+    }
+
+    const toggle = document.querySelector('#vector-main-menu-dropdown-checkbox, #mw-mf-main-menu-input');
+    if (toggle && typeof toggle.click === 'function') {
+      toggle.click();
+      return true;
+    }
+    return false;
   }
 
   function bottomMenuButton() {
@@ -119,80 +295,57 @@
     }) || null;
   }
 
-  function customDrawerReady() {
-    return Boolean(
-      bottomMenuButton() &&
-      document.querySelector('.enthusia-mobile-drawer') &&
-      document.querySelector('.enthusia-mobile-shade')
-    );
-  }
-
-  function closeNativeMenuState() {
-    document.querySelectorAll(NATIVE_MENU_TOGGLE_SELECTOR).forEach(function (toggle) {
-      if ('checked' in toggle) toggle.checked = false;
-      toggle.setAttribute('aria-expanded', 'false');
-    });
-    document.querySelectorAll(NATIVE_MENU_CONTROL_SELECTOR).forEach(function (control) {
-      control.setAttribute('aria-expanded', 'false');
-    });
-    root.classList.remove('enthusia-minerva-menu-open');
-  }
-
-  function syncReadyState() {
-    const ready = isMobile() && customDrawerReady();
-    root.classList.toggle('enthusia-custom-mobile-menu-ready', ready);
-    if (ready) closeNativeMenuState();
-    repairMobileBrand();
-    return ready;
-  }
-
-  function openExactBottomMenu() {
+  function bindBottomMenuToNativeSidebar() {
+    if (!isMobile()) return false;
     const button = bottomMenuButton();
-    if (!button || !customDrawerReady()) return false;
-    closeNativeMenuState();
-    button.click();
-    button.blur();
+    if (!button || button.dataset.enthusiaNativeMenuBound === '1') return Boolean(button);
+
+    button.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      openNativeMenu();
+      button.blur();
+    }, true);
+    button.dataset.enthusiaNativeMenuBound = '1';
     return true;
   }
 
-  /* Capture the skin hamburger before its label/checkbox can open the native
-     sidebar. Delegate to the exact bottom Menu button instead of duplicating the
-     drawer-opening logic. */
-  document.addEventListener('click', function (event) {
-    if (!isMobile() || !customDrawerReady()) return;
-    const target = event.target && event.target.closest ? event.target.closest(NATIVE_MENU_CONTROL_SELECTOR) : null;
-    if (!target || target.closest('.enthusia-mobile-quickbar, .enthusia-mobile-drawer')) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    openExactBottomMenu();
-  }, true);
+  function removeLegacyCustomDrawer() {
+    if (!isMobile()) return;
+    document.querySelectorAll('.enthusia-mobile-drawer, .enthusia-mobile-shade').forEach(function (node) {
+      node.remove();
+    });
+    root.classList.remove('enthusia-mobile-menu-open');
+  }
 
-  /* Some MobileFrontend/Vector variants can still toggle the hidden checkbox by
-     keyboard or script. Collapse that state immediately and open the same custom
-     drawer so no second sidebar can flash or remain active. */
-  document.addEventListener('change', function (event) {
-    if (!isMobile() || !customDrawerReady()) return;
-    const toggle = event.target;
-    if (!toggle || !toggle.matches || !toggle.matches(NATIVE_MENU_TOGGLE_SELECTOR) || !toggle.checked) return;
-    toggle.checked = false;
-    toggle.setAttribute('aria-expanded', 'false');
-    openExactBottomMenu();
-  }, true);
+  function normalizeMobileNavigation() {
+    if (!isMobile()) return;
+    removeLegacyCustomDrawer();
+    ensureMinervaSidebar();
+    ensureVectorSidebarBrand();
+    bindMinervaMenuState();
+    bindBottomMenuToNativeSidebar();
+    repairMobileBrand();
+  }
 
-  function retryUntilReady() {
-    let remaining = 16;
+  function retryInitialNavigation() {
+    let remaining = 8;
     const retry = function () {
-      if (syncReadyState()) return;
+      normalizeMobileNavigation();
       remaining -= 1;
-      if (remaining > 0) window.setTimeout(retry, 100);
+      if (remaining > 0 && (!bottomMenuButton() || (isMinerva() && !document.querySelector('#mw-mf-page-left .enthusia-minerva-nav')))) {
+        window.setTimeout(retry, 125);
+      }
     };
     retry();
   }
 
   function start() {
     restoreStoredTheme();
-    retryUntilReady();
+    retryInitialNavigation();
 
+    /* Theme classes can be updated after Common.js starts. Observe only those
+       attributes; navigation itself is present in Minerva's initial HTML. */
     const themeObserver = new MutationObserver(function () {
       window.setTimeout(function () {
         restoreStoredTheme();
@@ -202,17 +355,10 @@
     themeObserver.observe(root, { attributes: true, attributeFilter: ['class'] });
     if (document.body) themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-    if (document.body) {
-      const readyObserver = new MutationObserver(function () {
-        if (syncReadyState()) readyObserver.disconnect();
-      });
-      readyObserver.observe(document.body, { childList: true, subtree: true });
-    }
-
     if (mobileMedia) {
       const onMobileChange = function () {
         restoreStoredTheme();
-        syncReadyState();
+        normalizeMobileNavigation();
       };
       if (typeof mobileMedia.addEventListener === 'function') mobileMedia.addEventListener('change', onMobileChange);
       else if (typeof mobileMedia.addListener === 'function') mobileMedia.addListener(onMobileChange);
