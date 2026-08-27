@@ -413,27 +413,20 @@ public final class BridgeRepository implements Closeable {
 
     public RepositoryStatus status() throws SQLException {
         try (Connection connection = open(); Statement statement = connection.createStatement()) {
-            long nonceCount;
-            long unresolvedCount;
-            long deliveredCount;
-            long reminderCount;
-            long pendingItemCount;
-            try (ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM request_nonces")) {
-                nonceCount = result.next() ? result.getLong(1) : 0;
-            }
-            try (ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM reward_operations WHERE state <> 'DELIVERED'")) {
-                unresolvedCount = result.next() ? result.getLong(1) : 0;
-            }
-            try (ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM reward_operations WHERE state = 'DELIVERED'")) {
-                deliveredCount = result.next() ? result.getLong(1) : 0;
-            }
-            try (ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM contributor_reminders")) {
-                reminderCount = result.next() ? result.getLong(1) : 0;
-            }
-            try (ResultSet result = statement.executeQuery("SELECT COUNT(*) FROM pending_item_rewards")) {
-                pendingItemCount = result.next() ? result.getLong(1) : 0;
-            }
-            return new RepositoryStatus(nonceCount, unresolvedCount, deliveredCount, reminderCount, pendingItemCount);
+            return new RepositoryStatus(
+                    count(statement, "SELECT COUNT(*) FROM request_nonces"),
+                    count(statement, "SELECT COUNT(*) FROM reward_operations WHERE state <> 'DELIVERED'"),
+                    count(statement, "SELECT COUNT(*) FROM reward_operations WHERE state = 'DELIVERED'"),
+                    count(statement, "SELECT COUNT(*) FROM contributor_reminders"),
+                    count(statement, "SELECT COUNT(*) FROM pending_item_rewards")
+            );
+        }
+    }
+
+    private static long count(Statement statement, String query) throws SQLException {
+        try (ResultSet result = statement.executeQuery(query)) {
+            if (!result.next()) return 0;
+            return result.getLong(1);
         }
     }
 

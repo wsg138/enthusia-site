@@ -60,4 +60,25 @@ class BridgeRepositoryTest {
             assertTrue(repository.contributorReminders(player).isEmpty());
         }
     }
+
+    @Test
+    void repositoryStatusCountsEachPersistedWorkType() throws Exception {
+        UUID player = UUID.randomUUID();
+        JsonObject detail = new JsonObject();
+        detail.addProperty("status", "ACCEPTED");
+        try (BridgeRepository repository = new BridgeRepository(temp)) {
+            assertEquals(new BridgeRepository.RepositoryStatus(0, 0, 0, 0, 0), repository.status());
+
+            assertTrue(repository.acceptNonce("request-one", 4000, 1000));
+            repository.claimReward("reward:delivered", "MONEY", player, "d".repeat(64), 4001);
+            repository.markRewardDelivered("reward:delivered", detail, 4002);
+            repository.claimReward("reward:queued", "ITEM", player, "e".repeat(64), 4003);
+            repository.acceptQueuedItem("reward:queued", player, "minecraft:diamond", 2, detail, 4004);
+            repository.claimReward("reward:unresolved", "MONEY", player, "f".repeat(64), 4005);
+            repository.upsertContributorReminder(new BridgeRepository.ContributorReminder(
+                    "competition", "submission", player, "Build Contest", "Castle", "HELPER", null), 4006);
+
+            assertEquals(new BridgeRepository.RepositoryStatus(1, 1, 2, 1, 1), repository.status());
+        }
+    }
 }
