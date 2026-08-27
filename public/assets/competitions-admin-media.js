@@ -222,8 +222,14 @@ async function refreshPreviews() {
 async function uploadAppearance(control) {
   const id = selectedCompetitionId();
   const file = control.input?.files?.[0];
-  if (!id) return void (control.result.textContent = "Select a competition first.");
-  if (!file) return void (control.result.textContent = `Choose a PNG or JPEG ${control.label.toLowerCase()} first.`);
+  if (!id) {
+    control.result.textContent = "Select a competition first.";
+    return;
+  }
+  if (!file) {
+    control.result.textContent = `Choose a PNG or JPEG ${control.label.toLowerCase()} first.`;
+    return;
+  }
 
   control.button.disabled = true;
   control.input.disabled = true;

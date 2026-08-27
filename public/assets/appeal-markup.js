@@ -69,15 +69,15 @@ export function renderAppealMarkup(root, value) {
       continue;
     }
 
-    const listMatch = /^(?:([-*+])|(\d+)[.)])\s+(.+)$/.exec(line);
+    const listMatch = /^(?:[-*+]|(\d+)[.)])\s+(.+)$/.exec(line);
     if (listMatch) {
-      const ordered = Boolean(listMatch[2]);
+      const ordered = Boolean(listMatch[1]);
       const list = document.createElement(ordered ? "ol" : "ul");
       while (index < lines.length) {
-        const item = /^(?:([-*+])|(\d+)[.)])\s+(.+)$/.exec(lines.at(index));
-        if (!item || Boolean(item[2]) !== ordered) break;
+        const item = /^(?:[-*+]|(\d+)[.)])\s+(.+)$/.exec(lines.at(index));
+        if (!item || Boolean(item[1]) !== ordered) break;
         const entry = document.createElement("li");
-        appendInline(entry, item[3]);
+        appendInline(entry, item[2]);
         list.append(entry);
         index += 1;
       }
