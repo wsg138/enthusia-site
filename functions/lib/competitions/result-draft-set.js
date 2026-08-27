@@ -73,6 +73,18 @@ async function sha256Hex(value) {
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
+function canonicalJsonValue(value) {
+  if (Array.isArray(value)) return value.map(canonicalJsonValue);
+  if (!value || typeof value !== "object") return value;
+  if (typeof value.toJSON === "function") return canonicalJsonValue(value.toJSON());
+
+  const sorted = {};
+  for (const key of Object.keys(value).sort()) {
+    sorted[key] = canonicalJsonValue(value[key]);
+  }
+  return sorted;
+}
+
 export async function provisionalResultSetHash(results, configVersion) {
   const normalized = normalizeResultSet(results, configVersion);
   const canonical = normalized.map((result) => ({
@@ -84,7 +96,7 @@ export async function provisionalResultSetHash(results, configVersion) {
     configVersion: result.configVersion,
     snapshot: result.snapshot
   }));
-  return sha256Hex(JSON.stringify(canonical));
+  return sha256Hex(JSON.stringify(canonicalJsonValue(canonical)));
 }
 
 export async function findResultDraftOperation(db, operationId) {

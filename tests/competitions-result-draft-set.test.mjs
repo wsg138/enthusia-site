@@ -65,6 +65,18 @@ test("result-set hashing is deterministic regardless of input order", async () =
   assert.match(first, /^[0-9a-f]{64}$/);
 });
 
+test("result-set hashing is deterministic regardless of snapshot key order", async () => {
+  const first = result("submission-a", 1, 9);
+  first.snapshot.components = { community: 8, judges: { score: 10, weight: 0.6 } };
+  const retry = result("submission-a", 1, 9);
+  retry.snapshot.components = { judges: { weight: 0.6, score: 10 }, community: 8 };
+
+  assert.equal(
+    await provisionalResultSetHash([first], 4),
+    await provisionalResultSetHash([retry], 4)
+  );
+});
+
 test("result-set hashing rejects duplicate placements and duplicate submissions", async () => {
   await assert.rejects(() => provisionalResultSetHash([
     result("submission-a", 1, 9),
