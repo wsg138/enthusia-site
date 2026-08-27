@@ -94,12 +94,25 @@ test("public submission projection never includes private locations or moderatio
     ownerName: "Owner",
     title: "Entry",
     description: "Description",
+    coverImageId: "image-1",
     revision: 1,
     staffEdited: 1,
     worldName: "world",
     x: 100,
     privateNote: "secret"
-  }, [{ playerUuid: "helper", playerName: "Helper", role: "HELPER", inviteStatus: "ACCEPTED" }]);
+  }, [{
+    playerUuid: "helper",
+    playerName: "Helper",
+    role: "HELPER",
+    inviteStatus: "ACCEPTED"
+  }], [{
+    id: "image-1",
+    sortOrder: 0,
+    width: 1920,
+    height: 1080,
+    mimeType: "image/jpeg",
+    storageKey: "private/path/image-1"
+  }]);
 
   assert.equal(detail.staffEdited, true);
   assert.equal("worldName" in detail, false);
@@ -108,6 +121,17 @@ test("public submission projection never includes private locations or moderatio
   assert.deepEqual(detail.participants, [
     { playerUuid: "helper", playerName: "Helper", role: "HELPER" }
   ]);
+  assert.deepEqual(detail.images, [{
+    id: "image-1",
+    sortOrder: 0,
+    width: 1920,
+    height: 1080,
+    mimeType: "image/jpeg",
+    isCover: true,
+    url: "/api/competitions/submission-media/image-1"
+  }]);
+  assert.equal(detail.coverImageUrl, "/api/competitions/submission-media/image-1");
+  assert.equal("storageKey" in detail.images[0], false);
 });
 
 test("detail API slug validation rejects reserved and malformed values", () => {

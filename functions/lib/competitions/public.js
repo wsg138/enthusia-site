@@ -18,59 +18,123 @@ function cloneCriteria(criteria) {
   }));
 }
 
+function sectionOrEmpty(value) {
+  return value ?? {};
+}
+
+function valueOrNull(value) {
+  return value ?? null;
+}
+
+function valueOrEmpty(value) {
+  return value ?? "";
+}
+
+function publicTextConfig(config) {
+  return {
+    summary: valueOrEmpty(config.summary),
+    description: valueOrEmpty(config.description),
+    rules: valueOrEmpty(config.rules)
+  };
+}
+
+function publicAppearanceConfig(config) {
+  return {
+    bannerImageId: valueOrNull(config.bannerImageId),
+    iconImageId: valueOrNull(config.iconImageId),
+    categoryImageId: valueOrNull(config.categoryImageId),
+    accent: valueOrNull(config.accent)
+  };
+}
+
+function publicScheduleConfig(config) {
+  return {
+    submissionsOpenAt: valueOrNull(config.submissionsOpenAt),
+    submissionsCloseAt: valueOrNull(config.submissionsCloseAt),
+    reviewCloseAt: valueOrNull(config.reviewCloseAt),
+    votingOpenAt: valueOrNull(config.votingOpenAt),
+    votingCloseAt: valueOrNull(config.votingCloseAt),
+    judgingOpenAt: valueOrNull(config.judgingOpenAt),
+    judgingCloseAt: valueOrNull(config.judgingCloseAt)
+  };
+}
+
+function publicEntriesConfig(config) {
+  return {
+    allowedTypes: Array.isArray(config.allowedTypes) ? [...config.allowedTypes] : [],
+    maxEntriesPerPlayer: valueOrNull(config.maxEntriesPerPlayer),
+    maxEntriesPerGuild: valueOrNull(config.maxEntriesPerGuild),
+    minImages: valueOrNull(config.minImages),
+    maxDescriptionChars: valueOrNull(config.maxDescriptionChars),
+    coordinatesRequested: Boolean(config.coordinatesRequested),
+    judgesCanViewCoordinates: Boolean(config.judgesCanViewCoordinates),
+    maxMainMembers: valueOrNull(config.maxMainMembers),
+    maxHelpers: valueOrNull(config.maxHelpers)
+  };
+}
+
+function publicVotingConfig(config) {
+  return {
+    enabled: Boolean(config.enabled),
+    votesPerVoter: valueOrNull(config.votesPerVoter),
+    minimumActiveMinutes: valueOrNull(config.minimumActiveMinutes),
+    allowChangesUntilClose: Boolean(config.allowChangesUntilClose)
+  };
+}
+
+function publicJudgingConfig(config) {
+  return {
+    enabled: Boolean(config.enabled),
+    criteria: cloneCriteria(config.criteria),
+    communityWeight: valueOrNull(config.communityWeight),
+    judgeWeight: valueOrNull(config.judgeWeight),
+    tiebreakRule: valueOrNull(config.tiebreakRule),
+    publicFeedbackOptional: Boolean(config.publicFeedbackOptional)
+  };
+}
+
+function submissionMediaUrl(id) {
+  return id ? `/api/competitions/submission-media/${id}` : null;
+}
+
+function publicSubmissionImage(image, coverImageId) {
+  return {
+    id: image.id,
+    sortOrder: image.sortOrder,
+    width: image.width,
+    height: image.height,
+    mimeType: image.mimeType,
+    isCover: image.id === coverImageId,
+    url: submissionMediaUrl(image.id)
+  };
+}
+
+function publicParticipant(participant) {
+  return {
+    playerUuid: participant.playerUuid,
+    playerName: participant.playerName,
+    role: participant.role
+  };
+}
+
 export function publicEntriesVisibleInState(state) {
   return ENTRY_VISIBLE_STATES.has(state);
 }
 
 export function publicCompetitionConfig(config = {}) {
+  const publicConfig = sectionOrEmpty(config.public);
+  const appearance = sectionOrEmpty(config.appearance);
+  const schedule = sectionOrEmpty(config.schedule);
+  const entries = sectionOrEmpty(config.entries);
+  const voting = sectionOrEmpty(config.voting);
+  const judging = sectionOrEmpty(config.judging);
   return {
-    public: {
-      summary: config.public?.summary ?? "",
-      description: config.public?.description ?? "",
-      rules: config.public?.rules ?? ""
-    },
-    appearance: {
-      bannerImageId: config.appearance?.bannerImageId ?? null,
-      iconImageId: config.appearance?.iconImageId ?? null,
-      categoryImageId: config.appearance?.categoryImageId ?? null,
-      accent: config.appearance?.accent ?? null
-    },
-    schedule: {
-      submissionsOpenAt: config.schedule?.submissionsOpenAt ?? null,
-      submissionsCloseAt: config.schedule?.submissionsCloseAt ?? null,
-      reviewCloseAt: config.schedule?.reviewCloseAt ?? null,
-      votingOpenAt: config.schedule?.votingOpenAt ?? null,
-      votingCloseAt: config.schedule?.votingCloseAt ?? null,
-      judgingOpenAt: config.schedule?.judgingOpenAt ?? null,
-      judgingCloseAt: config.schedule?.judgingCloseAt ?? null
-    },
-    entries: {
-      allowedTypes: Array.isArray(config.entries?.allowedTypes)
-        ? [...config.entries.allowedTypes]
-        : [],
-      maxEntriesPerPlayer: config.entries?.maxEntriesPerPlayer ?? null,
-      maxEntriesPerGuild: config.entries?.maxEntriesPerGuild ?? null,
-      minImages: config.entries?.minImages ?? null,
-      maxDescriptionChars: config.entries?.maxDescriptionChars ?? null,
-      coordinatesRequested: Boolean(config.entries?.coordinatesRequested),
-      judgesCanViewCoordinates: Boolean(config.entries?.judgesCanViewCoordinates),
-      maxMainMembers: config.entries?.maxMainMembers ?? null,
-      maxHelpers: config.entries?.maxHelpers ?? null
-    },
-    voting: {
-      enabled: Boolean(config.voting?.enabled),
-      votesPerVoter: config.voting?.votesPerVoter ?? null,
-      minimumActiveMinutes: config.voting?.minimumActiveMinutes ?? null,
-      allowChangesUntilClose: Boolean(config.voting?.allowChangesUntilClose)
-    },
-    judging: {
-      enabled: Boolean(config.judging?.enabled),
-      criteria: cloneCriteria(config.judging?.criteria),
-      communityWeight: config.judging?.communityWeight ?? null,
-      judgeWeight: config.judging?.judgeWeight ?? null,
-      tiebreakRule: config.judging?.tiebreakRule ?? null,
-      publicFeedbackOptional: Boolean(config.judging?.publicFeedbackOptional)
-    },
+    public: publicTextConfig(publicConfig),
+    appearance: publicAppearanceConfig(appearance),
+    schedule: publicScheduleConfig(schedule),
+    entries: publicEntriesConfig(entries),
+    voting: publicVotingConfig(voting),
+    judging: publicJudgingConfig(judging),
     rewards: publicCompetitionRewards(config.rewards)
   };
 }
@@ -91,38 +155,25 @@ export function publicCompetitionDetail(competition) {
 }
 
 export function publicSubmissionDetail(submission, participants = [], images = []) {
-  const publicImages = images.map((image) => ({
-    id: image.id,
-    sortOrder: image.sortOrder,
-    width: image.width,
-    height: image.height,
-    mimeType: image.mimeType,
-    isCover: image.id === (submission.coverImageId ?? null),
-    url: `/api/competitions/submission-media/${image.id}`
-  }));
+  const coverImageId = valueOrNull(submission.coverImageId);
+  const publicImages = images.map((image) => publicSubmissionImage(image, coverImageId));
   return {
     id: submission.id,
     competitionId: submission.competitionId,
     entryType: submission.entryType,
     ownerUuid: submission.ownerUuid,
     ownerName: submission.ownerName,
-    guildId: submission.guildId ?? null,
-    guildName: submission.guildName ?? null,
+    guildId: valueOrNull(submission.guildId),
+    guildName: valueOrNull(submission.guildName),
     title: submission.title,
     description: submission.description,
-    coverImageId: submission.coverImageId ?? null,
-    coverImageUrl: submission.coverImageId
-      ? `/api/competitions/submission-media/${submission.coverImageId}`
-      : null,
+    coverImageId,
+    coverImageUrl: submissionMediaUrl(coverImageId),
     revision: submission.revision,
     staffEdited: Boolean(submission.staffEdited),
-    submittedAt: submission.submittedAt ?? null,
-    approvedAt: submission.approvedAt ?? null,
+    submittedAt: valueOrNull(submission.submittedAt),
+    approvedAt: valueOrNull(submission.approvedAt),
     images: publicImages,
-    participants: participants.map((participant) => ({
-      playerUuid: participant.playerUuid,
-      playerName: participant.playerName,
-      role: participant.role
-    }))
+    participants: participants.map(publicParticipant)
   };
 }
