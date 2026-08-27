@@ -172,12 +172,19 @@ function validateJudgingSchedule(errors, schedule) {
   }
 }
 
+function trimmedString(value) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
 function validCriterion(criterion, ids) {
-  const id = typeof criterion?.id === "string" ? criterion.id.trim() : "";
-  const label = typeof criterion?.label === "string" ? criterion.label.trim() : "";
-  if (!id || ids.has(id)) return false;
-  if (!label || criterion.maxScore !== 10) return false;
-  if (typeof criterion.weight !== "number" || criterion.weight <= 0) return false;
+  const id = trimmedString(criterion?.id);
+  if (!id) return false;
+  if (ids.has(id)) return false;
+  const label = trimmedString(criterion?.label);
+  if (!label) return false;
+  if (criterion.maxScore !== 10) return false;
+  if (typeof criterion.weight !== "number") return false;
+  if (criterion.weight <= 0) return false;
   ids.add(id);
   return true;
 }
@@ -209,13 +216,17 @@ function validCombinedWeights(judging) {
     && weights[0] + weights[1] === 100;
 }
 
+function sectionOrEmpty(value) {
+  return value ?? {};
+}
+
 function competitionSections(config) {
   return {
-    schedule: config.schedule ?? {},
-    entries: config.entries ?? {},
-    voting: config.voting ?? {},
-    judging: config.judging ?? {},
-    moderation: config.moderation ?? {}
+    schedule: sectionOrEmpty(config.schedule),
+    entries: sectionOrEmpty(config.entries),
+    voting: sectionOrEmpty(config.voting),
+    judging: sectionOrEmpty(config.judging),
+    moderation: sectionOrEmpty(config.moderation)
   };
 }
 

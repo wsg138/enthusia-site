@@ -8,11 +8,71 @@ import {
   validatePublishableCompetitionConfig
 } from "../functions/lib/competitions/lifecycle.js";
 
+const PUBLISHABLE_POLICY_ERRORS = [
+  "submission_schedule_invalid",
+  "review_schedule_invalid",
+  "entry_types_invalid",
+  "player_entry_limit_invalid",
+  "guild_entry_limit_invalid",
+  "group_main_limit_missing",
+  "image_limit_invalid",
+  "minimum_images_invalid",
+  "description_limit_invalid",
+  "judge_coordinates_without_locations",
+  "staff_review_required",
+  "openai_moderation_required",
+  "review_grace_invalid",
+  "voting_schedule_missing",
+  "votes_per_voter_invalid",
+  "active_playtime_invalid",
+  "judges_cannot_vote",
+  "judging_schedule_missing",
+  "judging_criterion_invalid",
+  "tiebreak_rule_missing",
+  "combined_weights_invalid"
+];
+
 function scheduledConfig() {
   const config = initialCompetitionConfig();
   config.schedule.submissionsOpenAt = "2026-09-01T00:00:00Z";
   config.schedule.submissionsCloseAt = "2026-09-08T00:00:00Z";
   config.schedule.reviewCloseAt = "2026-09-09T00:00:00Z";
+  return config;
+}
+
+function configWithEveryPublishablePolicyError() {
+  const config = scheduledConfig();
+  config.schedule.submissionsCloseAt = "2026-08-31T00:00:00Z";
+  config.schedule.reviewCloseAt = "2026-08-30T00:00:00Z";
+  Object.assign(config.entries, {
+    allowedTypes: ["UNKNOWN", "GUILD", "GROUP"],
+    maxEntriesPerPlayer: 0,
+    maxEntriesPerGuild: 0,
+    maxMainMembers: 0,
+    maxImages: 9,
+    minImages: 10,
+    maxDescriptionChars: 2499,
+    judgesCanViewCoordinates: true,
+    coordinatesRequested: false
+  });
+  Object.assign(config.moderation, {
+    requireStaffApproval: false,
+    openAIModeration: false,
+    reviewGraceMinutes: -1
+  });
+  Object.assign(config.voting, {
+    enabled: true,
+    votesPerVoter: 0,
+    minimumActiveMinutes: -1,
+    judgesCanVote: true
+  });
+  Object.assign(config.judging, {
+    enabled: true,
+    criteria: [{ id: "", label: "", maxScore: 5, weight: 0 }],
+    tiebreakRule: null,
+    communityWeight: null,
+    judgeWeight: null
+  });
   return config;
 }
 
@@ -110,63 +170,6 @@ test("required moderation controls cannot be disabled for a publishable competit
 });
 
 test("publishable validation preserves the full policy error order", () => {
-  const config = scheduledConfig();
-  config.schedule.submissionsCloseAt = "2026-08-31T00:00:00Z";
-  config.schedule.reviewCloseAt = "2026-08-30T00:00:00Z";
-  Object.assign(config.entries, {
-    allowedTypes: ["UNKNOWN", "GUILD", "GROUP"],
-    maxEntriesPerPlayer: 0,
-    maxEntriesPerGuild: 0,
-    maxMainMembers: 0,
-    maxImages: 9,
-    minImages: 10,
-    maxDescriptionChars: 2499,
-    judgesCanViewCoordinates: true,
-    coordinatesRequested: false
-  });
-  Object.assign(config.moderation, {
-    requireStaffApproval: false,
-    openAIModeration: false,
-    reviewGraceMinutes: -1
-  });
-  Object.assign(config.voting, {
-    enabled: true,
-    votesPerVoter: 0,
-    minimumActiveMinutes: -1,
-    judgesCanVote: true
-  });
-  Object.assign(config.judging, {
-    enabled: true,
-    criteria: [{ id: "", label: "", maxScore: 5, weight: 0 }],
-    tiebreakRule: null,
-    communityWeight: null,
-    judgeWeight: null
-  });
-
-  assert.deepEqual(
-    validatePublishableCompetitionConfig(config).map((error) => error.code),
-    [
-      "submission_schedule_invalid",
-      "review_schedule_invalid",
-      "entry_types_invalid",
-      "player_entry_limit_invalid",
-      "guild_entry_limit_invalid",
-      "group_main_limit_missing",
-      "image_limit_invalid",
-      "minimum_images_invalid",
-      "description_limit_invalid",
-      "judge_coordinates_without_locations",
-      "staff_review_required",
-      "openai_moderation_required",
-      "review_grace_invalid",
-      "voting_schedule_missing",
-      "votes_per_voter_invalid",
-      "active_playtime_invalid",
-      "judges_cannot_vote",
-      "judging_schedule_missing",
-      "judging_criterion_invalid",
-      "tiebreak_rule_missing",
-      "combined_weights_invalid"
-    ]
-  );
+  const errors = validatePublishableCompetitionConfig(configWithEveryPublishablePolicyError());
+  assert.deepEqual(errors.map((error) => error.code), PUBLISHABLE_POLICY_ERRORS);
 });
