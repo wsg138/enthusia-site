@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +31,7 @@ final class BridgeHttpServer implements AutoCloseable {
     private final RequestAuthenticator authenticator;
     private final PlaytimeIntegration playtime;
     private final GuildIntegration guilds;
+    private final Map<String, RouteHandler> routes;
     private final HttpServer server;
     private final ExecutorService executor;
 
@@ -41,6 +44,17 @@ final class BridgeHttpServer implements AutoCloseable {
         this.authenticator = new RequestAuthenticator(config.security(), repository);
         this.playtime = new PlaytimeIntegration(plugin);
         this.guilds = new GuildIntegration(plugin);
+        this.routes = Map.of(
+                "/v1/competitions/player-context", (input, body) -> playerContext(input),
+                "/v1/competitions/player-lookup", (input, body) -> playerLookup(input),
+                "/v1/competitions/guild-members", (input, body) -> guildMembers(input),
+                "/v1/competitions/rewards/deliver", (input, body) -> rewards.deliver(config, input, body),
+                "/v1/competitions/notifications/submission", (input, body) -> submissionNotification(input),
+                "/v1/competitions/notifications/contributor", (input, body) -> contributorNotification(input),
+                "/v1/competitions/link/register", (input, body) -> registerLink(input),
+                "/v1/competitions/link/status", (input, body) -> linkStatus(input),
+                "/v1/competitions/link/consume", (input, body) -> consumeLink(input)
+        );
         this.server = HttpServer.create(new InetSocketAddress(config.server().bindHost(), config.server().port()), 64);
         this.executor = Executors.newFixedThreadPool(config.server().workerThreads(), runnable -> {
             Thread thread = new Thread(runnable, "EnthusiaCompetitionBridge-HTTP");
@@ -56,61 +70,9 @@ final class BridgeHttpServer implements AutoCloseable {
     private void handle(HttpExchange exchange) {
         try {
             securityHeaders(exchange);
-            if (!"POST".equals(exchange.getRequestMethod())) {
-                send(exchange, 405, error("method_not_allowed", "Only POST is supported"));
-                return;
-            }
-            String path = exchange.getRequestURI().getPath();
-            if (!allowedRoute(path)) {
-                send(exchange, 404, error("not_found", "Unknown bridge route"));
-                return;
-            }
-            String contentType = exchange.getRequestHeaders().getFirst("Content-Type");
-            if (contentType == null || !contentType.toLowerCase().startsWith("application/json")) {
-                send(exchange, 415, error("json_required", "Content-Type must be application/json"));
-                return;
-            }
-
-            byte[] body = readBody(exchange);
-            RequestAuthenticator.Result auth = authenticator.verify(
-                    "POST",
-                    path,
-                    body,
-                    new RequestAuthenticator.Headers(
-                            exchange.getRequestHeaders().getFirst("Authorization"),
-                            exchange.getRequestHeaders().getFirst("X-Enthusia-Timestamp"),
-                            exchange.getRequestHeaders().getFirst("X-Enthusia-Nonce"),
-                            exchange.getRequestHeaders().getFirst("X-Enthusia-Content-Sha256"),
-                            exchange.getRequestHeaders().getFirst("X-Enthusia-Signature")
-                    )
-            );
-            if (!auth.accepted()) {
-                if (config.logging().rejectedRequests()) plugin.getLogger().warning("Rejected competition bridge request " + path + ": " + auth.error());
-                send(exchange, auth.status(), error(auth.error(), "Request authentication failed"));
-                return;
-            }
-
-            JsonObject input;
-            try {
-                input = JsonParser.parseString(new String(body, StandardCharsets.UTF_8)).getAsJsonObject();
-            } catch (Exception exception) {
-                send(exchange, 400, error("invalid_json", "JSON object required"));
-                return;
-            }
-
-            JsonObject output = switch (path) {
-                case "/v1/competitions/player-context" -> playerContext(input);
-                case "/v1/competitions/player-lookup" -> playerLookup(input);
-                case "/v1/competitions/guild-members" -> guildMembers(input);
-                case "/v1/competitions/rewards/deliver" -> rewards.deliver(config, input, body);
-                case "/v1/competitions/notifications/submission" -> submissionNotification(input);
-                case "/v1/competitions/notifications/contributor" -> contributorNotification(input);
-                case "/v1/competitions/link/register" -> registerLink(input);
-                case "/v1/competitions/link/status" -> linkStatus(input);
-                case "/v1/competitions/link/consume" -> consumeLink(input);
-                default -> throw new BridgeRequestException(404, "not_found", "Unknown bridge route");
-            };
-            if (config.logging().successfulRequests()) plugin.getLogger().info("Competition bridge request completed: " + path);
+            AuthenticatedRequest request = authenticate(exchange);
+            JsonObject output = routes.get(request.path()).handle(request.input(), request.body());
+            if (config.logging().successfulRequests()) plugin.getLogger().info("Competition bridge request completed: " + request.path());
             send(exchange, 200, output);
         } catch (BridgeRequestException exception) {
             safeSend(exchange, exception.status(), error(exception.code(), exception.getMessage()));
@@ -119,6 +81,47 @@ final class BridgeHttpServer implements AutoCloseable {
             safeSend(exchange, 503, error("bridge_unavailable", "Bridge operation failed"));
         } finally {
             exchange.close();
+        }
+    }
+
+    private AuthenticatedRequest authenticate(HttpExchange exchange) throws Exception {
+        if (!"POST".equals(exchange.getRequestMethod())) {
+            throw new BridgeRequestException(405, "method_not_allowed", "Only POST is supported");
+        }
+        String path = exchange.getRequestURI().getPath();
+        if (!routes.containsKey(path)) {
+            throw new BridgeRequestException(404, "not_found", "Unknown bridge route");
+        }
+        String contentType = exchange.getRequestHeaders().getFirst("Content-Type");
+        if (contentType == null || !contentType.toLowerCase(Locale.ROOT).startsWith("application/json")) {
+            throw new BridgeRequestException(415, "json_required", "Content-Type must be application/json");
+        }
+
+        byte[] body = readBody(exchange);
+        RequestAuthenticator.Result auth = authenticator.verify(
+                "POST",
+                path,
+                body,
+                new RequestAuthenticator.Headers(
+                        exchange.getRequestHeaders().getFirst("Authorization"),
+                        exchange.getRequestHeaders().getFirst("X-Enthusia-Timestamp"),
+                        exchange.getRequestHeaders().getFirst("X-Enthusia-Nonce"),
+                        exchange.getRequestHeaders().getFirst("X-Enthusia-Content-Sha256"),
+                        exchange.getRequestHeaders().getFirst("X-Enthusia-Signature")
+                )
+        );
+        if (!auth.accepted()) {
+            if (config.logging().rejectedRequests()) plugin.getLogger().warning("Rejected competition bridge request " + path + ": " + auth.error());
+            throw new BridgeRequestException(auth.status(), auth.error(), "Request authentication failed");
+        }
+        return new AuthenticatedRequest(path, body, parseInput(body));
+    }
+
+    private static JsonObject parseInput(byte[] body) throws BridgeRequestException {
+        try {
+            return JsonParser.parseString(new String(body, StandardCharsets.UTF_8)).getAsJsonObject();
+        } catch (Exception exception) {
+            throw new BridgeRequestException(400, "invalid_json", "JSON object required");
         }
     }
 
@@ -280,18 +283,6 @@ final class BridgeHttpServer implements AutoCloseable {
         return body;
     }
 
-    private static boolean allowedRoute(String path) {
-        return path.equals("/v1/competitions/player-context")
-                || path.equals("/v1/competitions/player-lookup")
-                || path.equals("/v1/competitions/guild-members")
-                || path.equals("/v1/competitions/rewards/deliver")
-                || path.equals("/v1/competitions/notifications/submission")
-                || path.equals("/v1/competitions/notifications/contributor")
-                || path.equals("/v1/competitions/link/register")
-                || path.equals("/v1/competitions/link/status")
-                || path.equals("/v1/competitions/link/consume");
-    }
-
     private static JsonObject playerResult(UUID uuid, String name) {
         JsonObject output = new JsonObject();
         output.addProperty("uuid", uuid.toString());
@@ -364,6 +355,13 @@ final class BridgeHttpServer implements AutoCloseable {
         String value = exception.getMessage();
         if (value == null || value.isBlank()) value = exception.getClass().getSimpleName();
         return value.length() > 300 ? value.substring(0, 300) : value;
+    }
+
+    private record AuthenticatedRequest(String path, byte[] body, JsonObject input) {}
+
+    @FunctionalInterface
+    private interface RouteHandler {
+        JsonObject handle(JsonObject input, byte[] exactBody) throws Exception;
     }
 
     @Override
