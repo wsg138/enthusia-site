@@ -150,23 +150,34 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
         if (command.getName().equalsIgnoreCase("competitionlink")) {
             return handleLinkCommand(sender, args);
         }
+        return handleBridgeCommand(sender, args);
+    }
+
+    private boolean handleBridgeCommand(CommandSender sender, String[] args) {
         if (!sender.hasPermission("enthusia.competitions.bridge.admin")) {
             sender.sendMessage(ChatColor.RED + "You do not have permission to manage the competition bridge.");
             return true;
         }
         String subcommand = args.length == 0 ? "status" : args[0].toLowerCase(Locale.ROOT);
         if (subcommand.equals("reload")) {
-            boolean success = reloadBridge();
-            sender.sendMessage(success
-                    ? ChatColor.GREEN + "Competition bridge reloaded successfully."
-                    : ChatColor.RED + "Competition bridge reload failed; the previous runtime was preserved when possible. Check console logs.");
+            sendReloadResult(sender, reloadBridge());
             return true;
         }
         if (!subcommand.equals("status")) {
             sender.sendMessage(ChatColor.RED + "Usage: /competitionbridge <status|reload>");
             return true;
         }
+        sendBridgeStatus(sender);
+        return true;
+    }
 
+    private static void sendReloadResult(CommandSender sender, boolean success) {
+        sender.sendMessage(success
+                ? ChatColor.GREEN + "Competition bridge reloaded successfully."
+                : ChatColor.RED + "Competition bridge reload failed; the previous runtime was preserved when possible. Check console logs.");
+    }
+
+    private void sendBridgeStatus(CommandSender sender) {
         BridgeConfig config = runtimeConfig;
         sender.sendMessage(ChatColor.GOLD + "Enthusia Competition Bridge");
         sender.sendMessage(ChatColor.GRAY + "Listener: " + listenerSummary(config));
@@ -185,7 +196,6 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
         } catch (Exception exception) {
             sender.sendMessage(ChatColor.RED + "Repository status unavailable: " + exception.getClass().getSimpleName());
         }
-        return true;
     }
 
     private boolean handleLinkCommand(CommandSender sender, String[] args) {
@@ -203,6 +213,11 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
             player.sendMessage(ChatColor.RED + "Competition account linking is temporarily unavailable.");
             return true;
         }
+        claimLinkCode(player, repo, code);
+        return true;
+    }
+
+    private void claimLinkCode(Player player, LinkCodeRepository repo, String code) {
         try {
             LinkCodeRepository.LinkStatus result = repo.claim(
                     code,
@@ -210,18 +225,21 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
                     player.getName(),
                     System.currentTimeMillis()
             );
-            switch (result.status()) {
-                case "CLAIMED" -> player.sendMessage(ChatColor.GREEN + "Link code accepted. Return to the Enthusia website to finish linking this account.");
-                case "EXPIRED" -> player.sendMessage(ChatColor.RED + "That link code is expired or does not exist. Generate a new code on the website.");
-                case "ALREADY_CLAIMED" -> player.sendMessage(ChatColor.RED + "That link code was already claimed by another Minecraft account.");
-                case "INVALID" -> player.sendMessage(ChatColor.RED + "That link code is invalid. Codes are eight characters.");
-                default -> player.sendMessage(ChatColor.RED + "The link could not be completed. Generate a new code and try again.");
-            }
+            sendLinkResult(player, result.status());
         } catch (Exception exception) {
             getLogger().log(Level.WARNING, "Minecraft competition link claim failed for " + player.getUniqueId(), exception);
             player.sendMessage(ChatColor.RED + "Competition account linking is temporarily unavailable.");
         }
-        return true;
+    }
+
+    private static void sendLinkResult(Player player, String status) {
+        switch (status) {
+            case "CLAIMED" -> player.sendMessage(ChatColor.GREEN + "Link code accepted. Return to the Enthusia website to finish linking this account.");
+            case "EXPIRED" -> player.sendMessage(ChatColor.RED + "That link code is expired or does not exist. Generate a new code on the website.");
+            case "ALREADY_CLAIMED" -> player.sendMessage(ChatColor.RED + "That link code was already claimed by another Minecraft account.");
+            case "INVALID" -> player.sendMessage(ChatColor.RED + "That link code is invalid. Codes are eight characters.");
+            default -> player.sendMessage(ChatColor.RED + "The link could not be completed. Generate a new code and try again.");
+        }
     }
 
     @Override
