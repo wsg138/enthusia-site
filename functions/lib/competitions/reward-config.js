@@ -6,7 +6,11 @@ const MAX_RANDOM_RECIPIENTS = 100;
 const MAX_PUBLIC_LABEL = 100;
 const MAX_PUBLIC_DESCRIPTION = 500;
 const MAX_PAYLOAD_TEXT = 1000;
-const MAX_SAFE_REWARD_AMOUNT = 9_000_000_000_000_000;
+const MAX_SAFE_REWARD_AMOUNT = 9 * 10 ** 15;
+
+const IDENTIFIER_CHARACTERS = new Set(
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._:-"
+);
 
 const REWARD_TYPES = new Set([
   "MONEY",
@@ -28,22 +32,33 @@ const DISTRIBUTION_MODES = new Set([
   "MANUAL"
 ]);
 
-function text(value, max, { required = false, multiline = false } = {}) {
-  if (value === null || value === undefined || value === "") return required ? null : "";
-  if (typeof value !== "string") return null;
-  const normalized = multiline
+function normalizedText(value, multiline) {
+  return multiline
     ? value.replace(/\r\n?/g, "\n").trim()
     : value.trim().replace(/\s+/g, " ");
-  if ((required && !normalized) || normalized.length > max) return null;
+}
+
+function text(value, max, { required = false, multiline = false } = {}) {
+  if ([null, undefined, ""].includes(value)) {
+    if (required) return null;
+    return "";
+  }
+  if (typeof value !== "string") return null;
+  const normalized = normalizedText(value, multiline);
+  if (required && !normalized) return null;
+  if (normalized.length > max) return null;
   return normalized;
+}
+
+function hasOnlyIdentifierCharacters(value) {
+  return [...value].every((character) => IDENTIFIER_CHARACTERS.has(character));
 }
 
 function identifier(value, max = 128) {
   if (typeof value !== "string") return null;
   const normalized = value.trim();
-  return normalized && normalized.length <= max && /^[A-Za-z0-9._:-]+$/.test(normalized)
-    ? normalized
-    : null;
+  if (!normalized || normalized.length > max) return null;
+  return hasOnlyIdentifierCharacters(normalized) ? normalized : null;
 }
 
 function positiveInteger(value, max) {
@@ -59,50 +74,134 @@ function optionalDurationMinutes(value) {
   return Number.isInteger(value) && value >= 1 && value <= 5_256_000 ? value : undefined;
 }
 
+function recordOrEmpty(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  return value;
+}
+
+function sanitizeMoneyPayload(source) {
+  const amount = nonNegativeSafeInteger(source.amount);
+  const currency = identifier(source.currency ?? "balance", 48);
+  if (amount === null || !currency) return null;
+  return { amount, currency };
+}
+
+function sanitizeItemPayload(source) {
+  const itemKey = identifier(source.itemKey, 160);
+  const amount = positiveInteger(source.amount ?? 1, 2304);
+  if (!itemKey || amount === null) return null;
+  return { itemKey, amount };
+}
+
+function sanitizeTimedIdentifierPayload(source, field, max) {
+  const value = identifier(source[field], max);
+  const durationMinutes = optionalDurationMinutes(source.durationMinutes);
+  if (!value || durationMinutes === undefined) return null;
+  return { [field]: value, durationMinutes };
+}
+
+function sanitizeCommandPayload(source) {
+  if (typeof source.command !== "string") return null;
+  if (/[\r\n]/.test(source.command)) return null;
+  const command = text(source.command, 500, { required: true });
+  return command ? { command } : null;
+}
+
+function sanitizeManualPayload(source) {
+  const instructions = text(source.instructions, MAX_PAYLOAD_TEXT, { required: true, multiline: true });
+  return instructions ? { instructions } : null;
+}
+
+const PAYLOAD_SANITIZERS = new Map([
+  ["MONEY", sanitizeMoneyPayload],
+  ["ITEM", sanitizeItemPayload],
+  ["LORE_ITEM", sanitizeItemPayload],
+  ["PERMISSION", (source) => sanitizeTimedIdentifierPayload(source, "permission", 160)],
+  ["RANK", (source) => sanitizeTimedIdentifierPayload(source, "rank", 96)],
+  ["COMMAND", sanitizeCommandPayload],
+  ["MANUAL", sanitizeManualPayload]
+]);
+
 function sanitizePayload(rewardType, payload) {
-  const source = payload && typeof payload === "object" && !Array.isArray(payload) ? payload : {};
+  const sanitizer = PAYLOAD_SANITIZERS.get(rewardType);
+  return sanitizer ? sanitizer(recordOrEmpty(payload)) : null;
+}
 
-  if (rewardType === "MONEY") {
-    const amount = nonNegativeSafeInteger(source.amount);
-    const currency = identifier(source.currency ?? "balance", 48);
-    if (amount === null || !currency) return null;
-    return { amount, currency };
-  }
+function valueOrDefault(value, fallback) {
+  return value === undefined ? fallback : value;
+}
 
-  if (rewardType === "ITEM" || rewardType === "LORE_ITEM") {
-    const itemKey = identifier(source.itemKey, 160);
-    const amount = positiveInteger(source.amount ?? 1, 2304);
-    if (!itemKey || amount === null) return null;
-    return { itemKey, amount };
-  }
+function sanitizeDistribution(raw, rewardType) {
+  const mode = raw.distributionMode ?? defaultRewardDistribution(rewardType);
+  if (!DISTRIBUTION_MODES.has(mode)) return null;
+  const random = mode === "RANDOM_ELIGIBLE" || mode === "RANDOM_GUILD_MEMBERS";
+  const randomCount = random
+    ? positiveInteger(raw.randomCount, MAX_RANDOM_RECIPIENTS)
+    : null;
+  return { distributionMode: mode, randomCount };
+}
 
-  if (rewardType === "PERMISSION") {
-    const permission = identifier(source.permission, 160);
-    const durationMinutes = optionalDurationMinutes(source.durationMinutes);
-    if (!permission || durationMinutes === undefined) return null;
-    return { permission, durationMinutes };
-  }
+function sanitizeHelperWeight(value, includeHelpers) {
+  if (!includeHelpers) return 0;
+  const weight = valueOrDefault(value, 0.5);
+  if (typeof weight !== "number") return null;
+  if (!Number.isFinite(weight)) return null;
+  if (weight <= 0 || weight > 1) return null;
+  return weight;
+}
 
-  if (rewardType === "RANK") {
-    const rank = identifier(source.rank, 96);
-    const durationMinutes = optionalDurationMinutes(source.durationMinutes);
-    if (!rank || durationMinutes === undefined) return null;
-    return { rank, durationMinutes };
-  }
+function sanitizeHelperPolicy(raw) {
+  const includeHelpers = valueOrDefault(raw.includeHelpers, false);
+  if (typeof includeHelpers !== "boolean") return null;
+  const helperWeight = sanitizeHelperWeight(raw.helperWeight, includeHelpers);
+  return helperWeight === null ? null : { includeHelpers, helperWeight };
+}
 
-  if (rewardType === "COMMAND") {
-    if (typeof source.command !== "string" || /[\r\n]/.test(source.command)) return null;
-    const command = text(source.command, 500, { required: true });
-    if (!command) return null;
-    return { command };
-  }
+function sanitizePublicDetails(raw) {
+  const publicLabel = text(raw.publicLabel, MAX_PUBLIC_LABEL, { required: true });
+  const publicDescription = text(raw.publicDescription, MAX_PUBLIC_DESCRIPTION, { required: true, multiline: true });
+  return publicLabel && publicDescription ? { publicLabel, publicDescription } : null;
+}
 
-  if (rewardType === "MANUAL") {
-    const instructions = text(source.instructions, MAX_PAYLOAD_TEXT, { required: true, multiline: true });
-    return instructions ? { instructions } : null;
-  }
+function missing(...values) {
+  return values.some((value) => value === null);
+}
 
-  return null;
+function isRecord(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function sanitizeRewardIdentity(raw, ids) {
+  const id = identifier(raw.id, 48);
+  if (!id || ids.has(id)) return null;
+  const placement = positiveInteger(raw.placement, MAX_PLACEMENT);
+  if (placement === null) return null;
+  const rewardType = raw.rewardType;
+  if (!REWARD_TYPES.has(rewardType)) return null;
+  return { id, placement, rewardType };
+}
+
+function sanitizeRewardDefinition(raw, ids) {
+  if (!isRecord(raw)) return null;
+  const identity = sanitizeRewardIdentity(raw, ids);
+  if (!identity) return null;
+
+  const distribution = sanitizeDistribution(raw, identity.rewardType);
+  const helperPolicy = sanitizeHelperPolicy(raw);
+  const publicDetails = sanitizePublicDetails(raw);
+  const payload = sanitizePayload(identity.rewardType, raw.payload);
+  if (missing(distribution, helperPolicy, publicDetails, payload)) return null;
+
+  const definition = {
+    ...identity,
+    ...distribution,
+    ...helperPolicy,
+    ...publicDetails,
+    payload
+  };
+  if (validateRewardDefinition(definition).length) return null;
+  ids.add(identity.id);
+  return definition;
 }
 
 export function initialRewardConfig() {
@@ -110,8 +209,8 @@ export function initialRewardConfig() {
 }
 
 export function sanitizeCompetitionRewards(input) {
-  const source = input === null || input === undefined ? {} : input;
-  if (!source || typeof source !== "object" || Array.isArray(source)) return null;
+  const source = input ?? {};
+  if (!isRecord(source)) return null;
 
   const rawDefinitions = source.definitions ?? [];
   if (!Array.isArray(rawDefinitions) || rawDefinitions.length > MAX_REWARDS) return null;
@@ -119,53 +218,8 @@ export function sanitizeCompetitionRewards(input) {
   const definitions = [];
   const ids = new Set();
   for (const raw of rawDefinitions) {
-    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
-
-    const id = identifier(raw.id, 48);
-    const placement = positiveInteger(raw.placement, MAX_PLACEMENT);
-    const rewardType = raw.rewardType;
-    if (!id || ids.has(id) || placement === null || !REWARD_TYPES.has(rewardType)) return null;
-
-    const distributionMode = raw.distributionMode ?? defaultRewardDistribution(rewardType);
-    if (!DISTRIBUTION_MODES.has(distributionMode)) return null;
-
-    const randomCount = distributionMode === "RANDOM_ELIGIBLE" || distributionMode === "RANDOM_GUILD_MEMBERS"
-      ? positiveInteger(raw.randomCount, MAX_RANDOM_RECIPIENTS)
-      : null;
-
-    const includeHelpers = raw.includeHelpers === undefined ? false : raw.includeHelpers;
-    if (typeof includeHelpers !== "boolean") return null;
-    const helperWeight = includeHelpers
-      ? (raw.helperWeight === undefined ? 0.5 : raw.helperWeight)
-      : 0;
-    if (
-      typeof helperWeight !== "number"
-      || !Number.isFinite(helperWeight)
-      || helperWeight < 0
-      || helperWeight > 1
-      || (includeHelpers && helperWeight === 0)
-    ) return null;
-
-    const publicLabel = text(raw.publicLabel, MAX_PUBLIC_LABEL, { required: true });
-    const publicDescription = text(raw.publicDescription, MAX_PUBLIC_DESCRIPTION, { required: true, multiline: true });
-    const payload = sanitizePayload(rewardType, raw.payload);
-    if (!publicLabel || !publicDescription || !payload) return null;
-
-    const definition = {
-      id,
-      placement,
-      rewardType,
-      distributionMode,
-      randomCount,
-      includeHelpers,
-      helperWeight,
-      publicLabel,
-      publicDescription,
-      payload
-    };
-    if (validateRewardDefinition(definition).length) return null;
-
-    ids.add(id);
+    const definition = sanitizeRewardDefinition(raw, ids);
+    if (!definition) return null;
     definitions.push(definition);
   }
 

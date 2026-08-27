@@ -123,3 +123,32 @@ test("reward definitions reject malformed commands and unsafe identifiers", () =
     definitions: [commandReward({ id: "bad id" })]
   }), null);
 });
+
+test("reward config sanitizes every supported execution payload", () => {
+  const payloads = [
+    ["MONEY", { amount: 0 }, { amount: 0, currency: "balance" }],
+    ["ITEM", { itemKey: "minecraft:diamond" }, { itemKey: "minecraft:diamond", amount: 1 }],
+    ["LORE_ITEM", { itemKey: "enthusia:champion", amount: 2 }, { itemKey: "enthusia:champion", amount: 2 }],
+    ["PERMISSION", { permission: "enthusia.winner" }, { permission: "enthusia.winner", durationMinutes: null }],
+    ["RANK", { rank: "champion", durationMinutes: 60 }, { rank: "champion", durationMinutes: 60 }],
+    ["COMMAND", { command: "  say   winner  " }, { command: "say winner" }],
+    ["MANUAL", { instructions: "Line one\r\nLine two" }, { instructions: "Line one\nLine two" }]
+  ];
+  const definitions = payloads.map(([rewardType, payload], index) => ({
+    id: `reward-${index}`,
+    placement: 1,
+    rewardType,
+    publicLabel: `${rewardType} reward`,
+    publicDescription: "Awarded to the competition winner.",
+    payload
+  }));
+
+  const sanitized = sanitizeCompetitionRewards({ definitions });
+  assert.ok(sanitized);
+  for (const [rewardType, , expected] of payloads) {
+    assert.deepEqual(
+      sanitized.definitions.find((definition) => definition.rewardType === rewardType)?.payload,
+      expected
+    );
+  }
+});
