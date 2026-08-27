@@ -46,7 +46,7 @@ public final class BridgeRepository implements Closeable {
             statement.execute("PRAGMA journal_mode = WAL");
             createRequestNonceTable(statement);
             createRewardOperationTable(statement);
-            if (!hasColumn(connection, "reward_operations", "request_hash")) {
+            if (!hasRewardRequestHashColumn(connection)) {
                 statement.execute("ALTER TABLE reward_operations ADD COLUMN request_hash TEXT");
             }
             createPendingItemTable(statement);
@@ -115,9 +115,12 @@ public final class BridgeRepository implements Closeable {
         statement.execute("CREATE INDEX IF NOT EXISTS idx_contributor_reminders_player ON contributor_reminders(player_uuid)");
     }
 
-    private static boolean hasColumn(Connection connection, String table, String column) throws SQLException {
-        try (Statement statement = connection.createStatement(); ResultSet result = statement.executeQuery("PRAGMA table_info(" + table + ")")) {
-            while (result.next()) if (column.equalsIgnoreCase(result.getString("name"))) return true;
+    private static boolean hasRewardRequestHashColumn(Connection connection) throws SQLException {
+        try (Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery("PRAGMA table_info(reward_operations)")) {
+            while (result.next()) {
+                if ("request_hash".equalsIgnoreCase(result.getString("name"))) return true;
+            }
             return false;
         }
     }

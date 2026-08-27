@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,6 +15,34 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BridgeRepositoryTest {
     @TempDir Path temp;
+
+    @Test
+    void migratesRewardOperationsCreatedBeforeRequestHashes() throws Exception {
+        Class.forName("org.sqlite.JDBC");
+        String jdbcUrl = "jdbc:sqlite:" + temp.resolve("bridge.db").toAbsolutePath().normalize();
+        try (Connection connection = DriverManager.getConnection(jdbcUrl);
+             Statement statement = connection.createStatement()) {
+            statement.execute("""
+                    CREATE TABLE reward_operations (
+                      operation_key TEXT PRIMARY KEY,
+                      reward_type TEXT NOT NULL,
+                      recipient_uuid TEXT NOT NULL,
+                      state TEXT NOT NULL CHECK(state IN ('CLAIMED','DELIVERED','FAILED_RECONCILE')),
+                      detail_json TEXT,
+                      created_at INTEGER NOT NULL,
+                      updated_at INTEGER NOT NULL
+                    )
+                    """);
+        }
+
+        UUID recipient = UUID.randomUUID();
+        try (BridgeRepository repository = new BridgeRepository(temp)) {
+            BridgeRepository.RewardClaim claim = repository.claimReward(
+                    "reward:legacy", "MONEY", recipient, "a".repeat(64), 5000);
+            assertEquals(BridgeRepository.RewardClaimState.CLAIMED, claim.state());
+            assertEquals("a".repeat(64), claim.operation().requestHash());
+        }
+    }
 
     @Test
     void rewardOperationRejectsChangedRequestBehindSameIdempotencyKey() throws Exception {
