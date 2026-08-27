@@ -1,4 +1,5 @@
 import { defaultRewardDistribution, validateRewardDefinition } from "./rewards.js";
+import { isSafeIdentifier } from "../validation.js";
 
 const MAX_REWARDS = 60;
 const MAX_PLACEMENT = 100;
@@ -7,10 +8,6 @@ const MAX_PUBLIC_LABEL = 100;
 const MAX_PUBLIC_DESCRIPTION = 500;
 const MAX_PAYLOAD_TEXT = 1000;
 const MAX_SAFE_REWARD_AMOUNT = 9 * 10 ** 15;
-
-const IDENTIFIER_CHARACTERS = new Set(
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._:-"
-);
 
 const REWARD_TYPES = new Set([
   "MONEY",
@@ -50,15 +47,10 @@ function text(value, max, { required = false, multiline = false } = {}) {
   return normalized;
 }
 
-function hasOnlyIdentifierCharacters(value) {
-  return [...value].every((character) => IDENTIFIER_CHARACTERS.has(character));
-}
-
 function identifier(value, max = 128) {
   if (typeof value !== "string") return null;
   const normalized = value.trim();
-  if (!normalized || normalized.length > max) return null;
-  return hasOnlyIdentifierCharacters(normalized) ? normalized : null;
+  return isSafeIdentifier(normalized, { maxLength: max }) ? normalized : null;
 }
 
 function positiveInteger(value, max) {

@@ -1,4 +1,5 @@
 import { initialRewardConfig, sanitizeCompetitionRewards } from "./reward-config.js";
+import { isSafeIdentifier } from "../validation.js";
 
 const TITLE_MIN = 3;
 const TITLE_MAX = 100;
@@ -75,9 +76,7 @@ function optionalIdentifier(value, max = 128) {
   if (!hasValue(value)) return null;
   if (typeof value !== "string") return INVALID;
   const normalized = value.trim();
-  return normalized && normalized.length <= max && /^[A-Za-z0-9._:-]+$/.test(normalized)
-    ? normalized
-    : INVALID;
+  return isSafeIdentifier(normalized, { maxLength: max }) ? normalized : INVALID;
 }
 
 function strictBoolean(value, fallback) {
@@ -153,7 +152,9 @@ function sanitizeGuildPermission(value, fallback) {
   if (!hasValue(value)) return fallback;
   if (typeof value !== "string") return INVALID;
   const permission = value.trim();
-  return /^[a-z0-9._-]{3,64}$/i.test(permission) ? permission.toLowerCase() : INVALID;
+  return isSafeIdentifier(permission, { minLength: 3, maxLength: 64, allowColon: false })
+    ? permission.toLowerCase()
+    : INVALID;
 }
 
 function sanitizeEntries(input, defaults) {
@@ -224,15 +225,32 @@ function sanitizeVoting(input, defaults) {
   };
 }
 
-function sanitizeCriterion(item, ids) {
-  if (!item || typeof item !== "object" || Array.isArray(item)) return INVALID;
+function record(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function sanitizeCriterionIdentity(item, ids) {
   const id = optionalIdentifier(item.id, 48);
+  if (id === INVALID || !id || ids.has(id)) return INVALID;
+  return id;
+}
+
+function sanitizeCriterionScore(item) {
   const label = cleanText(item.label);
   const weight = optionalNumber(item.weight, 0.000001, 1000);
-  if (id === INVALID || weight === INVALID || !id || ids.has(id)) return INVALID;
-  if (!label || label.length > 80 || item.maxScore !== 10) return INVALID;
+  if (weight === INVALID) return INVALID;
+  if (!label || label.length > 80) return INVALID;
+  if (item.maxScore !== 10) return INVALID;
+  return { label, weight };
+}
+
+function sanitizeCriterion(item, ids) {
+  if (!record(item)) return INVALID;
+  const id = sanitizeCriterionIdentity(item, ids);
+  const score = sanitizeCriterionScore(item);
+  if (id === INVALID || score === INVALID) return INVALID;
   ids.add(id);
-  return { id, label, maxScore: 10, weight };
+  return { id, label: score.label, maxScore: 10, weight: score.weight };
 }
 
 function sanitizeCriteria(value) {
@@ -286,6 +304,87 @@ function sanitizeModeration(input, defaults) {
   };
 }
 
+function trimmedText(value) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function hasLengthBetween(value, min, max) {
+  return value.length >= min && value.length <= max;
+}
+
+function initialAppearanceConfig() {
+  return {
+    bannerImageId: null,
+    iconImageId: null,
+    categoryImageId: null,
+    accent: null
+  };
+}
+
+function initialScheduleConfig() {
+  return {
+    submissionsOpenAt: null,
+    submissionsCloseAt: null,
+    reviewCloseAt: null,
+    votingOpenAt: null,
+    votingCloseAt: null,
+    judgingOpenAt: null,
+    judgingCloseAt: null
+  };
+}
+
+function initialEntriesConfig() {
+  return {
+    allowedTypes: ["SOLO"],
+    maxEntriesPerPlayer: 3,
+    maxEntriesPerGuild: 1,
+    maxImages: 8,
+    minImages: 1,
+    maxDescriptionChars: 2500,
+    coordinatesRequested: false,
+    judgesCanViewCoordinates: false,
+    maxMainMembers: null,
+    maxHelpers: null,
+    guildSubmissionPermission: "competition.submit"
+  };
+}
+
+function initialVotingConfig() {
+  return {
+    enabled: false,
+    votesPerVoter: 3,
+    minimumActiveMinutes: 120,
+    allowChangesUntilClose: true,
+    communityScoreMode: "BALLOT_APPROVAL_RATE",
+    showTotalsToStaff: true,
+    showTotalsPublicWhileOpen: false,
+    helpersCanVoteOwnEntry: true,
+    guildMembersCanVoteOwnEntry: false,
+    judgesCanVote: false
+  };
+}
+
+function initialJudgingConfig() {
+  return {
+    enabled: false,
+    allowNonStaffJudges: true,
+    publicFeedbackOptional: true,
+    criteria: [],
+    communityWeight: null,
+    judgeWeight: null,
+    tiebreakRule: null
+  };
+}
+
+function initialModerationConfig() {
+  return {
+    requireStaffApproval: true,
+    reviewGraceMinutes: 1440,
+    openAIModeration: true,
+    minecraftPrivacyReview: "MANUAL_STAFF"
+  };
+}
+
 export function competitionSlug(value) {
   return cleanText(value)
     .toLowerCase()
@@ -298,14 +397,14 @@ export function competitionSlug(value) {
 export function sanitizeDraftCompetition(input) {
   const title = cleanText(input?.title);
   const category = cleanText(input?.category);
-  const summary = typeof input?.summary === "string" ? input.summary.trim() : "";
+  const summary = trimmedText(input?.summary);
   const requestedSlug = cleanText(input?.slug);
   const slug = competitionSlug(requestedSlug || title);
 
-  if (title.length < TITLE_MIN || title.length > TITLE_MAX) return null;
-  if (!category || category.length > CATEGORY_MAX) return null;
+  if (!hasLengthBetween(title, TITLE_MIN, TITLE_MAX)) return null;
+  if (!hasLengthBetween(category, 1, CATEGORY_MAX)) return null;
   if (summary.length > SUMMARY_MAX) return null;
-  if (!slug || slug.length > SLUG_MAX) return null;
+  if (!hasLengthBetween(slug, 1, SLUG_MAX)) return null;
 
   return { title, category, summary, slug };
 }
@@ -313,67 +412,14 @@ export function sanitizeDraftCompetition(input) {
 export function initialCompetitionConfig({ summary = "" } = {}) {
   return {
     schemaVersion: 1,
-    public: {
-      summary,
-      description: "",
-      rules: ""
-    },
-    appearance: {
-      bannerImageId: null,
-      iconImageId: null,
-      categoryImageId: null,
-      accent: null
-    },
-    schedule: {
-      submissionsOpenAt: null,
-      submissionsCloseAt: null,
-      reviewCloseAt: null,
-      votingOpenAt: null,
-      votingCloseAt: null,
-      judgingOpenAt: null,
-      judgingCloseAt: null
-    },
-    entries: {
-      allowedTypes: ["SOLO"],
-      maxEntriesPerPlayer: 3,
-      maxEntriesPerGuild: 1,
-      maxImages: 8,
-      minImages: 1,
-      maxDescriptionChars: 2500,
-      coordinatesRequested: false,
-      judgesCanViewCoordinates: false,
-      maxMainMembers: null,
-      maxHelpers: null,
-      guildSubmissionPermission: "competition.submit"
-    },
-    voting: {
-      enabled: false,
-      votesPerVoter: 3,
-      minimumActiveMinutes: 120,
-      allowChangesUntilClose: true,
-      communityScoreMode: "BALLOT_APPROVAL_RATE",
-      showTotalsToStaff: true,
-      showTotalsPublicWhileOpen: false,
-      helpersCanVoteOwnEntry: true,
-      guildMembersCanVoteOwnEntry: false,
-      judgesCanVote: false
-    },
-    judging: {
-      enabled: false,
-      allowNonStaffJudges: true,
-      publicFeedbackOptional: true,
-      criteria: [],
-      communityWeight: null,
-      judgeWeight: null,
-      tiebreakRule: null
-    },
+    public: { summary, description: "", rules: "" },
+    appearance: initialAppearanceConfig(),
+    schedule: initialScheduleConfig(),
+    entries: initialEntriesConfig(),
+    voting: initialVotingConfig(),
+    judging: initialJudgingConfig(),
     rewards: initialRewardConfig(),
-    moderation: {
-      requireStaffApproval: true,
-      reviewGraceMinutes: 1440,
-      openAIModeration: true,
-      minecraftPrivacyReview: "MANUAL_STAFF"
-    }
+    moderation: initialModerationConfig()
   };
 }
 

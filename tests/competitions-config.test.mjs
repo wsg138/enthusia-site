@@ -7,6 +7,15 @@ import {
   sanitizeCompetitionConfig,
   sanitizeDraftCompetition
 } from "../functions/lib/competitions/config.js";
+import { isSafeIdentifier } from "../functions/lib/validation.js";
+
+test("safe identifiers enforce explicit length and character policies", () => {
+  assert.equal(isSafeIdentifier("media:summer-2026"), true);
+  assert.equal(isSafeIdentifier("competition.submit", { minLength: 3, maxLength: 64, allowColon: false }), true);
+  assert.equal(isSafeIdentifier("competition:submit", { allowColon: false }), false);
+  assert.equal(isSafeIdentifier("bad identifier"), false);
+  assert.equal(isSafeIdentifier("x", { minLength: 2 }), false);
+});
 
 test("competition slugs are stable and URL-safe", () => {
   assert.equal(competitionSlug("  Summer Build Competition!  "), "summer-build-competition");
