@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 final class LinkCodeRepository implements AutoCloseable {
+    private static final int SINGLE_ROW = 1;
+
     record LinkStatus(String status, UUID minecraftUuid, String minecraftName, long expiresAtMillis) {}
 
     private final String jdbcUrl;
@@ -101,7 +103,7 @@ final class LinkCodeRepository implements AutoCloseable {
                     update.setLong(3, nowMillis);
                     update.setString(4, codeHash);
                     update.setLong(5, nowMillis);
-                    if (update.executeUpdate() != 1) {
+                    if (update.executeUpdate() != SINGLE_ROW) {
                         connection.rollback();
                         return new LinkStatus("CONFLICT", null, null, current.expiresAtMillis());
                     }

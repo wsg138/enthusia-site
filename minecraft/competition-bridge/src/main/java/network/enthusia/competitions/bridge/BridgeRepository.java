@@ -20,6 +20,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public final class BridgeRepository implements Closeable {
+    private static final int SINGLE_ROW = 1;
+
     private final String jdbcUrl;
 
     public BridgeRepository(Path dataFolder) throws Exception {
@@ -141,7 +143,7 @@ public final class BridgeRepository implements Closeable {
                     inserted = insert.executeUpdate();
                 }
                 connection.commit();
-                return inserted == 1;
+                return inserted == SINGLE_ROW;
             } catch (SQLException failure) {
                 connection.rollback();
                 throw failure;
@@ -234,7 +236,9 @@ public final class BridgeRepository implements Closeable {
             statement.setString(2, detail == null ? null : detail.toString());
             statement.setLong(3, nowMillis);
             statement.setString(4, operationKey);
-            if (statement.executeUpdate() != 1) throw new SQLException("Reward operation does not exist: " + operationKey);
+            if (statement.executeUpdate() != SINGLE_ROW) {
+                throw new SQLException("Reward operation does not exist: " + operationKey);
+            }
         }
     }
 
@@ -265,7 +269,9 @@ public final class BridgeRepository implements Closeable {
                     update.setString(1, detail == null ? null : detail.toString());
                     update.setLong(2, nowMillis);
                     update.setString(3, operationKey);
-                    if (update.executeUpdate() != 1) throw new SQLException("Reward operation is not claimable: " + operationKey);
+                    if (update.executeUpdate() != SINGLE_ROW) {
+                        throw new SQLException("Reward operation is not claimable: " + operationKey);
+                    }
                 }
                 connection.commit();
             } catch (SQLException failure) {
@@ -383,7 +389,7 @@ public final class BridgeRepository implements Closeable {
             statement.setString(1, competitionId);
             statement.setString(2, submissionId);
             statement.setString(3, playerUuid.toString());
-            return statement.executeUpdate() == 1;
+            return statement.executeUpdate() == SINGLE_ROW;
         }
     }
 

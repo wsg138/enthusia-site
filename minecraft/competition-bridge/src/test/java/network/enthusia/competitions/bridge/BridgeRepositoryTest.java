@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BridgeRepositoryTest {
+    private static final String MONEY_REWARD = "MONEY";
+
     @TempDir Path temp;
 
     @Test
@@ -38,7 +40,7 @@ class BridgeRepositoryTest {
         UUID recipient = UUID.randomUUID();
         try (BridgeRepository repository = new BridgeRepository(temp)) {
             BridgeRepository.RewardClaim claim = repository.claimReward(
-                    "reward:legacy", "MONEY", recipient, "a".repeat(64), 5000);
+                    "reward:legacy", MONEY_REWARD, recipient, "a".repeat(64), 5000);
             assertEquals(BridgeRepository.RewardClaimState.CLAIMED, claim.state());
             assertEquals("a".repeat(64), claim.operation().requestHash());
         }
@@ -52,11 +54,11 @@ class BridgeRepositoryTest {
         String hashB = "b".repeat(64);
         try (BridgeRepository repository = new BridgeRepository(temp)) {
             assertEquals(BridgeRepository.RewardClaimState.CLAIMED,
-                    repository.claimReward(key, "MONEY", recipient, hashA, 1000).state());
+                    repository.claimReward(key, MONEY_REWARD, recipient, hashA, 1000).state());
             assertEquals(BridgeRepository.RewardClaimState.RECONCILIATION_REQUIRED,
-                    repository.claimReward(key, "MONEY", recipient, hashA, 1001).state());
+                    repository.claimReward(key, MONEY_REWARD, recipient, hashA, 1001).state());
             assertEquals(BridgeRepository.RewardClaimState.OPERATION_CONFLICT,
-                    repository.claimReward(key, "MONEY", recipient, hashB, 1002).state());
+                    repository.claimReward(key, MONEY_REWARD, recipient, hashB, 1002).state());
         }
     }
 
@@ -101,11 +103,11 @@ class BridgeRepositoryTest {
             assertEquals(new BridgeRepository.RepositoryStatus(0, 0, 0, 0, 0), repository.status());
 
             assertTrue(repository.acceptNonce("request-one", 4000, 1000));
-            repository.claimReward("reward:delivered", "MONEY", player, "d".repeat(64), 4001);
+            repository.claimReward("reward:delivered", MONEY_REWARD, player, "d".repeat(64), 4001);
             repository.markRewardDelivered("reward:delivered", detail, 4002);
             repository.claimReward("reward:queued", "ITEM", player, "e".repeat(64), 4003);
             repository.acceptQueuedItem("reward:queued", player, "minecraft:diamond", 2, detail, 4004);
-            repository.claimReward("reward:unresolved", "MONEY", player, "f".repeat(64), 4005);
+            repository.claimReward("reward:unresolved", MONEY_REWARD, player, "f".repeat(64), 4005);
             repository.upsertContributorReminder(new BridgeRepository.ContributorReminder(
                     "competition", "submission", player, "Build Contest", "Castle", "HELPER", null), 4006);
 
