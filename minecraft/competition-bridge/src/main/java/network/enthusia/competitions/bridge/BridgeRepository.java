@@ -415,21 +415,24 @@ public final class BridgeRepository implements Closeable {
     }
 
     public RepositoryStatus status() throws SQLException {
-        try (Connection connection = open(); Statement statement = connection.createStatement()) {
+        try (Connection connection = open();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery("""
+                     SELECT
+                       (SELECT COUNT(*) FROM request_nonces) AS nonce_count,
+                       (SELECT COUNT(*) FROM reward_operations WHERE state <> 'DELIVERED') AS unresolved_count,
+                       (SELECT COUNT(*) FROM reward_operations WHERE state = 'DELIVERED') AS delivered_count,
+                       (SELECT COUNT(*) FROM contributor_reminders) AS reminder_count,
+                       (SELECT COUNT(*) FROM pending_item_rewards) AS pending_item_count
+                     """)) {
+            if (!result.next()) return new RepositoryStatus(0, 0, 0, 0, 0);
             return new RepositoryStatus(
-                    count(statement, "SELECT COUNT(*) FROM request_nonces"),
-                    count(statement, "SELECT COUNT(*) FROM reward_operations WHERE state <> 'DELIVERED'"),
-                    count(statement, "SELECT COUNT(*) FROM reward_operations WHERE state = 'DELIVERED'"),
-                    count(statement, "SELECT COUNT(*) FROM contributor_reminders"),
-                    count(statement, "SELECT COUNT(*) FROM pending_item_rewards")
+                    result.getLong("nonce_count"),
+                    result.getLong("unresolved_count"),
+                    result.getLong("delivered_count"),
+                    result.getLong("reminder_count"),
+                    result.getLong("pending_item_count")
             );
-        }
-    }
-
-    private static long count(Statement statement, String query) throws SQLException {
-        try (ResultSet result = statement.executeQuery(query)) {
-            if (!result.next()) return 0;
-            return result.getLong(1);
         }
     }
 
