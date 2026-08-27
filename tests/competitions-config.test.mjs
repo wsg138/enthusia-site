@@ -109,3 +109,52 @@ test("editor config rejects malformed timestamps, numbers, booleans, and entry t
   badEntryType.entries.allowedTypes = ["SOLO", "UNKNOWN"];
   assert.equal(sanitizeCompetitionConfig(badEntryType), null);
 });
+
+test("editor config normalizes every configurable section", () => {
+  const input = initialCompetitionConfig({ summary: "  Summer build  " });
+  input.public.description = "Line one\r\nLine two";
+  input.appearance.bannerImageId = "banner:summer-2026";
+  input.schedule.submissionsOpenAt = "2026-09-01T12:00:00-04:00";
+  input.entries.guildSubmissionPermission = " Competition.Submit ";
+  input.judging.enabled = true;
+  input.judging.criteria = [
+    { id: "creativity", label: "  Creativity  ", maxScore: 10, weight: 2 }
+  ];
+  input.judging.communityWeight = 40;
+  input.judging.judgeWeight = 60;
+  input.judging.tiebreakRule = "HIGHEST_JUDGE_SCORE";
+  input.moderation.reviewGraceMinutes = 720;
+
+  const sanitized = sanitizeCompetitionConfig(input);
+  assert.ok(sanitized);
+  assert.equal(sanitized.public.summary, "Summer build");
+  assert.equal(sanitized.public.description, "Line one\nLine two");
+  assert.equal(sanitized.appearance.bannerImageId, "banner:summer-2026");
+  assert.equal(sanitized.schedule.submissionsOpenAt, "2026-09-01T16:00:00.000Z");
+  assert.equal(sanitized.entries.guildSubmissionPermission, "competition.submit");
+  assert.deepEqual(sanitized.judging.criteria, [
+    { id: "creativity", label: "Creativity", maxScore: 10, weight: 2 }
+  ]);
+  assert.equal(sanitized.judging.tiebreakRule, "HIGHEST_JUDGE_SCORE");
+  assert.equal(sanitized.moderation.reviewGraceMinutes, 720);
+});
+
+test("editor config rejects malformed section containers", () => {
+  assert.equal(sanitizeCompetitionConfig([]), null);
+  assert.equal(sanitizeCompetitionConfig({ schemaVersion: 2 }), null);
+
+  for (const section of [
+    "public",
+    "appearance",
+    "schedule",
+    "entries",
+    "voting",
+    "judging",
+    "rewards",
+    "moderation"
+  ]) {
+    const input = initialCompetitionConfig();
+    input[section] = [];
+    assert.equal(sanitizeCompetitionConfig(input), null, `${section} must be an object`);
+  }
+});
