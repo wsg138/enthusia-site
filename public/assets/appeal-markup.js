@@ -45,7 +45,7 @@ export function renderAppealMarkup(root, value) {
   const lines = String(value ?? "").replace(/\r\n?/g, "\n").split("\n");
   let index = 0;
   while (index < lines.length) {
-    const line = lines[index];
+    const line = lines.at(index);
     if (!line.trim()) { index += 1; continue; }
 
     const heading = /^(#{1,3})\s+(.+)$/.exec(line);
@@ -60,9 +60,9 @@ export function renderAppealMarkup(root, value) {
 
     if (/^>\s?/.test(line)) {
       const quote = document.createElement("blockquote");
-      while (index < lines.length && /^>\s?/.test(lines[index])) {
+      while (index < lines.length && /^>\s?/.test(lines.at(index))) {
         if (quote.childNodes.length) quote.append(document.createElement("br"));
-        appendInline(quote, lines[index].replace(/^>\s?/, ""));
+        appendInline(quote, lines.at(index).replace(/^>\s?/, ""));
         index += 1;
       }
       root.append(quote);
@@ -74,7 +74,7 @@ export function renderAppealMarkup(root, value) {
       const ordered = Boolean(listMatch[2]);
       const list = document.createElement(ordered ? "ol" : "ul");
       while (index < lines.length) {
-        const item = /^(?:([-*+])|(\d+)[.)])\s+(.+)$/.exec(lines[index]);
+        const item = /^(?:([-*+])|(\d+)[.)])\s+(.+)$/.exec(lines.at(index));
         if (!item || Boolean(item[2]) !== ordered) break;
         const entry = document.createElement("li");
         appendInline(entry, item[3]);
@@ -86,9 +86,9 @@ export function renderAppealMarkup(root, value) {
     }
 
     const paragraph = document.createElement("p");
-    while (index < lines.length && lines[index].trim() && !startsBlock(lines[index])) {
+    while (index < lines.length && lines.at(index).trim() && !startsBlock(lines.at(index))) {
       if (paragraph.childNodes.length) paragraph.append(document.createElement("br"));
-      appendInline(paragraph, lines[index]);
+      appendInline(paragraph, lines.at(index));
       index += 1;
     }
     if (paragraph.childNodes.length) root.append(paragraph);

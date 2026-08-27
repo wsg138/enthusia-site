@@ -36,6 +36,10 @@ function discordName(session) {
   return session.discord?.globalName || session.discord?.username || "Discord account";
 }
 
+function showAccountLoadError() {
+  root.replaceChildren(element("p", "account-error", "Your account could not be loaded. Refresh the page to try again."));
+}
+
 async function signOut(button) {
   button.disabled = true;
   try {
@@ -182,8 +186,8 @@ async function render() {
     if (session.authenticated) signedIn(session);
     else signedOut();
   } catch {
-    root.replaceChildren(element("p", "account-error", "Your account could not be loaded. Refresh the page to try again."));
+    showAccountLoadError();
   }
 }
 
-render();
+render().catch(showAccountLoadError);
