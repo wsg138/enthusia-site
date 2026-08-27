@@ -23,11 +23,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 final class BridgeHttpServer implements AutoCloseable {
+    private static final String HTTP_POST = "POST";
+
     private final Plugin plugin;
     private final BridgeConfig config;
     private final BridgeRepository repository;
     private final LinkCodeRepository linkCodes;
-    private final RewardDeliveryService rewards;
     private final RequestAuthenticator authenticator;
     private final PlaytimeIntegration playtime;
     private final GuildIntegration guilds;
@@ -35,12 +36,17 @@ final class BridgeHttpServer implements AutoCloseable {
     private final HttpServer server;
     private final ExecutorService executor;
 
-    BridgeHttpServer(Plugin plugin, BridgeConfig config, BridgeRepository repository, LinkCodeRepository linkCodes, RewardDeliveryService rewards) throws IOException {
+    BridgeHttpServer(
+            Plugin plugin,
+            BridgeConfig config,
+            BridgeRepository repository,
+            LinkCodeRepository linkCodes,
+            RewardDeliveryService rewardDelivery
+    ) throws IOException {
         this.plugin = plugin;
         this.config = config;
         this.repository = repository;
         this.linkCodes = linkCodes;
-        this.rewards = rewards;
         this.authenticator = new RequestAuthenticator(config.security(), repository);
         this.playtime = new PlaytimeIntegration(plugin);
         this.guilds = new GuildIntegration(plugin);
@@ -48,7 +54,7 @@ final class BridgeHttpServer implements AutoCloseable {
                 "/v1/competitions/player-context", (input, body) -> playerContext(input),
                 "/v1/competitions/player-lookup", (input, body) -> playerLookup(input),
                 "/v1/competitions/guild-members", (input, body) -> guildMembers(input),
-                "/v1/competitions/rewards/deliver", (input, body) -> rewards.deliver(config, input, body),
+                "/v1/competitions/rewards/deliver", (input, body) -> rewardDelivery.deliver(config, input, body),
                 "/v1/competitions/notifications/submission", (input, body) -> submissionNotification(input),
                 "/v1/competitions/notifications/contributor", (input, body) -> contributorNotification(input),
                 "/v1/competitions/link/register", (input, body) -> registerLink(input),
@@ -85,7 +91,7 @@ final class BridgeHttpServer implements AutoCloseable {
     }
 
     private AuthenticatedRequest authenticate(HttpExchange exchange) throws Exception {
-        if (!"POST".equals(exchange.getRequestMethod())) {
+        if (!HTTP_POST.equals(exchange.getRequestMethod())) {
             throw new BridgeRequestException(405, "method_not_allowed", "Only POST is supported");
         }
         String path = exchange.getRequestURI().getPath();
@@ -99,7 +105,7 @@ final class BridgeHttpServer implements AutoCloseable {
 
         byte[] body = readBody(exchange);
         RequestAuthenticator.Result auth = authenticator.verify(
-                "POST",
+                HTTP_POST,
                 path,
                 body,
                 new RequestAuthenticator.Headers(

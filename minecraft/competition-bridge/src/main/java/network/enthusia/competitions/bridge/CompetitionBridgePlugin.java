@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,6 +20,10 @@ import java.util.Locale;
 import java.util.logging.Level;
 
 public final class CompetitionBridgePlugin extends JavaPlugin implements Listener, CommandExecutor, TabCompleter {
+    private static final String BRIDGE_COMMAND = "competitionbridge";
+    private static final String LINK_COMMAND = "competitionlink";
+    private static final int SINGLE_ARGUMENT_COUNT = 1;
+
     private final Object runtimeLock = new Object();
     private volatile BridgeConfig runtimeConfig;
     private volatile BridgeRepository repository;
@@ -44,12 +49,14 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
         }
 
         Bukkit.getPluginManager().registerEvents(this, this);
-        if (getCommand("competitionbridge") != null) {
-            getCommand("competitionbridge").setExecutor(this);
-            getCommand("competitionbridge").setTabCompleter(this);
+        PluginCommand bridgeCommand = getCommand(BRIDGE_COMMAND);
+        if (bridgeCommand != null) {
+            bridgeCommand.setExecutor(this);
+            bridgeCommand.setTabCompleter(this);
         }
-        if (getCommand("competitionlink") != null) {
-            getCommand("competitionlink").setExecutor(this);
+        PluginCommand linkCommand = getCommand(LINK_COMMAND);
+        if (linkCommand != null) {
+            linkCommand.setExecutor(this);
         }
         getLogger().info("EnthusiaCompetitionBridge enabled; listener " + listenerSummary(runtimeConfig));
     }
@@ -147,7 +154,7 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("competitionlink")) {
+        if (command.getName().equalsIgnoreCase(LINK_COMMAND)) {
             return handleLinkCommand(sender, args);
         }
         return handleBridgeCommand(sender, args);
@@ -203,7 +210,7 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
             sender.sendMessage(ChatColor.RED + "This command must be run in-game by the Minecraft account being linked.");
             return true;
         }
-        if (args.length != 1) {
+        if (args.length != SINGLE_ARGUMENT_COUNT) {
             player.sendMessage(ChatColor.RED + "Usage: /competitionlink <code>");
             return true;
         }
@@ -244,7 +251,7 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (!command.getName().equalsIgnoreCase("competitionbridge") || args.length != 1) return List.of();
+        if (!command.getName().equalsIgnoreCase(BRIDGE_COMMAND) || args.length != SINGLE_ARGUMENT_COUNT) return List.of();
         String prefix = args[0].toLowerCase(Locale.ROOT);
         return List.of("status", "reload").stream().filter(value -> value.startsWith(prefix)).toList();
     }
