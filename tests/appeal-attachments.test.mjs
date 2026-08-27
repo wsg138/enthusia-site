@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   appealAttachmentKey,
   appealAttachmentLimits,
+  cleanupAppealAttachment,
   deleteAppealAttachment,
   inspectAppealAttachment,
   safeAttachmentName,
@@ -85,4 +86,23 @@ test("appeal evidence deletion rejects objects outside the appeal scope", async 
   assert.deepEqual(deleted, [key]);
   await assert.rejects(() => deleteAppealAttachment(bucket, "gallery/private.png"), /key is invalid/);
   assert.equal(appealAttachmentLimits().maxAttachments, 5);
+});
+
+test("appeal evidence cleanup retries a transient storage failure", async () => {
+  const pending = [];
+  let attempts = 0;
+  const context = { waitUntil(promise) { pending.push(promise); } };
+  const bucket = {
+    async delete() {
+      attempts += 1;
+      if (attempts === 1) throw new Error("temporary R2 failure");
+    }
+  };
+  const key = `appeals/${DRAFT_ID}/${ATTACHMENT_ID}.txt`;
+
+  await cleanupAppealAttachment(context, bucket, key);
+  await Promise.all(pending);
+
+  assert.equal(attempts, 2);
+  assert.equal(pending.length, 1);
 });

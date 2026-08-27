@@ -1,6 +1,6 @@
 import {
   appealAttachmentLimits,
-  deleteAppealAttachment,
+  cleanupAppealAttachment,
   inspectAppealAttachment,
   safeAttachmentName,
   storeAppealAttachment
@@ -138,7 +138,7 @@ export async function onRequestPost(context) {
     });
     return json({ attachment, limits }, 201);
   } catch {
-    await deleteAppealAttachment(context.env.COMPETITIONS_MEDIA, stored.key).catch(() => {});
+    await cleanupAppealAttachment(context, context.env.COMPETITIONS_MEDIA, stored.key);
     return json({ error: "attachment_record_failed" }, 503);
   }
 }

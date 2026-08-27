@@ -92,6 +92,26 @@ export async function deleteAppealAttachment(bucket, key) {
   await bucket.delete(key);
 }
 
+function cleanupError(error) {
+  if (error instanceof Error && error.message) return error.message.slice(0, 160);
+  return "unknown storage error";
+}
+
+export async function cleanupAppealAttachment(context, bucket, key) {
+  try {
+    await deleteAppealAttachment(bucket, key);
+  } catch (initialError) {
+    const retry = deleteAppealAttachment(bucket, key).catch((retryError) => {
+      console.error("Appeal attachment cleanup failed after retry", {
+        initialError: cleanupError(initialError),
+        retryError: cleanupError(retryError)
+      });
+    });
+    if (typeof context?.waitUntil === "function") context.waitUntil(retry);
+    else await retry;
+  }
+}
+
 export function appealAttachmentLimits() {
   return Object.freeze({
     maxAttachments: MAX_ATTACHMENTS,

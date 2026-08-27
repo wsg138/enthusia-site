@@ -1,4 +1,4 @@
-import { deleteAppealAttachment } from "../../../lib/appeal-attachments.js";
+import { cleanupAppealAttachment } from "../../../lib/appeal-attachments.js";
 import { findOwnedAppealAttachment, removeDraftAttachment } from "../../../lib/appeal-repository.js";
 import { authenticateLinkedAppealRequest } from "../../../lib/appeal-session.js";
 import { json, methodNotAllowed, unauthorized } from "../../../lib/responses.js";
@@ -67,7 +67,7 @@ export async function onRequestDelete(context) {
     return json({ error: "attachment_delete_failed" }, 503);
   }
   if (!removed) return json({ error: "attachment_locked" }, 409);
-  await deleteAppealAttachment(context.env.COMPETITIONS_MEDIA, resolved.record.storageKey).catch(() => {});
+  await cleanupAppealAttachment(context, context.env.COMPETITIONS_MEDIA, resolved.record.storageKey);
   return json({ status: "DELETED" });
 }
 
