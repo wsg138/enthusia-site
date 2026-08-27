@@ -75,6 +75,62 @@ export function aggregateJudgeScores(judgeScores) {
   return roundScore(values.reduce((sum, value) => sum + value, 0) / values.length);
 }
 
+function componentResult({
+  finalScore,
+  communityComponent,
+  judgeComponent,
+  communityWeight,
+  judgeWeight
+}) {
+  return {
+    formulaVersion: SCORING_FORMULA_VERSION,
+    finalScore,
+    communityComponent,
+    judgeComponent,
+    communityWeight,
+    judgeWeight
+  };
+}
+
+function communityOnlyResult(value) {
+  const community = boundedScore(value, "Community component");
+  return componentResult({
+    finalScore: community,
+    communityComponent: community,
+    judgeComponent: null,
+    communityWeight: 100,
+    judgeWeight: 0
+  });
+}
+
+function judgesOnlyResult(value) {
+  const judges = boundedScore(value, "Judge component");
+  return componentResult({
+    finalScore: judges,
+    communityComponent: null,
+    judgeComponent: judges,
+    communityWeight: 0,
+    judgeWeight: 100
+  });
+}
+
+function scoringPercent(value, label) {
+  const percent = finiteNumber(value, label);
+  if (percent < 0 || percent > 100) {
+    throw new RangeError("Community and judge weights must total 100");
+  }
+  return percent;
+}
+
+function combinedWeights(communityWeight, judgeWeight) {
+  const communityPercent = scoringPercent(communityWeight, "Community weight");
+  const judgePercent = scoringPercent(judgeWeight, "Judge weight");
+  if (Math.abs((communityPercent + judgePercent) - 100) > 1e-9) {
+    throw new RangeError("Community and judge weights must total 100");
+  }
+  return { communityPercent, judgePercent };
+}
+
 export function combineCompetitionComponents({
   votingEnabled,
   judgingEnabled,
@@ -87,52 +143,19 @@ export function combineCompetitionComponents({
     throw new TypeError("At least one scoring component must be enabled");
   }
 
-  if (votingEnabled && !judgingEnabled) {
-    const community = boundedScore(communityComponent, "Community component");
-    return {
-      formulaVersion: SCORING_FORMULA_VERSION,
-      finalScore: community,
-      communityComponent: community,
-      judgeComponent: null,
-      communityWeight: 100,
-      judgeWeight: 0
-    };
-  }
-
-  if (!votingEnabled && judgingEnabled) {
-    const judges = boundedScore(judgeComponent, "Judge component");
-    return {
-      formulaVersion: SCORING_FORMULA_VERSION,
-      finalScore: judges,
-      communityComponent: null,
-      judgeComponent: judges,
-      communityWeight: 0,
-      judgeWeight: 100
-    };
-  }
+  if (votingEnabled && !judgingEnabled) return communityOnlyResult(communityComponent);
+  if (!votingEnabled && judgingEnabled) return judgesOnlyResult(judgeComponent);
 
   const community = boundedScore(communityComponent, "Community component");
   const judges = boundedScore(judgeComponent, "Judge component");
-  const communityPercent = finiteNumber(communityWeight, "Community weight");
-  const judgePercent = finiteNumber(judgeWeight, "Judge weight");
-  if (
-    communityPercent < 0
-    || judgePercent < 0
-    || communityPercent > 100
-    || judgePercent > 100
-    || Math.abs((communityPercent + judgePercent) - 100) > 1e-9
-  ) {
-    throw new RangeError("Community and judge weights must total 100");
-  }
-
-  return {
-    formulaVersion: SCORING_FORMULA_VERSION,
+  const { communityPercent, judgePercent } = combinedWeights(communityWeight, judgeWeight);
+  return componentResult({
     finalScore: roundScore(community * communityPercent / 100 + judges * judgePercent / 100),
     communityComponent: community,
     judgeComponent: judges,
     communityWeight: roundScore(communityPercent),
     judgeWeight: roundScore(judgePercent)
-  };
+  });
 }
 
 export function createResultSnapshot({

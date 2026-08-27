@@ -57,6 +57,19 @@ test("single-component competitions use that component as the final score", () =
     communityWeight: 100,
     judgeWeight: 0
   });
+
+  assert.deepEqual(combineCompetitionComponents({
+    votingEnabled: false,
+    judgingEnabled: true,
+    judgeComponent: 8.75
+  }), {
+    formulaVersion: SCORING_FORMULA_VERSION,
+    finalScore: 8.75,
+    communityComponent: null,
+    judgeComponent: 8.75,
+    communityWeight: 0,
+    judgeWeight: 100
+  });
 });
 
 test("combined scoring applies the configured community and judge percentages", () => {
