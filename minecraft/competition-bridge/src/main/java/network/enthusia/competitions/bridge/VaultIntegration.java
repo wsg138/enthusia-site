@@ -32,7 +32,7 @@ final class VaultIntegration {
             boolean success = Boolean.TRUE.equals(response.getClass().getMethod("transactionSuccess").invoke(response));
             if (!success) {
                 Object error = response.getClass().getField("errorMessage").get(response);
-                throw new IllegalStateException("Vault deposit failed: " + String.valueOf(error));
+                throw new IllegalStateException("Vault deposit failed: " + error);
             }
             return null;
         });
