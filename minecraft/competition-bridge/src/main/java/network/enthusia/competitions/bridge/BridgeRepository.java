@@ -44,55 +44,75 @@ public final class BridgeRepository implements Closeable {
     private void migrate() throws SQLException {
         try (Connection connection = open(); Statement statement = connection.createStatement()) {
             statement.execute("PRAGMA journal_mode = WAL");
-            statement.execute("""
-                    CREATE TABLE IF NOT EXISTS request_nonces (
-                      nonce TEXT PRIMARY KEY,
-                      seen_at INTEGER NOT NULL
-                    )
-                    """);
-            statement.execute("""
-                    CREATE TABLE IF NOT EXISTS reward_operations (
-                      operation_key TEXT PRIMARY KEY,
-                      reward_type TEXT NOT NULL,
-                      recipient_uuid TEXT NOT NULL,
-                      request_hash TEXT,
-                      state TEXT NOT NULL CHECK(state IN ('CLAIMED','DELIVERED','FAILED_RECONCILE')),
-                      detail_json TEXT,
-                      created_at INTEGER NOT NULL,
-                      updated_at INTEGER NOT NULL
-                    )
-                    """);
+            createRequestNonceTable(statement);
+            createRewardOperationTable(statement);
             if (!hasColumn(connection, "reward_operations", "request_hash")) {
                 statement.execute("ALTER TABLE reward_operations ADD COLUMN request_hash TEXT");
             }
-            statement.execute("""
-                    CREATE TABLE IF NOT EXISTS pending_item_rewards (
-                      operation_key TEXT PRIMARY KEY REFERENCES reward_operations(operation_key) ON DELETE CASCADE,
-                      player_uuid TEXT NOT NULL,
-                      material_key TEXT NOT NULL,
-                      remaining INTEGER NOT NULL CHECK(remaining > 0),
-                      created_at INTEGER NOT NULL,
-                      updated_at INTEGER NOT NULL
-                    )
-                    """);
-            statement.execute("""
-                    CREATE TABLE IF NOT EXISTS contributor_reminders (
-                      competition_id TEXT NOT NULL,
-                      submission_id TEXT NOT NULL,
-                      player_uuid TEXT NOT NULL,
-                      competition_title TEXT NOT NULL,
-                      submission_title TEXT NOT NULL,
-                      role TEXT NOT NULL,
-                      action_url TEXT,
-                      created_at INTEGER NOT NULL,
-                      updated_at INTEGER NOT NULL,
-                      PRIMARY KEY (competition_id, submission_id, player_uuid)
-                    )
-                    """);
-            statement.execute("CREATE INDEX IF NOT EXISTS idx_request_nonces_seen ON request_nonces(seen_at)");
-            statement.execute("CREATE INDEX IF NOT EXISTS idx_pending_items_player ON pending_item_rewards(player_uuid)");
-            statement.execute("CREATE INDEX IF NOT EXISTS idx_contributor_reminders_player ON contributor_reminders(player_uuid)");
+            createPendingItemTable(statement);
+            createContributorReminderTable(statement);
+            createIndexes(statement);
         }
+    }
+
+    private static void createRequestNonceTable(Statement statement) throws SQLException {
+        statement.execute("""
+                CREATE TABLE IF NOT EXISTS request_nonces (
+                  nonce TEXT PRIMARY KEY,
+                  seen_at INTEGER NOT NULL
+                )
+                """);
+    }
+
+    private static void createRewardOperationTable(Statement statement) throws SQLException {
+        statement.execute("""
+                CREATE TABLE IF NOT EXISTS reward_operations (
+                  operation_key TEXT PRIMARY KEY,
+                  reward_type TEXT NOT NULL,
+                  recipient_uuid TEXT NOT NULL,
+                  request_hash TEXT,
+                  state TEXT NOT NULL CHECK(state IN ('CLAIMED','DELIVERED','FAILED_RECONCILE')),
+                  detail_json TEXT,
+                  created_at INTEGER NOT NULL,
+                  updated_at INTEGER NOT NULL
+                )
+                """);
+    }
+
+    private static void createPendingItemTable(Statement statement) throws SQLException {
+        statement.execute("""
+                CREATE TABLE IF NOT EXISTS pending_item_rewards (
+                  operation_key TEXT PRIMARY KEY REFERENCES reward_operations(operation_key) ON DELETE CASCADE,
+                  player_uuid TEXT NOT NULL,
+                  material_key TEXT NOT NULL,
+                  remaining INTEGER NOT NULL CHECK(remaining > 0),
+                  created_at INTEGER NOT NULL,
+                  updated_at INTEGER NOT NULL
+                )
+                """);
+    }
+
+    private static void createContributorReminderTable(Statement statement) throws SQLException {
+        statement.execute("""
+                CREATE TABLE IF NOT EXISTS contributor_reminders (
+                  competition_id TEXT NOT NULL,
+                  submission_id TEXT NOT NULL,
+                  player_uuid TEXT NOT NULL,
+                  competition_title TEXT NOT NULL,
+                  submission_title TEXT NOT NULL,
+                  role TEXT NOT NULL,
+                  action_url TEXT,
+                  created_at INTEGER NOT NULL,
+                  updated_at INTEGER NOT NULL,
+                  PRIMARY KEY (competition_id, submission_id, player_uuid)
+                )
+                """);
+    }
+
+    private static void createIndexes(Statement statement) throws SQLException {
+        statement.execute("CREATE INDEX IF NOT EXISTS idx_request_nonces_seen ON request_nonces(seen_at)");
+        statement.execute("CREATE INDEX IF NOT EXISTS idx_pending_items_player ON pending_item_rewards(player_uuid)");
+        statement.execute("CREATE INDEX IF NOT EXISTS idx_contributor_reminders_player ON contributor_reminders(player_uuid)");
     }
 
     private static boolean hasColumn(Connection connection, String table, String column) throws SQLException {
@@ -139,31 +159,10 @@ public final class BridgeRepository implements Closeable {
                 Optional<RewardOperation> existing = rewardOperation(connection, operationKey);
                 if (existing.isPresent()) {
                     RewardOperation operation = existing.get();
-                    boolean sameIdentity = operation.rewardType().equals(rewardType)
-                            && operation.recipientUuid().equals(recipientUuid)
-                            && (operation.requestHash() == null || operation.requestHash().equals(requestHash));
                     connection.commit();
-                    if (!sameIdentity) return new RewardClaim(RewardClaimState.OPERATION_CONFLICT, operation);
-                    return switch (operation.state()) {
-                        case "DELIVERED" -> new RewardClaim(RewardClaimState.ALREADY_DELIVERED, operation);
-                        case "CLAIMED", "FAILED_RECONCILE" -> new RewardClaim(RewardClaimState.RECONCILIATION_REQUIRED, operation);
-                        default -> throw new SQLException("Unknown reward state " + operation.state());
-                    };
+                    return existingRewardClaim(operation, rewardType, recipientUuid, requestHash);
                 }
-                try (PreparedStatement insert = connection.prepareStatement("""
-                        INSERT INTO reward_operations(
-                          operation_key, reward_type, recipient_uuid, request_hash, state,
-                          detail_json, created_at, updated_at
-                        ) VALUES (?, ?, ?, ?, 'CLAIMED', NULL, ?, ?)
-                        """)) {
-                    insert.setString(1, operationKey);
-                    insert.setString(2, rewardType);
-                    insert.setString(3, recipientUuid.toString());
-                    insert.setString(4, requestHash);
-                    insert.setLong(5, nowMillis);
-                    insert.setLong(6, nowMillis);
-                    insert.executeUpdate();
-                }
+                insertRewardClaim(connection, operationKey, rewardType, recipientUuid, requestHash, nowMillis);
                 RewardOperation created = new RewardOperation(operationKey, rewardType, recipientUuid, requestHash, "CLAIMED", null, nowMillis, nowMillis);
                 connection.commit();
                 return new RewardClaim(RewardClaimState.CLAIMED, created);
@@ -173,6 +172,43 @@ public final class BridgeRepository implements Closeable {
             } finally {
                 connection.setAutoCommit(true);
             }
+        }
+    }
+
+    private static RewardClaim existingRewardClaim(
+            RewardOperation operation, String rewardType, UUID recipientUuid, String requestHash) throws SQLException {
+        boolean sameIdentity = operation.rewardType().equals(rewardType)
+                && operation.recipientUuid().equals(recipientUuid)
+                && (operation.requestHash() == null || operation.requestHash().equals(requestHash));
+        if (!sameIdentity) return new RewardClaim(RewardClaimState.OPERATION_CONFLICT, operation);
+        return switch (operation.state()) {
+            case "DELIVERED" -> new RewardClaim(RewardClaimState.ALREADY_DELIVERED, operation);
+            case "CLAIMED", "FAILED_RECONCILE" -> new RewardClaim(RewardClaimState.RECONCILIATION_REQUIRED, operation);
+            default -> throw new SQLException("Unknown reward state " + operation.state());
+        };
+    }
+
+    private static void insertRewardClaim(
+            Connection connection,
+            String operationKey,
+            String rewardType,
+            UUID recipientUuid,
+            String requestHash,
+            long nowMillis
+    ) throws SQLException {
+        try (PreparedStatement insert = connection.prepareStatement("""
+                INSERT INTO reward_operations(
+                  operation_key, reward_type, recipient_uuid, request_hash, state,
+                  detail_json, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, 'CLAIMED', NULL, ?, ?)
+                """)) {
+            insert.setString(1, operationKey);
+            insert.setString(2, rewardType);
+            insert.setString(3, recipientUuid.toString());
+            insert.setString(4, requestHash);
+            insert.setLong(5, nowMillis);
+            insert.setLong(6, nowMillis);
+            insert.executeUpdate();
         }
     }
 
