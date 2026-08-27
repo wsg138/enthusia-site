@@ -226,7 +226,7 @@ final class BridgeHttpServer implements AutoCloseable {
     }
 
     private JsonObject contributorNotification(JsonObject input) throws Exception {
-        String action = optionalText(input, "action", 16, "UPSERT").toUpperCase();
+        String action = optionalText(input, "action", 16, "UPSERT").toUpperCase(Locale.ROOT);
         String competitionId = text(input, "competitionId", 80);
         String submissionId = text(input, "submissionId", 80);
         UUID playerUuid = uuid(input, "playerUuid");
@@ -253,7 +253,7 @@ final class BridgeHttpServer implements AutoCloseable {
 
     static String contributorMessage(BridgeConfig config, BridgeRepository.ContributorReminder reminder) {
         return color(config.notifications().contributorPrefix())
-                + "You were invited as " + reminder.role().toLowerCase().replace('_', ' ')
+                + "You were invited as " + reminder.role().toLowerCase(Locale.ROOT).replace('_', ' ')
                 + " on “" + reminder.submissionTitle() + "” in " + reminder.competitionTitle() + "."
                 + (reminder.actionUrl() == null || reminder.actionUrl().isBlank() ? "" : " Respond: " + reminder.actionUrl());
     }
