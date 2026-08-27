@@ -19,6 +19,7 @@ final class LinkCodeRepository implements AutoCloseable {
 
     record LinkStatus(String status, UUID minecraftUuid, String minecraftName, long expiresAtMillis) {}
 
+    private final Object operationLock = new Object();
     private final String jdbcUrl;
 
     LinkCodeRepository(Path dataFolder) throws Exception {
@@ -53,77 +54,83 @@ final class LinkCodeRepository implements AutoCloseable {
         }
     }
 
-    synchronized void register(String codeHash, long expiresAtMillis, long nowMillis) throws Exception {
-        requireHash(codeHash);
-        if (expiresAtMillis <= nowMillis || expiresAtMillis > nowMillis + 10 * 60_000L) {
-            throw new IllegalArgumentException("Link code expiry is outside the accepted window");
-        }
-        prune(nowMillis);
-        try (Connection connection = open(); PreparedStatement statement = connection.prepareStatement("""
-                INSERT INTO minecraft_link_codes(code_hash,expires_at,claimed_uuid,claimed_name,claimed_at,created_at)
-                VALUES(?,?,NULL,NULL,NULL,?)
-                ON CONFLICT(code_hash) DO UPDATE SET
-                  expires_at=excluded.expires_at
-                WHERE minecraft_link_codes.claimed_at IS NULL
-                """)) {
-            statement.setString(1, codeHash);
-            statement.setLong(2, expiresAtMillis);
-            statement.setLong(3, nowMillis);
-            statement.executeUpdate();
-        }
-    }
-
-    synchronized LinkStatus claim(String rawCode, UUID playerUuid, String playerName, long nowMillis) throws Exception {
-        if (rawCode == null || !rawCode.matches("[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{8}")) {
-            return new LinkStatus("INVALID", null, null, 0L);
-        }
-        String codeHash = hash(rawCode);
-        prune(nowMillis);
-        try (Connection connection = open()) {
-            connection.setAutoCommit(false);
-            try {
-                LinkStatus current = status(connection, codeHash, nowMillis);
-                if (current.status().equals("CLAIMED")) {
-                    connection.commit();
-                    return current.minecraftUuid().equals(playerUuid)
-                            ? current
-                            : new LinkStatus("ALREADY_CLAIMED", current.minecraftUuid(), current.minecraftName(), current.expiresAtMillis());
-                }
-                if (!current.status().equals("PENDING")) {
-                    connection.commit();
-                    return current;
-                }
-                try (PreparedStatement update = connection.prepareStatement("""
-                        UPDATE minecraft_link_codes
-                        SET claimed_uuid=?,claimed_name=?,claimed_at=?
-                        WHERE code_hash=? AND claimed_at IS NULL AND expires_at>?
-                        """)) {
-                    update.setString(1, playerUuid.toString());
-                    update.setString(2, playerName);
-                    update.setLong(3, nowMillis);
-                    update.setString(4, codeHash);
-                    update.setLong(5, nowMillis);
-                    if (update.executeUpdate() != SINGLE_ROW) {
-                        connection.rollback();
-                        return new LinkStatus("CONFLICT", null, null, current.expiresAtMillis());
-                    }
-                }
-                connection.commit();
-                return new LinkStatus("CLAIMED", playerUuid, playerName, current.expiresAtMillis());
-            } catch (Exception failure) {
-                connection.rollback();
-                throw failure;
-            } finally {
-                connection.setAutoCommit(true);
+    void register(String codeHash, long expiresAtMillis, long nowMillis) throws Exception {
+        synchronized (operationLock) {
+            requireHash(codeHash);
+            if (expiresAtMillis <= nowMillis || expiresAtMillis > nowMillis + 10 * 60_000L) {
+                throw new IllegalArgumentException("Link code expiry is outside the accepted window");
+            }
+            prune(nowMillis);
+            try (Connection connection = open(); PreparedStatement statement = connection.prepareStatement("""
+                    INSERT INTO minecraft_link_codes(code_hash,expires_at,claimed_uuid,claimed_name,claimed_at,created_at)
+                    VALUES(?,?,NULL,NULL,NULL,?)
+                    ON CONFLICT(code_hash) DO UPDATE SET
+                      expires_at=excluded.expires_at
+                    WHERE minecraft_link_codes.claimed_at IS NULL
+                    """)) {
+                statement.setString(1, codeHash);
+                statement.setLong(2, expiresAtMillis);
+                statement.setLong(3, nowMillis);
+                statement.executeUpdate();
             }
         }
     }
 
-    synchronized LinkStatus status(String codeHash, long nowMillis) throws Exception {
-        requireHash(codeHash);
-        prune(nowMillis);
-        try (Connection connection = open()) {
-            return status(connection, codeHash, nowMillis);
+    LinkStatus claim(String rawCode, UUID playerUuid, String playerName, long nowMillis) throws Exception {
+        synchronized (operationLock) {
+            if (rawCode == null || !rawCode.matches("[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{8}")) {
+                return new LinkStatus("INVALID", null, null, 0L);
+            }
+            String codeHash = hash(rawCode);
+            prune(nowMillis);
+            try (Connection connection = open()) {
+                connection.setAutoCommit(false);
+                try {
+                    LinkStatus current = status(connection, codeHash, nowMillis);
+                    if (current.status().equals("CLAIMED")) {
+                        connection.commit();
+                        return current.minecraftUuid().equals(playerUuid)
+                                ? current
+                                : new LinkStatus("ALREADY_CLAIMED", current.minecraftUuid(), current.minecraftName(), current.expiresAtMillis());
+                    }
+                    if (!current.status().equals("PENDING")) {
+                        connection.commit();
+                        return current;
+                    }
+                    try (PreparedStatement update = connection.prepareStatement("""
+                            UPDATE minecraft_link_codes
+                            SET claimed_uuid=?,claimed_name=?,claimed_at=?
+                            WHERE code_hash=? AND claimed_at IS NULL AND expires_at>?
+                            """)) {
+                        update.setString(1, playerUuid.toString());
+                        update.setString(2, playerName);
+                        update.setLong(3, nowMillis);
+                        update.setString(4, codeHash);
+                        update.setLong(5, nowMillis);
+                        if (update.executeUpdate() != SINGLE_ROW) {
+                            connection.rollback();
+                            return new LinkStatus("CONFLICT", null, null, current.expiresAtMillis());
+                        }
+                    }
+                    connection.commit();
+                    return new LinkStatus("CLAIMED", playerUuid, playerName, current.expiresAtMillis());
+                } catch (Exception failure) {
+                    connection.rollback();
+                    throw failure;
+                } finally {
+                    connection.setAutoCommit(true);
+                }
+            }
+        }
+    }
+
+    LinkStatus status(String codeHash, long nowMillis) throws Exception {
+        synchronized (operationLock) {
+            requireHash(codeHash);
+            prune(nowMillis);
+            try (Connection connection = open()) {
+                return status(connection, codeHash, nowMillis);
+            }
         }
     }
 
@@ -149,12 +156,14 @@ final class LinkCodeRepository implements AutoCloseable {
         }
     }
 
-    synchronized void consume(String codeHash) throws Exception {
-        requireHash(codeHash);
-        try (Connection connection = open(); PreparedStatement statement = connection.prepareStatement(
-                "DELETE FROM minecraft_link_codes WHERE code_hash=?")) {
-            statement.setString(1, codeHash);
-            statement.executeUpdate();
+    void consume(String codeHash) throws Exception {
+        synchronized (operationLock) {
+            requireHash(codeHash);
+            try (Connection connection = open(); PreparedStatement statement = connection.prepareStatement(
+                    "DELETE FROM minecraft_link_codes WHERE code_hash=?")) {
+                statement.setString(1, codeHash);
+                statement.executeUpdate();
+            }
         }
     }
 
