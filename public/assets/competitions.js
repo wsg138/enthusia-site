@@ -353,7 +353,16 @@ function renderOverview(root, payload) {
     summary.className = "competition-completed-summary";
     const dates = document.createElement("div");
     dates.className = "competition-completed-dates";
-    dates.innerHTML = `<span><strong>Started</strong> ${formatDate(competition.config?.schedule?.submissionsOpenAt)}</span><span><strong>Ended</strong> ${formatDate(winnerResult.publishedAt)}</span>`;
+    for (const [label, value] of [
+      ["Started", formatDate(competition.config?.schedule?.submissionsOpenAt)],
+      ["Ended", formatDate(winnerResult.publishedAt)]
+    ]) {
+      const date = document.createElement("span");
+      const heading = document.createElement("strong");
+      heading.textContent = label;
+      date.append(heading, ` ${value}`);
+      dates.append(date);
+    }
     const winner = document.createElement("div");
     winner.className = "competition-winner";
     const image = document.createElement("img");

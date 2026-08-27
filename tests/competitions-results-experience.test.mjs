@@ -6,6 +6,7 @@ test("completed competition overview includes winner dates prizes members and en
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
   for (const marker of ["competition-completed-summary", "Started", "Ended", "participantLabel", "showEntryDialog", "Previous entry", "Next entry", "openImageLightbox", "competition-entry-gallery"]) assert.match(source, new RegExp(marker));
   assert.doesNotMatch(source, /competition-winner-prizes/);
+  assert.doesNotMatch(source, /dates\.innerHTML\s*=/);
 });
 
 test("voting and judging tabs are conditional", async () => {
