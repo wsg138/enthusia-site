@@ -75,6 +75,15 @@ test("admin status fails readiness when required integrations are missing", () =
   assert.equal(snapshot.notifications.discordContributorDmConfigured, true);
 });
 
+test("admin status does not treat example bridge settings as deployed", () => {
+  const env = readyEnv();
+  env.COMPETITION_BRIDGE_ORIGIN = "https://REPLACE_WITH_PRIVATE_BRIDGE_HOST";
+  const snapshot = buildStatusSnapshot(env, true);
+  assert.equal(snapshot.ok, false);
+  assert.equal(snapshot.bridge.configured, false);
+  assert.equal(snapshot.notifications.minecraftConfigured, false);
+});
+
 test("contributor Discord DMs remain optional for overall readiness", () => {
   const env = readyEnv();
   delete env.COMPETITIONS_DISCORD_BOT_TOKEN;

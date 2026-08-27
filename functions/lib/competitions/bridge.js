@@ -31,6 +31,11 @@ function flag(value) {
   return String(value ?? "").trim().toLowerCase() === "true";
 }
 
+function isTemplateValue(value) {
+  const normalized = String(value ?? "").trim().toUpperCase();
+  return normalized.includes("REPLACE_WITH_") || normalized === "CHANGE_ME";
+}
+
 function configuration(env) {
   const rawOrigin = typeof env?.COMPETITION_BRIDGE_ORIGIN === "string" ? env.COMPETITION_BRIDGE_ORIGIN.trim() : "";
   const bearer = typeof env?.COMPETITION_BRIDGE_BEARER_TOKEN === "string" ? env.COMPETITION_BRIDGE_BEARER_TOKEN : "";
@@ -44,6 +49,9 @@ function configuration(env) {
     : "";
 
   if (!rawOrigin || bearer.length < 32 || secret.length < 32) throw new Error("Competition bridge is not configured");
+  if ([rawOrigin, bearer, secret, accessClientId, accessClientSecret].some(isTemplateValue)) {
+    throw new Error("Competition bridge contains template values");
+  }
   if (Boolean(accessClientId) !== Boolean(accessClientSecret)) {
     throw new Error("Competition bridge Access service credentials are incomplete");
   }
@@ -54,8 +62,17 @@ function configuration(env) {
     throw new Error("Competition bridge Access service credentials are invalid");
   }
 
-  const origin = new URL(rawOrigin).origin;
-  if (!origin.startsWith("https://")) throw new Error("Competition bridge requires HTTPS");
+  let bridgeUrl;
+  try {
+    bridgeUrl = new URL(rawOrigin);
+  } catch {
+    throw new Error("Competition bridge origin is invalid");
+  }
+  if (bridgeUrl.protocol !== "https:") throw new Error("Competition bridge requires HTTPS");
+  if (bridgeUrl.username || bridgeUrl.password || bridgeUrl.pathname !== "/" || bridgeUrl.search || bridgeUrl.hash) {
+    throw new Error("Competition bridge origin must not include credentials, a path, query parameters, or a fragment");
+  }
+  const origin = bridgeUrl.origin;
   return {
     origin,
     bearer,

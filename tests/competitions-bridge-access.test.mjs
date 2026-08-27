@@ -35,6 +35,38 @@ test("required bridge Access service auth fails closed when credentials are abse
   );
 });
 
+test("bridge configuration rejects undeployed template values", () => {
+  assert.throws(
+    () => competitionBridgeConfiguration({
+      ...BASE,
+      COMPETITION_BRIDGE_ORIGIN: "https://REPLACE_WITH_PRIVATE_BRIDGE_HOST"
+    }),
+    /template values/
+  );
+  assert.throws(
+    () => competitionBridgeConfiguration({
+      ...BASE,
+      COMPETITION_BRIDGE_BEARER_TOKEN: "REPLACE_WITH_BRIDGE_BEARER_TOKEN_VALUE"
+    }),
+    /template values/
+  );
+});
+
+test("bridge configuration requires an exact HTTPS origin", () => {
+  assert.throws(
+    () => competitionBridgeConfiguration({ ...BASE, COMPETITION_BRIDGE_ORIGIN: "https://bridge-dev.enthusia.info/v1" }),
+    /must not include/
+  );
+  assert.throws(
+    () => competitionBridgeConfiguration({ ...BASE, COMPETITION_BRIDGE_ORIGIN: "https://bridge-dev.enthusia.info?target=other" }),
+    /must not include/
+  );
+  assert.throws(
+    () => competitionBridgeConfiguration({ ...BASE, COMPETITION_BRIDGE_ORIGIN: "http://bridge-dev.enthusia.info" }),
+    /requires HTTPS/
+  );
+});
+
 test("bridge Access service credentials are retained for outgoing requests", () => {
   const config = competitionBridgeConfiguration({
     ...BASE,
