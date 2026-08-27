@@ -97,6 +97,11 @@ For the Pages development environment, set non-secret variables:
 - `DISCORD_CLIENT_ID=<Discord application ID>`
 - `DISCORD_GUILD_ID=<Enthusia Discord server ID>`
 - `DISCORD_OAUTH_REDIRECT_URI=https://<Access-protected-preview-host>/api/competitions/auth/discord/callback`
+- `DISCORD_FOUNDER_ROLE_IDS=<comma-separated Discord role IDs>`
+- `DISCORD_ADMIN_ROLE_IDS=<comma-separated Discord role IDs>`
+- `DISCORD_DEVELOPER_ROLE_IDS=<comma-separated Discord role IDs>`
+- `DISCORD_MODERATOR_ROLE_IDS=<comma-separated Discord role IDs>`
+- `DISCORD_HELPER_ROLE_IDS=<comma-separated Discord role IDs>`
 - `COMPETITIONS_DISCORD_STAFF_ROLE_ID=<Discord staff role ID>`
 - `CF_ACCESS_TEAM_DOMAIN=<team>.cloudflareaccess.com`
 - `CF_ACCESS_AUD=<preview Access application audience>`
@@ -110,6 +115,8 @@ Set secret values only in Cloudflare encrypted/secret storage:
 - `COMPETITION_BRIDGE_ACCESS_CLIENT_SECRET`
 - `COMPETITIONS_DISCORD_STAFF_WEBHOOK`
 - `COMPETITIONS_DISCORD_BOT_TOKEN` (optional, required only for contributor DMs)
+
+Staff competition and appeal-review access uses the fresh Discord role snapshot from the website session. A staff member must be in the Discord, have one of the configured role IDs, and have at least one linked Minecraft account. Role snapshots older than one hour require signing in with Discord again before a staff action is accepted.
 
 The bearer token and HMAC secret must be different random values of at least 32 characters.
 

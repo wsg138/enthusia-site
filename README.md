@@ -136,7 +136,7 @@ Additional cinematic/mask tools are available through the package scripts for si
 
 The site is structured for Cloudflare Pages/Pages Functions and includes Wrangler configuration. Infrastructure bindings, API credentials and secrets belong in the deployment environment and must not be written into public documentation.
 
-Discord sign-in requires `DISCORD_CLIENT_ID`, encrypted `DISCORD_CLIENT_SECRET`, `DISCORD_GUILD_ID` and an exact `DISCORD_OAUTH_REDIRECT_URI`. Competition entry additionally requires the isolated D1/R2 bindings and Minecraft bridge configuration described in the development bring-up guide.
+Discord sign-in requires `DISCORD_CLIENT_ID`, encrypted `DISCORD_CLIENT_SECRET`, `DISCORD_GUILD_ID` and an exact `DISCORD_OAUTH_REDIRECT_URI`. Staff website access also requires the Discord staff-role ID mappings documented in the development bring-up guide. Competition entry additionally requires the isolated D1/R2 bindings and Minecraft bridge configuration described there.
 
 Appeal submission requires encrypted `STAFF_API_BEARER_TOKEN` and `STAFF_API_HMAC_SECRET` values that match the EnthusiaStaff website API. Public punishment history and every appeal operation also require `staff-api.enthusia.info` to resolve to the deployed Staff API. The UI reports that dependency as unavailable rather than accepting an unverified appeal when the integration is offline.
 

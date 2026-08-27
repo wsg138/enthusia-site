@@ -72,6 +72,7 @@ Recommended non-secret environment variables:
 - `COMPETITIONS_ENABLED=true` only in the isolated development project during development
 - `APP_ENV=preview`
 - `DISCORD_GUILD_ID=<Enthusia Discord server ID>`
+- `DISCORD_FOUNDER_ROLE_IDS`, `DISCORD_ADMIN_ROLE_IDS`, `DISCORD_DEVELOPER_ROLE_IDS`, `DISCORD_MODERATOR_ROLE_IDS`, and `DISCORD_HELPER_ROLE_IDS` mapped to the current Discord roles
 
 Recommended secret names:
 
