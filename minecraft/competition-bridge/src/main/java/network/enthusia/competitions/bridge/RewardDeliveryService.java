@@ -31,6 +31,16 @@ final class RewardDeliveryService {
     }
 
     JsonObject deliver(BridgeConfig config, JsonObject request, byte[] exactBody) throws Exception {
+        RewardRequest reward = rewardRequest(config, request);
+        String requestHash = sha256Hex(exactBody);
+        BridgeRepository.RewardClaim claim = repository.claimReward(
+                reward.operationKey(), reward.rewardType(), reward.recipient(), requestHash, System.currentTimeMillis());
+        JsonObject resolvedClaim = resolveClaim(claim, reward.operationKey(), reward.rewardType());
+        if (resolvedClaim != null) return resolvedClaim;
+        return deliverReward(config, reward);
+    }
+
+    private RewardRequest rewardRequest(BridgeConfig config, JsonObject request) throws Exception {
         if (!request.has("schemaVersion") || request.get("schemaVersion").getAsInt() != 1) {
             throw new BridgeRequestException(400, "unsupported_reward_schema", "schemaVersion must be 1");
         }
@@ -39,33 +49,42 @@ final class RewardDeliveryService {
         String rewardType = text(request, "rewardType", 32).toUpperCase(Locale.ROOT);
         JsonObject payload = object(request, "payload");
         validatePayload(config, rewardType, payload);
+        return new RewardRequest(operationKey, recipient, rewardType, payload);
+    }
 
-        String requestHash = sha256Hex(exactBody);
-        BridgeRepository.RewardClaim claim = repository.claimReward(
-                operationKey, rewardType, recipient, requestHash, System.currentTimeMillis());
-        if (claim.state() == BridgeRepository.RewardClaimState.OPERATION_CONFLICT) {
-            throw new BridgeRequestException(409, "operation_key_conflict", "operationKey already belongs to a different reward request");
-        }
-        if (claim.state() == BridgeRepository.RewardClaimState.ALREADY_DELIVERED) {
-            JsonObject response = response("ALREADY_DELIVERED", operationKey, "The logical reward was already accepted or delivered");
-            response.addProperty("idempotentReplay", true);
-            return response;
-        }
-        if (claim.state() == BridgeRepository.RewardClaimState.RECONCILIATION_REQUIRED
-                && !rewardType.equals("LORE_ITEM") && !rewardType.equals("ITEM")) {
-            return response("REVIEW_REQUIRED", operationKey,
-                    "A previous attempt crossed or may have crossed the side-effect boundary. Automatic retry is blocked.");
-        }
+    private JsonObject resolveClaim(BridgeRepository.RewardClaim claim, String operationKey, String rewardType) throws BridgeRequestException {
+        return switch (claim.state()) {
+            case CLAIMED -> null;
+            case OPERATION_CONFLICT -> throw new BridgeRequestException(
+                    409, "operation_key_conflict", "operationKey already belongs to a different reward request");
+            case ALREADY_DELIVERED -> idempotentReplay(operationKey);
+            case RECONCILIATION_REQUIRED -> retryableReward(rewardType)
+                    ? null
+                    : response("REVIEW_REQUIRED", operationKey,
+                            "A previous attempt crossed or may have crossed the side-effect boundary. Automatic retry is blocked.");
+        };
+    }
 
-        return switch (rewardType) {
-            case "MONEY" -> money(config, operationKey, recipient, payload);
-            case "ITEM" -> item(config, operationKey, recipient, payload);
-            case "LORE_ITEM" -> lore(config, operationKey, recipient, payload);
-            case "PERMISSION" -> permission(config, operationKey, recipient, payload);
-            case "RANK" -> rank(config, operationKey, recipient, payload);
-            case "COMMAND" -> rawCommand(config, operationKey, recipient, payload);
+    private JsonObject deliverReward(BridgeConfig config, RewardRequest reward) throws Exception {
+        return switch (reward.rewardType()) {
+            case "MONEY" -> money(config, reward.operationKey(), reward.recipient(), reward.payload());
+            case "ITEM" -> item(config, reward.operationKey(), reward.recipient(), reward.payload());
+            case "LORE_ITEM" -> lore(config, reward.operationKey(), reward.recipient(), reward.payload());
+            case "PERMISSION" -> permission(config, reward.operationKey(), reward.recipient(), reward.payload());
+            case "RANK" -> rank(config, reward.operationKey(), reward.recipient(), reward.payload());
+            case "COMMAND" -> rawCommand(config, reward.operationKey(), reward.recipient(), reward.payload());
             default -> throw new BridgeRequestException(400, "unsupported_reward_type", "Unsupported reward type");
         };
+    }
+
+    private static JsonObject idempotentReplay(String operationKey) {
+        JsonObject result = response("ALREADY_DELIVERED", operationKey, "The logical reward was already accepted or delivered");
+        result.addProperty("idempotentReplay", true);
+        return result;
+    }
+
+    private static boolean retryableReward(String rewardType) {
+        return rewardType.equals("LORE_ITEM") || rewardType.equals("ITEM");
     }
 
     private JsonObject money(BridgeConfig config, String key, UUID recipient, JsonObject payload) throws Exception {
@@ -175,41 +194,63 @@ final class RewardDeliveryService {
         if (player == null || !player.isOnline()) return;
         try {
             for (BridgeRepository.PendingItem pending : repository.pendingItems(playerUuid)) {
-                Material material = Material.matchMaterial(pending.materialKey());
-                if (material == null || !material.isItem() || material.isAir()) continue;
-                int remaining = pending.remaining();
-                while (remaining > 0) {
-                    int stackAmount = Math.min(remaining, material.getMaxStackSize());
-                    Map<Integer, ItemStack> leftovers = player.getInventory().addItem(new ItemStack(material, stackAmount));
-                    int leftover = leftovers.values().stream().mapToInt(ItemStack::getAmount).sum();
-                    int inserted = stackAmount - leftover;
-                    remaining -= inserted;
-                    if (inserted <= 0 || leftover > 0) break;
-                }
-                repository.updatePendingItem(pending.operationKey(), remaining, System.currentTimeMillis());
+                attemptPendingItem(player, pending);
             }
         } catch (Exception exception) {
             plugin.getLogger().warning("Unable to process queued competition items for " + playerUuid + ": " + safe(exception));
         }
     }
 
+    private void attemptPendingItem(Player player, BridgeRepository.PendingItem pending) throws Exception {
+        Material material = Material.matchMaterial(pending.materialKey());
+        if (material == null || !material.isItem() || material.isAir()) return;
+        int remaining = insertIntoInventory(player, material, pending.remaining());
+        repository.updatePendingItem(pending.operationKey(), remaining, System.currentTimeMillis());
+    }
+
+    private static int insertIntoInventory(Player player, Material material, int remaining) {
+        while (remaining > 0) {
+            int stackAmount = Math.min(remaining, material.getMaxStackSize());
+            Map<Integer, ItemStack> leftovers = player.getInventory().addItem(new ItemStack(material, stackAmount));
+            int leftover = leftovers.values().stream().mapToInt(ItemStack::getAmount).sum();
+            int inserted = stackAmount - leftover;
+            remaining -= inserted;
+            if (inserted <= 0 || leftover > 0) break;
+        }
+        return remaining;
+    }
+
     private void validatePayload(BridgeConfig config, String type, JsonObject payload) throws Exception {
         switch (type) {
             case "MONEY" -> longValue(payload, "amount", 0, MAX_AMOUNT);
-            case "ITEM" -> {
-                String item = text(payload, "itemKey", 160);
-                longValue(payload, "amount", 1, 2304);
-                Material material = MainThreadBridge.call(plugin, config.server().mainThreadTimeoutMs(), () -> Material.matchMaterial(item));
-                if (material == null || !material.isItem() || material.isAir()) throw new BridgeRequestException(400, "unknown_item", "Unknown vanilla item");
-            }
+            case "ITEM" -> validateItemPayload(config, payload);
             case "LORE_ITEM" -> text(payload, "itemKey", 160);
-            case "PERMISSION" -> { identifier(payload, "permission", 160); optionalPositive(payload, "durationMinutes", 5_256_000L); }
-            case "RANK" -> { identifier(payload, "rank", 96); optionalPositive(payload, "durationMinutes", 5_256_000L); }
-            case "COMMAND" -> {
-                String command = text(payload, "command", 500);
-                if (command.indexOf('\n') >= 0 || command.indexOf('\r') >= 0) throw new BridgeRequestException(400, "invalid_command", "Command contains a newline");
-            }
+            case "PERMISSION" -> validateTimedIdentifier(payload, "permission", 160);
+            case "RANK" -> validateTimedIdentifier(payload, "rank", 96);
+            case "COMMAND" -> validateCommandPayload(payload);
             default -> throw new BridgeRequestException(400, "unsupported_reward_type", "Unsupported reward type");
+        }
+    }
+
+    private void validateItemPayload(BridgeConfig config, JsonObject payload) throws Exception {
+        String item = text(payload, "itemKey", 160);
+        longValue(payload, "amount", 1, 2304);
+        Material material = MainThreadBridge.call(
+                plugin, config.server().mainThreadTimeoutMs(), () -> Material.matchMaterial(item));
+        if (material == null || !material.isItem() || material.isAir()) {
+            throw new BridgeRequestException(400, "unknown_item", "Unknown vanilla item");
+        }
+    }
+
+    private static void validateTimedIdentifier(JsonObject payload, String key, int max) throws BridgeRequestException {
+        identifier(payload, key, max);
+        optionalPositive(payload, "durationMinutes", 5_256_000L);
+    }
+
+    private static void validateCommandPayload(JsonObject payload) throws BridgeRequestException {
+        String command = text(payload, "command", 500);
+        if (command.indexOf('\n') >= 0 || command.indexOf('\r') >= 0) {
+            throw new BridgeRequestException(400, "invalid_command", "Command contains a newline");
         }
     }
 
@@ -289,4 +330,6 @@ final class RewardDeliveryService {
         if (value == null || value.isBlank()) value = exception.getClass().getSimpleName();
         return value.length() > 300 ? value.substring(0, 300) : value;
     }
+
+    private record RewardRequest(String operationKey, UUID recipient, String rewardType, JsonObject payload) {}
 }
