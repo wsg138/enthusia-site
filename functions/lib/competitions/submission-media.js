@@ -27,6 +27,18 @@ function revisionExistsSql() {
   )`;
 }
 
+export function nextSubmissionImageSortOrder(images) {
+  if (!Array.isArray(images)) throw new TypeError("Submission image list is invalid");
+  let next = 0;
+  for (const image of images) {
+    if (!Number.isInteger(image?.sortOrder) || image.sortOrder < 0) {
+      throw new TypeError("Submission image sort order is invalid");
+    }
+    next = Math.max(next, image.sortOrder + 1);
+  }
+  return next;
+}
+
 export async function getOwnedSubmissionImage(db, competitionId, submissionId, imageId, ownerSubject) {
   const database = requireDatabase(db);
   return database.prepare(`
@@ -57,6 +69,9 @@ export async function getOwnedSubmissionImage(db, competitionId, submissionId, i
 
 export async function attachSubmissionImage(db, image) {
   const database = requireWritableDatabase(db);
+  if (!Number.isInteger(image.sortOrder) || image.sortOrder < 0) {
+    throw new TypeError("Submission image sort order is invalid");
+  }
   const nextRevision = image.expectedRevision + 1;
   const marker = revisionExistsSql();
   const results = await database.batch([
@@ -259,115 +274,6 @@ export async function removeSubmissionImage(db, removal) {
   ]);
 
   return Number(results?.[0]?.meta?.changes ?? 0) === 1
-    ? { status: "UPDATED", revision: nextRevision }
-    : { status: "CONFLICT" };
-}
-
-export async function reorderSubmissionImages(db, reorder) {
-  const database = requireWritableDatabase(db);
-  const ids = reorder.imageIds.map(String);
-  if (!ids.length || new Set(ids).size !== ids.length) throw new TypeError("Image order is invalid");
-  if (!ids.includes(reorder.coverImageId)) throw new TypeError("Cover image must be in the image order");
-
-  const nextRevision = reorder.expectedRevision + 1;
-  const marker = revisionExistsSql();
-  const statements = [
-    database.prepare(`
-      UPDATE submissions
-      SET revision = ?, updated_at = ?, cover_image_id = ?
-      WHERE id = ?
-        AND competition_id = ?
-        AND owner_subject = ?
-        AND revision = ?
-        AND status IN ('DRAFT','NEEDS_CHANGES')
-        AND removed_at IS NULL
-        AND (
-          SELECT COUNT(*)
-          FROM submission_images i
-          WHERE i.submission_id = submissions.id
-            AND i.removed_at IS NULL
-        ) = ?
-    `).bind(
-      nextRevision,
-      reorder.updatedAt,
-      reorder.coverImageId,
-      reorder.submissionId,
-      reorder.competitionId,
-      reorder.ownerSubject,
-      reorder.expectedRevision,
-      ids.length
-    ),
-    database.prepare(`
-      UPDATE submission_images
-      SET sort_order = sort_order + 1000
-      WHERE submission_id = ?
-        AND removed_at IS NULL
-        AND ${marker}
-    `).bind(
-      reorder.submissionId,
-      reorder.submissionId,
-      reorder.competitionId,
-      reorder.ownerSubject,
-      nextRevision,
-      reorder.updatedAt
-    )
-  ];
-
-  ids.forEach((imageId, index) => {
-    statements.push(database.prepare(`
-      UPDATE submission_images
-      SET sort_order = ?
-      WHERE submission_id = ?
-        AND id = ?
-        AND removed_at IS NULL
-        AND ${marker}
-    `).bind(
-      index,
-      reorder.submissionId,
-      imageId,
-      reorder.submissionId,
-      reorder.competitionId,
-      reorder.ownerSubject,
-      nextRevision,
-      reorder.updatedAt
-    ));
-  });
-
-  statements.push(database.prepare(`
-    INSERT INTO competition_audit_events (
-      id, competition_id, submission_id, actor_subject, actor_uuid,
-      action, after_json, note, created_at
-    )
-    SELECT ?, ?, ?, ?, ?, 'SUBMISSION_IMAGES_REORDERED', ?, ?, ?
-    WHERE ${marker}
-      AND NOT EXISTS (
-        SELECT 1 FROM submission_images
-        WHERE submission_id = ?
-          AND removed_at IS NULL
-          AND sort_order >= 1000
-      )
-  `).bind(
-    reorder.auditEventId,
-    reorder.competitionId,
-    reorder.submissionId,
-    reorder.ownerSubject,
-    reorder.actorUuid,
-    JSON.stringify({ imageIds: ids, coverImageId: reorder.coverImageId, revision: nextRevision }),
-    "Submission images reordered",
-    reorder.updatedAt,
-    reorder.submissionId,
-    reorder.competitionId,
-    reorder.ownerSubject,
-    nextRevision,
-    reorder.updatedAt,
-    reorder.submissionId
-  ));
-
-  const results = await database.batch(statements);
-  if (Number(results?.[0]?.meta?.changes ?? 0) !== 1) return { status: "CONFLICT" };
-  const imageUpdateStart = 2;
-  const allUpdated = ids.every((_, index) => Number(results?.[imageUpdateStart + index]?.meta?.changes ?? 0) === 1);
-  return allUpdated
     ? { status: "UPDATED", revision: nextRevision }
     : { status: "CONFLICT" };
 }

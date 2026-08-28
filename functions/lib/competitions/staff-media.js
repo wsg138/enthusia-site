@@ -37,6 +37,9 @@ export async function getStaffSubmissionImage(db, competitionId, submissionId, i
 
 export async function attachStaffSubmissionImage(db, image) {
   const database = requireWritableDatabase(db);
+  if (!Number.isInteger(image.sortOrder) || image.sortOrder < 0) {
+    throw new TypeError("Submission image sort order is invalid");
+  }
   const nextRevision = image.expectedRevision + 1;
   const results = await database.batch([
     database.prepare(`

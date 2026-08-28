@@ -13,8 +13,14 @@ import { getCompetitionParticipantSession } from "../../../../../../lib/competit
 import { authorizeCompetitionRead } from "../../../../../../lib/competitions/public-access.js";
 import { competitionRateLimit, rateLimitHeaders } from "../../../../../../lib/competitions/rate-limit.js";
 import { getPublicCompetitionBySlug } from "../../../../../../lib/competitions/repository.js";
-import { attachSubmissionImage } from "../../../../../../lib/competitions/submission-media.js";
-import { getAccountSubmission } from "../../../../../../lib/competitions/submissions.js";
+import {
+  attachSubmissionImage,
+  nextSubmissionImageSortOrder
+} from "../../../../../../lib/competitions/submission-media.js";
+import {
+  getAccountSubmission,
+  listSubmissionImages
+} from "../../../../../../lib/competitions/submissions.js";
 import { json, methodNotAllowed, unauthorized } from "../../../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../../../lib/security.js";
 import { isCanonicalUuid } from "../../../../../../lib/validation.js";
@@ -123,6 +129,14 @@ export async function onRequestPost(context) {
   if (!editable(competition, submission)) return json({ error: "submission_locked" }, 409);
   if (submission.revision !== revision) return json({ error: "submission_revision_conflict" }, 409);
 
+  let sortOrder;
+  try {
+    const images = await listSubmissionImages(context.env.COMPETITIONS_DB, submission.id);
+    sortOrder = nextSubmissionImageSortOrder(images);
+  } catch {
+    return json({ error: "submission_images_unavailable" }, 503);
+  }
+
   try {
     const limited = await imageUploadRateLimit(context, session);
     if (limited) return limited;
@@ -176,7 +190,7 @@ export async function onRequestPost(context) {
       ownerSubject: session.subject,
       actorUuid: submission.ownerUuid,
       expectedRevision: revision,
-      sortOrder: existing.length,
+      sortOrder,
       storageKey: stored.key,
       sha256: stored.sha256,
       mimeType: stored.mimeType,
@@ -195,7 +209,7 @@ export async function onRequestPost(context) {
     return json({
       image: {
         id: imageId,
-        sortOrder: existing.length,
+        sortOrder,
         mimeType: stored.mimeType,
         byteSize: stored.size,
         width: stored.width,

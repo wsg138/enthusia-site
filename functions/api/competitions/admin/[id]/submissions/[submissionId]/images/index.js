@@ -12,8 +12,10 @@ import {
   prepareCompetitionImage,
   storePreparedCompetitionImage
 } from "../../../../../../../lib/competitions/media-storage.js";
+import { nextSubmissionImageSortOrder } from "../../../../../../../lib/competitions/submission-media.js";
 import { attachStaffSubmissionImage } from "../../../../../../../lib/competitions/staff-media.js";
 import { getStaffSubmission } from "../../../../../../../lib/competitions/staff-submissions.js";
+import { listSubmissionImages } from "../../../../../../../lib/competitions/submissions.js";
 import { json, methodNotAllowed, unauthorized } from "../../../../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../../../../lib/security.js";
 import { isCanonicalUuid } from "../../../../../../../lib/validation.js";
@@ -106,6 +108,13 @@ export async function onRequestPost(context) {
     return json({ error: "submission_locked" }, 409);
   }
   if (submission.revision !== revision) return json({ error: "submission_revision_conflict" }, 409);
+  let sortOrder;
+  try {
+    const images = await listSubmissionImages(context.env.COMPETITIONS_DB, submissionId);
+    sortOrder = nextSubmissionImageSortOrder(images);
+  } catch {
+    return json({ error: "submission_images_unavailable" }, 503);
+  }
   const requestedType = String(context.request.headers.get("content-type") ?? "").split(";", 1)[0].trim().toLowerCase();
   if (!competitionImageLimits().mimeTypes.includes(requestedType)) {
     return json({ error: "unsupported_image_type" }, 415);
@@ -152,7 +161,7 @@ export async function onRequestPost(context) {
       actorSubject: authorized.session.subject,
       actorUuid: authorized.session.player.uuid,
       expectedRevision: revision,
-      sortOrder: existing.length,
+      sortOrder,
       storageKey: stored.key,
       sha256: stored.sha256,
       mimeType: stored.mimeType,
@@ -171,7 +180,7 @@ export async function onRequestPost(context) {
     return json({
       image: {
         id: imageId,
-        sortOrder: existing.length,
+        sortOrder,
         mimeType: stored.mimeType,
         byteSize: stored.size,
         width: stored.width,
