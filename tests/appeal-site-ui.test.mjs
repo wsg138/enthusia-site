@@ -27,6 +27,17 @@ test("staff appeal workspace is private and uses its maintained script", async (
   assert.doesNotMatch(html, /<script type="module">/);
 });
 
+test("appeal evidence routes are derived from attachment IDs", async () => {
+  const [player, reviewer] = await Promise.all([
+    readFile(new URL("../public/assets/appeals.js", import.meta.url), "utf8"),
+    readFile(new URL("../public/assets/reviewer-appeals.js", import.meta.url), "utf8")
+  ]);
+  assert.match(player, /\/api\/appeals\/attachments\/\$\{encodeURIComponent/);
+  assert.match(reviewer, /\/api\/reviewer\/appeals\/attachments\/\$\{encodeURIComponent/);
+  assert.doesNotMatch(player, /attachment\.previewUrl/);
+  assert.doesNotMatch(reviewer, /attachment\.previewUrl/);
+});
+
 test("profile menu links to appeal history and dismisses when it is no longer in use", async () => {
   const [html, menu] = await Promise.all([
     readFile(new URL("../public/account.html", import.meta.url), "utf8"),
