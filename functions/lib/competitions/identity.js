@@ -338,12 +338,21 @@ export async function consumeMinecraftLinkCode(db, {
     database.prepare(`
       INSERT INTO competition_minecraft_links (
         minecraft_uuid, discord_user_id, minecraft_name, linked_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?)
+      )
+      SELECT ?, ?, ?, ?, ?
+      WHERE EXISTS (
+        SELECT 1
+        FROM competition_link_codes
+        WHERE code_hash = ?
+          AND discord_user_id = ?
+          AND consumed_at IS NULL
+          AND expires_at > ?
+      )
       ON CONFLICT(minecraft_uuid) DO UPDATE SET
         minecraft_name = excluded.minecraft_name,
         updated_at = excluded.updated_at
       WHERE competition_minecraft_links.discord_user_id = excluded.discord_user_id
-    `).bind(uuid, discordUserId, name, nowIso, nowIso),
+    `).bind(uuid, discordUserId, name, nowIso, nowIso, codeHash, discordUserId, nowIso),
     database.prepare(`
       UPDATE competition_link_codes
       SET consumed_at = ?
