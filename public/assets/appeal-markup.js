@@ -41,27 +41,27 @@ function markupSpace(character) {
 }
 
 function contentAfterMarker(line, markerEnd) {
-  if (!markupSpace(line[markerEnd])) return null;
+  if (!markupSpace(line.charAt(markerEnd))) return null;
   let contentStart = markerEnd + 1;
-  while (contentStart < line.length && markupSpace(line[contentStart])) contentStart += 1;
+  while (contentStart < line.length && markupSpace(line.charAt(contentStart))) contentStart += 1;
   return contentStart < line.length ? line.slice(contentStart) : null;
 }
 
 export function parseAppealBlock(value) {
   const line = String(value ?? "");
   let headingEnd = 0;
-  while (headingEnd < 3 && line[headingEnd] === "#") headingEnd += 1;
-  if (headingEnd && line[headingEnd] !== "#") {
+  while (headingEnd < 3 && line.charAt(headingEnd) === "#") headingEnd += 1;
+  if (headingEnd && line.charAt(headingEnd) !== "#") {
     const content = contentAfterMarker(line, headingEnd);
     if (content !== null) return { kind: "heading", level: headingEnd, content };
   }
 
   if (line.startsWith(">")) {
-    const contentStart = markupSpace(line[1]) ? 2 : 1;
+    const contentStart = markupSpace(line.charAt(1)) ? 2 : 1;
     return { kind: "quote", content: line.slice(contentStart) };
   }
 
-  if (line.length && "-*+".includes(line[0])) {
+  if (line.length && "-*+".includes(line.charAt(0))) {
     const content = contentAfterMarker(line, 1);
     return content === null ? null : { kind: "unordered-item", content };
   }
@@ -70,7 +70,7 @@ export function parseAppealBlock(value) {
   while (digitEnd < line.length && line.charCodeAt(digitEnd) >= 48 && line.charCodeAt(digitEnd) <= 57) {
     digitEnd += 1;
   }
-  if (digitEnd && (line[digitEnd] === "." || line[digitEnd] === ")")) {
+  if (digitEnd && (line.charAt(digitEnd) === "." || line.charAt(digitEnd) === ")")) {
     const content = contentAfterMarker(line, digitEnd + 1);
     if (content !== null) return { kind: "ordered-item", content };
   }

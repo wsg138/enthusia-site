@@ -59,15 +59,18 @@ function setActionsDisabled(container, disabled) {
   for (const control of container.querySelectorAll("button, textarea")) control.disabled = disabled;
 }
 
+function confirmationForDecision(decision) {
+  if (decision === "approve") return "Accept this appeal and remove the punishment?";
+  if (decision === "deny") return "Deny this appeal?";
+  return null;
+}
+
 async function decide(appeal, decision, note, actionRoot, actionStatus) {
   if (note.trim().length < 3) {
     actionStatus.textContent = "Add a short note explaining the decision.";
     return;
   }
-  const confirmation = {
-    approve: "Accept this appeal and remove the punishment?",
-    deny: "Deny this appeal?"
-  }[decision];
+  const confirmation = confirmationForDecision(decision);
   if (confirmation && !window.confirm(confirmation)) return;
   actionStatus.textContent = "Saving decision…";
   setActionsDisabled(actionRoot, true);

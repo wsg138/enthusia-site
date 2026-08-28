@@ -1,7 +1,14 @@
+function trimTrailingSlashes(value) {
+  const path = String(value || "");
+  let end = path.length;
+  while (end > 0 && path.charAt(end - 1) === "/") end -= 1;
+  return path.slice(0, end) || "/";
+}
+
 function localPath(link) {
   try {
     const target = new URL(link.href, window.location.href);
-    return target.origin === window.location.origin ? target.pathname.replace(/\/+$/, "") || "/" : null;
+    return target.origin === window.location.origin ? trimTrailingSlashes(target.pathname) : null;
   } catch {
     return null;
   }
@@ -59,7 +66,7 @@ export function normalizeSiteNavigation() {
   menu.insertBefore(market, wiki ?? null);
   menu.insertBefore(competition, wiki ?? null);
 
-  const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
+  const currentPath = trimTrailingSlashes(window.location.pathname);
   const currentSection = currentPath === "/index.html" ? "/" : currentPath;
   let activeLink = null;
   nav.querySelectorAll("a.active, a[aria-current='page']").forEach((link) => {

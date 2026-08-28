@@ -20,11 +20,16 @@ test("appeal page requires linked punishment selection and asks separate detaile
 });
 
 test("staff appeal workspace is private and uses its maintained script", async () => {
-  const html = await readFile(new URL("../public/reviewer/appeals.html", import.meta.url), "utf8");
+  const [html, script] = await Promise.all([
+    readFile(new URL("../public/reviewer/appeals.html", import.meta.url), "utf8"),
+    readFile(new URL("../public/assets/reviewer-appeals.js", import.meta.url), "utf8")
+  ]);
   assert.match(html, /name="robots" content="noindex,nofollow,noarchive"/);
   assert.match(html, /src="\.\.\/assets\/reviewer-appeals\.js\?v=3"/);
   assert.match(html, /id="review-search"/);
   assert.doesNotMatch(html, /<script type="module">/);
+  assert.match(script, /confirmationForDecision\(decision\)/);
+  assert.doesNotMatch(script, /}\[decision\]/);
 });
 
 test("appeal evidence routes are derived from attachment IDs", async () => {
