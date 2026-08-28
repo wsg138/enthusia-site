@@ -27,6 +27,10 @@ const DRAFT_ID = "123e4567-e89b-42d3-a456-426614174010";
 const PLAYER_ID = "123e4567-e89b-42d3-a456-426614174000";
 const PUNISHMENT_ID = "123e4567-e89b-42d3-a456-426614174099";
 const ATTACHMENT_ID = "123e4567-e89b-42d3-a456-426614174011";
+const DISCORD_USER_ID = "3".repeat(18);
+const DISCORD_OTHER_USER_ID = "1".repeat(18);
+const DISCORD_ADMIN_ROLE_ID = "4".repeat(18);
+const DISCORD_MODERATOR_ROLE_ID = "5".repeat(18);
 
 const playerClaims = {
   sub: "access-user-1",
@@ -102,7 +106,7 @@ test("browser identity fields cannot override linked appeal identity", () => {
 });
 
 test("submission hashes bind answers, evidence, account, and punishment", async () => {
-  const session = { discord: { id: "123456789012345678" } };
+  const session = { discord: { id: DISCORD_OTHER_USER_ID } };
   const one = sanitizeAppealSubmission(appealInput());
   const two = sanitizeAppealSubmission(appealInput({ attachmentIds: [] }));
   const oneHash = await appealSubmissionHash(session, one);
@@ -142,11 +146,11 @@ test("review access requires an explicitly configured privileged role", () => {
 
 test("Discord staff sessions use fresh configured role IDs and a linked Minecraft account", () => {
   const checkedAt = "2026-08-26T20:00:00.000Z";
-  const adminRole = "123456789012345678";
-  const moderatorRole = "223456789012345678";
+  const adminRole = DISCORD_ADMIN_ROLE_ID;
+  const moderatorRole = DISCORD_MODERATOR_ROLE_ID;
   const identity = {
-    subject: "discord:323456789012345678",
-    discord: { id: "323456789012345678", username: "Reviewer" },
+    subject: `discord:${DISCORD_USER_ID}`,
+    discord: { id: DISCORD_USER_ID, username: "Reviewer" },
     discordGuildMember: true,
     discordRolesCheckedAt: checkedAt,
     guildRoleIds: [adminRole, moderatorRole],
@@ -166,9 +170,9 @@ test("Discord staff sessions use fresh configured role IDs and a linked Minecraf
 
 test("Discord staff sessions fail closed for stale roles, missing membership, or missing links", () => {
   const checkedAt = "2026-08-26T20:00:00.000Z";
-  const roleId = "123456789012345678";
+  const roleId = DISCORD_ADMIN_ROLE_ID;
   const identity = {
-    subject: "discord:323456789012345678",
+    subject: `discord:${DISCORD_USER_ID}`,
     discordGuildMember: true,
     discordRolesCheckedAt: checkedAt,
     guildRoleIds: [roleId],
@@ -196,7 +200,7 @@ test("Discord staff sessions fail closed for stale roles, missing membership, or
 });
 
 test("staff API authentication accepts a current Discord session before the Access fallback", async () => {
-  const roleId = "123456789012345678";
+  const roleId = DISCORD_MODERATOR_ROLE_ID;
   const database = {
     prepare(sql) {
       return {
@@ -205,7 +209,7 @@ test("staff API authentication accepts a current Discord session before the Acce
             async first() {
               if (!sql.includes("FROM competition_identity_sessions")) return null;
               return {
-                discordUserId: "323456789012345678",
+                discordUserId: DISCORD_USER_ID,
                 expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
                 username: "Reviewer",
                 globalName: null,
@@ -238,7 +242,7 @@ test("staff API authentication accepts a current Discord session before the Acce
 
   assert.deepEqual(session.roles, ["moderator"]);
   assert.deepEqual(session.player, { uuid: PLAYER_ID, name: "Lincoln" });
-  assert.equal(session.subject, "discord:323456789012345678");
+  assert.equal(session.subject, `discord:${DISCORD_USER_ID}`);
 });
 
 test("mutation requests require the exact site origin", () => {

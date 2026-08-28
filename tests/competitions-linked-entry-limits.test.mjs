@@ -4,7 +4,7 @@ import { DatabaseSync } from "node:sqlite";
 import test from "node:test";
 
 const NOW = "2026-08-23T03:10:00.000Z";
-const DISCORD = "123456789012345678";
+const DISCORD = "1".repeat(18);
 const ALT_A = "00000000-0000-4000-8000-0000000000a1";
 const ALT_B = "00000000-0000-4000-8000-0000000000b2";
 const OTHER = "00000000-0000-4000-8000-0000000000c3";

@@ -7,6 +7,18 @@ const UUID_A = "00000000-0000-4000-8000-0000000000a1";
 const UUID_B = "00000000-0000-4000-8000-0000000000b2";
 const UUID_C = "00000000-0000-4000-8000-0000000000c3";
 const UUID_D = "00000000-0000-4000-8000-0000000000d4";
+const DISCORD_A = "1".repeat(18);
+const DISCORD_B = "1".repeat(17) + "2";
+const DISCORD_C = "1".repeat(17) + "3";
+const DISCORD_D = "1".repeat(17) + "4";
+const DISCORD_E = "1".repeat(17) + "5";
+const DISCORD_F = "1".repeat(17) + "6";
+const DISCORD_SUBJECT_A = `discord:${DISCORD_A}`;
+const DISCORD_SUBJECT_B = `discord:${DISCORD_B}`;
+const DISCORD_SUBJECT_C = `discord:${DISCORD_C}`;
+const DISCORD_SUBJECT_D = `discord:${DISCORD_D}`;
+const DISCORD_SUBJECT_E = `discord:${DISCORD_E}`;
+const DISCORD_SUBJECT_F = `discord:${DISCORD_F}`;
 
 async function migratedDatabase() {
   const database = new DatabaseSync(":memory:");
@@ -80,15 +92,15 @@ function assignJudge(database, judgeUuid) {
 test("a Discord-linked alt cannot vote for an entry owned by a sibling Minecraft account", async () => {
   const database = await migratedDatabase();
   seedCompetition(database);
-  seedDiscordIdentity(database, "100000000000000001", [[UUID_A, "Alpha"], [UUID_B, "Beta"]]);
-  seedSubmission(database, "entry-1", UUID_A, "discord:100000000000000001");
+  seedDiscordIdentity(database, DISCORD_A, [[UUID_A, "Alpha"], [UUID_B, "Beta"]]);
+  seedSubmission(database, "entry-1", UUID_A, DISCORD_SUBJECT_A);
   seedSubmission(database, "entry-2", UUID_C, "other");
 
   assert.throws(
-    () => vote(database, "discord:100000000000000001", UUID_B, "entry-1"),
+    () => vote(database, DISCORD_SUBJECT_A, UUID_B, "entry-1"),
     /linked_owner_cannot_vote_own_entry/
   );
-  vote(database, "discord:100000000000000001", UUID_B, "entry-2");
+  vote(database, DISCORD_SUBJECT_A, UUID_B, "entry-2");
   assert.equal(database.prepare("SELECT COUNT(*) AS count FROM votes").get().count, 1);
   database.close();
 });
@@ -96,12 +108,12 @@ test("a Discord-linked alt cannot vote for an entry owned by a sibling Minecraft
 test("a Discord-linked alt cannot vote when a sibling Minecraft account is a judge", async () => {
   const database = await migratedDatabase();
   seedCompetition(database);
-  seedDiscordIdentity(database, "100000000000000002", [[UUID_A, "Alpha"], [UUID_B, "Beta"]]);
+  seedDiscordIdentity(database, DISCORD_B, [[UUID_A, "Alpha"], [UUID_B, "Beta"]]);
   seedSubmission(database, "entry-1", UUID_C, "other");
   assignJudge(database, UUID_A);
 
   assert.throws(
-    () => vote(database, "discord:100000000000000002", UUID_B, "entry-1"),
+    () => vote(database, DISCORD_SUBJECT_B, UUID_B, "entry-1"),
     /linked_judge_cannot_vote/
   );
   database.close();
@@ -110,16 +122,16 @@ test("a Discord-linked alt cannot vote when a sibling Minecraft account is a jud
 test("judge assignment is rejected when a linked sibling owns an entry or already voted", async () => {
   const database = await migratedDatabase();
   seedCompetition(database);
-  seedDiscordIdentity(database, "100000000000000003", [[UUID_A, "Alpha"], [UUID_B, "Beta"]]);
-  seedSubmission(database, "entry-1", UUID_A, "discord:100000000000000003");
+  seedDiscordIdentity(database, DISCORD_C, [[UUID_A, "Alpha"], [UUID_B, "Beta"]]);
+  seedSubmission(database, "entry-1", UUID_A, DISCORD_SUBJECT_C);
   assert.throws(() => assignJudge(database, UUID_B), /linked_judge_is_submission_owner/);
   database.close();
 
   const voted = await migratedDatabase();
   seedCompetition(voted);
-  seedDiscordIdentity(voted, "100000000000000004", [[UUID_A, "Alpha"], [UUID_B, "Beta"]]);
+  seedDiscordIdentity(voted, DISCORD_D, [[UUID_A, "Alpha"], [UUID_B, "Beta"]]);
   seedSubmission(voted, "entry-1", UUID_C, "other");
-  vote(voted, "discord:100000000000000004", UUID_A, "entry-1");
+  vote(voted, DISCORD_SUBJECT_D, UUID_A, "entry-1");
   assert.throws(() => assignJudge(voted, UUID_B), /linked_judge_has_voted/);
   voted.close();
 });
@@ -127,11 +139,11 @@ test("judge assignment is rejected when a linked sibling owns an entry or alread
 test("a linked sibling cannot become an owner or main participant after judge assignment", async () => {
   const database = await migratedDatabase();
   seedCompetition(database, "SUBMISSIONS_OPEN");
-  seedDiscordIdentity(database, "100000000000000005", [[UUID_A, "Alpha"], [UUID_B, "Beta"]]);
+  seedDiscordIdentity(database, DISCORD_E, [[UUID_A, "Alpha"], [UUID_B, "Beta"]]);
   assignJudge(database, UUID_A);
 
   assert.throws(
-    () => seedSubmission(database, "entry-owner", UUID_B, "discord:100000000000000005"),
+    () => seedSubmission(database, "entry-owner", UUID_B, DISCORD_SUBJECT_E),
     /linked_judge_cannot_enter/
   );
 
@@ -150,10 +162,10 @@ test("a linked sibling cannot become an owner or main participant after judge as
 test("Discord voter UUID must belong to the stated Discord account", async () => {
   const database = await migratedDatabase();
   seedCompetition(database);
-  seedDiscordIdentity(database, "100000000000000006", [[UUID_A, "Alpha"]]);
+  seedDiscordIdentity(database, DISCORD_F, [[UUID_A, "Alpha"]]);
   seedSubmission(database, "entry-1", UUID_C, "other");
   assert.throws(
-    () => vote(database, "discord:100000000000000006", UUID_B, "entry-1"),
+    () => vote(database, DISCORD_SUBJECT_F, UUID_B, "entry-1"),
     /vote_identity_mismatch/
   );
   database.close();

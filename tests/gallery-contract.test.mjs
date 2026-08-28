@@ -5,7 +5,14 @@ import { galleryMediaKey } from "../functions/lib/competitions/media-storage.js"
 import { galleryStaffAccess, SUBMITTABLE_CATEGORIES } from "../functions/lib/gallery.js";
 
 const fresh = new Date().toISOString();
-const ids = { helper: "100000000000000001", mod: "100000000000000002", dev: "100000000000000003", admin: "100000000000000004", founder: "100000000000000005" };
+const idPrefix = "1".repeat(17);
+const ids = {
+  helper: `${idPrefix}1`,
+  mod: `${idPrefix}2`,
+  dev: `${idPrefix}3`,
+  admin: `${idPrefix}4`,
+  founder: `${idPrefix}5`
+};
 const env = { DISCORD_HELPER_ROLE_IDS: ids.helper, DISCORD_MODERATOR_ROLE_IDS: ids.mod, DISCORD_DEVELOPER_ROLE_IDS: ids.dev, DISCORD_ADMIN_ROLE_IDS: ids.admin, DISCORD_FOUNDER_ROLE_IDS: ids.founder };
 
 test("only Community Builds and Mapart accept player submissions", () => {

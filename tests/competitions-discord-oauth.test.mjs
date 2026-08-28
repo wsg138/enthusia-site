@@ -23,9 +23,9 @@ function writeOnlyDb() {
 }
 
 const ENV = {
-  DISCORD_CLIENT_ID: "123456789012345678",
+  DISCORD_CLIENT_ID: "1".repeat(18),
   DISCORD_CLIENT_SECRET: "not-a-real-secret",
-  DISCORD_GUILD_ID: "1410303324745371709",
+  DISCORD_GUILD_ID: "6".repeat(18),
   DISCORD_OAUTH_REDIRECT_URI: "https://competitions-dev.example.com/api/competitions/auth/discord/callback"
 };
 
@@ -69,13 +69,13 @@ test("Discord OAuth callback returns the session cookie with its redirect", () =
 });
 
 test("Discord membership lookup distinguishes roleless members from non-members", async () => {
-  const env = { DISCORD_GUILD_ID: "1410303324745371709" };
+  const env = { DISCORD_GUILD_ID: ENV.DISCORD_GUILD_ID };
   let requestedUrl;
   const member = await fetchDiscordMembership("access-token", env, async (url) => {
     requestedUrl = String(url);
     return new Response(JSON.stringify({ roles: [] }), { status: 200, headers: { "content-type": "application/json" } });
   });
-  assert.equal(requestedUrl, "https://discord.com/api/v10/users/@me/guilds/1410303324745371709/member");
+  assert.equal(requestedUrl, `https://discord.com/api/v10/users/@me/guilds/${ENV.DISCORD_GUILD_ID}/member`);
   assert.deepEqual(member, { member: true, roleIds: [] });
 
   const outsider = await fetchDiscordMembership("access-token", env, async () => new Response(null, { status: 404 }));

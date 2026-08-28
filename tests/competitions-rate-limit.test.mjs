@@ -4,6 +4,9 @@ import { DatabaseSync } from "node:sqlite";
 import test from "node:test";
 import { competitionRateLimit, rateLimitHeaders } from "../functions/lib/competitions/rate-limit.js";
 
+const DISCORD_A = `discord:${"1".repeat(18)}`;
+const DISCORD_B = `discord:${"2".repeat(18)}`;
+
 function d1(database) {
   return {
     prepare(sql) {
@@ -40,9 +43,9 @@ test("competition rate limiter allows up to the configured count and then thrott
   const database = await migratedDatabase();
   const db = d1(database);
   const now = Date.parse("2026-08-23T04:00:00.000Z");
-  const first = await competitionRateLimit(db, { scope: "image-upload", identity: "discord:123456789012345678", limit: 2, windowSeconds: 60, now });
-  const second = await competitionRateLimit(db, { scope: "image-upload", identity: "discord:123456789012345678", limit: 2, windowSeconds: 60, now: now + 1000 });
-  const third = await competitionRateLimit(db, { scope: "image-upload", identity: "discord:123456789012345678", limit: 2, windowSeconds: 60, now: now + 2000 });
+  const first = await competitionRateLimit(db, { scope: "image-upload", identity: DISCORD_A, limit: 2, windowSeconds: 60, now });
+  const second = await competitionRateLimit(db, { scope: "image-upload", identity: DISCORD_A, limit: 2, windowSeconds: 60, now: now + 1000 });
+  const third = await competitionRateLimit(db, { scope: "image-upload", identity: DISCORD_A, limit: 2, windowSeconds: 60, now: now + 2000 });
   assert.equal(first.allowed, true);
   assert.equal(second.allowed, true);
   assert.equal(third.allowed, false);
@@ -55,9 +58,9 @@ test("competition rate limiter isolates identities and resets on the next window
   const database = await migratedDatabase();
   const db = d1(database);
   const now = Date.parse("2026-08-23T04:00:00.000Z");
-  await competitionRateLimit(db, { scope: "vote", identity: "discord:111111111111111111", limit: 1, windowSeconds: 60, now });
-  const other = await competitionRateLimit(db, { scope: "vote", identity: "discord:222222222222222222", limit: 1, windowSeconds: 60, now: now + 1000 });
-  const nextWindow = await competitionRateLimit(db, { scope: "vote", identity: "discord:111111111111111111", limit: 1, windowSeconds: 60, now: now + 61_000 });
+  await competitionRateLimit(db, { scope: "vote", identity: DISCORD_A, limit: 1, windowSeconds: 60, now });
+  const other = await competitionRateLimit(db, { scope: "vote", identity: DISCORD_B, limit: 1, windowSeconds: 60, now: now + 1000 });
+  const nextWindow = await competitionRateLimit(db, { scope: "vote", identity: DISCORD_A, limit: 1, windowSeconds: 60, now: now + 61_000 });
   assert.equal(other.allowed, true);
   assert.equal(nextWindow.allowed, true);
   assert.equal(nextWindow.requestCount, 1);

@@ -13,7 +13,8 @@ import {
 } from "../functions/lib/appeal-repository.js";
 import { sanitizeAppealSubmission } from "../functions/lib/appeal-content.js";
 
-const OWNER_ID = "123456789012345678";
+const OWNER_ID = "1".repeat(18);
+const OTHER_OWNER_ID = "9".repeat(18);
 const DRAFT_ID = "11111111-1111-4111-8111-111111111111";
 const PLAYER_ID = "22222222-2222-4222-8222-222222222222";
 const PUNISHMENT_ID = "33333333-3333-4333-8333-333333333333";
@@ -215,6 +216,6 @@ test("players can read status and ordered appeal messages without seeing another
   assert.equal(appeals[0].comments.length, 2);
   assert.equal(appeals[0].comments[0].authorType, "STAFF");
   assert.equal(appeals[0].comments[1].authorType, "PLAYER");
-  assert.deepEqual(await listOwnedAppeals(db, "999999999999999999"), []);
+  assert.deepEqual(await listOwnedAppeals(db, OTHER_OWNER_ID), []);
   database.close();
 });

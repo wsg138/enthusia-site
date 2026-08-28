@@ -10,7 +10,9 @@ import {
 } from "../functions/lib/competitions/discord-notifications.js";
 
 const NOW = "2026-08-23T04:30:00.000Z";
-const DISCORD = "123456789012345678";
+const DISCORD = "1".repeat(18);
+const CHANNEL_ID = "2".repeat(18);
+const MESSAGE_ID = "3".repeat(18);
 const PLAYER = "00000000-0000-4000-8000-0000000000a1";
 const OWNER = "00000000-0000-4000-8000-0000000000b2";
 const COMPETITION = "00000000-0000-4000-8000-0000000000c3";
@@ -154,17 +156,17 @@ test("contributor Discord delivery opens a DM then sends a no-mention message", 
     calls.push({ url, options });
     if (url.endsWith("/users/@me/channels")) {
       assert.equal(JSON.parse(options.body).recipient_id, DISCORD);
-      return new Response(JSON.stringify({ id: "234567890123456789" }), { status: 200 });
+      return new Response(JSON.stringify({ id: CHANNEL_ID }), { status: 200 });
     }
-    assert.equal(url, "https://discord.com/api/v10/channels/234567890123456789/messages");
+    assert.equal(url, `https://discord.com/api/v10/channels/${CHANNEL_ID}/messages`);
     const payload = JSON.parse(options.body);
     assert.deepEqual(payload.allowed_mentions, { parse: [] });
     assert.match(payload.content, /Summer Build/);
     assert.match(payload.content, /summer-build/);
-    return new Response(JSON.stringify({ id: "345678901234567890" }), { status: 200 });
+    return new Response(JSON.stringify({ id: MESSAGE_ID }), { status: 200 });
   });
   assert.equal(result.status, "DELIVERED");
-  assert.equal(result.messageId, "345678901234567890");
+  assert.equal(result.messageId, MESSAGE_ID);
   assert.equal(calls.length, 2);
   assert.equal(calls.every((call) => call.options.headers.authorization === `Bot ${token}`), true);
   assert.equal(JSON.stringify(result).includes(token), false);
