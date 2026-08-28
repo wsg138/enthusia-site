@@ -24,7 +24,7 @@ function writeOnlyDb() {
 
 const ENV = {
   DISCORD_CLIENT_ID: "123456789012345678",
-  DISCORD_CLIENT_SECRET: "0123456789abcdef0123456789abcdef",
+  DISCORD_CLIENT_SECRET: "not-a-real-secret",
   DISCORD_GUILD_ID: "1410303324745371709",
   DISCORD_OAUTH_REDIRECT_URI: "https://competitions-dev.example.com/api/competitions/auth/discord/callback"
 };
