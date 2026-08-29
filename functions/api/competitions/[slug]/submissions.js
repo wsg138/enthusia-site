@@ -9,10 +9,10 @@ import {
 import { listEntrantModerationNotices } from "../../../lib/competitions/entrant-moderation.js";
 import { authorizeCompetitionRead } from "../../../lib/competitions/public-access.js";
 import { getPublicCompetitionBySlug } from "../../../lib/competitions/repository.js";
+import { createSubmissionDraft } from "../../../lib/competitions/submission-creation.js";
 import {
   countGuildEntries,
   countLinkedPlayerEntrySlots,
-  createSubmissionDraft,
   listAccountSubmissions
 } from "../../../lib/competitions/submissions.js";
 import { json, methodNotAllowed, unauthorized } from "../../../lib/responses.js";
@@ -36,23 +36,43 @@ function cleanDescription(value, max) {
   return description.length >= 1 && description.length <= max ? description : null;
 }
 
+function accountList(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function addLinkedAccount(accounts, uuidValue, nameValue) {
+  const uuid = String(uuidValue ?? "").trim().toLowerCase();
+  const name = String(nameValue ?? "").trim();
+  if (isCanonicalUuid(uuid) && /^[A-Za-z0-9_]{1,16}$/.test(name)) {
+    accounts.set(uuid, name);
+  }
+}
+
+function addBridgeAccount(accounts, raw) {
+  const uuid = typeof raw === "string" ? raw : raw?.uuid;
+  const name = typeof raw === "object" ? raw?.name : "";
+  addLinkedAccount(accounts, uuid, name);
+}
+
+function addSessionAccount(accounts, raw) {
+  addLinkedAccount(accounts, raw?.uuid, raw?.name);
+}
+
+function linkedAccounts(value) {
+  return value ? accountList(value.linkedMinecraftAccounts) : [];
+}
+
 function normalizeLinkedAccounts(playerContext, session) {
   const accounts = new Map();
-  for (const raw of session?.linkedMinecraftAccounts ?? []) {
-    const uuid = String(raw?.uuid ?? "").trim().toLowerCase();
-    const name = String(raw?.name ?? "").trim();
-    if (isCanonicalUuid(uuid) && /^[A-Za-z0-9_]{1,16}$/.test(name)) accounts.set(uuid, name);
+  for (const raw of linkedAccounts(session)) {
+    addSessionAccount(accounts, raw);
   }
   // Preserve compatibility with earlier unit contracts; production ownership
   // comes from the Discord identity link table above, not bridge-returned links.
-  for (const raw of playerContext?.linkedMinecraftAccounts ?? []) {
-    const uuid = String(typeof raw === "string" ? raw : raw?.uuid ?? "").trim().toLowerCase();
-    const name = String(typeof raw === "object" ? raw?.name ?? "" : "").trim();
-    if (isCanonicalUuid(uuid) && /^[A-Za-z0-9_]{1,16}$/.test(name)) accounts.set(uuid, name);
+  for (const raw of linkedAccounts(playerContext)) {
+    addBridgeAccount(accounts, raw);
   }
-  if (session?.player && isCanonicalUuid(session.player.uuid) && /^[A-Za-z0-9_]{1,16}$/.test(session.player.name)) {
-    accounts.set(session.player.uuid, session.player.name);
-  }
+  addSessionAccount(accounts, session?.player);
   return accounts;
 }
 
@@ -64,23 +84,61 @@ function findGuild(playerContext, guildId, permission) {
   }) ?? null;
 }
 
+function isLocationObject(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function hasValidLocationValues(source, worldName) {
+  return Boolean(worldName)
+    && worldName.length <= 128
+    && Number.isInteger(source.x)
+    && Number.isInteger(source.y)
+    && Number.isInteger(source.z)
+    && source.exactCoordinatesConfirmed === true;
+}
+
 function requestedLocation(input, requested) {
   if (!requested) return null;
   const source = input?.location;
-  if (!source || typeof source !== "object" || Array.isArray(source)) return undefined;
+  if (!isLocationObject(source)) return undefined;
   const worldName = typeof source.worldName === "string" ? source.worldName.trim() : "";
-  const x = source.x;
-  const y = source.y;
-  const z = source.z;
-  if (
-    !worldName
-    || worldName.length > 128
-    || !Number.isInteger(x)
-    || !Number.isInteger(y)
-    || !Number.isInteger(z)
-    || source.exactCoordinatesConfirmed !== true
-  ) return undefined;
-  return { worldName, x, y, z, exactCoordinatesConfirmed: true };
+  if (!hasValidLocationValues(source, worldName)) return undefined;
+  return {
+    worldName,
+    x: source.x,
+    y: source.y,
+    z: source.z,
+    exactCoordinatesConfirmed: true
+  };
+}
+
+async function participantSession(context) {
+  try {
+    const session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
+    return { session };
+  } catch {
+    return { response: json({ error: "competition_identity_unavailable" }, 503) };
+  }
+}
+
+function identityResponse(session) {
+  if (!session) return unauthorized();
+  const membershipError = discordMembershipError(session);
+  if (membershipError) return json({ error: membershipError }, 403);
+  return session.linkedMinecraftAccounts.length
+    ? null
+    : json({ error: "minecraft_link_required" }, 403);
+}
+
+async function competitionContext(context, slug, session) {
+  try {
+    const competition = await getPublicCompetitionBySlug(context.env.COMPETITIONS_DB, slug);
+    return competition
+      ? { session, competition }
+      : { response: json({ error: "competition_not_found" }, 404) };
+  } catch {
+    return { response: json({ error: "competition_unavailable" }, 503) };
+  }
 }
 
 async function resolveEntrantContext(context) {
@@ -90,26 +148,13 @@ async function resolveEntrantContext(context) {
   if (!hasCompetitionDatabase(context.env)) {
     return { response: json({ error: "competition_database_unavailable" }, 503) };
   }
-  let session;
-  try {
-    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
-  } catch {
-    return { response: json({ error: "competition_identity_unavailable" }, 503) };
-  }
-  if (!session) return { response: unauthorized() };
-  const membershipError = discordMembershipError(session);
-  if (membershipError) return { response: json({ error: membershipError }, 403) };
-  if (!session.linkedMinecraftAccounts.length) return { response: json({ error: "minecraft_link_required" }, 403) };
-
+  const identity = await participantSession(context);
+  if (identity.response) return identity;
+  const identityError = identityResponse(identity.session);
+  if (identityError) return { response: identityError };
   const slug = slugValue(context);
   if (!slug || slug === "admin") return { response: json({ error: "competition_not_found" }, 404) };
-  try {
-    const competition = await getPublicCompetitionBySlug(context.env.COMPETITIONS_DB, slug);
-    if (!competition) return { response: json({ error: "competition_not_found" }, 404) };
-    return { session, competition };
-  } catch {
-    return { response: json({ error: "competition_unavailable" }, 503) };
-  }
+  return competitionContext(context, slug, identity.session);
 }
 
 export async function onRequestGet(context) {
@@ -140,110 +185,186 @@ export async function onRequestGet(context) {
   }
 }
 
-export async function onRequestPost(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-  const resolved = await resolveEntrantContext(context);
-  if (resolved.response) return resolved.response;
+async function readInput(request) {
+  let input;
+  try {
+    input = await request.json();
+  } catch {
+    input = null;
+  }
+  return input;
+}
+
+function submissionInput(input, competition) {
+  const source = input || {};
+  const entries = competition.config.entries;
+  const entryType = source.entryType;
+  if (!entries.allowedTypes.includes(entryType)) {
+    return { response: json({ error: "entry_type_not_allowed" }, 400) };
+  }
+  const title = cleanTitle(source.title);
+  const description = cleanDescription(source.description, entries.maxDescriptionChars);
+  const location = requestedLocation(source, Boolean(entries.coordinatesRequested));
+  if (!title || !description || location === undefined) {
+    return { response: json({ error: "invalid_submission_details" }, 400) };
+  }
+  return { source, entryType, title, description, location };
+}
+
+async function playerContext(context, session, owner) {
+  try {
+    const value = await bridgeContextForLinkedAccount(context.env, session, owner);
+    return { value };
+  } catch {
+    return { response: json({ error: "competition_bridge_unavailable" }, 503) };
+  }
+}
+
+function cleanGuildId(value) {
+  const guildId = String(value ?? "").trim();
+  return guildId && guildId.length <= 128 ? guildId : null;
+}
+
+function cleanGuildName(guild) {
+  const guildName = String(guild?.guildName ?? guild?.name ?? "").trim();
+  return guildName && guildName.length <= 80 ? guildName : null;
+}
+
+function guildSelection(input, context, competition) {
+  const guildId = cleanGuildId(input.guildId);
+  if (!guildId) {
+    return { response: json({ error: "guild_required" }, 400) };
+  }
+  const permission = competition.config.entries.guildSubmissionPermission;
+  const guild = findGuild(context, guildId, permission);
+  if (!guild) return { response: json({ error: "guild_submission_permission_required" }, 403) };
+  const guildName = cleanGuildName(guild);
+  if (!guildName) {
+    return { response: json({ error: "guild_context_invalid" }, 503) };
+  }
+  return { guildId, guildName };
+}
+
+async function guildEntry(context, competition, input, entrantContext) {
+  const selection = guildSelection(input, entrantContext, competition);
+  if (selection.response) return selection;
+  const count = await countGuildEntries(
+    context.env.COMPETITIONS_DB,
+    competition.id,
+    selection.guildId
+  );
+  return count >= competition.config.entries.maxEntriesPerGuild
+    ? { response: json({ error: "guild_entry_limit_reached" }, 409) }
+    : selection;
+}
+
+async function playerEntry(context, competition, session) {
+  const count = await countLinkedPlayerEntrySlots(
+    context.env.COMPETITIONS_DB,
+    competition.id,
+    linkedMinecraftUuids(session)
+  );
+  return count >= competition.config.entries.maxEntriesPerPlayer
+    ? { response: json({ error: "player_entry_limit_reached" }, 409) }
+    : { guildId: null, guildName: null };
+}
+
+async function entryOwnership(context, competition, fields, entrantContext, session) {
+  return fields.entryType === "GUILD"
+    ? guildEntry(context, competition, fields.source, entrantContext)
+    : playerEntry(context, competition, session);
+}
+
+function creationFailure(error) {
+  const message = String(error?.message ?? error);
+  if (["competition_judge_cannot_enter", "competition_linked_judge_cannot_enter"]
+    .some((value) => message.includes(value))) {
+    return json({ error: "judges_cannot_submit_entries" }, 409);
+  }
+  return message.includes("competition_linked_entry_limit_reached")
+    ? json({ error: "player_entry_limit_reached" }, 409)
+    : json({ error: "submission_create_failed" }, 503);
+}
+
+function createdSubmissionResponse(draft) {
+  return json({
+    submission: {
+      id: draft.id,
+      competitionId: draft.competitionId,
+      entryType: draft.entryType,
+      status: "DRAFT",
+      ownerUuid: draft.ownerUuid,
+      ownerName: draft.ownerName,
+      guildId: draft.guildId,
+      guildName: draft.guildName,
+      title: draft.title,
+      description: draft.description,
+      revision: 1,
+      createdAt: draft.createdAt
+    }
+  }, 201);
+}
+
+async function persistDraft(context, draft) {
+  try {
+    const result = await createSubmissionDraft(context.env.COMPETITIONS_DB, draft);
+    return result.status === "CREATED"
+      ? createdSubmissionResponse(draft)
+      : json({ error: "submission_create_conflict" }, 409);
+  } catch (error) {
+    return creationFailure(error);
+  }
+}
+
+function draftRecord(competition, session, fields, owner, ownership) {
+  return {
+    id: crypto.randomUUID(),
+    competitionId: competition.id,
+    expectedConfigVersion: competition.configVersion,
+    entryType: fields.entryType,
+    ownerSubject: session.subject,
+    ownerUuid: owner.uuid,
+    ownerName: owner.name,
+    guildId: ownership.guildId,
+    guildName: ownership.guildName,
+    title: fields.title,
+    description: fields.description,
+    location: fields.location,
+    createdAt: new Date().toISOString(),
+    auditEventId: crypto.randomUUID()
+  };
+}
+
+async function createEntrantSubmission(context, resolved, input) {
   const { session, competition } = resolved;
   if (competition.lifecycleState !== "SUBMISSIONS_OPEN") {
     return json({ error: "submissions_not_open" }, 409);
   }
-
-  let input;
-  try {
-    input = await context.request.json();
-  } catch {
-    input = null;
-  }
-  const entryType = input?.entryType;
-  if (!competition.config?.entries?.allowedTypes?.includes(entryType)) {
-    return json({ error: "entry_type_not_allowed" }, 400);
-  }
-  const title = cleanTitle(input?.title);
-  const description = cleanDescription(input?.description, competition.config.entries.maxDescriptionChars);
-  const location = requestedLocation(input, Boolean(competition.config.entries.coordinatesRequested));
-  if (!title || !description || location === undefined) {
-    return json({ error: "invalid_submission_details" }, 400);
-  }
-
-  const owner = linkedMinecraftAccount(session, input?.ownerUuid ?? null);
+  const fields = submissionInput(input, competition);
+  if (fields.response) return fields.response;
+  const owner = linkedMinecraftAccount(session, fields.source.ownerUuid ?? null);
   if (!owner) return json({ error: "minecraft_account_not_linked" }, 403);
+  const entrantContext = await playerContext(context, session, owner);
+  if (entrantContext.response) return entrantContext.response;
+  const ownership = await entryOwnership(context, competition, fields, entrantContext.value, session);
+  if (ownership.response) return ownership.response;
+  return persistDraft(context, draftRecord(competition, session, fields, owner, ownership));
+}
 
-  let playerContext;
+async function entrantSubmissionResponse(context, resolved, input) {
   try {
-    playerContext = await bridgeContextForLinkedAccount(context.env, session, owner);
-  } catch {
-    return json({ error: "competition_bridge_unavailable" }, 503);
-  }
-
-  let guildId = null;
-  let guildName = null;
-  try {
-    if (entryType === "GUILD") {
-      guildId = String(input?.guildId ?? "").trim();
-      if (!guildId || guildId.length > 128) return json({ error: "guild_required" }, 400);
-      const guild = findGuild(playerContext, guildId, competition.config.entries.guildSubmissionPermission);
-      if (!guild) return json({ error: "guild_submission_permission_required" }, 403);
-      guildName = String(guild.guildName ?? guild.name ?? "").trim();
-      if (!guildName || guildName.length > 80) return json({ error: "guild_context_invalid" }, 503);
-      const count = await countGuildEntries(context.env.COMPETITIONS_DB, competition.id, guildId);
-      if (count >= competition.config.entries.maxEntriesPerGuild) {
-        return json({ error: "guild_entry_limit_reached" }, 409);
-      }
-    } else {
-      const count = await countLinkedPlayerEntrySlots(
-        context.env.COMPETITIONS_DB,
-        competition.id,
-        linkedMinecraftUuids(session)
-      );
-      if (count >= competition.config.entries.maxEntriesPerPlayer) {
-        return json({ error: "player_entry_limit_reached" }, 409);
-      }
-    }
-
-    const id = crypto.randomUUID();
-    const createdAt = new Date().toISOString();
-    await createSubmissionDraft(context.env.COMPETITIONS_DB, {
-      id,
-      competitionId: competition.id,
-      entryType,
-      ownerSubject: session.subject,
-      ownerUuid: owner.uuid,
-      ownerName: owner.name,
-      guildId,
-      guildName,
-      title,
-      description,
-      location,
-      createdAt,
-      auditEventId: crypto.randomUUID()
-    });
-    return json({
-      submission: {
-        id,
-        competitionId: competition.id,
-        entryType,
-        status: "DRAFT",
-        ownerUuid: owner.uuid,
-        ownerName: owner.name,
-        guildId,
-        guildName,
-        title,
-        description,
-        revision: 1,
-        createdAt
-      }
-    }, 201);
+    return await createEntrantSubmission(context, resolved, input);
   } catch (error) {
-    const message = String(error?.message ?? error);
-    if (message.includes("competition_judge_cannot_enter") || message.includes("competition_linked_judge_cannot_enter")) {
-      return json({ error: "judges_cannot_submit_entries" }, 409);
-    }
-    if (message.includes("competition_linked_entry_limit_reached")) {
-      return json({ error: "player_entry_limit_reached" }, 409);
-    }
-    return json({ error: "submission_create_failed" }, 503);
+    return creationFailure(error);
   }
+}
+
+export async function onRequestPost(context) {
+  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+  const resolved = await resolveEntrantContext(context);
+  if (resolved.response) return resolved.response;
+  const input = await readInput(context.request);
+  return entrantSubmissionResponse(context, resolved, input);
 }
 
 export function onRequest() {
