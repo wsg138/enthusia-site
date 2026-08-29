@@ -1,3 +1,8 @@
+import {
+  OWNER_SUBMISSION_EDIT_GUARD_SQL,
+  ownerSubmissionEditPolicy
+} from "./submission-edit-policy.js";
+
 function requireWritableDatabase(db) {
   if (!db || typeof db.prepare !== "function" || typeof db.batch !== "function") {
     throw new TypeError("Competition database binding is not writable");
@@ -7,6 +12,11 @@ function requireWritableDatabase(db) {
 
 export async function updateOwnedSubmissionDraft(db, update) {
   const database = requireWritableDatabase(db);
+  const policy = ownerSubmissionEditPolicy({
+    expectedConfigVersion: update.expectedConfigVersion,
+    operationAt: update.updatedAt,
+    reviewCloseAt: update.reviewCloseAt
+  });
   const nextRevision = update.expectedRevision + 1;
   const revisionPredicate = `
     EXISTS (
@@ -35,15 +45,20 @@ export async function updateOwnedSubmissionDraft(db, update) {
         AND revision = ?
         AND status IN ('DRAFT','NEEDS_CHANGES')
         AND removed_at IS NULL
+        AND ${OWNER_SUBMISSION_EDIT_GUARD_SQL}
     `).bind(
       update.title,
       update.description,
       nextRevision,
-      update.updatedAt,
+      policy.operationAt,
       update.submissionId,
       update.competitionId,
       update.ownerSubject,
-      update.expectedRevision
+      update.expectedRevision,
+      policy.configVersion,
+      policy.reviewCloseAt,
+      policy.operationAt,
+      policy.reviewCloseAt
     )
   ];
 
@@ -69,12 +84,12 @@ export async function updateOwnedSubmissionDraft(db, update) {
       update.location.y,
       update.location.z,
       update.location.exactCoordinatesConfirmed ? 1 : 0,
-      update.updatedAt,
+      policy.operationAt,
       update.submissionId,
       update.competitionId,
       update.ownerSubject,
       nextRevision,
-      update.updatedAt
+      policy.operationAt
     ));
   } else if (update.clearLocation) {
     statements.push(database.prepare(`
@@ -87,7 +102,7 @@ export async function updateOwnedSubmissionDraft(db, update) {
       update.competitionId,
       update.ownerSubject,
       nextRevision,
-      update.updatedAt
+      policy.operationAt
     ));
   }
 
@@ -106,12 +121,12 @@ export async function updateOwnedSubmissionDraft(db, update) {
     update.actorUuid,
     JSON.stringify({ revision: nextRevision }),
     update.note ?? "Submission updated",
-    update.updatedAt,
+    policy.operationAt,
     update.submissionId,
     update.competitionId,
     update.ownerSubject,
     nextRevision,
-    update.updatedAt
+    policy.operationAt
   ));
 
   const results = await database.batch(statements);

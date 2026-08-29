@@ -153,6 +153,8 @@ export async function onRequestPut(context) {
       ownerSubject: session.subject,
       actorUuid: submission.ownerUuid,
       expectedRevision: input.expectedRevision,
+      expectedConfigVersion: competition.configVersion,
+      reviewCloseAt: competition.config?.schedule?.reviewCloseAt ?? null,
       title,
       description,
       location,
@@ -218,51 +220,37 @@ async function submissionModerationRateLimit(context, session) {
     : json({ error: "rate_limited", retryAfterSeconds: result.retryAfterSeconds }, 429, rateLimitHeaders(result));
 }
 
-export async function onRequestPost(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-  const resolved = await resolveOwnerContext(context);
-  if (resolved.response) return resolved.response;
+async function withdrawOwnedSubmission(context, resolved) {
   const { session, competition, submission } = resolved;
-
-  let input;
+  if (!new Set(["SUBMISSIONS_OPEN", "REVIEW"]).has(competition.lifecycleState)) {
+    return json({ error: "submission_locked" }, 409);
+  }
   try {
-    input = await context.request.json();
+    const withdrawn = await withdrawSubmission(context.env.COMPETITIONS_DB, {
+      competitionId: competition.id,
+      submissionId: submission.id,
+      ownerSubject: session.subject,
+      actorUuid: submission.ownerUuid,
+      expectedConfigVersion: competition.configVersion,
+      withdrawnAt: new Date().toISOString(),
+      auditEventId: crypto.randomUUID()
+    });
+    if (!withdrawn) return json({ error: "submission_locked" }, 409);
+    return json({ status: "WITHDRAWN" });
   } catch {
-    input = null;
+    return json({ error: "submission_withdraw_failed" }, 503);
   }
-  const action = input?.action;
+}
 
-  if (action === "WITHDRAW") {
-    if (!new Set(["SUBMISSIONS_OPEN", "REVIEW"]).has(competition.lifecycleState)) {
-      return json({ error: "submission_locked" }, 409);
-    }
-    try {
-      const withdrawn = await withdrawSubmission(context.env.COMPETITIONS_DB, {
-        competitionId: competition.id,
-        submissionId: submission.id,
-        ownerSubject: session.subject,
-        actorUuid: submission.ownerUuid,
-        withdrawnAt: new Date().toISOString(),
-        auditEventId: crypto.randomUUID()
-      });
-      if (!withdrawn) return json({ error: "submission_locked" }, 409);
-      return json({ status: "WITHDRAWN" });
-    } catch {
-      return json({ error: "submission_withdraw_failed" }, 503);
-    }
-  }
-
-  if (action !== "SUBMIT" || !Number.isInteger(input?.expectedRevision) || input.expectedRevision < 1) {
-    return json({ error: "invalid_submission_action" }, 400);
-  }
-
+async function submitOwnedSubmission(context, resolved, expectedRevision) {
+  const { session, competition, submission } = resolved;
   const canSubmit = (
     competition.lifecycleState === "SUBMISSIONS_OPEN" && submission.status === "DRAFT"
   ) || (
     submission.status === "NEEDS_CHANGES" && needsChangesWindowOpen(competition)
   );
   if (!canSubmit) return json({ error: "submission_locked" }, 409);
-  if (submission.revision !== input.expectedRevision) return json({ error: "submission_revision_conflict" }, 409);
+  if (submission.revision !== expectedRevision) return json({ error: "submission_revision_conflict" }, 409);
 
   try {
     const [images, location] = await Promise.all([
@@ -295,7 +283,11 @@ export async function onRequestPost(context) {
       submissionId: submission.id,
       ownerSubject: session.subject,
       actorUuid: submission.ownerUuid,
-      expectedRevision: input.expectedRevision,
+      expectedRevision,
+      expectedConfigVersion: competition.configVersion,
+      reviewCloseAt: competition.config?.schedule?.reviewCloseAt ?? null,
+      minImages: competition.config.entries.minImages,
+      coordinatesRequested: Boolean(competition.config.entries.coordinatesRequested),
       submittedAt: new Date().toISOString(),
       auditEventId: crypto.randomUUID()
     });
@@ -307,6 +299,28 @@ export async function onRequestPost(context) {
     }
     return json({ error: "submission_submit_failed" }, 503);
   }
+}
+
+export async function onRequestPost(context) {
+  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+  const resolved = await resolveOwnerContext(context);
+  if (resolved.response) return resolved.response;
+
+  let input;
+  try {
+    input = await context.request.json();
+  } catch {
+    input = null;
+  }
+  if (input?.action === "WITHDRAW") return withdrawOwnedSubmission(context, resolved);
+  if (
+    input?.action !== "SUBMIT"
+    || !Number.isInteger(input.expectedRevision)
+    || input.expectedRevision < 1
+  ) {
+    return json({ error: "invalid_submission_action" }, 400);
+  }
+  return submitOwnedSubmission(context, resolved, input.expectedRevision);
 }
 
 export function onRequest() {

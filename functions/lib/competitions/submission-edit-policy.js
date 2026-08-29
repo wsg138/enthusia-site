@@ -22,6 +22,14 @@ export const STAFF_SUBMISSION_EDIT_GUARD_SQL = `EXISTS (
     AND competition.lifecycle_state IN ('SUBMISSIONS_OPEN','REVIEW')
 )`;
 
+export const OWNER_SUBMISSION_WITHDRAW_GUARD_SQL = `EXISTS (
+  SELECT 1
+  FROM competitions competition
+  WHERE competition.id = submissions.competition_id
+    AND competition.current_config_version = ?
+    AND competition.lifecycle_state IN ('SUBMISSIONS_OPEN','REVIEW')
+)`;
+
 function configVersion(value) {
   if (!Number.isInteger(value) || value < 1) {
     throw new TypeError("Competition config version is invalid");
@@ -50,5 +58,9 @@ export function ownerSubmissionEditPolicy({
 }
 
 export function staffSubmissionEditPolicy(expectedConfigVersion) {
+  return { configVersion: configVersion(expectedConfigVersion) };
+}
+
+export function ownerSubmissionWithdrawPolicy(expectedConfigVersion) {
   return { configVersion: configVersion(expectedConfigVersion) };
 }

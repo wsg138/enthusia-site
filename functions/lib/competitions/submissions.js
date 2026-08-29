@@ -1,3 +1,10 @@
+import {
+  OWNER_SUBMISSION_EDIT_GUARD_SQL,
+  OWNER_SUBMISSION_WITHDRAW_GUARD_SQL,
+  ownerSubmissionEditPolicy,
+  ownerSubmissionWithdrawPolicy
+} from "./submission-edit-policy.js";
+
 function requireDatabase(db) {
   if (!db || typeof db.prepare !== "function") {
     throw new TypeError("Competition database binding is unavailable");
@@ -299,90 +306,6 @@ export async function createSubmissionDraft(db, draft) {
   return draft.id;
 }
 
-export async function updateSubmissionDraft(db, update) {
-  const database = requireWritableDatabase(db);
-  const nextRevision = update.expectedRevision + 1;
-  const statements = [
-    database.prepare(`
-      UPDATE submissions
-      SET title = ?,
-          description = ?,
-          revision = ?,
-          updated_at = ?
-      WHERE id = ?
-        AND competition_id = ?
-        AND owner_subject = ?
-        AND revision = ?
-        AND status IN ('DRAFT','NEEDS_CHANGES')
-        AND removed_at IS NULL
-    `).bind(
-      update.title,
-      update.description,
-      nextRevision,
-      update.updatedAt,
-      update.submissionId,
-      update.competitionId,
-      update.ownerSubject,
-      update.expectedRevision
-    )
-  ];
-
-  if (update.location) {
-    statements.push(database.prepare(`
-      INSERT INTO submission_private_locations (
-        submission_id, world_name, block_x, block_y, block_z,
-        exact_coordinates_confirmed, updated_at
-      )
-      SELECT ?, ?, ?, ?, ?, ?, ?
-      WHERE changes() = 1
-      ON CONFLICT(submission_id) DO UPDATE SET
-        world_name = excluded.world_name,
-        block_x = excluded.block_x,
-        block_y = excluded.block_y,
-        block_z = excluded.block_z,
-        exact_coordinates_confirmed = excluded.exact_coordinates_confirmed,
-        updated_at = excluded.updated_at
-    `).bind(
-      update.submissionId,
-      update.location.worldName,
-      update.location.x,
-      update.location.y,
-      update.location.z,
-      update.location.exactCoordinatesConfirmed ? 1 : 0,
-      update.updatedAt
-    ));
-  } else if (update.clearLocation) {
-    statements.push(database.prepare(`
-      DELETE FROM submission_private_locations
-      WHERE submission_id = ?
-        AND changes() = 1
-    `).bind(update.submissionId));
-  }
-
-  statements.push(database.prepare(`
-    INSERT INTO competition_audit_events (
-      id, competition_id, submission_id, actor_subject, actor_uuid,
-      action, after_json, note, created_at
-    )
-    SELECT ?, ?, ?, ?, ?, 'SUBMISSION_UPDATED', ?, ?, ?
-    WHERE changes() = 1
-  `).bind(
-    update.auditEventId,
-    update.competitionId,
-    update.submissionId,
-    update.ownerSubject,
-    update.actorUuid,
-    JSON.stringify({ revision: nextRevision }),
-    update.note ?? "Submission updated",
-    update.updatedAt
-  ));
-
-  const results = await database.batch(statements);
-  return Number(results?.[0]?.meta?.changes ?? 0) === 1
-    ? { status: "UPDATED", revision: nextRevision }
-    : { status: "CONFLICT" };
-}
-
 export async function recordTextModerationChecks(db, checks) {
   const database = requireWritableDatabase(db);
   const statements = checks.map((check) => database.prepare(`
@@ -410,6 +333,17 @@ export async function recordTextModerationChecks(db, checks) {
 
 export async function submitSubmissionForReview(db, submission) {
   const database = requireWritableDatabase(db);
+  const policy = ownerSubmissionEditPolicy({
+    expectedConfigVersion: submission.expectedConfigVersion,
+    operationAt: submission.submittedAt,
+    reviewCloseAt: submission.reviewCloseAt
+  });
+  if (!Number.isInteger(submission.minImages) || submission.minImages < 0) {
+    throw new TypeError("Minimum submission image count is invalid");
+  }
+  if (typeof submission.coordinatesRequested !== "boolean") {
+    throw new TypeError("Submission coordinate requirement is invalid");
+  }
   const nextRevision = submission.expectedRevision + 1;
   const results = await database.batch([
     database.prepare(`
@@ -424,14 +358,43 @@ export async function submitSubmissionForReview(db, submission) {
         AND revision = ?
         AND status IN ('DRAFT','NEEDS_CHANGES')
         AND removed_at IS NULL
+        AND ${OWNER_SUBMISSION_EDIT_GUARD_SQL}
+        AND (
+          SELECT COUNT(*)
+          FROM submission_images image
+          WHERE image.submission_id = submissions.id
+            AND image.removed_at IS NULL
+        ) >= ?
+        AND NOT EXISTS (
+          SELECT 1
+          FROM submission_images image
+          WHERE image.submission_id = submissions.id
+            AND image.removed_at IS NULL
+            AND image.moderation_state <> 'PASSED'
+        )
+        AND (
+          ? = 0
+          OR EXISTS (
+            SELECT 1
+            FROM submission_private_locations location
+            WHERE location.submission_id = submissions.id
+              AND location.exact_coordinates_confirmed = 1
+          )
+        )
     `).bind(
       nextRevision,
-      submission.submittedAt,
-      submission.submittedAt,
+      policy.operationAt,
+      policy.operationAt,
       submission.submissionId,
       submission.competitionId,
       submission.ownerSubject,
-      submission.expectedRevision
+      submission.expectedRevision,
+      policy.configVersion,
+      policy.reviewCloseAt,
+      policy.operationAt,
+      policy.reviewCloseAt,
+      submission.minImages,
+      submission.coordinatesRequested ? 1 : 0
     ),
     database.prepare(`
       INSERT INTO competition_audit_events (
@@ -448,7 +411,7 @@ export async function submitSubmissionForReview(db, submission) {
       submission.actorUuid,
       JSON.stringify({ status: "PENDING_REVIEW", revision: nextRevision }),
       "Submission sent for staff review",
-      submission.submittedAt
+      policy.operationAt
     )
   ]);
   return Number(results?.[0]?.meta?.changes ?? 0) === 1
@@ -458,6 +421,7 @@ export async function submitSubmissionForReview(db, submission) {
 
 export async function withdrawSubmission(db, withdrawal) {
   const database = requireWritableDatabase(db);
+  const policy = ownerSubmissionWithdrawPolicy(withdrawal.expectedConfigVersion);
   const now = withdrawal.withdrawnAt;
   const results = await database.batch([
     database.prepare(`
@@ -470,7 +434,15 @@ export async function withdrawSubmission(db, withdrawal) {
         AND owner_subject = ?
         AND status IN ('DRAFT','PENDING_REVIEW','NEEDS_CHANGES','APPROVED')
         AND removed_at IS NULL
-    `).bind(now, now, withdrawal.submissionId, withdrawal.competitionId, withdrawal.ownerSubject),
+        AND ${OWNER_SUBMISSION_WITHDRAW_GUARD_SQL}
+    `).bind(
+      now,
+      now,
+      withdrawal.submissionId,
+      withdrawal.competitionId,
+      withdrawal.ownerSubject,
+      policy.configVersion
+    ),
     database.prepare(`
       INSERT INTO competition_audit_events (
         id, competition_id, submission_id, actor_subject, actor_uuid,
