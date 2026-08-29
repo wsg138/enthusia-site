@@ -331,8 +331,7 @@ export async function recordTextModerationChecks(db, checks) {
   await database.batch(statements);
 }
 
-export async function submitSubmissionForReview(db, submission) {
-  const database = requireWritableDatabase(db);
+function submissionReviewWritePolicy(submission) {
   const policy = ownerSubmissionEditPolicy({
     expectedConfigVersion: submission.expectedConfigVersion,
     operationAt: submission.submittedAt,
@@ -344,6 +343,18 @@ export async function submitSubmissionForReview(db, submission) {
   if (typeof submission.coordinatesRequested !== "boolean") {
     throw new TypeError("Submission coordinate requirement is invalid");
   }
+  return {
+    configVersion: policy.configVersion,
+    operationAt: policy.operationAt,
+    reviewCloseAt: policy.reviewCloseAt,
+    minImages: submission.minImages,
+    coordinatesRequested: submission.coordinatesRequested ? 1 : 0
+  };
+}
+
+export async function submitSubmissionForReview(db, submission) {
+  const database = requireWritableDatabase(db);
+  const policy = submissionReviewWritePolicy(submission);
   const nextRevision = submission.expectedRevision + 1;
   const results = await database.batch([
     database.prepare(`
@@ -393,8 +404,8 @@ export async function submitSubmissionForReview(db, submission) {
       policy.reviewCloseAt,
       policy.operationAt,
       policy.reviewCloseAt,
-      submission.minImages,
-      submission.coordinatesRequested ? 1 : 0
+      policy.minImages,
+      policy.coordinatesRequested
     ),
     database.prepare(`
       INSERT INTO competition_audit_events (

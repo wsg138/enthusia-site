@@ -5,6 +5,7 @@ import {
   submitSubmissionForReview,
   withdrawSubmission
 } from "../functions/lib/competitions/submissions.js";
+import { requestedLocation } from "../functions/api/competitions/[slug]/submissions/[id].js";
 import { d1, migratedDatabase } from "./support/d1-sqlite.mjs";
 
 const COMPETITION_ID = "10000000-0000-4000-8000-000000000011";
@@ -132,6 +133,26 @@ function submissionRow(database) {
 function auditCount(database) {
   return database.prepare("SELECT COUNT(*) AS count FROM competition_audit_events").get().count;
 }
+
+test("submission locations are optional unless the competition requests exact coordinates", () => {
+  assert.equal(requestedLocation({}, false), null);
+  assert.equal(requestedLocation({}, true), undefined);
+  assert.deepEqual(requestedLocation({
+    location: {
+      worldName: " world ",
+      x: 1,
+      y: 64,
+      z: 2,
+      exactCoordinatesConfirmed: true
+    }
+  }, true), {
+    worldName: "world",
+    x: 1,
+    y: 64,
+    z: 2,
+    exactCoordinatesConfirmed: true
+  });
+});
 
 test("draft updates stop when the competition locks before the database batch", async () => {
   const database = await seededDatabase();
