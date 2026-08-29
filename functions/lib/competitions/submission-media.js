@@ -1,3 +1,8 @@
+import {
+  OWNER_SUBMISSION_EDIT_GUARD_SQL,
+  ownerSubmissionEditPolicy
+} from "./submission-edit-policy.js";
+
 function requireDatabase(db) {
   if (!db || typeof db.prepare !== "function") {
     throw new TypeError("Competition database binding is unavailable");
@@ -72,6 +77,11 @@ export async function attachSubmissionImage(db, image) {
   if (!Number.isInteger(image.sortOrder) || image.sortOrder < 0) {
     throw new TypeError("Submission image sort order is invalid");
   }
+  const policy = ownerSubmissionEditPolicy({
+    expectedConfigVersion: image.expectedConfigVersion,
+    operationAt: image.createdAt,
+    reviewCloseAt: image.reviewCloseAt
+  });
   const nextRevision = image.expectedRevision + 1;
   const marker = revisionExistsSql();
   const results = await database.batch([
@@ -86,14 +96,19 @@ export async function attachSubmissionImage(db, image) {
         AND revision = ?
         AND status IN ('DRAFT','NEEDS_CHANGES')
         AND removed_at IS NULL
+        AND ${OWNER_SUBMISSION_EDIT_GUARD_SQL}
     `).bind(
       nextRevision,
-      image.createdAt,
+      policy.operationAt,
       image.id,
       image.submissionId,
       image.competitionId,
       image.ownerSubject,
-      image.expectedRevision
+      image.expectedRevision,
+      policy.configVersion,
+      policy.reviewCloseAt,
+      policy.operationAt,
+      policy.reviewCloseAt
     ),
     database.prepare(`
       INSERT INTO submission_images (
@@ -112,12 +127,12 @@ export async function attachSubmissionImage(db, image) {
       image.byteSize,
       image.width,
       image.height,
-      image.createdAt,
+      policy.operationAt,
       image.submissionId,
       image.competitionId,
       image.ownerSubject,
       nextRevision,
-      image.createdAt
+      policy.operationAt
     ),
     database.prepare(`
       INSERT INTO moderation_checks (
@@ -137,12 +152,12 @@ export async function attachSubmissionImage(db, image) {
       JSON.stringify(image.moderation.categories ?? {}),
       JSON.stringify(image.moderation.scores ?? {}),
       image.sha256,
-      image.createdAt,
+      policy.operationAt,
       image.submissionId,
       image.competitionId,
       image.ownerSubject,
       nextRevision,
-      image.createdAt
+      policy.operationAt
     ),
     database.prepare(`
       INSERT INTO competition_audit_events (
@@ -159,12 +174,12 @@ export async function attachSubmissionImage(db, image) {
       image.actorUuid,
       JSON.stringify({ imageId: image.id, sortOrder: image.sortOrder, revision: nextRevision }),
       "Submission image added",
-      image.createdAt,
+      policy.operationAt,
       image.submissionId,
       image.competitionId,
       image.ownerSubject,
       nextRevision,
-      image.createdAt
+      policy.operationAt
     )
   ]);
 
@@ -177,6 +192,11 @@ export async function attachSubmissionImage(db, image) {
 
 export async function removeSubmissionImage(db, removal) {
   const database = requireWritableDatabase(db);
+  const policy = ownerSubmissionEditPolicy({
+    expectedConfigVersion: removal.expectedConfigVersion,
+    operationAt: removal.removedAt,
+    reviewCloseAt: removal.reviewCloseAt
+  });
   const nextRevision = removal.expectedRevision + 1;
   const marker = revisionExistsSql();
   const results = await database.batch([
@@ -189,6 +209,7 @@ export async function removeSubmissionImage(db, removal) {
         AND revision = ?
         AND status IN ('DRAFT','NEEDS_CHANGES')
         AND removed_at IS NULL
+        AND ${OWNER_SUBMISSION_EDIT_GUARD_SQL}
         AND EXISTS (
           SELECT 1 FROM submission_images i
           WHERE i.submission_id = submissions.id
@@ -197,11 +218,15 @@ export async function removeSubmissionImage(db, removal) {
         )
     `).bind(
       nextRevision,
-      removal.removedAt,
+      policy.operationAt,
       removal.submissionId,
       removal.competitionId,
       removal.ownerSubject,
       removal.expectedRevision,
+      policy.configVersion,
+      policy.reviewCloseAt,
+      policy.operationAt,
+      policy.reviewCloseAt,
       removal.imageId
     ),
     database.prepare(`
@@ -212,7 +237,7 @@ export async function removeSubmissionImage(db, removal) {
         AND removed_at IS NULL
         AND ${marker}
     `).bind(
-      removal.removedAt,
+      policy.operationAt,
       removal.actorUuid,
       removal.submissionId,
       removal.imageId,
@@ -220,7 +245,7 @@ export async function removeSubmissionImage(db, removal) {
       removal.competitionId,
       removal.ownerSubject,
       nextRevision,
-      removal.removedAt
+      policy.operationAt
     ),
     database.prepare(`
       UPDATE submissions
@@ -247,7 +272,7 @@ export async function removeSubmissionImage(db, removal) {
       removal.competitionId,
       removal.ownerSubject,
       nextRevision,
-      removal.removedAt
+      policy.operationAt
     ),
     database.prepare(`
       INSERT INTO competition_audit_events (
@@ -264,12 +289,12 @@ export async function removeSubmissionImage(db, removal) {
       removal.actorUuid,
       JSON.stringify({ imageId: removal.imageId, revision: nextRevision }),
       "Submission image removed",
-      removal.removedAt,
+      policy.operationAt,
       removal.submissionId,
       removal.competitionId,
       removal.ownerSubject,
       nextRevision,
-      removal.removedAt
+      policy.operationAt
     )
   ]);
 

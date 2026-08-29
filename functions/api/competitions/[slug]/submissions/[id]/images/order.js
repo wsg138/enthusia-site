@@ -80,6 +80,8 @@ export async function onRequestPost(context) {
       ownerSubject: session.subject,
       actorUuid: submission.ownerUuid,
       expectedRevision: input.expectedRevision,
+      expectedConfigVersion: competition.configVersion,
+      reviewCloseAt: competition.config?.schedule?.reviewCloseAt ?? null,
       imageIds: requestedIds,
       coverImageId: String(input.coverImageId).toLowerCase(),
       updatedAt: new Date().toISOString(),

@@ -1,3 +1,8 @@
+import {
+  OWNER_SUBMISSION_EDIT_GUARD_SQL,
+  ownerSubmissionEditPolicy
+} from "./submission-edit-policy.js";
+
 function requireWritableDatabase(db) {
   if (!db || typeof db.prepare !== "function" || typeof db.batch !== "function") {
     throw new TypeError("Competition database binding is not writable");
@@ -24,6 +29,11 @@ export async function reorderOwnedSubmissionImages(db, reorder) {
   const ids = reorder.imageIds.map((value) => String(value));
   if (!ids.length || new Set(ids).size !== ids.length) throw new TypeError("Image order is invalid");
   if (!ids.includes(reorder.coverImageId)) throw new TypeError("Cover image must be in the image order");
+  const policy = ownerSubmissionEditPolicy({
+    expectedConfigVersion: reorder.expectedConfigVersion,
+    operationAt: reorder.updatedAt,
+    reviewCloseAt: reorder.reviewCloseAt
+  });
 
   const nextRevision = reorder.expectedRevision + 1;
   const marker = revisionMarker();
@@ -37,6 +47,7 @@ export async function reorderOwnedSubmissionImages(db, reorder) {
         AND revision = ?
         AND status IN ('DRAFT','NEEDS_CHANGES')
         AND removed_at IS NULL
+        AND ${OWNER_SUBMISSION_EDIT_GUARD_SQL}
         AND (
           SELECT COUNT(*)
           FROM submission_images i
@@ -45,12 +56,16 @@ export async function reorderOwnedSubmissionImages(db, reorder) {
         ) = ?
     `).bind(
       nextRevision,
-      reorder.updatedAt,
+      policy.operationAt,
       reorder.coverImageId,
       reorder.submissionId,
       reorder.competitionId,
       reorder.ownerSubject,
       reorder.expectedRevision,
+      policy.configVersion,
+      policy.reviewCloseAt,
+      policy.operationAt,
+      policy.reviewCloseAt,
       ids.length
     ),
     database.prepare(`
@@ -65,7 +80,7 @@ export async function reorderOwnedSubmissionImages(db, reorder) {
       reorder.competitionId,
       reorder.ownerSubject,
       nextRevision,
-      reorder.updatedAt
+      policy.operationAt
     )
   ];
 
@@ -85,7 +100,7 @@ export async function reorderOwnedSubmissionImages(db, reorder) {
       reorder.competitionId,
       reorder.ownerSubject,
       nextRevision,
-      reorder.updatedAt
+      policy.operationAt
     ));
   });
 
@@ -97,7 +112,8 @@ export async function reorderOwnedSubmissionImages(db, reorder) {
     INSERT INTO competition_audit_events (
       id, competition_id, submission_id, actor_subject, actor_uuid,
       action, after_json, note, created_at
-    ) VALUES (
+    )
+    SELECT
       ?,
       CASE WHEN EXISTS (
         SELECT 1 FROM submission_images
@@ -106,7 +122,7 @@ export async function reorderOwnedSubmissionImages(db, reorder) {
           AND sort_order >= 1000
       ) THEN NULL ELSE ? END,
       ?, ?, ?, 'SUBMISSION_IMAGES_REORDERED', ?, ?, ?
-    )
+    WHERE ${marker}
   `).bind(
     reorder.auditEventId,
     reorder.submissionId,
@@ -116,7 +132,12 @@ export async function reorderOwnedSubmissionImages(db, reorder) {
     reorder.actorUuid,
     JSON.stringify({ imageIds: ids, coverImageId: reorder.coverImageId, revision: nextRevision }),
     "Submission images reordered",
-    reorder.updatedAt
+    policy.operationAt,
+    reorder.submissionId,
+    reorder.competitionId,
+    reorder.ownerSubject,
+    nextRevision,
+    policy.operationAt
   ));
 
   const results = await database.batch(statements);

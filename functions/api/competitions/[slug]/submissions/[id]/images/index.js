@@ -190,6 +190,8 @@ export async function onRequestPost(context) {
       ownerSubject: session.subject,
       actorUuid: submission.ownerUuid,
       expectedRevision: revision,
+      expectedConfigVersion: competition.configVersion,
+      reviewCloseAt: competition.config?.schedule?.reviewCloseAt ?? null,
       sortOrder,
       storageKey: stored.key,
       sha256: stored.sha256,

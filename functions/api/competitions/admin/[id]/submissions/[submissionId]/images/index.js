@@ -161,6 +161,7 @@ export async function onRequestPost(context) {
       actorSubject: authorized.session.subject,
       actorUuid: authorized.session.player.uuid,
       expectedRevision: revision,
+      expectedConfigVersion: competition.configVersion,
       sortOrder,
       storageKey: stored.key,
       sha256: stored.sha256,

@@ -117,6 +117,8 @@ export async function onRequestDelete(context) {
       ownerSubject: resolved.session.subject,
       actorUuid: resolved.submission.ownerUuid,
       expectedRevision: revision,
+      expectedConfigVersion: resolved.competition.configVersion,
+      reviewCloseAt: resolved.competition.config?.schedule?.reviewCloseAt ?? null,
       removedAt,
       auditEventId: crypto.randomUUID()
     });

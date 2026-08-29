@@ -1,3 +1,8 @@
+import {
+  STAFF_SUBMISSION_EDIT_GUARD_SQL,
+  staffSubmissionEditPolicy
+} from "./submission-edit-policy.js";
+
 function requireDatabase(db) {
   if (!db || typeof db.prepare !== "function") throw new TypeError("Competition database binding is unavailable");
   return db;
@@ -40,6 +45,7 @@ export async function attachStaffSubmissionImage(db, image) {
   if (!Number.isInteger(image.sortOrder) || image.sortOrder < 0) {
     throw new TypeError("Submission image sort order is invalid");
   }
+  const policy = staffSubmissionEditPolicy(image.expectedConfigVersion);
   const nextRevision = image.expectedRevision + 1;
   const results = await database.batch([
     database.prepare(`
@@ -54,13 +60,15 @@ export async function attachStaffSubmissionImage(db, image) {
         AND owner_subject LIKE 'staff-manual:%'
         AND removed_at IS NULL
         AND status IN ('PENDING_REVIEW','NEEDS_CHANGES')
+        AND ${STAFF_SUBMISSION_EDIT_GUARD_SQL}
     `).bind(
       nextRevision,
       image.createdAt,
       image.id,
       image.submissionId,
       image.competitionId,
-      image.expectedRevision
+      image.expectedRevision,
+      policy.configVersion
     ),
     database.prepare(`
       INSERT INTO submission_images (
