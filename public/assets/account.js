@@ -40,14 +40,13 @@ function showAccountLoadError() {
   root.replaceChildren(element("p", "account-error", "Your account could not be loaded. Refresh the page to try again."));
 }
 
-async function signOut(button) {
+function signOut(button) {
   button.disabled = true;
-  try {
-    await request(`${API}/logout`, { method: "POST", body: "{}" });
-    window.location.reload();
-  } catch {
-    button.disabled = false;
-  }
+  request(`${API}/logout`, { method: "POST", body: "{}" })
+    .then(() => window.location.reload())
+    .catch(() => {
+      button.disabled = false;
+    });
 }
 
 async function unlink(account, button) {
