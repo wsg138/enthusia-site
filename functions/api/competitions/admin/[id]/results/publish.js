@@ -22,6 +22,25 @@ function note(value) {
   return normalized && normalized.length <= 500 ? normalized : null;
 }
 
+function publicationInput(value) {
+  if (!value || typeof value !== "object") return null;
+  const operationId = typeof value.idempotencyKey === "string"
+    ? value.idempotencyKey.trim().toLowerCase()
+    : "";
+  const publishNote = note(value.note);
+  return isCanonicalUuid(operationId) && publishNote
+    ? { operationId, publishNote }
+    : null;
+}
+
+async function readPublicationInput(request) {
+  try {
+    return publicationInput(await request.json());
+  } catch {
+    return null;
+  }
+}
+
 async function authorizeManager(context) {
   if (!competitionsEnabled(context.env)) return { response: json({ error: "not_found" }, 404) };
   let session;
@@ -39,38 +58,29 @@ async function authorizeManager(context) {
   return { session };
 }
 
-export async function onRequestPost(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-
+async function validatedRequest(context) {
+  if (!requireSameOrigin(context.request)) return { response: json({ error: "invalid_origin" }, 403) };
   const id = competitionId(context);
-  if (!id) return json({ error: "competition_not_found" }, 404);
-
+  if (!id) return { response: json({ error: "competition_not_found" }, 404) };
   const authorized = await authorizeManager(context);
-  if (authorized.response) return authorized.response;
+  if (authorized.response) return authorized;
+  const input = await readPublicationInput(context.request);
+  if (!input) return { response: json({ error: "invalid_results_publish_request" }, 400) };
+  return { id, session: authorized.session, input };
+}
 
-  let input;
+async function loadCompetition(db, id) {
   try {
-    input = await context.request.json();
+    const competition = await getAdminCompetition(db, id);
+    return competition
+      ? { competition }
+      : { response: json({ error: "competition_not_found" }, 404) };
   } catch {
-    input = null;
+    return { response: json({ error: "competition_database_unavailable" }, 503) };
   }
+}
 
-  const operationId = typeof input?.idempotencyKey === "string"
-    ? input.idempotencyKey.trim().toLowerCase()
-    : "";
-  const publishNote = note(input?.note);
-  if (!isCanonicalUuid(operationId) || !publishNote) {
-    return json({ error: "invalid_results_publish_request" }, 400);
-  }
-
-  let current;
-  try {
-    current = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
-  } catch {
-    return json({ error: "competition_database_unavailable" }, 503);
-  }
-  if (!current) return json({ error: "competition_not_found" }, 404);
-
+function publicationStateResponse(current, operationId) {
   if (current.lifecycleState === "COMPLETED" && current.lastLifecycleOperationId === operationId) {
     return json({ competition: current, idempotentReplay: true });
   }
@@ -80,50 +90,64 @@ export async function onRequestPost(context) {
       currentState: current.lifecycleState
     }, 409);
   }
+  return null;
+}
 
+async function applyPublication(db, request) {
   const publishedAt = new Date().toISOString();
+  const result = await publishProvisionalResults(db, {
+    competitionId: request.id,
+    operationId: request.input.operationId,
+    auditEventId: crypto.randomUUID(),
+    actorSubject: request.session.subject,
+    actorUuid: request.session.player.uuid,
+    note: request.input.publishNote,
+    publishedAt
+  });
+  if (result.status === "NOT_READY") {
+    return json({ error: "competition_results_not_ready", readiness: result.readiness }, 409);
+  }
+  if (result.status !== "PUBLISHED") {
+    return json({ error: "competition_results_publish_conflict" }, 409);
+  }
+  const competition = await getAdminCompetition(db, request.id);
+  return json({
+    competition,
+    resultCount: result.resultCount,
+    configVersion: result.configVersion,
+    publishedAt: result.publishedAt,
+    idempotentReplay: false
+  });
+}
+
+function publicationFailureResponse(error) {
+  const message = String(error?.message ?? error);
+  const conflict = message.includes("competition_results_")
+    || message.includes("UNIQUE constraint")
+    || message.includes("stale_competition_config_version");
+  return conflict
+    ? json({ error: "competition_results_publish_conflict" }, 409)
+    : json({ error: "competition_results_publish_failed" }, 503);
+}
+
+export async function onRequestPost(context) {
+  const request = await validatedRequest(context);
+  if (request.response) return request.response;
+  const database = context.env.COMPETITIONS_DB;
+  const loaded = await loadCompetition(database, request.id);
+  if (loaded.response) return loaded.response;
+  const stateResponse = publicationStateResponse(loaded.competition, request.input.operationId);
+  if (stateResponse) return stateResponse;
+
   try {
-    const result = await publishProvisionalResults(context.env.COMPETITIONS_DB, {
-      competitionId: id,
-      operationId,
-      auditEventId: crypto.randomUUID(),
-      actorSubject: authorized.session.subject,
-      actorUuid: authorized.session.player.uuid,
-      note: publishNote,
-      publishedAt
-    });
-
-    if (result.status === "NOT_READY") {
-      return json({
-        error: "competition_results_not_ready",
-        readiness: result.readiness
-      }, 409);
-    }
-    if (result.status !== "PUBLISHED") {
-      return json({ error: "competition_results_publish_conflict" }, 409);
-    }
-
-    const competition = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
-    return json({
-      competition,
-      resultCount: result.resultCount,
-      configVersion: result.configVersion,
-      publishedAt: result.publishedAt,
-      idempotentReplay: false
-    });
+    return await applyPublication(database, request);
   } catch (error) {
-    const message = String(error?.message ?? error);
-    if (
-      message.includes("competition_results_")
-      || message.includes("UNIQUE constraint")
-      || message.includes("stale_competition_config_version")
-    ) {
-      return json({ error: "competition_results_publish_conflict" }, 409);
-    }
-    return json({ error: "competition_results_publish_failed" }, 503);
+    return publicationFailureResponse(error);
   }
 }
 
 export function onRequest() {
   return methodNotAllowed(["POST"]);
 }
+
+export { note, publicationFailureResponse, publicationInput, publicationStateResponse };
