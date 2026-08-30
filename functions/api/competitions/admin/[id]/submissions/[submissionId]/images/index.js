@@ -7,6 +7,7 @@ import {
 } from "../../../../../../../lib/competitions/access.js";
 import { getAdminCompetition } from "../../../../../../../lib/competitions/drafts.js";
 import { competitionImageLimits } from "../../../../../../../lib/competitions/media-policy.js";
+import { readLimitedBody, requestMimeType } from "../../../../../../../lib/competitions/media-upload.js";
 import {
   deleteCompetitionImage,
   prepareCompetitionImage,
@@ -27,38 +28,6 @@ function paramUuid(context, key) {
 function expectedRevision(request) {
   const value = Number(request.headers.get("x-submission-revision"));
   return Number.isInteger(value) && value >= 1 ? value : null;
-}
-
-async function readLimitedBody(request, limit) {
-  const declared = Number(request.headers.get("content-length"));
-  if (Number.isFinite(declared) && declared > limit) throw new Error("image_too_large");
-  if (!request.body) throw new Error("image_empty");
-  const reader = request.body.getReader();
-  const chunks = [];
-  let total = 0;
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      if (!value?.byteLength) continue;
-      total += value.byteLength;
-      if (total > limit) {
-        await reader.cancel("image_too_large").catch(() => {});
-        throw new Error("image_too_large");
-      }
-      chunks.push(value);
-    }
-  } finally {
-    reader.releaseLock();
-  }
-  if (!total) throw new Error("image_empty");
-  const output = new Uint8Array(total);
-  let offset = 0;
-  for (const chunk of chunks) {
-    output.set(chunk, offset);
-    offset += chunk.byteLength;
-  }
-  return output;
 }
 
 async function authorize(context) {
@@ -113,7 +82,7 @@ export async function onRequestPost(context) {
   } catch {
     return json({ error: "submission_images_unavailable" }, 503);
   }
-  const requestedType = String(context.request.headers.get("content-type") ?? "").split(";", 1)[0].trim().toLowerCase();
+  const requestedType = requestMimeType(context.request);
   if (!competitionImageLimits().mimeTypes.includes(requestedType)) {
     return json({ error: "unsupported_image_type" }, 415);
   }
