@@ -41,6 +41,102 @@ function changeNote(value) {
   return normalized && normalized.length <= 500 ? normalized : null;
 }
 
+function rewardUpdate(value) {
+  if (!Number.isInteger(value?.expectedVersion) || value.expectedVersion < 1) {
+    return { response: json({ error: "expected_version_required" }, 400) };
+  }
+  const rewards = sanitizeCompetitionRewards(value.rewards);
+  const note = changeNote(value.changeNote);
+  if (!rewards || !note) {
+    return { response: json({ error: "invalid_reward_configuration" }, 400) };
+  }
+  return { expectedVersion: value.expectedVersion, rewards, changeNote: note };
+}
+
+async function readRewardUpdate(request) {
+  try {
+    return rewardUpdate(await request.json());
+  } catch {
+    return { response: json({ error: "expected_version_required" }, 400) };
+  }
+}
+
+async function validatedRewardRequest(context) {
+  if (!requireSameOrigin(context.request)) return { response: json({ error: "invalid_origin" }, 403) };
+  const id = competitionId(context);
+  if (!id) return { response: json({ error: "competition_not_found" }, 404) };
+  const authorized = await authorizeManager(context);
+  if (authorized.response) return authorized;
+  const update = await readRewardUpdate(context.request);
+  if (update.response) return update;
+  return { id, session: authorized.session, update };
+}
+
+async function loadCompetition(db, id) {
+  try {
+    const competition = await getAdminCompetition(db, id);
+    return competition
+      ? { competition }
+      : { response: json({ error: "competition_not_found" }, 404) };
+  } catch {
+    return { response: json({ error: "competition_database_unavailable" }, 503) };
+  }
+}
+
+function rewardStateResponse(current, expectedVersion) {
+  if (current.lifecycleState !== "DRAFT") {
+    return json({ error: "competition_rewards_locked" }, 409);
+  }
+  if (current.configVersion !== expectedVersion) {
+    return json({ error: "competition_version_conflict", currentVersion: current.configVersion }, 409);
+  }
+  return null;
+}
+
+function draftRewardChange(request, current, config) {
+  const createdAt = new Date().toISOString();
+  return {
+    competitionId: request.id,
+    expectedVersion: request.update.expectedVersion,
+    operationId: crypto.randomUUID(),
+    auditEventId: crypto.randomUUID(),
+    title: current.title,
+    category: current.category,
+    visibility: current.visibility,
+    beforeTitle: current.title,
+    beforeCategory: current.category,
+    beforeVisibility: current.visibility,
+    config,
+    actorSubject: request.session.subject,
+    actorUuid: request.session.player.uuid,
+    createdAt,
+    changeNote: request.update.changeNote
+  };
+}
+
+async function applyRewardUpdate(db, request, current, config) {
+  const result = await saveDraftCompetition(db, draftRewardChange(request, current, config));
+  if (result.status !== "UPDATED") {
+    return json({ error: "competition_version_conflict" }, 409);
+  }
+  return json({
+    competitionId: request.id,
+    lifecycleState: "DRAFT",
+    configVersion: result.competition.configVersion,
+    rewards: request.update.rewards,
+    publishReadiness: validatePublishableCompetitionConfig(config)
+  });
+}
+
+function rewardUpdateFailureResponse(error) {
+  const message = String(error?.message ?? error);
+  const conflict = message.includes("stale_competition_config_version")
+    || message.includes("UNIQUE constraint");
+  return conflict
+    ? json({ error: "competition_version_conflict" }, 409)
+    : json({ error: "competition_rewards_update_failed" }, 503);
+}
+
 export async function onRequestGet(context) {
   const id = competitionId(context);
   if (!id) return json({ error: "competition_not_found" }, 404);
@@ -61,73 +157,23 @@ export async function onRequestGet(context) {
 }
 
 export async function onRequestPatch(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-  const id = competitionId(context);
-  if (!id) return json({ error: "competition_not_found" }, 404);
-  const authorized = await authorizeManager(context);
-  if (authorized.response) return authorized.response;
+  const request = await validatedRewardRequest(context);
+  if (request.response) return request.response;
+  const database = context.env.COMPETITIONS_DB;
+  const loaded = await loadCompetition(database, request.id);
+  if (loaded.response) return loaded.response;
+  const stateResponse = rewardStateResponse(loaded.competition, request.update.expectedVersion);
+  if (stateResponse) return stateResponse;
 
-  let input;
-  try {
-    input = await context.request.json();
-  } catch {
-    input = null;
-  }
-  if (!Number.isInteger(input?.expectedVersion) || input.expectedVersion < 1) {
-    return json({ error: "expected_version_required" }, 400);
-  }
-  const rewards = sanitizeCompetitionRewards(input?.rewards);
-  const note = changeNote(input?.changeNote);
-  if (!rewards || !note) return json({ error: "invalid_reward_configuration" }, 400);
-
-  let current;
-  try {
-    current = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
-  } catch {
-    return json({ error: "competition_database_unavailable" }, 503);
-  }
-  if (!current) return json({ error: "competition_not_found" }, 404);
-  if (current.lifecycleState !== "DRAFT") return json({ error: "competition_rewards_locked" }, 409);
-  if (current.configVersion !== input.expectedVersion) {
-    return json({ error: "competition_version_conflict", currentVersion: current.configVersion }, 409);
-  }
-
-  const config = sanitizeCompetitionConfig({ ...current.config, rewards });
+  const config = sanitizeCompetitionConfig({
+    ...loaded.competition.config,
+    rewards: request.update.rewards
+  });
   if (!config) return json({ error: "invalid_reward_configuration" }, 400);
-
-  const now = new Date().toISOString();
   try {
-    const result = await saveDraftCompetition(context.env.COMPETITIONS_DB, {
-      competitionId: id,
-      expectedVersion: input.expectedVersion,
-      operationId: crypto.randomUUID(),
-      auditEventId: crypto.randomUUID(),
-      title: current.title,
-      category: current.category,
-      visibility: current.visibility,
-      beforeTitle: current.title,
-      beforeCategory: current.category,
-      beforeVisibility: current.visibility,
-      config,
-      actorSubject: authorized.session.subject,
-      actorUuid: authorized.session.player.uuid,
-      createdAt: now,
-      changeNote: note
-    });
-    if (result.status !== "UPDATED") return json({ error: "competition_version_conflict" }, 409);
-    return json({
-      competitionId: id,
-      lifecycleState: "DRAFT",
-      configVersion: result.competition.configVersion,
-      rewards,
-      publishReadiness: validatePublishableCompetitionConfig(config)
-    });
+    return await applyRewardUpdate(database, request, loaded.competition, config);
   } catch (error) {
-    const message = String(error?.message ?? error);
-    if (message.includes("stale_competition_config_version") || message.includes("UNIQUE constraint")) {
-      return json({ error: "competition_version_conflict" }, 409);
-    }
-    return json({ error: "competition_rewards_update_failed" }, 503);
+    return rewardUpdateFailureResponse(error);
   }
 }
 
@@ -135,4 +181,10 @@ export function onRequest() {
   return methodNotAllowed(["GET", "PATCH"]);
 }
 
-export { changeNote, competitionId };
+export {
+  changeNote,
+  competitionId,
+  rewardStateResponse,
+  rewardUpdate,
+  rewardUpdateFailureResponse
+};
