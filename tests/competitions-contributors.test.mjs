@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   inviteSubmissionContributor,
-  removeSubmissionContributor
+  removeSubmissionContributor,
+  respondSubmissionInvite
 } from "../functions/lib/competitions/contributors.js";
 import { d1, migratedDatabase } from "./support/d1-sqlite.mjs";
 
@@ -101,6 +102,31 @@ test("a lifecycle transition cannot race an invite or removal past the roster lo
   assert.equal(
     database.prepare("SELECT COUNT(*) AS count FROM submission_participants WHERE submission_id = ?").get(SUBMISSION_ID).count,
     1
+  );
+  assert.equal(database.prepare("SELECT COUNT(*) AS count FROM competition_audit_events").get().count, 0);
+  database.close();
+});
+
+test("competition cancellation cannot race a pending invite response", async () => {
+  const database = await seededDatabase();
+  database.prepare("UPDATE competitions SET lifecycle_state = 'CANCELLED' WHERE id = ?").run(COMPETITION_ID);
+
+  assert.equal(await respondSubmissionInvite(d1(database), {
+    competitionId: COMPETITION_ID,
+    submissionId: SUBMISSION_ID,
+    playerUuid: EXISTING_UUID,
+    actorSubject: "invitee",
+    accept: true,
+    respondedAt: NOW,
+    auditEventId: "80000000-0000-4000-8000-000000000008"
+  }), false);
+  assert.equal(
+    database.prepare(`
+      SELECT invite_status AS inviteStatus
+      FROM submission_participants
+      WHERE submission_id = ? AND player_uuid = ?
+    `).get(SUBMISSION_ID, EXISTING_UUID).inviteStatus,
+    "PENDING"
   );
   assert.equal(database.prepare("SELECT COUNT(*) AS count FROM competition_audit_events").get().count, 0);
   database.close();

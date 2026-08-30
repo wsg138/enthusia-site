@@ -228,18 +228,32 @@ export async function getPendingSubmissionInvite(db, competitionId, submissionId
   `).bind(competitionId, submissionId, playerUuid).first();
 }
 
-export async function respondSubmissionInvite(db, response) {
-  const database = requireWritableDatabase(db);
-  const status = response.accept ? "ACCEPTED" : "DECLINED";
-  const statements = [
-    database.prepare(`
+function inviteResponseUpdate(database, response, status) {
+  return database.prepare(`
       UPDATE submission_participants
       SET invite_status = ?, responded_at = ?
       WHERE submission_id = ?
         AND player_uuid = ?
         AND invite_status = 'PENDING'
-    `).bind(status, response.respondedAt, response.submissionId, response.playerUuid),
-    database.prepare(`
+        AND EXISTS (
+          SELECT 1
+          FROM submissions submission
+          JOIN competitions competition ON competition.id = submission.competition_id
+          WHERE submission.id = submission_participants.submission_id
+            AND competition.id = ?
+            AND competition.lifecycle_state <> 'CANCELLED'
+        )
+    `).bind(
+      status,
+      response.respondedAt,
+      response.submissionId,
+      response.playerUuid,
+      response.competitionId
+    );
+}
+
+function inviteResponseAudit(database, response, status) {
+  return database.prepare(`
       INSERT INTO competition_audit_events (
         id, competition_id, submission_id, actor_subject, actor_uuid,
         action, after_json, note, created_at
@@ -256,11 +270,11 @@ export async function respondSubmissionInvite(db, response) {
       JSON.stringify({ playerUuid: response.playerUuid, inviteStatus: status }),
       response.accept ? "Contributor invite accepted" : "Contributor invite declined",
       response.respondedAt
-    )
-  ];
+    );
+}
 
-  if (response.notification) {
-    statements.push(database.prepare(`
+function inviteResponseNotification(database, response, status) {
+  return database.prepare(`
       INSERT INTO competition_notification_outbox (
         id, competition_id, submission_id, event_type, recipient_uuid,
         operation_key, payload_json, state, attempts, next_attempt_at,
@@ -289,9 +303,24 @@ export async function respondSubmissionInvite(db, response) {
       response.playerUuid,
       status,
       response.respondedAt
-    ));
+    );
+}
+
+function firstStatementChanged(results) {
+  return Number(results?.[0]?.meta?.changes ?? 0) === 1;
+}
+
+export async function respondSubmissionInvite(db, response) {
+  const database = requireWritableDatabase(db);
+  const status = response.accept ? "ACCEPTED" : "DECLINED";
+  const statements = [
+    inviteResponseUpdate(database, response, status),
+    inviteResponseAudit(database, response, status)
+  ];
+  if (response.notification) {
+    statements.push(inviteResponseNotification(database, response, status));
   }
 
   const results = await database.batch(statements);
-  return Number(results?.[0]?.meta?.changes ?? 0) === 1;
+  return firstStatementChanged(results);
 }
