@@ -197,7 +197,7 @@ test("manual submission creation counts entries held by a linked Minecraft accou
   const database = await migratedDatabase();
   seedCompetition(database);
   const linkedUuid = "30000000-0000-4000-8000-000000000002";
-  const discordId = "111111111111111111";
+  const discordId = "1".repeat(18);
   database.prepare(`
     INSERT INTO competition_discord_accounts (
       discord_user_id, username, created_at, updated_at

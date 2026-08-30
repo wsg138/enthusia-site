@@ -1,3 +1,5 @@
+import { serializeJsonDocument } from "./json-document.js";
+
 function requireWritableDatabase(db) {
   if (!db || typeof db.prepare !== "function" || typeof db.batch !== "function") {
     throw new TypeError("Competition database binding is not writable");
@@ -184,7 +186,7 @@ function auditStatement(database, draft) {
     draft.id,
     draft.ownerSubject,
     draft.ownerUuid,
-    JSON.stringify({
+    serializeJsonDocument({
       entryType: draft.entryType,
       ownerUuid: draft.ownerUuid,
       guildId: draft.guildId ?? null,

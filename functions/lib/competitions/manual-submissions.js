@@ -1,3 +1,5 @@
+import { serializeJsonDocument } from "./json-document.js";
+
 function requireWritableDatabase(db) {
   if (!db || typeof db.prepare !== "function" || typeof db.batch !== "function") {
     throw new TypeError("Competition database binding is not writable");
@@ -164,8 +166,8 @@ function moderationStatement(database, submission, check) {
     check.provider,
     check.model,
     check.outcome,
-    JSON.stringify(check.categories ?? {}),
-    JSON.stringify(check.scores ?? {}),
+    serializeJsonDocument(check.categories ?? {}),
+    serializeJsonDocument(check.scores ?? {}),
     check.contentHash,
     submission.createdAt,
     ...createdSubmissionBindings(submission)
@@ -186,7 +188,7 @@ function auditStatement(database, submission) {
     submission.id,
     submission.actorSubject,
     submission.actorUuid,
-    JSON.stringify({
+    serializeJsonDocument({
       ownerUuid: submission.ownerUuid,
       ownerName: submission.ownerName,
       status: "PENDING_REVIEW",
@@ -213,7 +215,7 @@ function notificationStatement(database, submission) {
     submission.competitionId,
     submission.id,
     `submission-review:${submission.id}:1`,
-    JSON.stringify({
+    serializeJsonDocument({
       competitionTitle: submission.competitionTitle,
       competitionSlug: submission.competitionSlug,
       submissionTitle: submission.title,
