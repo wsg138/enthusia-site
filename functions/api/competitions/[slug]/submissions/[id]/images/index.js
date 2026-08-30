@@ -15,11 +15,10 @@ import { competitionRateLimit, rateLimitHeaders } from "../../../../../../lib/co
 import { getPublicCompetitionBySlug } from "../../../../../../lib/competitions/repository.js";
 import {
   attachSubmissionImage,
-  nextSubmissionImageSortOrder
+  nextStoredSubmissionImageSortOrder
 } from "../../../../../../lib/competitions/submission-media.js";
 import {
-  getAccountSubmission,
-  listSubmissionImages
+  getAccountSubmission
 } from "../../../../../../lib/competitions/submissions.js";
 import { json, methodNotAllowed, unauthorized } from "../../../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../../../lib/security.js";
@@ -131,8 +130,7 @@ export async function onRequestPost(context) {
 
   let sortOrder;
   try {
-    const images = await listSubmissionImages(context.env.COMPETITIONS_DB, submission.id);
-    sortOrder = nextSubmissionImageSortOrder(images);
+    sortOrder = await nextStoredSubmissionImageSortOrder(context.env.COMPETITIONS_DB, submission.id);
   } catch {
     return json({ error: "submission_images_unavailable" }, 503);
   }

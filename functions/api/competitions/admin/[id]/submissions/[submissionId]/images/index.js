@@ -12,10 +12,9 @@ import {
   prepareCompetitionImage,
   storePreparedCompetitionImage
 } from "../../../../../../../lib/competitions/media-storage.js";
-import { nextSubmissionImageSortOrder } from "../../../../../../../lib/competitions/submission-media.js";
+import { nextStoredSubmissionImageSortOrder } from "../../../../../../../lib/competitions/submission-media.js";
 import { attachStaffSubmissionImage } from "../../../../../../../lib/competitions/staff-media.js";
 import { getStaffSubmission } from "../../../../../../../lib/competitions/staff-submissions.js";
-import { listSubmissionImages } from "../../../../../../../lib/competitions/submissions.js";
 import { json, methodNotAllowed, unauthorized } from "../../../../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../../../../lib/security.js";
 import { isCanonicalUuid } from "../../../../../../../lib/validation.js";
@@ -110,8 +109,7 @@ export async function onRequestPost(context) {
   if (submission.revision !== revision) return json({ error: "submission_revision_conflict" }, 409);
   let sortOrder;
   try {
-    const images = await listSubmissionImages(context.env.COMPETITIONS_DB, submissionId);
-    sortOrder = nextSubmissionImageSortOrder(images);
+    sortOrder = await nextStoredSubmissionImageSortOrder(context.env.COMPETITIONS_DB, submissionId);
   } catch {
     return json({ error: "submission_images_unavailable" }, 503);
   }

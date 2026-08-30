@@ -18,6 +18,25 @@ function requireWritableDatabase(db) {
   return database;
 }
 
+function requireSortOrder(value) {
+  if (!Number.isInteger(value) || value < 0) {
+    throw new TypeError("Submission image sort order is invalid");
+  }
+  return value;
+}
+
+function serializedRecord(value) {
+  return JSON.stringify(value ?? {});
+}
+
+function statementChanged(results, index) {
+  return Number(results?.[index]?.meta?.changes ?? 0) === 1;
+}
+
+function allStatementsChanged(results, indexes) {
+  return indexes.every((index) => statementChanged(results, index));
+}
+
 function revisionExistsSql() {
   return `EXISTS (
     SELECT 1
@@ -32,6 +51,16 @@ function revisionExistsSql() {
   )`;
 }
 
+function auditEventExistsSql() {
+  return `EXISTS (
+    SELECT 1
+    FROM competition_audit_events event
+    WHERE event.id = ?
+      AND event.competition_id = ?
+      AND event.submission_id = ?
+  )`;
+}
+
 export function nextSubmissionImageSortOrder(images) {
   if (!Array.isArray(images)) throw new TypeError("Submission image list is invalid");
   let next = 0;
@@ -42,6 +71,22 @@ export function nextSubmissionImageSortOrder(images) {
     next = Math.max(next, image.sortOrder + 1);
   }
   return next;
+}
+
+export async function nextStoredSubmissionImageSortOrder(db, submissionId) {
+  const database = requireDatabase(db);
+  const row = await database.prepare(`
+    SELECT MAX(sort_order) AS maxSortOrder
+    FROM submission_images
+    WHERE submission_id = ?
+  `).bind(submissionId).first();
+  if (row?.maxSortOrder === null || row?.maxSortOrder === undefined) return 0;
+  if (!Number.isSafeInteger(row.maxSortOrder)
+      || row.maxSortOrder < 0
+      || row.maxSortOrder === Number.MAX_SAFE_INTEGER) {
+    throw new TypeError("Stored submission image sort order is invalid");
+  }
+  return row.maxSortOrder + 1;
 }
 
 export async function getOwnedSubmissionImage(db, competitionId, submissionId, imageId, ownerSubject) {
@@ -74,9 +119,7 @@ export async function getOwnedSubmissionImage(db, competitionId, submissionId, i
 
 export async function attachSubmissionImage(db, image) {
   const database = requireWritableDatabase(db);
-  if (!Number.isInteger(image.sortOrder) || image.sortOrder < 0) {
-    throw new TypeError("Submission image sort order is invalid");
-  }
+  requireSortOrder(image.sortOrder);
   const policy = ownerSubmissionEditPolicy({
     expectedConfigVersion: image.expectedConfigVersion,
     operationAt: image.createdAt,
@@ -149,8 +192,8 @@ export async function attachSubmissionImage(db, image) {
       image.id,
       image.moderation.provider,
       image.moderation.model,
-      JSON.stringify(image.moderation.categories ?? {}),
-      JSON.stringify(image.moderation.scores ?? {}),
+      serializedRecord(image.moderation.categories),
+      serializedRecord(image.moderation.scores),
       image.sha256,
       policy.operationAt,
       image.submissionId,
@@ -183,9 +226,7 @@ export async function attachSubmissionImage(db, image) {
     )
   ]);
 
-  const updated = Number(results?.[0]?.meta?.changes ?? 0) === 1;
-  const inserted = Number(results?.[1]?.meta?.changes ?? 0) === 1;
-  return updated && inserted
+  return allStatementsChanged(results, [0, 1])
     ? { status: "UPDATED", revision: nextRevision }
     : { status: "CONFLICT" };
 }
@@ -198,11 +239,16 @@ export async function removeSubmissionImage(db, removal) {
     reviewCloseAt: removal.reviewCloseAt
   });
   const nextRevision = removal.expectedRevision + 1;
-  const marker = revisionExistsSql();
+  const marker = auditEventExistsSql();
   const results = await database.batch([
     database.prepare(`
-      UPDATE submissions
-      SET revision = ?, updated_at = ?
+      INSERT INTO competition_audit_events (
+        id, competition_id, submission_id, actor_subject, actor_uuid,
+        action, after_json, note, created_at
+      )
+      SELECT ?, submissions.competition_id, submissions.id, ?, ?,
+             'SUBMISSION_IMAGE_REMOVED', ?, ?, ?
+      FROM submissions
       WHERE id = ?
         AND competition_id = ?
         AND owner_subject = ?
@@ -211,13 +257,17 @@ export async function removeSubmissionImage(db, removal) {
         AND removed_at IS NULL
         AND ${OWNER_SUBMISSION_EDIT_GUARD_SQL}
         AND EXISTS (
-          SELECT 1 FROM submission_images i
-          WHERE i.submission_id = submissions.id
-            AND i.id = ?
-            AND i.removed_at IS NULL
+          SELECT 1 FROM submission_images image
+          WHERE image.submission_id = submissions.id
+            AND image.id = ?
+            AND image.removed_at IS NULL
         )
     `).bind(
-      nextRevision,
+      removal.auditEventId,
+      removal.ownerSubject,
+      removal.actorUuid,
+      JSON.stringify({ imageId: removal.imageId, revision: nextRevision }),
+      "Submission image removed",
       policy.operationAt,
       removal.submissionId,
       removal.competitionId,
@@ -228,6 +278,27 @@ export async function removeSubmissionImage(db, removal) {
       policy.operationAt,
       policy.reviewCloseAt,
       removal.imageId
+    ),
+    database.prepare(`
+      UPDATE submissions
+      SET revision = ?, updated_at = ?
+      WHERE id = ?
+        AND competition_id = ?
+        AND owner_subject = ?
+        AND revision = ?
+        AND status IN ('DRAFT','NEEDS_CHANGES')
+        AND removed_at IS NULL
+        AND ${marker}
+    `).bind(
+      nextRevision,
+      policy.operationAt,
+      removal.submissionId,
+      removal.competitionId,
+      removal.ownerSubject,
+      removal.expectedRevision,
+      removal.auditEventId,
+      removal.competitionId,
+      removal.submissionId
     ),
     database.prepare(`
       UPDATE submission_images
@@ -241,11 +312,9 @@ export async function removeSubmissionImage(db, removal) {
       removal.actorUuid,
       removal.submissionId,
       removal.imageId,
-      removal.submissionId,
+      removal.auditEventId,
       removal.competitionId,
-      removal.ownerSubject,
-      nextRevision,
-      policy.operationAt
+      removal.submissionId
     ),
     database.prepare(`
       UPDATE submissions
@@ -264,7 +333,7 @@ export async function removeSubmissionImage(db, removal) {
         AND competition_id = ?
         AND owner_subject = ?
         AND revision = ?
-        AND updated_at = ?
+        AND ${marker}
     `).bind(
       removal.imageId,
       removal.submissionId,
@@ -272,33 +341,13 @@ export async function removeSubmissionImage(db, removal) {
       removal.competitionId,
       removal.ownerSubject,
       nextRevision,
-      policy.operationAt
-    ),
-    database.prepare(`
-      INSERT INTO competition_audit_events (
-        id, competition_id, submission_id, actor_subject, actor_uuid,
-        action, after_json, note, created_at
-      )
-      SELECT ?, ?, ?, ?, ?, 'SUBMISSION_IMAGE_REMOVED', ?, ?, ?
-      WHERE ${marker}
-    `).bind(
       removal.auditEventId,
       removal.competitionId,
-      removal.submissionId,
-      removal.ownerSubject,
-      removal.actorUuid,
-      JSON.stringify({ imageId: removal.imageId, revision: nextRevision }),
-      "Submission image removed",
-      policy.operationAt,
-      removal.submissionId,
-      removal.competitionId,
-      removal.ownerSubject,
-      nextRevision,
-      policy.operationAt
+      removal.submissionId
     )
   ]);
 
-  return Number(results?.[0]?.meta?.changes ?? 0) === 1
+  return allStatementsChanged(results, [0, 1, 2])
     ? { status: "UPDATED", revision: nextRevision }
     : { status: "CONFLICT" };
 }

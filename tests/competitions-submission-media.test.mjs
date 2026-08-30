@@ -5,6 +5,7 @@ import { reorderOwnedSubmissionImages } from "../functions/lib/competitions/subm
 import {
   attachSubmissionImage,
   nextSubmissionImageSortOrder,
+  nextStoredSubmissionImageSortOrder,
   removeSubmissionImage
 } from "../functions/lib/competitions/submission-media.js";
 import { attachStaffSubmissionImage } from "../functions/lib/competitions/staff-media.js";
@@ -101,9 +102,29 @@ test("player and staff upload routes calculate an explicit image position", asyn
     readFile(new URL("../functions/api/competitions/admin/[id]/submissions/[submissionId]/images/index.js", import.meta.url), "utf8")
   ]);
   for (const source of sources) {
-    assert.match(source, /nextSubmissionImageSortOrder\(images\)/);
+    assert.match(source, /nextStoredSubmissionImageSortOrder\(/);
     assert.doesNotMatch(source, /existing\.length/);
   }
+});
+
+test("removed image positions are not reused by later uploads", async () => {
+  const database = await seededDatabase();
+  const db = d1(database);
+  assert.deepEqual(await attachSubmissionImage(db, playerImage()), { status: "UPDATED", revision: 2 });
+  assert.deepEqual(await removeSubmissionImage(db, {
+    competitionId: COMPETITION_ID,
+    submissionId: SUBMISSION_ID,
+    imageId: IMAGE_ID,
+    ownerSubject: OWNER_SUBJECT,
+    actorUuid: OWNER_UUID,
+    expectedRevision: 2,
+    expectedConfigVersion: 1,
+    reviewCloseAt: null,
+    removedAt: "2026-08-28T14:00:01.000Z",
+    auditEventId: "70000000-0000-4000-8000-000000000009"
+  }), { status: "UPDATED", revision: 3 });
+  assert.equal(await nextStoredSubmissionImageSortOrder(db, SUBMISSION_ID), 1);
+  database.close();
 });
 
 test("player media writes stop when the competition locks after validation", async () => {
@@ -151,6 +172,50 @@ test("player changes requested after the review deadline do not attach media", a
   }));
   assert.deepEqual(result, { status: "CONFLICT" });
   assert.equal(database.prepare("SELECT COUNT(*) AS count FROM submission_images").get().count, 0);
+  database.close();
+});
+
+test("same-millisecond stale removal cannot mutate a second submission image", async () => {
+  const database = await seededDatabase();
+  const db = d1(database);
+  const secondImageId = "40000000-0000-4000-8000-000000000014";
+  assert.deepEqual(await attachSubmissionImage(db, playerImage()), { status: "UPDATED", revision: 2 });
+  assert.deepEqual(await attachSubmissionImage(db, playerImage({
+    id: secondImageId,
+    expectedRevision: 2,
+    sortOrder: 1,
+    storageKey: `competitions/${COMPETITION_ID}/submissions/${secondImageId}.png`,
+    moderationCheckId: "50000000-0000-4000-8000-000000000015",
+    auditEventId: "60000000-0000-4000-8000-000000000016"
+  })), { status: "UPDATED", revision: 3 });
+
+  const removedAt = "2026-08-28T14:03:00.000Z";
+  const removal = {
+    competitionId: COMPETITION_ID,
+    submissionId: SUBMISSION_ID,
+    ownerSubject: OWNER_SUBJECT,
+    actorUuid: OWNER_UUID,
+    expectedRevision: 3,
+    expectedConfigVersion: 1,
+    reviewCloseAt: null,
+    removedAt
+  };
+  assert.deepEqual(await removeSubmissionImage(db, {
+    ...removal,
+    imageId: IMAGE_ID,
+    auditEventId: "70000000-0000-4000-8000-000000000017"
+  }), { status: "UPDATED", revision: 4 });
+  assert.deepEqual(await removeSubmissionImage(db, {
+    ...removal,
+    imageId: secondImageId,
+    auditEventId: "80000000-0000-4000-8000-000000000018"
+  }), { status: "CONFLICT" });
+
+  assert.equal(
+    database.prepare("SELECT removed_at FROM submission_images WHERE id = ?").get(secondImageId).removed_at,
+    null
+  );
+  assert.equal(database.prepare("SELECT COUNT(*) AS count FROM competition_audit_events").get().count, 3);
   database.close();
 });
 
