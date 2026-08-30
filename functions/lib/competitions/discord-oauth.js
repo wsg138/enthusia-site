@@ -8,25 +8,43 @@ import {
 const DISCORD_AUTHORIZE_URL = "https://discord.com/oauth2/authorize";
 const DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
 const DISCORD_USER_URL = "https://discord.com/api/v10/users/@me";
+const DISCORD_ID = /^\d{16,22}$/;
 
-function configuration(env) {
-  const clientId = String(env?.DISCORD_CLIENT_ID ?? "").trim();
-  const clientSecret = String(env?.DISCORD_CLIENT_SECRET ?? "").trim();
-  const guildId = String(env?.DISCORD_GUILD_ID ?? "").trim();
-  const redirectUri = String(env?.DISCORD_OAUTH_REDIRECT_URI ?? "").trim();
-  if (!/^\d{16,22}$/.test(clientId) || clientSecret.length < 16 || !/^\d{16,22}$/.test(guildId)) {
+function environmentValue(env, key) {
+  if (!env || typeof env !== "object") return "";
+  return String(env[key] ?? "").trim();
+}
+
+function discordCredentials(env) {
+  const clientId = environmentValue(env, "DISCORD_CLIENT_ID");
+  const clientSecret = environmentValue(env, "DISCORD_CLIENT_SECRET");
+  const guildId = environmentValue(env, "DISCORD_GUILD_ID");
+  if (!DISCORD_ID.test(clientId) || clientSecret.length < 16 || !DISCORD_ID.test(guildId)) {
     throw new Error("Discord OAuth is not configured");
   }
-  let redirect;
+  return { clientId, clientSecret, guildId };
+}
+
+function parseRedirectUri(value) {
+  let redirectUrl;
   try {
-    redirect = new URL(redirectUri);
+    redirectUrl = new URL(value);
   } catch {
     throw new Error("Discord OAuth redirect URI is invalid");
   }
-  if (redirect.protocol !== "https:" && redirect.hostname !== "localhost") {
+  const secure = redirectUrl.protocol === "https:";
+  const localDevelopment = redirectUrl.protocol === "http:" && redirectUrl.hostname === "localhost";
+  if (!secure && !localDevelopment) {
     throw new Error("Discord OAuth redirect URI must use HTTPS");
   }
-  return { clientId, clientSecret, guildId, redirectUri: redirect.toString() };
+  return redirectUrl.toString();
+}
+
+function configuration(env) {
+  return {
+    ...discordCredentials(env),
+    redirectUri: parseRedirectUri(environmentValue(env, "DISCORD_OAUTH_REDIRECT_URI"))
+  };
 }
 
 export async function beginDiscordOAuth(db, env, returnTo) {
@@ -75,25 +93,37 @@ async function fetchDiscordUser(accessToken, fetchImpl = fetch) {
   return body;
 }
 
+function discordRoleIds(body) {
+  if (!body || !Array.isArray(body.roles)) return null;
+  return body.roles.map(String).filter((role) => DISCORD_ID.test(role));
+}
+
 async function fetchDiscordMembership(accessToken, env, fetchImpl = fetch) {
-  const guildId = String(env?.DISCORD_GUILD_ID ?? "").trim();
-  if (!/^\d{16,22}$/.test(guildId)) return { member: false, roleIds: [] };
+  const guildId = environmentValue(env, "DISCORD_GUILD_ID");
+  if (!DISCORD_ID.test(guildId)) return { member: false, roleIds: [] };
   const response = await fetchImpl(`${DISCORD_USER_URL}/guilds/${guildId}/member`, {
     headers: { authorization: `Bearer ${accessToken}` }
   });
   if (response.status === 404) return { member: false, roleIds: [] };
   const body = await response.json().catch(() => null);
-  if (!response.ok || !Array.isArray(body?.roles)) throw new Error(`Discord member lookup failed: ${response.status}`);
+  const roleIds = discordRoleIds(body);
+  if (!response.ok || roleIds === null) throw new Error(`Discord member lookup failed: ${response.status}`);
   return {
     member: true,
-    roleIds: body.roles.map(String).filter((role) => /^\d{16,22}$/.test(role))
+    roleIds
   };
 }
 
+function oauthCallbackValue(value, maximumLength) {
+  if (typeof value !== "string") return null;
+  const normalized = value.trim();
+  return normalized && normalized.length <= maximumLength ? normalized : null;
+}
+
 export async function completeDiscordOAuth(db, env, { code, state }, fetchImpl = fetch) {
-  const safeCode = typeof code === "string" ? code.trim() : "";
-  const safeState = typeof state === "string" ? state.trim() : "";
-  if (!safeCode || safeCode.length > 512 || !safeState || safeState.length > 256) {
+  const safeCode = oauthCallbackValue(code, 512);
+  const safeState = oauthCallbackValue(state, 256);
+  if (safeCode === null || safeState === null) {
     throw new TypeError("Discord OAuth callback is invalid");
   }
   const oauthState = await consumeOAuthState(db, safeState);
@@ -126,6 +156,8 @@ export {
   DISCORD_USER_URL,
   configuration as discordOAuthConfiguration,
   exchangeAuthorizationCode,
+  discordRoleIds,
   fetchDiscordMembership,
-  fetchDiscordUser
+  fetchDiscordUser,
+  oauthCallbackValue
 };

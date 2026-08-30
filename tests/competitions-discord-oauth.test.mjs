@@ -5,7 +5,9 @@ import {
   beginDiscordOAuth,
   discordOAuthConfiguration,
   discordOAuthConfigured,
-  fetchDiscordMembership
+  discordRoleIds,
+  fetchDiscordMembership,
+  oauthCallbackValue
 } from "../functions/lib/competitions/discord-oauth.js";
 import { safeReturnTo } from "../functions/lib/competitions/identity.js";
 import { authenticatedRedirect } from "../functions/api/competitions/auth/discord/callback.js";
@@ -47,6 +49,11 @@ test("Discord OAuth configuration fails closed for missing secret or insecure re
   assert.throws(() => discordOAuthConfiguration({ ...ENV, DISCORD_CLIENT_SECRET: "" }), /not configured/);
   assert.throws(() => discordOAuthConfiguration({ ...ENV, DISCORD_GUILD_ID: "" }), /not configured/);
   assert.throws(() => discordOAuthConfiguration({ ...ENV, DISCORD_OAUTH_REDIRECT_URI: "http://example.com/callback" }), /HTTPS/);
+  assert.throws(() => discordOAuthConfiguration({ ...ENV, DISCORD_OAUTH_REDIRECT_URI: "ftp://localhost/callback" }), /HTTPS/);
+  assert.equal(
+    discordOAuthConfiguration({ ...ENV, DISCORD_OAUTH_REDIRECT_URI: "http://localhost:8788/callback" }).redirectUri,
+    "http://localhost:8788/callback"
+  );
 });
 
 test("Discord OAuth returns to safe same-site pages", () => {
@@ -83,4 +90,13 @@ test("Discord membership lookup distinguishes roleless members from non-members"
   assert.deepEqual(await fetchDiscordMembership("access-token", {}, async () => {
     throw new Error("must not fetch");
   }), { member: false, roleIds: [] });
+});
+
+test("Discord OAuth normalizes callback fields and role identifiers", () => {
+  assert.equal(oauthCallbackValue("  callback-code  ", 32), "callback-code");
+  assert.equal(oauthCallbackValue("", 32), null);
+  assert.equal(oauthCallbackValue("x".repeat(33), 32), null);
+  assert.equal(oauthCallbackValue(null, 32), null);
+  assert.deepEqual(discordRoleIds({ roles: ["3".repeat(18), "bad-role"] }), ["3".repeat(18)]);
+  assert.equal(discordRoleIds({ roles: "invalid" }), null);
 });
