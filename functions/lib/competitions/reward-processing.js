@@ -5,82 +5,171 @@ import {
   listCompetitionRewardDeliveries
 } from "./reward-ledger.js";
 
-function bridgePayload(delivery) {
+const SUCCESS_STATUSES = new Set([
+  "DELIVERED",
+  "ALREADY_DELIVERED",
+  "ACCEPTED",
+  "ALREADY_ACCEPTED"
+]);
+
+function rewardPayload(delivery) {
+  const configured = delivery.detail?.payload;
+  const payload = configured && typeof configured === "object" && !Array.isArray(configured)
+    ? { ...configured }
+    : {};
+  if (Number.isSafeInteger(delivery.detail?.amount)) payload.amount = delivery.detail.amount;
+  return payload;
+}
+
+export function deliveryPayload(competitionId, delivery) {
   return {
+    schemaVersion: 1,
     operationKey: delivery.operationKey,
-    competitionId: delivery.detail?.competitionId ?? null,
+    competitionId,
     submissionId: delivery.submissionId,
     rewardId: delivery.rewardId,
     recipientUuid: delivery.recipientUuid,
-    rewardType: delivery.detail?.rewardType,
-    payload: delivery.detail?.payload,
-    configVersion: delivery.detail?.configVersion ?? null
+    rewardType: delivery.rewardType,
+    payload: rewardPayload(delivery)
+  };
+}
+
+function unchangedOutcome(delivery) {
+  if (!["PENDING", "FAILED"].includes(delivery.state)) {
+    return { deliveryId: delivery.id, status: "UNCHANGED", state: delivery.state };
+  }
+  if (!delivery.recipientUuid || delivery.detail?.manual || delivery.detail?.skippedReason) {
+    return { deliveryId: delivery.id, status: "UNCHANGED", state: delivery.state };
+  }
+  return null;
+}
+
+function processingDependencies(options) {
+  return {
+    deliverPrize: typeof options?.deliverPrize === "function" ? options.deliverPrize : deliverCompetitionPrize,
+    now: typeof options?.now === "function" ? options.now : () => new Date().toISOString()
+  };
+}
+
+function bridgeDetail(delivery, bridge, bridgeStatus) {
+  return {
+    ...(delivery.detail ?? {}),
+    bridgeStatus,
+    bridgeReference: bridge.reference ?? null,
+    bridgeMessage: bridge.message ?? null
+  };
+}
+
+async function finishBridgeResponse(database, delivery, expectedAttempt, bridge, now) {
+  const bridgeStatus = String(bridge.status ?? "").toUpperCase();
+  const success = SUCCESS_STATUSES.has(bridgeStatus);
+  const finished = await finishRewardDelivery(database, {
+    deliveryId: delivery.id,
+    expectedAttempt,
+    state: success ? "DELIVERED" : "FAILED",
+    detail: bridgeDetail(delivery, bridge, bridgeStatus),
+    finishedAt: now()
+  });
+  return {
+    deliveryId: delivery.id,
+    status: finished ? (success ? "DELIVERED" : "FAILED") : "STATE_CONFLICT",
+    bridgeStatus
+  };
+}
+
+function errorDetail(delivery, error) {
+  return {
+    ...(delivery.detail ?? {}),
+    bridgeStatus: "ERROR",
+    bridgeMessage: String(error?.message ?? error).slice(0, 500)
+  };
+}
+
+async function finishBridgeError(database, delivery, expectedAttempt, error, now) {
+  let finished = false;
+  try {
+    finished = await finishRewardDelivery(database, {
+      deliveryId: delivery.id,
+      expectedAttempt,
+      state: "FAILED",
+      detail: errorDetail(delivery, error),
+      finishedAt: now()
+    });
+  } catch {
+    finished = false;
+  }
+  return {
+    deliveryId: delivery.id,
+    status: finished ? "FAILED" : "STATE_CONFLICT",
+    bridgeStatus: "ERROR"
+  };
+}
+
+async function processClaimedDelivery(env, competitionId, delivery, expectedAttempt, dependencies) {
+  try {
+    const bridge = await dependencies.deliverPrize(env, deliveryPayload(competitionId, delivery));
+    const outcome = await finishBridgeResponse(
+      env.COMPETITIONS_DB,
+      delivery,
+      expectedAttempt,
+      bridge,
+      dependencies.now
+    );
+    return outcome;
+  } catch (error) {
+    return finishBridgeError(env.COMPETITIONS_DB, delivery, expectedAttempt, error, dependencies.now);
+  }
+}
+
+export async function processCompetitionPrizeDelivery(env, competitionId, delivery, options = {}) {
+  const unchanged = unchangedOutcome(delivery);
+  if (unchanged) return unchanged;
+  const dependencies = processingDependencies(options);
+  const expectedAttempt = delivery.attempts + 1;
+  const claimed = await claimRewardDelivery(
+    env.COMPETITIONS_DB,
+    delivery.id,
+    delivery.attempts,
+    dependencies.now()
+  );
+  if (!claimed) return { deliveryId: delivery.id, status: "CLAIM_CONFLICT", state: delivery.state };
+  return processClaimedDelivery(env, competitionId, delivery, expectedAttempt, dependencies);
+}
+
+function safeBatchLimit(value) {
+  return Number.isInteger(value) ? Math.min(25, Math.max(1, value)) : 10;
+}
+
+function pendingAutomatedDelivery(delivery) {
+  return ["PENDING", "FAILED"].includes(delivery.state) && Boolean(delivery.recipientUuid);
+}
+
+function deliveryCounts(deliveries) {
+  const count = (state) => deliveries.filter((delivery) => delivery.state === state).length;
+  return {
+    pending: deliveries.filter((delivery) => ["PENDING", "FAILED"].includes(delivery.state)).length,
+    delivered: count("DELIVERED"),
+    manual: count("MANUAL"),
+    skipped: count("SKIPPED")
   };
 }
 
 export async function processCompetitionPrizeBatch(env, competitionId, { limit = 10 } = {}) {
-  const safeLimit = Number.isInteger(limit) ? Math.min(25, Math.max(1, limit)) : 10;
   const all = await listCompetitionRewardDeliveries(env.COMPETITIONS_DB, competitionId);
   const candidates = all
-    .filter((delivery) => (delivery.state === "PENDING" || delivery.state === "FAILED") && delivery.recipientUuid)
-    .slice(0, safeLimit);
+    .filter(pendingAutomatedDelivery)
+    .slice(0, safeBatchLimit(limit));
 
   const outcomes = [];
   for (const delivery of candidates) {
-    const claimedAt = new Date().toISOString();
-    const expectedAttempt = delivery.attempts + 1;
-    const claimed = await claimRewardDelivery(
-      env.COMPETITIONS_DB,
-      delivery.id,
-      delivery.attempts,
-      claimedAt
-    );
-    if (!claimed) {
-      outcomes.push({ deliveryId: delivery.id, status: "NOT_CLAIMED" });
-      continue;
-    }
-
-    try {
-      const bridge = await deliverCompetitionPrize(env, bridgePayload(delivery));
-      const accepted = bridge.status === "DELIVERED" || bridge.status === "ALREADY_DELIVERED";
-      if (!accepted) throw new Error(`Bridge returned unsupported delivery status ${bridge.status}`);
-      const finishedAt = new Date().toISOString();
-      const finished = await finishRewardDelivery(env.COMPETITIONS_DB, {
-        deliveryId: delivery.id,
-        expectedAttempt,
-        state: "DELIVERED",
-        detail: {
-          ...delivery.detail,
-          bridgeStatus: bridge.status,
-          bridgeReference: bridge.reference ?? null
-        },
-        finishedAt
-      });
-      outcomes.push({ deliveryId: delivery.id, status: finished ? "DELIVERED" : "STATE_CONFLICT" });
-    } catch (error) {
-      const finishedAt = new Date().toISOString();
-      await finishRewardDelivery(env.COMPETITIONS_DB, {
-        deliveryId: delivery.id,
-        expectedAttempt,
-        state: "FAILED",
-        detail: {
-          ...delivery.detail,
-          lastError: String(error?.message ?? error).slice(0, 500)
-        },
-        finishedAt
-      }).catch(() => {});
-      outcomes.push({ deliveryId: delivery.id, status: "FAILED", error: String(error?.message ?? error) });
-    }
+    outcomes.push(await processCompetitionPrizeDelivery(env, competitionId, delivery));
   }
 
   const refreshed = await listCompetitionRewardDeliveries(env.COMPETITIONS_DB, competitionId);
   return {
     attempted: candidates.length,
     outcomes,
-    pending: refreshed.filter((delivery) => delivery.state === "PENDING" || delivery.state === "FAILED").length,
-    delivered: refreshed.filter((delivery) => delivery.state === "DELIVERED").length,
-    manual: refreshed.filter((delivery) => delivery.state === "MANUAL").length,
-    skipped: refreshed.filter((delivery) => delivery.state === "SKIPPED").length,
+    ...deliveryCounts(refreshed),
     deliveries: refreshed
   };
 }
