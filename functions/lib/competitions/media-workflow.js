@@ -37,3 +37,20 @@ export async function cleanupStoredUpload(bucket, key) {
     // Cleanup is best-effort; callers must preserve the primary database response.
   }
 }
+
+export async function privateStoredImageResponse(bucket, image) {
+  try {
+    const object = await bucket.get(image.storageKey);
+    if (!object?.body) return json({ error: "image_not_found" }, 404);
+    const headers = new Headers({
+      "content-type": image.mimeType,
+      "cache-control": "private, no-store",
+      "content-disposition": "inline",
+      "x-content-type-options": "nosniff"
+    });
+    if (object.httpEtag) headers.set("etag", object.httpEtag);
+    return new Response(object.body, { status: 200, headers });
+  } catch {
+    return json({ error: "competition_media_unavailable" }, 503);
+  }
+}
