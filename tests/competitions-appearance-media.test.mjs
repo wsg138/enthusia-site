@@ -11,6 +11,7 @@ import {
 } from "../functions/lib/competitions/media-repository.js";
 import { competitionMediaKey } from "../functions/lib/competitions/media-storage.js";
 import { publicCompetitionConfig } from "../functions/lib/competitions/public.js";
+import { d1 } from "./support/d1-sqlite.mjs";
 
 const COMPETITION_ID = "11111111-1111-4111-8111-111111111111";
 const MEDIA_ID = "22222222-2222-4222-8222-222222222222";
@@ -131,6 +132,115 @@ test("appearance attach preserves draft/version concurrency guard for icon media
   assert.match(db.calls[0].sql, /'ICON'/);
   assert.match(db.calls[0].sql, /lifecycle_state = 'DRAFT'/);
   assert.match(db.calls[2].sql, /COMPETITION_ICON_UPDATED/);
+});
+
+test("appearance media, config version, and audit persist atomically in D1", async () => {
+  const database = await migratedDatabase();
+  const now = "2026-08-23T04:30:00.000Z";
+  const actorUuid = "33333333-3333-4333-8333-333333333333";
+  database.prepare(`
+    INSERT INTO competitions (
+      id, slug, title, category, lifecycle_state, current_config_version,
+      created_by_subject, created_by_uuid, created_at, updated_at
+    ) VALUES (?, 'appearance-write', 'Appearance Write', 'Build', 'DRAFT', 1,
+              'staff:test', ?, ?, ?)
+  `).run(COMPETITION_ID, actorUuid, now, now);
+  database.prepare(`
+    INSERT INTO competition_config_versions (
+      competition_id, version, config_json, created_by_subject,
+      created_by_uuid, created_at, change_note
+    ) VALUES (?, 1, '{"schemaVersion":1}', 'staff:test', ?, ?, 'Initial')
+  `).run(COMPETITION_ID, actorUuid, now);
+
+  const result = await createAndAttachCompetitionAppearanceMedia(d1(database), {
+    id: MEDIA_ID,
+    competitionId: COMPETITION_ID,
+    purpose: "ICON",
+    expectedVersion: 1,
+    storageKey: `competitions/${COMPETITION_ID}/icon/${MEDIA_ID}.png`,
+    sha256: "a".repeat(64),
+    mimeType: "image/png",
+    byteSize: 100,
+    width: 256,
+    height: 256,
+    moderation,
+    config: { schemaVersion: 1, appearance: { iconImageId: MEDIA_ID } },
+    actorSubject: "staff:test",
+    actorUuid,
+    createdAt: "2026-08-23T04:31:00.000Z",
+    operationId: "operation-d1-icon",
+    auditEventId: "audit-d1-icon"
+  });
+
+  assert.equal(result.status, "UPDATED");
+  assert.equal(result.configVersion, 2);
+  assert.equal(
+    database.prepare("SELECT current_config_version FROM competitions WHERE id = ?").get(COMPETITION_ID).current_config_version,
+    2
+  );
+  assert.deepEqual({ ...database.prepare(`
+    SELECT purpose, moderation_outcome AS moderationOutcome
+    FROM competition_media WHERE id = ?
+  `).get(MEDIA_ID) }, { purpose: "ICON", moderationOutcome: "PASSED" });
+  assert.equal(
+    database.prepare("SELECT action FROM competition_audit_events WHERE id = 'audit-d1-icon'").get().action,
+    "COMPETITION_ICON_UPDATED"
+  );
+  database.close();
+});
+
+test("appearance media write rolls back when its config version is stale", async () => {
+  const database = await migratedDatabase();
+  const now = "2026-08-23T04:30:00.000Z";
+  const actorUuid = "33333333-3333-4333-8333-333333333333";
+  database.prepare(`
+    INSERT INTO competitions (
+      id, slug, title, category, lifecycle_state, current_config_version,
+      created_by_subject, created_by_uuid, created_at, updated_at
+    ) VALUES (?, 'appearance-conflict', 'Appearance Conflict', 'Build', 'DRAFT', 1,
+              'staff:test', ?, ?, ?)
+  `).run(COMPETITION_ID, actorUuid, now, now);
+  database.prepare(`
+    INSERT INTO competition_config_versions (
+      competition_id, version, config_json, created_by_subject,
+      created_by_uuid, created_at, change_note
+    ) VALUES (?, 1, '{"schemaVersion":1}', 'staff:test', ?, ?, 'Initial')
+  `).run(COMPETITION_ID, actorUuid, now);
+  database.prepare(`
+    INSERT INTO competition_config_versions (
+      competition_id, version, config_json, created_by_subject,
+      created_by_uuid, created_at, change_note
+    ) VALUES (?, 2, '{"schemaVersion":1}', 'staff:test', ?, ?, 'Current')
+  `).run(COMPETITION_ID, actorUuid, "2026-08-23T04:30:30.000Z");
+
+  const result = await createAndAttachCompetitionAppearanceMedia(d1(database), {
+    id: MEDIA_ID,
+    competitionId: COMPETITION_ID,
+    purpose: "BANNER",
+    expectedVersion: 1,
+    storageKey: `competitions/${COMPETITION_ID}/banner/${MEDIA_ID}.png`,
+    sha256: "b".repeat(64),
+    mimeType: "image/png",
+    byteSize: 100,
+    width: 1200,
+    height: 400,
+    moderation,
+    config: { schemaVersion: 1, appearance: { bannerImageId: MEDIA_ID } },
+    actorSubject: "staff:test",
+    actorUuid,
+    createdAt: "2026-08-23T04:31:00.000Z",
+    operationId: "operation-stale-banner",
+    auditEventId: "audit-stale-banner"
+  });
+
+  assert.equal(result.status, "CONFLICT");
+  assert.equal(database.prepare("SELECT COUNT(*) AS count FROM competition_media").get().count, 0);
+  assert.equal(database.prepare("SELECT COUNT(*) AS count FROM competition_audit_events").get().count, 0);
+  assert.equal(
+    database.prepare("SELECT current_config_version FROM competitions WHERE id = ?").get(COMPETITION_ID).current_config_version,
+    2
+  );
+  database.close();
 });
 
 test("public appearance lookup only serves currently referenced typed assets", async () => {

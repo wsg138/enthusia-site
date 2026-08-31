@@ -6,10 +6,12 @@ import {
 import { competitionImageLimits } from "../../../../../../lib/competitions/media-policy.js";
 import { readLimitedBody, requestMimeType } from "../../../../../../lib/competitions/media-upload.js";
 import {
-  deleteCompetitionImage,
-  prepareCompetitionImage,
-  storePreparedCompetitionImage
-} from "../../../../../../lib/competitions/media-storage.js";
+  cleanupStoredUpload as cleanupStoredImage,
+  imageBodyFailureResponse,
+  preparedImageFailureResponse,
+  storePreparedUpload as storeUpload
+} from "../../../../../../lib/competitions/media-workflow.js";
+import { prepareCompetitionImage } from "../../../../../../lib/competitions/media-storage.js";
 import { getCompetitionParticipantSession } from "../../../../../../lib/competitions/participant-auth.js";
 import { authorizeCompetitionRead } from "../../../../../../lib/competitions/public-access.js";
 import { competitionRateLimit, rateLimitHeaders } from "../../../../../../lib/competitions/rate-limit.js";
@@ -136,18 +138,6 @@ async function preflightUpload(context) {
   return rateLimit.response ? rateLimit : { ...resolved, ...order, revision };
 }
 
-function imageBodyFailureResponse(error) {
-  const code = String(error?.message ?? "invalid_image");
-  return json({ error: code }, code === "image_too_large" ? 413 : 400);
-}
-
-function preparedImageFailureResponse(prepared) {
-  if (prepared.status === "REJECTED") return json({ error: prepared.error || "invalid_image" }, 400);
-  if (prepared.status === "BLOCKED") return json({ error: "image_blocked_by_moderation" }, 422);
-  if (prepared.status !== "READY") return json({ error: "image_moderation_unavailable" }, 503);
-  return null;
-}
-
 async function prepareUpload(context, competition) {
   const limits = competitionImageLimits();
   if (!limits.mimeTypes.includes(requestMimeType(context.request))) {
@@ -174,22 +164,6 @@ async function prepareUpload(context, competition) {
   }
   const response = preparedImageFailureResponse(prepared);
   return response ? { response } : { imageId, prepared };
-}
-
-async function storeUpload(bucket, prepared) {
-  try {
-    return { stored: await storePreparedCompetitionImage(bucket, prepared) };
-  } catch {
-    return { response: json({ error: "competition_media_storage_failed" }, 503) };
-  }
-}
-
-async function cleanupStoredImage(bucket, key) {
-  try {
-    await deleteCompetitionImage(bucket, key);
-  } catch {
-    // A failed best-effort cleanup must not replace the database error response.
-  }
 }
 
 function attachmentRecord(request, uploaded) {

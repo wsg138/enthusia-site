@@ -10,10 +10,12 @@ import { competitionImageLimits } from "../../../../../lib/competitions/media-po
 import { readLimitedBody, requestMimeType } from "../../../../../lib/competitions/media-upload.js";
 import { createAndAttachCompetitionAppearanceMedia } from "../../../../../lib/competitions/media-repository.js";
 import {
-  deleteCompetitionImage,
-  prepareCompetitionImage,
-  storePreparedCompetitionImage
-} from "../../../../../lib/competitions/media-storage.js";
+  cleanupStoredUpload,
+  imageBodyFailureResponse,
+  preparedImageFailureResponse,
+  storePreparedUpload
+} from "../../../../../lib/competitions/media-workflow.js";
+import { prepareCompetitionImage } from "../../../../../lib/competitions/media-storage.js";
 import { json, methodNotAllowed, unauthorized } from "../../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../../lib/security.js";
 import { isCanonicalUuid } from "../../../../../lib/validation.js";
@@ -57,45 +59,72 @@ function expectedVersion(request) {
 }
 
 export async function onRequestPost(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+  const request = await preflightUpload(context);
+  if (request.response) return request.response;
+  const prepared = await prepareUpload(context, request.id, request.purpose);
+  if (prepared.response) return prepared.response;
+  const stored = await storePreparedUpload(context.env.COMPETITIONS_MEDIA, prepared.prepared);
+  if (stored.response) return stored.response;
+  return persistUpload(context, request, { ...prepared, ...stored });
+}
+
+function uploadIdentity(context) {
   const id = competitionId(context);
-  if (!id) return json({ error: "competition_not_found" }, 404);
-
+  if (!id) return { response: json({ error: "competition_not_found" }, 404) };
   const version = expectedVersion(context.request);
-  if (!version) return json({ error: "expected_version_required" }, 400);
+  if (!version) return { response: json({ error: "expected_version_required" }, 400) };
   const purpose = appearancePurpose(context.request);
-  if (!purpose) return json({ error: "invalid_competition_media_purpose" }, 400);
+  return purpose
+    ? { id, version, purpose }
+    : { response: json({ error: "invalid_competition_media_purpose" }, 400) };
+}
 
-  const authorized = await authorizeManager(context);
-  if (authorized.response) return authorized.response;
-
-  let competition;
+async function loadCompetition(context, id) {
   try {
-    competition = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
+    const competition = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
+    return competition
+      ? { competition }
+      : { response: json({ error: "competition_not_found" }, 404) };
   } catch {
-    return json({ error: "competition_database_unavailable" }, 503);
+    return { response: json({ error: "competition_database_unavailable" }, 503) };
   }
-  if (!competition) return json({ error: "competition_not_found" }, 404);
+}
+
+function draftStateResponse(competition, version) {
   if (competition.lifecycleState !== "DRAFT") {
     return json({ error: "competition_media_locked" }, 409);
   }
   if (competition.configVersion !== version) {
     return json({ error: "competition_version_conflict", currentVersion: competition.configVersion }, 409);
   }
+  return null;
+}
 
-  const requestedType = requestMimeType(context.request);
-  if (!competitionImageLimits().mimeTypes.includes(requestedType)) {
-    return json({ error: "unsupported_image_type" }, 415);
+async function preflightUpload(context) {
+  if (!requireSameOrigin(context.request)) return { response: json({ error: "invalid_origin" }, 403) };
+  const identity = uploadIdentity(context);
+  if (identity.response) return identity;
+  const authorized = await authorizeManager(context);
+  if (authorized.response) return authorized;
+  const loaded = await loadCompetition(context, identity.id);
+  if (loaded.response) return loaded;
+  const stateResponse = draftStateResponse(loaded.competition, identity.version);
+  return stateResponse
+    ? { response: stateResponse }
+    : { ...identity, ...authorized, ...loaded };
+}
+
+async function prepareUpload(context, id, purpose) {
+  const limits = competitionImageLimits();
+  if (!limits.mimeTypes.includes(requestMimeType(context.request))) {
+    return { response: json({ error: "unsupported_image_type" }, 415) };
   }
-
   let data;
   try {
-    data = await readLimitedBody(context.request, competitionImageLimits().maxBytes);
+    data = await readLimitedBody(context.request, limits.maxBytes);
   } catch (error) {
-    const code = String(error?.message ?? "invalid_image");
-    return json({ error: code }, code === "image_too_large" ? 413 : 400);
+    return { response: imageBodyFailureResponse(error) };
   }
-
   const mediaId = crypto.randomUUID();
   let prepared;
   try {
@@ -107,77 +136,79 @@ export async function onRequestPost(context) {
       env: context.env
     });
   } catch {
-    return json({ error: "image_processing_failed" }, 400);
+    return { response: json({ error: "image_processing_failed" }, 400) };
   }
+  const response = preparedImageFailureResponse(prepared);
+  return response ? { response } : { mediaId, prepared };
+}
 
-  if (prepared.status === "REJECTED") {
-    return json({ error: prepared.error || "invalid_image" }, 400);
-  }
-  if (prepared.status === "BLOCKED") {
-    return json({ error: "image_blocked_by_moderation" }, 422);
-  }
-  if (prepared.status !== "READY") {
-    return json({ error: "image_moderation_unavailable" }, 503);
-  }
-
-  let stored;
-  try {
-    stored = await storePreparedCompetitionImage(context.env.COMPETITIONS_MEDIA, prepared);
-  } catch {
-    return json({ error: "competition_media_storage_failed" }, 503);
-  }
-
-  const now = new Date().toISOString();
+function updatedAppearanceConfig(competition, purpose, mediaId) {
   const config = structuredClone(competition.config);
   config.appearance = {
     ...(config.appearance ?? {}),
     [purpose.field]: mediaId
   };
+  return config;
+}
 
+function appearanceRecord(request, uploaded) {
+  return {
+    id: uploaded.mediaId,
+    competitionId: request.id,
+    purpose: request.purpose.database,
+    expectedVersion: request.version,
+    storageKey: uploaded.stored.key,
+    sha256: uploaded.stored.sha256,
+    mimeType: uploaded.stored.mimeType,
+    byteSize: uploaded.stored.size,
+    width: uploaded.stored.width,
+    height: uploaded.stored.height,
+    moderation: uploaded.stored.moderation,
+    config: updatedAppearanceConfig(request.competition, request.purpose, uploaded.mediaId),
+    actorSubject: request.session.subject,
+    actorUuid: request.session.player.uuid,
+    createdAt: new Date().toISOString(),
+    operationId: crypto.randomUUID(),
+    auditEventId: crypto.randomUUID()
+  };
+}
+
+function appearanceResponse(request, attached) {
+  return json({
+    media: {
+      id: attached.media.id,
+      purpose: attached.media.purpose,
+      appearanceField: attached.appearanceField,
+      mimeType: attached.media.mimeType,
+      byteSize: attached.media.byteSize,
+      width: attached.media.width,
+      height: attached.media.height,
+      sha256: attached.media.sha256,
+      previewUrl: `/api/competitions/admin/${request.id}/media/${attached.media.id}`
+    },
+    configVersion: attached.configVersion
+  }, 201);
+}
+
+function versionConflictError(error) {
+  const message = String(error?.message ?? error);
+  return message.includes("stale_competition_config_version") || message.includes("UNIQUE constraint");
+}
+
+async function persistUpload(context, request, uploaded) {
   try {
-    const attached = await createAndAttachCompetitionAppearanceMedia(context.env.COMPETITIONS_DB, {
-      id: mediaId,
-      competitionId: id,
-      purpose: purpose.database,
-      expectedVersion: version,
-      storageKey: stored.key,
-      sha256: stored.sha256,
-      mimeType: stored.mimeType,
-      byteSize: stored.size,
-      width: stored.width,
-      height: stored.height,
-      moderation: stored.moderation,
-      config,
-      actorSubject: authorized.session.subject,
-      actorUuid: authorized.session.player.uuid,
-      createdAt: now,
-      operationId: crypto.randomUUID(),
-      auditEventId: crypto.randomUUID()
-    });
-
+    const attached = await createAndAttachCompetitionAppearanceMedia(
+      context.env.COMPETITIONS_DB,
+      appearanceRecord(request, uploaded)
+    );
     if (attached.status !== "UPDATED") {
-      await deleteCompetitionImage(context.env.COMPETITIONS_MEDIA, stored.key).catch(() => {});
+      await cleanupStoredUpload(context.env.COMPETITIONS_MEDIA, uploaded.stored.key);
       return json({ error: "competition_version_conflict" }, 409);
     }
-
-    return json({
-      media: {
-        id: attached.media.id,
-        purpose: attached.media.purpose,
-        appearanceField: attached.appearanceField,
-        mimeType: attached.media.mimeType,
-        byteSize: attached.media.byteSize,
-        width: attached.media.width,
-        height: attached.media.height,
-        sha256: attached.media.sha256,
-        previewUrl: `/api/competitions/admin/${id}/media/${attached.media.id}`
-      },
-      configVersion: attached.configVersion
-    }, 201);
+    return appearanceResponse(request, attached);
   } catch (error) {
-    await deleteCompetitionImage(context.env.COMPETITIONS_MEDIA, stored.key).catch(() => {});
-    const message = String(error?.message ?? error);
-    if (message.includes("stale_competition_config_version") || message.includes("UNIQUE constraint")) {
+    await cleanupStoredUpload(context.env.COMPETITIONS_MEDIA, uploaded.stored.key);
+    if (versionConflictError(error)) {
       return json({ error: "competition_version_conflict" }, 409);
     }
     return json({ error: "competition_media_record_failed" }, 503);
