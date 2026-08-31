@@ -190,6 +190,42 @@ test("changes requested after the review deadline cannot update the draft", asyn
   database.close();
 });
 
+test("same-millisecond stale draft update cannot change private location", async () => {
+  const database = await seededDatabase();
+  insertLocation(database);
+  const updatedAt = "2026-08-28T14:01:00.000Z";
+  database.prepare(`
+    UPDATE submissions
+    SET title = 'Newer title', revision = 2, updated_at = ?
+    WHERE id = ?
+  `).run(updatedAt, SUBMISSION_ID);
+
+  const result = await updateOwnedSubmissionDraft(d1(database), draftUpdate({
+    updatedAt,
+    location: {
+      worldName: "stale-world",
+      x: 20,
+      y: 80,
+      z: 30,
+      exactCoordinatesConfirmed: true
+    },
+    clearLocation: false
+  }));
+  assert.deepEqual(result, { status: "CONFLICT" });
+  assert.equal(submissionRow(database).title, "Newer title");
+  assert.deepEqual({ ...database.prepare(`
+    SELECT world_name AS worldName, block_x AS x, block_y AS y, block_z AS z
+    FROM submission_private_locations WHERE submission_id = ?
+  `).get(SUBMISSION_ID) }, {
+    worldName: "world",
+    x: 1,
+    y: 64,
+    z: 2
+  });
+  assert.equal(auditCount(database), 0);
+  database.close();
+});
+
 test("submission stops when the competition locks before the database batch", async () => {
   const database = await seededDatabase();
   const result = await submitSubmissionForReview(d1(database, {

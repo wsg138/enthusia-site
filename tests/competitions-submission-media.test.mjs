@@ -329,6 +329,20 @@ test("player changes requested after the review deadline do not attach media", a
   database.close();
 });
 
+test("same-millisecond stale attachment cannot persist after another submission write", async () => {
+  const database = await seededDatabase();
+  database.prepare(`
+    UPDATE submissions SET revision = 2, updated_at = ? WHERE id = ?
+  `).run(NOW, SUBMISSION_ID);
+
+  const result = await attachSubmissionImage(d1(database), playerImage());
+  assert.deepEqual(result, { status: "CONFLICT" });
+  assert.equal(database.prepare("SELECT COUNT(*) AS count FROM submission_images").get().count, 0);
+  assert.equal(database.prepare("SELECT COUNT(*) AS count FROM moderation_checks").get().count, 0);
+  assert.equal(database.prepare("SELECT COUNT(*) AS count FROM competition_audit_events").get().count, 0);
+  database.close();
+});
+
 test("same-millisecond stale removal cannot mutate a second submission image", async () => {
   const database = await seededDatabase();
   const db = d1(database);
