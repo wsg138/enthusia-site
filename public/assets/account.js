@@ -58,7 +58,7 @@ async function unlink(account, button) {
       body: JSON.stringify({ action: "UNLINK", minecraftUuid: account.uuid })
     });
     await render();
-  } catch {
+  } catch (error) {
     button.disabled = false;
     window.alert("That Minecraft account could not be unlinked.");
   }
@@ -98,10 +98,10 @@ async function pollLink(requestId, expiresAt, status, button) {
 }
 
 async function startLink(button, output, status) {
-  button.disabled = true;
-  output.textContent = "";
-  status.textContent = "Generating a link code…";
   try {
+    button.disabled = true;
+    output.textContent = "";
+    status.textContent = "Generating a link code…";
     const payload = await request(`${API}/link`, {
       method: "POST",
       body: JSON.stringify({ action: "START" })
@@ -109,7 +109,7 @@ async function startLink(button, output, status) {
     output.textContent = payload.command || `/competitionlink ${payload.code}`;
     status.textContent = "Run this command in-game. This page will update when the account is linked.";
     await pollLink(payload.requestId, payload.expiresAt, status, button);
-  } catch {
+  } catch (error) {
     status.textContent = "Account linking is unavailable right now.";
     button.disabled = false;
   }
@@ -172,7 +172,9 @@ function signedIn(session) {
   const command = element("code", "account-link-command");
   const status = element("p", "account-link-status");
   status.setAttribute("role", "status");
-  button.addEventListener("click", () => startLink(button, command, status));
+  button.addEventListener("click", () => {
+    void startLink(button, command, status);
+  });
   linker.append(copy, button, command, status);
 
   root.append(header, links, linker);
@@ -184,7 +186,7 @@ async function render() {
     const session = await request(`${API}/session`);
     if (session.authenticated) signedIn(session);
     else signedOut();
-  } catch {
+  } catch (error) {
     showAccountLoadError();
   }
 }
