@@ -1,25 +1,30 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
+import {
+  containedFilename,
+  projectInputPath,
+  wikiOutputPath
+} from './project-paths.mjs';
 
-const SOURCE = process.env.WIKI_DEMO_SOURCE || 'public/wiki-demo';
-const RENDERED = process.env.WIKI_RENDER_OUT || 'wiki-worker-output/rendered';
+const SOURCE = projectInputPath(process.env.WIKI_DEMO_SOURCE, 'public/wiki-demo', 'Wiki source');
+const RENDERED = wikiOutputPath(process.env.WIKI_RENDER_OUT);
 const loadOrder = ['v2-core.js','v2-support.js','v2-commands.js','v2-detail.js','v2-final.js','v2-polish.js','v2-reputation.js'];
 
 globalThis.window = {};
 for (const name of loadOrder) {
-  const file = path.join(SOURCE, name);
+  const file = containedFilename(SOURCE, name, 'Wiki source filename');
   if (!fs.existsSync(file)) throw new Error(`Missing wiki source file: ${file}`);
   vm.runInThisContext(fs.readFileSync(file, 'utf8'), { filename: file });
 }
 const sourcePages = window.WIKI_V2?.pages;
 if (!sourcePages) throw new Error('WIKI_V2 pages did not load');
 
-const manifestPath = path.join(RENDERED, 'manifest.json');
+const manifestPath = containedFilename(RENDERED, 'manifest.json');
 if (!fs.existsSync(manifestPath)) throw new Error('Rendered manifest is missing');
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 const byId = new Map(manifest.pages.map(item => [item.id, item]));
-const cssPath = path.join(RENDERED, 'EnthusiaWiki.styles.css');
+const cssPath = containedFilename(RENDERED, 'EnthusiaWiki.styles.css');
 const css = fs.readFileSync(cssPath, 'utf8');
 
 const failures = [];
@@ -45,7 +50,7 @@ for (const [id, page] of Object.entries(sourcePages)) {
     failures.push(`${id}: rendered manifest entry is missing`);
     continue;
   }
-  const file = path.join(RENDERED, item.filename);
+  const file = containedFilename(RENDERED, item.filename, 'Rendered wiki filename');
   if (!fs.existsSync(file)) {
     failures.push(`${id}: rendered page file is missing`);
     continue;
@@ -93,11 +98,11 @@ for (const [id, page] of Object.entries(sourcePages)) {
   if (actualTables !== expectedTables) failures.push(`${id}: responsive table count ${actualTables} != source ${expectedTables}`);
 }
 
-const mechanics = fs.readFileSync(path.join(RENDERED, byId.get('mechanics').filename), 'utf8');
+const mechanics = fs.readFileSync(containedFilename(RENDERED, byId.get('mechanics').filename, 'Mechanics filename'), 'utf8');
 if (mechanics.includes('Server Informationpermanent world')) failures.push('mechanics: title and description were concatenated');
 const historyItem = byId.get('history-lore');
 if (historyItem) {
-  const history = fs.readFileSync(path.join(RENDERED, historyItem.filename), 'utf8');
+  const history = fs.readFileSync(containedFilename(RENDERED, historyItem.filename, 'History filename'), 'utf8');
   if (history.includes('Player Pagesplayers')) failures.push('history-lore: title and description were concatenated');
 }
 

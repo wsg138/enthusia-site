@@ -2,6 +2,7 @@ dist/
 minecraft/competition-bridge/target/
 .visual-test/
 .wrangler/
+wiki-worker-output/
 __pycache__/
 *.pyc
 .dev.vars
