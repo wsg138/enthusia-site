@@ -35,6 +35,7 @@ def http_json(url, data=None, retries=4):
                 time.sleep(2 + attempt * 2)
                 continue
             raise RuntimeError(f'Unable to reach {url}: {exc}') from exc
+    raise RuntimeError('HTTP request retries exhausted')
 
 
 def api(params, method='GET'):

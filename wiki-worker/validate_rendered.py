@@ -37,6 +37,7 @@ def api(params, retries=4):
                 time.sleep(2 + attempt * 2)
                 continue
             raise RuntimeError(f'Unable to reach Miraheze parser: {exc}') from exc
+    raise RuntimeError('MediaWiki parser request retries exhausted')
 
 
 def escaped_unsupported_tags(parsed_html):
@@ -81,7 +82,7 @@ def main():
                 raise RuntimeError(f'MediaWiki escaped unsupported HTML tag(s): {", ".join(escaped)}')
             report['validated'].append({'title': title, 'ok': True})
             print(f'PARSE OK {title}')
-        except Exception as exc:
+        except (RuntimeError, ValueError, KeyError, TypeError, AttributeError) as exc:
             failures.append({'title': title, 'error': str(exc)})
             print(f'PARSE FAIL {title}: {exc}', file=sys.stderr)
 
@@ -96,6 +97,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Exception as exc:
+    except (RuntimeError, ValueError, KeyError, TypeError, AttributeError, OSError) as exc:
         print(f'VALIDATION ERROR: {exc}', file=sys.stderr)
         sys.exit(1)

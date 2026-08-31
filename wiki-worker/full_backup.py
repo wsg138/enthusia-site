@@ -47,7 +47,7 @@ def request(params, method='GET', retries=4):
                 time.sleep(2 + attempt * 2)
                 continue
             raise RuntimeError(f'HTTP {exc.code}: {body[:1000]}') from exc
-        except (urllib.error.URLError, TimeoutError) as exc:
+        except (urllib.error.URLError, TimeoutError):
             if attempt + 1 < retries:
                 time.sleep(2 + attempt * 2)
                 continue
