@@ -47,54 +47,91 @@ async function authorize(context) {
   return { session };
 }
 
-export async function onRequestPost(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-  const authorized = await authorize(context);
-  if (authorized.response) return authorized.response;
+function uploadIdentity(context) {
   const competitionId = paramUuid(context, "id");
   const submissionId = paramUuid(context, "submissionId");
-  const revision = expectedRevision(context.request);
-  if (!competitionId || !submissionId) return json({ error: "submission_not_found" }, 404);
-  if (!revision) return json({ error: "expected_revision_required" }, 400);
-
-  let competition;
-  let submission;
-  try {
-    [competition, submission] = await Promise.all([
-      getAdminCompetition(context.env.COMPETITIONS_DB, competitionId),
-      getStaffSubmission(context.env.COMPETITIONS_DB, competitionId, submissionId)
-    ]);
-  } catch {
-    return json({ error: "submission_unavailable" }, 503);
+  if (!competitionId || !submissionId) {
+    return { response: json({ error: "submission_not_found" }, 404) };
   }
-  if (!competition || !submission) return json({ error: "submission_not_found" }, 404);
+  const revision = expectedRevision(context.request);
+  return revision
+    ? { competitionId, submissionId, revision }
+    : { response: json({ error: "expected_revision_required" }, 400) };
+}
+
+async function loadManualSubmission(context, identity) {
+  try {
+    const database = context.env.COMPETITIONS_DB;
+    const [competition, submission] = await Promise.all([
+      getAdminCompetition(database, identity.competitionId),
+      getStaffSubmission(database, identity.competitionId, identity.submissionId)
+    ]);
+    return competition && submission
+      ? { competition, submission }
+      : { response: json({ error: "submission_not_found" }, 404) };
+  } catch {
+    return { response: json({ error: "submission_unavailable" }, 503) };
+  }
+}
+
+function manualUploadStateResponse(competition, submission, revision) {
   if (!String(submission.ownerSubject ?? "").startsWith("staff-manual:")) {
     return json({ error: "manual_submission_required" }, 409);
   }
-  if (!["SUBMISSIONS_OPEN", "REVIEW"].includes(competition.lifecycleState)
-      || !["PENDING_REVIEW", "NEEDS_CHANGES"].includes(submission.status)) {
-    return json({ error: "submission_locked" }, 409);
-  }
+  const activeLifecycle = ["SUBMISSIONS_OPEN", "REVIEW"].includes(competition.lifecycleState);
+  const editableStatus = ["PENDING_REVIEW", "NEEDS_CHANGES"].includes(submission.status);
+  if (!activeLifecycle || !editableStatus) return json({ error: "submission_locked" }, 409);
   if (submission.revision !== revision) return json({ error: "submission_revision_conflict" }, 409);
-  let sortOrder;
-  try {
-    sortOrder = await nextStoredSubmissionImageSortOrder(context.env.COMPETITIONS_DB, submissionId);
-  } catch {
-    return json({ error: "submission_images_unavailable" }, 503);
-  }
-  const requestedType = requestMimeType(context.request);
-  if (!competitionImageLimits().mimeTypes.includes(requestedType)) {
-    return json({ error: "unsupported_image_type" }, 415);
-  }
+  return null;
+}
 
+async function uploadSortOrder(database, submissionId) {
+  try {
+    return { sortOrder: await nextStoredSubmissionImageSortOrder(database, submissionId) };
+  } catch {
+    return { response: json({ error: "submission_images_unavailable" }, 503) };
+  }
+}
+
+async function preflightUpload(context) {
+  if (!requireSameOrigin(context.request)) return { response: json({ error: "invalid_origin" }, 403) };
+  const authorized = await authorize(context);
+  if (authorized.response) return authorized;
+  const identity = uploadIdentity(context);
+  if (identity.response) return identity;
+  const loaded = await loadManualSubmission(context, identity);
+  if (loaded.response) return loaded;
+  const stateResponse = manualUploadStateResponse(loaded.competition, loaded.submission, identity.revision);
+  if (stateResponse) return { response: stateResponse };
+  const order = await uploadSortOrder(context.env.COMPETITIONS_DB, identity.submissionId);
+  return order.response
+    ? order
+    : { ...authorized, ...identity, ...loaded, ...order };
+}
+
+function imageBodyFailureResponse(error) {
+  const code = String(error?.message ?? "invalid_image");
+  return json({ error: code }, code === "image_too_large" ? 413 : 400);
+}
+
+function preparedImageFailureResponse(prepared) {
+  if (prepared.status === "REJECTED") return json({ error: prepared.error || "invalid_image" }, 400);
+  if (prepared.status === "BLOCKED") return json({ error: "image_blocked_by_moderation" }, 422);
+  if (prepared.status !== "READY") return json({ error: "image_moderation_unavailable" }, 503);
+  return null;
+}
+
+async function prepareUpload(context, competitionId) {
+  const limits = competitionImageLimits();
+  if (!limits.mimeTypes.includes(requestMimeType(context.request))) {
+    return { response: json({ error: "unsupported_image_type" }, 415) };
+  }
   let data;
   try {
-    data = await readLimitedBody(context.request, competitionImageLimits().maxBytes);
+    data = await readLimitedBody(context.request, limits.maxBytes);
   } catch (error) {
-    const code = String(error?.message ?? "invalid_image");
-    return json({ error: code }, code === "image_too_large" ? 413 : 400);
+    return { response: imageBodyFailureResponse(error) };
   }
-
   const imageId = crypto.randomUUID();
   let prepared;
   try {
@@ -106,66 +143,103 @@ export async function onRequestPost(context) {
       env: context.env
     });
   } catch {
-    return json({ error: "image_processing_failed" }, 400);
+    return { response: json({ error: "image_processing_failed" }, 400) };
   }
-  if (prepared.status === "REJECTED") return json({ error: prepared.error || "invalid_image" }, 400);
-  if (prepared.status === "BLOCKED") return json({ error: "image_blocked_by_moderation" }, 422);
-  if (prepared.status !== "READY") return json({ error: "image_moderation_unavailable" }, 503);
+  const response = preparedImageFailureResponse(prepared);
+  return response ? { response } : { imageId, prepared };
+}
 
-  let stored;
+async function storeUpload(bucket, prepared) {
   try {
-    stored = await storePreparedCompetitionImage(context.env.COMPETITIONS_MEDIA, prepared);
+    return { stored: await storePreparedCompetitionImage(bucket, prepared) };
   } catch {
-    return json({ error: "competition_media_storage_failed" }, 503);
+    return { response: json({ error: "competition_media_storage_failed" }, 503) };
   }
+}
 
-  const createdAt = new Date().toISOString();
+async function cleanupStoredImage(bucket, key) {
   try {
-    const attached = await attachStaffSubmissionImage(context.env.COMPETITIONS_DB, {
-      id: imageId,
-      competitionId,
-      submissionId,
-      actorSubject: authorized.session.subject,
-      actorUuid: authorized.session.player.uuid,
-      expectedRevision: revision,
-      expectedConfigVersion: competition.configVersion,
-      sortOrder,
-      storageKey: stored.key,
-      sha256: stored.sha256,
-      mimeType: stored.mimeType,
-      byteSize: stored.size,
-      width: stored.width,
-      height: stored.height,
-      moderation: stored.moderation,
-      moderationCheckId: crypto.randomUUID(),
-      auditEventId: crypto.randomUUID(),
-      createdAt
-    });
+    await deleteCompetitionImage(bucket, key);
+  } catch {
+    // A failed best-effort cleanup must not replace the database error response.
+  }
+}
+
+function attachmentRecord(request, uploaded) {
+  return {
+    id: uploaded.imageId,
+    competitionId: request.competitionId,
+    submissionId: request.submissionId,
+    actorSubject: request.session.subject,
+    actorUuid: request.session.player.uuid,
+    expectedRevision: request.revision,
+    expectedConfigVersion: request.competition.configVersion,
+    sortOrder: request.sortOrder,
+    storageKey: uploaded.stored.key,
+    sha256: uploaded.stored.sha256,
+    mimeType: uploaded.stored.mimeType,
+    byteSize: uploaded.stored.size,
+    width: uploaded.stored.width,
+    height: uploaded.stored.height,
+    moderation: uploaded.stored.moderation,
+    moderationCheckId: crypto.randomUUID(),
+    auditEventId: crypto.randomUUID(),
+    createdAt: new Date().toISOString()
+  };
+}
+
+function uploadedImageResponse(request, uploaded, revision) {
+  return json({
+    image: {
+      id: uploaded.imageId,
+      sortOrder: request.sortOrder,
+      mimeType: uploaded.stored.mimeType,
+      byteSize: uploaded.stored.size,
+      width: uploaded.stored.width,
+      height: uploaded.stored.height,
+      moderationState: "PASSED",
+      previewUrl: `/api/competitions/admin/${request.competitionId}/submissions/${request.submissionId}/images/${uploaded.imageId}`
+    },
+    revision
+  }, 201);
+}
+
+async function persistUpload(context, request, uploaded) {
+  try {
+    const attached = await attachStaffSubmissionImage(
+      context.env.COMPETITIONS_DB,
+      attachmentRecord(request, uploaded)
+    );
     if (attached.status !== "UPDATED") {
-      await deleteCompetitionImage(context.env.COMPETITIONS_MEDIA, stored.key).catch(() => {});
+      await cleanupStoredImage(context.env.COMPETITIONS_MEDIA, uploaded.stored.key);
       return json({ error: "submission_revision_conflict" }, 409);
     }
-    return json({
-      image: {
-        id: imageId,
-        sortOrder,
-        mimeType: stored.mimeType,
-        byteSize: stored.size,
-        width: stored.width,
-        height: stored.height,
-        moderationState: "PASSED",
-        previewUrl: `/api/competitions/admin/${competitionId}/submissions/${submissionId}/images/${imageId}`
-      },
-      revision: attached.revision
-    }, 201);
+    return uploadedImageResponse(request, uploaded, attached.revision);
   } catch {
-    await deleteCompetitionImage(context.env.COMPETITIONS_MEDIA, stored.key).catch(() => {});
+    await cleanupStoredImage(context.env.COMPETITIONS_MEDIA, uploaded.stored.key);
     return json({ error: "submission_image_record_failed" }, 503);
   }
+}
+
+export async function onRequestPost(context) {
+  const request = await preflightUpload(context);
+  if (request.response) return request.response;
+  const prepared = await prepareUpload(context, request.competitionId);
+  if (prepared.response) return prepared.response;
+  const storage = await storeUpload(context.env.COMPETITIONS_MEDIA, prepared.prepared);
+  if (storage.response) return storage.response;
+  return persistUpload(context, request, { ...prepared, ...storage });
 }
 
 export function onRequest() {
   return methodNotAllowed(["POST"]);
 }
 
-export { expectedRevision, paramUuid, readLimitedBody };
+export {
+  expectedRevision,
+  imageBodyFailureResponse,
+  manualUploadStateResponse,
+  paramUuid,
+  preparedImageFailureResponse,
+  readLimitedBody
+};

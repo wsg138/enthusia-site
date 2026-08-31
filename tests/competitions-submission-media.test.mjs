@@ -8,7 +8,10 @@ import {
   nextStoredSubmissionImageSortOrder,
   removeSubmissionImage
 } from "../functions/lib/competitions/submission-media.js";
-import { attachStaffSubmissionImage } from "../functions/lib/competitions/staff-media.js";
+import {
+  attachStaffSubmissionImage,
+  removeStaffSubmissionImage
+} from "../functions/lib/competitions/staff-media.js";
 import { d1, migratedDatabase } from "./support/d1-sqlite.mjs";
 
 const COMPETITION_ID = "10000000-0000-4000-8000-000000000001";
@@ -79,6 +82,14 @@ function playerImage(overrides = {}) {
     moderationCheckId: "50000000-0000-4000-8000-000000000005",
     auditEventId: "60000000-0000-4000-8000-000000000006",
     createdAt: NOW,
+    ...overrides
+  };
+}
+
+function staffImage(overrides = {}) {
+  return {
+    ...playerImage({ ownerSubject: "staff-manual:test" }),
+    actorSubject: "staff:test",
     ...overrides
   };
 }
@@ -226,12 +237,102 @@ test("staff media writes also recheck the current competition lifecycle", async 
     submissionStatus: "PENDING_REVIEW",
     ownerSubject: staffSubject
   });
-  const result = await attachStaffSubmissionImage(d1(database), {
-    ...playerImage({ ownerSubject: staffSubject }),
-    actorSubject: "staff:test",
-    expectedConfigVersion: 1
-  });
+  const result = await attachStaffSubmissionImage(d1(database), staffImage());
   assert.deepEqual(result, { status: "CONFLICT" });
   assert.equal(database.prepare("SELECT COUNT(*) AS count FROM submission_images").get().count, 0);
+  database.close();
+});
+
+test("staff image removal rechecks the current competition lifecycle", async () => {
+  const database = await seededDatabase({
+    submissionStatus: "PENDING_REVIEW",
+    ownerSubject: "staff-manual:test"
+  });
+  const db = d1(database);
+  assert.deepEqual(await attachStaffSubmissionImage(db, staffImage()), { status: "UPDATED", revision: 2 });
+  database.prepare("UPDATE competitions SET lifecycle_state = 'VOTING' WHERE id = ?").run(COMPETITION_ID);
+
+  const result = await removeStaffSubmissionImage(db, {
+    competitionId: COMPETITION_ID,
+    submissionId: SUBMISSION_ID,
+    imageId: IMAGE_ID,
+    expectedRevision: 2,
+    expectedConfigVersion: 1,
+    actorSubject: "staff:test",
+    removedByUuid: OWNER_UUID,
+    privateNote: "Removed by staff",
+    removedAt: "2026-08-28T14:05:00.000Z",
+    auditEventId: "70000000-0000-4000-8000-000000000019"
+  });
+  assert.deepEqual(result, { status: "CONFLICT" });
+  assert.equal(database.prepare("SELECT removed_at FROM submission_images WHERE id = ?").get(IMAGE_ID).removed_at, null);
+  database.close();
+});
+
+test("staff may remove a player image while competition review is active", async () => {
+  const database = await seededDatabase();
+  const db = d1(database);
+  assert.deepEqual(await attachSubmissionImage(db, playerImage()), { status: "UPDATED", revision: 2 });
+  const result = await removeStaffSubmissionImage(db, {
+    competitionId: COMPETITION_ID,
+    submissionId: SUBMISSION_ID,
+    imageId: IMAGE_ID,
+    expectedRevision: 2,
+    expectedConfigVersion: 1,
+    actorSubject: "staff:test",
+    removedByUuid: OWNER_UUID,
+    privateNote: "Removed during moderation",
+    removedAt: "2026-08-28T14:05:30.000Z",
+    auditEventId: "70000000-0000-4000-8000-000000000029"
+  });
+  assert.deepEqual(result, { status: "UPDATED", revision: 3 });
+  assert.equal(
+    database.prepare("SELECT removed_at FROM submission_images WHERE id = ?").get(IMAGE_ID).removed_at,
+    "2026-08-28T14:05:30.000Z"
+  );
+  database.close();
+});
+
+test("same-millisecond stale staff removal cannot mutate a second image", async () => {
+  const database = await seededDatabase({
+    submissionStatus: "PENDING_REVIEW",
+    ownerSubject: "staff-manual:test"
+  });
+  const db = d1(database);
+  const secondImageId = "40000000-0000-4000-8000-000000000024";
+  assert.deepEqual(await attachStaffSubmissionImage(db, staffImage()), { status: "UPDATED", revision: 2 });
+  assert.deepEqual(await attachStaffSubmissionImage(db, staffImage({
+    id: secondImageId,
+    expectedRevision: 2,
+    sortOrder: 1,
+    storageKey: `competitions/${COMPETITION_ID}/submissions/${secondImageId}.png`,
+    moderationCheckId: "50000000-0000-4000-8000-000000000025",
+    auditEventId: "60000000-0000-4000-8000-000000000026"
+  })), { status: "UPDATED", revision: 3 });
+
+  const removal = {
+    competitionId: COMPETITION_ID,
+    submissionId: SUBMISSION_ID,
+    expectedRevision: 3,
+    expectedConfigVersion: 1,
+    actorSubject: "staff:test",
+    removedByUuid: OWNER_UUID,
+    privateNote: "Removed by staff",
+    removedAt: "2026-08-28T14:06:00.000Z"
+  };
+  assert.deepEqual(await removeStaffSubmissionImage(db, {
+    ...removal,
+    imageId: IMAGE_ID,
+    auditEventId: "70000000-0000-4000-8000-000000000027"
+  }), { status: "UPDATED", revision: 4 });
+  assert.deepEqual(await removeStaffSubmissionImage(db, {
+    ...removal,
+    imageId: secondImageId,
+    auditEventId: "80000000-0000-4000-8000-000000000028"
+  }), { status: "CONFLICT" });
+  assert.equal(
+    database.prepare("SELECT removed_at FROM submission_images WHERE id = ?").get(secondImageId).removed_at,
+    null
+  );
   database.close();
 });

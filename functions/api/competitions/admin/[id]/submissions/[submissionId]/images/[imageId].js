@@ -5,6 +5,7 @@ import {
   hasCompetitionDatabase,
   hasCompetitionMedia
 } from "../../../../../../../lib/competitions/access.js";
+import { getAdminCompetition } from "../../../../../../../lib/competitions/drafts.js";
 import { deleteCompetitionImage } from "../../../../../../../lib/competitions/media-storage.js";
 import {
   getStaffSubmissionImage,
@@ -43,12 +44,15 @@ async function resolve(context, session) {
   const imageId = paramUuid(context, "imageId");
   if (!competitionId || !submissionId || !imageId) return { response: json({ error: "image_not_found" }, 404) };
   try {
-    const [submission, image] = await Promise.all([
+    const [competition, submission, image] = await Promise.all([
+      getAdminCompetition(context.env.COMPETITIONS_DB, competitionId),
       getStaffSubmission(context.env.COMPETITIONS_DB, competitionId, submissionId),
       getStaffSubmissionImage(context.env.COMPETITIONS_DB, competitionId, submissionId, imageId)
     ]);
-    if (!submission || !image || image.removedAt) return { response: json({ error: "image_not_found" }, 404) };
-    return { session, competitionId, submissionId, imageId, submission, image };
+    if (!competition || !submission || !image || image.removedAt) {
+      return { response: json({ error: "image_not_found" }, 404) };
+    }
+    return { session, competitionId, submissionId, imageId, competition, submission, image };
   } catch {
     return { response: json({ error: "competition_media_unavailable" }, 503) };
   }
@@ -94,6 +98,9 @@ export async function onRequestDelete(context) {
   if (!Number.isInteger(expectedRevision) || expectedRevision < 1 || !privateNote || privateNote.length > 4000) {
     return json({ error: "invalid_image_removal" }, 400);
   }
+  if (!["SUBMISSIONS_OPEN", "REVIEW"].includes(resolved.competition.lifecycleState)) {
+    return json({ error: "submission_locked" }, 409);
+  }
   if (resolved.submission.revision !== expectedRevision) return json({ error: "submission_revision_conflict" }, 409);
 
   const removedAt = new Date().toISOString();
@@ -103,6 +110,7 @@ export async function onRequestDelete(context) {
       submissionId: resolved.submissionId,
       imageId: resolved.imageId,
       expectedRevision,
+      expectedConfigVersion: resolved.competition.configVersion,
       actorSubject: authorized.session.subject,
       removedByUuid: authorized.session.player.uuid,
       privateNote,
