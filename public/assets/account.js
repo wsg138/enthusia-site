@@ -108,7 +108,7 @@ async function startLink(button, output, status) {
     });
     output.textContent = payload.command || `/competitionlink ${payload.code}`;
     status.textContent = "Run this command in-game. This page will update when the account is linked.";
-    pollLink(payload.requestId, payload.expiresAt, status, button);
+    await pollLink(payload.requestId, payload.expiresAt, status, button);
   } catch {
     status.textContent = "Account linking is unavailable right now.";
     button.disabled = false;

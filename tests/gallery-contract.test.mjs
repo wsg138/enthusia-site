@@ -39,7 +39,9 @@ test("public media route is approved-only and Gallery documents all six categori
   const page = await readFile(new URL("../public/gallery.html", import.meta.url), "utf8");
   const browser = await readFile(new URL("../public/assets/gallery.js", import.meta.url), "utf8");
   assert.match(media, /status = 'APPROVED'/);
-  for (const category of ["COMMUNITY_BUILDS", "PVP", "BETA_1", "BETA_2", "BETA_3", "MAPART"]) assert.match(page, new RegExp(category));
+  for (const category of ["COMMUNITY_BUILDS", "PVP", "BETA_1", "BETA_2", "BETA_3", "MAPART"]) {
+    assert.ok(page.includes(category), `Missing Gallery category: ${category}`);
+  }
   assert.match(page, /Every image is reviewed before it appears here/);
   assert.doesNotMatch(browser, /\.innerHTML\s*=/);
   assert.match(browser, /replaceChildren/);

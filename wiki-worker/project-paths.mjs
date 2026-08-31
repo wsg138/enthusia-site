@@ -45,9 +45,21 @@ export function containedFilename(directory, filename, label = "Generated filena
   return requireDescendant(path.resolve(directory), path.resolve(directory, filename), label);
 }
 
+function isWikiPageIdCharacter(character) {
+  const code = character.charCodeAt(0);
+  return (code >= 97 && code <= 122) || (code >= 48 && code <= 57);
+}
+
+function isWikiPageIdSegment(segment) {
+  return segment.length > 0 && segment.split("").every(isWikiPageIdCharacter);
+}
+
+function isWikiPageId(value) {
+  if (typeof value !== "string" || value.length === 0 || value.length > 128) return false;
+  return value.split("-").every(isWikiPageIdSegment);
+}
+
 export function wikiPageFilename(id) {
-  if (typeof id !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) {
-    throw new Error("Wiki page ID is invalid");
-  }
+  if (!isWikiPageId(id)) throw new Error("Wiki page ID is invalid");
   return `${id}.wiki`;
 }

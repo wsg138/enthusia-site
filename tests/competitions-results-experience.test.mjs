@@ -2,9 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
+function assertIncludes(source, markers) {
+  for (const marker of markers) assert.ok(source.includes(marker), `Missing expected marker: ${marker}`);
+}
+
 test("completed competition overview includes winner dates prizes members and entry viewer", async () => {
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
-  for (const marker of ["competition-completed-summary", "Started", "Ended", "participantLabel", "showEntryDialog", "Previous entry", "Next entry", "openImageLightbox", "competition-entry-gallery"]) assert.match(source, new RegExp(marker));
+  assertIncludes(source, ["competition-completed-summary", "Started", "Ended", "participantLabel", "showEntryDialog", "Previous entry", "Next entry", "openImageLightbox", "competition-entry-gallery"]);
   assert.doesNotMatch(source, /competition-winner-prizes/);
   assert.doesNotMatch(source, /dates\.innerHTML\s*=/);
 });
@@ -35,18 +39,15 @@ test("result scores follow enabled voting and judging modes", async () => {
 test("rules guide winner members and entry viewer use structured layouts", async () => {
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
   const styles = await readFile(new URL("../public/assets/competitions.css", import.meta.url), "utf8");
-  for (const marker of ["Submit original work", "Enter accurate information", "Follow the deadline", "competition-guide-topic-number", "competition-entry-gallery", "event.target === dialog"]) {
-    assert.match(source, new RegExp(marker));
-  }
-  for (const marker of ["competition-document-panel", "margin-inline:\\s*auto", "competition-winner-member", "competition-entry-gallery"]) {
-    assert.match(styles, new RegExp(marker));
-  }
+  assertIncludes(source, ["Submit original work", "Enter accurate information", "Follow the deadline", "competition-guide-topic-number", "competition-entry-gallery", "event.target === dialog"]);
+  assertIncludes(styles, ["competition-document-panel", "competition-winner-member", "competition-entry-gallery"]);
+  assert.match(styles, /margin-inline:\s*auto/);
 });
 
 test("detail view includes responsive skins, gallery lightbox, two-column rules, and rewards", async () => {
   const source = await readFile(new URL("../public/assets/competitions.js", import.meta.url), "utf8");
   const styles = await readFile(new URL("../public/assets/competitions.css", import.meta.url), "utf8");
-  for (const marker of ["mc-heads.net/body", "renderRewardsTab", "competition-image-lightbox", "Awarded to", "rewardIcon", "raw_gold", "showRewardDetailDialog", "competition-result-head", "competition-result-skin", "competition-entry-member"]) assert.match(source, new RegExp(marker));
+  assertIncludes(source, ["mc-heads.net/body", "renderRewardsTab", "competition-image-lightbox", "Awarded to", "rewardIcon", "raw_gold", "showRewardDetailDialog", "competition-result-head", "competition-result-skin", "competition-entry-member"]);
   assert.match(styles, /competition-rules-list\{grid-template-columns:repeat\(2/);
   assert.match(styles, /competition-entry-gallery\{display:grid;grid-template-columns:repeat\(3/);
   assert.match(styles, /competition-winner-members\[data-count="1"\]/);
@@ -73,7 +74,7 @@ test("completed entry cards show equal player lists and podium styling", async (
   assert.match(source, /participantNames/);
   assert.match(source, /submission-podium-mark/);
   assert.match(source, /is-place-\$\{placement\}/);
-  for (const marker of ["is-place-1", "is-place-2", "is-place-3"]) assert.match(styles, new RegExp(marker));
+  assertIncludes(styles, ["is-place-1", "is-place-2", "is-place-3"]);
 });
 
 test("competition navigation separates back and guide actions", async () => {

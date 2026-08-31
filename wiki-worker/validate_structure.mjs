@@ -41,7 +41,12 @@ for (const selector of requiredCss) {
   if (!css.includes(selector)) failures.push(`TemplateStyles is missing required selector: ${selector}`);
 }
 
-const unsupportedHtmlTags = ['details', 'summary', 'thead', 'tbody'];
+const unsupportedHtmlTags = [
+  ['details', /<\/?details\b/i],
+  ['summary', /<\/?summary\b/i],
+  ['thead', /<\/?thead\b/i],
+  ['tbody', /<\/?tbody\b/i]
+];
 
 for (const [id, page] of Object.entries(sourcePages)) {
   if (!page?.title || typeof page.body !== 'string') continue;
@@ -60,8 +65,8 @@ for (const [id, page] of Object.entries(sourcePages)) {
 
   if (/\sdata-(?:page|special|community)=/i.test(rendered)) failures.push(`${id}: unresolved data-link attribute remains`);
   if (/<a\b[^>]*class="[^"]*\btopic-card\b/i.test(rendered)) failures.push(`${id}: preview topic-card anchor survived conversion`);
-  for (const tag of unsupportedHtmlTags) {
-    if (new RegExp(`<\\/?${tag}\\b`, 'i').test(rendered)) failures.push(`${id}: unsupported MediaWiki HTML tag <${tag}> survived conversion`);
+  for (const [tag, pattern] of unsupportedHtmlTags) {
+    if (pattern.test(rendered)) failures.push(`${id}: unsupported MediaWiki HTML tag <${tag}> survived conversion`);
   }
 
   const expectedTopicCards = (page.body.match(/<a\b[^>]*class="[^"]*\btopic-card\b[^>]*>/gi) || []).length;

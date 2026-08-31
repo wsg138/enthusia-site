@@ -13,6 +13,12 @@ const STYLE_SOURCE = projectInputPath(process.env.WIKI_STYLE_SOURCE, 'wiki-worke
 const loadOrder = ['v2-core.js','v2-support.js','v2-commands.js','v2-detail.js','v2-final.js','v2-polish.js','v2-reputation.js'];
 const STYLE_TITLE = 'Template:EnthusiaWiki/styles.css';
 const STYLE_TAG = `<templatestyles src="${STYLE_TITLE}" />`;
+const attributePatterns = Object.freeze({
+  class: /\bclass\s*=\s*"([^"]*)"/i,
+  'data-page': /\bdata-page\s*=\s*"([^"]*)"/i,
+  'data-special': /\bdata-special\s*=\s*"([^"]*)"/i,
+  'data-community': /\bdata-community\s*=\s*"([^"]*)"/i
+});
 
 globalThis.window = {};
 for (const name of loadOrder) {
@@ -41,8 +47,9 @@ function stripTags(s) {
 }
 
 function attrValue(attrs, name) {
-  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const match = String(attrs).match(new RegExp(`\\b${escaped}\\s*=\\s*"([^"]*)"`, 'i'));
+  const pattern = attributePatterns[name];
+  if (!pattern) throw new Error(`Unsupported wiki attribute: ${name}`);
+  const match = String(attrs).match(pattern);
   return match ? match[1] : '';
 }
 

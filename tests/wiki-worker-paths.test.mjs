@@ -36,4 +36,6 @@ test("wiki filenames cannot introduce directory traversal", () => {
   assert.throws(() => containedFilename(rendered, "nested/mechanics.wiki"), /single filename/);
   assert.equal(wikiPageFilename("history-lore"), "history-lore.wiki");
   assert.throws(() => wikiPageFilename("../history"), /page ID is invalid/);
+  assert.throws(() => wikiPageFilename("history--lore"), /page ID is invalid/);
+  assert.throws(() => wikiPageFilename("a".repeat(129)), /page ID is invalid/);
 });
