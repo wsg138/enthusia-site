@@ -6,14 +6,11 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from pathlib import Path
+from safety import baseline_manifest_url, project_output_path, wiki_api_url
 
-API = os.environ.get('WIKI_API', 'https://enthusia.miraheze.org/w/api.php')
-BASELINE_URL = os.environ.get(
-    'WIKI_BASELINE_URL',
-    'https://raw.githubusercontent.com/wsg138/EnthusiaSentinel-Docs/wiki-preservation-baseline/manifest.json',
-)
-OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
+API = wiki_api_url(os.environ.get('WIKI_API'))
+BASELINE_URL = baseline_manifest_url(os.environ.get('WIKI_BASELINE_URL'))
+OUT = project_output_path(os.environ.get('WIKI_WORKER_OUT'))
 UA = 'EnthusiaWikiWorker/2.0 (pre-publish conflict check)'
 
 

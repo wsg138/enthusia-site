@@ -7,10 +7,10 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from pathlib import Path
+from safety import contained_file, project_output_path, wiki_api_url
 
-API = os.environ.get('WIKI_API', 'https://enthusia.miraheze.org/w/api.php')
-OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
+API = wiki_api_url(os.environ.get('WIKI_API'))
+OUT = project_output_path(os.environ.get('WIKI_WORKER_OUT'))
 RENDERED = OUT / 'rendered'
 UA = 'EnthusiaWikiValidator/2.2 (read-only parser validation)'
 UNSUPPORTED_TAGS = ('details', 'summary', 'thead', 'tbody')
@@ -65,7 +65,7 @@ def main():
         if item.get('contentModel') == 'sanitized-css':
             continue
         title = item['title']
-        text = (RENDERED / item['filename']).read_text(encoding='utf-8')
+        text = contained_file(RENDERED, item['filename'], 'Rendered wiki filename').read_text(encoding='utf-8')
         try:
             parsed = api({
                 'action': 'parse', 'title': title, 'text': text, 'contentmodel': 'wikitext',

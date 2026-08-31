@@ -8,12 +8,12 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from pathlib import Path
+from safety import contained_file, project_output_path, wiki_api_url
 
-API = os.environ.get('WIKI_API', 'https://enthusia.miraheze.org/w/api.php')
+API = wiki_api_url(os.environ.get('WIKI_API'))
 USERNAME = os.environ.get('WIKI_BOT_USERNAME', '').strip()
 PASSWORD = os.environ.get('WIKI_BOT_PASSWORD', '')
-OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
+OUT = project_output_path(os.environ.get('WIKI_WORKER_OUT'))
 RENDERED = OUT / 'rendered'
 FULL_BACKUP = OUT / 'full-backup' / 'manifest.json'
 UA = 'EnthusiaWikiPublisher/2.4 (owner-authorized documentation publisher)'
@@ -128,7 +128,7 @@ def main():
     plan = []
     for item in targets:
         title = item['title']
-        text = (RENDERED / item['filename']).read_text(encoding='utf-8')
+        text = contained_file(RENDERED, item['filename'], 'Rendered wiki filename').read_text(encoding='utf-8')
         before = get_page(title)
         expected_revid = expected.get(title)
         if expected_revid is not None and before.get('revid') != expected_revid:
