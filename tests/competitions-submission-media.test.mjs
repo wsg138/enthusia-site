@@ -138,6 +138,53 @@ test("removed image positions are not reused by later uploads", async () => {
   database.close();
 });
 
+test("reordering preserves active positions reserved around removed images", async () => {
+  const database = await seededDatabase();
+  const db = d1(database);
+  const secondImageId = "40000000-0000-4000-8000-000000000054";
+  assert.deepEqual(await attachSubmissionImage(db, playerImage()), { status: "UPDATED", revision: 2 });
+  assert.deepEqual(await removeSubmissionImage(db, {
+    competitionId: COMPETITION_ID,
+    submissionId: SUBMISSION_ID,
+    imageId: IMAGE_ID,
+    ownerSubject: OWNER_SUBJECT,
+    actorUuid: OWNER_UUID,
+    expectedRevision: 2,
+    expectedConfigVersion: 1,
+    reviewCloseAt: null,
+    removedAt: "2026-08-28T14:00:30.000Z",
+    auditEventId: "70000000-0000-4000-8000-000000000055"
+  }), { status: "UPDATED", revision: 3 });
+  assert.deepEqual(await attachSubmissionImage(db, playerImage({
+    id: secondImageId,
+    expectedRevision: 3,
+    sortOrder: 1,
+    storageKey: `competitions/${COMPETITION_ID}/submissions/${secondImageId}.png`,
+    moderationCheckId: "50000000-0000-4000-8000-000000000056",
+    auditEventId: "60000000-0000-4000-8000-000000000057",
+    createdAt: "2026-08-28T14:00:45.000Z"
+  })), { status: "UPDATED", revision: 4 });
+
+  assert.deepEqual(await reorderOwnedSubmissionImages(db, {
+    competitionId: COMPETITION_ID,
+    submissionId: SUBMISSION_ID,
+    ownerSubject: OWNER_SUBJECT,
+    actorUuid: OWNER_UUID,
+    expectedRevision: 4,
+    expectedConfigVersion: 1,
+    reviewCloseAt: null,
+    imageIds: [secondImageId],
+    coverImageId: secondImageId,
+    updatedAt: "2026-08-28T14:00:50.000Z",
+    auditEventId: "80000000-0000-4000-8000-000000000058"
+  }), { status: "UPDATED", revision: 5 });
+  assert.equal(
+    database.prepare("SELECT sort_order FROM submission_images WHERE id = ?").get(secondImageId).sort_order,
+    1
+  );
+  database.close();
+});
+
 test("player media writes stop when the competition locks after validation", async () => {
   const database = await seededDatabase();
   const db = d1(database);
@@ -173,6 +220,102 @@ test("player media writes stop when the competition locks after validation", asy
   assert.equal(database.prepare("SELECT revision FROM submissions WHERE id = ?").get(SUBMISSION_ID).revision, 2);
   assert.equal(database.prepare("SELECT removed_at FROM submission_images WHERE id = ?").get(IMAGE_ID).removed_at, null);
   assert.equal(database.prepare("SELECT COUNT(*) AS count FROM competition_audit_events").get().count, 1);
+  database.close();
+});
+
+test("same-millisecond stale reorder cannot overwrite a completed image order", async () => {
+  const database = await seededDatabase();
+  const db = d1(database);
+  const secondImageId = "40000000-0000-4000-8000-000000000034";
+  assert.deepEqual(await attachSubmissionImage(db, playerImage()), { status: "UPDATED", revision: 2 });
+  assert.deepEqual(await attachSubmissionImage(db, playerImage({
+    id: secondImageId,
+    expectedRevision: 2,
+    sortOrder: 1,
+    storageKey: `competitions/${COMPETITION_ID}/submissions/${secondImageId}.png`,
+    moderationCheckId: "50000000-0000-4000-8000-000000000035",
+    auditEventId: "60000000-0000-4000-8000-000000000036"
+  })), { status: "UPDATED", revision: 3 });
+
+  const reorder = {
+    competitionId: COMPETITION_ID,
+    submissionId: SUBMISSION_ID,
+    ownerSubject: OWNER_SUBJECT,
+    actorUuid: OWNER_UUID,
+    expectedRevision: 3,
+    expectedConfigVersion: 1,
+    reviewCloseAt: null,
+    coverImageId: secondImageId,
+    updatedAt: "2026-08-28T14:02:30.000Z"
+  };
+  assert.deepEqual(await reorderOwnedSubmissionImages(db, {
+    ...reorder,
+    imageIds: [secondImageId, IMAGE_ID],
+    auditEventId: "70000000-0000-4000-8000-000000000037"
+  }), { status: "UPDATED", revision: 4 });
+  assert.deepEqual(await reorderOwnedSubmissionImages(db, {
+    ...reorder,
+    imageIds: [IMAGE_ID, secondImageId],
+    coverImageId: IMAGE_ID,
+    auditEventId: "80000000-0000-4000-8000-000000000038"
+  }), { status: "CONFLICT" });
+
+  const orderedIds = database.prepare(`
+    SELECT id FROM submission_images
+    WHERE submission_id = ? AND removed_at IS NULL
+    ORDER BY sort_order ASC
+  `).all(SUBMISSION_ID).map((row) => row.id);
+  assert.deepEqual(orderedIds, [secondImageId, IMAGE_ID]);
+  assert.equal(
+    database.prepare("SELECT cover_image_id FROM submissions WHERE id = ?").get(SUBMISSION_ID).cover_image_id,
+    secondImageId
+  );
+  database.close();
+});
+
+test("incomplete image reorder rolls back the full transaction", async () => {
+  const database = await seededDatabase();
+  const db = d1(database);
+  const secondImageId = "40000000-0000-4000-8000-000000000044";
+  const missingImageId = "40000000-0000-4000-8000-000000000045";
+  assert.deepEqual(await attachSubmissionImage(db, playerImage()), { status: "UPDATED", revision: 2 });
+  assert.deepEqual(await attachSubmissionImage(db, playerImage({
+    id: secondImageId,
+    expectedRevision: 2,
+    sortOrder: 1,
+    storageKey: `competitions/${COMPETITION_ID}/submissions/${secondImageId}.png`,
+    moderationCheckId: "50000000-0000-4000-8000-000000000046",
+    auditEventId: "60000000-0000-4000-8000-000000000047"
+  })), { status: "UPDATED", revision: 3 });
+
+  await assert.rejects(reorderOwnedSubmissionImages(db, {
+    competitionId: COMPETITION_ID,
+    submissionId: SUBMISSION_ID,
+    ownerSubject: OWNER_SUBJECT,
+    actorUuid: OWNER_UUID,
+    expectedRevision: 3,
+    expectedConfigVersion: 1,
+    reviewCloseAt: null,
+    imageIds: [IMAGE_ID, missingImageId],
+    coverImageId: IMAGE_ID,
+    updatedAt: "2026-08-28T14:02:45.000Z",
+    auditEventId: "70000000-0000-4000-8000-000000000048"
+  }));
+
+  const submission = database.prepare(`
+    SELECT revision, cover_image_id AS coverImageId
+    FROM submissions WHERE id = ?
+  `).get(SUBMISSION_ID);
+  assert.deepEqual({ ...submission }, { revision: 3, coverImageId: IMAGE_ID });
+  assert.deepEqual(
+    database.prepare(`
+      SELECT id FROM submission_images
+      WHERE submission_id = ? AND removed_at IS NULL
+      ORDER BY sort_order ASC
+    `).all(SUBMISSION_ID).map((row) => row.id),
+    [IMAGE_ID, secondImageId]
+  );
+  assert.equal(database.prepare("SELECT COUNT(*) AS count FROM competition_audit_events").get().count, 2);
   database.close();
 });
 
