@@ -11,7 +11,9 @@ function parsePayload(row) {
   try {
     const parsed = JSON.parse(row.payloadJson);
     if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) payload = parsed;
-  } catch {}
+  } catch {
+    // Legacy or malformed outbox payloads are represented by an empty object.
+  }
   return { ...row, payload, payloadJson: undefined };
 }
 

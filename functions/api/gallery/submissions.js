@@ -1,6 +1,6 @@
 import { competitionImageLimits } from "../../lib/competitions/media-policy.js";
 import { prepareGalleryImage, storePreparedCompetitionImage, deleteGalleryImage } from "../../lib/competitions/media-storage.js";
-import { cleanGalleryText, galleryEvent, gallerySession, SUBMITTABLE_CATEGORIES } from "../../lib/gallery.js";
+import { cleanGalleryText, gallerySession, SUBMITTABLE_CATEGORIES } from "../../lib/gallery.js";
 import { json, methodNotAllowed, unauthorized } from "../../lib/responses.js";
 import { requireSameOrigin } from "../../lib/security.js";
 

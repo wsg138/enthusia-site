@@ -31,13 +31,6 @@ function input(type, name, value = "") {
   return node;
 }
 
-function formatDate(value) {
-  if (!value) return "—";
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(date);
-}
-
 function humanError(error) {
   const code = error?.code ?? error?.message ?? "unknown_error";
   const labels = {
@@ -507,7 +500,6 @@ async function changeImageOrder(wizard, imageIds, coverImageId) {
 
 function buildImagesStep(wizard, panel) {
   panel.append(element("h3", "", "Images"));
-  const limits = wizard.state.competition.config.entries;
   panel.append(element("p", "participant-muted", "Upload as many screenshots as the entry needs. Each image can be up to 8 MB. Ordering controls are included for keyboard and touch users, and the selected cover image appears first publicly."));
   const privacy = element("div", "participant-image-warning");
   privacy.append(

@@ -11,10 +11,13 @@ function joinedChunks(chunks, total) {
 async function readChunks(reader, limit) {
   const chunks = [];
   let total = 0;
+  let done = false;
   try {
-    while (true) {
-      const { done, value } = await reader.read();
+    while (!done) {
+      const next = await reader.read();
+      done = next.done;
       if (done) break;
+      const { value } = next;
       if (!value?.byteLength) continue;
       total += value.byteLength;
       if (total > limit) {

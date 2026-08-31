@@ -18,7 +18,9 @@
       if (!window.localStorage) return;
       if (value === null) localStorage.removeItem(key);
       else localStorage.setItem(key, value);
-    } catch (e) {}
+    } catch {
+      // Storage can be unavailable in private or restricted browser sessions.
+    }
   }
 
   function hasThemeClass(name) {
@@ -333,7 +335,7 @@
   }
 
   function start() {
-    try { window.sessionStorage.removeItem('enthusia-vector-layout-v2'); } catch (e) {}
+    try { window.sessionStorage.removeItem('enthusia-vector-layout-v2'); } catch { /* Session storage may be blocked. */ }
     enhance(document);
     buildMobileUx();
     if (window.mw && mw.hook) {

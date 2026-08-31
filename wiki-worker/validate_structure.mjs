@@ -17,7 +17,7 @@ for (const name of loadOrder) {
   if (!fs.existsSync(file)) throw new Error(`Missing wiki source file: ${file}`);
   vm.runInThisContext(fs.readFileSync(file, 'utf8'), { filename: file });
 }
-const sourcePages = window.WIKI_V2?.pages;
+const sourcePages = globalThis.window.WIKI_V2?.pages;
 if (!sourcePages) throw new Error('WIKI_V2 pages did not load');
 
 const manifestPath = containedFilename(RENDERED, 'manifest.json');

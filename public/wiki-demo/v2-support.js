@@ -1,7 +1,6 @@
 (()=>{
 const P=window.WIKI_V2.pages;
 const facts=(items)=>`<div class="fact-grid">${items.map(([a,b])=>`<div><b>${a}</b><span>${b}</span></div>`).join('')}</div>`;
-const details=(title,subtitle,html)=>`<details class="drop"><summary><b>${title}</b>${subtitle?`<span>${subtitle}</span>`:''}</summary><div>${html}</div></details>`;
 const table=(rows,head='')=>`<table>${head?`<thead><tr>${head.split('|').map(x=>`<th>${x}</th>`).join('')}</tr></thead>`:''}<tbody>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 const list=(items)=>`<ul>${items.map(x=>`<li>${x}</li>`).join('')}</ul>`;
 const card=(id,title,desc)=>`<a class="topic-card" data-page="${id}"><b>${title}</b><span>${desc}</span></a>`;

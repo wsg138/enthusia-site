@@ -26,7 +26,7 @@ for (const name of loadOrder) {
   if (!fs.existsSync(file)) throw new Error(`Missing wiki source file: ${file}`);
   vm.runInThisContext(fs.readFileSync(file, 'utf8'), { filename: file });
 }
-const pages = window.WIKI_V2?.pages;
+const pages = globalThis.window.WIKI_V2?.pages;
 if (!pages) throw new Error('WIKI_V2 pages did not load');
 if (!fs.existsSync(STYLE_SOURCE)) throw new Error(`Missing wiki TemplateStyles source: ${STYLE_SOURCE}`);
 

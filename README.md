@@ -123,10 +123,14 @@ The repository also contains reviewer pages, cinematic review documentation, ter
 The project is intentionally lightweight/static and uses Node scripts rather than a large client framework.
 
 ```bash
+npm ci --ignore-scripts
 npm run build
+npm run lint
 npm run check
 npm test
 ```
+
+ESLint 8 is pinned as a development dependency so local checks and the hosted Codacy analyzer use the same configuration. It is installed only inside this project's `node_modules` directory; it does not add a global tool or background service. Delete `node_modules` to remove the local installation, and run `npm ci --ignore-scripts` to restore it from `package-lock.json`.
 
 Current test coverage includes site validation plus dedicated competition, Discord-membership, appeal-auth, punishment-site, navigation and potion-preview tests.
 

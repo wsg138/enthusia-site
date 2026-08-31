@@ -153,7 +153,7 @@
     const midpoint = touchMidpoint(), rect = el.viewport.getBoundingClientRect(), localX = midpoint.x - rect.left, localY = midpoint.y - rect.top;
     state.touchGesture = {start: midpoint, view: {...state.view}, sceneX: (localX - state.view.x) / state.view.scale, sceneY: (localY - state.view.y) / state.view.scale};
     state.touchTap = null; hideTooltip(); el.viewport.classList.add("dragging");
-    for (const id of state.touchPointers.keys()) try { el.viewport.setPointerCapture(id); } catch {}
+    for (const id of state.touchPointers.keys()) try { el.viewport.setPointerCapture(id); } catch { /* Pointer capture is best-effort across browsers. */ }
   }
   function updateTouchGesture(event) {
     if (!state.touchGesture || state.touchPointers.size < 2) return;
@@ -207,7 +207,7 @@
     if (event.pointerType === "touch") { finishTouch(event); return; }
     const pointer = state.pointer; if (!pointer || pointer.id !== event.pointerId) return;
     if (pointer.pressed) buildingElements.get(pointer.pressed)?.classList.remove("pressed");
-    if (pointer.drag) { try { el.viewport.releasePointerCapture(event.pointerId); } catch {} el.viewport.classList.remove("dragging"); }
+    if (pointer.drag) { try { el.viewport.releasePointerCapture(event.pointerId); } catch { /* Capture may already be released. */ } el.viewport.classList.remove("dragging"); }
     else { pinCoordinate(event.clientX, event.clientY); const hit = hitBuilding(event.clientX, event.clientY); if (hit) openBuilding(hit); }
     state.pointer = null;
   };
@@ -493,7 +493,7 @@
       if (event.pointerType === "mouse" && event.button !== 0) return;
       const started = state.collapsedContext === surface ? "collapsed" : state.sheet.state;
       handleGesture = {id: event.pointerId, startY: event.clientY, moved: false, started, time: performance.now()};
-      try { handle.setPointerCapture(event.pointerId); } catch {}
+      try { handle.setPointerCapture(event.pointerId); } catch { /* Pointer capture is best-effort across browsers. */ }
     });
     handle.addEventListener("pointermove", event => { if (handleGesture?.id === event.pointerId && Math.abs(event.clientY - handleGesture.startY) > 6) handleGesture.moved = true; });
     handle.addEventListener("pointerup", event => {
@@ -714,9 +714,6 @@
     hydrateItemRasters(node);
   })));
   itemRasterObserver.observe(document.body, {childList: true, subtree: true});
-  async function drawCanvasItem(context, item, x, y) {
-    context.drawImage(await canonicalItemRaster(item, true), x, y);
-  }
   async function drawMinecraftText(context, text, x, y, color, rightAligned = false) {
     const font = await loadCanvasImage(fontManifest.texture), widths = [...String(text)].map(character => fontManifest.widths?.[character.codePointAt(0)] || 6);
     const total = widths.reduce((sum, width) => sum + width, 0), layer = document.createElement("canvas"); layer.width = 176; layer.height = 76;
@@ -749,7 +746,7 @@
   }));
   addEventListener("resize", () => activeShulkerCanvases.forEach(canvas => { const item = shulkerRenderState.get(canvas); if (item && canvas.isConnected) renderShulkerCanvas(canvas, item); else activeShulkerCanvases.delete(canvas); }), {passive:true});
   function containerMarkup(entry) {
-    const { item, context, depth } = entry, container = item.metadata?.container;
+    const { item, context } = entry, container = item.metadata?.container;
     if (!container) return "";
     if (container.type === "SHULKER") {
       const slots = new Map(container.contents.map(value => [value.slot, value.item]));
@@ -1012,7 +1009,7 @@
     fixtureSnapshot: await localFixtureSnapshot(),
     onStatus: renderConnectionStatus,
     onSnapshot(nextSnapshot) { snapshot = nextSnapshot; adapter.replaceSnapshot(nextSnapshot); refreshMarketUi(); prefetchSnapshotAssets(); },
-    onStallUpdate(stallId, stall, nextSnapshot) { adapter.replaceStall(stall); snapshot = adapter.snapshot; refreshMarketUi(stallId); }
+    onStallUpdate(stallId, stall) { adapter.replaceStall(stall); snapshot = adapter.snapshot; refreshMarketUi(stallId); }
   });
   snapshot = await marketClient.loadInitialSnapshot();
   if (snapshot) adapter.replaceSnapshot(snapshot);

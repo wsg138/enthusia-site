@@ -6,6 +6,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/validate-site.mjs",
+    "lint": "eslint . --ext .js,.mjs",
     "test:baseline": "node --test tests/site-baseline.test.mjs",
     "test:competitions": "node --test tests/competitions-*.test.mjs tests/gallery-*.test.mjs",
     "test:appeals": "node --test tests/appeal-*.test.mjs tests/punishment-site.test.mjs tests/site-community-navigation.test.mjs",
@@ -13,6 +14,9 @@
     "test:wiki-worker": "node --test tests/wiki-worker-*.test.mjs",
     "mask-editor": "python scripts/cinematic-mask-editor.py",
     "validate:cinematic": "python scripts/generate-terrain-mask.py --validate-only",
-    "test": "npm run check && npm run test:baseline && npm run test:competitions && npm run test:appeals && npm run test:potions && npm run test:wiki-worker"
+    "test": "npm run lint && npm run check && npm run test:baseline && npm run test:competitions && npm run test:appeals && npm run test:potions && npm run test:wiki-worker"
+  },
+  "devDependencies": {
+    "eslint": "8.57.1"
   }
 }

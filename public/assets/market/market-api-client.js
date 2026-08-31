@@ -190,7 +190,7 @@
         this.socket = null;
         if (!this.stopped) this.scheduleReconnect();
       });
-      socket.addEventListener("error", () => { try { socket.close(); } catch {} });
+      socket.addEventListener("error", () => { try { socket.close(); } catch { /* The socket may already be closed. */ } });
     }
 
     handleMessage(raw) {
@@ -236,7 +236,7 @@
 
     isSocketOpen() { return this.socket?.readyState === 1; }
     clearReconnectTimer() { if (this.reconnectTimer) this.clearTimeoutImpl(this.reconnectTimer); this.reconnectTimer = null; }
-    closeSocket() { const socket = this.socket; this.socket = null; if (socket) try { socket.close(); } catch {} }
+    closeSocket() { const socket = this.socket; this.socket = null; if (socket) try { socket.close(); } catch { /* The socket may already be closed. */ } }
     stop() {
       this.stopped = true;
       this.clearReconnectTimer();

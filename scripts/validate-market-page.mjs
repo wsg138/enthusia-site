@@ -11,7 +11,7 @@ const child = spawn(chrome, ["--headless=new", "--disable-gpu", "--allow-file-ac
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 let target;
 for (let attempt = 0; attempt < 70 && !target; attempt += 1) {
-  try { target = (await fetch(`http://127.0.0.1:${port}/json/list`).then(response => response.json())).find(candidate => candidate.type === "page"); } catch {}
+  try { target = (await fetch(`http://127.0.0.1:${port}/json/list`).then(response => response.json())).find(candidate => candidate.type === "page"); } catch { /* Chrome is still starting. */ }
   if (!target) await delay(100);
 }
 if (!target) { child.kill(); throw new Error("Chrome did not start"); }

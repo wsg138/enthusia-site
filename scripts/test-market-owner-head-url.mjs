@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 const source = await readFile("public/assets/market/market.js", "utf8");
-const match = source.match(/  const minotarHeadUrlPattern =[^\n]+;\n  const capturedHeadUrlPattern =[^\n]+;\n  function ownerHeadUrl\(owner\) \{[\s\S]*?\n  \}/);
+const match = source.match(/ {2}const minotarHeadUrlPattern =[^\r\n]+;\r?\n {2}const capturedHeadUrlPattern =[^\r\n]+;\r?\n {2}function ownerHeadUrl\(owner\) \{[\s\S]*?\r?\n {2}\}/);
 assert.ok(match, "ownerHeadUrl implementation was not found");
 const ownerHeadUrl = Function(`${match[0]}\nreturn ownerHeadUrl;`)();
 
