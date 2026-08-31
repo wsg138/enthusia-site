@@ -64,7 +64,13 @@ async function processOne(context, competitionIdValue, delivery) {
   }
 
   const startedAt = new Date().toISOString();
-  const claimed = await claimRewardDelivery(context.env.COMPETITIONS_DB, delivery.id, startedAt);
+  const expectedAttempt = delivery.attempts + 1;
+  const claimed = await claimRewardDelivery(
+    context.env.COMPETITIONS_DB,
+    delivery.id,
+    delivery.attempts,
+    startedAt
+  );
   if (!claimed) return { deliveryId: delivery.id, status: "CLAIM_CONFLICT", state: delivery.state };
 
   try {
@@ -74,6 +80,7 @@ async function processOne(context, competitionIdValue, delivery) {
     const finishedAt = new Date().toISOString();
     await finishRewardDelivery(context.env.COMPETITIONS_DB, {
       deliveryId: delivery.id,
+      expectedAttempt,
       state: success ? "DELIVERED" : "FAILED",
       detail: {
         ...(delivery.detail ?? {}),
@@ -92,6 +99,7 @@ async function processOne(context, competitionIdValue, delivery) {
     const finishedAt = new Date().toISOString();
     await finishRewardDelivery(context.env.COMPETITIONS_DB, {
       deliveryId: delivery.id,
+      expectedAttempt,
       state: "FAILED",
       detail: {
         ...(delivery.detail ?? {}),

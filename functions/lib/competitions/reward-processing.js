@@ -28,7 +28,13 @@ export async function processCompetitionPrizeBatch(env, competitionId, { limit =
   const outcomes = [];
   for (const delivery of candidates) {
     const claimedAt = new Date().toISOString();
-    const claimed = await claimRewardDelivery(env.COMPETITIONS_DB, delivery.id, claimedAt);
+    const expectedAttempt = delivery.attempts + 1;
+    const claimed = await claimRewardDelivery(
+      env.COMPETITIONS_DB,
+      delivery.id,
+      delivery.attempts,
+      claimedAt
+    );
     if (!claimed) {
       outcomes.push({ deliveryId: delivery.id, status: "NOT_CLAIMED" });
       continue;
@@ -41,6 +47,7 @@ export async function processCompetitionPrizeBatch(env, competitionId, { limit =
       const finishedAt = new Date().toISOString();
       const finished = await finishRewardDelivery(env.COMPETITIONS_DB, {
         deliveryId: delivery.id,
+        expectedAttempt,
         state: "DELIVERED",
         detail: {
           ...delivery.detail,
@@ -54,6 +61,7 @@ export async function processCompetitionPrizeBatch(env, competitionId, { limit =
       const finishedAt = new Date().toISOString();
       await finishRewardDelivery(env.COMPETITIONS_DB, {
         deliveryId: delivery.id,
+        expectedAttempt,
         state: "FAILED",
         detail: {
           ...delivery.detail,

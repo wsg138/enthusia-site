@@ -7,6 +7,7 @@ import {
   insertRewardDeliveries,
   listCompetitionRewardDeliveries
 } from "../functions/lib/competitions/reward-ledger.js";
+import { d1, migratedDatabase } from "./support/d1-sqlite.mjs";
 
 function fakeDatabase({ batchChanges = [], rows = [], runChanges = 1 } = {}) {
   const calls = [];
@@ -120,22 +121,86 @@ test("ledger list is scoped through reward definitions to one competition", asyn
 
 test("claim transition is concurrency-safe and increments attempts", async () => {
   const db = fakeDatabase({ runChanges: 1 });
-  assert.equal(await claimRewardDelivery(db, "delivery-1", "2026-08-23T00:46:00.000Z"), true);
+  assert.equal(await claimRewardDelivery(db, "delivery-1", 0, "2026-08-23T00:46:00.000Z"), true);
   assert.match(db.calls[0].sql, /state IN \('PENDING','FAILED'\)/);
   assert.match(db.calls[0].sql, /attempts = attempts \+ 1/);
+  assert.match(db.calls[0].sql, /attempts = \?/);
 
   const stale = fakeDatabase({ runChanges: 0 });
-  assert.equal(await claimRewardDelivery(stale, "delivery-1", "2026-08-23T00:46:00.000Z"), false);
+  assert.equal(await claimRewardDelivery(stale, "delivery-1", 0, "2026-08-23T00:46:00.000Z"), false);
 });
 
 test("delivery completion only succeeds from DELIVERING and timestamps successful delivery", async () => {
   const db = fakeDatabase({ runChanges: 1 });
   assert.equal(await finishRewardDelivery(db, {
     deliveryId: "delivery-1",
+    expectedAttempt: 1,
     state: "DELIVERED",
     detail: { externalReference: "server-ack-1" },
     finishedAt: "2026-08-23T00:47:00.000Z"
   }), true);
   assert.match(db.calls[0].sql, /state = 'DELIVERING'/);
+  assert.match(db.calls[0].sql, /attempts = \?/);
   assert.match(db.calls[0].sql, /delivered_at = CASE/);
+});
+
+test("stale reward worker cannot finish a later delivery attempt", async () => {
+  const database = await migratedDatabase();
+  const now = "2026-08-23T00:45:00.000Z";
+  database.prepare(`
+    INSERT INTO competitions (
+      id, slug, title, category, lifecycle_state, current_config_version,
+      created_by_subject, created_by_uuid, created_at, updated_at
+    ) VALUES ('competition-1', 'reward-fence', 'Reward Fence', 'Build', 'COMPLETED', 1,
+              'staff:test', 'staff-player', ?, ?)
+  `).run(now, now);
+  database.prepare(`
+    INSERT INTO submissions (
+      id, competition_id, entry_type, status, owner_subject, owner_uuid,
+      owner_name, title, description, revision, created_at, updated_at
+    ) VALUES ('submission-1', 'competition-1', 'SOLO', 'APPROVED', 'staff-manual:test',
+              'player-1', 'Player', 'Entry', 'Description', 1, ?, ?)
+  `).run(now, now);
+  database.prepare(`
+    INSERT INTO reward_definitions (
+      id, competition_id, placement, reward_type, distribution_mode,
+      config_json, created_at
+    ) VALUES ('reward-1', 'competition-1', 1, 'MONEY', 'OWNER_ONLY', '{}', ?)
+  `).run(now);
+  database.prepare(`
+    INSERT INTO reward_deliveries (
+      id, reward_id, submission_id, recipient_uuid, operation_key,
+      state, attempts, created_at, updated_at
+    ) VALUES ('delivery-1', 'reward-1', 'submission-1', 'player-1',
+              'reward-fence:delivery-1', 'PENDING', 0, ?, ?)
+  `).run(now, now);
+  const db = d1(database);
+
+  assert.equal(await claimRewardDelivery(db, "delivery-1", 0, "2026-08-23T00:46:00.000Z"), true);
+  assert.equal(await finishRewardDelivery(db, {
+    deliveryId: "delivery-1",
+    expectedAttempt: 1,
+    state: "FAILED",
+    finishedAt: "2026-08-23T00:47:00.000Z"
+  }), true);
+  assert.equal(await claimRewardDelivery(db, "delivery-1", 1, "2026-08-23T00:48:00.000Z"), true);
+
+  assert.equal(await finishRewardDelivery(db, {
+    deliveryId: "delivery-1",
+    expectedAttempt: 1,
+    state: "FAILED",
+    detail: { lastError: "late attempt one failure" },
+    finishedAt: "2026-08-23T00:49:00.000Z"
+  }), false);
+  assert.deepEqual({ ...database.prepare(`
+    SELECT state, attempts FROM reward_deliveries WHERE id = 'delivery-1'
+  `).get() }, { state: "DELIVERING", attempts: 2 });
+
+  assert.equal(await finishRewardDelivery(db, {
+    deliveryId: "delivery-1",
+    expectedAttempt: 2,
+    state: "DELIVERED",
+    finishedAt: "2026-08-23T00:50:00.000Z"
+  }), true);
+  database.close();
 });

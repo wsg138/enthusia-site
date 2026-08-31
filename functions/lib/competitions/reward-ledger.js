@@ -32,6 +32,13 @@ function detailJson(value) {
   return JSON.stringify(value);
 }
 
+function attemptNumber(value, label, minimum = 0) {
+  if (!Number.isSafeInteger(value) || value < minimum) {
+    throw new TypeError(`${label} is invalid`);
+  }
+  return value;
+}
+
 export async function insertRewardDeliveries(db, deliveries, createdAt) {
   const database = requireWritableDatabase(db);
   if (!Array.isArray(deliveries)) throw new TypeError("Reward deliveries must be an array");
@@ -105,14 +112,19 @@ export async function listCompetitionRewardDeliveries(db, competitionId) {
 
   return (Array.isArray(result?.results) ? result.results : []).map((row) => ({
     ...row,
+    attempts: Number(row.attempts),
     detail: row.detailJson ? JSON.parse(row.detailJson) : null,
     detailJson: undefined
   }));
 }
 
-export async function claimRewardDelivery(db, deliveryId, claimedAt) {
+export async function claimRewardDelivery(db, deliveryId, expectedAttempts, claimedAt) {
   const database = requireDatabase(db);
   const id = identifier(deliveryId, "Reward delivery ID");
+  const attempts = attemptNumber(expectedAttempts, "Reward delivery attempt count");
+  if (attempts === Number.MAX_SAFE_INTEGER) {
+    throw new TypeError("Reward delivery attempt count is exhausted");
+  }
   if (typeof claimedAt !== "string" || !Number.isFinite(Date.parse(claimedAt))) {
     throw new TypeError("Reward claim time is invalid");
   }
@@ -124,18 +136,21 @@ export async function claimRewardDelivery(db, deliveryId, claimedAt) {
         updated_at = ?
     WHERE id = ?
       AND state IN ('PENDING','FAILED')
-  `).bind(claimedAt, id).run();
+      AND attempts = ?
+  `).bind(claimedAt, id, attempts).run();
   return Number(result?.meta?.changes ?? 0) === 1;
 }
 
 export async function finishRewardDelivery(db, {
   deliveryId,
+  expectedAttempt,
   state,
   detail = null,
   finishedAt
 }) {
   const database = requireDatabase(db);
   const id = identifier(deliveryId, "Reward delivery ID");
+  const attempt = attemptNumber(expectedAttempt, "Reward delivery attempt", 1);
   if (!TERMINAL_STATES.has(state)) throw new TypeError("Reward terminal state is invalid");
   if (typeof finishedAt !== "string" || !Number.isFinite(Date.parse(finishedAt))) {
     throw new TypeError("Reward completion time is invalid");
@@ -149,13 +164,15 @@ export async function finishRewardDelivery(db, {
         delivered_at = CASE WHEN ? = 'DELIVERED' THEN ? ELSE delivered_at END
     WHERE id = ?
       AND state = 'DELIVERING'
+      AND attempts = ?
   `).bind(
     state,
     detailJson(detail),
     finishedAt,
     state,
     finishedAt,
-    id
+    id,
+    attempt
   ).run();
   return Number(result?.meta?.changes ?? 0) === 1;
 }
