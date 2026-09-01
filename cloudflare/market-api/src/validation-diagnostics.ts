@@ -54,11 +54,14 @@ function safePath(path: PropertyKey[]): string {
 function valueAtPath(data: unknown, path: PropertyKey[]): unknown {
   let current = data;
   for (const segment of path) {
-    if (typeof segment === "string" && !SAFE_FIELDS.has(segment)) return undefined;
-    if ((typeof segment !== "string" && typeof segment !== "number") || current === null || typeof current !== "object") {
-      return undefined;
+    if (current === null || typeof current !== "object") return undefined;
+    if (typeof segment === "number") {
+      if (!Array.isArray(current) || !Number.isInteger(segment) || segment < 0 || segment >= current.length) return undefined;
+      current = current.at(segment);
+      continue;
     }
-    current = (current as Record<PropertyKey, unknown>)[segment];
+    if (typeof segment !== "string" || !SAFE_FIELDS.has(segment) || !Object.hasOwn(current, segment)) return undefined;
+    current = Reflect.get(current, segment);
   }
   return current;
 }

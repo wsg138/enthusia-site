@@ -13,4 +13,8 @@ describe("request authentication", () => {
   it("rejects a signature for changed body bytes", async () => expect((await signedFetch("/internal/v1/test", "POST", probe(), { secret: "wrong-secret" })).status).toBe(401));
   it("rejects a signature for another pathname", async () => expect((await signedFetch("/internal/v1/test", "POST", probe(), { signedPath: "/internal/v1/other" })).status).toBe(401));
   it("rejects a missing signature header", async () => expect((await signedFetch("/internal/v1/test", "POST", probe(), { omit: "X-Enthusia-Signature" })).status).toBe(401));
+  it("rejects malformed signature bytes", async () => expect((await signedFetch("/internal/v1/test", "POST", probe(), { signature: `v1=${"g".repeat(64)}` })).status).toBe(401));
+  it("rejects truncated signatures", async () => expect((await signedFetch("/internal/v1/test", "POST", probe(), { signature: `v1=${"0".repeat(62)}` })).status).toBe(401));
+  it("rejects non-decimal timestamps", async () => expect((await signedFetch("/internal/v1/test", "POST", probe(), { timestamp: "12x" })).status).toBe(401));
+  it("rejects event IDs containing spaces", async () => expect((await signedFetch("/internal/v1/test", "POST", probe(), { headerEventId: "invalid event" })).status).toBe(401));
 });
