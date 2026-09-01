@@ -388,15 +388,34 @@
   const iconItemRegistry = new Map();
   let iconItemSequence = 0;
   const hasGlint = item => item.metadata?.glintOverride !== false && (item.metadata?.glintOverride === true || item.metadata?.enchantments?.length || item.metadata?.storedEnchantments?.length);
-  function itemIcon(item, extraClass = "") {
+  function createItemIcon(item, extraClass = "") {
     const definitions = iconDefinition(item);
     const enchanted = hasGlint(item), key = `icon-${++iconItemSequence}`;
     iconItemRegistry.set(key, item);
+    const icon = document.createElement("span");
+    icon.className = `minecraft-item-icon${enchanted ? " enchanted" : ""}${extraClass ? ` ${extraClass}` : ""}`;
+    icon.dataset.iconKey = key;
+    icon.setAttribute("role", "img");
+    icon.setAttribute("aria-label", publicItemName(item.displayName));
+    const canvas = document.createElement("canvas");
+    canvas.className = "item-raster";
+    canvas.width = 16;
+    canvas.height = 16;
+    canvas.setAttribute("aria-hidden", "true");
+    icon.append(canvas);
     const silhouette = definitions.find(layer => !layer.tintSource)?.src || definitions[0]?.src;
     const glintTexture = iconManifest.glint?.item || "minecraft/vanilla/textures/misc/enchanted_glint_item.png";
-    const glint = enchanted && silhouette ? `<span class="item-glint" style="--item-silhouette:url('${cssAssetBase}${silhouette}');--glint-texture:url('${cssAssetBase}${glintTexture}')" aria-hidden="true"></span>` : "";
-    return `<span class="minecraft-item-icon${enchanted ? " enchanted" : ""} ${extraClass}" data-icon-key="${key}" role="img" aria-label="${esc(publicItemName(item.displayName))}"><canvas class="item-raster" width="16" height="16" aria-hidden="true"></canvas>${glint}</span>`;
+    if (enchanted && silhouette) {
+      const glint = document.createElement("span");
+      glint.className = "item-glint";
+      glint.style.setProperty("--item-silhouette", `url('${cssAssetBase}${silhouette}')`);
+      glint.style.setProperty("--glint-texture", `url('${cssAssetBase}${glintTexture}')`);
+      glint.setAttribute("aria-hidden", "true");
+      icon.append(glint);
+    }
+    return icon;
   }
+  const itemIcon = (item, extraClass = "") => createItemIcon(item, extraClass).outerHTML;
   function minecraftText(value, className = "") {
     const text = String(value ?? "");
     const glyph = character => {
@@ -984,11 +1003,29 @@
     const items = normalized ? adapter.suggest(query, potionQuery ? 220 : 15) : [];
     state.suggestionIndex = -1; const box = selectOne("#search-suggestions");
     if (!items.length) { box.replaceChildren(); box.hidden = true; return; }
-    box.innerHTML = items.map((entry, index) => {
+    const buttons = items.map((entry, index) => {
       const label = publicItemName(entry.displayName || entry.searchQuery), query = publicItemName(entry.searchQuery || label), subtitle = publicItemName(entry.subtitle);
-      return `<button role="option" data-suggestion="${esc(query)}" data-index="${index}">${itemIcon(entry.item || {material:entry.material,displayName:label,amount:1})}<span><strong>${esc(label)}</strong>${subtitle ? `<small>${esc(subtitle)}</small>` : ""}</span></button>`;
-    }).join(""); box.hidden = false;
-    box.querySelectorAll("button").forEach(button => button.onclick = () => { selectOne("#item-search").value = button.dataset.suggestion; executeSearch(); });
+      const button = document.createElement("button");
+      button.type = "button";
+      button.setAttribute("role", "option");
+      button.dataset.suggestion = query;
+      button.dataset.index = String(index);
+      button.append(createItemIcon(entry.item || {material: entry.material, displayName: label, amount: 1}));
+      const copy = document.createElement("span");
+      const name = document.createElement("strong");
+      name.textContent = label;
+      copy.append(name);
+      if (subtitle) {
+        const detail = document.createElement("small");
+        detail.textContent = subtitle;
+        copy.append(detail);
+      }
+      button.append(copy);
+      button.onclick = () => { selectOne("#item-search").value = query; executeSearch(); };
+      return button;
+    });
+    box.replaceChildren(...buttons);
+    box.hidden = false;
   }
   function hideSuggestions() { selectOne("#search-suggestions").hidden = true; state.suggestionIndex = -1; }
   selectOne("#item-search").addEventListener("input", showSuggestions);
