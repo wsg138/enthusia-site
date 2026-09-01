@@ -70,7 +70,7 @@ const state = {
   repairRevision: 0,
   foregroundCache: new Map(),
   dirty: false,
-  unresolvedConflicts: new Uint8Array(W * H),
+  unresolvedConflicts: new Uint8Array(W * H)
 };
 
 const ASSETS = {
@@ -83,7 +83,7 @@ const ASSETS = {
   foregroundDay: "/assets/minecraft-terrain-foreground-day-v1.png",
   foregroundSunset: "/assets/minecraft-terrain-foreground-sunset-v1.png",
   foregroundNight: "/assets/minecraft-terrain-foreground-night-v1.png",
-  foregroundSunrise: "/assets/minecraft-terrain-foreground-sunrise-v1.png",
+  foregroundSunrise: "/assets/minecraft-terrain-foreground-sunrise-v1.png"
 };
 
 function loadImage(url, optional = false) {
