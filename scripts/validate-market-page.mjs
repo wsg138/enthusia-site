@@ -91,12 +91,14 @@ try {
     const T=window.__MARKET_TEST__,original=structuredClone(T.adapter.snapshot.stalls.find(stall=>stall.owner.type==='PLAYER'&&stall.shops.length));
     const probe='<img src=x onerror=window.__marketXssProbe=1>',modified=structuredClone(original);
     modified.owner.name=probe;modified.shops[0].owner.name=probe;
+    modified.shops[0].sellItem.displayName=probe;modified.shops[0].sellItem.metadata.customName=probe;
     modified.members.length?modified.members[0]=probe:modified.members.push(probe);
     window.__marketXssProbe=0;T.openStall(original);
     T.adapter.replaceStall(modified);T.refreshMarketUi(original.id);
-    const content=document.querySelector('#drawer-content');
-    const escaped=window.__marketXssProbe===0&&!content.querySelector('img[src="x"]')&&content.textContent.includes(probe);
-    T.adapter.replaceStall(original);T.refreshMarketUi(original.id);
+    T.openInspector(modified.shops[0].id,'sellItem');
+    const drawer=document.querySelector('#drawer-content'),inspector=document.querySelector('#inspector-content');
+    const escaped=window.__marketXssProbe===0&&!drawer.querySelector('img[src="x"]')&&!inspector.querySelector('img[src="x"]')&&drawer.textContent.includes(probe)&&inspector.textContent.includes(probe);
+    T.closeInspector();T.adapter.replaceStall(original);T.refreshMarketUi(original.id);
     delete window.__marketXssProbe;return escaped;
   })()`);
   results.liveConnectionBadge = await evaluate("(()=>{const T=window.__MARKET_TEST__;T.marketClient.source='api';T.marketClient.emitStatus('live');return document.querySelector('#market-connection-label').textContent==='Live'&&document.querySelector('#market-connection-status').dataset.source==='api'})()");
