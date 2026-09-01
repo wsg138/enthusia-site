@@ -59,9 +59,9 @@ export async function verifySignedRequest(
   const timestamp = request.headers.get("X-Enthusia-Timestamp");
   const eventId = request.headers.get("X-Enthusia-Event-Id");
   const supplied = request.headers.get("X-Enthusia-Signature");
-  if (!serverId || !timestamp || !eventId || !supplied || serverId !== env.MARKET_SERVER_ID) return false;
+  if (serverId === null || timestamp === null || eventId === null || supplied === null || serverId !== env.MARKET_SERVER_ID) return false;
   const suppliedBytes = decodeSignature(supplied);
-  if (!isDecimalTimestamp(timestamp) || !isPrintableEventId(eventId) || !suppliedBytes) return false;
+  if (!isDecimalTimestamp(timestamp) || !isPrintableEventId(eventId) || suppliedBytes === null) return false;
   const timestampNumber = Number(timestamp);
   if (!Number.isSafeInteger(timestampNumber) || Math.abs(now - timestampNumber) > FIVE_MINUTES_MS) return false;
   const bodyHash = hex(await crypto.subtle.digest("SHA-256", body));
