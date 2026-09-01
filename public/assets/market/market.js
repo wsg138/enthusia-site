@@ -14,6 +14,13 @@
     "potion", "strength", "slow falling", "invis", "water breathing", "night vision", "regeneration",
     "poison", "weakness", "turtle master", "wind charged", "weaving", "oozing", "infestation"
   ]);
+  const filterDefinitions = Object.freeze([
+    { key: "floor", label: "Floor", selector: "#floor-filter" },
+    { key: "owner", label: "Owner", selector: "#owner-filter" },
+    { key: "shop", label: "Shop", selector: "#shop-filter" },
+    { key: "stock", label: "Stock", selector: "#stock-filter" },
+    { key: "rent", label: "Rent", selector: "#rent-filter" }
+  ]);
   const assetBase = document.querySelector("[data-market-asset-base]")?.dataset.marketAssetBase || selectOne("#site-logo").getAttribute("src").replace(/[^/]+$/, "");
   const cssAssetBase = document.querySelector("[data-market-css-asset-base]")?.dataset.marketCssAssetBase ?? assetBase;
   const el = {
@@ -820,11 +827,32 @@
     for (const stall of layout.stalls) stallElements.get(stall.id).classList.toggle("filtered", !state.matching.has(stall.id));
     for (const building of layout.buildings) buildingElements.get(building.id).classList.toggle("filtered", !building.stallIds.some(id => state.matching.has(id)));
     selectOne("#result-count").textContent = snapshot ? `${state.matching.size} of ${layout.stalls.length} stalls` : "Market data unavailable";
-    const labels = { floor: "Floor", owner: "Owner", shop: "Shop", stock: "Stock", rent: "Rent" }, selectors = {floor:"#floor-filter",owner:"#owner-filter",shop:"#shop-filter",stock:"#stock-filter",rent:"#rent-filter"};
-    const active = Object.entries(state.filters).filter(([, value]) => value && value !== "ALL");
-    selectOne("#filter-chips").innerHTML = active.map(([key]) => { const select = selectOne(selectors[key]), display = select.options[select.selectedIndex]?.text || state.filters[key]; return `<span class="chip">${labels[key]}: ${esc(display)} <button type="button" data-remove-filter="${key}" aria-label="Remove ${labels[key]} filter">×</button></span>`; }).join("") + (active.length ? `<button id="clear-active-filters" class="clear-active-filters" type="button">Clear all filters</button>` : "");
-    selectOne("#filter-chips").querySelectorAll("[data-remove-filter]").forEach(button => button.onclick = () => { const key = button.dataset.removeFilter; state.filters[key] = "ALL"; selectOne(selectors[key]).value = "ALL"; applyFilters(); });
-    selectOne("#clear-active-filters")?.addEventListener("click", clearFilters);
+    const active = filterDefinitions.filter(({ key }) => state.filters[key] !== "ALL");
+    const chips = active.map(({ key, label, selector }) => {
+      const select = selectOne(selector);
+      const display = select.options[select.selectedIndex]?.text || state.filters[key];
+      const chip = document.createElement("span");
+      chip.className = "chip";
+      chip.append(document.createTextNode(`${label}: ${display} `));
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.dataset.removeFilter = key;
+      remove.setAttribute("aria-label", `Remove ${label} filter`);
+      remove.textContent = "×";
+      remove.onclick = () => { state.filters[key] = "ALL"; select.value = "ALL"; applyFilters(); };
+      chip.append(remove);
+      return chip;
+    });
+    if (active.length) {
+      const clear = document.createElement("button");
+      clear.id = "clear-active-filters";
+      clear.className = "clear-active-filters";
+      clear.type = "button";
+      clear.textContent = "Clear all filters";
+      clear.onclick = clearFilters;
+      chips.push(clear);
+    }
+    selectOne("#filter-chips").replaceChildren(...chips);
     if (state.drawerMode === "building" && state.drawerBuilding) renderBuildingDrawer();
   }
   function clearFilters() {
