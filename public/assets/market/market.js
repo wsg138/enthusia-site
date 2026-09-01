@@ -254,12 +254,7 @@
     if (stallId) stallElements.get(stallId)?.classList.add("highlighted");
   }
 
-  const minotarHeadUrlPattern = /^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/;
-  const capturedHeadUrlPattern = /^https:\/\/market-api\.enthusia\.info\/v1\/player-heads\/[0-9a-f]{64}\.png$/;
-  function ownerHeadUrl(owner) {
-    const url = owner?.avatarUrl || "";
-    return minotarHeadUrlPattern.test(url) || capturedHeadUrlPattern.test(url) ? url : null;
-  }
+  const ownerHeadUrl = window.EnthusiaMarketOwnerUrl.ownerHeadUrl;
   function genericPlayer(owner, size, headUrl = null) {
     const data = headUrl ? ` data-owner-head-url="${esc(headUrl)}" data-owner-head-name="${esc(owner.name)}" data-skin-source="${esc(owner.avatar?.source || "JAVA")}" data-outer-layer="${owner.avatar?.includesOuterLayer === true}"` : "";
     return `<span class="owner-image player-head fallback${size}" aria-label="Generic player icon for ${esc(owner.name)}"${data}><img src="${assetBase}player-head-base.svg" alt="Generic player icon for ${esc(owner.name)}" width="82" height="82" decoding="async"><img class="skin-overlay" src="${assetBase}player-head-overlay.svg" alt="" width="82" height="82" decoding="async"></span>`;
