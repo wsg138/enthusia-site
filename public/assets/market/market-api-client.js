@@ -12,12 +12,30 @@
   const isInteger = value => Number.isInteger(value) && value >= 0 && value <= 2147483647;
   const isPositive = value => isInteger(value) && value > 0;
   const isString = value => typeof value === "string" && value.length > 0;
+  const isBoundedString = (value, maximum) => isString(value) && value.length <= maximum;
+  const isCoordinate = value => Number.isInteger(value) && value >= -30000000 && value <= 30000000;
   const minotarHeadUrlPattern = /^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/;
   const capturedHeadUrlPattern = /^https:\/\/market-api\.enthusia\.info\/v1\/player-heads\/[0-9a-f]{64}\.png$/;
   const bannerColors = new Set(["WHITE","ORANGE","MAGENTA","LIGHT_BLUE","YELLOW","LIME","PINK","GRAY","LIGHT_GRAY","CYAN","PURPLE","BLUE","BROWN","GREEN","RED","BLACK"]);
   const bannerPatterns = new Set(["SQUARE_BOTTOM_LEFT","SQUARE_BOTTOM_RIGHT","SQUARE_TOP_LEFT","SQUARE_TOP_RIGHT","STRIPE_BOTTOM","STRIPE_TOP","STRIPE_LEFT","STRIPE_RIGHT","STRIPE_CENTER","STRIPE_MIDDLE","STRIPE_DOWNRIGHT","STRIPE_DOWNLEFT","STRIPE_SMALL","CROSS","STRAIGHT_CROSS","TRIANGLE_BOTTOM","TRIANGLE_TOP","TRIANGLES_BOTTOM","TRIANGLES_TOP","DIAGONAL_LEFT","DIAGONAL_RIGHT","DIAGONAL_LEFT_MIRROR","DIAGONAL_RIGHT_MIRROR","CIRCLE","RHOMBUS","HALF_VERTICAL","HALF_HORIZONTAL","HALF_VERTICAL_MIRROR","HALF_HORIZONTAL_MIRROR","BORDER","CURLY_BORDER","GRADIENT","GRADIENT_UP","BRICKS","GLOBE","CREEPER","SKULL","FLOWER","MOJANG","PIGLIN","FLOW","GUSTER"]);
   const stallStates = new Set(["UNOWNED", "AUCTIONING", "OWNED", "GRACE", "RE_AUCTIONING", "EMERGENCY_AUCTIONING"]);
   const rentTimingStatuses = new Set(["PERSISTED", "LEGACY_DERIVED", "UNAVAILABLE", "NOT_APPLICABLE"]);
+
+  function isBuildingId(value) {
+    if (!isBoundedString(value, 64) || !value.startsWith("building-")) return false;
+    const suffix = value.slice("building-".length);
+    if (!suffix.length || suffix.charCodeAt(0) < 0x31 || suffix.charCodeAt(0) > 0x39) return false;
+    for (let index = 1; index < suffix.length; index++) {
+      const code = suffix.charCodeAt(index);
+      if (code < 0x30 || code > 0x39) return false;
+    }
+    return true;
+  }
+
+  function validLocation(location) {
+    return isObject(location) && isBoundedString(location.world, 128)
+      && isCoordinate(location.x) && isCoordinate(location.y) && isCoordinate(location.z);
+  }
 
   function validAvatar(owner) {
     if (!isObject(owner.avatar) || !isString(owner.avatar.kind)) return false;
@@ -36,24 +54,29 @@
   }
 
   function validItem(item, depth = 0) {
-    if (!isObject(item) || depth > 4 || !isString(item.material) || !isString(item.displayName) || !isPositive(item.amount) || item.amount > 64000 || !isObject(item.metadata)) return false;
+    if (!isObject(item) || depth > 4 || !isBoundedString(item.material, 128) || !isBoundedString(item.displayName, 256) || !isPositive(item.amount) || item.amount > 64000 || !isObject(item.metadata)) return false;
     const contents = item.metadata.container?.contents;
     return contents === undefined || Array.isArray(contents) && contents.length <= 1024 && contents.every(entry => isObject(entry) && validItem(entry.item, depth + 1));
   }
 
   function validStall(stall, expectedIds) {
-    if (!isObject(stall) || !expectedIds.has(stall.id) || !isString(stall.buildingId) || !Number.isInteger(stall.floor) || !isObject(stall.location) || !isObject(stall.owner) || !Array.isArray(stall.members) || !Array.isArray(stall.shops)) return false;
-    if (!isString(stall.owner.type) || !isString(stall.owner.name) || !validAvatar(stall.owner) || stall.members.some(member => typeof member !== "string")) return false;
+    if (!isObject(stall) || !expectedIds.has(stall.id) || !isBuildingId(stall.buildingId) || !Number.isInteger(stall.floor) || !validLocation(stall.location) || !isObject(stall.owner) || !Array.isArray(stall.members) || !Array.isArray(stall.shops)) return false;
+    if (!["NONE", "PLAYER", "GUILD"].includes(stall.owner.type) || !isBoundedString(stall.owner.name, 64) || !validAvatar(stall.owner) || stall.members.length > 256 || stall.members.some(member => !isBoundedString(member, 64))) return false;
     if (stall.stallState !== undefined && !stallStates.has(stall.stallState)) return false;
     if (stall.rentTimingStatus !== undefined && !rentTimingStatuses.has(stall.rentTimingStatus)) return false;
     if (stall.graceEndsAt !== undefined && stall.graceEndsAt !== null && typeof stall.graceEndsAt !== "string") return false;
-    return stall.shops.every(shop => isObject(shop) && isPositive(shop.id) && isObject(shop.owner) && isString(shop.owner.name) && ["BUY", "SELL", "TRADE"].includes(shop.direction) && validItem(shop.sellItem) && isPositive(shop.sellAmount) && validItem(shop.costItem) && isPositive(shop.costAmount) && isObject(shop.interaction) && isInteger(shop.stockCount) && isInteger(shop.availableTrades));
+    return stall.shops.length <= 256 && stall.shops.every(shop => isObject(shop) && isPositive(shop.id) && isObject(shop.owner) && isBoundedString(shop.owner.name, 64) && ["BUY", "SELL", "TRADE"].includes(shop.direction) && validItem(shop.sellItem) && isPositive(shop.sellAmount) && validItem(shop.costItem) && isPositive(shop.costAmount) && validLocation(shop.interaction) && isInteger(shop.stockCount) && isInteger(shop.availableTrades));
+  }
+
+  function validStallCollection(stalls, expectedStallIds) {
+    if (!Array.isArray(stalls) || stalls.length !== expectedStallIds.length) return false;
+    const expected = new Set(expectedStallIds), ids = new Set(stalls.map(stall => stall?.id));
+    return ids.size === expected.size && ![...expected].some(id => !ids.has(id))
+      && stalls.every(stall => validStall(stall, expected));
   }
 
   function validateSnapshot(value, expectedStallIds) {
-    if (!isObject(value) || value.schemaVersion !== 1 || value.serverId !== "enthusia-main" || !isInteger(value.sequence) || !isPositive(value.snapshotRevision) || !Array.isArray(value.stalls) || value.stalls.length !== expectedStallIds.length) return null;
-    const expected = new Set(expectedStallIds), ids = new Set(value.stalls.map(stall => stall?.id));
-    if (ids.size !== expected.size || [...expected].some(id => !ids.has(id)) || !value.stalls.every(stall => validStall(stall, expected))) return null;
+    if (!isObject(value) || value.schemaVersion !== 1 || value.serverId !== "enthusia-main" || !isInteger(value.sequence) || !isPositive(value.snapshotRevision) || !validStallCollection(value.stalls, expectedStallIds)) return null;
     return value;
   }
 

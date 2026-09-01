@@ -47,8 +47,17 @@
   const stallElements = new Map();
   const px = point => ({ x: (point.x - t.originX) * t.pixelsPerBlock, y: (point.z - t.originZ) * t.pixelsPerBlock });
   const esc = value => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
-  const displayStall = id => `Stall ${String(id).match(/\d+/)?.[0] || id}`;
-  const buildingNumber = id => `Building ${String(id).match(/\d+/)?.[0] || id}`;
+  function numberedLabel(id, prefix, label) {
+    const value = String(id ?? ""), suffix = value.startsWith(prefix) ? value.slice(prefix.length) : "";
+    if (!suffix.length) return `Unknown ${label.toLowerCase()}`;
+    for (let index = 0; index < suffix.length; index++) {
+      const code = suffix.charCodeAt(index);
+      if (code < 0x30 || code > 0x39) return `Unknown ${label.toLowerCase()}`;
+    }
+    return `${label} ${suffix}`;
+  }
+  const displayStall = id => numberedLabel(id, "stall", "Stall");
+  const buildingNumber = id => numberedLabel(id, "building-", "Building");
   const isMobile = () => matchMedia("(max-width: 600px), (max-height: 500px)").matches;
   const makeSvg = (name, attributes = {}) => {
     const node = document.createElementNS(ns, name);
@@ -274,9 +283,10 @@
   }
   const ownerType = owner => owner.type === "PLAYER" ? "Player" : owner.type === "GUILD" ? "Guild" : "Unowned";
   function locationMarkup(location, compact = false) {
-    if (!location) return `<span class="coordinates unavailable">Coordinates unavailable</span>`;
+    if (!location || ![location.x, location.y, location.z].every(Number.isFinite)) return `<span class="coordinates unavailable">Coordinates unavailable</span>`;
     const value = `X ${location.x}, Y ${location.y}, Z ${location.z}`;
-    return `<span class="coordinates${compact ? " compact" : ""}"><span>${value}</span><button class="copy-coordinates" data-copy="${location.x} ${location.y} ${location.z}" aria-label="Copy coordinates ${value}">Copy</button></span>`;
+    const copyValue = `${location.x} ${location.y} ${location.z}`;
+    return `<span class="coordinates${compact ? " compact" : ""}"><span>${esc(value)}</span><button class="copy-coordinates" data-copy="${esc(copyValue)}" aria-label="Copy coordinates ${esc(value)}">Copy</button></span>`;
   }
   async function copyText(value, button) {
     try { await navigator.clipboard.writeText(value); }
