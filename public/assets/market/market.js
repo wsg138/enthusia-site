@@ -7,22 +7,26 @@
   const iconManifest = window.ENTHUSIA_MINECRAFT_ASSETS;
   const fontManifest = window.ENTHUSIA_MINECRAFT_FONT;
   const adapter = new window.EnthusiaMarketAdapter.StaticMarketAdapter(layout, null);
-  const $ = selector => document.querySelector(selector);
+  const selectOne = selector => document.querySelector(selector);
   const ns = "http://www.w3.org/2000/svg";
   const t = layout.renderTransform;
-  const assetBase = document.querySelector("[data-market-asset-base]")?.dataset.marketAssetBase || $("#site-logo").getAttribute("src").replace(/[^/]+$/, "");
+  const potionSearchTerms = Object.freeze([
+    "potion", "strength", "slow falling", "invis", "water breathing", "night vision", "regeneration",
+    "poison", "weakness", "turtle master", "wind charged", "weaving", "oozing", "infestation"
+  ]);
+  const assetBase = document.querySelector("[data-market-asset-base]")?.dataset.marketAssetBase || selectOne("#site-logo").getAttribute("src").replace(/[^/]+$/, "");
   const cssAssetBase = document.querySelector("[data-market-css-asset-base]")?.dataset.marketCssAssetBase ?? assetBase;
   const el = {
-    viewport: $("#market-map"), scene: $("#map-scene"), svg: $("#map-svg"), buildings: $("#building-layer"),
-    stalls: $("#stall-layer"), tooltip: $("#map-tooltip"), hud: $("#coordinate-hud"), hudValue: $("#coordinate-value"), clearCoordinate: $("#clear-coordinate"), marker: $("#pinned-coordinate-marker"), results: $("#search-results"), resultsContent: $(".search-results-content"),
-    drawer: $("#market-drawer"), backdrop: $("#drawer-backdrop"), content: $("#drawer-content"), title: $("#drawer-title"),
-    kicker: $("#drawer-kicker"), summary: $("#drawer-summary"), back: $("#drawer-back"), inspector: $("#item-inspector"),
-    inspectorContent: $("#inspector-content"), inspectorTitle: $("#inspector-title"), inspectorKicker: $("#inspector-kicker"),
-    itemTooltip: $("#minecraft-hover-tooltip"), connection: $("#market-connection-status"),
-    connectionLabel: $("#market-connection-label"), lastUpdated: $("#market-last-updated")
+    viewport: selectOne("#market-map"), scene: selectOne("#map-scene"), svg: selectOne("#map-svg"), buildings: selectOne("#building-layer"),
+    stalls: selectOne("#stall-layer"), tooltip: selectOne("#map-tooltip"), hud: selectOne("#coordinate-hud"), hudValue: selectOne("#coordinate-value"), clearCoordinate: selectOne("#clear-coordinate"), marker: selectOne("#pinned-coordinate-marker"), results: selectOne("#search-results"), resultsContent: selectOne(".search-results-content"),
+    drawer: selectOne("#market-drawer"), backdrop: selectOne("#drawer-backdrop"), content: selectOne("#drawer-content"), title: selectOne("#drawer-title"),
+    kicker: selectOne("#drawer-kicker"), summary: selectOne("#drawer-summary"), back: selectOne("#drawer-back"), inspector: selectOne("#item-inspector"),
+    inspectorContent: selectOne("#inspector-content"), inspectorTitle: selectOne("#inspector-title"), inspectorKicker: selectOne("#inspector-kicker"),
+    itemTooltip: selectOne("#minecraft-hover-tooltip"), connection: selectOne("#market-connection-status"),
+    connectionLabel: selectOne("#market-connection-label"), lastUpdated: selectOne("#market-last-updated")
   };
 
-  const filterFields = $("#filter-fields");
+  const filterFields = selectOne("#filter-fields");
   document.documentElement.classList.add("market-viewer-active");
   const overlayPortal = document.createElement("div");
   overlayPortal.className = "market-page-root market-overlay-portal";
@@ -562,7 +566,7 @@
     if (building.stallIds.length === 1) return openStall(adapter.getStall(building.stallIds[0]), null);
     state.drawerBuilding = building; state.drawerMode = "building"; renderBuildingDrawer(); showDrawer();
   }
-  function showDrawer() { el.drawer.hidden = false; el.backdrop.hidden = false; if (isMobile()) activateSheet("details", el.drawer, state.drawerBuilding?.label || el.title.textContent, "normal", el.viewport); else requestAnimationFrame(() => $("#drawer-close").focus()); }
+  function showDrawer() { el.drawer.hidden = false; el.backdrop.hidden = false; if (isMobile()) activateSheet("details", el.drawer, state.drawerBuilding?.label || el.title.textContent, "normal", el.viewport); else requestAnimationFrame(() => selectOne("#drawer-close").focus()); }
   function closeDrawer() { closeInspector(); hideMobileResults(); el.drawer.hidden = true; el.drawer.classList.remove("mobile-sheet-active"); el.backdrop.hidden = true; state.drawerMode = null; state.drawerBuilding = null; state.highlightShop = null; state.mobileStack = []; state.searchReturn = false; selectMap(null); }
   function renderBuildingDrawer() {
     const building = state.drawerBuilding;
@@ -815,17 +819,17 @@
     state.matching = snapshot ? new Set(snapshot.stalls.filter(matchesFilters).map(stall => stall.id)) : new Set(layout.stalls.map(stall => stall.id));
     for (const stall of layout.stalls) stallElements.get(stall.id).classList.toggle("filtered", !state.matching.has(stall.id));
     for (const building of layout.buildings) buildingElements.get(building.id).classList.toggle("filtered", !building.stallIds.some(id => state.matching.has(id)));
-    $("#result-count").textContent = snapshot ? `${state.matching.size} of ${layout.stalls.length} stalls` : "Market data unavailable";
+    selectOne("#result-count").textContent = snapshot ? `${state.matching.size} of ${layout.stalls.length} stalls` : "Market data unavailable";
     const labels = { floor: "Floor", owner: "Owner", shop: "Shop", stock: "Stock", rent: "Rent" }, selectors = {floor:"#floor-filter",owner:"#owner-filter",shop:"#shop-filter",stock:"#stock-filter",rent:"#rent-filter"};
     const active = Object.entries(state.filters).filter(([, value]) => value && value !== "ALL");
-    $("#filter-chips").innerHTML = active.map(([key]) => { const select = $(selectors[key]), display = select.options[select.selectedIndex]?.text || state.filters[key]; return `<span class="chip">${labels[key]}: ${esc(display)} <button type="button" data-remove-filter="${key}" aria-label="Remove ${labels[key]} filter">×</button></span>`; }).join("") + (active.length ? `<button id="clear-active-filters" class="clear-active-filters" type="button">Clear all filters</button>` : "");
-    $("#filter-chips").querySelectorAll("[data-remove-filter]").forEach(button => button.onclick = () => { const key = button.dataset.removeFilter; state.filters[key] = "ALL"; $(selectors[key]).value = "ALL"; applyFilters(); });
-    $("#clear-active-filters")?.addEventListener("click", clearFilters);
+    selectOne("#filter-chips").innerHTML = active.map(([key]) => { const select = selectOne(selectors[key]), display = select.options[select.selectedIndex]?.text || state.filters[key]; return `<span class="chip">${labels[key]}: ${esc(display)} <button type="button" data-remove-filter="${key}" aria-label="Remove ${labels[key]} filter">×</button></span>`; }).join("") + (active.length ? `<button id="clear-active-filters" class="clear-active-filters" type="button">Clear all filters</button>` : "");
+    selectOne("#filter-chips").querySelectorAll("[data-remove-filter]").forEach(button => button.onclick = () => { const key = button.dataset.removeFilter; state.filters[key] = "ALL"; selectOne(selectors[key]).value = "ALL"; applyFilters(); });
+    selectOne("#clear-active-filters")?.addEventListener("click", clearFilters);
     if (state.drawerMode === "building" && state.drawerBuilding) renderBuildingDrawer();
   }
   function clearFilters() {
     state.filters = { floor: "ALL", owner: "ALL", shop: "ALL", stock: "ALL", rent: "ALL" };
-    $("#floor-filter").value = $("#owner-filter").value = $("#shop-filter").value = $("#stock-filter").value = $("#rent-filter").value = "ALL"; applyFilters();
+    selectOne("#floor-filter").value = selectOne("#owner-filter").value = selectOne("#shop-filter").value = selectOne("#stock-filter").value = selectOne("#rent-filter").value = "ALL"; applyFilters();
   }
   function matchesRentFilter(stall, filter) {
     if (!filter || filter === "ALL") return true;
@@ -836,18 +840,18 @@
     return filter === "UNDER_1_DAY" ? remaining <= 24 * 3600000 : filter === "UNDER_3_DAYS" ? remaining <= 72 * 3600000 : false;
   }
   for (const floor of [...new Set(layout.stalls.map(stall => stall.floor))].sort((a, b) => a - b)) {
-    const option = document.createElement("option"); option.value = floor; option.textContent = C.floorName(floor); $("#floor-filter").append(option);
+    const option = document.createElement("option"); option.value = floor; option.textContent = C.floorName(floor); selectOne("#floor-filter").append(option);
   }
   for (const [selector, key] of [["#floor-filter", "floor"], ["#owner-filter", "owner"], ["#shop-filter", "shop"], ["#stock-filter", "stock"], ["#rent-filter", "rent"]]) {
-    $(selector).addEventListener("change", event => { state.filters[key] = event.target.value; applyFilters(); });
+    selectOne(selector).addEventListener("change", event => { state.filters[key] = event.target.value; applyFilters(); });
   }
-  $("#clear-filters").onclick = clearFilters;
-  $("#apply-filters").onclick = () => { applyFilters(); if (isMobile()) setSheetState("collapsed"); };
-  $("#collapse-filters").onclick = () => setSheetState("collapsed");
-  $("#mobile-filters").onclick = () => {
+  selectOne("#clear-filters").onclick = clearFilters;
+  selectOne("#apply-filters").onclick = () => { applyFilters(); if (isMobile()) setSheetState("collapsed"); };
+  selectOne("#collapse-filters").onclick = () => setSheetState("collapsed");
+  selectOne("#mobile-filters").onclick = () => {
     closeInspector(); hideMobileResults(); el.drawer.hidden = true; el.backdrop.hidden = true;
-    activateSheet("filters", filterFields, "Filters", "normal", $("#mobile-filters"));
-    $("#mobile-filters").setAttribute("aria-expanded", "true");
+    activateSheet("filters", filterFields, "Filters", "normal", selectOne("#mobile-filters"));
+    selectOne("#mobile-filters").setAttribute("aria-expanded", "true");
   };
 
   function hideMobileResults() {
@@ -858,17 +862,17 @@
   function showMobileResults() {
     if (!isMobile() || !state.lastSearch) return;
     state.mobileResultsOpen = true;
-    activateSheet("results", el.results, state.lastSearch.query ? `Results for “${state.lastSearch.query}”` : "Search results", "normal", $("#item-search"));
+    activateSheet("results", el.results, state.lastSearch.query ? `Results for “${state.lastSearch.query}”` : "Search results", "normal", selectOne("#item-search"));
     el.resultsContent.scrollTop = 0;
   }
 
-  function executeSearch(query = $("#item-search").value) {
+  function executeSearch(query = selectOne("#item-search").value) {
     const value = query.trim(), shops = value ? adapter.searchItems(value).map((shop, index) => ({shop, index})).sort((left, right) => Number(right.shop.stockCount > 0) - Number(left.shop.stockCount > 0) || left.index - right.index).map(entry => entry.shop) : [];
-    $("#item-search").value = value;
+    selectOne("#item-search").value = value;
     state.lastSearch = {query: value, shops}; state.searchReturn = false;
     if (isMobile()) { preserveDetailContext(); el.backdrop.hidden = true; filterFields.classList.remove("open"); }
     else { closeInspector(); el.drawer.hidden = true; el.backdrop.hidden = true; state.drawerMode = null; state.drawerBuilding = null; }
-    renderResults(value, shops); hideSuggestions(); $("#item-search").blur();
+    renderResults(value, shops); hideSuggestions(); selectOne("#item-search").blur();
     if (isMobile()) showMobileResults();
     return shops;
   }
@@ -939,47 +943,49 @@
   }
   let suggestionRevision = 0;
   function showSuggestions(event) {
-    const input = $("#item-search");
+    const input = selectOne("#item-search");
     if (event?.isComposing) return;
     const revision = ++suggestionRevision, query = input.value;
     queueMicrotask(() => renderSuggestions(query, revision));
   }
   function renderSuggestions(query, revision) {
-    const input = $("#item-search");
+    const input = selectOne("#item-search");
     if (revision !== suggestionRevision || input.value !== query) return;
-    const normalized = query.trim().toLowerCase(), potionQuery = /potion|strength|slow falling|invis|water breathing|night vision|regeneration|poison|weakness|turtle master|wind charged|weaving|oozing|infestation/.test(normalized), items = normalized ? adapter.suggest(query, potionQuery ? 220 : 15) : [];
-    state.suggestionIndex = -1; const box = $("#search-suggestions");
+    const normalized = query.trim().toLowerCase();
+    const potionQuery = potionSearchTerms.some(term => normalized.includes(term));
+    const items = normalized ? adapter.suggest(query, potionQuery ? 220 : 15) : [];
+    state.suggestionIndex = -1; const box = selectOne("#search-suggestions");
     if (!items.length) { box.replaceChildren(); box.hidden = true; return; }
     box.innerHTML = items.map((entry, index) => {
       const label = publicItemName(entry.displayName || entry.searchQuery), query = publicItemName(entry.searchQuery || label), subtitle = publicItemName(entry.subtitle);
       return `<button role="option" data-suggestion="${esc(query)}" data-index="${index}">${itemIcon(entry.item || {material:entry.material,displayName:label,amount:1})}<span><strong>${esc(label)}</strong>${subtitle ? `<small>${esc(subtitle)}</small>` : ""}</span></button>`;
     }).join(""); box.hidden = false;
-    box.querySelectorAll("button").forEach(button => button.onclick = () => { $("#item-search").value = button.dataset.suggestion; executeSearch(); });
+    box.querySelectorAll("button").forEach(button => button.onclick = () => { selectOne("#item-search").value = button.dataset.suggestion; executeSearch(); });
   }
-  function hideSuggestions() { $("#search-suggestions").hidden = true; state.suggestionIndex = -1; }
-  $("#item-search").addEventListener("input", showSuggestions);
-  $("#item-search").addEventListener("compositionend", showSuggestions);
-  $("#item-search").addEventListener("search", showSuggestions);
-  $("#item-search").addEventListener("focus", showSuggestions);
-  $("#item-search").onkeydown = event => {
-    const buttons = [...$("#search-suggestions").querySelectorAll("button")];
+  function hideSuggestions() { selectOne("#search-suggestions").hidden = true; state.suggestionIndex = -1; }
+  selectOne("#item-search").addEventListener("input", showSuggestions);
+  selectOne("#item-search").addEventListener("compositionend", showSuggestions);
+  selectOne("#item-search").addEventListener("search", showSuggestions);
+  selectOne("#item-search").addEventListener("focus", showSuggestions);
+  selectOne("#item-search").onkeydown = event => {
+    const buttons = [...selectOne("#search-suggestions").querySelectorAll("button")];
     if (event.key === "ArrowDown" && buttons.length) { event.preventDefault(); state.suggestionIndex = Math.min(buttons.length - 1, state.suggestionIndex + 1); }
     else if (event.key === "ArrowUp" && buttons.length) { event.preventDefault(); state.suggestionIndex = Math.max(0, state.suggestionIndex - 1); }
-    else if (event.key === "Enter") { event.preventDefault(); if (state.suggestionIndex >= 0) $("#item-search").value = buttons[state.suggestionIndex].dataset.suggestion; executeSearch(); }
+    else if (event.key === "Enter") { event.preventDefault(); if (state.suggestionIndex >= 0) selectOne("#item-search").value = buttons[state.suggestionIndex].dataset.suggestion; executeSearch(); }
     else if (event.key === "Escape") hideSuggestions();
     buttons.forEach((button, index) => button.classList.toggle("active", index === state.suggestionIndex));
   };
   document.addEventListener("pointerdown", event => {
-    if ($("#search-suggestions").hidden) return;
+    if (selectOne("#search-suggestions").hidden) return;
     const path = event.composedPath?.() || [];
-    if (!path.includes($("#item-search")) && !path.includes($("#search-button")) && !path.includes($("#search-suggestions"))) hideSuggestions();
+    if (!path.includes(selectOne("#item-search")) && !path.includes(selectOne("#search-button")) && !path.includes(selectOne("#search-suggestions"))) hideSuggestions();
   });
-  $("#search-button").onclick = () => executeSearch(); $("#drawer-close").onclick = closeDrawer; el.backdrop.onclick = closeDrawer;
+  selectOne("#search-button").onclick = () => executeSearch(); selectOne("#drawer-close").onclick = closeDrawer; el.backdrop.onclick = closeDrawer;
   el.back.onclick = () => { closeInspector(); if (state.drawerBuilding) { state.drawerMode = "building"; renderBuildingDrawer(); showDrawer(); } };
-  $("#inspector-close").onclick = () => isMobile() ? closeDrawer() : closeInspector();
-  $("#zoom-in").onclick = () => zoomAt(1.2, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
-  $("#zoom-out").onclick = () => zoomAt(.83, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
-  $("#fit-map").onclick = fit;
+  selectOne("#inspector-close").onclick = () => isMobile() ? closeDrawer() : closeInspector();
+  selectOne("#zoom-in").onclick = () => zoomAt(1.2, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
+  selectOne("#zoom-out").onclick = () => zoomAt(.83, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
+  selectOne("#fit-map").onclick = fit;
   window.addEventListener("keydown", event => {
     if (event.key !== "Escape") return;
     if (isMobile() && state.sheet.surface && state.sheet.state !== "collapsed") setSheetState("collapsed");
