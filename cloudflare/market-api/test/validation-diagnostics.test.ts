@@ -76,6 +76,24 @@ describe("safe validation diagnostics", () => {
     expect(JSON.stringify(summary)).not.toContain("private-value");
   });
 
+  it("redacts symbol path segments without reading their values", () => {
+    const privateKey = Symbol("private-path");
+    const data = { [privateKey]: "private-value" };
+    const summary = summarizeValidationIssues([{
+      code: "custom",
+      path: [privateKey],
+      message: "invalid private field",
+    }], data);
+
+    expect(summary.issues[0]).toEqual({
+      code: "custom",
+      path: "field",
+      expected: "constraint",
+      received: "undefined",
+    });
+    expect(JSON.stringify(summary)).not.toContain("private-value");
+  });
+
   it("emits one bounded log entry inside the rate-limit window", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
     const summary = { category: "invalid_field" as const, issues: [], omitted: 0 };

@@ -16,6 +16,12 @@ const SAFE_FIELDS = new Set([
   "capacityUsed", "capacityMax", "contents", "slot", "item", "probe",
 ]);
 
+const SPECIAL_EXPECTATIONS = new Map<string, string>([
+  ["unrecognized_keys", "strict_object"],
+  ["invalid_value", "enum_or_literal"],
+  ["custom", "constraint"],
+]);
+
 export interface SafeValidationIssue {
   code: string;
   path: string;
@@ -35,33 +41,42 @@ export interface SafeValidationSummary {
 
 let lastLogAt = 0;
 
+function renderedPathSegment(segment: PropertyKey, nested: boolean): string {
+  if (typeof segment === "number") return `[${Math.max(0, Math.min(segment, 9999))}]`;
+  const field = typeof segment === "string" && SAFE_FIELDS.has(segment) ? segment : "field";
+  return nested ? `.${field}` : field;
+}
+
 function safePath(path: PropertyKey[]): string {
   let result = "";
   for (const segment of path) {
-    if (typeof segment === "number") {
-      result += `[${Math.max(0, Math.min(segment, 9999))}]`;
-    } else if (typeof segment === "string") {
-      const field = SAFE_FIELDS.has(segment) ? segment : "field";
-      result += result ? `.${field}` : field;
-    } else {
-      result += result ? ".field" : "field";
-    }
+    result += renderedPathSegment(segment, result.length > 0);
     if (result.length >= MAX_PATH_LENGTH) return result.slice(0, MAX_PATH_LENGTH);
   }
   return result || "$";
+}
+
+function indexedPathValue(current: object, index: number): unknown {
+  if (!Array.isArray(current)) return undefined;
+  if (!Number.isInteger(index) || index < 0 || index >= current.length) return undefined;
+  return current.at(index);
+}
+
+function fieldPathValue(current: object, segment: PropertyKey): unknown {
+  if (typeof segment !== "string") return undefined;
+  if (!SAFE_FIELDS.has(segment) || !Object.hasOwn(current, segment)) return undefined;
+  return Reflect.get(current, segment);
+}
+
+function nextPathValue(current: object, segment: PropertyKey): unknown {
+  return typeof segment === "number" ? indexedPathValue(current, segment) : fieldPathValue(current, segment);
 }
 
 function valueAtPath(data: unknown, path: PropertyKey[]): unknown {
   let current = data;
   for (const segment of path) {
     if (current === null || typeof current !== "object") return undefined;
-    if (typeof segment === "number") {
-      if (!Array.isArray(current) || !Number.isInteger(segment) || segment < 0 || segment >= current.length) return undefined;
-      current = current.at(segment);
-      continue;
-    }
-    if (typeof segment !== "string" || !SAFE_FIELDS.has(segment) || !Object.hasOwn(current, segment)) return undefined;
-    current = Reflect.get(current, segment);
+    current = nextPathValue(current, segment);
   }
   return current;
 }
@@ -74,16 +89,21 @@ function received(value: unknown): Pick<SafeValidationIssue, "received" | "lengt
   return { received: typeof value };
 }
 
+function firstExpectedValue(...candidates: Array<string | undefined>): string {
+  for (const candidate of candidates) {
+    if (candidate !== undefined) return candidate;
+  }
+  return "constraint";
+}
+
 function expected(issue: ZodIssue): string {
   const details = issue as ZodIssue & {
     expected?: string;
     format?: string;
     origin?: string;
   };
-  if (issue.code === "unrecognized_keys") return "strict_object";
-  if (issue.code === "invalid_value") return "enum_or_literal";
-  if (issue.code === "custom") return "constraint";
-  return details.expected ?? details.format ?? details.origin ?? "constraint";
+  const special = SPECIAL_EXPECTATIONS.get(issue.code);
+  return special ?? firstExpectedValue(details.expected, details.format, details.origin);
 }
 
 export function summarizeValidationIssues(issues: ZodIssue[], data: unknown): SafeValidationSummary {
