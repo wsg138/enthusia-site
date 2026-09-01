@@ -87,6 +87,18 @@ try {
       &&T.state.selectedStall===stall.id&&drawer.includes('Live Preview Test')&&inspector.includes('LiveShopOwner')
       &&T.state.view.scale===view.scale&&T.state.view.x===view.x&&T.state.view.y===view.y;
   })()`);
+  results.dynamicMarkupEscaping = await evaluate(`(()=>{
+    const T=window.__MARKET_TEST__,original=structuredClone(T.adapter.snapshot.stalls.find(stall=>stall.owner.type==='PLAYER'&&stall.shops.length));
+    const probe='<img src=x onerror=window.__marketXssProbe=1>',modified=structuredClone(original);
+    modified.owner.name=probe;modified.shops[0].owner.name=probe;
+    modified.members.length?modified.members[0]=probe:modified.members.push(probe);
+    window.__marketXssProbe=0;T.openStall(original);
+    T.adapter.replaceStall(modified);T.refreshMarketUi(original.id);
+    const content=document.querySelector('#drawer-content');
+    const escaped=window.__marketXssProbe===0&&!content.querySelector('img[src="x"]')&&content.textContent.includes(probe);
+    T.adapter.replaceStall(original);T.refreshMarketUi(original.id);
+    delete window.__marketXssProbe;return escaped;
+  })()`);
   results.liveConnectionBadge = await evaluate("(()=>{const T=window.__MARKET_TEST__;T.marketClient.source='api';T.marketClient.emitStatus('live');return document.querySelector('#market-connection-label').textContent==='Live'&&document.querySelector('#market-connection-status').dataset.source==='api'})()");
   results.nullOwnerAndRentRendering = await evaluate("(()=>{const T=window.__MARKET_TEST__,stall=T.adapter.snapshot.stalls.find(value=>value.owner.type==='NONE'&&value.ownerSince===null&&value.nextRentAt===null);T.openStall(stall);const text=document.querySelector('#market-drawer').innerText;return !/null|invalid date/i.test(text)})()");
   results.nativeStyle = await evaluate("getComputedStyle(document.querySelector('.map-card')).borderStyle==='solid'&&getComputedStyle(document.querySelector('.market-intro h1')).fontSize!=='16px'");
