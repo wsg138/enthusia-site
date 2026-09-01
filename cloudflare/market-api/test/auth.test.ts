@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { signedFetch } from "./helpers";
 
 function probe() {
-  return { schemaVersion: 1, serverId: "enthusia-main", serverEpoch: "epoch", eventId: crypto.randomUUID(), sentAt: new Date().toISOString(), probe: "random" };
+  return { schemaVersion: 1, serverId: "enthusia-main", serverEpoch: "epoch", eventId: globalThis.crypto.randomUUID(), sentAt: new Date().toISOString(), probe: "random" };
 }
 
 describe("request authentication", () => {
