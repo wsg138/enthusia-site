@@ -135,6 +135,16 @@ ESLint 8 is pinned as a development dependency so local checks and the hosted Co
 Current test coverage includes site validation plus dedicated competition, Discord-membership, appeal-auth, punishment-site, navigation and potion-preview tests.
 
 Additional cinematic/mask tools are available through the package scripts for site media work.
+They use Python and the Pillow version declared in `requirements.txt`. Keep that
+dependency isolated from the system Python installation:
+
+```bash
+python -m venv .venv-tools
+# Activate .venv-tools for your shell, then:
+python -m pip install --requirement requirements.txt
+```
+
+Delete `.venv-tools` to remove the local Python environment.
 
 ## Deployment
 

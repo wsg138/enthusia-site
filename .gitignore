@@ -6,6 +6,7 @@ minecraft/competition-bridge/target/
 wiki-worker-output/
 __pycache__/
 *.pyc
+.venv-tools/
 .dev.vars
 .dev.vars.*
 .env
