@@ -1,15 +1,12 @@
 import { authenticateRequest, canReview } from "../../../../lib/auth.js";
+import {
+  appealAttachmentDisposition,
+  appealAttachmentResponse
+} from "../../../../lib/appeal-attachment-response.js";
 import { findReviewerAppealAttachment } from "../../../../lib/appeal-repository.js";
 import { forbidden, json, methodNotAllowed, unauthorized } from "../../../../lib/responses.js";
 import { reviewerRank } from "../../../../lib/staff-api.js";
 import { isCanonicalUuid } from "../../../../lib/validation.js";
-
-function disposition(record) {
-  const encoded = encodeURIComponent(record.displayName).replace(/['()*]/g, (value) => (
-    `%${value.codePointAt(0).toString(16).toUpperCase()}`
-  ));
-  return `${record.mimeType.startsWith("image/") ? "inline" : "attachment"}; filename*=UTF-8''${encoded}`;
-}
 
 export async function onRequestGet(context) {
   let session;
@@ -28,18 +25,9 @@ export async function onRequestGet(context) {
   try { object = await context.env.COMPETITIONS_MEDIA.get(record.storageKey); }
   catch { return json({ error: "attachment_unavailable" }, 503); }
   if (!object) return json({ error: "attachment_not_found" }, 404);
-  return new Response(object.body, {
-    headers: {
-      "content-type": record.mimeType,
-      "content-length": String(object.size ?? record.byteSize),
-      "content-disposition": disposition(record),
-      "cache-control": "private, no-store",
-      "content-security-policy": "default-src 'none'; sandbox",
-      "x-content-type-options": "nosniff"
-    }
-  });
+  return appealAttachmentResponse(object, record);
 }
 
 export function onRequest() { return methodNotAllowed(["GET"]); }
 
-export { disposition };
+export { appealAttachmentDisposition as disposition };

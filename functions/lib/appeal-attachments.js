@@ -57,6 +57,25 @@ export function appealAttachmentKey(draftId, attachmentId, extension) {
   return `appeals/${draft}/${attachment}.${extension}`;
 }
 
+function attachmentStorageOptions(inspection, sha256) {
+  return {
+    httpMetadata: { contentType: inspection.mimeType, cacheControl: "private, no-store" },
+    customMetadata: { sha256, purpose: "appeal-evidence" },
+    sha256
+  };
+}
+
+function storedAttachment(stored, binary, inspection, key, sha256) {
+  return {
+    key,
+    sha256,
+    byteSize: stored?.size ?? binary.byteLength,
+    mimeType: inspection.mimeType,
+    width: inspection.width ?? null,
+    height: inspection.height ?? null
+  };
+}
+
 export async function storeAppealAttachment(bucket, {
   data,
   draftId,
@@ -69,19 +88,8 @@ export async function storeAppealAttachment(bucket, {
   const binary = asBytes(data);
   const sha256 = await sha256Hex(binary);
   const key = appealAttachmentKey(draftId, attachmentId, inspection.extension);
-  const stored = await bucket.put(key, binary, {
-    httpMetadata: { contentType: inspection.mimeType, cacheControl: "private, no-store" },
-    customMetadata: { sha256, purpose: "appeal-evidence" },
-    sha256
-  });
-  return {
-    key,
-    sha256,
-    byteSize: stored?.size ?? binary.byteLength,
-    mimeType: inspection.mimeType,
-    width: inspection.width ?? null,
-    height: inspection.height ?? null
-  };
+  const stored = await bucket.put(key, binary, attachmentStorageOptions(inspection, sha256));
+  return storedAttachment(stored, binary, inspection, key, sha256);
 }
 
 export async function deleteAppealAttachment(bucket, key) {

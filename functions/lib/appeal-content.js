@@ -1,4 +1,5 @@
 import { isCanonicalUuid } from "./validation.js";
+import { plainAppealText } from "./appeal-markup.js";
 
 const MAX_STAFF_REASON_LENGTH = 1000;
 const MAX_ATTACHMENTS = 5;
@@ -16,21 +17,6 @@ function normalizedText(input, field) {
   return typeof input?.[field] === "string"
     ? input[field].replace(/\r\n?/g, "\n").trim()
     : "";
-}
-
-export function plainAppealText(value) {
-  return String(value ?? "")
-    .replace(/^#{1,3}[ \t]+/gm, "")
-    .replace(/^>[ \t]?/gm, "")
-    .replace(/^[-*+][ \t]+/gm, "")
-    .replace(/^\d+[.)][ \t]+/gm, "")
-    .replace(/\*\*([^*]+)\*\*/g, "$1")
-    .replace(/__([^_]+)__/g, "$1")
-    .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, "$1")
-    .replace(/(?<!_)_([^_]+)_(?!_)/g, "$1")
-    .replace(/`([^`]+)`/g, "$1")
-    .replace(/\s+/g, " ")
-    .trim();
 }
 
 function meaningfulLength(value) {
@@ -115,4 +101,4 @@ export function staffAppealIdempotencyKey(payloadHash) {
   return `appeal-${payloadHash}`;
 }
 
-export { MAX_ATTACHMENTS, MAX_STAFF_REASON_LENGTH };
+export { MAX_ATTACHMENTS, MAX_STAFF_REASON_LENGTH, plainAppealText };

@@ -9,6 +9,10 @@ import {
   safeAttachmentName,
   storeAppealAttachment
 } from "../functions/lib/appeal-attachments.js";
+import {
+  appealAttachmentDisposition,
+  appealAttachmentResponse
+} from "../functions/lib/appeal-attachment-response.js";
 
 const DRAFT_ID = "11111111-1111-4111-8111-111111111111";
 const ATTACHMENT_ID = "22222222-2222-4222-8222-222222222222";
@@ -105,4 +109,31 @@ test("appeal evidence cleanup retries a transient storage failure", async () => 
 
   assert.equal(attempts, 2);
   assert.equal(pending.length, 1);
+});
+
+test("appeal evidence responses use safe private download headers", async () => {
+  const record = {
+    displayName: "chat (complete).log",
+    mimeType: "text/plain",
+    byteSize: 12
+  };
+  assert.equal(
+    appealAttachmentDisposition(record),
+    "attachment; filename*=UTF-8''chat%20%28complete%29.log"
+  );
+
+  const response = appealAttachmentResponse({ body: "chat content" }, record);
+  assert.equal(response.headers.get("content-type"), "text/plain");
+  assert.equal(response.headers.get("content-length"), "12");
+  assert.equal(response.headers.get("cache-control"), "private, no-store");
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+  assert.match(response.headers.get("content-security-policy"), /default-src 'none'/);
+  assert.equal(await response.text(), "chat content");
+});
+
+test("appeal screenshots open inline without weakening private headers", () => {
+  assert.equal(appealAttachmentDisposition({
+    displayName: "proof.png",
+    mimeType: "image/png"
+  }), "inline; filename*=UTF-8''proof.png");
 });

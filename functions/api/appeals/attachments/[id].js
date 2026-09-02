@@ -1,4 +1,8 @@
 import { cleanupAppealAttachment } from "../../../lib/appeal-attachments.js";
+import {
+  appealAttachmentDisposition,
+  appealAttachmentResponse
+} from "../../../lib/appeal-attachment-response.js";
 import { findOwnedAppealAttachment, removeDraftAttachment } from "../../../lib/appeal-repository.js";
 import { authenticateLinkedAppealRequest } from "../../../lib/appeal-session.js";
 import { json, methodNotAllowed, unauthorized } from "../../../lib/responses.js";
@@ -21,13 +25,6 @@ async function resolve(context) {
   return record ? { session, record } : { response: json({ error: "attachment_not_found" }, 404) };
 }
 
-function disposition(record) {
-  const encoded = encodeURIComponent(record.displayName).replace(/['()*]/g, (value) => (
-    `%${value.codePointAt(0).toString(16).toUpperCase()}`
-  ));
-  return `${record.mimeType.startsWith("image/") ? "inline" : "attachment"}; filename*=UTF-8''${encoded}`;
-}
-
 export async function onRequestGet(context) {
   const resolved = await resolve(context);
   if (resolved.response) return resolved.response;
@@ -35,16 +32,7 @@ export async function onRequestGet(context) {
   try { object = await context.env.COMPETITIONS_MEDIA.get(resolved.record.storageKey); }
   catch { return json({ error: "attachment_unavailable" }, 503); }
   if (!object) return json({ error: "attachment_not_found" }, 404);
-  return new Response(object.body, {
-    headers: {
-      "content-type": resolved.record.mimeType,
-      "content-length": String(object.size ?? resolved.record.byteSize),
-      "content-disposition": disposition(resolved.record),
-      "cache-control": "private, no-store",
-      "content-security-policy": "default-src 'none'; sandbox",
-      "x-content-type-options": "nosniff"
-    }
-  });
+  return appealAttachmentResponse(object, resolved.record);
 }
 
 export async function onRequestDelete(context) {
@@ -73,4 +61,4 @@ export async function onRequestDelete(context) {
 
 export function onRequest() { return methodNotAllowed(["GET", "DELETE"]); }
 
-export { disposition, resolve };
+export { appealAttachmentDisposition as disposition, resolve };
