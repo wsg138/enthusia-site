@@ -5272,6 +5272,8 @@ html body :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt
 .appeal-history{display:grid;gap:18px}
 .appeal-history[aria-busy="true"]{opacity:.62}
 .appeal-history-card{overflow:hidden;padding:0;border-radius:18px;background:rgba(12,10,9,.95);box-shadow:0 24px 68px rgba(0,0,0,.23)}
+.appeal-history-card.is-targeted{outline:2px solid rgba(255,183,76,.82);outline-offset:3px;box-shadow:0 24px 68px rgba(0,0,0,.3),0 0 34px rgba(255,132,42,.2)}
+.appeal-history-card:focus{outline:2px solid rgba(255,214,154,.95);outline-offset:3px}
 .appeal-history-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:24px 26px 18px;background:linear-gradient(120deg,rgba(45,25,14,.66),rgba(15,13,11,.28))}
 .appeal-history-card-header h2{margin:4px 0 0;font-size:clamp(1.38rem,3vw,2rem)}
 .appeal-history-state{flex:none;border:1px solid rgba(255,183,76,.32);border-radius:999px;padding:7px 11px;color:#ffd69a;background:rgba(48,24,11,.78);font-size:.71rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}

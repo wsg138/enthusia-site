@@ -38,8 +38,11 @@ const state = {
   attachments: [],
   draftId: null,
   uploading: false,
-  submitting: false
+  submitting: false,
+  focusedAppealId: null
 };
+
+const canonicalUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const statusCopy = Object.freeze({
   OPEN: {
@@ -149,6 +152,23 @@ function dateTime(value) {
 
 function shortId(value) {
   return String(value ?? "").slice(0, 8).toUpperCase() || "UNKNOWN";
+}
+
+function requestedAppealId() {
+  const value = new URLSearchParams(window.location.search).get("appeal")?.trim() ?? "";
+  return canonicalUuid.test(value) ? value.toLowerCase() : null;
+}
+
+function focusRequestedAppeal() {
+  const appealId = requestedAppealId();
+  if (!appealId || state.focusedAppealId === appealId) return;
+  const card = [...historyRoot.querySelectorAll("[data-appeal-id]")]
+    .find((candidate) => candidate.dataset.appealId === appealId);
+  if (!card) return;
+  state.focusedAppealId = appealId;
+  card.focus({ preventScroll: true });
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  card.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "center" });
 }
 
 function typeLabel(value) {
@@ -279,6 +299,10 @@ function appealHistoryCard(appeal) {
     ? { label: "Reply sent", message: "Your message was sent. Staff will review it with the appeal." }
     : statusCopy[appeal.status] ?? { label: typeLabel(appeal.status), message: "Check the messages below for the latest update." };
   const article = element("article", "card appeal-history-card");
+  const appealId = String(appeal.id ?? "").toLowerCase();
+  article.dataset.appealId = appealId;
+  article.tabIndex = -1;
+  article.classList.toggle("is-targeted", appealId === requestedAppealId());
   const header = element("header", "appeal-history-card-header");
   const heading = element("div");
   heading.append(
@@ -310,6 +334,7 @@ function renderAppealHistory() {
     return;
   }
   historyRoot.append(...state.appeals.map(appealHistoryCard));
+  focusRequestedAppeal();
 }
 
 async function loadAppealHistory() {

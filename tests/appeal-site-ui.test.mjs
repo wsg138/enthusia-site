@@ -43,6 +43,19 @@ test("appeal evidence routes are derived from attachment IDs", async () => {
   assert.doesNotMatch(reviewer, /attachment\.previewUrl/);
 });
 
+test("appeal update links focus the requested appeal without accepting arbitrary selectors", async () => {
+  const [script, styles] = await Promise.all([
+    readFile(new URL("../public/assets/appeals.js", import.meta.url), "utf8"),
+    readFile(new URL("../public/assets/styles.css", import.meta.url), "utf8")
+  ]);
+  assert.match(script, /new URLSearchParams\(window\.location\.search\)\.get\("appeal"\)/);
+  assert.match(script, /canonicalUuid\.test\(value\)/);
+  assert.match(script, /article\.dataset\.appealId = appealId/);
+  assert.match(script, /card\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(script, /card\.scrollIntoView\(/);
+  assert.match(styles, /\.appeal-history-card\.is-targeted\{/);
+});
+
 test("profile menu links to appeal history and dismisses when it is no longer in use", async () => {
   const [html, menu] = await Promise.all([
     readFile(new URL("../public/account.html", import.meta.url), "utf8"),
