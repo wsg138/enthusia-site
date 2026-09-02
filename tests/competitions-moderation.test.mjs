@@ -5,7 +5,8 @@ import {
   moderateImageDataUrl,
   moderateText,
   moderationAllowsPublication,
-  moderationModel
+  moderationModel,
+  supportedImageDataUrl
 } from "../functions/lib/competitions/moderation.js";
 
 function jsonResponse(status, payload) {
@@ -94,6 +95,11 @@ test("moderation failure fails closed instead of approving content", async () =>
 });
 
 test("image moderation accepts supported data URLs and rejects other inputs", async () => {
+  assert.equal(supportedImageDataUrl("DATA:IMAGE/JPEG;BASE64,aGVsbG8="), true);
+  assert.equal(supportedImageDataUrl("data:image/svg+xml;base64,PHN2Zz4="), false);
+  assert.equal(supportedImageDataUrl("data:image/png;utf8,pixels"), false);
+  assert.equal(supportedImageDataUrl(null), false);
+
   let body;
   const result = await moderateImageDataUrl(
     "data:image/png;base64,aGVsbG8=",

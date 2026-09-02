@@ -4,16 +4,39 @@ import { isCanonicalUuid } from "../validation.js";
 
 const MAX_LINKED_ACCOUNTS = 16;
 const MEMBERSHIP_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+const PLAYER_NAME = /^[A-Za-z0-9_]{1,16}$/;
+
+function rawLinks(session) {
+  if (!session || !Array.isArray(session.linkedMinecraftAccounts)) return [];
+  return session.linkedMinecraftAccounts;
+}
+
+function normalizedLink(raw) {
+  const source = raw && typeof raw === "object" ? raw : {};
+  const uuid = String(source.uuid ?? "").trim().toLowerCase();
+  const name = String(source.name ?? "").trim();
+  if (!isCanonicalUuid(uuid) || !PLAYER_NAME.test(name)) return null;
+  return { uuid, name };
+}
+
+function addNormalizedLink(links, raw) {
+  const account = normalizedLink(raw);
+  if (account) links.set(account.uuid, account);
+  return links.size >= MAX_LINKED_ACCOUNTS;
+}
 
 function normalizedLinks(session) {
   const links = new Map();
-  for (const raw of session?.linkedMinecraftAccounts ?? []) {
-    const uuid = String(raw?.uuid ?? "").trim().toLowerCase();
-    const name = String(raw?.name ?? "").trim();
-    if (isCanonicalUuid(uuid) && /^[A-Za-z0-9_]{1,16}$/.test(name)) links.set(uuid, { uuid, name });
-    if (links.size >= MAX_LINKED_ACCOUNTS) break;
+  for (const raw of rawLinks(session)) {
+    if (addNormalizedLink(links, raw)) break;
   }
   return links;
+}
+
+function requestedLinkUuid(value) {
+  if ([null, undefined, ""].includes(value)) return undefined;
+  const uuid = String(value).trim().toLowerCase();
+  return isCanonicalUuid(uuid) ? uuid : null;
 }
 
 export async function getCompetitionParticipantSession(request, db) {
@@ -38,12 +61,9 @@ export function discordMembershipError(session, now = Date.now()) {
 export function linkedMinecraftAccount(session, requestedUuid = null) {
   const links = normalizedLinks(session);
   if (!links.size) return null;
-  if (requestedUuid !== null && requestedUuid !== undefined && requestedUuid !== "") {
-    const uuid = String(requestedUuid).trim().toLowerCase();
-    if (!isCanonicalUuid(uuid)) return null;
-    return links.get(uuid) ?? null;
-  }
-  return links.values().next().value ?? null;
+  const uuid = requestedLinkUuid(requestedUuid);
+  if (uuid === undefined) return links.values().next().value ?? null;
+  return uuid === null ? null : links.get(uuid) ?? null;
 }
 
 export function linkedMinecraftUuids(session) {
@@ -75,4 +95,4 @@ export function maxLinkedActiveMinutes(contexts) {
   return maximum;
 }
 
-export { MAX_LINKED_ACCOUNTS, MEMBERSHIP_MAX_AGE_MS, normalizedLinks };
+export { MAX_LINKED_ACCOUNTS, MEMBERSHIP_MAX_AGE_MS, normalizedLink, normalizedLinks };

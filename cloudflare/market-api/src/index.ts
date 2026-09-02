@@ -41,7 +41,7 @@ function internalMethod(pathname: string): string | null {
 
 async function readLimitedBody(request: Request, limit: number): Promise<ArrayBuffer | Response> {
   const declared = request.headers.get("Content-Length");
-  if (declared && Number(declared) > limit) return error("payload_too_large", "Request payload exceeds the route limit.", 413);
+  if (declared !== null && Number(declared) > limit) return error("payload_too_large", "Request payload exceeds the route limit.", 413);
   const body = await request.arrayBuffer();
   if (body.byteLength > limit) return error("payload_too_large", "Request payload exceeds the route limit.", 413);
   return body;
@@ -49,12 +49,12 @@ async function readLimitedBody(request: Request, limit: number): Promise<ArrayBu
 
 async function handleInternal(request: Request, env: Env, pathname: string): Promise<Response> {
   const expectedMethod = internalMethod(pathname);
-  if (!expectedMethod) return error("not_found", "Route not found.", 404);
+  const limit = routeLimit(pathname);
+  if (expectedMethod === null || limit === null) return error("not_found", "Route not found.", 404);
   if (request.method !== expectedMethod) return error("method_not_allowed", "Method not allowed.", 405, { Allow: expectedMethod });
   if (!(request.headers.get("Content-Type") ?? "").toLowerCase().startsWith("application/json")) {
     return error("unsupported_media_type", "Content-Type must be application/json.", 415);
   }
-  const limit = routeLimit(pathname)!;
   const read = await readLimitedBody(request, limit);
   if (read instanceof Response) return read;
   if (!(await verifySignedRequest(request, read, env))) return error("unauthorized", "Request authentication failed.", 401);
@@ -105,7 +105,7 @@ function isPublicPath(pathname: string): boolean {
 
 async function handlePublic(request: Request, env: Env, pathname: string): Promise<Response> {
   const origin = request.headers.get("Origin");
-  if (origin && !allowedOrigins(env).has(origin)) return withPublicCors(error("origin_not_allowed", "Origin is not allowed.", 403), null);
+  if (origin !== null && !allowedOrigins(env).has(origin)) return withPublicCors(error("origin_not_allowed", "Origin is not allowed.", 403), null);
   if (request.method === "OPTIONS") {
     const headers: HeadersInit = {
       "Access-Control-Allow-Methods": "GET, OPTIONS",

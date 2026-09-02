@@ -4,6 +4,13 @@ const ALLOWED_MODELS = new Set([
   "omni-moderation-latest",
   "omni-moderation-2024-09-26"
 ]);
+const IMAGE_DATA_URL_HEADERS = new Set([
+  "data:image/png;base64,",
+  "data:image/jpeg;base64,",
+  "data:image/webp;base64,",
+  "data:image/gif;base64,"
+]);
+const MAX_IMAGE_DATA_URL_HEADER_LENGTH = 32;
 
 function selectedModel(env) {
   const configured = String(env?.OPENAI_MODERATION_MODEL ?? DEFAULT_MODEL).trim();
@@ -101,8 +108,15 @@ export async function moderateText(text, env, fetchImpl = fetch) {
   return requestModeration([{ type: "text", text }], env, fetchImpl);
 }
 
+function supportedImageDataUrl(value) {
+  if (typeof value !== "string") return false;
+  const header = value.slice(0, MAX_IMAGE_DATA_URL_HEADER_LENGTH).toLowerCase();
+  const separator = header.indexOf(",");
+  return separator >= 0 && IMAGE_DATA_URL_HEADERS.has(header.slice(0, separator + 1));
+}
+
 export async function moderateImageDataUrl(dataUrl, env, fetchImpl = fetch) {
-  if (typeof dataUrl !== "string" || !/^data:image\/(?:png|jpeg|webp|gif);base64,/i.test(dataUrl)) {
+  if (!supportedImageDataUrl(dataUrl)) {
     throw new TypeError("Image moderation requires a supported image data URL");
   }
   return requestModeration(
@@ -115,3 +129,5 @@ export async function moderateImageDataUrl(dataUrl, env, fetchImpl = fetch) {
 export function moderationAllowsPublication(result) {
   return result?.outcome === "PASSED";
 }
+
+export { supportedImageDataUrl };

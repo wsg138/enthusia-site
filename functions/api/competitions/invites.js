@@ -12,19 +12,28 @@ import { json, methodNotAllowed, unauthorized } from "../../lib/responses.js";
 import { requireSameOrigin } from "../../lib/security.js";
 import { isCanonicalUuid } from "../../lib/validation.js";
 
-function linkedAccounts(playerContext, session) {
-  const accounts = new Set();
-  for (const raw of session?.linkedMinecraftAccounts ?? []) {
-    const uuid = String(raw?.uuid ?? "").trim().toLowerCase();
-    if (isCanonicalUuid(uuid)) accounts.add(uuid);
+function canonicalUuid(value) {
+  const uuid = String(value ?? "").trim().toLowerCase();
+  return isCanonicalUuid(uuid) ? uuid : null;
+}
+
+function inviteResponseInput(input, accounts) {
+  if (!input || typeof input !== "object") return null;
+  const competitionId = canonicalUuid(input.competitionId);
+  const submissionId = canonicalUuid(input.submissionId);
+  const playerUuid = canonicalUuid(input.playerUuid);
+  if (!competitionId || !submissionId || !playerUuid || typeof input.accept !== "boolean" || !accounts.has(playerUuid)) {
+    return null;
   }
-  // Compatibility fallback for older unit contracts only.
-  for (const raw of playerContext?.linkedMinecraftAccounts ?? []) {
-    const uuid = String(typeof raw === "string" ? raw : raw?.uuid ?? "").trim().toLowerCase();
-    if (isCanonicalUuid(uuid)) accounts.add(uuid);
+  return { competitionId, submissionId, playerUuid, accept: input.accept };
+}
+
+async function readInviteResponse(request, accounts) {
+  try {
+    return inviteResponseInput(await request.json(), accounts);
+  } catch {
+    return null;
   }
-  if (session?.player?.uuid && isCanonicalUuid(session.player.uuid)) accounts.add(session.player.uuid);
-  return accounts;
 }
 
 async function authorize(context) {
@@ -59,77 +68,76 @@ export async function onRequestGet(context) {
   }
 }
 
+async function loadInviteContext(db, input) {
+  const [invite, competition] = await Promise.all([
+    getPendingSubmissionInvite(db, input.competitionId, input.submissionId, input.playerUuid),
+    getAdminCompetition(db, input.competitionId)
+  ]);
+  return invite && competition ? { invite, competition } : null;
+}
+
+function rosterConflict(competition, accept) {
+  const operation = accept ? "ACCEPT" : "DECLINE";
+  return canChangeParticipantRoster(competition.lifecycleState, operation, { existingPendingInvite: true })
+    ? null
+    : json({ error: "contributor_roster_locked" }, 409);
+}
+
+async function entryLimitConflict(db, loaded, input, accounts) {
+  if (!input.accept || loaded.invite.role !== "MAIN") return null;
+  const count = await countLinkedPlayerEntrySlots(db, input.competitionId, [...accounts]);
+  return count >= loaded.competition.config.entries.maxEntriesPerPlayer
+    ? json({ error: "player_entry_limit_reached" }, 409)
+    : null;
+}
+
+async function applyInviteResponse(context, authorized, input) {
+  const database = context.env.COMPETITIONS_DB;
+  const loaded = await loadInviteContext(database, input);
+  if (!loaded) return json({ error: "invite_not_found" }, 404);
+  const rosterResponse = rosterConflict(loaded.competition, input.accept);
+  if (rosterResponse) return rosterResponse;
+  const limitResponse = await entryLimitConflict(database, loaded, input, authorized.accounts);
+  if (limitResponse) return limitResponse;
+
+  const respondedAt = new Date().toISOString();
+  const updated = await respondSubmissionInvite(database, {
+    ...input,
+    actorSubject: authorized.session.subject,
+    respondedAt,
+    auditEventId: crypto.randomUUID()
+  });
+  if (!updated) return json({ error: "invite_not_found" }, 404);
+  return json({
+    ...input,
+    inviteStatus: input.accept ? "ACCEPTED" : "DECLINED",
+    respondedAt
+  });
+}
+
+function inviteFailureResponse(error) {
+  const message = String(error?.message ?? error);
+  if (message.includes("competition_judge_cannot_enter") || message.includes("competition_linked_judge_cannot_enter")) {
+    return json({ error: "judge_can_only_be_helper" }, 409);
+  }
+  if (message.includes("competition_linked_entry_limit_reached")) {
+    return json({ error: "player_entry_limit_reached" }, 409);
+  }
+  return json({ error: "invite_response_failed" }, 503);
+}
+
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   const authorized = await authorize(context);
   if (authorized.response) return authorized.response;
 
-  let input;
-  try {
-    input = await context.request.json();
-  } catch {
-    input = null;
-  }
-  const competitionId = String(input?.competitionId ?? "").trim().toLowerCase();
-  const submissionId = String(input?.submissionId ?? "").trim().toLowerCase();
-  const playerUuid = String(input?.playerUuid ?? "").trim().toLowerCase();
-  const accept = input?.accept;
-  if (
-    !isCanonicalUuid(competitionId)
-    || !isCanonicalUuid(submissionId)
-    || !isCanonicalUuid(playerUuid)
-    || typeof accept !== "boolean"
-    || !authorized.accounts.has(playerUuid)
-  ) return json({ error: "invalid_invite_response" }, 400);
+  const input = await readInviteResponse(context.request, authorized.accounts);
+  if (!input) return json({ error: "invalid_invite_response" }, 400);
 
   try {
-    const [invite, competition] = await Promise.all([
-      getPendingSubmissionInvite(context.env.COMPETITIONS_DB, competitionId, submissionId, playerUuid),
-      getAdminCompetition(context.env.COMPETITIONS_DB, competitionId)
-    ]);
-    if (!invite || !competition) return json({ error: "invite_not_found" }, 404);
-    if (!canChangeParticipantRoster(competition.lifecycleState, accept ? "ACCEPT" : "DECLINE", { existingPendingInvite: true })) {
-      return json({ error: "contributor_roster_locked" }, 409);
-    }
-
-    if (accept && invite.role === "MAIN") {
-      const count = await countLinkedPlayerEntrySlots(
-        context.env.COMPETITIONS_DB,
-        competitionId,
-        [...authorized.accounts]
-      );
-      if (count >= competition.config.entries.maxEntriesPerPlayer) {
-        return json({ error: "player_entry_limit_reached" }, 409);
-      }
-    }
-
-    const respondedAt = new Date().toISOString();
-    const updated = await respondSubmissionInvite(context.env.COMPETITIONS_DB, {
-      competitionId,
-      submissionId,
-      playerUuid,
-      actorSubject: authorized.session.subject,
-      accept,
-      respondedAt,
-      auditEventId: crypto.randomUUID()
-    });
-    if (!updated) return json({ error: "invite_not_found" }, 404);
-    return json({
-      competitionId,
-      submissionId,
-      playerUuid,
-      inviteStatus: accept ? "ACCEPTED" : "DECLINED",
-      respondedAt
-    });
+    return await applyInviteResponse(context, authorized, input);
   } catch (error) {
-    const message = String(error?.message ?? error);
-    if (message.includes("competition_judge_cannot_enter") || message.includes("competition_linked_judge_cannot_enter")) {
-      return json({ error: "judge_can_only_be_helper" }, 409);
-    }
-    if (message.includes("competition_linked_entry_limit_reached")) {
-      return json({ error: "player_entry_limit_reached" }, 409);
-    }
-    return json({ error: "invite_response_failed" }, 503);
+    return inviteFailureResponse(error);
   }
 }
 
@@ -137,4 +145,4 @@ export function onRequest() {
   return methodNotAllowed(["GET", "POST"]);
 }
 
-export { linkedAccounts };
+export { inviteFailureResponse, inviteResponseInput };

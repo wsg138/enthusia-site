@@ -1,31 +1,35 @@
-# Codacy baseline — 2026-08-27
+# Codacy baseline — 2026-08-30
 
 This report records the completed Codacy analysis for pull request 6 at commit
-`255ec37c9945f99e66940673e5c858e5c61a56de`. It does not claim that the branch
+`99088a718429e0f4acfe3d9e9cc21bd6567a06f5`. It does not claim that the branch
 meets the Codacy gate or that the website is ready for production.
 
 ## Current checkpoint
 
-The pull-request analysis reports:
-
-- 1,047 new issues;
-- 7,317 delta complexity;
-- 901 delta clones;
-- a failed zero-new-issues gate.
-
-The `dev/competitions` branch has 1,445 active issues:
+The hosted `dev/competitions` branch report has 1,525 active issues and still
+fails the pull request's zero-new-issues gate:
 
 | Language | Active issues |
 | --- | ---: |
-| JavaScript | 945 |
+| JavaScript | 1,025 |
 | SQL | 287 |
 | CSS | 162 |
 | Python | 34 |
 | Java | 17 |
 
-The focused cleanup reduced the pull-request total from 1,102 to 1,047 and the
-Java total from 39 to 17. The same checkpoint passed 288 website tests, the site
-build and validation, and 14 Java 21 Competition Bridge tests.
+| Category | Active issues |
+| --- | ---: |
+| Best practice | 105 |
+| Compatibility | 482 |
+| Performance | 32 |
+| Security | 201 |
+| Error prone | 473 |
+| Complexity | 232 |
+
+The active severities are 718 high, 756 warning, and 51 error findings. The
+latest source checkpoint passed the production build, validation of all 19 HTML
+pages, and all 337 website tests. The Competition Bridge's 14 Java 21 tests also
+passed at its latest completed checkpoint.
 
 ## Valid findings resolved
 
@@ -40,12 +44,26 @@ The cleanup included the following source fixes:
 - removed unused bridge runtime state and clarified persistence invariants;
 - moved link-code serialization from the public object monitor to a private
   lock without changing transaction boundaries;
+- made manual competition entry creation atomic with lifecycle, version,
+  identity, type, and entry-cap checks;
+- made player and guild draft creation atomic with lifecycle, version,
+  participant, guild, and entry-cap checks;
+- decomposed the participant-context endpoint and competition submission
+  creation paths below the configured complexity threshold;
 - handled the account page's startup promise;
 - removed dynamic array property access from the appeal formatter;
 - retried transient R2 cleanup failures for appeal evidence instead of silently
   abandoning the object;
 - removed avoidable duplicate literals, null control flow, and parameter
   reassignment in reward delivery.
+
+The most recent cleanup reduced the branch total from 1,529 to 1,525. Two test
+identifiers that resembled Discord client IDs were replaced with clearly
+synthetic values. Two findings that treated JSON document serialization as
+object-key generation were consolidated behind `serializeJsonDocument`. That
+function has one line-level Semgrep annotation because these values are stored
+documents and never object keys; key-order stability is not part of their
+contract.
 
 ## Analyzer configuration mismatch
 
@@ -64,8 +82,9 @@ frameworks that this repository does not use. The current branch totals include:
 
 Codacy currently rejects repository overrides for patterns enforced by the
 linked standard. Issue-level false-positive writes are also unavailable for
-this repository. No findings were ignored, no first-party paths were excluded,
-and no source suppressions were added to make the totals appear lower.
+this repository. No issues were ignored, no first-party paths were excluded,
+and no global rules were disabled. The one source annotation described above is
+limited to a proven, repeated false positive at the serialization boundary.
 
 ## Reviewed Java findings left visible
 
@@ -99,4 +118,6 @@ Replace the linked catch-all standard with a repository-specific standard that:
 
 The original 44-issue baseline from 2026-08-22 predated the competition,
 appeals, Gallery, Wiki worker, and bridge additions and is no longer a useful
-measure of the active branch.
+measure of the active branch. The 1,525 total includes valid work still to
+remediate as well as the analyzer mismatches above; it must not be presented as
+an A-grade or clean result.

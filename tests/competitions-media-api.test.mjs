@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  expectedVersion,
-  readLimitedBody
+  expectedVersion
 } from "../functions/api/competitions/admin/[id]/media/index.js";
+import { readLimitedBody, requestMimeType } from "../functions/lib/competitions/media-upload.js";
 import { mediaId } from "../functions/api/competitions/media/[id].js";
 
 function requestWithBody(body, headers = {}) {
@@ -34,6 +34,11 @@ test("limited request reader returns the exact body and enforces the declared li
     () => readLimitedBody(requestWithBody(body, { "content-length": "100" }), 8),
     /image_too_large/
   );
+});
+
+test("image request MIME type ignores parameters and normalizes case", () => {
+  const request = requestWithBody(new Uint8Array([1]), { "content-type": " Image/PNG; charset=binary " });
+  assert.equal(requestMimeType(request), "image/png");
 });
 
 test("limited request reader stops a streamed body once it exceeds the cap", async () => {

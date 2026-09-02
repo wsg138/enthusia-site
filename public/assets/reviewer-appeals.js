@@ -51,8 +51,18 @@ function humanBytes(value) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+function reviewerAttachmentUrl(id) {
+  return `/api/reviewer/appeals/attachments/${encodeURIComponent(String(id || ""))}`;
+}
+
 function setActionsDisabled(container, disabled) {
   for (const control of container.querySelectorAll("button, textarea")) control.disabled = disabled;
+}
+
+function confirmationForDecision(decision) {
+  if (decision === "approve") return "Accept this appeal and remove the punishment?";
+  if (decision === "deny") return "Deny this appeal?";
+  return null;
 }
 
 async function decide(appeal, decision, note, actionRoot, actionStatus) {
@@ -60,10 +70,7 @@ async function decide(appeal, decision, note, actionRoot, actionStatus) {
     actionStatus.textContent = "Add a short note explaining the decision.";
     return;
   }
-  const confirmation = {
-    approve: "Accept this appeal and remove the punishment?",
-    deny: "Deny this appeal?"
-  }[decision];
+  const confirmation = confirmationForDecision(decision);
   if (confirmation && !window.confirm(confirmation)) return;
   actionStatus.textContent = "Saving decision…";
   setActionsDisabled(actionRoot, true);
@@ -163,14 +170,15 @@ function evidence(attachments) {
   section.append(element("h3", "", "Evidence"));
   const list = element("ul", "reviewer-evidence-list");
   for (const attachment of attachments) {
+    const previewUrl = reviewerAttachmentUrl(attachment.id);
     const item = element("li", "reviewer-evidence-item");
     const link = element("a", "reviewer-evidence-preview");
-    link.href = attachment.previewUrl;
+    link.href = previewUrl;
     link.target = "_blank";
     link.rel = "noopener";
     if (attachment.mimeType?.startsWith("image/")) {
       const image = document.createElement("img");
-      image.src = attachment.previewUrl;
+      image.src = previewUrl;
       image.alt = "";
       link.append(image);
     } else {
@@ -179,7 +187,7 @@ function evidence(attachments) {
     const copy = element("div");
     copy.append(element("strong", "", attachment.name), element("span", "", humanBytes(attachment.byteSize)));
     const open = element("a", "reviewer-evidence-open", "Open");
-    open.href = attachment.previewUrl;
+    open.href = previewUrl;
     open.target = "_blank";
     open.rel = "noopener";
     item.append(link, copy, open);

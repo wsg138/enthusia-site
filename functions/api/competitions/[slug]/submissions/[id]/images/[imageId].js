@@ -3,7 +3,10 @@ import {
   hasCompetitionDatabase,
   hasCompetitionMedia
 } from "../../../../../../lib/competitions/access.js";
-import { deleteCompetitionImage } from "../../../../../../lib/competitions/media-storage.js";
+import {
+  cleanupStoredUpload,
+  privateStoredImageResponse
+} from "../../../../../../lib/competitions/media-workflow.js";
 import { getCompetitionParticipantSession } from "../../../../../../lib/competitions/participant-auth.js";
 import { authorizeCompetitionRead } from "../../../../../../lib/competitions/public-access.js";
 import { getPublicCompetitionBySlug } from "../../../../../../lib/competitions/repository.js";
@@ -31,6 +34,15 @@ function expectedRevision(request) {
   return Number.isInteger(value) && value >= 1 ? value : null;
 }
 
+function ownerIdentity(context) {
+  const slug = slugValue(context);
+  const submissionId = paramUuid(context, "id");
+  const imageId = paramUuid(context, "imageId");
+  return slug && submissionId && imageId
+    ? { slug, submissionId, imageId }
+    : { response: json({ error: "image_not_found" }, 404) };
+}
+
 async function resolveOwner(context) {
   if (!competitionsEnabled(context.env)) return { response: json({ error: "not_found" }, 404) };
   const read = await authorizeCompetitionRead(context);
@@ -38,34 +50,38 @@ async function resolveOwner(context) {
   if (!hasCompetitionDatabase(context.env) || !hasCompetitionMedia(context.env)) {
     return { response: json({ error: "competition_media_unavailable" }, 503) };
   }
-  let session;
+  const participant = await participantSession(context);
+  if (participant.response) return participant;
+  const identity = ownerIdentity(context);
+  return identity.response
+    ? identity
+    : loadOwnerMedia(context, participant.session, identity);
+}
+
+async function participantSession(context) {
   try {
-    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
+    const session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
+    return session ? { session } : { response: unauthorized() };
   } catch {
     return { response: json({ error: "competition_identity_unavailable" }, 503) };
   }
-  if (!session) return { response: unauthorized() };
-  const slug = slugValue(context);
-  const submissionId = paramUuid(context, "id");
-  const imageId = paramUuid(context, "imageId");
-  if (!slug || !submissionId || !imageId) return { response: json({ error: "image_not_found" }, 404) };
+}
+
+async function loadOwnerMedia(context, session, identity) {
   try {
-    const competition = await getPublicCompetitionBySlug(context.env.COMPETITIONS_DB, slug);
+    const competition = await getPublicCompetitionBySlug(context.env.COMPETITIONS_DB, identity.slug);
     if (!competition) return { response: json({ error: "competition_not_found" }, 404) };
-    const submission = await getAccountSubmission(
-      context.env.COMPETITIONS_DB,
-      competition.id,
-      submissionId,
-      session.subject
-    );
+    const [submission, image] = await Promise.all([
+      getAccountSubmission(context.env.COMPETITIONS_DB, competition.id, identity.submissionId, session.subject),
+      getOwnedSubmissionImage(
+        context.env.COMPETITIONS_DB,
+        competition.id,
+        identity.submissionId,
+        identity.imageId,
+        session.subject
+      )
+    ]);
     if (!submission) return { response: json({ error: "image_not_found" }, 404) };
-    const image = await getOwnedSubmissionImage(
-      context.env.COMPETITIONS_DB,
-      competition.id,
-      submissionId,
-      imageId,
-      session.subject
-    );
     if (!image || image.removedAt) return { response: json({ error: "image_not_found" }, 404) };
     return { session, competition, submission, image };
   } catch {
@@ -74,58 +90,61 @@ async function resolveOwner(context) {
 }
 
 function editable(competition, submission) {
-  if (competition.lifecycleState === "SUBMISSIONS_OPEN" && submission.status === "DRAFT") return true;
-  if (competition.lifecycleState !== "REVIEW" || submission.status !== "NEEDS_CHANGES") return false;
+  if (competition.lifecycleState === "SUBMISSIONS_OPEN") return submission.status === "DRAFT";
+  if (competition.lifecycleState !== "REVIEW") return false;
+  if (submission.status !== "NEEDS_CHANGES") return false;
   const close = Date.parse(competition.config?.schedule?.reviewCloseAt ?? "");
-  return Number.isFinite(close) && Date.now() <= close;
+  if (!Number.isFinite(close)) return false;
+  return Date.now() <= close;
 }
 
 export async function onRequestGet(context) {
   const resolved = await resolveOwner(context);
   if (resolved.response) return resolved.response;
-  try {
-    const object = await context.env.COMPETITIONS_MEDIA.get(resolved.image.storageKey);
-    if (!object?.body) return json({ error: "image_not_found" }, 404);
-    const headers = new Headers({
-      "content-type": resolved.image.mimeType,
-      "cache-control": "private, no-store",
-      "content-disposition": "inline",
-      "x-content-type-options": "nosniff"
-    });
-    if (object.httpEtag) headers.set("etag", object.httpEtag);
-    return new Response(object.body, { status: 200, headers });
-  } catch {
-    return json({ error: "competition_media_unavailable" }, 503);
-  }
+  return privateStoredImageResponse(context.env.COMPETITIONS_MEDIA, resolved.image);
 }
 
-export async function onRequestDelete(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+async function preflightOwnerRemoval(context) {
+  if (!requireSameOrigin(context.request)) return { response: json({ error: "invalid_origin" }, 403) };
   const revision = expectedRevision(context.request);
-  if (!revision) return json({ error: "expected_revision_required" }, 400);
+  if (!revision) return { response: json({ error: "expected_revision_required" }, 400) };
   const resolved = await resolveOwner(context);
-  if (resolved.response) return resolved.response;
-  if (!editable(resolved.competition, resolved.submission)) return json({ error: "submission_locked" }, 409);
-  if (resolved.submission.revision !== revision) return json({ error: "submission_revision_conflict" }, 409);
+  if (resolved.response) return resolved;
+  if (!editable(resolved.competition, resolved.submission)) {
+    return { response: json({ error: "submission_locked" }, 409) };
+  }
+  if (resolved.submission.revision !== revision) {
+    return { response: json({ error: "submission_revision_conflict" }, 409) };
+  }
+  return { ...resolved, expectedRevision: revision };
+}
 
-  const removedAt = new Date().toISOString();
+async function persistOwnerRemoval(context, removal) {
   try {
     const result = await removeSubmissionImage(context.env.COMPETITIONS_DB, {
-      competitionId: resolved.competition.id,
-      submissionId: resolved.submission.id,
-      imageId: resolved.image.id,
-      ownerSubject: resolved.session.subject,
-      actorUuid: resolved.submission.ownerUuid,
-      expectedRevision: revision,
-      removedAt,
+      competitionId: removal.competition.id,
+      submissionId: removal.submission.id,
+      imageId: removal.image.id,
+      ownerSubject: removal.session.subject,
+      actorUuid: removal.submission.ownerUuid,
+      expectedRevision: removal.expectedRevision,
+      expectedConfigVersion: removal.competition.configVersion,
+      reviewCloseAt: removal.competition.config?.schedule?.reviewCloseAt ?? null,
+      removedAt: new Date().toISOString(),
       auditEventId: crypto.randomUUID()
     });
     if (result.status !== "UPDATED") return json({ error: "submission_revision_conflict" }, 409);
-    await deleteCompetitionImage(context.env.COMPETITIONS_MEDIA, resolved.image.storageKey).catch(() => {});
+    await cleanupStoredUpload(context.env.COMPETITIONS_MEDIA, removal.image.storageKey);
     return json({ status: "REMOVED", revision: result.revision });
   } catch {
     return json({ error: "submission_image_remove_failed" }, 503);
   }
+}
+
+export async function onRequestDelete(context) {
+  const removal = await preflightOwnerRemoval(context);
+  if (removal.response) return removal.response;
+  return persistOwnerRemoval(context, removal);
 }
 
 export function onRequest() {

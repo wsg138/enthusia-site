@@ -3,6 +3,9 @@ import { readFile, readdir } from "node:fs/promises";
 import { DatabaseSync } from "node:sqlite";
 import test from "node:test";
 
+const OWNER_DISCORD_ID = "1".repeat(18);
+const OWNER_SUBJECT = `discord:${OWNER_DISCORD_ID}`;
+
 async function migratedDatabase() {
   const database = new DatabaseSync(":memory:");
   const directory = new URL("../migrations/", import.meta.url);
@@ -28,8 +31,8 @@ function seedCompetition(database) {
   database.prepare(`
     INSERT INTO competition_discord_accounts (
       discord_user_id, username, global_name, avatar_hash, created_at, updated_at
-    ) VALUES ('111111111111111111', 'owner', NULL, NULL, ?, ?)
-  `).run(now, now);
+    ) VALUES (?, 'owner', NULL, NULL, ?, ?)
+  `).run(OWNER_DISCORD_ID, now, now);
   database.prepare(`
     INSERT INTO submissions (
       id, competition_id, entry_type, status, owner_subject, owner_uuid,
@@ -38,7 +41,7 @@ function seedCompetition(database) {
   `).run(
     "20000000-0000-4000-8000-000000000001",
     "10000000-0000-4000-8000-000000000001",
-    "discord:111111111111111111",
+    OWNER_SUBJECT,
     "30000000-0000-4000-8000-000000000001",
     now,
     now

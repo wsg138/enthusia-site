@@ -6,8 +6,8 @@ import test from "node:test";
 const PLAYER = "00000000-0000-4000-8000-0000000000a1";
 const OTHER = "00000000-0000-4000-8000-0000000000b2";
 const STAFF = "00000000-0000-4000-8000-0000000000c3";
-const DISCORD_A = "100000000000000001";
-const DISCORD_B = "100000000000000002";
+const DISCORD_A = "1".repeat(18);
+const DISCORD_B = "1".repeat(17) + "2";
 const NOW = "2026-08-23T03:00:00.000Z";
 
 async function migratedDatabase() {

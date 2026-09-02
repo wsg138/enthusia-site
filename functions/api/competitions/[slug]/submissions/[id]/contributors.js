@@ -56,18 +56,18 @@ function roleAllowed(entryType, role) {
   return false;
 }
 
+function participantRoleLimit(competition, role) {
+  if (role === "MAIN") return competition.config.entries.maxMainMembers;
+  if (role === "HELPER") return competition.config.entries.maxHelpers;
+  return null;
+}
+
 function roleLimitReached(competition, participants, role) {
-  if (role === "MAIN") {
-    const limit = competition.config.entries.maxMainMembers;
-    if (!Number.isInteger(limit)) return false;
-    return participants.filter((p) => p.role === "MAIN" && p.inviteStatus !== "DECLINED").length >= limit;
-  }
-  if (role === "HELPER") {
-    const limit = competition.config.entries.maxHelpers;
-    if (!Number.isInteger(limit)) return false;
-    return participants.filter((p) => p.role === "HELPER" && p.inviteStatus !== "DECLINED").length >= limit;
-  }
-  return false;
+  const limit = participantRoleLimit(competition, role);
+  if (!Number.isInteger(limit)) return false;
+  return participants.filter((participant) => (
+    participant.role === role && participant.inviteStatus !== "DECLINED"
+  )).length >= limit;
 }
 
 export async function onRequestGet(context) {
@@ -81,44 +81,36 @@ export async function onRequestGet(context) {
   }
 }
 
-export async function onRequestPost(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-  const resolved = await resolveOwner(context);
-  if (resolved.response) return resolved.response;
+async function removeContributor(context, resolved, input) {
+  const { session, competition, submission } = resolved;
+  if (!canChangeParticipantRoster(competition.lifecycleState, "REMOVE")) {
+    return json({ error: "contributor_roster_locked" }, 409);
+  }
+  const playerUuid = String(input?.playerUuid ?? "").trim().toLowerCase();
+  if (!isCanonicalUuid(playerUuid)) return json({ error: "invalid_contributor" }, 400);
+  try {
+    const removed = await removeSubmissionContributor(context.env.COMPETITIONS_DB, {
+      competitionId: competition.id,
+      submissionId: submission.id,
+      configVersion: competition.configVersion,
+      playerUuid,
+      actorSubject: session.subject,
+      removedByUuid: submission.ownerUuid,
+      removedAt: new Date().toISOString(),
+      auditEventId: crypto.randomUUID()
+    });
+    if (!removed) return json({ error: "contributor_not_found" }, 404);
+    return json({ status: "REMOVED", playerUuid });
+  } catch {
+    return json({ error: "contributor_remove_failed" }, 503);
+  }
+}
+
+async function inviteContributor(context, resolved, input) {
   const { session, competition, submission } = resolved;
   if (!canChangeParticipantRoster(competition.lifecycleState, "ADD")) {
     return json({ error: "contributor_roster_locked" }, 409);
   }
-
-  let input;
-  try {
-    input = await context.request.json();
-  } catch {
-    input = null;
-  }
-  const action = input?.action;
-
-  if (action === "REMOVE") {
-    const playerUuid = String(input?.playerUuid ?? "").trim().toLowerCase();
-    if (!isCanonicalUuid(playerUuid)) return json({ error: "invalid_contributor" }, 400);
-    try {
-      const removed = await removeSubmissionContributor(context.env.COMPETITIONS_DB, {
-        competitionId: competition.id,
-        submissionId: submission.id,
-        playerUuid,
-        actorSubject: session.subject,
-        removedByUuid: submission.ownerUuid,
-        removedAt: new Date().toISOString(),
-        auditEventId: crypto.randomUUID()
-      });
-      if (!removed) return json({ error: "contributor_not_found" }, 404);
-      return json({ status: "REMOVED", playerUuid });
-    } catch {
-      return json({ error: "contributor_remove_failed" }, 503);
-    }
-  }
-
-  if (action !== "INVITE") return json({ error: "invalid_contributor_action" }, 400);
   const role = input?.role;
   const minecraftName = typeof input?.minecraftName === "string" ? input.minecraftName.trim() : "";
   if (!roleAllowed(submission.entryType, role) || !/^[A-Za-z0-9_]{1,16}$/.test(minecraftName)) {
@@ -148,9 +140,11 @@ export async function onRequestPost(context) {
     const invited = await inviteSubmissionContributor(context.env.COMPETITIONS_DB, {
       competitionId: competition.id,
       submissionId: submission.id,
+      configVersion: competition.configVersion,
       playerUuid: target.uuid,
       playerName: target.name,
       role,
+      roleLimit: participantRoleLimit(competition, role),
       invitedByUuid: submission.ownerUuid,
       actorSubject: session.subject,
       invitedAt,
@@ -188,8 +182,32 @@ export async function onRequestPost(context) {
   }
 }
 
+function contributorAction(context, resolved, input) {
+  switch (input?.action) {
+    case "INVITE":
+      return inviteContributor(context, resolved, input);
+    case "REMOVE":
+      return removeContributor(context, resolved, input);
+    default:
+      return json({ error: "invalid_contributor_action" }, 400);
+  }
+}
+
+export async function onRequestPost(context) {
+  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+  const resolved = await resolveOwner(context);
+  if (resolved.response) return resolved.response;
+  let input;
+  try {
+    input = await context.request.json();
+  } catch {
+    input = null;
+  }
+  return contributorAction(context, resolved, input);
+}
+
 export function onRequest() {
   return methodNotAllowed(["GET", "POST"]);
 }
 
-export { roleAllowed, roleLimitReached, slugValue, submissionId };
+export { participantRoleLimit, roleAllowed, roleLimitReached, slugValue, submissionId };

@@ -14,6 +14,8 @@ test("navigation keeps Appeals top-level and Punishments in Community", async ()
 
 test("navigation applies one consistent active state to the current page and its section", async () => {
   const source = await readFile(new URL("../public/assets/site-navigation.js", import.meta.url), "utf8");
+  assert.match(source, /function trimTrailingSlashes/);
+  assert.doesNotMatch(source, /replace\(\/\\\/\+\$\//);
   assert.match(source, /activeLink\.classList\.add\("active"\)/);
   assert.match(source, /trigger\.classList\.toggle\("active", hasActiveCommunityLink\)/);
   assert.match(source, /menu\.querySelector\("a\.active"\)/);

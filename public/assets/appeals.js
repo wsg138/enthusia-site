@@ -83,6 +83,10 @@ function element(tag, className, content) {
   return node;
 }
 
+function playerAttachmentUrl(id) {
+  return `/api/appeals/attachments/${encodeURIComponent(String(id || ""))}`;
+}
+
 function signInHref() {
   const returnTo = `${window.location.pathname}${window.location.search}`;
   return `/api/competitions/auth/discord/start?returnTo=${encodeURIComponent(returnTo)}`;
@@ -255,7 +259,7 @@ function originalAppeal(appeal) {
     const list = element("ul");
     for (const attachment of appeal.attachments) {
       const link = element("a", "", `${attachment.name} · ${humanBytes(attachment.byteSize)}`);
-      link.href = attachment.previewUrl;
+      link.href = playerAttachmentUrl(attachment.id);
       link.target = "_blank";
       link.rel = "noopener";
       const item = document.createElement("li");
@@ -493,12 +497,13 @@ function renderAttachments() {
   for (const attachment of state.attachments) {
     const item = element("li", "appeal-attachment-item");
     const preview = element("a", "appeal-attachment-preview");
-    preview.href = attachment.previewUrl;
+    const previewUrl = playerAttachmentUrl(attachment.id);
+    preview.href = previewUrl;
     preview.target = "_blank";
     preview.rel = "noopener";
     if (attachment.mimeType.startsWith("image/")) {
       const image = document.createElement("img");
-      image.src = attachment.previewUrl;
+      image.src = previewUrl;
       image.alt = "";
       preview.append(image);
     } else {
@@ -586,7 +591,7 @@ async function removeAttachment(attachment, button) {
   attachmentStatus.textContent = `Removing ${attachment.name}…`;
   try {
     const response = await fetch(
-      `${attachment.previewUrl}?draftId=${encodeURIComponent(state.draftId)}`,
+      `${playerAttachmentUrl(attachment.id)}?draftId=${encodeURIComponent(state.draftId)}`,
       { method: "DELETE", credentials: "same-origin", headers: { accept: "application/json" } }
     );
     if (!response.ok) throw new Error("delete_failed");

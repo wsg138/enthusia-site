@@ -20,11 +20,27 @@ test("appeal page requires linked punishment selection and asks separate detaile
 });
 
 test("staff appeal workspace is private and uses its maintained script", async () => {
-  const html = await readFile(new URL("../public/reviewer/appeals.html", import.meta.url), "utf8");
+  const [html, script] = await Promise.all([
+    readFile(new URL("../public/reviewer/appeals.html", import.meta.url), "utf8"),
+    readFile(new URL("../public/assets/reviewer-appeals.js", import.meta.url), "utf8")
+  ]);
   assert.match(html, /name="robots" content="noindex,nofollow,noarchive"/);
   assert.match(html, /src="\.\.\/assets\/reviewer-appeals\.js\?v=3"/);
   assert.match(html, /id="review-search"/);
   assert.doesNotMatch(html, /<script type="module">/);
+  assert.match(script, /confirmationForDecision\(decision\)/);
+  assert.doesNotMatch(script, /}\[decision\]/);
+});
+
+test("appeal evidence routes are derived from attachment IDs", async () => {
+  const [player, reviewer] = await Promise.all([
+    readFile(new URL("../public/assets/appeals.js", import.meta.url), "utf8"),
+    readFile(new URL("../public/assets/reviewer-appeals.js", import.meta.url), "utf8")
+  ]);
+  assert.match(player, /\/api\/appeals\/attachments\/\$\{encodeURIComponent/);
+  assert.match(reviewer, /\/api\/reviewer\/appeals\/attachments\/\$\{encodeURIComponent/);
+  assert.doesNotMatch(player, /attachment\.previewUrl/);
+  assert.doesNotMatch(reviewer, /attachment\.previewUrl/);
 });
 
 test("profile menu links to appeal history and dismisses when it is no longer in use", async () => {

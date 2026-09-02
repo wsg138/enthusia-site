@@ -6,12 +6,12 @@ import sys
 import time
 import urllib.parse
 import urllib.request
-from pathlib import Path
+from safety import project_output_path, wiki_api_url
 
-API = os.environ.get('WIKI_API', 'https://enthusia.miraheze.org/w/api.php')
+API = wiki_api_url(os.environ.get('WIKI_API'))
 USERNAME = os.environ.get('WIKI_BOT_USERNAME', '').strip()
 PASSWORD = os.environ.get('WIKI_BOT_PASSWORD', '')
-OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
+OUT = project_output_path(os.environ.get('WIKI_WORKER_OUT'))
 DESIRED = OUT / 'rendered' / 'events.wiki'
 UA = 'EnthusiaWikiPublisher/2.5 (owner-authorized title migration)'
 
@@ -107,6 +107,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Exception as exc:
+    except (RuntimeError, ValueError, KeyError, IndexError, OSError) as exc:
         print(f'EVENTS TITLE MIGRATION ERROR: {exc}', file=sys.stderr)
         sys.exit(1)

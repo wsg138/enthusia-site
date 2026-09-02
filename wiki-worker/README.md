@@ -36,6 +36,10 @@ The workflow also accepts the legacy fallback names `MIRAHEZE_BOT_USERNAME` / `M
 
 Secrets must never be committed to the repository or written into workflow files.
 
+## Local safety boundaries
+
+The worker accepts only the production Enthusia Miraheze API and the maintained GitHub baseline manifest as network destinations. Generated files must stay below `wiki-worker-output`, and the full-backup cleanup must target a child directory rather than the output root. Rendered manifest filenames are also checked before they are read. These checks apply to local runs as well as GitHub Actions.
+
 ## Publishing
 
 The worker can be started with `workflow_dispatch` or by updating `wiki-publish-trigger.txt` on the same-repository wiki source PR. The trigger is only a request; all safety gates still run before any authenticated edit.

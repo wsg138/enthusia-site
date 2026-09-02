@@ -417,7 +417,6 @@ async function reorderImages(wizard, ids, coverId) {
 
 function imagesStep(wizard, panel) {
   panel.append(el("h3", "", "Images"));
-  const limits = wizard.state.competition.config.entries;
   panel.append(el("p", "participant-muted", "Upload as many screenshots as the entry needs. Each image can be up to 8 MB. The selected cover image appears first publicly."));
   const warning = el("div", "participant-image-warning");
   warning.append(el("strong", "", "Before uploading"), el("p", "", "Competition screenshots become public after approval. Hide coordinates, minimap waypoints, private chat, private base locations, and anything else you do not want published."));

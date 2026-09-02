@@ -301,41 +301,6 @@ function placementLabel(value) {
   return `${placement}${({ 1: "st", 2: "nd", 3: "rd" })[placement % 10] ?? "th"} place`;
 }
 
-function renderRewards(section, competition) {
-  const definitions = Array.isArray(competition.config?.rewards?.definitions)
-    ? competition.config.rewards.definitions
-    : [];
-  if (!definitions.length) return;
-
-  const heading = document.createElement("h2");
-  heading.textContent = "Rewards";
-  const grid = document.createElement("div");
-  grid.className = "competition-reward-grid";
-
-  for (const reward of definitions) {
-    const card = document.createElement("article");
-    card.className = "competition-reward-card";
-    const place = document.createElement("span");
-    place.className = "competition-reward-placement";
-    place.textContent = placementLabel(reward.placement);
-    const title = document.createElement("strong");
-    title.textContent = reward.publicLabel;
-    const description = document.createElement("p");
-    description.textContent = reward.publicDescription;
-    card.append(place, title, description);
-    grid.append(card);
-  }
-
-  const helperMultiplier = competition.config?.rewards?.helperRewardMultiplier;
-  const note = document.createElement("p");
-  note.className = "competition-reward-note";
-  note.textContent = typeof helperMultiplier === "number" && helperMultiplier !== 1
-    ? `Helpers are reward-eligible at ${Math.round(helperMultiplier * 100)}% of the normal participant share when the reward supports proportional distribution.`
-    : "Reward distribution follows the rules shown for each competition.";
-
-  section.append(heading, grid, note);
-}
-
 function renderOverview(root, payload) {
   const competition = payload.competition;
   const config = competition.config ?? {};
@@ -566,12 +531,6 @@ function scoreBreakdown(result, competition) {
   const list = document.createElement("div"); list.className = "competition-score-breakdown";
   for (const [label, value] of scores) { const item = document.createElement("span"); const name = document.createElement("small"); name.textContent = label; const number = document.createElement("strong"); number.textContent = Number(value).toFixed(2); item.append(name, number); list.append(item); }
   return list;
-}
-
-function resultName(result) {
-  return result.entryType === "GUILD" && result.guildName
-    ? result.guildName
-    : result.ownerName;
 }
 
 function resultCard(result, submissions, competition, podium = false) {

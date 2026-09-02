@@ -9,14 +9,48 @@ function requireWritableDatabase(db) {
   return database;
 }
 
+function contributorRoleLimit(value) {
+  if (value === null || value === undefined) return null;
+  if (!Number.isInteger(value) || value < 0 || value > 100) {
+    throw new TypeError("Contributor role limit is invalid");
+  }
+  return value;
+}
+
+function expectedConfigVersion(value) {
+  if (!Number.isInteger(value) || value < 1) {
+    throw new TypeError("Competition config version is invalid");
+  }
+  return value;
+}
+
 export async function inviteSubmissionContributor(db, invite) {
   const database = requireWritableDatabase(db);
+  const roleLimit = contributorRoleLimit(invite.roleLimit);
+  const configVersion = expectedConfigVersion(invite.configVersion);
   const statements = [
     database.prepare(`
       INSERT INTO submission_participants (
         submission_id, player_uuid, player_name, participant_role,
         invite_status, invited_by_uuid, invited_at, responded_at
-      ) VALUES (?, ?, ?, ?, 'PENDING', ?, ?, NULL)
+      )
+      SELECT ?, ?, ?, ?, 'PENDING', ?, ?, NULL
+      WHERE EXISTS (
+        SELECT 1
+        FROM submissions submission
+        JOIN competitions competition ON competition.id = submission.competition_id
+        WHERE submission.id = ?
+          AND competition.id = ?
+          AND competition.current_config_version = ?
+          AND competition.lifecycle_state IN ('DRAFT','UPCOMING','SUBMISSIONS_OPEN','REVIEW')
+      )
+        AND (? IS NULL OR (
+          SELECT COUNT(*)
+          FROM submission_participants
+          WHERE submission_id = ?
+            AND participant_role = ?
+            AND invite_status <> 'DECLINED'
+        ) < ?)
       ON CONFLICT(submission_id, player_uuid) DO UPDATE SET
         player_name = excluded.player_name,
         participant_role = excluded.participant_role,
@@ -31,7 +65,14 @@ export async function inviteSubmissionContributor(db, invite) {
       invite.playerName,
       invite.role,
       invite.invitedByUuid,
-      invite.invitedAt
+      invite.invitedAt,
+      invite.submissionId,
+      invite.competitionId,
+      configVersion,
+      roleLimit,
+      invite.submissionId,
+      invite.role,
+      roleLimit
     ),
     database.prepare(`
       INSERT INTO competition_audit_events (
@@ -90,13 +131,29 @@ export async function inviteSubmissionContributor(db, invite) {
 
 export async function removeSubmissionContributor(db, removal) {
   const database = requireWritableDatabase(db);
+  const configVersion = expectedConfigVersion(removal.configVersion);
   const results = await database.batch([
     database.prepare(`
       DELETE FROM submission_participants
       WHERE submission_id = ?
         AND player_uuid = ?
         AND participant_role <> 'OWNER'
-    `).bind(removal.submissionId, removal.playerUuid),
+        AND EXISTS (
+          SELECT 1
+          FROM submissions submission
+          JOIN competitions competition ON competition.id = submission.competition_id
+          WHERE submission.id = ?
+            AND competition.id = ?
+            AND competition.current_config_version = ?
+            AND competition.lifecycle_state IN ('DRAFT','UPCOMING','SUBMISSIONS_OPEN','REVIEW')
+        )
+    `).bind(
+      removal.submissionId,
+      removal.playerUuid,
+      removal.submissionId,
+      removal.competitionId,
+      configVersion
+    ),
     database.prepare(`
       INSERT INTO competition_audit_events (
         id, competition_id, submission_id, actor_subject, actor_uuid,
@@ -171,18 +228,32 @@ export async function getPendingSubmissionInvite(db, competitionId, submissionId
   `).bind(competitionId, submissionId, playerUuid).first();
 }
 
-export async function respondSubmissionInvite(db, response) {
-  const database = requireWritableDatabase(db);
-  const status = response.accept ? "ACCEPTED" : "DECLINED";
-  const statements = [
-    database.prepare(`
+function inviteResponseUpdate(database, response, status) {
+  return database.prepare(`
       UPDATE submission_participants
       SET invite_status = ?, responded_at = ?
       WHERE submission_id = ?
         AND player_uuid = ?
         AND invite_status = 'PENDING'
-    `).bind(status, response.respondedAt, response.submissionId, response.playerUuid),
-    database.prepare(`
+        AND EXISTS (
+          SELECT 1
+          FROM submissions submission
+          JOIN competitions competition ON competition.id = submission.competition_id
+          WHERE submission.id = submission_participants.submission_id
+            AND competition.id = ?
+            AND competition.lifecycle_state <> 'CANCELLED'
+        )
+    `).bind(
+      status,
+      response.respondedAt,
+      response.submissionId,
+      response.playerUuid,
+      response.competitionId
+    );
+}
+
+function inviteResponseAudit(database, response, status) {
+  return database.prepare(`
       INSERT INTO competition_audit_events (
         id, competition_id, submission_id, actor_subject, actor_uuid,
         action, after_json, note, created_at
@@ -199,11 +270,11 @@ export async function respondSubmissionInvite(db, response) {
       JSON.stringify({ playerUuid: response.playerUuid, inviteStatus: status }),
       response.accept ? "Contributor invite accepted" : "Contributor invite declined",
       response.respondedAt
-    )
-  ];
+    );
+}
 
-  if (response.notification) {
-    statements.push(database.prepare(`
+function inviteResponseNotification(database, response, status) {
+  return database.prepare(`
       INSERT INTO competition_notification_outbox (
         id, competition_id, submission_id, event_type, recipient_uuid,
         operation_key, payload_json, state, attempts, next_attempt_at,
@@ -232,9 +303,24 @@ export async function respondSubmissionInvite(db, response) {
       response.playerUuid,
       status,
       response.respondedAt
-    ));
+    );
+}
+
+function firstStatementChanged(results) {
+  return Number(results?.[0]?.meta?.changes ?? 0) === 1;
+}
+
+export async function respondSubmissionInvite(db, response) {
+  const database = requireWritableDatabase(db);
+  const status = response.accept ? "ACCEPTED" : "DECLINED";
+  const statements = [
+    inviteResponseUpdate(database, response, status),
+    inviteResponseAudit(database, response, status)
+  ];
+  if (response.notification) {
+    statements.push(inviteResponseNotification(database, response, status));
   }
 
   const results = await database.batch(statements);
-  return Number(results?.[0]?.meta?.changes ?? 0) === 1;
+  return firstStatementChanged(results);
 }

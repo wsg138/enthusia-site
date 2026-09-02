@@ -128,118 +128,125 @@ export async function createCompetitionMediaRecord(db, record) {
   });
 }
 
-export async function createAndAttachCompetitionAppearanceMedia(db, change) {
-  const database = requireWritableDatabase(db);
+function appearanceChange(change) {
   const spec = appearanceSpec(change.purpose);
   const nextVersion = change.expectedVersion + 1;
-  const configJson = JSON.stringify(change.config);
-  const mediaAfter = JSON.stringify({
-    mediaId: change.id,
-    purpose: spec.purpose,
-    appearanceField: spec.field,
-    mimeType: change.mimeType,
-    width: change.width,
-    height: change.height,
-    sha256: change.sha256,
-    moderationOutcome: "PASSED",
-    configVersion: nextVersion
-  });
+  return {
+    spec,
+    nextVersion,
+    configJson: JSON.stringify(change.config),
+    mediaAfter: JSON.stringify({
+      mediaId: change.id,
+      purpose: spec.purpose,
+      appearanceField: spec.field,
+      mimeType: change.mimeType,
+      width: change.width,
+      height: change.height,
+      sha256: change.sha256,
+      moderationOutcome: "PASSED",
+      configVersion: nextVersion
+    })
+  };
+}
 
-  const results = await database.batch([
-    database.prepare(`
-      INSERT INTO competition_media (
-        id, competition_id, purpose, storage_key, sha256, mime_type,
-        byte_size, width, height, moderation_provider, moderation_model,
-        moderation_outcome, moderation_categories_json, moderation_scores_json,
-        moderation_applied_input_types_json, created_by_uuid, created_at
-      )
-      SELECT ?, c.id, '${spec.purpose}', ?, ?, ?, ?, ?, ?, ?, ?, 'PASSED', ?, ?, ?, ?, ?
-      FROM competitions c
-      WHERE c.id = ?
-        AND c.lifecycle_state = 'DRAFT'
-        AND c.current_config_version = ?
-    `).bind(
-      change.id,
-      change.storageKey,
-      change.sha256,
-      change.mimeType,
-      change.byteSize,
-      change.width,
-      change.height,
-      ...moderationBindings(change),
-      change.actorUuid,
-      change.createdAt,
-      change.competitionId,
-      change.expectedVersion
-    ),
-    database.prepare(`
-      INSERT INTO competition_config_versions (
-        competition_id, version, config_json, created_by_subject,
-        created_by_uuid, created_at, change_note, operation_id
-      )
-      SELECT c.id, ?, ?, ?, ?, ?, ?, ?
-      FROM competitions c
-      WHERE c.id = ?
-        AND c.lifecycle_state = 'DRAFT'
-        AND c.current_config_version = ?
-        AND EXISTS (
-          SELECT 1 FROM competition_media m
-          WHERE m.id = ?
-            AND m.competition_id = c.id
-            AND m.purpose = '${spec.purpose}'
-            AND m.removed_at IS NULL
-        )
-    `).bind(
-      nextVersion,
-      configJson,
-      change.actorSubject,
-      change.actorUuid,
-      change.createdAt,
-      `${spec.label} image updated`,
-      change.operationId,
-      change.competitionId,
-      change.expectedVersion,
-      change.id
-    ),
-    database.prepare(`
-      INSERT INTO competition_audit_events (
-        id, competition_id, actor_subject, actor_uuid, action,
-        after_json, note, created_at
-      )
-      SELECT ?, c.id, ?, ?, '${spec.auditAction}', ?, ?, ?
-      FROM competitions c
-      WHERE c.id = ?
-        AND c.current_config_version = ?
-        AND EXISTS (
-          SELECT 1 FROM competition_media m
-          WHERE m.id = ?
-            AND m.competition_id = c.id
-            AND m.purpose = '${spec.purpose}'
-            AND m.removed_at IS NULL
-        )
-    `).bind(
-      change.auditEventId,
-      change.actorSubject,
-      change.actorUuid,
-      mediaAfter,
-      `${spec.label} image uploaded, moderated, and attached to the competition`,
-      change.createdAt,
-      change.competitionId,
-      nextVersion,
-      change.id
+function appearanceMediaStatement(database, change, appearance) {
+  return database.prepare(`
+    INSERT INTO competition_media (
+      id, competition_id, purpose, storage_key, sha256, mime_type,
+      byte_size, width, height, moderation_provider, moderation_model,
+      moderation_outcome, moderation_categories_json, moderation_scores_json,
+      moderation_applied_input_types_json, created_by_uuid, created_at
     )
-  ]);
+    SELECT ?, c.id, '${appearance.spec.purpose}', ?, ?, ?, ?, ?, ?, ?, ?, 'PASSED', ?, ?, ?, ?, ?
+    FROM competitions c
+    WHERE c.id = ?
+      AND c.lifecycle_state = 'DRAFT'
+      AND c.current_config_version = ?
+  `).bind(
+    change.id,
+    change.storageKey,
+    change.sha256,
+    change.mimeType,
+    change.byteSize,
+    change.width,
+    change.height,
+    ...moderationBindings(change),
+    change.actorUuid,
+    change.createdAt,
+    change.competitionId,
+    change.expectedVersion
+  );
+}
 
-  const mediaInserted = Number(results?.[0]?.meta?.changes ?? 0);
-  const configInserted = Number(results?.[1]?.meta?.changes ?? 0);
-  if (mediaInserted !== 1 || configInserted !== 1) return { status: "CONFLICT" };
+function appearanceConfigStatement(database, change, appearance) {
+  return database.prepare(`
+    INSERT INTO competition_config_versions (
+      competition_id, version, config_json, created_by_subject,
+      created_by_uuid, created_at, change_note, operation_id
+    )
+    SELECT c.id, ?, ?, ?, ?, ?, ?, ?
+    FROM competitions c
+    WHERE c.id = ?
+      AND c.lifecycle_state = 'DRAFT'
+      AND c.current_config_version = ?
+      AND EXISTS (
+        SELECT 1 FROM competition_media media
+        WHERE media.id = ?
+          AND media.competition_id = c.id
+          AND media.purpose = '${appearance.spec.purpose}'
+          AND media.removed_at IS NULL
+      )
+  `).bind(
+    appearance.nextVersion,
+    appearance.configJson,
+    change.actorSubject,
+    change.actorUuid,
+    change.createdAt,
+    `${appearance.spec.label} image updated`,
+    change.operationId,
+    change.competitionId,
+    change.expectedVersion,
+    change.id
+  );
+}
 
+function appearanceAuditStatement(database, change, appearance) {
+  return database.prepare(`
+    INSERT INTO competition_audit_events (
+      id, competition_id, actor_subject, actor_uuid, action,
+      after_json, note, created_at
+    )
+    SELECT ?, c.id, ?, ?, '${appearance.spec.auditAction}', ?, ?, ?
+    FROM competitions c
+    WHERE c.id = ?
+      AND c.current_config_version = ?
+      AND EXISTS (
+        SELECT 1 FROM competition_media media
+        WHERE media.id = ?
+          AND media.competition_id = c.id
+          AND media.purpose = '${appearance.spec.purpose}'
+          AND media.removed_at IS NULL
+      )
+  `).bind(
+    change.auditEventId,
+    change.actorSubject,
+    change.actorUuid,
+    appearance.mediaAfter,
+    `${appearance.spec.label} image uploaded, moderated, and attached to the competition`,
+    change.createdAt,
+    change.competitionId,
+    appearance.nextVersion,
+    change.id
+  );
+}
+
+function attachedAppearance(change, appearance) {
   return {
     status: "UPDATED",
     media: publicMediaRow({
       id: change.id,
       competitionId: change.competitionId,
-      purpose: spec.purpose,
+      purpose: appearance.spec.purpose,
       storageKey: change.storageKey,
       mimeType: change.mimeType,
       byteSize: change.byteSize,
@@ -247,9 +254,29 @@ export async function createAndAttachCompetitionAppearanceMedia(db, change) {
       height: change.height,
       sha256: change.sha256
     }),
-    appearanceField: spec.field,
-    configVersion: nextVersion
+    appearanceField: appearance.spec.field,
+    configVersion: appearance.nextVersion
   };
+}
+
+function statementChanges(results, index) {
+  return Number(results?.[index]?.meta?.changes ?? 0);
+}
+
+function appearanceWriteSucceeded(results) {
+  return statementChanges(results, 0) === 1 && statementChanges(results, 1) === 1;
+}
+
+export async function createAndAttachCompetitionAppearanceMedia(db, change) {
+  const database = requireWritableDatabase(db);
+  const appearance = appearanceChange(change);
+  const results = await database.batch([
+    appearanceMediaStatement(database, change, appearance),
+    appearanceConfigStatement(database, change, appearance),
+    appearanceAuditStatement(database, change, appearance)
+  ]);
+  if (!appearanceWriteSucceeded(results)) return { status: "CONFLICT" };
+  return attachedAppearance(change, appearance);
 }
 
 export async function createAndAttachCompetitionBanner(db, change) {

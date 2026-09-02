@@ -33,6 +33,59 @@ function groupRows(rows, key = "submissionId") {
 
 const groupParticipants = groupRows;
 
+function publicJudges(judges) {
+  return judges.map((judge) => ({
+    playerUuid: judge.judgeUuid,
+    playerName: judge.judgeName,
+    assignedAt: judge.assignedAt
+  }));
+}
+
+async function hiddenEntryPayload(db, competition) {
+  const judges = competition.config?.judging?.enabled
+    ? await listCompetitionJudges(db, competition.id)
+    : [];
+  return {
+    competition: publicCompetitionDetail(competition),
+    entriesVisible: false,
+    submissions: [],
+    results: [],
+    judges: publicJudges(judges)
+  };
+}
+
+async function visibleEntryPayload(db, competition) {
+  const resultsVisible = ["COMPLETED", "ARCHIVED"].includes(competition.lifecycleState);
+  const judgingEnabled = Boolean(competition.config?.judging?.enabled);
+  const [submissions, participants, images, results, judges] = await Promise.all([
+    listApprovedPublicSubmissions(db, competition.id),
+    listAcceptedPublicParticipantsByCompetition(db, competition.id),
+    listPublicSubmissionImages(db, competition.id),
+    resultsVisible ? listPublicResults(db, competition.id) : Promise.resolve([]),
+    judgingEnabled ? listCompetitionJudges(db, competition.id) : Promise.resolve([])
+  ]);
+  const participantsBySubmission = groupRows(participants);
+  const imagesBySubmission = groupRows(images);
+
+  return {
+    competition: publicCompetitionDetail(competition),
+    entriesVisible: true,
+    submissions: submissions.map((submission) => publicSubmissionDetail(
+      submission,
+      participantsBySubmission.get(submission.id) ?? [],
+      imagesBySubmission.get(submission.id) ?? []
+    )),
+    results,
+    judges: publicJudges(judges)
+  };
+}
+
+function competitionPayload(db, competition) {
+  return publicEntriesVisibleInState(competition.lifecycleState)
+    ? visibleEntryPayload(db, competition)
+    : hiddenEntryPayload(db, competition);
+}
+
 export async function onRequestGet(context) {
   const authorized = await authorizeCompetitionRead(context);
   if (authorized.response) return authorized.response;
@@ -47,48 +100,7 @@ export async function onRequestGet(context) {
   try {
     const competition = await getPublicCompetitionBySlug(context.env.COMPETITIONS_DB, slug);
     if (!competition) return json({ error: "competition_not_found" }, 404);
-
-    const entriesVisible = publicEntriesVisibleInState(competition.lifecycleState);
-    if (!entriesVisible) {
-      const judges = competition.config?.judging?.enabled
-        ? await listCompetitionJudges(context.env.COMPETITIONS_DB, competition.id)
-        : [];
-      return json({
-        competition: publicCompetitionDetail(competition),
-        entriesVisible: false,
-        submissions: [],
-        results: [],
-        judges: judges.map((judge) => ({ playerUuid: judge.judgeUuid, playerName: judge.judgeName, assignedAt: judge.assignedAt }))
-      });
-    }
-
-    const resultsVisible = ["COMPLETED", "ARCHIVED"].includes(competition.lifecycleState);
-    const judgingEnabled = Boolean(competition.config?.judging?.enabled);
-    const [submissions, participants, images, results, judges] = await Promise.all([
-      listApprovedPublicSubmissions(context.env.COMPETITIONS_DB, competition.id),
-      listAcceptedPublicParticipantsByCompetition(context.env.COMPETITIONS_DB, competition.id),
-      listPublicSubmissionImages(context.env.COMPETITIONS_DB, competition.id),
-      resultsVisible ? listPublicResults(context.env.COMPETITIONS_DB, competition.id) : Promise.resolve([]),
-      judgingEnabled ? listCompetitionJudges(context.env.COMPETITIONS_DB, competition.id) : Promise.resolve([])
-    ]);
-    const participantsBySubmission = groupRows(participants);
-    const imagesBySubmission = groupRows(images);
-
-    return json({
-      competition: publicCompetitionDetail(competition),
-      entriesVisible: true,
-      submissions: submissions.map((submission) => publicSubmissionDetail(
-        submission,
-        participantsBySubmission.get(submission.id) ?? [],
-        imagesBySubmission.get(submission.id) ?? []
-      )),
-      results,
-      judges: judges.map((judge) => ({
-        playerUuid: judge.judgeUuid,
-        playerName: judge.judgeName,
-        assignedAt: judge.assignedAt
-      }))
-    });
+    return json(await competitionPayload(context.env.COMPETITIONS_DB, competition));
   } catch {
     return json({ error: "competition_detail_unavailable" }, 503);
   }
@@ -98,4 +110,4 @@ export function onRequest() {
   return methodNotAllowed(["GET"]);
 }
 
-export { competitionSlug, groupParticipants, groupRows };
+export { competitionPayload, competitionSlug, groupParticipants, groupRows, publicJudges };

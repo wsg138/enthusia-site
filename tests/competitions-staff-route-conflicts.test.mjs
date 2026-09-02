@@ -25,6 +25,6 @@ test("staff submission mutations use the full linked/guild conflict checker", as
     "RESTORE",
     "EDIT"
   ]) {
-    assert.match(source, new RegExp(`\\"${action}\\"`));
+    assert.ok(source.includes(`"${action}"`), `Missing staff action: ${action}`);
   }
 });

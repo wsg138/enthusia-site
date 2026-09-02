@@ -5,7 +5,11 @@ import {
   hasCompetitionDatabase,
   hasCompetitionMedia
 } from "../../../../../../../lib/competitions/access.js";
-import { deleteCompetitionImage } from "../../../../../../../lib/competitions/media-storage.js";
+import { getAdminCompetition } from "../../../../../../../lib/competitions/drafts.js";
+import {
+  cleanupStoredUpload,
+  privateStoredImageResponse
+} from "../../../../../../../lib/competitions/media-workflow.js";
 import {
   getStaffSubmissionImage,
   removeStaffSubmissionImage
@@ -14,6 +18,8 @@ import { getStaffSubmission } from "../../../../../../../lib/competitions/staff-
 import { json, methodNotAllowed, unauthorized } from "../../../../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../../../../lib/security.js";
 import { isCanonicalUuid } from "../../../../../../../lib/validation.js";
+
+const STAFF_REMOVAL_STATES = new Set(["SUBMISSIONS_OPEN", "REVIEW"]);
 
 function paramUuid(context, key) {
   const value = typeof context?.params?.[key] === "string" ? context.params[key].trim().toLowerCase() : "";
@@ -42,13 +48,20 @@ async function resolve(context, session) {
   const submissionId = paramUuid(context, "submissionId");
   const imageId = paramUuid(context, "imageId");
   if (!competitionId || !submissionId || !imageId) return { response: json({ error: "image_not_found" }, 404) };
+  return loadStaffMedia(context, session, { competitionId, submissionId, imageId });
+}
+
+async function loadStaffMedia(context, session, identity) {
   try {
-    const [submission, image] = await Promise.all([
-      getStaffSubmission(context.env.COMPETITIONS_DB, competitionId, submissionId),
-      getStaffSubmissionImage(context.env.COMPETITIONS_DB, competitionId, submissionId, imageId)
+    const [competition, submission, image] = await Promise.all([
+      getAdminCompetition(context.env.COMPETITIONS_DB, identity.competitionId),
+      getStaffSubmission(context.env.COMPETITIONS_DB, identity.competitionId, identity.submissionId),
+      getStaffSubmissionImage(context.env.COMPETITIONS_DB, identity.competitionId, identity.submissionId, identity.imageId)
     ]);
-    if (!submission || !image || image.removedAt) return { response: json({ error: "image_not_found" }, 404) };
-    return { session, competitionId, submissionId, imageId, submission, image };
+    if (!competition || !submission || !image || image.removedAt) {
+      return { response: json({ error: "image_not_found" }, 404) };
+    }
+    return { session, ...identity, competition, submission, image };
   } catch {
     return { response: json({ error: "competition_media_unavailable" }, 503) };
   }
@@ -59,62 +72,76 @@ export async function onRequestGet(context) {
   if (authorized.response) return authorized.response;
   const resolved = await resolve(context, authorized.session);
   if (resolved.response) return resolved.response;
+  return privateStoredImageResponse(context.env.COMPETITIONS_MEDIA, resolved.image);
+}
+
+function validRemovalInput(input) {
+  const expectedRevision = input?.expectedRevision;
+  const privateNote = typeof input?.privateNote === "string" ? input.privateNote.trim() : "";
+  if (!Number.isInteger(expectedRevision) || expectedRevision < 1) return null;
+  if (!privateNote || privateNote.length > 4000) return null;
+  return { expectedRevision, privateNote };
+}
+
+async function removalInput(request) {
   try {
-    const object = await context.env.COMPETITIONS_MEDIA.get(resolved.image.storageKey);
-    if (!object?.body) return json({ error: "image_not_found" }, 404);
-    return new Response(object.body, {
-      status: 200,
-      headers: {
-        "content-type": resolved.image.mimeType,
-        "cache-control": "private, no-store",
-        "content-disposition": "inline",
-        "x-content-type-options": "nosniff"
-      }
-    });
+    const input = validRemovalInput(await request.json());
+    return input ? { input } : { response: json({ error: "invalid_image_removal" }, 400) };
   } catch {
-    return json({ error: "competition_media_unavailable" }, 503);
+    return { response: json({ error: "invalid_image_removal" }, 400) };
   }
 }
 
-export async function onRequestDelete(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+function staffRemovalStateResponse(resolved, expectedRevision) {
+  if (!STAFF_REMOVAL_STATES.has(resolved.competition.lifecycleState)) {
+    return json({ error: "submission_locked" }, 409);
+  }
+  if (resolved.submission.revision !== expectedRevision) {
+    return json({ error: "submission_revision_conflict" }, 409);
+  }
+  return null;
+}
+
+async function preflightStaffRemoval(context) {
+  if (!requireSameOrigin(context.request)) return { response: json({ error: "invalid_origin" }, 403) };
   const authorized = await authorize(context);
-  if (authorized.response) return authorized.response;
+  if (authorized.response) return authorized;
   const resolved = await resolve(context, authorized.session);
-  if (resolved.response) return resolved.response;
+  if (resolved.response) return resolved;
+  const parsed = await removalInput(context.request);
+  if (parsed.response) return parsed;
+  const stateResponse = staffRemovalStateResponse(resolved, parsed.input.expectedRevision);
+  return stateResponse
+    ? { response: stateResponse }
+    : { ...authorized, ...resolved, ...parsed.input };
+}
 
-  let input;
-  try {
-    input = await context.request.json();
-  } catch {
-    input = null;
-  }
-  const privateNote = typeof input?.privateNote === "string" ? input.privateNote.trim() : "";
-  const expectedRevision = input?.expectedRevision;
-  if (!Number.isInteger(expectedRevision) || expectedRevision < 1 || !privateNote || privateNote.length > 4000) {
-    return json({ error: "invalid_image_removal" }, 400);
-  }
-  if (resolved.submission.revision !== expectedRevision) return json({ error: "submission_revision_conflict" }, 409);
-
-  const removedAt = new Date().toISOString();
+async function persistStaffRemoval(context, removal) {
   try {
     const result = await removeStaffSubmissionImage(context.env.COMPETITIONS_DB, {
-      competitionId: resolved.competitionId,
-      submissionId: resolved.submissionId,
-      imageId: resolved.imageId,
-      expectedRevision,
-      actorSubject: authorized.session.subject,
-      removedByUuid: authorized.session.player.uuid,
-      privateNote,
-      removedAt,
+      competitionId: removal.competitionId,
+      submissionId: removal.submissionId,
+      imageId: removal.imageId,
+      expectedRevision: removal.expectedRevision,
+      expectedConfigVersion: removal.competition.configVersion,
+      actorSubject: removal.session.subject,
+      removedByUuid: removal.session.player.uuid,
+      privateNote: removal.privateNote,
+      removedAt: new Date().toISOString(),
       auditEventId: crypto.randomUUID()
     });
     if (result.status !== "UPDATED") return json({ error: "submission_revision_conflict" }, 409);
-    await deleteCompetitionImage(context.env.COMPETITIONS_MEDIA, resolved.image.storageKey).catch(() => {});
+    await cleanupStoredUpload(context.env.COMPETITIONS_MEDIA, removal.image.storageKey);
     return json({ status: "REMOVED", revision: result.revision });
   } catch {
     return json({ error: "submission_image_remove_failed" }, 503);
   }
+}
+
+export async function onRequestDelete(context) {
+  const removal = await preflightStaffRemoval(context);
+  if (removal.response) return removal.response;
+  return persistStaffRemoval(context, removal);
 }
 
 export function onRequest() {

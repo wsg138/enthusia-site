@@ -36,8 +36,45 @@ function appendInline(root, value) {
   if (cursor < value.length) root.append(document.createTextNode(value.slice(cursor)));
 }
 
-function startsBlock(line) {
-  return /^(?:#{1,3}\s+|>\s?|[-*+]\s+|\d+[.)]\s+)/.test(line);
+function markupSpace(character) {
+  return character === " " || character === "\t";
+}
+
+function contentAfterMarker(line, markerEnd) {
+  if (!markupSpace(line.charAt(markerEnd))) return null;
+  let contentStart = markerEnd + 1;
+  while (contentStart < line.length && markupSpace(line.charAt(contentStart))) contentStart += 1;
+  return contentStart < line.length ? line.slice(contentStart) : null;
+}
+
+export function parseAppealBlock(value) {
+  const line = String(value ?? "");
+  let headingEnd = 0;
+  while (headingEnd < 3 && line.charAt(headingEnd) === "#") headingEnd += 1;
+  if (headingEnd && line.charAt(headingEnd) !== "#") {
+    const content = contentAfterMarker(line, headingEnd);
+    if (content !== null) return { kind: "heading", level: headingEnd, content };
+  }
+
+  if (line.startsWith(">")) {
+    const contentStart = markupSpace(line.charAt(1)) ? 2 : 1;
+    return { kind: "quote", content: line.slice(contentStart) };
+  }
+
+  if (line.length && "-*+".includes(line.charAt(0))) {
+    const content = contentAfterMarker(line, 1);
+    return content === null ? null : { kind: "unordered-item", content };
+  }
+
+  let digitEnd = 0;
+  while (digitEnd < line.length && line.charCodeAt(digitEnd) >= 48 && line.charCodeAt(digitEnd) <= 57) {
+    digitEnd += 1;
+  }
+  if (digitEnd && (line.charAt(digitEnd) === "." || line.charAt(digitEnd) === ")")) {
+    const content = contentAfterMarker(line, digitEnd + 1);
+    if (content !== null) return { kind: "ordered-item", content };
+  }
+  return null;
 }
 
 export function renderAppealMarkup(root, value) {
@@ -48,45 +85,48 @@ export function renderAppealMarkup(root, value) {
     const line = lines.at(index);
     if (!line.trim()) { index += 1; continue; }
 
-    const heading = /^(#{1,3})\s+(.+)$/.exec(line);
-    if (heading) {
+    const block = parseAppealBlock(line);
+    if (block?.kind === "heading") {
       const node = document.createElement("h4");
-      node.className = `appeal-markup-heading appeal-markup-heading-${heading[1].length}`;
-      appendInline(node, heading[2]);
+      node.className = `appeal-markup-heading appeal-markup-heading-${block.level}`;
+      appendInline(node, block.content);
       root.append(node);
       index += 1;
       continue;
     }
 
-    if (/^>\s?/.test(line)) {
+    if (block?.kind === "quote") {
       const quote = document.createElement("blockquote");
-      while (index < lines.length && /^>\s?/.test(lines.at(index))) {
+      let quoteBlock = block;
+      while (index < lines.length && quoteBlock?.kind === "quote") {
         if (quote.childNodes.length) quote.append(document.createElement("br"));
-        appendInline(quote, lines.at(index).replace(/^>\s?/, ""));
+        appendInline(quote, quoteBlock.content);
         index += 1;
+        quoteBlock = index < lines.length ? parseAppealBlock(lines.at(index)) : null;
       }
       root.append(quote);
       continue;
     }
 
-    const listMatch = /^(?:[-*+]|(\d+)[.)])\s+(.+)$/.exec(line);
-    if (listMatch) {
-      const ordered = Boolean(listMatch[1]);
+    if (block?.kind === "ordered-item" || block?.kind === "unordered-item") {
+      const ordered = block.kind === "ordered-item";
+      const expectedKind = ordered ? "ordered-item" : "unordered-item";
       const list = document.createElement(ordered ? "ol" : "ul");
+      let item = block;
       while (index < lines.length) {
-        const item = /^(?:[-*+]|(\d+)[.)])\s+(.+)$/.exec(lines.at(index));
-        if (!item || Boolean(item[1]) !== ordered) break;
+        if (!item || item.kind !== expectedKind) break;
         const entry = document.createElement("li");
-        appendInline(entry, item[2]);
+        appendInline(entry, item.content);
         list.append(entry);
         index += 1;
+        item = index < lines.length ? parseAppealBlock(lines.at(index)) : null;
       }
       root.append(list);
       continue;
     }
 
     const paragraph = document.createElement("p");
-    while (index < lines.length && lines.at(index).trim() && !startsBlock(lines.at(index))) {
+    while (index < lines.length && lines.at(index).trim() && !parseAppealBlock(lines.at(index))) {
       if (paragraph.childNodes.length) paragraph.append(document.createElement("br"));
       appendInline(paragraph, lines.at(index));
       index += 1;

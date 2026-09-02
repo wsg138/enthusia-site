@@ -9,7 +9,8 @@ import {
 } from "../functions/lib/competitions/public.js";
 import {
   competitionSlug,
-  groupParticipants
+  groupParticipants,
+  publicJudges
 } from "../functions/api/competitions/[slug].js";
 
 test("entries remain hidden until public viewing stages begin", () => {
@@ -148,4 +149,18 @@ test("participant grouping is stable per submission", () => {
   ]);
   assert.deepEqual(grouped.get("s1").map((row) => row.playerName), ["A", "C"]);
   assert.deepEqual(grouped.get("s2").map((row) => row.playerName), ["B"]);
+});
+
+test("public judge projection omits assignment internals", () => {
+  assert.deepEqual(publicJudges([{
+    judgeUuid: "judge-uuid",
+    judgeName: "Judge",
+    assignedAt: "2026-08-30T12:00:00.000Z",
+    assignedByUuid: "staff-uuid",
+    removedAt: null
+  }]), [{
+    playerUuid: "judge-uuid",
+    playerName: "Judge",
+    assignedAt: "2026-08-30T12:00:00.000Z"
+  }]);
 });
