@@ -8,7 +8,8 @@ Every scheduled run:
 
 1. recovers notification outbox rows left in `DELIVERING` for more than five minutes;
 2. advances safe date-driven lifecycle states;
-3. drains pending/failed Minecraft bridge notifications.
+3. drains pending/failed Minecraft bridge notifications;
+4. retries competition and appeal Discord notifications.
 
 The worker may automatically advance:
 
@@ -34,8 +35,13 @@ Required secret/environment configuration:
 - `COMPETITION_BRIDGE_ORIGIN`
 - `COMPETITION_BRIDGE_BEARER_TOKEN`
 - `COMPETITION_BRIDGE_HMAC_SECRET`
+- `ENTHUSIA_SITE_DISCORD_BOT_TOKEN` when contributor invites and appeal-update DMs are enabled
 
 The bridge origin must be HTTPS. Bearer/HMAC secrets are never committed.
+The Discord token is also a secret and must be configured through Wrangler's
+secret store. Appeal DMs contain only a generic update notice and a link back to
+the private appeal page; appeal text, evidence, punishments and decisions are not
+copied into Discord.
 
 The example Cron Trigger runs every two minutes. Cloudflare Cron Triggers invoke the Worker's `scheduled()` handler; this worker has no public fetch handler and the example disables `workers.dev`.
 

@@ -41,13 +41,21 @@ function staffWebhookConfiguration(env) {
   return { webhook: webhook.toString(), roleId: roleId || null };
 }
 
-function contributorBotConfiguration(env) {
-  const token = String(env?.COMPETITIONS_DISCORD_BOT_TOKEN ?? "").trim();
+function discordBotConfiguration(env) {
+  const token = String(
+    env?.ENTHUSIA_SITE_DISCORD_BOT_TOKEN
+      ?? env?.COMPETITIONS_DISCORD_BOT_TOKEN
+      ?? ""
+  ).trim();
   if (!token) return null;
   if (token.length < 50 || token.length > 256 || !/^[A-Za-z0-9._-]+$/.test(token)) {
-    throw new Error("Competition Discord bot token is invalid");
+    throw new Error("Discord bot token is invalid");
   }
   return { token };
+}
+
+function contributorBotConfiguration(env) {
+  return discordBotConfiguration(env);
 }
 
 function discordConfiguration(env) {
@@ -229,10 +237,30 @@ async function deliverStaffWebhook(env, notification, fetchImpl) {
 }
 
 async function deliverContributorDm(env, notification, fetchImpl) {
-  const config = contributorBotConfiguration(env);
+  return sendDiscordDirectMessage(
+    env,
+    notification.recipientDiscordUserId,
+    contributorMessagePayload(env, notification),
+    fetchImpl
+  );
+}
+
+function discordDeliveryError(message, status, body) {
+  const error = new Error(`${message}: ${status}:${body?.message ?? "unknown"}`);
+  error.status = status;
+  error.discordCode = Number.isSafeInteger(Number(body?.code)) ? Number(body.code) : null;
+  return error;
+}
+
+export function discordDmFailureIsPermanent(error) {
+  return error?.status === 403 && error?.discordCode === 50007;
+}
+
+export async function sendDiscordDirectMessage(env, recipientValue, payload, fetchImpl = fetch) {
+  const config = discordBotConfiguration(env);
   if (!config) return { status: "NOT_CONFIGURED" };
-  const recipient = String(notification.recipientDiscordUserId ?? "").trim();
-  if (!/^\d{16,22}$/.test(recipient)) throw new Error("Competition contributor Discord recipient is invalid");
+  const recipient = String(recipientValue ?? "").trim();
+  if (!/^\d{16,22}$/.test(recipient)) throw new Error("Discord DM recipient is invalid");
 
   const auth = { authorization: `Bot ${config.token}`, "content-type": "application/json" };
   const channelResponse = await boundedFetch(`${DISCORD_API_ROOT}/users/@me/channels`, {
@@ -242,17 +270,17 @@ async function deliverContributorDm(env, notification, fetchImpl) {
   }, fetchImpl);
   const channel = await channelResponse.json().catch(() => null);
   if (!channelResponse.ok || !/^\d{16,22}$/.test(String(channel?.id ?? ""))) {
-    throw new Error(`Competition contributor DM channel failed: ${channelResponse.status}:${channel?.message ?? "unknown"}`);
+    throw discordDeliveryError("Discord DM channel failed", channelResponse.status, channel);
   }
 
   const messageResponse = await boundedFetch(`${DISCORD_API_ROOT}/channels/${channel.id}/messages`, {
     method: "POST",
     headers: auth,
-    body: JSON.stringify(contributorMessagePayload(env, notification))
+    body: JSON.stringify({ ...payload, allowed_mentions: { parse: [] } })
   }, fetchImpl);
   const message = await messageResponse.json().catch(() => null);
   if (!messageResponse.ok) {
-    throw new Error(`Competition contributor DM failed: ${messageResponse.status}:${message?.message ?? "unknown"}`);
+    throw discordDeliveryError("Discord DM failed", messageResponse.status, message);
   }
   return { status: "DELIVERED", messageId: message?.id ?? null };
 }
@@ -331,6 +359,7 @@ export {
   contributorBotConfiguration,
   contributorMessagePayload,
   contributorUrl,
+  discordBotConfiguration,
   discordConfiguration,
   reviewUrl,
   staffWebhookConfiguration,

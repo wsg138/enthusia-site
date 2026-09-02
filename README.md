@@ -49,6 +49,7 @@ Flow:
 4. The player selects a punishment, answers the appeal questions and may attach screenshots or text logs.
 5. `POST /api/appeals` rechecks the linked identity and punishment, records the complete submission and sends the bounded appeal summary to EnthusiaStaff through the signed server-to-server API.
 6. The appeal history page shows status changes and player-visible messages. Authorized staff use the private reviewer workspace to reply, request information, accept or deny.
+7. When Discord DMs are configured, a durable notification tells the player to sign in after a staff reply or decision. The DM never includes the appeal, evidence, punishment or outcome.
 
 Security properties include:
 
@@ -151,6 +152,8 @@ Delete `.venv-tools` to remove the local Python environment.
 The site is structured for Cloudflare Pages/Pages Functions and includes Wrangler configuration. Infrastructure bindings, API credentials and secrets belong in the deployment environment and must not be written into public documentation.
 
 Discord sign-in requires `DISCORD_CLIENT_ID`, encrypted `DISCORD_CLIENT_SECRET`, `DISCORD_GUILD_ID` and an exact `DISCORD_OAUTH_REDIRECT_URI`. Staff website access also requires the Discord staff-role ID mappings documented in the development bring-up guide. Competition entry additionally requires the isolated D1/R2 bindings and Minecraft bridge configuration described there.
+
+`ENTHUSIA_SITE_DISCORD_BOT_TOKEN` optionally enables contributor-invite and appeal-update DMs. It belongs to the limited website-notification application, not the privileged staff moderation bot. The older `COMPETITIONS_DISCORD_BOT_TOKEN` name remains accepted during migration. Keep either value in the deployment secret store, never in the repository or Wrangler variables.
 
 Appeal submission requires encrypted `STAFF_API_BEARER_TOKEN` and `STAFF_API_HMAC_SECRET` values that match the EnthusiaStaff website API. Public punishment history and every appeal operation also require `staff-api.enthusia.info` to resolve to the deployed Staff API. The UI reports that dependency as unavailable rather than accepting an unverified appeal when the integration is offline.
 

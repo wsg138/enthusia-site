@@ -1,4 +1,8 @@
 import {
+  drainAppealDiscordNotifications,
+  recoverStaleAppealDiscordNotifications
+} from "../../../functions/lib/appeal-notifications.js";
+import {
   drainCompetitionDiscordNotifications,
   recoverStaleCompetitionDiscordNotifications
 } from "../../../functions/lib/competitions/discord-notifications.js";
@@ -11,8 +15,15 @@ function enabled(env) {
 async function runDiscordJobs(env, scheduledFor) {
   if (!env?.COMPETITIONS_DB) return;
   const nowIso = scheduledFor.toISOString();
-  await recoverStaleCompetitionDiscordNotifications(env.COMPETITIONS_DB, nowIso, 300);
-  await drainCompetitionDiscordNotifications(env, env.COMPETITIONS_DB, { limit: 100 });
+  const results = await Promise.allSettled([
+    recoverStaleCompetitionDiscordNotifications(env.COMPETITIONS_DB, nowIso, 300),
+    recoverStaleAppealDiscordNotifications(env.COMPETITIONS_DB, nowIso, 300),
+    drainCompetitionDiscordNotifications(env, env.COMPETITIONS_DB, { limit: 100 }),
+    drainAppealDiscordNotifications(env, env.COMPETITIONS_DB, { limit: 100 })
+  ]);
+  if (results.some((result) => result.status === "rejected")) {
+    throw new Error("One or more Discord notification jobs failed");
+  }
 }
 
 export default {

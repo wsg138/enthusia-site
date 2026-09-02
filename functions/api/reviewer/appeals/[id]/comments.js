@@ -1,5 +1,6 @@
 import { authenticateRequest, canReview } from "../../../../lib/auth.js";
 import { sanitizeAppealComment } from "../../../../lib/appeal-comments.js";
+import { scheduleAppealDiscordDrain } from "../../../../lib/appeal-notifications.js";
 import { findAppeal, recordAppealComment } from "../../../../lib/appeal-repository.js";
 import { forbidden, json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../lib/security.js";
@@ -35,6 +36,7 @@ export async function onRequestPost(context) {
       createdAt: new Date().toISOString()
     });
     if (recorded.status === "CONFLICT") return json({ error: "comment_conflict" }, 409);
+    scheduleAppealDiscordDrain(context);
     return json({ comment: recorded.comment }, recorded.status === "CREATED" ? 201 : 200);
   } catch {
     return serviceUnavailable();

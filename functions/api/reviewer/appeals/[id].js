@@ -1,4 +1,5 @@
 import { authenticateRequest, canReview } from "../../../lib/auth.js";
+import { scheduleAppealDiscordDrain } from "../../../lib/appeal-notifications.js";
 import { recordAppealComment, recordAppealStatus } from "../../../lib/appeal-repository.js";
 import { forbidden, json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../lib/responses.js";
 import { boundedIdempotencyKey, requireSameOrigin } from "../../../lib/security.js";
@@ -93,7 +94,10 @@ export async function onRequestPost(context) {
   try {
     const upstream = await requestDecision(context, appealId, reviewer, decision);
     if (upstream.ok) {
-      try { await mirrorDecision(context, appealId, reviewer, decision); }
+      try {
+        await mirrorDecision(context, appealId, reviewer, decision);
+        scheduleAppealDiscordDrain(context);
+      }
       catch { /* The authoritative Staff decision has already succeeded. */ }
     }
     return staffApiResponse(upstream);
