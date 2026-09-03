@@ -1,0 +1,83 @@
+name: Publish guild directory sidebar correction
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-worker/publish-guild-directory-sidebar.py'
+      - '.github/workflows/wiki-guild-directory-publish.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enthusia-wiki-guild-sidebar-correction
+  cancel-in-progress: false
+
+jobs:
+  backup-publish-verify:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_GUILD_SIDEBAR_OUT: wiki-guild-sidebar-output
+      WIKI_FULL_BACKUP_OUT: wiki-guild-sidebar-output/full-backup
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME || secrets.MIRAHEZE_BOT_USERNAME || secrets.WIKI_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD || secrets.MIRAHEZE_BOT_PASSWORD || secrets.WIKI_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Validate publisher
+        run: |
+          set -euo pipefail
+          python3 -m py_compile wiki-worker/full_backup.py wiki-worker/publish-guild-directory-sidebar.py
+      - name: Capture complete live wiki immediately before edit
+        run: |
+          set -euo pipefail
+          mkdir -p "$WIKI_GUILD_SIDEBAR_OUT"
+          python3 wiki-worker/full_backup.py | tee "$WIKI_GUILD_SIDEBAR_OUT/full-backup.log"
+          test -s "$WIKI_FULL_BACKUP_OUT/manifest.json"
+      - name: Upload immutable pre-edit backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-guild-sidebar-backup-${{ github.run_id }}
+          path: wiki-guild-sidebar-output/full-backup/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Require wiki credentials
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+      - name: Publish one-line Guilds target correction
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/publish-guild-directory-sidebar.py | tee "$WIKI_GUILD_SIDEBAR_OUT/publish.log"
+          test -s "$WIKI_GUILD_SIDEBAR_OUT/publish-evidence.json"
+      - name: Verify evidence
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          e=json.loads(Path('wiki-guild-sidebar-output/publish-evidence.json').read_text())
+          assert e['newGuildTarget']=='Guild list'
+          assert e['playersTargetPreserved']=='Players'
+          assert e['changedLineCount'] <= 1
+          print(json.dumps(e,indent=2))
+          PY
+      - name: Upload publication evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-guild-sidebar-evidence-${{ github.run_id }}
+          path: |
+            wiki-guild-sidebar-output/publish.log
+            wiki-guild-sidebar-output/publish-evidence.json
+            wiki-guild-sidebar-output/sidebar-before.wiki
+            wiki-guild-sidebar-output/sidebar-target.wiki
+          if-no-files-found: warn
+          retention-days: 90
