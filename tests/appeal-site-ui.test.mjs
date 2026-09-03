@@ -67,8 +67,9 @@ test("profile menu links to appeal history and dismisses when it is no longer in
   assert.match(menu, /menuLink\("Appeals", "\/appeal\.html#history"/);
   assert.match(menu, /appeal\?\.status !== "INFORMATION_REQUESTED"/);
   assert.match(menu, /comments\.at\(-1\)\?\.authorType === "STAFF"/);
-  assert.match(menu, /Promise\.all\(\[isStaffMember\(\), appealReplyCount\(\)\]\)/);
+  assert.match(menu, /Promise\.all\(\[staffCapabilities\(\), appealReplyCount\(\)\]\)/);
   assert.match(menu, /site-account-alert-count/);
+  assert.match(menu, /menuLink\("Staff dashboard", "\/reviewer\/"/);
   assert.match(menu, /\/account\.html/);
   assert.match(menu, /window\.addEventListener\("scroll", \(\) => closeAccountMenus\(\)/);
   assert.match(menu, /event\.key === "Escape"/);

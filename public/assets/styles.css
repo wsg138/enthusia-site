@@ -5335,6 +5335,26 @@ html body :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt
 .reviewer-comment-form{margin-top:4px}
 .reviewer-decision-limit{margin:0;color:var(--soft);font-size:.76rem}
 
+/* Staff dashboard */
+.staff-dashboard-auth{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1080px;padding:24px 26px;border-radius:16px}
+.staff-dashboard-auth p{margin:0;color:var(--muted)}
+.staff-dashboard{display:grid;max-width:1080px;gap:18px}
+.staff-dashboard-heading{display:flex;align-items:end;justify-content:space-between;gap:20px}
+.staff-dashboard-heading h2{margin:4px 0 0;font-size:clamp(1.65rem,4vw,2.4rem)}
+.staff-dashboard-sections{display:grid;gap:18px}
+.staff-dashboard-section{overflow:hidden;border:1px solid rgba(255,172,60,.18);border-radius:18px;background:rgba(12,10,9,.95);box-shadow:0 24px 68px rgba(0,0,0,.23)}
+.staff-dashboard-section>header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 26px;border-bottom:1px solid rgba(255,255,255,.08);background:linear-gradient(120deg,rgba(45,25,14,.6),rgba(15,13,11,.28))}
+.staff-dashboard-section h2{margin:4px 0 0;font-size:clamp(1.35rem,3vw,1.95rem)}
+.staff-dashboard-counts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0}
+.staff-dashboard-counts>div{display:grid;gap:6px;padding:24px 26px;border-right:1px solid rgba(255,255,255,.08)}
+.staff-dashboard-counts>div:last-child{border-right:0}
+.staff-dashboard-counts dt{color:var(--soft);font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.staff-dashboard-counts dd{order:-1;margin:0;color:#ffd69a;font-size:clamp(1.9rem,4vw,2.7rem);font-weight:900;line-height:1}
+.staff-dashboard-status{min-height:1.4em;margin:0;padding:17px 26px;color:var(--muted);border-top:1px solid rgba(255,255,255,.08)}
+.staff-dashboard-callout{margin:24px 26px 0;padding:18px 20px;border-left:3px solid rgba(255,183,76,.6);color:var(--cream);background:rgba(255,138,0,.06)}
+.staff-dashboard-callout.is-ready{border-left-color:rgba(130,202,93,.8);background:rgba(68,115,45,.12)}
+.staff-dashboard-callout.needs-attention{border-left-color:rgba(234,164,65,.8);background:rgba(94,55,21,.18)}
+
 @media(max-width:900px){
   .moderation-hero{grid-template-columns:1fr;align-items:start}
   .moderation-help-card{max-width:650px}
@@ -5344,6 +5364,9 @@ html body :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt
   .reviewer-meta{grid-template-columns:repeat(2,minmax(0,1fr))}
   .reviewer-toolbar{grid-template-columns:1fr 1fr auto}
   .reviewer-toolbar>p{grid-column:1/-1;justify-self:start;margin:0}
+  .staff-dashboard-counts{grid-template-columns:1fr}
+  .staff-dashboard-counts>div{border-right:0;border-bottom:1px solid rgba(255,255,255,.08)}
+  .staff-dashboard-counts>div:last-child{border-bottom:0}
 }
 @media(max-width:680px){
   .moderation-main{padding-top:46px}
@@ -5400,6 +5423,8 @@ html body :where(h1,h2,h3,h4,h5,h6,button,input,select,textarea,label,summary,dt
   .appeal-original-evidence{padding:0 20px 20px}
   .reviewer-card-disclosure>summary{align-items:flex-start;flex-direction:column;padding:16px 20px}
   .reviewer-card-disclosure>summary::after{position:absolute;right:20px}
+  .staff-dashboard-auth,.staff-dashboard-heading,.staff-dashboard-section>header{align-items:flex-start;flex-direction:column}
+  .staff-dashboard-auth .btn,.staff-dashboard-heading .btn,.staff-dashboard-section>header .btn{width:100%}
 }
 
 /* Account and Minecraft linking */

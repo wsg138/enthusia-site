@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b32c17176ee24992b3ae8569e84ab3a1)](https://app.codacy.com/gh/wsg138/enthusia-site/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-This repository is the public Enthusia SMP website at `enthusia.info`. It contains the static player-facing site, Cloudflare Pages Functions/API routes, leaderboard/data presentation, public-safe punishment history, code-backed punishment appeals, and internal reviewer tooling.
+This repository is the public Enthusia SMP website at `enthusia.info`. It contains the static player-facing site, Cloudflare Pages Functions/API routes, leaderboard/data presentation, public-safe punishment history, account-linked punishment appeals, and internal reviewer tooling.
 
 ## What belongs here
 
@@ -50,6 +50,8 @@ Flow:
 5. `POST /api/appeals` rechecks the linked identity and punishment, records the complete submission and sends the bounded appeal summary to EnthusiaStaff through the signed server-to-server API.
 6. The appeal history page shows status changes and player-visible messages. Authorized staff use the private reviewer workspace to reply, request information, accept or deny.
 7. When Discord DMs are configured, a durable notification tells the player to sign in after a staff reply or decision. The DM never includes the appeal, evidence, punishment or outcome.
+
+Authorized staff can open `public/reviewer/index.html` for one private dashboard that summarizes appeal work and links to the competition management workspace. Appeal-review and competition-management permissions remain independent.
 
 Security properties include:
 

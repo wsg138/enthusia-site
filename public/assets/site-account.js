@@ -35,15 +35,20 @@ async function fetchSession() {
   }
 }
 
-async function isStaffMember() {
+async function staffCapabilities() {
   try {
-    const response = await fetch("/api/competitions/admin/status", {
+    const response = await fetch("/api/reviewer/session", {
       credentials: "same-origin",
       headers: { accept: "application/json" }
     });
-    return response.status === 200 || response.status === 503;
+    if (!response.ok) return { appeals: false, competitions: false };
+    const payload = await response.json();
+    return {
+      appeals: payload.appeals === true,
+      competitions: payload.competitions === true
+    };
   } catch {
-    return false;
+    return { appeals: false, competitions: false };
   }
 }
 
@@ -192,15 +197,11 @@ async function renderAccount(root, session) {
   actions.append(logout);
   details.append(summary, actions);
   root.append(details);
-  const [staffMember, replyCount] = await Promise.all([isStaffMember(), appealReplyCount()]);
+  const [staff, replyCount] = await Promise.all([staffCapabilities(), appealReplyCount()]);
   showAppealReplyCount(appealsLink, replyCount);
-  if (staffMember) {
+  if (staff.appeals || staff.competitions) {
     actions.insertBefore(
-      menuLink("Review appeals", "/reviewer/appeals.html", "Open the staff appeal queue"),
-      logout
-    );
-    actions.insertBefore(
-      menuLink("Competition tools", "/competitions/admin/", "Manage competitions"),
+      menuLink("Staff dashboard", "/reviewer/", "Appeals and competition tools"),
       logout
     );
   }
