@@ -6,6 +6,19 @@ This directory owns the guarded publication path from the approved Enthusia wiki
 
 The approved player-facing content is loaded from `public/wiki-demo/v2-*.js` on the publishing branch. Existing community-authored player, guild, staff, mapart, template and lore pages are not generated or replaced by this worker.
 
+## Stable community navigation
+
+`MediaWiki:Sidebar` should keep the community-maintained directory links pointed at the stable normal pages:
+
+```text
+** Players|Players
+** Guilds|Guilds
+```
+
+Do not point these sidebar entries directly at replaceable pages such as `Noteable Players`, `Noteable Guilds`, or a future replacement directory page. `MediaWiki:Sidebar` is interface-protected, while the normal `Players` and `Guilds` pages can be maintained by ordinary wiki editors. If the directory structure changes later, update the normal stable page (or make that normal page redirect to the new destination) rather than changing the interface sidebar again.
+
+The live sidebar was migrated to this stable routing on 2026-09-03. The migration changed only those two sidebar targets and did not modify the `Players` or `Guilds` page content.
+
 ## Required gates
 
 The `Publish Enthusia wiki` workflow performs these steps in order:
