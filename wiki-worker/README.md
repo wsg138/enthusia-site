@@ -8,16 +8,18 @@ The approved player-facing content is loaded from `public/wiki-demo/v2-*.js` on 
 
 ## Stable community navigation
 
-`MediaWiki:Sidebar` should keep the community-maintained directory links pointed at the stable normal pages:
+`MediaWiki:Sidebar` should keep the community directory entries pointed at the pages that actually contain those directories:
 
 ```text
 ** Players|Players
-** Guilds|Guilds
+** Guild list|Guilds
 ```
 
-Do not point these sidebar entries directly at replaceable pages such as `Noteable Players`, `Noteable Guilds`, or a future replacement directory page. `MediaWiki:Sidebar` is interface-protected, while the normal `Players` and `Guilds` pages can be maintained by ordinary wiki editors. If the directory structure changes later, update the normal stable page (or make that normal page redirect to the new destination) rather than changing the interface sidebar again.
+`Guilds` is the server's guild-plugin/how-to documentation page; it is not the community guild directory. The community guild directory is `Guild list`, which dynamically lists pages using `Template:Guild` in the `Guilds` category. Do not repoint the sidebar Guilds entry to the plugin documentation page.
 
-The live sidebar was migrated to this stable routing on 2026-09-03. The migration changed only those two sidebar targets and did not modify the `Players` or `Guilds` page content.
+Likewise, keep the Players entry pointed at `Players` rather than the older `Noteable Players` page. If either community directory is replaced later, verify the actual current wiki structure and content before changing the protected interface sidebar.
+
+The live Guilds sidebar target was corrected to `Guild list` on 2026-09-03 after a fresh full-wiki inspection confirmed the distinction. The correction changed only the Guilds target and preserved the Players target and all community page content.
 
 ## Required gates
 
