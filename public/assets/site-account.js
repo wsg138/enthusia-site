@@ -47,6 +47,26 @@ async function isStaffMember() {
   }
 }
 
+function appealNeedsReply(appeal) {
+  if (appeal?.status !== "INFORMATION_REQUESTED") return false;
+  const comments = Array.isArray(appeal.comments) ? appeal.comments : [];
+  return comments.at(-1)?.authorType === "STAFF";
+}
+
+async function appealReplyCount() {
+  try {
+    const response = await fetch("/api/appeals", {
+      credentials: "same-origin",
+      headers: { accept: "application/json" }
+    });
+    if (!response.ok) return 0;
+    const payload = await response.json();
+    return Array.isArray(payload.appeals) ? payload.appeals.filter(appealNeedsReply).length : 0;
+  } catch {
+    return 0;
+  }
+}
+
 async function signOut(button) {
   button.disabled = true;
   try {
@@ -105,6 +125,19 @@ function menuLink(label, href, description) {
   return link;
 }
 
+function showAppealReplyCount(link, count) {
+  if (!Number.isSafeInteger(count) || count < 1) return;
+  const title = link.querySelector("strong");
+  const detail = link.querySelector("small");
+  if (!title || !detail) return;
+  const badge = document.createElement("span");
+  badge.className = "site-account-alert-count";
+  badge.textContent = String(count);
+  badge.setAttribute("aria-label", `${count} appeal${count === 1 ? "" : "s"} need your reply`);
+  title.append(badge);
+  detail.textContent = count === 1 ? "One appeal needs your reply" : `${count} appeals need your reply`;
+}
+
 function closeAccountMenus(except = null) {
   for (const menu of document.querySelectorAll(".site-account-menu[open]")) {
     if (menu !== except) menu.removeAttribute("open");
@@ -145,9 +178,10 @@ async function renderAccount(root, session) {
   summary.append(avatar, identity);
   const actions = document.createElement("div");
   actions.className = "site-account-actions";
+  const appealsLink = menuLink("Appeals", "/appeal.html#history", "Status and staff replies");
   actions.append(
     menuLink("Profile", "/account.html", "Discord and Minecraft links"),
-    menuLink("Appeals", "/appeal.html#history", "Status and staff replies"),
+    appealsLink,
     menuLink("Competitions", "/competitions/", "Entries, voting, and results")
   );
   const logout = document.createElement("button");
@@ -158,7 +192,9 @@ async function renderAccount(root, session) {
   actions.append(logout);
   details.append(summary, actions);
   root.append(details);
-  if (await isStaffMember()) {
+  const [staffMember, replyCount] = await Promise.all([isStaffMember(), appealReplyCount()]);
+  showAppealReplyCount(appealsLink, replyCount);
+  if (staffMember) {
     actions.insertBefore(
       menuLink("Review appeals", "/reviewer/appeals.html", "Open the staff appeal queue"),
       logout
