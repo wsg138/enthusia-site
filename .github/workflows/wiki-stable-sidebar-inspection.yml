@@ -1,0 +1,87 @@
+name: Inspect stable wiki sidebar links
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-worker/inspect-stable-sidebar-links.py'
+      - '.github/workflows/wiki-stable-sidebar-inspection.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-live-sidebar:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_FULL_BACKUP_OUT: wiki-sidebar-routing-output/full-backup
+    steps:
+      - name: Check out exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Validate inspection source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile wiki-worker/inspect-stable-sidebar-links.py
+          python3 -m py_compile wiki-worker/full_backup.py
+
+      - name: Capture complete current live wiki
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p wiki-sidebar-routing-output
+          python3 wiki-worker/full_backup.py | tee wiki-sidebar-routing-output/full-backup.log
+          test -s wiki-sidebar-routing-output/full-backup/manifest.json
+          pages="$(find wiki-sidebar-routing-output/full-backup/pages -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find wiki-sidebar-routing-output/full-backup/history -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+
+      - name: Inspect current sidebar and stable pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/inspect-stable-sidebar-links.py | tee wiki-sidebar-routing-output/inspection.log
+          test -s wiki-sidebar-routing-output/inspection.json
+          test -s wiki-sidebar-routing-output/sidebar-before.wiki
+          test -s wiki-sidebar-routing-output/sidebar-proposed.wiki
+
+      - name: Prove proposed edit changes only Guilds and Players targets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          before = Path('wiki-sidebar-routing-output/sidebar-before.wiki').read_text(encoding='utf-8').splitlines()
+          after = Path('wiki-sidebar-routing-output/sidebar-proposed.wiki').read_text(encoding='utf-8').splitlines()
+          if len(before) != len(after):
+              raise SystemExit('line count changed')
+          changed=[]
+          for i,(a,b) in enumerate(zip(before,after),1):
+              if a != b:
+                  changed.append((i,a,b))
+          if len(changed) > 2:
+              raise SystemExit(f'unexpected changed lines: {changed!r}')
+          for i,a,b in changed:
+              if not re.match(r'^\s*\*\*\s*Guilds\s*\|\s*Guilds\s*$', b, re.I) and not re.match(r'^\s*\*\*\s*Players\s*\|\s*Players\s*$', b, re.I):
+                  raise SystemExit(f'unexpected replacement at line {i}: {b!r}')
+          print(f'validated changed_lines={len(changed)}')
+          PY
+
+      - name: Upload immutable inspection evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-stable-sidebar-inspection-${{ github.run_id }}
+          path: wiki-sidebar-routing-output/
+          if-no-files-found: error
+          retention-days: 90
