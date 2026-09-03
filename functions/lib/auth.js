@@ -1,6 +1,15 @@
 import { isCanonicalUuid } from "./validation.js";
+import { getCompetitionIdentitySession } from "./competitions/identity.js";
 
 const encoder = new TextEncoder();
+const DISCORD_ROLE_MAX_AGE_MS = 60 * 60 * 1000;
+const DISCORD_STAFF_ROLE_BINDINGS = Object.freeze([
+  Object.freeze(["founder", "DISCORD_FOUNDER_ROLE_IDS"]),
+  Object.freeze(["admin", "DISCORD_ADMIN_ROLE_IDS"]),
+  Object.freeze(["developer", "DISCORD_DEVELOPER_ROLE_IDS"]),
+  Object.freeze(["moderator", "DISCORD_MODERATOR_ROLE_IDS"]),
+  Object.freeze(["helper", "DISCORD_HELPER_ROLE_IDS"])
+]);
 
 function decodeBase64Url(value) {
   const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
@@ -99,10 +108,83 @@ export function buildSession(claims) {
   });
 }
 
+function configuredDiscordRoleIds(env, binding) {
+  return new Set(
+    String(env?.[binding] ?? "")
+      .split(",")
+      .map((roleId) => roleId.trim())
+      .filter((roleId) => /^\d{16,22}$/.test(roleId))
+  );
+}
+
+export function discordStaffRoles(session, env) {
+  const assigned = new Set(
+    Array.isArray(session?.guildRoleIds)
+      ? session.guildRoleIds.map(String).filter((roleId) => /^\d{16,22}$/.test(roleId))
+      : []
+  );
+  return DISCORD_STAFF_ROLE_BINDINGS
+    .filter(([, binding]) => [...configuredDiscordRoleIds(env, binding)].some((roleId) => assigned.has(roleId)))
+    .map(([role]) => role);
+}
+
+export function discordRoleSnapshotIsFresh(session, now = Date.now()) {
+  const checkedAt = Date.parse(session?.discordRolesCheckedAt ?? "");
+  return Number.isFinite(checkedAt)
+    && checkedAt <= now + 5 * 60 * 1000
+    && now - checkedAt <= DISCORD_ROLE_MAX_AGE_MS;
+}
+
+function linkedStaffPlayer(session) {
+  for (const account of session?.linkedMinecraftAccounts ?? []) {
+    const uuid = String(account?.uuid ?? "").trim().toLowerCase();
+    const name = String(account?.name ?? "").trim();
+    if (isCanonicalUuid(uuid) && /^[A-Za-z0-9_]{1,16}$/.test(name)) return { uuid, name };
+  }
+  return null;
+}
+
+export function buildDiscordStaffSession(session, env, now = Date.now()) {
+  if (!session || session.discordGuildMember !== true) {
+    throw new Error("Discord server membership is required");
+  }
+  if (!discordRoleSnapshotIsFresh(session, now)) {
+    throw new Error("Discord staff roles must be refreshed");
+  }
+  const roles = discordStaffRoles(session, env);
+  if (!roles.length) throw new Error("A configured Discord staff role is required");
+  const player = linkedStaffPlayer(session);
+  if (!player) throw new Error("A linked Minecraft account is required");
+  return Object.freeze({
+    ...session,
+    player: Object.freeze(player),
+    roles: Object.freeze(roles)
+  });
+}
+
 export async function authenticateRequest(request, env, verifier = verifyAccessJwt) {
+  let discordError = null;
+  if (env?.COMPETITIONS_DB && typeof env.COMPETITIONS_DB.prepare === "function") {
+    try {
+      const identity = await getCompetitionIdentitySession(request, env.COMPETITIONS_DB);
+      if (identity) {
+        try {
+          return buildDiscordStaffSession(identity, env);
+        } catch (error) {
+          discordError = error;
+        }
+      }
+    } catch {
+      // Access authentication remains available while the Discord session store is unavailable.
+    }
+  }
   const token = request.headers.get("CF-Access-Jwt-Assertion");
-  const claims = await verifier(token, env);
-  return buildSession(claims);
+  try {
+    const claims = await verifier(token, env);
+    return buildSession(claims);
+  } catch (error) {
+    throw discordError ?? error;
+  }
 }
 
 export function reviewerRoles(env) {
@@ -116,3 +198,5 @@ export function canReview(session, env) {
   const allowed = new Set(reviewerRoles(env));
   return session.roles.some((role) => allowed.has(role));
 }
+
+export { DISCORD_ROLE_MAX_AGE_MS };

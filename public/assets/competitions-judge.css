@@ -1,0 +1,88 @@
+.judge-panel,
+.judge-entry-list,
+.judge-score-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.judge-entry-list {
+  margin-top: 1rem;
+}
+
+.judge-entry-card {
+  padding: 1.1rem;
+}
+
+.judge-entry-description {
+  white-space: pre-wrap;
+  line-height: 1.55;
+}
+
+.judge-image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 0.75rem;
+}
+
+.judge-image-link {
+  display: block;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.judge-image-link img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  transition: transform 140ms ease;
+}
+
+.judge-image-link:hover img {
+  transform: scale(1.015);
+}
+
+.judge-coordinate-box {
+  display: grid;
+  gap: 0.4rem;
+  border: 1px solid rgba(255, 186, 79, 0.35);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 153, 51, 0.08);
+}
+
+.judge-coordinate-box code {
+  font-size: 0.95rem;
+  color: #fff2d6;
+}
+
+.judge-score-form {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+.judge-score-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.judge-score-heading h4 {
+  margin: 0;
+}
+
+.judge-score-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+@media (max-width: 700px) {
+  .judge-score-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

@@ -7,10 +7,10 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from pathlib import Path
+from safety import contained_file, project_output_path, wiki_api_url
 
-API = os.environ.get('WIKI_API', 'https://enthusia.miraheze.org/w/api.php')
-OUT = Path(os.environ.get('WIKI_WORKER_OUT', 'wiki-worker-output'))
+API = wiki_api_url(os.environ.get('WIKI_API'))
+OUT = project_output_path(os.environ.get('WIKI_WORKER_OUT'))
 RENDERED = OUT / 'rendered'
 UA = 'EnthusiaWikiValidator/2.2 (read-only parser validation)'
 UNSUPPORTED_TAGS = ('details', 'summary', 'thead', 'tbody')
@@ -37,6 +37,7 @@ def api(params, retries=4):
                 time.sleep(2 + attempt * 2)
                 continue
             raise RuntimeError(f'Unable to reach Miraheze parser: {exc}') from exc
+    raise RuntimeError('MediaWiki parser request retries exhausted')
 
 
 def escaped_unsupported_tags(parsed_html):
@@ -65,7 +66,7 @@ def main():
         if item.get('contentModel') == 'sanitized-css':
             continue
         title = item['title']
-        text = (RENDERED / item['filename']).read_text(encoding='utf-8')
+        text = contained_file(RENDERED, item['filename'], 'Rendered wiki filename').read_text(encoding='utf-8')
         try:
             parsed = api({
                 'action': 'parse', 'title': title, 'text': text, 'contentmodel': 'wikitext',
@@ -81,7 +82,7 @@ def main():
                 raise RuntimeError(f'MediaWiki escaped unsupported HTML tag(s): {", ".join(escaped)}')
             report['validated'].append({'title': title, 'ok': True})
             print(f'PARSE OK {title}')
-        except Exception as exc:
+        except (RuntimeError, ValueError, KeyError, TypeError, AttributeError) as exc:
             failures.append({'title': title, 'error': str(exc)})
             print(f'PARSE FAIL {title}: {exc}', file=sys.stderr)
 
@@ -96,6 +97,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Exception as exc:
+    except (RuntimeError, ValueError, KeyError, TypeError, AttributeError, OSError) as exc:
         print(f'VALIDATION ERROR: {exc}', file=sys.stderr)
         sys.exit(1)

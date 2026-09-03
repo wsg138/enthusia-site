@@ -1,0 +1,305 @@
+function requireDatabase(db) {
+  if (!db || typeof db.prepare !== "function") {
+    throw new TypeError("Competition database binding is unavailable");
+  }
+  return db;
+}
+
+function requireWritableDatabase(db) {
+  const database = requireDatabase(db);
+  if (typeof database.batch !== "function") {
+    throw new TypeError("Competition database binding does not support transactional batches");
+  }
+  return database;
+}
+
+function rows(result) {
+  return Array.isArray(result?.results) ? result.results : [];
+}
+
+function parseConfig(value) {
+  if (typeof value !== "string") throw new Error("Competition config is unavailable");
+  const parsed = JSON.parse(value);
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new Error("Competition config is invalid");
+  }
+  return parsed;
+}
+
+function rowsWithConfig(result) {
+  return rows(result).map((row) => {
+    const { configJson, ...competition } = row;
+    return { ...competition, config: parseConfig(configJson) };
+  });
+}
+
+export async function competitionSchemaReady(db) {
+  const database = requireDatabase(db);
+  const row = await database
+    .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = ? LIMIT 1")
+    .bind("competitions")
+    .first();
+  return row?.name === "competitions";
+}
+
+export async function competitionSlugExists(db, slug) {
+  const database = requireDatabase(db);
+  const row = await database
+    .prepare("SELECT id FROM competitions WHERE slug = ? LIMIT 1")
+    .bind(slug)
+    .first();
+  return Boolean(row?.id);
+}
+
+export async function createDraftCompetition(db, draft) {
+  const database = requireWritableDatabase(db);
+  const configJson = JSON.stringify(draft.config);
+
+  await database.batch([
+    database.prepare(`
+      INSERT INTO competitions (
+        id, slug, title, category, lifecycle_state, current_config_version,
+        created_by_subject, created_by_uuid, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, 'DRAFT', 1, ?, ?, ?, ?)
+    `).bind(
+      draft.id,
+      draft.slug,
+      draft.title,
+      draft.category,
+      draft.createdBySubject,
+      draft.createdByUuid,
+      draft.createdAt,
+      draft.createdAt
+    ),
+    database.prepare(`
+      INSERT INTO competition_config_versions (
+        competition_id, version, config_json, created_by_subject,
+        created_by_uuid, created_at, change_note
+      ) VALUES (?, 1, ?, ?, ?, ?, ?)
+    `).bind(
+      draft.id,
+      configJson,
+      draft.createdBySubject,
+      draft.createdByUuid,
+      draft.createdAt,
+      "Initial draft"
+    ),
+    database.prepare(`
+      INSERT INTO competition_audit_events (
+        id, competition_id, actor_subject, actor_uuid, action,
+        after_json, note, created_at
+      ) VALUES (?, ?, ?, ?, 'COMPETITION_CREATED', ?, ?, ?)
+    `).bind(
+      draft.auditEventId,
+      draft.id,
+      draft.createdBySubject,
+      draft.createdByUuid,
+      JSON.stringify({
+        slug: draft.slug,
+        title: draft.title,
+        category: draft.category,
+        visibility: "PUBLIC",
+        lifecycleState: "DRAFT",
+        configVersion: 1
+      }),
+      "Initial draft created",
+      draft.createdAt
+    )
+  ]);
+
+  return {
+    id: draft.id,
+    slug: draft.slug,
+    title: draft.title,
+    category: draft.category,
+    visibility: "PUBLIC",
+    lifecycleState: "DRAFT",
+    configVersion: 1,
+    createdAt: draft.createdAt
+  };
+}
+
+export async function listPublicCompetitions(db) {
+  const database = requireDatabase(db);
+  const result = await database.prepare(`
+    SELECT
+      c.id,
+      c.slug,
+      c.title,
+      c.category,
+      c.visibility,
+      c.lifecycle_state AS lifecycleState,
+      c.current_config_version AS configVersion,
+      c.published_at AS publishedAt,
+      c.archived_at AS archivedAt,
+      v.config_json AS configJson
+    FROM competitions c
+    JOIN competition_config_versions v
+      ON v.competition_id = c.id
+     AND v.version = c.current_config_version
+    WHERE c.visibility = 'PUBLIC'
+      AND c.published_at IS NOT NULL
+      AND c.lifecycle_state NOT IN ('DRAFT', 'CANCELLED')
+    ORDER BY
+      CASE c.lifecycle_state
+        WHEN 'SUBMISSIONS_OPEN' THEN 1
+        WHEN 'REVIEW' THEN 2
+        WHEN 'VOTING' THEN 3
+        WHEN 'JUDGING' THEN 4
+        WHEN 'RESULTS_READY' THEN 5
+        WHEN 'UPCOMING' THEN 6
+        WHEN 'COMPLETED' THEN 7
+        WHEN 'ARCHIVED' THEN 8
+        ELSE 9
+      END,
+      c.published_at DESC
+  `).all();
+  return rowsWithConfig(result);
+}
+
+export async function getPublicCompetitionBySlug(db, slug) {
+  const database = requireDatabase(db);
+  const row = await database.prepare(`
+    SELECT
+      c.id,
+      c.slug,
+      c.title,
+      c.category,
+      c.visibility,
+      c.lifecycle_state AS lifecycleState,
+      c.current_config_version AS configVersion,
+      c.published_at AS publishedAt,
+      c.archived_at AS archivedAt,
+      v.config_json AS configJson
+    FROM competitions c
+    JOIN competition_config_versions v
+      ON v.competition_id = c.id
+     AND v.version = c.current_config_version
+    WHERE c.slug = ?
+      AND c.visibility IN ('PUBLIC', 'UNLISTED')
+      AND c.published_at IS NOT NULL
+      AND c.lifecycle_state NOT IN ('DRAFT', 'CANCELLED')
+    LIMIT 1
+  `).bind(slug).first();
+
+  if (!row) return null;
+  const { configJson, ...competition } = row;
+  return { ...competition, config: parseConfig(configJson) };
+}
+
+export async function listApprovedPublicSubmissions(db, competitionId) {
+  const database = requireDatabase(db);
+  const result = await database.prepare(`
+    SELECT
+      id,
+      competition_id AS competitionId,
+      entry_type AS entryType,
+      owner_uuid AS ownerUuid,
+      owner_name AS ownerName,
+      guild_id AS guildId,
+      guild_name_snapshot AS guildName,
+      title,
+      description,
+      cover_image_id AS coverImageId,
+      revision,
+      staff_edited AS staffEdited,
+      submitted_at AS submittedAt,
+      approved_at AS approvedAt
+    FROM submissions
+    WHERE competition_id = ?
+      AND status = 'APPROVED'
+      AND removed_at IS NULL
+    ORDER BY approved_at ASC, id ASC
+  `).bind(competitionId).all();
+  return rows(result);
+}
+
+export async function listAcceptedPublicParticipants(db, submissionId) {
+  const database = requireDatabase(db);
+  const result = await database.prepare(`
+    SELECT
+      player_uuid AS playerUuid,
+      player_name AS playerName,
+      participant_role AS role
+    FROM submission_participants
+    WHERE submission_id = ?
+      AND invite_status = 'ACCEPTED'
+    ORDER BY
+      CASE participant_role
+        WHEN 'OWNER' THEN 1
+        WHEN 'MAIN' THEN 2
+        WHEN 'GUILD_WORKER' THEN 3
+        WHEN 'HELPER' THEN 4
+        ELSE 5
+      END,
+      player_name COLLATE NOCASE ASC
+  `).bind(submissionId).all();
+  return rows(result);
+}
+
+export async function listAcceptedPublicParticipantsByCompetition(db, competitionId) {
+  const database = requireDatabase(db);
+  const result = await database.prepare(`
+    SELECT
+      p.submission_id AS submissionId,
+      p.player_uuid AS playerUuid,
+      p.player_name AS playerName,
+      p.participant_role AS role
+    FROM submission_participants p
+    JOIN submissions s ON s.id = p.submission_id
+    WHERE s.competition_id = ?
+      AND s.status = 'APPROVED'
+      AND s.removed_at IS NULL
+      AND p.invite_status = 'ACCEPTED'
+    ORDER BY
+      p.submission_id ASC,
+      CASE p.participant_role
+        WHEN 'OWNER' THEN 1
+        WHEN 'MAIN' THEN 2
+        WHEN 'GUILD_WORKER' THEN 3
+        WHEN 'HELPER' THEN 4
+        ELSE 5
+      END,
+      p.player_name COLLATE NOCASE ASC
+  `).bind(competitionId).all();
+  return rows(result);
+}
+
+export async function getPrivateSubmissionLocation(db, submissionId) {
+  const database = requireDatabase(db);
+  return database.prepare(`
+    SELECT
+      world_name AS worldName,
+      block_x AS x,
+      block_y AS y,
+      block_z AS z,
+      exact_coordinates_confirmed AS exactCoordinatesConfirmed,
+      updated_at AS updatedAt
+    FROM submission_private_locations
+    WHERE submission_id = ?
+    LIMIT 1
+  `).bind(submissionId).first();
+}
+
+export async function listAdminCompetitions(db) {
+  const database = requireDatabase(db);
+  const result = await database.prepare(`
+    SELECT
+      id,
+      slug,
+      title,
+      category,
+      visibility,
+      lifecycle_state AS lifecycleState,
+      current_config_version AS configVersion,
+      created_by_uuid AS createdByUuid,
+      created_at AS createdAt,
+      updated_at AS updatedAt,
+      published_at AS publishedAt,
+      archived_at AS archivedAt,
+      cancelled_at AS cancelledAt
+    FROM competitions
+    ORDER BY updated_at DESC
+  `).all();
+  return rows(result);
+}

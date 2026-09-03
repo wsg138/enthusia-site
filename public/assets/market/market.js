@@ -7,22 +7,33 @@
   const iconManifest = window.ENTHUSIA_MINECRAFT_ASSETS;
   const fontManifest = window.ENTHUSIA_MINECRAFT_FONT;
   const adapter = new window.EnthusiaMarketAdapter.StaticMarketAdapter(layout, null);
-  const $ = selector => document.querySelector(selector);
+  const selectOne = selector => document.querySelector(selector);
   const ns = "http://www.w3.org/2000/svg";
   const t = layout.renderTransform;
-  const assetBase = document.querySelector("[data-market-asset-base]")?.dataset.marketAssetBase || $("#site-logo").getAttribute("src").replace(/[^/]+$/, "");
+  const potionSearchTerms = Object.freeze([
+    "potion", "strength", "slow falling", "invis", "water breathing", "night vision", "regeneration",
+    "poison", "weakness", "turtle master", "wind charged", "weaving", "oozing", "infestation"
+  ]);
+  const filterDefinitions = Object.freeze([
+    { key: "floor", label: "Floor", selector: "#floor-filter" },
+    { key: "owner", label: "Owner", selector: "#owner-filter" },
+    { key: "shop", label: "Shop", selector: "#shop-filter" },
+    { key: "stock", label: "Stock", selector: "#stock-filter" },
+    { key: "rent", label: "Rent", selector: "#rent-filter" }
+  ]);
+  const assetBase = document.querySelector("[data-market-asset-base]")?.dataset.marketAssetBase || selectOne("#site-logo").getAttribute("src").replace(/[^/]+$/, "");
   const cssAssetBase = document.querySelector("[data-market-css-asset-base]")?.dataset.marketCssAssetBase ?? assetBase;
   const el = {
-    viewport: $("#market-map"), scene: $("#map-scene"), svg: $("#map-svg"), buildings: $("#building-layer"),
-    stalls: $("#stall-layer"), tooltip: $("#map-tooltip"), hud: $("#coordinate-hud"), hudValue: $("#coordinate-value"), clearCoordinate: $("#clear-coordinate"), marker: $("#pinned-coordinate-marker"), results: $("#search-results"), resultsContent: $(".search-results-content"),
-    drawer: $("#market-drawer"), backdrop: $("#drawer-backdrop"), content: $("#drawer-content"), title: $("#drawer-title"),
-    kicker: $("#drawer-kicker"), summary: $("#drawer-summary"), back: $("#drawer-back"), inspector: $("#item-inspector"),
-    inspectorContent: $("#inspector-content"), inspectorTitle: $("#inspector-title"), inspectorKicker: $("#inspector-kicker"),
-    itemTooltip: $("#minecraft-hover-tooltip"), connection: $("#market-connection-status"),
-    connectionLabel: $("#market-connection-label"), lastUpdated: $("#market-last-updated")
+    viewport: selectOne("#market-map"), scene: selectOne("#map-scene"), svg: selectOne("#map-svg"), buildings: selectOne("#building-layer"),
+    stalls: selectOne("#stall-layer"), tooltip: selectOne("#map-tooltip"), hud: selectOne("#coordinate-hud"), hudValue: selectOne("#coordinate-value"), clearCoordinate: selectOne("#clear-coordinate"), marker: selectOne("#pinned-coordinate-marker"), results: selectOne("#search-results"), resultsContent: selectOne(".search-results-content"),
+    drawer: selectOne("#market-drawer"), backdrop: selectOne("#drawer-backdrop"), content: selectOne("#drawer-content"), title: selectOne("#drawer-title"),
+    kicker: selectOne("#drawer-kicker"), summary: selectOne("#drawer-summary"), back: selectOne("#drawer-back"), inspector: selectOne("#item-inspector"),
+    inspectorContent: selectOne("#inspector-content"), inspectorTitle: selectOne("#inspector-title"), inspectorKicker: selectOne("#inspector-kicker"),
+    itemTooltip: selectOne("#minecraft-hover-tooltip"), connection: selectOne("#market-connection-status"),
+    connectionLabel: selectOne("#market-connection-label"), lastUpdated: selectOne("#market-last-updated")
   };
 
-  const filterFields = $("#filter-fields");
+  const filterFields = selectOne("#filter-fields");
   document.documentElement.classList.add("market-viewer-active");
   const overlayPortal = document.createElement("div");
   overlayPortal.className = "market-page-root market-overlay-portal";
@@ -47,8 +58,17 @@
   const stallElements = new Map();
   const px = point => ({ x: (point.x - t.originX) * t.pixelsPerBlock, y: (point.z - t.originZ) * t.pixelsPerBlock });
   const esc = value => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
-  const displayStall = id => `Stall ${String(id).match(/\d+/)?.[0] || id}`;
-  const buildingNumber = id => `Building ${String(id).match(/\d+/)?.[0] || id}`;
+  function numberedLabel(id, prefix, label) {
+    const value = String(id ?? ""), suffix = value.startsWith(prefix) ? value.slice(prefix.length) : "";
+    if (!suffix.length) return `Unknown ${label.toLowerCase()}`;
+    for (let index = 0; index < suffix.length; index++) {
+      const code = suffix.charCodeAt(index);
+      if (code < 0x30 || code > 0x39) return `Unknown ${label.toLowerCase()}`;
+    }
+    return `${label} ${suffix}`;
+  }
+  const displayStall = id => numberedLabel(id, "stall", "Stall");
+  const buildingNumber = id => numberedLabel(id, "building-", "Building");
   const isMobile = () => matchMedia("(max-width: 600px), (max-height: 500px)").matches;
   const makeSvg = (name, attributes = {}) => {
     const node = document.createElementNS(ns, name);
@@ -153,7 +173,7 @@
     const midpoint = touchMidpoint(), rect = el.viewport.getBoundingClientRect(), localX = midpoint.x - rect.left, localY = midpoint.y - rect.top;
     state.touchGesture = {start: midpoint, view: {...state.view}, sceneX: (localX - state.view.x) / state.view.scale, sceneY: (localY - state.view.y) / state.view.scale};
     state.touchTap = null; hideTooltip(); el.viewport.classList.add("dragging");
-    for (const id of state.touchPointers.keys()) try { el.viewport.setPointerCapture(id); } catch {}
+    for (const id of state.touchPointers.keys()) try { el.viewport.setPointerCapture(id); } catch { /* Pointer capture is best-effort across browsers. */ }
   }
   function updateTouchGesture(event) {
     if (!state.touchGesture || state.touchPointers.size < 2) return;
@@ -207,7 +227,7 @@
     if (event.pointerType === "touch") { finishTouch(event); return; }
     const pointer = state.pointer; if (!pointer || pointer.id !== event.pointerId) return;
     if (pointer.pressed) buildingElements.get(pointer.pressed)?.classList.remove("pressed");
-    if (pointer.drag) { try { el.viewport.releasePointerCapture(event.pointerId); } catch {} el.viewport.classList.remove("dragging"); }
+    if (pointer.drag) { try { el.viewport.releasePointerCapture(event.pointerId); } catch { /* Capture may already be released. */ } el.viewport.classList.remove("dragging"); }
     else { pinCoordinate(event.clientX, event.clientY); const hit = hitBuilding(event.clientX, event.clientY); if (hit) openBuilding(hit); }
     state.pointer = null;
   };
@@ -245,12 +265,7 @@
     if (stallId) stallElements.get(stallId)?.classList.add("highlighted");
   }
 
-  const minotarHeadUrlPattern = /^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/;
-  const capturedHeadUrlPattern = /^https:\/\/market-api\.enthusia\.info\/v1\/player-heads\/[0-9a-f]{64}\.png$/;
-  function ownerHeadUrl(owner) {
-    const url = owner?.avatarUrl || "";
-    return minotarHeadUrlPattern.test(url) || capturedHeadUrlPattern.test(url) ? url : null;
-  }
+  const ownerHeadUrl = window.EnthusiaMarketOwnerUrl.ownerHeadUrl;
   function genericPlayer(owner, size, headUrl = null) {
     const data = headUrl ? ` data-owner-head-url="${esc(headUrl)}" data-owner-head-name="${esc(owner.name)}" data-skin-source="${esc(owner.avatar?.source || "JAVA")}" data-outer-layer="${owner.avatar?.includesOuterLayer === true}"` : "";
     return `<span class="owner-image player-head fallback${size}" aria-label="Generic player icon for ${esc(owner.name)}"${data}><img src="${assetBase}player-head-base.svg" alt="Generic player icon for ${esc(owner.name)}" width="82" height="82" decoding="async"><img class="skin-overlay" src="${assetBase}player-head-overlay.svg" alt="" width="82" height="82" decoding="async"></span>`;
@@ -274,9 +289,10 @@
   }
   const ownerType = owner => owner.type === "PLAYER" ? "Player" : owner.type === "GUILD" ? "Guild" : "Unowned";
   function locationMarkup(location, compact = false) {
-    if (!location) return `<span class="coordinates unavailable">Coordinates unavailable</span>`;
+    if (!location || ![location.x, location.y, location.z].every(Number.isFinite)) return `<span class="coordinates unavailable">Coordinates unavailable</span>`;
     const value = `X ${location.x}, Y ${location.y}, Z ${location.z}`;
-    return `<span class="coordinates${compact ? " compact" : ""}"><span>${value}</span><button class="copy-coordinates" data-copy="${location.x} ${location.y} ${location.z}" aria-label="Copy coordinates ${value}">Copy</button></span>`;
+    const copyValue = `${location.x} ${location.y} ${location.z}`;
+    return `<span class="coordinates${compact ? " compact" : ""}"><span>${esc(value)}</span><button class="copy-coordinates" data-copy="${esc(copyValue)}" aria-label="Copy coordinates ${esc(value)}">Copy</button></span>`;
   }
   async function copyText(value, button) {
     try { await navigator.clipboard.writeText(value); }
@@ -372,15 +388,34 @@
   const iconItemRegistry = new Map();
   let iconItemSequence = 0;
   const hasGlint = item => item.metadata?.glintOverride !== false && (item.metadata?.glintOverride === true || item.metadata?.enchantments?.length || item.metadata?.storedEnchantments?.length);
-  function itemIcon(item, extraClass = "") {
+  function createItemIcon(item, extraClass = "") {
     const definitions = iconDefinition(item);
     const enchanted = hasGlint(item), key = `icon-${++iconItemSequence}`;
     iconItemRegistry.set(key, item);
+    const icon = document.createElement("span");
+    icon.className = `minecraft-item-icon${enchanted ? " enchanted" : ""}${extraClass ? ` ${extraClass}` : ""}`;
+    icon.dataset.iconKey = key;
+    icon.setAttribute("role", "img");
+    icon.setAttribute("aria-label", publicItemName(item.displayName));
+    const canvas = document.createElement("canvas");
+    canvas.className = "item-raster";
+    canvas.width = 16;
+    canvas.height = 16;
+    canvas.setAttribute("aria-hidden", "true");
+    icon.append(canvas);
     const silhouette = definitions.find(layer => !layer.tintSource)?.src || definitions[0]?.src;
     const glintTexture = iconManifest.glint?.item || "minecraft/vanilla/textures/misc/enchanted_glint_item.png";
-    const glint = enchanted && silhouette ? `<span class="item-glint" style="--item-silhouette:url('${cssAssetBase}${silhouette}');--glint-texture:url('${cssAssetBase}${glintTexture}')" aria-hidden="true"></span>` : "";
-    return `<span class="minecraft-item-icon${enchanted ? " enchanted" : ""} ${extraClass}" data-icon-key="${key}" role="img" aria-label="${esc(publicItemName(item.displayName))}"><canvas class="item-raster" width="16" height="16" aria-hidden="true"></canvas>${glint}</span>`;
+    if (enchanted && silhouette) {
+      const glint = document.createElement("span");
+      glint.className = "item-glint";
+      glint.style.setProperty("--item-silhouette", `url('${cssAssetBase}${silhouette}')`);
+      glint.style.setProperty("--glint-texture", `url('${cssAssetBase}${glintTexture}')`);
+      glint.setAttribute("aria-hidden", "true");
+      icon.append(glint);
+    }
+    return icon;
   }
+  const itemIcon = (item, extraClass = "") => createItemIcon(item, extraClass).outerHTML;
   function minecraftText(value, className = "") {
     const text = String(value ?? "");
     const glyph = character => {
@@ -493,7 +528,7 @@
       if (event.pointerType === "mouse" && event.button !== 0) return;
       const started = state.collapsedContext === surface ? "collapsed" : state.sheet.state;
       handleGesture = {id: event.pointerId, startY: event.clientY, moved: false, started, time: performance.now()};
-      try { handle.setPointerCapture(event.pointerId); } catch {}
+      try { handle.setPointerCapture(event.pointerId); } catch { /* Pointer capture is best-effort across browsers. */ }
     });
     handle.addEventListener("pointermove", event => { if (handleGesture?.id === event.pointerId && Math.abs(event.clientY - handleGesture.startY) > 6) handleGesture.moved = true; });
     handle.addEventListener("pointerup", event => {
@@ -557,7 +592,7 @@
     if (building.stallIds.length === 1) return openStall(adapter.getStall(building.stallIds[0]), null);
     state.drawerBuilding = building; state.drawerMode = "building"; renderBuildingDrawer(); showDrawer();
   }
-  function showDrawer() { el.drawer.hidden = false; el.backdrop.hidden = false; if (isMobile()) activateSheet("details", el.drawer, state.drawerBuilding?.label || el.title.textContent, "normal", el.viewport); else requestAnimationFrame(() => $("#drawer-close").focus()); }
+  function showDrawer() { el.drawer.hidden = false; el.backdrop.hidden = false; if (isMobile()) activateSheet("details", el.drawer, state.drawerBuilding?.label || el.title.textContent, "normal", el.viewport); else requestAnimationFrame(() => selectOne("#drawer-close").focus()); }
   function closeDrawer() { closeInspector(); hideMobileResults(); el.drawer.hidden = true; el.drawer.classList.remove("mobile-sheet-active"); el.backdrop.hidden = true; state.drawerMode = null; state.drawerBuilding = null; state.highlightShop = null; state.mobileStack = []; state.searchReturn = false; selectMap(null); }
   function renderBuildingDrawer() {
     const building = state.drawerBuilding;
@@ -714,9 +749,6 @@
     hydrateItemRasters(node);
   })));
   itemRasterObserver.observe(document.body, {childList: true, subtree: true});
-  async function drawCanvasItem(context, item, x, y) {
-    context.drawImage(await canonicalItemRaster(item, true), x, y);
-  }
   async function drawMinecraftText(context, text, x, y, color, rightAligned = false) {
     const font = await loadCanvasImage(fontManifest.texture), widths = [...String(text)].map(character => fontManifest.widths?.[character.codePointAt(0)] || 6);
     const total = widths.reduce((sum, width) => sum + width, 0), layer = document.createElement("canvas"); layer.width = 176; layer.height = 76;
@@ -749,7 +781,7 @@
   }));
   addEventListener("resize", () => activeShulkerCanvases.forEach(canvas => { const item = shulkerRenderState.get(canvas); if (item && canvas.isConnected) renderShulkerCanvas(canvas, item); else activeShulkerCanvases.delete(canvas); }), {passive:true});
   function containerMarkup(entry) {
-    const { item, context, depth } = entry, container = item.metadata?.container;
+    const { item, context } = entry, container = item.metadata?.container;
     if (!container) return "";
     if (container.type === "SHULKER") {
       const slots = new Map(container.contents.map(value => [value.slot, value.item]));
@@ -813,17 +845,38 @@
     state.matching = snapshot ? new Set(snapshot.stalls.filter(matchesFilters).map(stall => stall.id)) : new Set(layout.stalls.map(stall => stall.id));
     for (const stall of layout.stalls) stallElements.get(stall.id).classList.toggle("filtered", !state.matching.has(stall.id));
     for (const building of layout.buildings) buildingElements.get(building.id).classList.toggle("filtered", !building.stallIds.some(id => state.matching.has(id)));
-    $("#result-count").textContent = snapshot ? `${state.matching.size} of ${layout.stalls.length} stalls` : "Market data unavailable";
-    const labels = { floor: "Floor", owner: "Owner", shop: "Shop", stock: "Stock", rent: "Rent" }, selectors = {floor:"#floor-filter",owner:"#owner-filter",shop:"#shop-filter",stock:"#stock-filter",rent:"#rent-filter"};
-    const active = Object.entries(state.filters).filter(([, value]) => value && value !== "ALL");
-    $("#filter-chips").innerHTML = active.map(([key]) => { const select = $(selectors[key]), display = select.options[select.selectedIndex]?.text || state.filters[key]; return `<span class="chip">${labels[key]}: ${esc(display)} <button type="button" data-remove-filter="${key}" aria-label="Remove ${labels[key]} filter">×</button></span>`; }).join("") + (active.length ? `<button id="clear-active-filters" class="clear-active-filters" type="button">Clear all filters</button>` : "");
-    $("#filter-chips").querySelectorAll("[data-remove-filter]").forEach(button => button.onclick = () => { const key = button.dataset.removeFilter; state.filters[key] = "ALL"; $(selectors[key]).value = "ALL"; applyFilters(); });
-    $("#clear-active-filters")?.addEventListener("click", clearFilters);
+    selectOne("#result-count").textContent = snapshot ? `${state.matching.size} of ${layout.stalls.length} stalls` : "Market data unavailable";
+    const active = filterDefinitions.filter(({ key }) => state.filters[key] !== "ALL");
+    const chips = active.map(({ key, label, selector }) => {
+      const select = selectOne(selector);
+      const display = select.options[select.selectedIndex]?.text || state.filters[key];
+      const chip = document.createElement("span");
+      chip.className = "chip";
+      chip.append(document.createTextNode(`${label}: ${display} `));
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.dataset.removeFilter = key;
+      remove.setAttribute("aria-label", `Remove ${label} filter`);
+      remove.textContent = "×";
+      remove.onclick = () => { state.filters[key] = "ALL"; select.value = "ALL"; applyFilters(); };
+      chip.append(remove);
+      return chip;
+    });
+    if (active.length) {
+      const clear = document.createElement("button");
+      clear.id = "clear-active-filters";
+      clear.className = "clear-active-filters";
+      clear.type = "button";
+      clear.textContent = "Clear all filters";
+      clear.onclick = clearFilters;
+      chips.push(clear);
+    }
+    selectOne("#filter-chips").replaceChildren(...chips);
     if (state.drawerMode === "building" && state.drawerBuilding) renderBuildingDrawer();
   }
   function clearFilters() {
     state.filters = { floor: "ALL", owner: "ALL", shop: "ALL", stock: "ALL", rent: "ALL" };
-    $("#floor-filter").value = $("#owner-filter").value = $("#shop-filter").value = $("#stock-filter").value = $("#rent-filter").value = "ALL"; applyFilters();
+    selectOne("#floor-filter").value = selectOne("#owner-filter").value = selectOne("#shop-filter").value = selectOne("#stock-filter").value = selectOne("#rent-filter").value = "ALL"; applyFilters();
   }
   function matchesRentFilter(stall, filter) {
     if (!filter || filter === "ALL") return true;
@@ -834,18 +887,18 @@
     return filter === "UNDER_1_DAY" ? remaining <= 24 * 3600000 : filter === "UNDER_3_DAYS" ? remaining <= 72 * 3600000 : false;
   }
   for (const floor of [...new Set(layout.stalls.map(stall => stall.floor))].sort((a, b) => a - b)) {
-    const option = document.createElement("option"); option.value = floor; option.textContent = C.floorName(floor); $("#floor-filter").append(option);
+    const option = document.createElement("option"); option.value = floor; option.textContent = C.floorName(floor); selectOne("#floor-filter").append(option);
   }
   for (const [selector, key] of [["#floor-filter", "floor"], ["#owner-filter", "owner"], ["#shop-filter", "shop"], ["#stock-filter", "stock"], ["#rent-filter", "rent"]]) {
-    $(selector).addEventListener("change", event => { state.filters[key] = event.target.value; applyFilters(); });
+    selectOne(selector).addEventListener("change", event => { state.filters[key] = event.target.value; applyFilters(); });
   }
-  $("#clear-filters").onclick = clearFilters;
-  $("#apply-filters").onclick = () => { applyFilters(); if (isMobile()) setSheetState("collapsed"); };
-  $("#collapse-filters").onclick = () => setSheetState("collapsed");
-  $("#mobile-filters").onclick = () => {
+  selectOne("#clear-filters").onclick = clearFilters;
+  selectOne("#apply-filters").onclick = () => { applyFilters(); if (isMobile()) setSheetState("collapsed"); };
+  selectOne("#collapse-filters").onclick = () => setSheetState("collapsed");
+  selectOne("#mobile-filters").onclick = () => {
     closeInspector(); hideMobileResults(); el.drawer.hidden = true; el.backdrop.hidden = true;
-    activateSheet("filters", filterFields, "Filters", "normal", $("#mobile-filters"));
-    $("#mobile-filters").setAttribute("aria-expanded", "true");
+    activateSheet("filters", filterFields, "Filters", "normal", selectOne("#mobile-filters"));
+    selectOne("#mobile-filters").setAttribute("aria-expanded", "true");
   };
 
   function hideMobileResults() {
@@ -856,17 +909,17 @@
   function showMobileResults() {
     if (!isMobile() || !state.lastSearch) return;
     state.mobileResultsOpen = true;
-    activateSheet("results", el.results, state.lastSearch.query ? `Results for “${state.lastSearch.query}”` : "Search results", "normal", $("#item-search"));
+    activateSheet("results", el.results, state.lastSearch.query ? `Results for “${state.lastSearch.query}”` : "Search results", "normal", selectOne("#item-search"));
     el.resultsContent.scrollTop = 0;
   }
 
-  function executeSearch(query = $("#item-search").value) {
+  function executeSearch(query = selectOne("#item-search").value) {
     const value = query.trim(), shops = value ? adapter.searchItems(value).map((shop, index) => ({shop, index})).sort((left, right) => Number(right.shop.stockCount > 0) - Number(left.shop.stockCount > 0) || left.index - right.index).map(entry => entry.shop) : [];
-    $("#item-search").value = value;
+    selectOne("#item-search").value = value;
     state.lastSearch = {query: value, shops}; state.searchReturn = false;
     if (isMobile()) { preserveDetailContext(); el.backdrop.hidden = true; filterFields.classList.remove("open"); }
     else { closeInspector(); el.drawer.hidden = true; el.backdrop.hidden = true; state.drawerMode = null; state.drawerBuilding = null; }
-    renderResults(value, shops); hideSuggestions(); $("#item-search").blur();
+    renderResults(value, shops); hideSuggestions(); selectOne("#item-search").blur();
     if (isMobile()) showMobileResults();
     return shops;
   }
@@ -937,47 +990,67 @@
   }
   let suggestionRevision = 0;
   function showSuggestions(event) {
-    const input = $("#item-search");
+    const input = selectOne("#item-search");
     if (event?.isComposing) return;
     const revision = ++suggestionRevision, query = input.value;
     queueMicrotask(() => renderSuggestions(query, revision));
   }
   function renderSuggestions(query, revision) {
-    const input = $("#item-search");
+    const input = selectOne("#item-search");
     if (revision !== suggestionRevision || input.value !== query) return;
-    const normalized = query.trim().toLowerCase(), potionQuery = /potion|strength|slow falling|invis|water breathing|night vision|regeneration|poison|weakness|turtle master|wind charged|weaving|oozing|infestation/.test(normalized), items = normalized ? adapter.suggest(query, potionQuery ? 220 : 15) : [];
-    state.suggestionIndex = -1; const box = $("#search-suggestions");
+    const normalized = query.trim().toLowerCase();
+    const potionQuery = potionSearchTerms.some(term => normalized.includes(term));
+    const items = normalized ? adapter.suggest(query, potionQuery ? 220 : 15) : [];
+    state.suggestionIndex = -1; const box = selectOne("#search-suggestions");
     if (!items.length) { box.replaceChildren(); box.hidden = true; return; }
-    box.innerHTML = items.map((entry, index) => {
+    const buttons = items.map((entry, index) => {
       const label = publicItemName(entry.displayName || entry.searchQuery), query = publicItemName(entry.searchQuery || label), subtitle = publicItemName(entry.subtitle);
-      return `<button role="option" data-suggestion="${esc(query)}" data-index="${index}">${itemIcon(entry.item || {material:entry.material,displayName:label,amount:1})}<span><strong>${esc(label)}</strong>${subtitle ? `<small>${esc(subtitle)}</small>` : ""}</span></button>`;
-    }).join(""); box.hidden = false;
-    box.querySelectorAll("button").forEach(button => button.onclick = () => { $("#item-search").value = button.dataset.suggestion; executeSearch(); });
+      const button = document.createElement("button");
+      button.type = "button";
+      button.setAttribute("role", "option");
+      button.dataset.suggestion = query;
+      button.dataset.index = String(index);
+      button.append(createItemIcon(entry.item || {material: entry.material, displayName: label, amount: 1}));
+      const copy = document.createElement("span");
+      const name = document.createElement("strong");
+      name.textContent = label;
+      copy.append(name);
+      if (subtitle) {
+        const detail = document.createElement("small");
+        detail.textContent = subtitle;
+        copy.append(detail);
+      }
+      button.append(copy);
+      button.onclick = () => { selectOne("#item-search").value = query; executeSearch(); };
+      return button;
+    });
+    box.replaceChildren(...buttons);
+    box.hidden = false;
   }
-  function hideSuggestions() { $("#search-suggestions").hidden = true; state.suggestionIndex = -1; }
-  $("#item-search").addEventListener("input", showSuggestions);
-  $("#item-search").addEventListener("compositionend", showSuggestions);
-  $("#item-search").addEventListener("search", showSuggestions);
-  $("#item-search").addEventListener("focus", showSuggestions);
-  $("#item-search").onkeydown = event => {
-    const buttons = [...$("#search-suggestions").querySelectorAll("button")];
+  function hideSuggestions() { selectOne("#search-suggestions").hidden = true; state.suggestionIndex = -1; }
+  selectOne("#item-search").addEventListener("input", showSuggestions);
+  selectOne("#item-search").addEventListener("compositionend", showSuggestions);
+  selectOne("#item-search").addEventListener("search", showSuggestions);
+  selectOne("#item-search").addEventListener("focus", showSuggestions);
+  selectOne("#item-search").onkeydown = event => {
+    const buttons = [...selectOne("#search-suggestions").querySelectorAll("button")];
     if (event.key === "ArrowDown" && buttons.length) { event.preventDefault(); state.suggestionIndex = Math.min(buttons.length - 1, state.suggestionIndex + 1); }
     else if (event.key === "ArrowUp" && buttons.length) { event.preventDefault(); state.suggestionIndex = Math.max(0, state.suggestionIndex - 1); }
-    else if (event.key === "Enter") { event.preventDefault(); if (state.suggestionIndex >= 0) $("#item-search").value = buttons[state.suggestionIndex].dataset.suggestion; executeSearch(); }
+    else if (event.key === "Enter") { event.preventDefault(); if (state.suggestionIndex >= 0) selectOne("#item-search").value = buttons[state.suggestionIndex].dataset.suggestion; executeSearch(); }
     else if (event.key === "Escape") hideSuggestions();
     buttons.forEach((button, index) => button.classList.toggle("active", index === state.suggestionIndex));
   };
   document.addEventListener("pointerdown", event => {
-    if ($("#search-suggestions").hidden) return;
+    if (selectOne("#search-suggestions").hidden) return;
     const path = event.composedPath?.() || [];
-    if (!path.includes($("#item-search")) && !path.includes($("#search-button")) && !path.includes($("#search-suggestions"))) hideSuggestions();
+    if (!path.includes(selectOne("#item-search")) && !path.includes(selectOne("#search-button")) && !path.includes(selectOne("#search-suggestions"))) hideSuggestions();
   });
-  $("#search-button").onclick = () => executeSearch(); $("#drawer-close").onclick = closeDrawer; el.backdrop.onclick = closeDrawer;
+  selectOne("#search-button").onclick = () => executeSearch(); selectOne("#drawer-close").onclick = closeDrawer; el.backdrop.onclick = closeDrawer;
   el.back.onclick = () => { closeInspector(); if (state.drawerBuilding) { state.drawerMode = "building"; renderBuildingDrawer(); showDrawer(); } };
-  $("#inspector-close").onclick = () => isMobile() ? closeDrawer() : closeInspector();
-  $("#zoom-in").onclick = () => zoomAt(1.2, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
-  $("#zoom-out").onclick = () => zoomAt(.83, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
-  $("#fit-map").onclick = fit;
+  selectOne("#inspector-close").onclick = () => isMobile() ? closeDrawer() : closeInspector();
+  selectOne("#zoom-in").onclick = () => zoomAt(1.2, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
+  selectOne("#zoom-out").onclick = () => zoomAt(.83, el.viewport.getBoundingClientRect().left + el.viewport.clientWidth / 2, el.viewport.getBoundingClientRect().top + el.viewport.clientHeight / 2);
+  selectOne("#fit-map").onclick = fit;
   window.addEventListener("keydown", event => {
     if (event.key !== "Escape") return;
     if (isMobile() && state.sheet.surface && state.sheet.state !== "collapsed") setSheetState("collapsed");
@@ -1012,7 +1085,7 @@
     fixtureSnapshot: await localFixtureSnapshot(),
     onStatus: renderConnectionStatus,
     onSnapshot(nextSnapshot) { snapshot = nextSnapshot; adapter.replaceSnapshot(nextSnapshot); refreshMarketUi(); prefetchSnapshotAssets(); },
-    onStallUpdate(stallId, stall, nextSnapshot) { adapter.replaceStall(stall); snapshot = adapter.snapshot; refreshMarketUi(stallId); }
+    onStallUpdate(stallId, stall) { adapter.replaceStall(stall); snapshot = adapter.snapshot; refreshMarketUi(stallId); }
   });
   snapshot = await marketClient.loadInitialSnapshot();
   if (snapshot) adapter.replaceSnapshot(snapshot);

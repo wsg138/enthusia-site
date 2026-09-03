@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Private Enthusia competition administration.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Competition Admin | Enthusia</title>
+  <link rel="stylesheet" href="../../assets/styles.css?v=vision86">
+  <link rel="stylesheet" href="../../assets/competitions-admin.css?v=1">
+  <link rel="stylesheet" href="../../assets/competitions-admin-operations.css?v=1">
+</head>
+<body class="competition-admin-page">
+  <header class="site-header competition-admin-header">
+    <div class="container header-inner">
+      <a class="brand" href="../../index.html"><img class="brand-logo" src="../../assets/enthusia-logo-v2.png" alt="" width="46" height="46"><span class="brand-name">Enthusia SMP</span></a>
+      <nav class="nav" aria-label="Competition administration navigation">
+        <a href="../../index.html">Return to site</a>
+        <span class="site-account" data-site-account></span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-main container competition-admin-main">
+    <section class="competition-admin-intro" aria-labelledby="competition-admin-title">
+      <div>
+        <p class="admin-eyebrow">Private staff workspace</p>
+        <h1 id="competition-admin-title">Competitions</h1>
+        <p>Create and configure competitions without exposing unfinished work to players. Drafts remain private until an explicit publish step.</p>
+      </div>
+      <button class="button-secondary" id="refreshCompetitions" type="button">Refresh</button>
+    </section>
+
+    <section class="admin-service-panel" aria-labelledby="service-status-title">
+      <div class="admin-panel-heading">
+        <div>
+          <p class="admin-eyebrow">Development readiness</p>
+          <h2 id="service-status-title">Service status</h2>
+        </div>
+        <p id="serviceStatusMessage" role="status">Checking…</p>
+      </div>
+      <div class="admin-status-grid" id="serviceStatusGrid" aria-live="polite"></div>
+    </section>
+
+    <div class="competition-admin-layout">
+      <aside class="competition-admin-sidebar">
+        <section class="admin-card">
+          <div class="admin-panel-heading">
+            <div>
+              <p class="admin-eyebrow">New</p>
+              <h2>Create draft</h2>
+            </div>
+          </div>
+          <form id="createCompetitionForm" class="admin-form-stack">
+            <label>
+              Title
+              <input name="title" maxlength="100" minlength="3" required placeholder="Summer Build Competition">
+            </label>
+            <label>
+              Category
+              <input name="category" maxlength="48" required placeholder="Build">
+            </label>
+            <label>
+              Short summary
+              <textarea name="summary" maxlength="500" rows="3" placeholder="What is this competition about?"></textarea>
+            </label>
+            <button type="submit">Create private draft</button>
+            <p class="admin-form-result" id="createCompetitionResult" role="status"></p>
+          </form>
+        </section>
+
+        <section class="admin-card admin-competition-list-card">
+          <div class="admin-panel-heading">
+            <div>
+              <p class="admin-eyebrow">All competitions</p>
+              <h2>Drafts & history</h2>
+            </div>
+          </div>
+          <div id="competitionList" class="admin-competition-list" aria-live="polite">
+            <p>Loading…</p>
+          </div>
+        </section>
+      </aside>
+
+      <section class="admin-card competition-editor-card" id="competitionEditor" hidden>
+        <div class="competition-editor-heading">
+          <div>
+            <p class="admin-eyebrow" id="editorStateLabel">Draft</p>
+            <h2 id="editorTitle">Competition editor</h2>
+            <p id="editorMetadata" class="admin-muted"></p>
+          </div>
+          <div class="editor-heading-actions">
+            <button class="button-secondary" id="reloadCompetition" type="button">Reload</button>
+            <button id="saveCompetition" type="button">Save draft</button>
+          </div>
+        </div>
+
+        <div class="admin-inline-alert admin-warning" id="staleWarning" hidden role="alert">
+          This draft changed after you loaded it. Reload before saving so another staff member's work is not overwritten.
+        </div>
+
+        <div class="competition-editor-shell">
+          <nav class="competition-editor-nav" aria-label="Competition editor sections">
+            <button type="button" class="is-active" data-editor-section="basics">Basics</button>
+            <button type="button" data-editor-section="schedule">Schedule</button>
+            <button type="button" data-editor-section="entries">Entries</button>
+            <button type="button" data-editor-section="voting">Voting</button>
+            <button type="button" data-editor-section="judging">Judging</button>
+            <button type="button" data-editor-section="moderation">Moderation</button>
+            <button type="button" data-editor-section="readiness">Publish readiness</button>
+          </nav>
+
+          <div class="competition-editor-content">
+            <form id="competitionEditForm">
+              <section class="editor-section is-active" data-editor-panel="basics">
+                <div class="editor-section-heading">
+                  <div>
+                    <p class="admin-eyebrow">Basics</p>
+                    <h3>Player-facing information</h3>
+                  </div>
+                </div>
+                <div class="admin-form-grid two-column">
+                  <label>
+                    Title
+                    <input name="title" maxlength="100" minlength="3" required>
+                  </label>
+                  <label>
+                    Category
+                    <input name="category" maxlength="48" required>
+                  </label>
+                </div>
+                <label>
+                  Short summary
+                  <textarea name="summary" maxlength="500" rows="3"></textarea>
+                </label>
+                <label>
+                  Full description
+                  <textarea name="description" maxlength="5000" rows="7"></textarea>
+                </label>
+                <label>
+                  Rules
+                  <textarea name="rules" maxlength="20000" rows="10"></textarea>
+                </label>
+                <div class="admin-form-grid two-column">
+                  <label>
+                    Accent color
+                    <input name="accent" type="color" value="#7d5cff">
+                  </label>
+                  <div class="admin-static-field admin-banner-field" id="bannerMediaField">
+                    <span>Banner / cover image</span>
+                    <p>PNG or JPEG. The browser removes normal embedded metadata, then the server validates the bytes and runs the free OpenAI moderation pass before private R2 storage.</p>
+                    <div class="admin-banner-preview" id="bannerMediaPreview" hidden>
+                      <img id="bannerMediaPreviewImage" alt="Current competition banner preview">
+                    </div>
+                    <div class="admin-banner-actions">
+                      <input id="bannerMediaInput" type="file" accept="image/png,image/jpeg">
+                      <button class="button-secondary" id="uploadBannerMedia" type="button">Upload & attach banner</button>
+                    </div>
+                    <p class="admin-form-result" id="bannerMediaResult" role="status"></p>
+                  </div>
+                </div>
+
+                <div class="competition-player-preview" id="competitionPreview">
+                  <p class="admin-eyebrow" id="previewCategory">Build</p>
+                  <h3 id="previewTitle">Competition title</h3>
+                  <p id="previewSummary">Player-facing summary preview.</p>
+                </div>
+              </section>
+
+              <section class="editor-section" data-editor-panel="schedule" hidden>
+                <div class="editor-section-heading">
+                  <div>
+                    <p class="admin-eyebrow">Schedule</p>
+                    <h3>Competition lifecycle</h3>
+                  </div>
+                </div>
+                <p class="admin-muted">Times are saved as absolute timestamps. Voting cannot begin before the review/fix period ends.</p>
+                <div class="admin-form-grid two-column">
+                  <label>Submissions open <input name="submissionsOpenAt" type="datetime-local"></label>
+                  <label>Submissions close <input name="submissionsCloseAt" type="datetime-local"></label>
+                  <label>Review/fix period ends <input name="reviewCloseAt" type="datetime-local"></label>
+                  <label>Voting opens <input name="votingOpenAt" type="datetime-local"></label>
+                  <label>Voting closes <input name="votingCloseAt" type="datetime-local"></label>
+                  <label>Judging opens <input name="judgingOpenAt" type="datetime-local"></label>
+                  <label>Judging closes <input name="judgingCloseAt" type="datetime-local"></label>
+                </div>
+              </section>
+
+              <section class="editor-section" data-editor-panel="entries" hidden>
+                <div class="editor-section-heading">
+                  <div>
+                    <p class="admin-eyebrow">Entries</p>
+                    <h3>Who can enter</h3>
+                  </div>
+                </div>
+
+                <fieldset class="admin-fieldset">
+                  <legend>Allowed entry types</legend>
+                  <label class="admin-check"><input type="checkbox" name="entryType" value="SOLO"> Solo</label>
+                  <label class="admin-check"><input type="checkbox" name="entryType" value="GROUP"> Group / team</label>
+                  <label class="admin-check"><input type="checkbox" name="entryType" value="GUILD"> Guild</label>
+                </fieldset>
+
+                <div class="admin-form-grid three-column">
+                  <label>Max entries / player <input name="maxEntriesPerPlayer" type="number" min="1" max="3"></label>
+                  <label>Max entries / guild <input name="maxEntriesPerGuild" type="number" min="1" max="10"></label>
+                  <label hidden>Legacy image setting <input name="maxImages" type="number" min="1" max="8"></label>
+                  <label>Minimum images <input name="minImages" type="number" min="1" max="8"></label>
+                  <label>Description character limit <input name="maxDescriptionChars" type="number" min="2500" max="10000"></label>
+                  <label>Max main group members <input name="maxMainMembers" type="number" min="1" max="100" placeholder="Required if Group is enabled"></label>
+                  <label>Max helpers / contributors <input name="maxHelpers" type="number" min="0" max="100" placeholder="No limit yet"></label>
+                  <label>Guild submission permission <input name="guildSubmissionPermission" maxlength="64"></label>
+                </div>
+
+                <fieldset class="admin-fieldset">
+                  <legend>Private location information</legend>
+                  <label class="admin-check"><input type="checkbox" name="coordinatesRequested"> Ask entrants for world + exact X/Y/Z</label>
+                  <label class="admin-check"><input type="checkbox" name="judgesCanViewCoordinates"> Allow assigned judges to view coordinates</label>
+                  <div class="admin-inline-alert admin-danger" id="judgeCoordinateWarning" hidden>
+                    <strong>Private-location warning:</strong> Assigned judges will be allowed to see entrants' exact coordinates for this competition. Only enable this when judges need to visit entries in-game.
+                  </div>
+                </fieldset>
+              </section>
+
+              <section class="editor-section" data-editor-panel="voting" hidden>
+                <div class="editor-section-heading">
+                  <div>
+                    <p class="admin-eyebrow">Voting</p>
+                    <h3>Community vote</h3>
+                  </div>
+                </div>
+                <label class="admin-check admin-feature-toggle"><input type="checkbox" name="votingEnabled"> Enable community voting</label>
+                <div class="admin-form-grid two-column">
+                  <label>Votes per voter <input name="votesPerVoter" type="number" min="1" max="20"></label>
+                  <label>Minimum active playtime (minutes) <input name="minimumActiveMinutes" type="number" min="0" max="5000000"></label>
+                </div>
+                <div class="admin-static-field">
+                  <span>Fixed fairness rules</span>
+                  <ul>
+                    <li>Votes can be changed until voting closes.</li>
+                    <li>Live totals are visible to staff, not regular players.</li>
+                    <li>Judges cannot public-vote.</li>
+                    <li>Owners/main members cannot vote for their entry; helpers may.</li>
+                    <li>Guild members cannot vote for their own guild entry.</li>
+                    <li>Default eligibility is 120 minutes of <strong>active</strong> PlayTimePlugin time.</li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="editor-section" data-editor-panel="judging" hidden>
+                <div class="editor-section-heading">
+                  <div>
+                    <p class="admin-eyebrow">Judging</p>
+                    <h3>Judge scoring</h3>
+                  </div>
+                </div>
+                <label class="admin-check admin-feature-toggle"><input type="checkbox" name="judgingEnabled"> Enable judge scoring</label>
+                <label class="admin-check"><input type="checkbox" name="allowNonStaffJudges"> Allow specifically assigned non-staff judges</label>
+                <p class="admin-muted">Assigned judges cannot enter or vote. They may be listed only as unrewarded helpers/contributors.</p>
+
+                <div class="admin-form-grid three-column">
+                  <label>Community weight % <input name="communityWeight" type="number" min="0" max="100" step="0.01"></label>
+                  <label>Judge weight % <input name="judgeWeight" type="number" min="0" max="100" step="0.01"></label>
+                  <label>
+                    Tie-break rule
+                    <select name="tiebreakRule">
+                      <option value="">Select before publishing</option>
+                      <option value="JUDGE_REVOTE">Assigned judges re-vote</option>
+                      <option value="HIGHEST_JUDGE_SCORE">Higher judge score</option>
+                      <option value="HIGHEST_COMMUNITY_SCORE">Higher community score</option>
+                      <option value="MANUAL_STAFF">Manual staff decision</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="criteria-editor">
+                  <div class="admin-panel-heading">
+                    <div>
+                      <span>Scoring criteria</span>
+                      <p class="admin-muted">Every criterion uses a 0–10 score. Weight controls its influence within the judge component.</p>
+                    </div>
+                    <button class="button-secondary" id="addCriterion" type="button">Add criterion</button>
+                  </div>
+                  <div id="criteriaList"></div>
+                </div>
+              </section>
+
+              <section class="editor-section" data-editor-panel="moderation" hidden>
+                <div class="editor-section-heading">
+                  <div>
+                    <p class="admin-eyebrow">Moderation</p>
+                    <h3>Review & content safety</h3>
+                  </div>
+                </div>
+                <div class="admin-locked-policy-grid">
+                  <article>
+                    <strong>Staff approval</strong>
+                    <span>Always required before an entry becomes public.</span>
+                  </article>
+                  <article>
+                    <strong>OpenAI Moderation API</strong>
+                    <span>Always screens submitted text and images. API failure fails closed.</span>
+                  </article>
+                  <article>
+                    <strong>Minecraft privacy review</strong>
+                    <span>Manual staff check for coordinates, waypoints, minimaps, private chat, and relevance.</span>
+                  </article>
+                </div>
+                <label>
+                  Default review/fix grace period (minutes)
+                  <input name="reviewGraceMinutes" type="number" min="0" max="10080">
+                </label>
+                <div class="admin-inline-alert admin-warning">
+                  Entry upload pages will clearly warn players that screenshots become public and should not expose coordinates, waypoints, minimaps, private chat, or other sensitive base information.
+                </div>
+              </section>
+
+              <section class="editor-section" data-editor-panel="readiness" hidden>
+                <div class="editor-section-heading">
+                  <div>
+                    <p class="admin-eyebrow">Publish readiness</p>
+                    <h3>Configuration checks</h3>
+                  </div>
+                </div>
+                <div id="publishReadiness" class="publish-readiness" aria-live="polite"></div>
+                <div class="admin-inline-alert admin-info">
+                  Lifecycle actions here affect only the isolated development competition resources. Production remains disabled until launch approval, and timers can never publish final results automatically.
+                </div>
+              </section>
+            </form>
+          </div>
+        </div>
+
+        <div class="competition-editor-footer">
+          <label class="editor-change-note">
+            Save note (optional)
+            <input id="changeNote" maxlength="500" placeholder="What changed?">
+          </label>
+          <p id="saveCompetitionResult" class="admin-form-result" role="status"></p>
+        </div>
+      </section>
+
+      <section class="admin-card competition-empty-state" id="competitionEmptyState">
+        <p class="admin-eyebrow">Editor</p>
+        <h2>Select a competition</h2>
+        <p>Choose a draft from the list or create a new one. Nothing here is public to players.</p>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="../../assets/competitions-admin.js?v=1"></script>
+  <script type="module" src="../../assets/competitions-admin-media.js?v=1"></script>
+  <script type="module" src="../../assets/site-account.js?v=8"></script>
+</body>
+</html>

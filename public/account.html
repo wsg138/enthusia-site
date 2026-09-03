@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" id="top">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="View your Enthusia profile and manage linked accounts.">
+  <meta name="theme-color" content="#100d0a">
+  <title>Profile | Enthusia SMP</title>
+  <link rel="icon" href="assets/enthusia-logo-v2.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css?v=vision86">
+</head>
+<body class="account-page">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="bg" aria-hidden="true"><div class="bg-grid"></div><div class="bg-vignette"></div><div class="bg-heat"></div></div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Enthusia SMP home"><img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="46" height="46"><span class="brand-name">Enthusia SMP</span></a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html">Home</a><a href="plugins.html">About</a><a href="rules.html">Rules</a><a href="appeal.html">Appeals</a>
+      <div class="nav-dropdown"><button class="nav-drop-trigger" type="button">Community</button><div class="nav-menu" aria-label="Community links"><a href="leaderboards.html">Leaderboards</a><a href="staff.html">Staff</a><a href="gallery.html">Gallery</a><a href="vote.html">Vote</a><a href="punishments.html">Punishments</a><a href="market.html">Market</a><a href="competitions/">Competitions</a><a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a></div></div>
+      <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a><a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a><span class="site-account" data-site-account></span>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-main account-main">
+  <header class="container account-hero">
+    <p class="eyebrow">Profile</p>
+    <h1>Your profile</h1>
+    <p>View your Discord account and manage the Minecraft accounts linked to it.</p>
+  </header>
+  <div class="container account-workspace">
+    <section id="account-session" class="account-session" aria-live="polite">
+      <h2>Checking your sign-in…</h2>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner"><p>&copy; <span id="year"></span> Enthusia SMP</p><p><a href="appeal.html">Appeals</a> · <a href="competitions/">Competitions</a></p></div></footer>
+<script src="assets/site-config.js?v=vision43" defer></script>
+<script src="assets/script.js?v=vision70" defer></script>
+<script type="module" src="assets/account.js?v=1"></script>
+</body>
+</html>
