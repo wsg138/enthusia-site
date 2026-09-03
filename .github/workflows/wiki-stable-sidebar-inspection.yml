@@ -54,27 +54,23 @@ jobs:
           test -s wiki-sidebar-routing-output/sidebar-before.wiki
           test -s wiki-sidebar-routing-output/sidebar-proposed.wiki
 
-      - name: Prove proposed edit changes only Guilds and Players targets
+      - name: Require live sidebar to be fully stable now
         shell: bash
         run: |
           set -euo pipefail
+          grep -q 'SIDEBAR_ALREADY_STABLE' wiki-sidebar-routing-output/inspection.log
           python3 - <<'PY'
+          import json
           from pathlib import Path
-          import re
-          before = Path('wiki-sidebar-routing-output/sidebar-before.wiki').read_text(encoding='utf-8').splitlines()
-          after = Path('wiki-sidebar-routing-output/sidebar-proposed.wiki').read_text(encoding='utf-8').splitlines()
-          if len(before) != len(after):
-              raise SystemExit('line count changed')
-          changed=[]
-          for i,(a,b) in enumerate(zip(before,after),1):
-              if a != b:
-                  changed.append((i,a,b))
-          if len(changed) > 2:
-              raise SystemExit(f'unexpected changed lines: {changed!r}')
-          for i,a,b in changed:
-              if not re.match(r'^\s*\*\*\s*Guilds\s*\|\s*Guilds\s*$', b, re.I) and not re.match(r'^\s*\*\*\s*Players\s*\|\s*Players\s*$', b, re.I):
-                  raise SystemExit(f'unexpected replacement at line {i}: {b!r}')
-          print(f'validated changed_lines={len(changed)}')
+          evidence=json.loads(Path('wiki-sidebar-routing-output/inspection.json').read_text())
+          changes=evidence['sidebar']['changes']
+          if any(item['needsChange'] for item in changes):
+              raise SystemExit(f'live sidebar still needs changes: {changes!r}')
+          before=Path('wiki-sidebar-routing-output/sidebar-before.wiki').read_text(encoding='utf-8')
+          proposed=Path('wiki-sidebar-routing-output/sidebar-proposed.wiki').read_text(encoding='utf-8')
+          if before != proposed:
+              raise SystemExit('inspection proposed a further sidebar edit')
+          print('live sidebar is stable; changed_lines=0')
           PY
 
       - name: Upload immutable inspection evidence
