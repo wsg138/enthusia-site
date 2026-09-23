@@ -1,0 +1,123 @@
+name: Publish mobile sidebar Safari performance fix
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'wiki-worker/mobile-corrections.js'
+      - 'wiki-worker/mobile-minerva-integration.js'
+      - 'wiki-worker/mobile-sidebar-close-controls.js'
+      - 'wiki-worker/mobile-native-sidebar.css'
+      - 'wiki-worker/publish-mobile-sidebar-safari-performance.py'
+      - 'wiki-worker/validate-live-mobile-sidebar-webkit.mjs'
+      - 'wiki-mobile-sidebar-safari-performance-trigger.txt'
+      - '.github/workflows/wiki-mobile-sidebar-safari-performance.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wiki-mobile-sidebar-safari-performance-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  publish-and-validate:
+    runs-on: ubuntu-24.04
+    env:
+      WIKI_API: https://enthusia.miraheze.org/w/api.php
+      WIKI_SAFARI_OUT: wiki-safari-output
+      WIKI_FULL_BACKUP_OUT: wiki-safari-output/full-backup
+      WIKI_BOT_USERNAME: ${{ secrets.WIKI_BOT_USERNAME }}
+      WIKI_BOT_PASSWORD: ${{ secrets.WIKI_BOT_PASSWORD }}
+    steps:
+      - name: Check out exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Validate fix sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile wiki-worker/publish-mobile-sidebar-safari-performance.py
+          node --check wiki-worker/mobile-corrections.js
+          node --check wiki-worker/mobile-minerva-integration.js
+          node --check wiki-worker/mobile-sidebar-close-controls.js
+          node --check wiki-worker/validate-live-mobile-sidebar-webkit.mjs
+          if grep -Fq 'enthusia-minerva-menu-open' wiki-worker/mobile-corrections.js wiki-worker/mobile-sidebar-close-controls.js wiki-worker/mobile-native-sidebar.css; then
+            echo 'native mobile menu state is still mirrored into custom code' >&2
+            exit 1
+          fi
+          if grep -Fq 'MutationObserver' wiki-worker/mobile-minerva-integration.js; then
+            echo 'Minerva branding still observes mobile DOM mutations' >&2
+            exit 1
+          fi
+          if grep -Fq 'input.checked =' wiki-worker/mobile-sidebar-close-controls.js || grep -Fq "dispatchEvent(new Event('change'" wiki-worker/mobile-sidebar-close-controls.js; then
+            echo 'close controls still synthesize native checkbox state' >&2
+            exit 1
+          fi
+          grep -q "document.createElement('label')" wiki-worker/mobile-sidebar-close-controls.js
+          grep -q 'body.skin-minerva .enthusia-mobile-quickbar' wiki-worker/mobile-native-sidebar.css
+          grep -q 'backdrop-filter: none !important;' wiki-worker/mobile-native-sidebar.css
+          grep -q 'will-change: transform;' wiki-worker/mobile-native-sidebar.css
+          if grep -Fq 'body.skin-minerva:has(' wiki-worker/mobile-native-sidebar.css; then
+            echo 'mobile sidebar CSS still contains a page-wide relational selector' >&2
+            exit 1
+          fi
+
+      - name: Capture complete live wiki before edit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$WIKI_SAFARI_OUT"
+          python3 wiki-worker/full_backup.py | tee "$WIKI_SAFARI_OUT/full-backup.log"
+          test -s "$WIKI_FULL_BACKUP_OUT/manifest.json"
+          pages="$(find "$WIKI_FULL_BACKUP_OUT/pages" -type f -name '*.wiki' | wc -l | tr -d ' ')"
+          histories="$(find "$WIKI_FULL_BACKUP_OUT/history" -type f -name '*.json' | wc -l | tr -d ' ')"
+          echo "full_backup_pages=$pages histories=$histories"
+          test "$pages" -gt 0
+          test "$histories" -eq "$pages"
+
+      - name: Upload immutable pre-edit backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-sidebar-safari-backup-${{ github.run_id }}
+          path: wiki-safari-output/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Require wiki credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$WIKI_BOT_USERNAME"
+          test -n "$WIKI_BOT_PASSWORD"
+
+      - name: Publish native mobile performance fix
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 wiki-worker/publish-mobile-sidebar-safari-performance.py | tee "$WIKI_SAFARI_OUT/publish.log"
+
+      - name: Install WebKit acceptance harness
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save --ignore-scripts playwright@1.55.0
+          npx playwright install --with-deps webkit
+
+      - name: Acceptance-test live mobile sidebar in WebKit
+        shell: bash
+        run: |
+          set -euo pipefail
+          node wiki-worker/validate-live-mobile-sidebar-webkit.mjs | tee "$WIKI_SAFARI_OUT/webkit.log"
+
+      - name: Upload publication and WebKit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enthusia-wiki-sidebar-safari-evidence-${{ github.run_id }}
+          path: wiki-safari-output/
+          if-no-files-found: warn
+          retention-days: 90
