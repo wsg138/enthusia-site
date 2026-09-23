@@ -11,7 +11,7 @@ const child = spawn(chrome, ["--headless=new", "--disable-gpu", "--allow-file-ac
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 let target;
 for (let attempt = 0; attempt < 70 && !target; attempt += 1) {
-  try { target = (await fetch(`http://127.0.0.1:${port}/json/list`).then(response => response.json())).find(candidate => candidate.type === "page"); } catch {}
+  try { target = (await fetch(`http://127.0.0.1:${port}/json/list`).then(response => response.json())).find(candidate => candidate.type === "page"); } catch { /* Chrome is still starting. */ }
   if (!target) await delay(100);
 }
 if (!target) { child.kill(); throw new Error("Chrome did not start"); }
@@ -87,6 +87,20 @@ try {
       &&T.state.selectedStall===stall.id&&drawer.includes('Live Preview Test')&&inspector.includes('LiveShopOwner')
       &&T.state.view.scale===view.scale&&T.state.view.x===view.x&&T.state.view.y===view.y;
   })()`);
+  results.dynamicMarkupEscaping = await evaluate(`(()=>{
+    const T=window.__MARKET_TEST__,original=structuredClone(T.adapter.snapshot.stalls.find(stall=>stall.owner.type==='PLAYER'&&stall.shops.length));
+    const probe='<img src=x onerror=window.__marketXssProbe=1>',modified=structuredClone(original);
+    modified.owner.name=probe;modified.shops[0].owner.name=probe;
+    modified.shops[0].sellItem.displayName=probe;modified.shops[0].sellItem.metadata.customName=probe;
+    modified.members.length?modified.members[0]=probe:modified.members.push(probe);
+    window.__marketXssProbe=0;T.openStall(original);
+    T.adapter.replaceStall(modified);T.refreshMarketUi(original.id);
+    T.openInspector(modified.shops[0].id,'sellItem');
+    const drawer=document.querySelector('#drawer-content'),inspector=document.querySelector('#inspector-content');
+    const escaped=window.__marketXssProbe===0&&!drawer.querySelector('img[src="x"]')&&!inspector.querySelector('img[src="x"]')&&drawer.textContent.includes(probe)&&inspector.textContent.includes(probe);
+    T.closeInspector();T.adapter.replaceStall(original);T.refreshMarketUi(original.id);
+    delete window.__marketXssProbe;return escaped;
+  })()`);
   results.liveConnectionBadge = await evaluate("(()=>{const T=window.__MARKET_TEST__;T.marketClient.source='api';T.marketClient.emitStatus('live');return document.querySelector('#market-connection-label').textContent==='Live'&&document.querySelector('#market-connection-status').dataset.source==='api'})()");
   results.nullOwnerAndRentRendering = await evaluate("(()=>{const T=window.__MARKET_TEST__,stall=T.adapter.snapshot.stalls.find(value=>value.owner.type==='NONE'&&value.ownerSince===null&&value.nextRentAt===null);T.openStall(stall);const text=document.querySelector('#market-drawer').innerText;return !/null|invalid date/i.test(text)})()");
   results.nativeStyle = await evaluate("getComputedStyle(document.querySelector('.map-card')).borderStyle==='solid'&&getComputedStyle(document.querySelector('.market-intro h1')).fontSize!=='16px'");
@@ -126,6 +140,7 @@ try {
   results.overlayPortal = await evaluate("(()=>{const portal=document.querySelector('body>.market-overlay-portal');return Boolean(portal&&portal.contains(document.querySelector('#market-drawer'))&&portal.contains(document.querySelector('#item-inspector'))&&portal.contains(document.querySelector('#minecraft-hover-tooltip'))&&getComputedStyle(portal).position==='static')})()");
   results.rootScrollbarHidden = await evaluate("getComputedStyle(document.documentElement).scrollbarWidth==='none'&&document.documentElement.scrollHeight>document.documentElement.clientHeight");
   results.suggestionScrollbar = await evaluate("(()=>{const input=document.querySelector('#item-search');input.value='potion';input.dispatchEvent(new Event('input'));const box=document.querySelector('#search-suggestions'),style=getComputedStyle(box);return !box.hidden&&box.scrollHeight>box.clientHeight&&style.scrollbarColor.includes('rgb(166, 83, 38)')})()");
+  results.suggestionDomRendering = await evaluate("(async()=>{const input=document.querySelector('#item-search');input.value='diamond';input.dispatchEvent(new Event('input'));await Promise.resolve();const box=document.querySelector('#search-suggestions'),button=box.querySelector('button');return !box.hidden&&button?.type==='button'&&Boolean(button.dataset.suggestion)&&Boolean(button.querySelector('.minecraft-item-icon canvas.item-raster'))&&Boolean(button.querySelector('strong')?.textContent)})()");
   results.potionFamiliesReachable = await evaluate("(()=>{const values=window.__MARKET_TEST__.adapter.suggest('potion',220);return values.length>=184&&values.some(value=>value.displayName.includes('Strength'))&&values.some(value=>value.displayName.includes('Slow Falling'))})()");
   results.filterRemovalControls = await evaluate("(()=>{const floor=document.querySelector('#floor-filter'),owner=document.querySelector('#owner-filter');floor.value='2';floor.dispatchEvent(new Event('change'));owner.value='PLAYER';owner.dispatchEvent(new Event('change'));const one=document.querySelector('[data-remove-filter=\"floor\"]');if(!one||!document.querySelector('#clear-active-filters'))return false;one.click();const removed=floor.value==='ALL'&&owner.value==='PLAYER';document.querySelector('#clear-active-filters').click();return removed&&owner.value==='ALL'&&!document.querySelector('[data-remove-filter]')})()");
   results.panelGeometry = await evaluate("(async()=>{const T=window.__MARKET_TEST__,building=T.layout.buildings.find(value=>value.stallIds.length>1),header=document.querySelector('.site-header');T.openBuilding(building);for(const y of[0,document.querySelector('.filter-shell').offsetTop,document.querySelector('.map-card').offsetTop,document.documentElement.scrollHeight-innerHeight]){scrollTo(0,y);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));const panel=document.querySelector('#market-drawer').getBoundingClientRect(),visible=Math.max(0,Math.min(innerHeight,header.getBoundingClientRect().bottom));if(Math.abs(panel.top-visible)>2||Math.abs(panel.bottom-innerHeight)>2)return false}header.style.transform='translateY(-100%)';await new Promise(resolve=>setTimeout(resolve,80));const hidden=document.querySelector('#market-drawer').getBoundingClientRect();header.style.transform='';return hidden.top<=2&&Math.abs(hidden.bottom-innerHeight)<=2})()");

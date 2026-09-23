@@ -93,6 +93,7 @@ Hashes are of complete PNG files, not decoded pixels.
 `scripts/generate-terrain-mask.py` is the existing generator restored from `1a451f7`. It was **not run during this restoration**. Its reproducible command is:
 
 ```powershell
+python -m pip install --requirement requirements.txt
 python scripts/generate-terrain-mask.py
 ```
 

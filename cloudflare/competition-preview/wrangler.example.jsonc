@@ -1,0 +1,43 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "enthusia-competitions-dev",
+  "pages_build_output_dir": "../../dist/client",
+  "compatibility_date": "2026-08-22",
+  "vars": {
+    "APP_ENV": "preview",
+    "COMPETITIONS_ENABLED": "true",
+    "COMPETITIONS_PUBLIC_ACCESS": "true",
+    "COMPETITIONS_MANAGER_ROLES": "founder,admin",
+    "COMPETITIONS_MODERATOR_ROLES": "founder,admin,moderator,developer",
+    "COMPETITIONS_PREVIEW_ROLES": "founder,admin",
+    "COMPETITIONS_SITE_ORIGIN": "https://REPLACE_WITH_PRIVATE_PREVIEW_HOST",
+    "COMPETITION_BRIDGE_ORIGIN": "https://REPLACE_WITH_PRIVATE_BRIDGE_HOST",
+    "COMPETITION_BRIDGE_ACCESS_REQUIRED": "true",
+    "COMPETITION_BRIDGE_ACCESS_CLIENT_ID": "REPLACE_WITH_BRIDGE_ACCESS_SERVICE_TOKEN_CLIENT_ID",
+    "DISCORD_CLIENT_ID": "REPLACE_WITH_DISCORD_APPLICATION_ID",
+    "DISCORD_GUILD_ID": "REPLACE_WITH_ENTHUSIA_DISCORD_SERVER_ID",
+    "DISCORD_OAUTH_REDIRECT_URI": "https://REPLACE_WITH_PRIVATE_PREVIEW_HOST/api/competitions/auth/discord/callback",
+    "DISCORD_FOUNDER_ROLE_IDS": "REPLACE_WITH_FOUNDER_ROLE_IDS",
+    "DISCORD_ADMIN_ROLE_IDS": "REPLACE_WITH_ADMIN_ROLE_IDS",
+    "DISCORD_DEVELOPER_ROLE_IDS": "REPLACE_WITH_DEVELOPER_ROLE_IDS",
+    "DISCORD_MODERATOR_ROLE_IDS": "REPLACE_WITH_MODERATOR_ROLE_IDS",
+    "DISCORD_HELPER_ROLE_IDS": "REPLACE_WITH_HELPER_ROLE_IDS",
+    "COMPETITIONS_DISCORD_STAFF_ROLE_ID": "REPLACE_WITH_STAFF_ROLE_ID",
+    "CF_ACCESS_TEAM_DOMAIN": "REPLACE_WITH_ACCESS_TEAM.cloudflareaccess.com",
+    "CF_ACCESS_AUD": "REPLACE_WITH_ACCESS_APPLICATION_AUDIENCE"
+  },
+  "d1_databases": [
+    {
+      "binding": "COMPETITIONS_DB",
+      "database_name": "enthusia-competitions-dev",
+      "database_id": "REPLACE_WITH_DEV_D1_DATABASE_ID",
+      "migrations_dir": "../../migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "COMPETITIONS_MEDIA",
+      "bucket_name": "enthusia-competitions-media-dev"
+    }
+  ]
+}

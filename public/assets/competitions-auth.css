@@ -1,0 +1,91 @@
+.competition-account-panel {
+  display: grid;
+  gap: .85rem;
+  margin: 0 0 1rem;
+  padding: 1rem;
+}
+
+.competition-account-heading,
+.competition-account-link-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.competition-account-copy {
+  display: grid;
+  gap: .2rem;
+}
+
+.competition-account-muted {
+  color: var(--muted, #b8afa6);
+  margin: 0;
+}
+
+.competition-account-warning,
+.competition-account-error {
+  margin: 0;
+  padding: .7rem .8rem;
+  border-radius: .65rem;
+  background: rgba(255,255,255,.05);
+}
+
+.competition-account-error {
+  border: 1px solid rgba(255,120,120,.28);
+}
+
+.competition-account-links,
+.competition-linker {
+  display: grid;
+  gap: .55rem;
+}
+
+.competition-account-link-row {
+  padding: .65rem .75rem;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: .65rem;
+  overflow-wrap: anywhere;
+}
+
+.competition-account-secondary,
+.competition-account-text-button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.competition-account-secondary {
+  width: fit-content;
+  padding: .6rem .8rem;
+  border-radius: .6rem;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  color: inherit;
+}
+
+.competition-account-text-button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+.competition-link-command {
+  display: block;
+  min-height: 1.2em;
+  width: fit-content;
+  max-width: 100%;
+  padding: .45rem .65rem;
+  border-radius: .55rem;
+  overflow-wrap: anywhere;
+  background: rgba(0,0,0,.3);
+}
+
+@media (max-width: 620px) {
+  .competition-account-heading,
+  .competition-account-link-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

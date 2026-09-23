@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Browse current, upcoming, and completed Enthusia competitions.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Competitions | Enthusia</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=vision86">
+  <link rel="stylesheet" href="../assets/competitions.css?v=29">
+  <link rel="stylesheet" href="../assets/competitions-appearance.css?v=1">
+</head>
+<body class="competitions-page" data-competition-page="catalog">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="bg" aria-hidden="true"><div class="bg-grid"></div><div class="bg-vignette"></div><div class="bg-heat"></div></div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html" aria-label="Enthusia SMP home"><img class="brand-logo" src="../assets/enthusia-logo-v2.png" alt="" width="46" height="46"><span class="brand-name">Enthusia SMP</span></a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="../index.html">Home</a><a href="../about.html">About</a><a href="../rules.html">Rules</a><a href="../market.html">Market</a>
+        <div class="nav-dropdown"><button class="nav-drop-trigger" type="button">Community</button><div class="nav-menu" aria-label="Community links">
+          <a href="../leaderboards.html">Leaderboards</a><a href="../staff.html">Staff</a><a href="../gallery.html">Gallery</a><a href="../vote.html">Vote</a><a href="/competitions/" class="active" aria-current="page">Competitions</a><a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+        </div></div>
+        <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a><a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+        <span class="site-account" data-site-account></span>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="page-main container competitions-main">
+    <section class="competitions-intro">
+      <div>
+        <p class="competitions-kicker">Enthusia Community</p>
+        <h1>Competitions</h1>
+        <p>See what’s running, submit your entry, and follow the results. <a href="guide.html">How competitions work</a></p>
+      </div>
+    </section>
+
+    <section aria-labelledby="featured-title">
+      <div class="competition-section-heading competition-section-heading-simple">
+        <div>
+          <p class="competitions-kicker">Now</p>
+          <h2 id="featured-title">Current competition</h2>
+        </div>
+      </div>
+      <div id="featuredCompetition" class="competition-loading">Loading competition…</div>
+    </section>
+
+    <section class="competition-section" aria-labelledby="upcoming-title">
+      <div class="competition-section-heading competition-section-heading-simple">
+        <div>
+          <p class="competitions-kicker">Next</p>
+          <h2 id="upcoming-title">Upcoming</h2>
+        </div>
+      </div>
+      <div id="upcomingCompetitions" class="competition-grid"></div>
+    </section>
+
+    <section class="competition-section" aria-labelledby="history-title">
+      <div class="competition-section-heading competition-section-heading-simple">
+        <div>
+          <p class="competitions-kicker">Archive</p>
+          <h2 id="history-title">Completed competitions</h2>
+        </div>
+      </div>
+      <div id="competitionHistory" class="competition-grid"></div>
+    </section>
+  </main>
+
+  <script src="../assets/competitions.js?v=25" type="module"></script>
+  <script src="../assets/script.js?v=vision70" defer></script>
+  <script src="../assets/competitions-appearance.js?v=1" type="module"></script>
+</body>
+</html>

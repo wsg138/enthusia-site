@@ -5,7 +5,3 @@
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
-
-/northstar-a7k3m9/*
-  X-Robots-Tag: noindex, nofollow, noarchive
-  Cache-Control: no-store

@@ -1,0 +1,78 @@
+{
+  "root": true,
+  "env": {
+    "es2022": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "ignorePatterns": [
+    "dist/**",
+    "wiki-worker-output/**",
+    "background-backups/**",
+    ".wrangler/**"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "public/**/*.js",
+        "tools/**/*.js"
+      ],
+      "env": {
+        "browser": true
+      }
+    },
+    {
+      "files": [
+        "functions/**/*.js",
+        "cloudflare/competition-jobs/**/*.js"
+      ],
+      "env": {
+        "worker": true
+      },
+      "globals": {
+        "AbortController": "readonly",
+        "structuredClone": "readonly"
+      }
+    },
+    {
+      "files": [
+        "scripts/**/*.mjs",
+        "tests/**/*.mjs",
+        "wiki-worker/**/*.mjs",
+        "cloudflare/market-api/**/*.mjs"
+      ],
+      "env": {
+        "node": true
+      },
+      "globals": {
+        "WebSocket": "readonly"
+      }
+    },
+    {
+      "files": [
+        "wiki-worker/*.js"
+      ],
+      "env": {
+        "browser": true
+      },
+      "globals": {
+        "mw": "readonly"
+      }
+    },
+    {
+      "files": [
+        "functions/lib/appeal-attachments.js",
+        "functions/lib/appeal-content.js",
+        "functions/lib/gallery.js"
+      ],
+      "rules": {
+        "no-control-regex": "off"
+      }
+    }
+  ]
+}

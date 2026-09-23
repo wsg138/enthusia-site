@@ -70,7 +70,7 @@ const state = {
   repairRevision: 0,
   foregroundCache: new Map(),
   dirty: false,
-  unresolvedConflicts: new Uint8Array(W * H),
+  unresolvedConflicts: new Uint8Array(W * H)
 };
 
 const ASSETS = {
@@ -83,7 +83,7 @@ const ASSETS = {
   foregroundDay: "/assets/minecraft-terrain-foreground-day-v1.png",
   foregroundSunset: "/assets/minecraft-terrain-foreground-sunset-v1.png",
   foregroundNight: "/assets/minecraft-terrain-foreground-night-v1.png",
-  foregroundSunrise: "/assets/minecraft-terrain-foreground-sunrise-v1.png",
+  foregroundSunrise: "/assets/minecraft-terrain-foreground-sunrise-v1.png"
 };
 
 function loadImage(url, optional = false) {
@@ -770,7 +770,7 @@ function bindEvents() {
   });
   const finishPointer=()=>{if(state.panning){state.panning=false;viewport.style.cursor=state.tool==="pan"?"grab":"crosshair";}if(state.dragging&&state.currentStroke){state.strokes.push(state.currentStroke);state.redo=[];state.currentStroke=null;state.dragging=false;rebuildRepairs();markDirty();}};
   viewport.addEventListener("pointerup",finishPointer);viewport.addEventListener("pointercancel",finishPointer);viewport.addEventListener("pointerleave",()=>{brushCursor.style.display="none";});
-  window.addEventListener("keydown",event=>{if(event.code==="Space"&&!/INPUT|SELECT|BUTTON/.test(document.activeElement?.tagName)){state.spaceDown=true;event.preventDefault();}if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==="z"){event.preventDefault();$(event.shiftKey?"#redoBtn":"#undoBtn").click();}});
+  window.addEventListener("keydown",event=>{if(event.code==="Space"&&!/INPUT|SELECT|BUTTON/.test(document.activeElement?.tagName)){state.spaceDown=true;event.preventDefault();}if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==="z"){event.preventDefault();document.getElementById(event.shiftKey?"redoBtn":"undoBtn")?.click();}});
   window.addEventListener("keyup",event=>{if(event.code==="Space")state.spaceDown=false;});
   window.addEventListener("beforeunload",event=>{if(state.dirty){event.preventDefault();event.returnValue="";}});
   window.addEventListener("resize",()=>{if(state.scale<1)resetView();});
@@ -797,15 +797,20 @@ async function init() {
     state.initialSubtract = state.session.savedRepairs.subtract ? await loadOptionalOverlay("/assets/minecraft-occlusion-subtract-v2.png") : new ImageData(W,H);
     for(const item of state.session.checkpoints)state.suggestions.set(item.id,suggestionFor(item));
     const restoredDraft = restoreDraft();
-    const container=$("#checkpointButtons");
-    state.session.checkpoints.forEach((item,index)=>{const button=document.createElement("button");button.textContent=item.label;button.addEventListener("click",()=>focusCheckpoint(index));container.append(button);});
+    const container=document.getElementById("checkpointButtons");
+    state.session.checkpoints.forEach((item,index)=>{const button=document.createElement("button");button.textContent=item.label;button.addEventListener("click",()=>focusCheckpoint(index));container.appendChild(button);});
     bindEvents();
     rebuildRepairs();
     requestAnimationFrame(()=>focusCheckpoint(state.currentCheckpoint));
     setStatus(restoredDraft ? "Restored unsaved browser draft" : state.session.savedRepairs.add||state.session.savedRepairs.subtract ? "Loaded saved v2 repairs" : "No unsaved strokes");
   } catch (error) {
-    setStatus(error.message,"error");
-    $("#validationResults").innerHTML=`<li class="error">${error.message}</li>`;
+    const message=error instanceof Error?error.message:"The editor could not start.";
+    setStatus(message,"error");
+    const list=document.getElementById("validationResults");
+    const item=document.createElement("li");
+    item.className="error";
+    item.textContent=message;
+    list.replaceChildren(item);
   }
 }
 

@@ -11,7 +11,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,6 +19,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install --ignore-scripts
+      - run: npm ci --ignore-scripts
       - run: npm test
       - run: npm run build
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: minecraft/competition-bridge/pom.xml
+      - name: Verify competition bridge
+        run: mvn -B -f minecraft/competition-bridge/pom.xml verify
+      - name: Upload verified competition bridge JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: EnthusiaCompetitionBridge-${{ github.event.pull_request.head.sha || github.sha }}
+          path: minecraft/competition-bridge/target/competition-bridge-1.0.0-SNAPSHOT.jar
+          if-no-files-found: error
+          retention-days: 14

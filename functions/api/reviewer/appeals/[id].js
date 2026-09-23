@@ -1,10 +1,17 @@
 import { authenticateRequest, canReview } from "../../../lib/auth.js";
+import { scheduleAppealDiscordDrain } from "../../../lib/appeal-notifications.js";
+import { recordAppealComment, recordAppealStatus } from "../../../lib/appeal-repository.js";
 import { forbidden, json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../lib/responses.js";
 import { boundedIdempotencyKey, requireSameOrigin } from "../../../lib/security.js";
 import { reviewerRank, signedStaffRequest, staffApiResponse } from "../../../lib/staff-api.js";
 import { isCanonicalUuid } from "../../../lib/validation.js";
 
 const DECISIONS = new Set(["approve", "deny", "request_information"]);
+const DECISION_STATUS = Object.freeze({
+  approve: "APPLIED",
+  deny: "DENIED",
+  request_information: "INFORMATION_REQUESTED"
+});
 
 function inputText(input, field) {
   return typeof input?.[field] === "string" ? input[field].trim() : "";
@@ -35,7 +42,7 @@ async function authenticatedReviewer(context) {
 }
 
 async function requestDecision(context, appealId, reviewer, decision) {
-  const upstream = await signedStaffRequest(
+  return signedStaffRequest(
     context.env,
     `/v1/website/appeals/reviewer/${appealId}/decision`,
     {
@@ -47,7 +54,29 @@ async function requestDecision(context, appealId, reviewer, decision) {
       idempotencyKey: decision.idempotencyKey
     }
   );
-  return staffApiResponse(upstream);
+}
+
+async function mirrorDecision(context, appealId, reviewer, decision) {
+  if (!context.env?.COMPETITIONS_DB) return;
+  const now = new Date().toISOString();
+  const version = decision.expectedVersion + 1;
+  const recorded = await recordAppealStatus(context.env.COMPETITIONS_DB, {
+    appealId,
+    status: DECISION_STATUS[decision.decision],
+    version,
+    updatedAt: now
+  });
+  if (!recorded) return;
+  await recordAppealComment(context.env.COMPETITIONS_DB, {
+    id: crypto.randomUUID(),
+    appealId,
+    authorType: "STAFF",
+    authorId: reviewer.session.player.uuid,
+    authorName: reviewer.session.player.name,
+    body: decision.note,
+    idempotencyKey: decision.idempotencyKey,
+    createdAt: now
+  });
 }
 
 export async function onRequestPost(context) {
@@ -63,7 +92,15 @@ export async function onRequestPost(context) {
   const appealId = String(context.params.id ?? "").trim();
   if (!decision || !isCanonicalUuid(appealId)) return json({ error: "invalid_decision" }, 400);
   try {
-    return await requestDecision(context, appealId, reviewer, decision);
+    const upstream = await requestDecision(context, appealId, reviewer, decision);
+    if (upstream.ok) {
+      try {
+        await mirrorDecision(context, appealId, reviewer, decision);
+        scheduleAppealDiscordDrain(context);
+      }
+      catch { /* The authoritative Staff decision has already succeeded. */ }
+    }
+    return staffApiResponse(upstream);
   } catch {
     return serviceUnavailable();
   }
