@@ -51,6 +51,7 @@ export async function authenticateLinkedAppealRequest(request, env) {
   if (!session) return null;
   return Object.freeze({
     subject: session.subject,
+    accountId: await discordAppealAccountId(session.subject),
     discord: session.discord,
     linkedMinecraftAccounts: session.linkedMinecraftAccounts,
     expiresAt: session.expiresAt
