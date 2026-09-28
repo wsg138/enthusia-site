@@ -36,6 +36,25 @@ async function hmacSha256(secret, value) {
   return new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(value)));
 }
 
+export function staffApiOrigin(env) {
+  const raw = String(env?.STAFF_API_ORIGIN ?? STAFF_API_ORIGIN).trim();
+  let url;
+  try { url = new URL(raw); } catch { throw new Error("Staff API origin is invalid"); }
+  const hostname = url.hostname.toLowerCase();
+  const allowedHost = hostname === "staff-api.enthusia.info" || hostname.endsWith(".enthusia.info");
+  if (url.protocol !== "https:"
+      || !allowedHost
+      || url.username
+      || url.password
+      || url.port
+      || url.pathname !== "/"
+      || url.search
+      || url.hash) {
+    throw new Error("Staff API origin is invalid");
+  }
+  return url.origin;
+}
+
 function staffApiConfiguration(env) {
   const bearer = typeof env.STAFF_API_BEARER_TOKEN === "string" ? env.STAFF_API_BEARER_TOKEN : "";
   const secret = typeof env.STAFF_API_HMAC_SECRET === "string" ? env.STAFF_API_HMAC_SECRET : "";
@@ -67,10 +86,10 @@ export function publicStaffRoute(path) {
   return path;
 }
 
-export async function publicStaffRequest(path, query = new URLSearchParams()) {
+export async function publicStaffRequest(env, path, query = new URLSearchParams()) {
   const requestTarget = publicStaffRoute(path);
   const parameters = query instanceof URLSearchParams ? query : new URLSearchParams(query);
-  const url = new URL(requestTarget, STAFF_API_ORIGIN);
+  const url = new URL(requestTarget, staffApiOrigin(env));
   url.search = parameters.toString();
   return boundedFetch(url, {
     method: "GET",
@@ -89,7 +108,7 @@ export async function signedStaffRequest(env, path, body) {
   const canonical = `${method}\n${requestTarget}\n${timestamp}\n${nonce}\n${contentHash}`;
   const signature = base64Url(await hmacSha256(configuration.secret, canonical));
 
-  return boundedFetch(`${STAFF_API_ORIGIN}${requestTarget}`, {
+  return boundedFetch(`${staffApiOrigin(env)}${requestTarget}`, {
     method,
     headers: {
       authorization: `Bearer ${configuration.bearer}`,
