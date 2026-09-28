@@ -316,7 +316,11 @@ test("private Staff API requests carry a valid replay-protected signature", asyn
     return new Response("{}", { status: 200, headers: { "content-type": "application/json" } });
   };
   try {
-    const env = { STAFF_API_BEARER_TOKEN: "b".repeat(32), STAFF_API_HMAC_SECRET: "s".repeat(32) };
+    const env = {
+      STAFF_API_TARGET: "production",
+      STAFF_API_BEARER_TOKEN: "b".repeat(32),
+      STAFF_API_HMAC_SECRET: "s".repeat(32)
+    };
     await signedStaffRequest(env, "/v1/website/appeals/eligible", { accountId: PLAYER_ID });
     assert.equal(captured.url, "https://staff-api.enthusia.info/v1/website/appeals/eligible");
     assert.equal(captured.options.method, "POST");
