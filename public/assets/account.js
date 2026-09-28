@@ -1,6 +1,7 @@
 const API = "/api/competitions/auth";
 const root = document.querySelector("#account-session");
 let pollTimer = null;
+let turnstileScriptPromise = null;
 
 function element(tag, className, content) {
   const node = document.createElement(tag);
@@ -31,6 +32,21 @@ async function request(path, options = {}) {
     throw error;
   }
   return payload;
+}
+
+function loadTurnstile() {
+  if (window.turnstile) return Promise.resolve(window.turnstile);
+  if (turnstileScriptPromise) return turnstileScriptPromise;
+  turnstileScriptPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.async = true;
+    script.defer = true;
+    script.addEventListener("load", () => window.turnstile ? resolve(window.turnstile) : reject(new Error("Turnstile unavailable")), { once: true });
+    script.addEventListener("error", () => reject(new Error("Turnstile unavailable")), { once: true });
+    document.head.append(script);
+  });
+  return turnstileScriptPromise;
 }
 
 function discordName(session) {
@@ -128,12 +144,45 @@ function accountRow(account) {
 }
 
 function punishmentClaimError(error) {
+  if (error.code === "turnstile_required") return "Complete the verification and try again.";
   if (error.code === "PUNISHMENT_CODE_INVALID" || error.status === 404) return "That punishment code and username could not be verified.";
   if (error.code === "PUNISHMENT_ALREADY_BOUND" || error.status === 409) return "That punishment is already bound to another website account.";
   if (error.code === "PUNISHMENT_INELIGIBLE" || error.status === 422) return "That punishment is not currently eligible for an appeal.";
   if (error.status === 429) return "Too many attempts were made. Wait a few minutes and try again.";
   if (error.status === 503) return "The punishment service is unavailable right now.";
   return "That punishment code could not be verified right now.";
+}
+
+async function configureClaimTurnstile(container, button, status) {
+  const configuration = await request("/api/appeals/turnstile");
+  const turnstile = await loadTurnstile();
+  let token = "";
+  const widgetId = turnstile.render(container, {
+    sitekey: configuration.siteKey,
+    action: configuration.action,
+    theme: "auto",
+    callback(value) {
+      token = value;
+      button.disabled = false;
+    },
+    "expired-callback"() {
+      token = "";
+      button.disabled = true;
+    },
+    "error-callback"() {
+      token = "";
+      button.disabled = true;
+      status.textContent = "Verification could not be loaded. Try refreshing the page.";
+    }
+  });
+  return {
+    token: () => token,
+    reset() {
+      token = "";
+      button.disabled = true;
+      turnstile.reset(widgetId);
+    }
+  };
 }
 
 function punishmentClaimSection(session) {
@@ -169,17 +218,35 @@ function punishmentClaimSection(session) {
   code.placeholder = "Enter the code from your punishment message";
   codeLabel.append(code);
 
+  const challenge = element("div", "account-turnstile");
   const button = element("button", "btn", "Bind punishment");
   button.type = "submit";
-  const status = element("p", "account-link-status");
+  button.disabled = true;
+  const status = element("p", "account-link-status", "Loading verification…");
   status.setAttribute("role", "status");
+  let verification = null;
 
-  form.append(accountLabel, codeLabel, button, status);
+  form.append(accountLabel, codeLabel, challenge, button, status);
+  configureClaimTurnstile(challenge, button, status)
+    .then((value) => {
+      verification = value;
+      status.textContent = "Complete the verification, then bind your punishment code.";
+    })
+    .catch(() => {
+      status.textContent = "Punishment-code verification is unavailable right now.";
+      button.disabled = true;
+    });
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const selected = accounts.find((account) => account.uuid === accountSelect.value);
+    const turnstileToken = verification?.token() || "";
     if (!selected) {
       status.textContent = "Choose a linked Minecraft account.";
+      return;
+    }
+    if (!turnstileToken) {
+      status.textContent = "Complete the verification before binding the punishment.";
       return;
     }
     button.disabled = true;
@@ -189,7 +256,7 @@ function punishmentClaimSection(session) {
     try {
       await request("/api/appeals/claim", {
         method: "POST",
-        body: JSON.stringify({ punishmentCode: code.value, username: selected.name })
+        body: JSON.stringify({ punishmentCode: code.value, username: selected.name, turnstileToken })
       });
       code.value = "";
       status.replaceChildren(
@@ -199,9 +266,9 @@ function punishmentClaimSection(session) {
     } catch (error) {
       status.textContent = punishmentClaimError(error);
     } finally {
-      button.disabled = false;
       accountSelect.disabled = false;
       code.disabled = false;
+      verification?.reset();
     }
   });
   section.append(form);
