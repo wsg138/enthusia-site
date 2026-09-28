@@ -39,15 +39,14 @@ test("public punishment search is isolated from list parameters", () => {
   assert.equal(punishmentQuery(new Request(`https://example.test/api/punishments?q=${"x".repeat(81)}`)), null);
 });
 
-test("Staff API origin defaults to production and permits only Enthusia HTTPS hosts", () => {
+test("Staff API requests select only fixed production or preview targets", () => {
   assert.equal(staffApiOrigin({}), "https://staff-api.enthusia.info");
   assert.equal(
-    staffApiOrigin({ STAFF_API_ORIGIN: "https://staff-api-preview.enthusia.info" }),
-    "https://staff-api-preview.enthusia.info"
+    staffApiOrigin({ STAFF_API_TARGET: "preview" }),
+    "https://staff-api-dev.enthusia.info"
   );
-  assert.throws(() => staffApiOrigin({ STAFF_API_ORIGIN: "https://evil.example" }), /origin is invalid/);
-  assert.throws(() => staffApiOrigin({ STAFF_API_ORIGIN: "http://staff-api-preview.enthusia.info" }), /origin is invalid/);
-  assert.throws(() => staffApiOrigin({ STAFF_API_ORIGIN: "https://staff-api-preview.enthusia.info/private" }), /origin is invalid/);
+  assert.throws(() => staffApiOrigin({ STAFF_API_TARGET: "https://evil.example" }), /target is invalid/);
+  assert.throws(() => staffApiOrigin({ STAFF_API_TARGET: "staging" }), /target is invalid/);
 });
 
 test("case IDs match the current EnthusiaStaff Crockford contract", () => {
