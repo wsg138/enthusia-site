@@ -4,6 +4,7 @@ import test from "node:test";
 import { revalidationRateLimit } from "../functions/api/appeals/revalidate.js";
 import { saveRevalidatedPunishmentBinding } from "../functions/lib/appeal-bindings.js";
 import { revalidatePunishment, sanitizeRevalidationRequest } from "../functions/lib/appeal-revalidation.js";
+import { revalidateOwnedPunishmentBinding } from "../functions/lib/appeal-revalidation-service.js";
 
 const ACCOUNT_ID = "123e4567-e89b-42d3-a456-426614174001";
 const PUNISHMENT_ID = "123e4567-e89b-42d3-a456-426614174099";
@@ -83,6 +84,16 @@ function bindingDatabase(initialGeneration = 4) {
   };
 }
 
+function serviceInput() {
+  return {
+    db: {},
+    env: ENV,
+    ownerDiscordId: "3".repeat(18),
+    accountId: ACCOUNT_ID,
+    punishmentId: PUNISHMENT_ID
+  };
+}
+
 test("revalidation only accepts an owned punishment identifier from the browser", () => {
   assert.deepEqual(sanitizeRevalidationRequest({ punishmentId: PUNISHMENT_ID }), { punishmentId: PUNISHMENT_ID });
   assert.equal(sanitizeRevalidationRequest({ punishmentId: PUNISHMENT_ID, accountId: ACCOUNT_ID }), null);
@@ -119,6 +130,44 @@ test("rotated-code revalidation preserves the last claimed generation", async ()
   assert.equal(saved.codeGeneration, 4);
   assert.equal(saved.eligibilityState, "CODE_ROTATED");
   assert.equal(saved.eligible, false);
+});
+
+test("Staff rejection never mutates the stored binding", async () => {
+  let saves = 0;
+  const result = await revalidateOwnedPunishmentBinding(serviceInput(), {
+    async findBinding() { return BINDING; },
+    async requestStaff() { return new Response("{}", { status: 503 }); },
+    async saveBinding() { saves += 1; return BINDING; }
+  });
+  assert.equal(result.kind, "UPSTREAM_REJECTED");
+  assert.equal(saves, 0);
+});
+
+test("malformed Staff success never mutates the stored binding", async () => {
+  let saves = 0;
+  const result = await revalidateOwnedPunishmentBinding(serviceInput(), {
+    async findBinding() { return BINDING; },
+    async requestStaff() { return new Response("{bad-json", { status: 200 }); },
+    async saveBinding() { saves += 1; return BINDING; }
+  });
+  assert.equal(result.kind, "INVALID_UPSTREAM");
+  assert.equal(saves, 0);
+});
+
+test("valid Staff success is persisted after validation", async () => {
+  let saves = 0;
+  const result = await revalidateOwnedPunishmentBinding(serviceInput(), {
+    async findBinding() { return BINDING; },
+    async requestStaff() { return new Response(JSON.stringify(BINDING), { status: 200 }); },
+    async saveBinding(_db, ownerDiscordId, binding) {
+      saves += 1;
+      assert.equal(ownerDiscordId, "3".repeat(18));
+      assert.deepEqual(binding, BINDING);
+      return binding;
+    }
+  });
+  assert.equal(result.kind, "OK");
+  assert.equal(saves, 1);
 });
 
 test("revalidation is account-keyed and rate limited", async () => {
