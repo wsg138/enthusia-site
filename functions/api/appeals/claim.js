@@ -1,3 +1,4 @@
+import { saveClaimedPunishmentBinding, sanitizePunishmentBinding } from "../../lib/appeal-bindings.js";
 import { authenticateAppealRequest } from "../../lib/appeal-session.js";
 import { claimPunishment, sanitizeClaim } from "../../lib/appeal-claim.js";
 import { competitionRateLimit, rateLimitHeaders } from "../../lib/competitions/rate-limit.js";
@@ -38,7 +39,15 @@ export async function onRequestPost(context) {
   if (!humanVerified) return json({ error: "turnstile_required" }, 403);
 
   try {
-    return staffApiResponse(await claimPunishment(context.env, session, claim), "private, no-store");
+    const upstream = await claimPunishment(context.env, session, claim);
+    if (!upstream.ok) return staffApiResponse(upstream, "private, no-store");
+    const binding = sanitizePunishmentBinding(await upstream.json());
+    if (!binding) return json({ error: "invalid_punishment_binding" }, 502);
+
+    if (session.discord?.id) {
+      await saveClaimedPunishmentBinding(context.env?.COMPETITIONS_DB, session.discord.id, binding);
+    }
+    return json(binding, 200, { "cache-control": "private, no-store" });
   } catch {
     return serviceUnavailable();
   }
