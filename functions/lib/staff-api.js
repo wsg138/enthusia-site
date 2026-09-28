@@ -1,5 +1,6 @@
 const encoder = new TextEncoder();
 const STAFF_API_ORIGIN = "https://staff-api.enthusia.info";
+const STAFF_API_PREVIEW_ORIGIN = "https://staff-api-dev.enthusia.info";
 const STAFF_API_TIMEOUT_MS = 7000;
 const STATIC_ROUTES = new Set([
   "/v1/website/punishment-codes/claim",
@@ -37,22 +38,10 @@ async function hmacSha256(secret, value) {
 }
 
 export function staffApiOrigin(env) {
-  const raw = String(env?.STAFF_API_ORIGIN ?? STAFF_API_ORIGIN).trim();
-  let url;
-  try { url = new URL(raw); } catch { throw new Error("Staff API origin is invalid"); }
-  const hostname = url.hostname.toLowerCase();
-  const allowedHost = hostname === "staff-api.enthusia.info" || hostname.endsWith(".enthusia.info");
-  if (url.protocol !== "https:"
-      || !allowedHost
-      || url.username
-      || url.password
-      || url.port
-      || url.pathname !== "/"
-      || url.search
-      || url.hash) {
-    throw new Error("Staff API origin is invalid");
-  }
-  return url.origin;
+  const target = String(env?.STAFF_API_TARGET ?? "production").trim().toLowerCase();
+  if (target === "production") return STAFF_API_ORIGIN;
+  if (target === "preview") return STAFF_API_PREVIEW_ORIGIN;
+  throw new Error("Staff API target is invalid");
 }
 
 function staffApiConfiguration(env) {
@@ -141,4 +130,11 @@ export function staffApiResponse(upstream, cacheControl = "no-store") {
   });
 }
 
-export { STAFF_API_ORIGIN, STAFF_API_TIMEOUT_MS, base64Url, staffApiConfiguration, staffRoute };
+export {
+  STAFF_API_ORIGIN,
+  STAFF_API_PREVIEW_ORIGIN,
+  STAFF_API_TIMEOUT_MS,
+  base64Url,
+  staffApiConfiguration,
+  staffRoute
+};
