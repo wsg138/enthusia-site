@@ -25,6 +25,7 @@ import { isCanonicalUuid } from "../functions/lib/validation.js";
 
 const DRAFT_ID = "123e4567-e89b-42d3-a456-426614174010";
 const PLAYER_ID = "123e4567-e89b-42d3-a456-426614174000";
+const WEBSITE_ACCOUNT_ID = "123e4567-e89b-42d3-a456-426614174777";
 const PUNISHMENT_ID = "123e4567-e89b-42d3-a456-426614174099";
 const ATTACHMENT_ID = "123e4567-e89b-42d3-a456-426614174011";
 const DISCORD_USER_ID = "3".repeat(18);
@@ -93,13 +94,18 @@ test("appeal answers support bounded formatting without counting markup as conte
   assert.equal(sanitizeAppealSubmission(appealInput({ whatHappened: "**x**" })), null);
 });
 
-test("browser identity fields cannot override linked appeal identity", () => {
+test("browser identity fields cannot override the bound website account identity", () => {
   const submission = sanitizeAppealSubmission(appealInput());
   const payloadHash = "a".repeat(64);
-  assert.deepEqual(buildAppealPayload(submission, { uuid: PLAYER_ID, name: "Lincoln" }, payloadHash), {
+  assert.deepEqual(buildAppealPayload(
+    submission,
+    { uuid: PLAYER_ID, name: "Lincoln" },
+    WEBSITE_ACCOUNT_ID,
+    payloadHash
+  ), {
     punishmentId: PUNISHMENT_ID,
     reason: buildStaffReason(appealAnswers),
-    accountId: PLAYER_ID,
+    accountId: WEBSITE_ACCOUNT_ID,
     username: "Lincoln",
     idempotencyKey: staffAppealIdempotencyKey(payloadHash)
   });
