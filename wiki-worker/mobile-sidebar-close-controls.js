@@ -1,7 +1,7 @@
-/* Close controls for the restored native Minerva mobile sidebar.
- * The skin remains authoritative for opening the menu. This only supplies the
- * missing close affordances confirmed on the live Minerva DOM: an explicit X
- * and the existing .main-menu-mask backdrop.
+/* Close affordances for the native Minerva mobile sidebar.
+ * Do not mirror menu state or synthesize change events. The visible X is a
+ * label for Minerva's native checkbox, and a native label backdrop is left
+ * completely untouched. A non-label fallback delegates to input.click().
  */
 (function () {
   'use strict';
@@ -24,36 +24,17 @@
     return Boolean(document.body && document.body.classList.contains('skin-minerva')) || Boolean(sidebar());
   }
 
-  function syncExistingState(input) {
-    if (typeof window.dispatchEvent === 'function') {
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-  }
-
-  function closeMinervaMenu() {
-    const input = toggle();
-    if (!input) return false;
-    if (input.checked) {
-      input.checked = false;
-      input.setAttribute('aria-expanded', 'false');
-      document.documentElement.classList.remove('enthusia-minerva-menu-open');
-      const opener = document.querySelector('#mw-mf-main-menu-button, label[for="main-menu-input"]');
-      if (opener) opener.setAttribute('aria-expanded', 'false');
-      syncExistingState(input);
-    }
-    return true;
-  }
-
   function directBrandChild(menu) {
     return Array.from(menu.children).find(function (node) {
       return node.classList && node.classList.contains('enthusia-native-sidebar-brand');
     }) || menu.querySelector('.enthusia-native-sidebar-brand');
   }
 
-  function ensureCloseButton() {
+  function ensureCloseControl() {
     if (!isMobile() || !isMinerva()) return false;
     const menu = sidebar();
-    if (!menu) return false;
+    const input = toggle();
+    if (!menu || !input) return false;
 
     let header = menu.querySelector('.enthusia-native-sidebar-header');
     const brand = directBrandChild(menu);
@@ -71,49 +52,66 @@
       header.prepend(brand);
     }
 
-    let button = header.querySelector('.enthusia-native-sidebar-close');
-    if (!button) {
-      button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'enthusia-native-sidebar-close';
-      button.setAttribute('aria-label', 'Close menu');
-      button.setAttribute('title', 'Close menu');
-      button.textContent = '×';
-      header.appendChild(button);
+    let control = header.querySelector('.enthusia-native-sidebar-close');
+    if (!control || control.tagName !== 'LABEL') {
+      const label = document.createElement('label');
+      label.className = 'enthusia-native-sidebar-close';
+      label.htmlFor = input.id;
+      label.setAttribute('role', 'button');
+      label.setAttribute('tabindex', '0');
+      label.setAttribute('aria-label', 'Close menu');
+      label.setAttribute('title', 'Close menu');
+      label.textContent = '×';
+      if (control) control.replaceWith(label);
+      else header.appendChild(label);
+      control = label;
     }
-    if (button.dataset.enthusiaCloseBound !== '1') {
-      button.addEventListener('click', function (event) {
+    control.htmlFor = input.id;
+
+    if (control.dataset.enthusiaKeyboardBound !== '1') {
+      control.addEventListener('keydown', function (event) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
         event.preventDefault();
-        event.stopPropagation();
-        closeMinervaMenu();
+        const nativeToggle = toggle();
+        if (nativeToggle && nativeToggle.checked) nativeToggle.click();
       });
-      button.dataset.enthusiaCloseBound = '1';
+      control.dataset.enthusiaKeyboardBound = '1';
     }
     return true;
   }
 
-  function bindBackdrop() {
+  function normalizeBackdrop() {
     if (!isMobile() || !isMinerva()) return false;
     const mask = document.querySelector('.main-menu-mask');
-    if (!mask) return false;
-    mask.setAttribute('role', 'button');
+    const input = toggle();
+    if (!mask || !input) return false;
+
     mask.setAttribute('aria-label', 'Close menu');
-    if (mask.dataset.enthusiaCloseBound === '1') return true;
-    mask.addEventListener('click', function (event) {
-      const input = toggle();
-      if (!input || !input.checked) return;
-      event.preventDefault();
-      event.stopPropagation();
-      closeMinervaMenu();
-    });
     mask.dataset.enthusiaCloseBound = '1';
+    if (mask.tagName === 'LABEL') {
+      mask.htmlFor = input.id;
+      mask.dataset.enthusiaCloseMode = 'native-label';
+      return true;
+    }
+
+    if (mask.dataset.enthusiaFallbackClickBound !== '1') {
+      mask.addEventListener('click', function (event) {
+        const nativeToggle = toggle();
+        if (!nativeToggle || !nativeToggle.checked) return;
+        event.preventDefault();
+        event.stopPropagation();
+        nativeToggle.click();
+      });
+      mask.dataset.enthusiaFallbackClickBound = '1';
+    }
+    mask.dataset.enthusiaCloseMode = 'input-click-fallback';
     return true;
   }
 
   function normalizeCloseControls() {
     if (!isMobile()) return;
-    ensureCloseButton();
-    bindBackdrop();
+    ensureCloseControl();
+    normalizeBackdrop();
   }
 
   function retryInitialBinding() {
@@ -121,7 +119,7 @@
     const retry = function () {
       normalizeCloseControls();
       remaining -= 1;
-      if (remaining > 0 && (!document.querySelector('.enthusia-native-sidebar-close') || !document.querySelector('.main-menu-mask[data-enthusia-close-bound="1"]'))) {
+      if (remaining > 0 && (!document.querySelector('label.enthusia-native-sidebar-close[for="main-menu-input"]') || !document.querySelector('.main-menu-mask[data-enthusia-close-bound="1"]'))) {
         window.setTimeout(retry, 125);
       }
     };
@@ -131,7 +129,7 @@
   function start() {
     retryInitialBinding();
     if (mobileMedia) {
-      const onChange = function () { normalizeCloseControls(); };
+      const onChange = function () { retryInitialBinding(); };
       if (typeof mobileMedia.addEventListener === 'function') mobileMedia.addEventListener('change', onChange);
       else if (typeof mobileMedia.addListener === 'function') mobileMedia.addListener(onChange);
     }

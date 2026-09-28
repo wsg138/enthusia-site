@@ -1,6 +1,6 @@
 /* Mobile-only header branding for Miraheze/Vector/Minerva.
- * Navigation is intentionally left native: the top-left hamburger must keep
- * MediaWiki's own click, animation, focus, backdrop, and sidebar behavior.
+ * Navigation is intentionally left native. Branding uses bounded startup
+ * retries only; it does not observe the page or run when the menu opens/closes.
  */
 (function () {
   'use strict';
@@ -64,9 +64,8 @@
     if (!brand) {
       brand = makeBrand();
       const existing = nativeBrand(header);
-      if (existing && existing.parentNode) {
-        existing.insertAdjacentElement('afterend', brand);
-      } else {
+      if (existing && existing.parentNode) existing.insertAdjacentElement('afterend', brand);
+      else {
         const search = header.querySelector('.search-box, .search-button, .mw-ui-icon-search, [aria-label*="search" i]');
         if (search && search.parentNode === header) header.insertBefore(brand, search);
         else header.appendChild(brand);
@@ -79,18 +78,20 @@
     return true;
   }
 
+  function retryBrand() {
+    let remaining = 12;
+    const retry = function () {
+      if (ensureMobileBrand()) return;
+      remaining -= 1;
+      if (remaining > 0) window.setTimeout(retry, 125);
+    };
+    retry();
+  }
+
   function start() {
-    ensureMobileBrand();
-
-    if (document.body) {
-      const observer = new MutationObserver(function () {
-        ensureMobileBrand();
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
-    }
-
+    retryBrand();
     if (mobileMedia) {
-      const refresh = function () { ensureMobileBrand(); };
+      const refresh = function () { retryBrand(); };
       if (typeof mobileMedia.addEventListener === 'function') mobileMedia.addEventListener('change', refresh);
       else if (typeof mobileMedia.addListener === 'function') mobileMedia.addListener(refresh);
     }
