@@ -24,7 +24,7 @@ export async function onRequestGet(context) {
   const query = punishmentQuery(context.request);
   if (!query) return json({ error: "invalid_punishment_query" }, 400);
   try {
-    const upstream = await publicStaffRequest(query.path, query.parameters);
+    const upstream = await publicStaffRequest(context.env, query.path, query.parameters);
     if (!upstream.ok) return staffApiResponse(upstream, "no-store");
     const sanitized = sanitizePublicPunishmentCollection(
       await upstream.json(),
