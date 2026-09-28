@@ -35,7 +35,7 @@ export function sanitizePublicPunishment(value) {
   if (!player || !PLAYER.test(player)
       || !punishmentType || !TOKEN.test(punishmentType)
       || !broadReason || !publicReason
-      || issuedAt === undefined || expiresAt === undefined
+      || !issuedAt || expiresAt === undefined
       || !state || !TOKEN.test(state)
       || !caseId || typeof value.appealAvailable !== "boolean"
       || (remainingSeconds !== null
