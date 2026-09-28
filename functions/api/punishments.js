@@ -1,3 +1,4 @@
+import { sanitizePublicPunishmentCollection } from "../lib/public-punishment.js";
 import { json, methodNotAllowed } from "../lib/responses.js";
 import { publicStaffRequest, staffApiResponse } from "../lib/staff-api.js";
 
@@ -21,15 +22,16 @@ export function punishmentQuery(request) {
 
 export async function onRequestGet(context) {
   const query = punishmentQuery(context.request);
-  if (!query) return new Response(JSON.stringify({ error: "invalid_punishment_query" }), {
-    status: 400,
-    headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
-  });
+  if (!query) return json({ error: "invalid_punishment_query" }, 400);
   try {
-    return staffApiResponse(
-      await publicStaffRequest(query.path, query.parameters),
-      "public, max-age=20, stale-while-revalidate=40"
+    const upstream = await publicStaffRequest(query.path, query.parameters);
+    if (!upstream.ok) return staffApiResponse(upstream, "no-store");
+    const sanitized = sanitizePublicPunishmentCollection(
+      await upstream.json(),
+      query.path === "/v1/public/punishments"
     );
+    if (!sanitized) return json({ error: "invalid_punishment_projection" }, 502);
+    return json(sanitized, 200, { "cache-control": "public, max-age=20, stale-while-revalidate=40" });
   } catch {
     return json({ error: "punishment_service_unavailable" }, 503);
   }
