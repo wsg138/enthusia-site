@@ -27,6 +27,7 @@ async function request(path, options = {}) {
   if (!response.ok) {
     const error = new Error(payload.error || `HTTP_${response.status}`);
     error.status = response.status;
+    error.code = payload.error || null;
     throw error;
   }
   return payload;
@@ -126,6 +127,87 @@ function accountRow(account) {
   return row;
 }
 
+function punishmentClaimError(error) {
+  if (error.code === "PUNISHMENT_CODE_INVALID" || error.status === 404) return "That punishment code and username could not be verified.";
+  if (error.code === "PUNISHMENT_ALREADY_BOUND" || error.status === 409) return "That punishment is already bound to another website account.";
+  if (error.code === "PUNISHMENT_INELIGIBLE" || error.status === 422) return "That punishment is not currently eligible for an appeal.";
+  if (error.status === 429) return "Too many attempts were made. Wait a few minutes and try again.";
+  if (error.status === 503) return "The punishment service is unavailable right now.";
+  return "That punishment code could not be verified right now.";
+}
+
+function punishmentClaimSection(session) {
+  const section = element("section", "account-linker");
+  section.append(
+    element("h3", "", "Bind a punishment code"),
+    element("p", "", "If a punishment message gave you an appeal code, bind it to this website account before submitting an appeal.")
+  );
+
+  const accounts = Array.isArray(session.linkedMinecraftAccounts) ? session.linkedMinecraftAccounts : [];
+  if (!accounts.length) {
+    section.append(element("p", "account-link-status", "Link the punished Minecraft account first, then enter its punishment code here."));
+    return section;
+  }
+
+  const form = element("form", "account-punishment-claim");
+  const accountLabel = element("label");
+  accountLabel.append(element("span", "", "Minecraft account"));
+  const accountSelect = document.createElement("select");
+  for (const account of accounts) accountSelect.append(new Option(account.name, account.uuid));
+  accountLabel.append(accountSelect);
+
+  const codeLabel = element("label");
+  codeLabel.append(element("span", "", "Punishment code"));
+  const code = document.createElement("input");
+  code.type = "text";
+  code.name = "punishmentCode";
+  code.required = true;
+  code.autocomplete = "off";
+  code.autocapitalize = "characters";
+  code.spellcheck = false;
+  code.maxLength = 32;
+  code.placeholder = "Enter the code from your punishment message";
+  codeLabel.append(code);
+
+  const button = element("button", "btn", "Bind punishment");
+  button.type = "submit";
+  const status = element("p", "account-link-status");
+  status.setAttribute("role", "status");
+
+  form.append(accountLabel, codeLabel, button, status);
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const selected = accounts.find((account) => account.uuid === accountSelect.value);
+    if (!selected) {
+      status.textContent = "Choose a linked Minecraft account.";
+      return;
+    }
+    button.disabled = true;
+    accountSelect.disabled = true;
+    code.disabled = true;
+    status.textContent = "Verifying punishment code…";
+    try {
+      await request("/api/appeals/claim", {
+        method: "POST",
+        body: JSON.stringify({ punishmentCode: code.value, username: selected.name })
+      });
+      code.value = "";
+      status.replaceChildren(
+        document.createTextNode("Punishment verified and bound. "),
+        Object.assign(element("a", "", "Open appeals"), { href: "/appeal.html#new" })
+      );
+    } catch (error) {
+      status.textContent = punishmentClaimError(error);
+    } finally {
+      button.disabled = false;
+      accountSelect.disabled = false;
+      code.disabled = false;
+    }
+  });
+  section.append(form);
+  return section;
+}
+
 function signedOut() {
   root.replaceChildren();
   const section = element("div", "account-signed-out");
@@ -177,7 +259,7 @@ function signedIn(session) {
   });
   linker.append(copy, button, command, status);
 
-  root.append(header, links, linker);
+  root.append(header, links, linker, punishmentClaimSection(session));
 }
 
 async function render() {
