@@ -32,6 +32,14 @@ test("staff appeal workspace is private and uses its maintained script", async (
   assert.doesNotMatch(script, /}\[decision\]/);
 });
 
+test("review decisions carry the loaded version and stop on stale conflicts", async () => {
+  const script = await readFile(new URL("../public/assets/reviewer-appeals.js", import.meta.url), "utf8");
+  assert.match(script, /expectedVersion:\s*appeal\.version/);
+  assert.match(script, /response\.status === 409/);
+  assert.match(script, /changed while you were reviewing it/i);
+  assert.match(script, /refresh before deciding/i);
+});
+
 test("appeal evidence routes are derived from attachment IDs", async () => {
   const [player, reviewer] = await Promise.all([
     readFile(new URL("../public/assets/appeals.js", import.meta.url), "utf8"),
