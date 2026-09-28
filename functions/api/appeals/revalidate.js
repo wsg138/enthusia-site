@@ -26,6 +26,14 @@ async function ownedBinding(context, session, punishmentId) {
   return findPunishmentBinding(context.env?.COMPETITIONS_DB, session.discord.id, punishmentId);
 }
 
+function revalidationResponse(binding) {
+  const headers = { "cache-control": "private, no-store" };
+  if (binding.eligibilityState === "CODE_ROTATED") {
+    return json({ error: "punishment_code_rotated", binding }, 409, headers);
+  }
+  return json(binding, 200, headers);
+}
+
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   let session;
@@ -58,8 +66,7 @@ export async function onRequestPost(context) {
       session.discord.id,
       binding
     );
-    const status = saved.eligibilityState === "CODE_ROTATED" ? 409 : 200;
-    return json(saved, status, { "cache-control": "private, no-store" });
+    return revalidationResponse(saved);
   } catch {
     return serviceUnavailable();
   }
