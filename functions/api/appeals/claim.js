@@ -1,5 +1,5 @@
 import { saveClaimedPunishmentBinding, sanitizePunishmentBinding } from "../../lib/appeal-bindings.js";
-import { authenticateAppealRequest } from "../../lib/appeal-session.js";
+import { authenticateLinkedAppealRequest } from "../../lib/appeal-session.js";
 import { claimPunishment, sanitizeClaim } from "../../lib/appeal-claim.js";
 import { competitionRateLimit, rateLimitHeaders } from "../../lib/competitions/rate-limit.js";
 import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../lib/responses.js";
@@ -22,7 +22,9 @@ async function claimRateLimit(context, session) {
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   let session;
-  try { session = await authenticateAppealRequest(context.request, context.env); } catch { return unauthorized(); }
+  try { session = await authenticateLinkedAppealRequest(context.request, context.env); }
+  catch { return serviceUnavailable(); }
+  if (!session) return unauthorized();
 
   let limited;
   try { limited = await claimRateLimit(context, session); } catch { return serviceUnavailable(); }
@@ -44,9 +46,7 @@ export async function onRequestPost(context) {
     const binding = sanitizePunishmentBinding(await upstream.json());
     if (!binding) return json({ error: "invalid_punishment_binding" }, 502);
 
-    if (session.discord?.id) {
-      await saveClaimedPunishmentBinding(context.env?.COMPETITIONS_DB, session.discord.id, binding);
-    }
+    await saveClaimedPunishmentBinding(context.env?.COMPETITIONS_DB, session.discord.id, binding);
     return json(binding, 200, { "cache-control": "private, no-store" });
   } catch {
     return serviceUnavailable();
