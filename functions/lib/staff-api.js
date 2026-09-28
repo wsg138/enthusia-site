@@ -38,7 +38,7 @@ async function hmacSha256(secret, value) {
 }
 
 export function staffApiOrigin(env) {
-  const target = String(env?.STAFF_API_TARGET ?? "production").trim().toLowerCase();
+  const target = String(env?.STAFF_API_TARGET ?? "").trim().toLowerCase();
   if (target === "production") return STAFF_API_ORIGIN;
   if (target === "preview") return STAFF_API_PREVIEW_ORIGIN;
   throw new Error("Staff API target is invalid");
