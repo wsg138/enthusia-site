@@ -16,7 +16,7 @@ export async function onRequestGet(context) {
   if (!account) return json({ error: "linked_minecraft_account_required" }, 400);
 
   try {
-    const eligible = await requestEligiblePunishments(context.env, account.uuid);
+    const eligible = await requestEligiblePunishments(context.env, session.accountId);
     if (eligible.upstream) return staffApiResponse(eligible.upstream, "private, no-store");
     return json({
       minecraft: { uuid: account.uuid, name: account.name },
