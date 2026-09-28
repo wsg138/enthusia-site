@@ -15,11 +15,12 @@ import { requireSameOrigin } from "../lib/security.js";
 import { signedStaffRequest, staffApiResponse } from "../lib/staff-api.js";
 import { isCanonicalUuid } from "../lib/validation.js";
 
-function buildAppealPayload(submission, account, payloadHash) {
+function buildAppealPayload(submission, account, websiteAccountId, payloadHash) {
+  if (!isCanonicalUuid(websiteAccountId)) throw new TypeError("Website account ID is invalid");
   return {
     punishmentId: submission.punishmentId,
     reason: submission.staffReason,
-    accountId: account.uuid,
+    accountId: websiteAccountId,
     username: account.name,
     idempotencyKey: staffAppealIdempotencyKey(payloadHash)
   };
@@ -65,7 +66,7 @@ export async function onRequestPost(context) {
   if (!account) return json({ error: "linked_minecraft_account_required" }, 400);
 
   try {
-    const eligible = await requestEligiblePunishments(context.env, account.uuid);
+    const eligible = await requestEligiblePunishments(context.env, authenticated.session.accountId);
     if (eligible.upstream) return staffApiResponse(eligible.upstream, "private, no-store");
     if (!eligible.punishments.some((candidate) => candidate.id === submission.punishmentId)) {
       return json({ error: "punishment_not_appealable" }, 409);
@@ -81,7 +82,7 @@ export async function onRequestPost(context) {
     if (prepared.status === "CONFLICT") return json({ error: "appeal_draft_conflict" }, 409);
     if (prepared.status === "ATTACHMENT_CONFLICT") return json({ error: "appeal_attachment_conflict" }, 409);
 
-    const payload = buildAppealPayload(submission, account, payloadHash);
+    const payload = buildAppealPayload(submission, account, authenticated.session.accountId, payloadHash);
     const submitted = await staffSubmission(context, payload);
     if (submitted.response) return submitted.response;
     await finalizeAppealSubmission(context.env.COMPETITIONS_DB, {
