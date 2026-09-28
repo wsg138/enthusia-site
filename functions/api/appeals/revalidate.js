@@ -1,10 +1,6 @@
-import {
-  findPunishmentBinding,
-  sanitizePunishmentBinding,
-  saveRevalidatedPunishmentBinding
-} from "../../lib/appeal-bindings.js";
+import { sanitizeRevalidationRequest } from "../../lib/appeal-revalidation.js";
+import { revalidateOwnedPunishmentBinding } from "../../lib/appeal-revalidation-service.js";
 import { authenticateLinkedAppealRequest } from "../../lib/appeal-session.js";
-import { revalidatePunishment, sanitizeRevalidationRequest } from "../../lib/appeal-revalidation.js";
 import { competitionRateLimit, rateLimitHeaders } from "../../lib/competitions/rate-limit.js";
 import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../lib/responses.js";
 import { requireSameOrigin } from "../../lib/security.js";
@@ -22,16 +18,19 @@ export async function revalidationRateLimit(context, session) {
     : json({ error: "rate_limited", retryAfterSeconds: result.retryAfterSeconds }, 429, rateLimitHeaders(result));
 }
 
-async function ownedBinding(context, session, punishmentId) {
-  return findPunishmentBinding(context.env?.COMPETITIONS_DB, session.discord.id, punishmentId);
-}
-
 function revalidationResponse(binding) {
   const headers = { "cache-control": "private, no-store" };
   if (binding.eligibilityState === "CODE_ROTATED") {
     return json({ error: "punishment_code_rotated", binding }, 409, headers);
   }
   return json(binding, 200, headers);
+}
+
+function resultResponse(result) {
+  if (result.kind === "NOT_FOUND") return json({ error: "punishment_binding_not_found" }, 404);
+  if (result.kind === "UPSTREAM_REJECTED") return staffApiResponse(result.upstream, "private, no-store");
+  if (result.kind === "INVALID_UPSTREAM") return json({ error: "invalid_punishment_binding" }, 502);
+  return revalidationResponse(result.binding);
 }
 
 export async function onRequestPost(context) {
@@ -51,22 +50,14 @@ export async function onRequestPost(context) {
   if (!request) return json({ error: "invalid_revalidation_request" }, 400);
 
   try {
-    const current = await ownedBinding(context, session, request.punishmentId);
-    if (!current) return json({ error: "punishment_binding_not_found" }, 404);
-
-    const upstream = await revalidatePunishment(context.env, session.accountId, current);
-    if (!upstream.ok) return staffApiResponse(upstream, "private, no-store");
-    const binding = sanitizePunishmentBinding(await upstream.json());
-    if (!binding || binding.punishmentId !== current.punishmentId) {
-      return json({ error: "invalid_punishment_binding" }, 502);
-    }
-
-    const saved = await saveRevalidatedPunishmentBinding(
-      context.env?.COMPETITIONS_DB,
-      session.discord.id,
-      binding
-    );
-    return revalidationResponse(saved);
+    const result = await revalidateOwnedPunishmentBinding({
+      db: context.env?.COMPETITIONS_DB,
+      env: context.env,
+      ownerDiscordId: session.discord.id,
+      accountId: session.accountId,
+      punishmentId: request.punishmentId
+    });
+    return resultResponse(result);
   } catch {
     return serviceUnavailable();
   }
