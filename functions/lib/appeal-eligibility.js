@@ -18,9 +18,10 @@ function candidate(value) {
   });
 }
 
-export async function requestEligiblePunishments(env, minecraftUuid) {
+export async function requestEligiblePunishments(env, accountId) {
+  if (!isCanonicalUuid(accountId)) throw new TypeError("Website account ID is invalid");
   const upstream = await signedStaffRequest(env, "/v1/website/appeals/eligible", {
-    accountId: minecraftUuid
+    accountId
   });
   if (!upstream.ok) return { upstream, punishments: null };
   let payload;
