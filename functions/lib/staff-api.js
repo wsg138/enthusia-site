@@ -3,6 +3,7 @@ const STAFF_API_ORIGIN = "https://staff-api.enthusia.info";
 const STAFF_API_TIMEOUT_MS = 7000;
 const STATIC_ROUTES = new Set([
   "/v1/website/punishment-codes/claim",
+  "/v1/website/punishment-codes/revalidate",
   "/v1/website/appeals/eligible",
   "/v1/website/appeals/submit",
   "/v1/website/appeals/reviewer/list"
@@ -12,6 +13,7 @@ const PUBLIC_ROUTES = new Set([
   "/v1/public/punishments",
   "/v1/public/search"
 ]);
+const PUBLIC_CASE_ROUTE = /^\/v1\/public\/cases\/[0-9A-HJKMNP-TV-Z]{16}$/;
 
 function base64Url(bytes) {
   let binary = "";
@@ -59,7 +61,9 @@ async function boundedFetch(url, options) {
 }
 
 export function publicStaffRoute(path) {
-  if (!PUBLIC_ROUTES.has(path)) throw new Error("Invalid public Staff API route");
+  if (!PUBLIC_ROUTES.has(path) && !PUBLIC_CASE_ROUTE.test(path)) {
+    throw new Error("Invalid public Staff API route");
+  }
   return path;
 }
 
