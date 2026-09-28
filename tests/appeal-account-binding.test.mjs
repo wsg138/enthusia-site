@@ -9,6 +9,7 @@ const MINECRAFT_UUID = "123e4567-e89b-42d3-a456-426614174000";
 const PUNISHMENT_ID = "123e4567-e89b-42d3-a456-426614174099";
 const DISCORD_SUBJECT = `discord:${"3".repeat(18)}`;
 const ENV = {
+  STAFF_API_TARGET: "production",
   STAFF_API_BEARER_TOKEN: "b".repeat(32),
   STAFF_API_HMAC_SECRET: "s".repeat(32)
 };
