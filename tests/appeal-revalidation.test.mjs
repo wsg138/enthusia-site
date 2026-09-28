@@ -9,8 +9,9 @@ import { revalidateOwnedPunishmentBinding } from "../functions/lib/appeal-revali
 const ACCOUNT_ID = "123e4567-e89b-42d3-a456-426614174001";
 const PUNISHMENT_ID = "123e4567-e89b-42d3-a456-426614174099";
 const ENV = {
-  STAFF_API_BEARER_TOKEN: "b".repeat(32),
-  STAFF_API_HMAC_SECRET: "s".repeat(32)
+  STAFF_API_TARGET: "production",
+  STAFF_API_BEARER_TOKEN: "test".repeat(8),
+  STAFF_API_HMAC_SECRET: "safe".repeat(8)
 };
 const BINDING = {
   punishmentId: PUNISHMENT_ID,
