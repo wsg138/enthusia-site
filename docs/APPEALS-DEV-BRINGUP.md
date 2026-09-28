@@ -19,6 +19,7 @@ Apply every migration in `migrations/` through `0032_appeal_punishment_bindings.
 Configure these values in the preview Pages environment:
 
 - `COMPETITIONS_SITE_ORIGIN=https://<preview-host>`
+- `STAFF_API_ORIGIN=https://<staff-preview-host>.enthusia.info`
 - `DISCORD_CLIENT_ID=<Discord application ID>`
 - `DISCORD_GUILD_ID=<Enthusia Discord server ID>`
 - `DISCORD_OAUTH_REDIRECT_URI=https://<preview-host>/api/competitions/auth/discord/callback`
@@ -34,6 +35,8 @@ Configure these values in the preview Pages environment:
 
 Discord OAuth must allow the callback above and the application must support the scopes currently requested by the site: `identify guilds.members.read`.
 
+`STAFF_API_ORIGIN` is optional in production and defaults to `https://staff-api.enthusia.info`. When set for preview, it must be a bare HTTPS origin on an `enthusia.info` subdomain; credentials, custom ports, paths, query strings and off-domain hosts are rejected before any Staff credential is sent.
+
 ## Secrets
 
 Set these only through Cloudflare encrypted secret storage:
@@ -46,7 +49,7 @@ Set these only through Cloudflare encrypted secret storage:
 
 `COMPETITIONS_DISCORD_BOT_TOKEN` remains an accepted temporary fallback for the optional website notification bot token. Do not use the privileged EnthusiaStaff Discord bot token for website notifications.
 
-The Staff bearer/HMAC values must match the credentials accepted by the deployed EnthusiaStaff website API. The website code uses the fixed HTTPS origin `https://staff-api.enthusia.info`; preview DNS/routing must therefore reach the intended non-production/test-capable Staff API without exposing it publicly.
+The Staff bearer/HMAC values must match the credentials accepted by the Staff API selected by `STAFF_API_ORIGIN`. Preview must use preview/test credentials accepted only by the isolated Staff endpoint; do not reuse production Staff API credentials for preview acceptance.
 
 ## Required acceptance checks
 
