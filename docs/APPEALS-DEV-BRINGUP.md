@@ -36,7 +36,7 @@ Configure these values in the preview Pages environment:
 
 Discord OAuth must allow the callback above and the application must support the scopes currently requested by the site: `identify guilds.members.read`.
 
-`STAFF_API_TARGET` accepts only `production` or `preview`. Production is the default and resolves to `https://staff-api.enthusia.info`; preview resolves to the hardcoded `https://staff-api-dev.enthusia.info`. The browser cannot supply or alter this target.
+`STAFF_API_TARGET` is required and accepts only `production` or `preview`. A missing, empty, or unrecognized value fails closed before any Staff request is sent. `production` resolves to the hardcoded `https://staff-api.enthusia.info`; `preview` resolves to the hardcoded `https://staff-api-dev.enthusia.info`. The browser cannot supply or alter this target.
 
 ## Secrets
 
@@ -99,5 +99,5 @@ Production remains blocked until all of the following are true:
 - hosted Codacy reports no new valid findings;
 - isolated preview acceptance passes with real D1/R2/Turnstile and Staff API connectivity;
 - the Staff appeal claim/edit/reopen contract gap is either implemented or explicitly excluded from the launch scope by the owner;
-- production bindings/secrets are configured outside the repository;
+- production bindings/secrets are configured outside the repository, including explicit `STAFF_API_TARGET=production`;
 - explicit production deployment approval is given.
