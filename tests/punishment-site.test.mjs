@@ -39,8 +39,13 @@ test("public punishment search is isolated from list parameters", () => {
   assert.equal(punishmentQuery(new Request(`https://example.test/api/punishments?q=${"x".repeat(81)}`)), null);
 });
 
-test("Staff API requests select only fixed production or preview targets", () => {
-  assert.equal(staffApiOrigin({}), "https://staff-api.enthusia.info");
+test("Staff API requests require an explicit fixed production or preview target", () => {
+  assert.throws(() => staffApiOrigin({}), /target is invalid/);
+  assert.throws(() => staffApiOrigin({ STAFF_API_TARGET: "" }), /target is invalid/);
+  assert.equal(
+    staffApiOrigin({ STAFF_API_TARGET: "production" }),
+    "https://staff-api.enthusia.info"
+  );
   assert.equal(
     staffApiOrigin({ STAFF_API_TARGET: "preview" }),
     "https://staff-api-dev.enthusia.info"
