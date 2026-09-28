@@ -10,7 +10,8 @@ Use the same isolated preview Pages project described in `COMPETITIONS-DEV-BRING
 - private R2 binding `COMPETITIONS_MEDIA`
 - an Access-protected preview hostname
 - a preview Turnstile widget
-- a non-production/test-capable EnthusiaStaff website API credential pair
+- a non-production EnthusiaStaff API at `https://staff-api-dev.enthusia.info`
+- a preview/test Staff API credential pair accepted only by that endpoint
 
 Apply every migration in `migrations/` through `0032_appeal_punishment_bindings.sql`. Do not apply only the appeal migrations; they depend on the earlier identity/rate-limit schema.
 
@@ -19,7 +20,7 @@ Apply every migration in `migrations/` through `0032_appeal_punishment_bindings.
 Configure these values in the preview Pages environment:
 
 - `COMPETITIONS_SITE_ORIGIN=https://<preview-host>`
-- `STAFF_API_ORIGIN=https://<staff-preview-host>.enthusia.info`
+- `STAFF_API_TARGET=preview`
 - `DISCORD_CLIENT_ID=<Discord application ID>`
 - `DISCORD_GUILD_ID=<Enthusia Discord server ID>`
 - `DISCORD_OAUTH_REDIRECT_URI=https://<preview-host>/api/competitions/auth/discord/callback`
@@ -35,7 +36,7 @@ Configure these values in the preview Pages environment:
 
 Discord OAuth must allow the callback above and the application must support the scopes currently requested by the site: `identify guilds.members.read`.
 
-`STAFF_API_ORIGIN` is optional in production and defaults to `https://staff-api.enthusia.info`. When set for preview, it must be a bare HTTPS origin on an `enthusia.info` subdomain; credentials, custom ports, paths, query strings and off-domain hosts are rejected before any Staff credential is sent.
+`STAFF_API_TARGET` accepts only `production` or `preview`. Production is the default and resolves to `https://staff-api.enthusia.info`; preview resolves to the hardcoded `https://staff-api-dev.enthusia.info`. The browser cannot supply or alter this target.
 
 ## Secrets
 
@@ -49,7 +50,7 @@ Set these only through Cloudflare encrypted secret storage:
 
 `COMPETITIONS_DISCORD_BOT_TOKEN` remains an accepted temporary fallback for the optional website notification bot token. Do not use the privileged EnthusiaStaff Discord bot token for website notifications.
 
-The Staff bearer/HMAC values must match the credentials accepted by the Staff API selected by `STAFF_API_ORIGIN`. Preview must use preview/test credentials accepted only by the isolated Staff endpoint; do not reuse production Staff API credentials for preview acceptance.
+The Staff bearer/HMAC values must match the credentials accepted by the selected Staff API target. Preview must use preview/test credentials accepted only by `staff-api-dev.enthusia.info`; do not reuse production Staff API credentials for preview acceptance.
 
 ## Required acceptance checks
 
