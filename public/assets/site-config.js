@@ -205,8 +205,13 @@ window.ENTHUSIA = {
       { name: "Fain", username: "FainNeito", role: "Founder" },
       { name: "P2wn", username: "P2wn", role: "Founder" },
       { name: "Sharpmatt", username: "Sharpmatt", role: "Founder" },
+      {
+        name: "TokenCryptid",
+        username: "TokenCryptid",
+        avatarUsername: "1aa50ca2-a806-4d5c-ae8e-a553fd1a8b7d",
+        role: "Founder"
+      },
       { name: "Borlyn", username: "Borlyn", role: "Admin" },
-      { name: "SarahNova", username: "SarahNovaSpring", role: "Admin" },
       { name: "Toxik", username: "ToxikFlame11", role: "Admin" },
       { name: "Badger", username: "BadgersMC", role: "Developer" },
       { name: "Demimeow", username: "Demimeow", role: "Developer" },
