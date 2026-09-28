@@ -7,7 +7,7 @@ export async function onRequestGet(context) {
   if (!caseId) return json({ error: "invalid_case_id" }, 400);
 
   try {
-    const upstream = await publicStaffRequest(`/v1/public/cases/${caseId}`);
+    const upstream = await publicStaffRequest(context.env, `/v1/public/cases/${caseId}`);
     if (!upstream.ok) return staffApiResponse(upstream, "no-store");
     const punishment = sanitizePublicPunishment(await upstream.json());
     if (!punishment) return json({ error: "invalid_punishment_projection" }, 502);
