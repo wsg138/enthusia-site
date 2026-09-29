@@ -1,5 +1,6 @@
 import { sanitizeAppealComment } from "../../../lib/appeal-comments.js";
-import { findOwnedAppeal, recordAppealComment } from "../../../lib/appeal-repository.js";
+import { findOwnedAppealLifecycle } from "../../../lib/appeal-lifecycle-repository.js";
+import { recordAppealComment } from "../../../lib/appeal-repository.js";
 import { authenticateLinkedAppealRequest } from "../../../lib/appeal-session.js";
 import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../lib/responses.js";
 import { requireSameOrigin } from "../../../lib/security.js";
@@ -9,6 +10,11 @@ const COMMENTABLE_STATUSES = new Set(["OPEN", "INFORMATION_REQUESTED"]);
 
 function authorName(session) {
   return String(session.discord?.globalName || session.discord?.username || "Player").slice(0, 64);
+}
+
+function commentAllowed(appeal) {
+  if (!COMMENTABLE_STATUSES.has(appeal.status)) return false;
+  return appeal.status === "INFORMATION_REQUESTED" || !appeal.claimed;
 }
 
 export async function onRequestPost(context) {
@@ -26,10 +32,14 @@ export async function onRequestPost(context) {
   if (!input) return json({ error: "invalid_comment" }, 400);
 
   try {
-    const appeal = await findOwnedAppeal(context.env.COMPETITIONS_DB, session.discord.id, appealId);
+    const appeal = await findOwnedAppealLifecycle(
+      context.env.COMPETITIONS_DB,
+      session.discord.id,
+      appealId
+    );
     if (!appeal) return json({ error: "appeal_not_found" }, 404);
-    if (!COMMENTABLE_STATUSES.has(appeal.status)) {
-      return json({ error: "appeal_closed" }, 409);
+    if (!commentAllowed(appeal)) {
+      return json({ error: appeal.claimed ? "appeal_claimed" : "appeal_closed" }, 409);
     }
     const recorded = await recordAppealComment(context.env.COMPETITIONS_DB, {
       id: crypto.randomUUID(),
@@ -50,4 +60,4 @@ export async function onRequestPost(context) {
 
 export function onRequest() { return methodNotAllowed(["POST"]); }
 
-export { COMMENTABLE_STATUSES };
+export { COMMENTABLE_STATUSES, commentAllowed };

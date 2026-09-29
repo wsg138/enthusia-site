@@ -4,6 +4,7 @@ import {
   staffAppealIdempotencyKey
 } from "../lib/appeal-content.js";
 import { requestEligiblePunishments } from "../lib/appeal-eligibility.js";
+import { appealLifecycleByIds } from "../lib/appeal-lifecycle-repository.js";
 import {
   finalizeAppealSubmission,
   listOwnedAppeals,
@@ -102,6 +103,15 @@ export async function onRequestPost(context) {
   }
 }
 
+async function ownedAppealsWithLifecycle(db, ownerDiscordId) {
+  const appeals = await listOwnedAppeals(db, ownerDiscordId);
+  const lifecycle = await appealLifecycleByIds(db, appeals.map((appeal) => appeal.id));
+  return appeals.map((appeal) => ({
+    ...appeal,
+    claimed: lifecycle.get(appeal.id)?.claimed === true
+  }));
+}
+
 export async function onRequestGet(context) {
   if (!context.env?.COMPETITIONS_DB) return serviceUnavailable();
   let session;
@@ -110,7 +120,7 @@ export async function onRequestGet(context) {
   if (!session) return unauthorized();
   try {
     return json(
-      { appeals: await listOwnedAppeals(context.env.COMPETITIONS_DB, session.discord.id) },
+      { appeals: await ownedAppealsWithLifecycle(context.env.COMPETITIONS_DB, session.discord.id) },
       200,
       { "cache-control": "private, no-store" }
     );
@@ -121,4 +131,4 @@ export async function onRequestGet(context) {
 
 export function onRequest() { return methodNotAllowed(["GET", "POST"]); }
 
-export { buildAppealPayload, linkedSession, staffSubmission };
+export { buildAppealPayload, linkedSession, ownedAppealsWithLifecycle, staffSubmission };
