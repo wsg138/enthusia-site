@@ -1,0 +1,190 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import { revalidationRateLimit } from "../functions/api/appeals/revalidate.js";
+import { saveRevalidatedPunishmentBinding } from "../functions/lib/appeal-bindings.js";
+import { revalidatePunishment, sanitizeRevalidationRequest } from "../functions/lib/appeal-revalidation.js";
+import { revalidateOwnedPunishmentBinding } from "../functions/lib/appeal-revalidation-service.js";
+
+const ACCOUNT_ID = "123e4567-e89b-42d3-a456-426614174001";
+const PUNISHMENT_ID = "123e4567-e89b-42d3-a456-426614174099";
+const OWNER_IDENTITY = `discord:${"3".repeat(18)}`;
+const ENV = {
+  STAFF_API_TARGET: "production",
+  STAFF_API_BEARER_TOKEN: "test".repeat(8),
+  STAFF_API_HMAC_SECRET: "safe".repeat(8)
+};
+const BINDING = {
+  punishmentId: PUNISHMENT_ID,
+  caseId: "01ARZ3NDEKTSV4RR",
+  codeGeneration: 4,
+  punishmentType: "BAN",
+  boundUsername: "Lincoln",
+  eligible: true,
+  eligibilityState: "ELIGIBLE"
+};
+
+function rateLimitDatabase() {
+  let count = 0;
+  return {
+    prepare(sql) {
+      return {
+        bind() {
+          return {
+            async run() { return { meta: { changes: 0 } }; },
+            async first() {
+              assert.match(sql, /competition_rate_limits/);
+              count += 1;
+              return { requestCount: count };
+            }
+          };
+        }
+      };
+    }
+  };
+}
+
+function bindingDatabase(initialGeneration = 4) {
+  const row = {
+    punishmentId: PUNISHMENT_ID,
+    caseId: BINDING.caseId,
+    codeGeneration: initialGeneration,
+    punishmentType: "BAN",
+    boundUsername: "Lincoln",
+    eligible: 1,
+    eligibilityState: "ELIGIBLE",
+    createdAt: "2026-09-28T00:00:00.000Z",
+    updatedAt: "2026-09-28T00:00:00.000Z",
+    lastValidatedAt: "2026-09-28T00:00:00.000Z"
+  };
+  return {
+    row,
+    prepare(sql) {
+      return {
+        bind(...values) {
+          return {
+            async run() {
+              assert.match(sql, /UPDATE appeal_punishment_bindings/);
+              assert.equal(values[9], OWNER_IDENTITY);
+              if (!values[1]) row.codeGeneration = values[2];
+              row.caseId = values[0];
+              row.punishmentType = values[3];
+              row.boundUsername = values[4];
+              row.eligible = values[5];
+              row.eligibilityState = values[6];
+              row.updatedAt = values[7];
+              row.lastValidatedAt = values[8];
+              return { meta: { changes: 1 } };
+            },
+            async first() {
+              assert.match(sql, /SELECT punishment_id AS punishmentId/);
+              assert.equal(values[0], OWNER_IDENTITY);
+              return row;
+            }
+          };
+        }
+      };
+    }
+  };
+}
+
+function serviceInput() {
+  return {
+    db: {},
+    env: ENV,
+    ownerIdentity: OWNER_IDENTITY,
+    accountId: ACCOUNT_ID,
+    punishmentId: PUNISHMENT_ID
+  };
+}
+
+test("revalidation only accepts an owned punishment identifier from the browser", () => {
+  assert.deepEqual(sanitizeRevalidationRequest({ punishmentId: PUNISHMENT_ID }), { punishmentId: PUNISHMENT_ID });
+  assert.equal(sanitizeRevalidationRequest({ punishmentId: PUNISHMENT_ID, accountId: ACCOUNT_ID }), null);
+  assert.equal(sanitizeRevalidationRequest({ punishmentId: PUNISHMENT_ID, codeGeneration: 99 }), null);
+  assert.equal(sanitizeRevalidationRequest({ punishmentId: "invalid" }), null);
+});
+
+test("Staff revalidation uses server-owned account and generation values", async () => {
+  const originalFetch = globalThis.fetch;
+  let captured;
+  globalThis.fetch = async (url, options) => {
+    captured = { url: String(url), options };
+    return new Response(JSON.stringify(BINDING), { status: 200, headers: { "content-type": "application/json" } });
+  };
+  try {
+    await revalidatePunishment(ENV, ACCOUNT_ID, BINDING);
+    const body = JSON.parse(new TextDecoder().decode(captured.options.body));
+    assert.equal(captured.url, "https://staff-api.enthusia.info/v1/website/punishment-codes/revalidate");
+    assert.deepEqual(body, { accountId: ACCOUNT_ID, punishmentId: PUNISHMENT_ID, codeGeneration: 4 });
+    assert.equal("punishmentCode" in body, false);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("rotated-code revalidation preserves the last claimed generation", async () => {
+  const db = bindingDatabase(4);
+  const saved = await saveRevalidatedPunishmentBinding(db, OWNER_IDENTITY, {
+    ...BINDING,
+    codeGeneration: 5,
+    eligible: false,
+    eligibilityState: "CODE_ROTATED"
+  }, new Date("2026-09-28T01:00:00.000Z"));
+  assert.equal(saved.codeGeneration, 4);
+  assert.equal(saved.eligibilityState, "CODE_ROTATED");
+  assert.equal(saved.eligible, false);
+});
+
+test("Staff rejection never mutates the stored binding", async () => {
+  let saves = 0;
+  const result = await revalidateOwnedPunishmentBinding(serviceInput(), {
+    async findBinding() { return BINDING; },
+    async requestStaff() { return new Response("{}", { status: 503 }); },
+    async saveBinding() { saves += 1; return BINDING; }
+  });
+  assert.equal(result.kind, "UPSTREAM_REJECTED");
+  assert.equal(saves, 0);
+});
+
+test("malformed Staff success never mutates the stored binding", async () => {
+  let saves = 0;
+  const result = await revalidateOwnedPunishmentBinding(serviceInput(), {
+    async findBinding() { return BINDING; },
+    async requestStaff() { return new Response("{bad-json", { status: 200 }); },
+    async saveBinding() { saves += 1; return BINDING; }
+  });
+  assert.equal(result.kind, "INVALID_UPSTREAM");
+  assert.equal(saves, 0);
+});
+
+test("valid Staff success is persisted after validation", async () => {
+  let saves = 0;
+  const result = await revalidateOwnedPunishmentBinding(serviceInput(), {
+    async findBinding(_db, owner, punishmentId) {
+      assert.equal(owner, OWNER_IDENTITY);
+      assert.equal(punishmentId, PUNISHMENT_ID);
+      return BINDING;
+    },
+    async requestStaff() { return new Response(JSON.stringify(BINDING), { status: 200 }); },
+    async saveBinding(_db, owner, binding) {
+      saves += 1;
+      assert.equal(owner, OWNER_IDENTITY);
+      assert.deepEqual(binding, BINDING);
+      return binding;
+    }
+  });
+  assert.equal(result.kind, "OK");
+  assert.equal(saves, 1);
+});
+
+test("revalidation is account-keyed and rate limited", async () => {
+  const context = { env: { COMPETITIONS_DB: rateLimitDatabase() } };
+  const session = { subject: OWNER_IDENTITY };
+  for (let attempt = 1; attempt <= 12; attempt += 1) {
+    assert.equal(await revalidationRateLimit(context, session), null);
+  }
+  const blocked = await revalidationRateLimit(context, session);
+  assert.equal(blocked.status, 429);
+  assert.equal(blocked.headers.get("x-ratelimit-limit"), "12");
+});

@@ -1,0 +1,353 @@
+.admin-workspace-body,
+.staff-submission-list,
+.staff-submission-detail,
+.judge-admin-list,
+.reward-editor-list,
+.reward-delivery-section,
+.reward-runtime-config,
+.reward-ledger-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.admin-workspace-toolbar,
+.staff-submission-card-top,
+.staff-detail-heading,
+.staff-review-actions,
+.judge-admin-row,
+.reward-editor-heading,
+.reward-policy-row,
+.reward-editor-save,
+.reward-ledger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.admin-workspace-toolbar {
+  flex-wrap: wrap;
+}
+
+.admin-workspace-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.admin-workspace-label {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.admin-workspace-field input,
+.admin-workspace-field select,
+.admin-workspace-field textarea,
+.reward-editor-card input,
+.reward-editor-card select,
+.reward-editor-card textarea,
+.staff-edit-form input,
+.staff-edit-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 10px;
+  background: rgba(4,8,15,.82);
+  color: #f4f7fb;
+  padding: .68rem .75rem;
+  font: inherit;
+}
+
+.staff-review-layout {
+  display: grid;
+  grid-template-columns: minmax(250px, .78fr) minmax(0, 1.5fr);
+  gap: 1rem;
+}
+
+.staff-submission-card {
+  display: grid;
+  gap: .38rem;
+  width: 100%;
+  text-align: left;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 13px;
+  padding: .85rem;
+  background: rgba(255,255,255,.035);
+  color: inherit;
+  cursor: pointer;
+}
+
+.staff-submission-card:hover,
+.staff-submission-card:focus-visible {
+  border-color: rgba(255,255,255,.26);
+  background: rgba(255,255,255,.065);
+}
+
+.staff-submission-card[data-status="PENDING_REVIEW"] {
+  border-left: 3px solid #ffb347;
+}
+
+.staff-submission-card[data-status="NEEDS_CHANGES"] {
+  border-left: 3px solid #ffd166;
+}
+
+.staff-submission-card[data-status="APPROVED"] {
+  border-left: 3px solid #65d890;
+}
+
+.staff-submission-card[data-status="DISQUALIFIED"],
+.staff-submission-card[data-status="REJECTED"],
+.staff-submission-card[data-status="REMOVED"] {
+  opacity: .76;
+}
+
+.staff-submission-reason {
+  color: #ffd6a3;
+  font-size: .9rem;
+}
+
+.staff-submission-detail {
+  min-width: 0;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 15px;
+  padding: 1rem;
+  background: rgba(255,255,255,.025);
+}
+
+.staff-detail-heading h3 {
+  margin: .45rem 0 .15rem;
+}
+
+.staff-entry-description p {
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.staff-participant-chips,
+.submission-members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.staff-image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px,1fr));
+  gap: .75rem;
+}
+
+.staff-image-card {
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  background: rgba(0,0,0,.18);
+}
+
+.staff-image-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+}
+
+.staff-image-meta {
+  display: grid;
+  gap: .5rem;
+  padding: .65rem;
+}
+
+.staff-moderation-checks {
+  display: grid;
+  gap: .5rem;
+}
+
+.staff-moderation-check {
+  display: grid;
+  gap: .2rem;
+  padding: .65rem .75rem;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+}
+
+.staff-review-actions {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: .4rem;
+}
+
+.admin-danger-button {
+  border: 1px solid rgba(255,82,82,.36);
+  border-radius: 10px;
+  padding: .62rem .85rem;
+  background: rgba(255,65,65,.11);
+  color: #ffdede;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-danger-button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.staff-edit-details {
+  border-top: 1px solid rgba(255,255,255,.09);
+  padding-top: .75rem;
+}
+
+.staff-edit-details summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.staff-edit-form {
+  display: grid;
+  gap: .7rem;
+  margin-top: .75rem;
+}
+
+.judge-admin-assign {
+  display: grid;
+  grid-template-columns: minmax(180px,1fr) auto minmax(120px,.8fr);
+  gap: .75rem;
+  align-items: end;
+}
+
+.judge-admin-row,
+.reward-ledger-row {
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 12px;
+  padding: .75rem .85rem;
+  background: rgba(255,255,255,.025);
+}
+
+.judge-admin-row > div,
+.reward-ledger-row > div {
+  display: grid;
+  gap: .25rem;
+  min-width: 0;
+}
+
+.standings-admin-wrap {
+  overflow-x: auto;
+}
+
+.standings-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.standings-admin-table th,
+.standings-admin-table td {
+  padding: .68rem .72rem;
+  border-bottom: 1px solid rgba(255,255,255,.09);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tie-resolution-box,
+.result-action-box,
+.result-publish-box {
+  display: grid;
+  gap: .75rem;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 13px;
+  padding: .9rem;
+}
+
+.result-publish-box {
+  border-color: rgba(255,186,79,.3);
+}
+
+.tie-resolution-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap: .65rem;
+  padding: .65rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,.025);
+}
+
+.reward-editor-card,
+.reward-runtime-card {
+  display: grid;
+  gap: .8rem;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px;
+  padding: .9rem;
+  background: rgba(255,255,255,.025);
+}
+
+.reward-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: .7rem;
+}
+
+.reward-editor-grid .admin-workspace-field:nth-last-child(-n+2) {
+  grid-column: span 2;
+}
+
+.reward-policy-row {
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.reward-policy-row > * {
+  flex: 1 1 240px;
+}
+
+.reward-payload-editor {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
+  gap: .7rem;
+  padding-top: .7rem;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.reward-editor-save {
+  align-items: end;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(255,255,255,.09);
+  padding-top: .9rem;
+}
+
+.reward-editor-save .admin-workspace-field {
+  flex: 1 1 300px;
+}
+
+.reward-plan-preview {
+  display: grid;
+  gap: .4rem;
+}
+
+.reward-plan-row {
+  padding: .55rem .65rem;
+  border-radius: 9px;
+  background: rgba(255,255,255,.035);
+  font-size: .92rem;
+}
+
+#lifecycleActions button[data-target-state="COMPLETED"] {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .staff-review-layout,
+  .reward-editor-grid,
+  .judge-admin-assign {
+    grid-template-columns: 1fr;
+  }
+
+  .reward-editor-grid .admin-workspace-field:nth-last-child(-n+2) {
+    grid-column: auto;
+  }
+
+  .staff-submission-card-top,
+  .staff-detail-heading,
+  .judge-admin-row,
+  .reward-ledger-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

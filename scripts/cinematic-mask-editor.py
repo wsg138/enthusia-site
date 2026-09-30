@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import binascii
 import hashlib
 import io
 import json
@@ -74,7 +75,7 @@ def decode_png(data_url: str) -> Image.Image:
         raw = base64.b64decode(data_url[len(prefix):], validate=True)
         image = Image.open(io.BytesIO(raw))
         image.load()
-    except Exception as exc:
+    except (binascii.Error, OSError, ValueError) as exc:
         raise ValueError("A repair layer is not a valid PNG.") from exc
     if image.size != (WIDTH, HEIGHT):
         raise ValueError(f"Repair layers must be exactly {WIDTH}×{HEIGHT} pixels.")
@@ -107,10 +108,7 @@ def atomic_save_png(image: Image.Image, destination: Path) -> None:
 class EditorHandler(SimpleHTTPRequestHandler):
     server_version = "EnthusiaMaskEditor/1.0"
 
-    def log_message(self, fmt: str, *args: object) -> None:
-        print(f"[mask-editor] {self.address_string()} - {fmt % args}")
-
-    def send_json(self, payload: dict, status: HTTPStatus = HTTPStatus.OK) -> None:
+    def send_json(self, payload: dict[str, object], status: HTTPStatus = HTTPStatus.OK) -> None:
         body = json.dumps(payload, indent=2).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -187,6 +185,8 @@ class EditorHandler(SimpleHTTPRequestHandler):
             if length <= 0 or length > MAX_REQUEST_BYTES:
                 raise ValueError("Save request is empty or too large.")
             payload = json.loads(self.rfile.read(length))
+            if not isinstance(payload, dict):
+                raise ValueError("Save request must be a JSON object.")
             expected_hash = payload.get("baseMaskSha256")
             actual_hash = sha256(BASE_MASK)
             if expected_hash != actual_hash:
@@ -197,7 +197,7 @@ class EditorHandler(SimpleHTTPRequestHandler):
             add_alpha = alpha_channel(add_image)
             subtract_alpha = alpha_channel(subtract_image)
             strong_overlap = sum(
-                1 for add, subtract in zip(add_alpha.getdata(), subtract_alpha.getdata())
+                1 for add, subtract in zip(add_alpha.tobytes(), subtract_alpha.tobytes())
                 if add >= 200 and subtract >= 200
             )
             if strong_overlap:
@@ -208,14 +208,19 @@ class EditorHandler(SimpleHTTPRequestHandler):
             atomic_save_png(normalized_add, ADD_PATH)
             atomic_save_png(normalized_subtract, SUBTRACT_PATH)
 
-            metadata = payload.get("metadata") if isinstance(payload.get("metadata"), dict) else {}
+            metadata_value = payload.get("metadata")
+            metadata: dict[str, object] = {
+                key: value for key, value in metadata_value.items() if isinstance(key, str)
+            } if isinstance(metadata_value, dict) else {}
+            add_hash = sha256(ADD_PATH)
+            subtract_hash = sha256(SUBTRACT_PATH)
             metadata.update({
                 "editorVersion": "1.0.0",
                 "sourceDimensions": {"width": WIDTH, "height": HEIGHT},
                 "timestamp": datetime.now(timezone.utc).isoformat(),
                 "baseMaskSha256": actual_hash,
-                "addLayerSha256": sha256(ADD_PATH),
-                "subtractLayerSha256": sha256(SUBTRACT_PATH),
+                "addLayerSha256": add_hash,
+                "subtractLayerSha256": subtract_hash,
             })
             temporary = METADATA_PATH.with_suffix(".json.tmp")
             temporary.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
@@ -224,12 +229,13 @@ class EditorHandler(SimpleHTTPRequestHandler):
                 "ok": True,
                 "message": "Repairs saved successfully",
                 "files": [str(ADD_PATH.relative_to(ROOT)), str(SUBTRACT_PATH.relative_to(ROOT)), str(METADATA_PATH.relative_to(ROOT))],
-                "hashes": {"add": metadata["addLayerSha256"], "subtract": metadata["subtractLayerSha256"]},
+                "hashes": {"add": add_hash, "subtract": subtract_hash},
             })
-        except (ValueError, json.JSONDecodeError) as exc:
+        except ValueError as exc:
             self.send_json({"ok": False, "error": str(exc)}, HTTPStatus.BAD_REQUEST)
-        except Exception as exc:
-            self.send_json({"ok": False, "error": f"Save failed: {exc}"}, HTTPStatus.INTERNAL_SERVER_ERROR)
+        except OSError as exc:
+            self.log_error("Failed to save mask repairs: %s", exc)
+            self.send_json({"ok": False, "error": "The repair files could not be saved."}, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 def main() -> None:

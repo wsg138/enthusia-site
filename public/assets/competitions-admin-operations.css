@@ -1,0 +1,156 @@
+.admin-link-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:40px;
+  padding:9px 13px;
+  border-radius:10px;
+  font-weight:900;
+  text-decoration:none;
+}
+.admin-link-button:hover{text-decoration:none;filter:brightness(1.08)}
+
+.lifecycle-state-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(9,7,6,.28);
+}
+.lifecycle-state-card span{color:var(--muted);font-weight:700}
+.lifecycle-state-card strong{color:var(--cream);font-size:1.05rem}
+
+.lifecycle-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.lifecycle-actions button{min-height:42px}
+.competition-admin-page .lifecycle-danger-action{
+  color:#fff;
+  border:1px solid rgba(240,91,72,.55);
+  background:rgba(240,91,72,.18);
+}
+.competition-admin-page .lifecycle-danger-action:hover{background:rgba(240,91,72,.28)}
+
+.lifecycle-note-label{
+  display:grid;
+  gap:7px;
+  color:var(--cream);
+  font-size:.9rem;
+  font-weight:700;
+}
+.lifecycle-note-label input{
+  width:100%;
+  border:1px solid var(--line-strong);
+  border-radius:10px;
+  padding:10px 12px;
+  color:var(--text);
+  background:#110e0b;
+  outline:none;
+}
+.lifecycle-note-label input:focus{
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px rgba(255,138,0,.12);
+}
+
+.audit-timeline{
+  display:grid;
+  gap:12px;
+}
+.audit-event{
+  display:grid;
+  gap:8px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(9,7,6,.3);
+}
+.audit-event-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.audit-event-top strong{
+  color:var(--cream);
+  text-transform:capitalize;
+}
+.audit-event-top span{
+  color:var(--soft);
+  font-size:.8rem;
+  white-space:nowrap;
+}
+.audit-event p{
+  margin:0;
+  color:var(--muted);
+  overflow-wrap:anywhere;
+}
+.audit-event pre{
+  max-height:260px;
+  margin:2px 0 0;
+  padding:11px;
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#0d0a08;
+  color:var(--muted);
+  font-size:.76rem;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.admin-banner-field{display:grid;gap:10px}
+.admin-banner-field>p{margin:0;color:var(--muted)}
+.admin-banner-preview{
+  overflow:hidden;
+  min-height:120px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#0d0a08;
+}
+.admin-banner-preview img{
+  display:block;
+  width:100%;
+  max-height:260px;
+  object-fit:cover;
+}
+.admin-banner-actions{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:9px;
+}
+.admin-banner-actions input[type="file"]{
+  min-width:0;
+  flex:1 1 220px;
+  color:var(--muted);
+}
+.admin-banner-actions input[type="file"]::file-selector-button{
+  margin-right:9px;
+  border:1px solid var(--line-strong);
+  border-radius:8px;
+  padding:8px 10px;
+  color:var(--cream);
+  background:#17110d;
+  cursor:pointer;
+}
+
+#competitionEditForm :disabled{
+  cursor:not-allowed;
+  opacity:.72;
+}
+
+@media(max-width:780px){
+  .lifecycle-state-card,
+  .audit-event-top{align-items:flex-start;flex-direction:column}
+  .audit-event-top span{white-space:normal}
+  .lifecycle-actions{display:grid;grid-template-columns:1fr}
+  .lifecycle-actions button{width:100%}
+  .admin-banner-actions{align-items:stretch;flex-direction:column}
+  .admin-banner-actions input[type="file"],
+  .admin-banner-actions button{width:100%;flex-basis:auto}
+}

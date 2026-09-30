@@ -6,6 +6,10 @@ on:
     paths:
       - 'public/wiki-demo/**'
       - 'wiki-worker/render_pages.mjs'
+      - 'wiki-worker/project-paths.mjs'
+      - 'wiki-worker/safety.py'
+      - 'wiki-worker/test_safety.py'
+      - 'wiki-worker/validate_rendered.py'
       - 'wiki-worker/wiki-template.css'
       - 'wiki-worker/validate_structure.mjs'
       - '.github/workflows/wiki-preview-validation.yml'
@@ -50,6 +54,10 @@ jobs:
           node --check wiki-worker/render_pages.mjs
           node wiki-worker/render_pages.mjs
           test -s wiki-worker-output/rendered/manifest.json
+
+      - name: Validate wiki worker safety boundaries
+        shell: bash
+        run: python3 -m unittest wiki-worker/test_safety.py
 
       - name: Validate translated component structure
         shell: bash

@@ -22,7 +22,7 @@ window.ENTHUSIA = {
         id: "balance-active-all",
         label: "Balance",
         title: "Balance",
-        statLabel: "Dollars",
+        statLabel: "Raw Gold",
         summary: "Richest players on the server.",
         limit: 10,
         source: "balance-active-all",
@@ -299,32 +299,3 @@ window.ENTHUSIA = {
     ]
   }
 };
-
-(function applyStaffRosterPresentationSupport() {
-  const style = document.createElement("style");
-  style.id = "staff-role-support";
-  style.textContent = ".staff-role.role-helper{background:linear-gradient(90deg,#cea130,#ffd76a)}";
-  document.head.append(style);
-
-  const apply = () => {
-    document.querySelectorAll(".staff-role").forEach((badge) => {
-      if (badge.textContent.trim().toLowerCase() !== "helper") return;
-      badge.classList.remove("role-default");
-      badge.classList.add("role-helper");
-    });
-
-    const roster = Array.isArray(window.ENTHUSIA?.home?.staff) ? window.ENTHUSIA.home.staff : [];
-    document.querySelectorAll(".staff-card").forEach((card) => {
-      const profile = card.querySelector(".staff-visual[href]");
-      const avatar = card.querySelector("img.staff-avatar");
-      if (!profile || !avatar) return;
-
-      const href = profile.getAttribute("href") || "";
-      const member = roster.find((entry) => href.endsWith(`/@${encodeURIComponent(entry.username || "")}`));
-      if (!member?.avatarUsername) return;
-      avatar.src = `https://minotar.net/helm/${encodeURIComponent(member.avatarUsername)}/96`;
-    });
-  };
-
-  document.addEventListener("DOMContentLoaded", () => window.setTimeout(apply, 0));
-})();

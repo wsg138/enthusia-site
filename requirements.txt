@@ -1,0 +1,2 @@
+# Dependencies for repository-local Python media tools.
+Pillow==12.3.0

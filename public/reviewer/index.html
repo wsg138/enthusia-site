@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" id="top">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Private Enthusia staff workspace for appeals and competition tools.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#100d0a">
+  <title>Staff dashboard | Enthusia SMP</title>
+  <link rel="icon" href="../assets/enthusia-logo-v2.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css?v=vision87">
+</head>
+<body class="reviewer-dashboard-page moderation-page">
+<a class="skip-link" href="#main-content">Skip to staff dashboard</a>
+<div class="bg" aria-hidden="true"><div class="bg-grid"></div><div class="bg-vignette"></div><div class="bg-heat"></div></div>
+
+<header class="site-header review-site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../index.html" aria-label="Enthusia SMP home"><img class="brand-logo" src="../assets/enthusia-logo-v2.png" alt="" width="46" height="46"><span class="brand-name">Enthusia SMP</span></a>
+    <div class="review-header-actions"><span>Staff workspace</span><a href="../appeal.html">View appeal page</a></div>
+  </div>
+</header>
+
+<main id="main-content" class="page-main reviewer-main">
+  <section class="container reviewer-hero" aria-labelledby="staff-dashboard-title">
+    <div><p class="eyebrow">Staff workspace</p><h1 id="staff-dashboard-title">Staff dashboard</h1><p>Check what needs attention, then open the full workspace.</p></div>
+  </section>
+
+  <section id="staff-dashboard-auth" class="container card staff-dashboard-auth" aria-live="polite">
+    <p id="staff-dashboard-access">Checking staff access…</p>
+    <a id="staff-dashboard-sign-in" class="btn" href="../account.html" hidden>Sign in with Discord</a>
+  </section>
+
+  <section id="staff-dashboard" class="container staff-dashboard" aria-label="Staff workspaces" hidden>
+    <header class="staff-dashboard-heading">
+      <div><p class="card-kicker">Current work</p><h2>Staff tools</h2></div>
+      <button id="staff-dashboard-refresh" class="btn ghost" type="button">Refresh</button>
+    </header>
+
+    <div class="staff-dashboard-sections">
+      <section id="staff-appeal-work" class="staff-dashboard-section" aria-labelledby="staff-appeal-title" hidden>
+        <header><div><p class="card-kicker">Moderation</p><h2 id="staff-appeal-title">Appeal queue</h2></div><a class="btn" href="appeals.html">Open appeal reviews</a></header>
+        <dl class="staff-dashboard-counts">
+          <div><dt>Open</dt><dd id="staff-appeals-open">—</dd></div>
+          <div><dt>Player replied</dt><dd id="staff-appeals-replied">—</dd></div>
+          <div><dt>Waiting for player</dt><dd id="staff-appeals-waiting">—</dd></div>
+        </dl>
+        <p id="staff-appeal-status" class="staff-dashboard-status" role="status">Loading appeal queue…</p>
+      </section>
+
+      <section id="staff-competition-work" class="staff-dashboard-section" aria-labelledby="staff-competition-title" hidden>
+        <header><div><p class="card-kicker">Community events</p><h2 id="staff-competition-title">Competition tools</h2></div><a class="btn" href="../competitions/admin/">Open competition tools</a></header>
+        <p id="staff-competition-state" class="staff-dashboard-callout">Checking competition services…</p>
+        <p id="staff-competition-status" class="staff-dashboard-status" role="status"></p>
+      </section>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner"><p>&copy; <span id="year"></span> Enthusia SMP</p><p>Authorized staff access only</p></div></footer>
+<script src="../assets/script.js?v=vision70" defer></script>
+<script type="module" src="../assets/reviewer-dashboard.js?v=1"></script>
+</body>
+</html>

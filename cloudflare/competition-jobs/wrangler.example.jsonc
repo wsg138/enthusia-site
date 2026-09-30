@@ -1,0 +1,25 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "enthusia-competition-jobs-dev",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-22",
+  "workers_dev": false,
+  "vars": {
+    "COMPETITION_JOBS_ENABLED": "true",
+    "COMPETITIONS_SITE_ORIGIN": "https://REPLACE_WITH_PRIVATE_PREVIEW_HOST",
+    "COMPETITION_BRIDGE_ORIGIN": "https://REPLACE_WITH_PRIVATE_BRIDGE_HOST",
+    "COMPETITION_BRIDGE_ACCESS_REQUIRED": "true",
+    "COMPETITION_BRIDGE_ACCESS_CLIENT_ID": "REPLACE_WITH_BRIDGE_ACCESS_SERVICE_TOKEN_CLIENT_ID",
+    "COMPETITIONS_DISCORD_STAFF_ROLE_ID": "REPLACE_WITH_STAFF_ROLE_ID"
+  },
+  "d1_databases": [
+    {
+      "binding": "COMPETITIONS_DB",
+      "database_name": "enthusia-competitions-dev",
+      "database_id": "REPLACE_WITH_DEV_D1_DATABASE_ID"
+    }
+  ],
+  "triggers": {
+    "crons": ["*/2 * * * *"]
+  }
+}

@@ -1,0 +1,132 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import {
+  defaultRewardDistribution,
+  rewardOperationKey,
+  selectRewardRecipients,
+  splitIntegerReward,
+  splitWeightedIntegerReward,
+  validateRewardDefinition
+} from "../functions/lib/competitions/rewards.js";
+
+test("divisible rewards default to splitting while ranks/lore items do not", () => {
+  assert.equal(defaultRewardDistribution("MONEY"), "SPLIT_ELIGIBLE");
+  assert.equal(defaultRewardDistribution("ITEM"), "SPLIT_ELIGIBLE");
+  assert.equal(defaultRewardDistribution("RANK"), "OWNER_ONLY");
+  assert.equal(defaultRewardDistribution("LORE_ITEM"), "OWNER_ONLY");
+});
+
+test("non-divisible rewards cannot use split distribution", () => {
+  assert.deepEqual(validateRewardDefinition({
+    placement: 1,
+    rewardType: "RANK",
+    distributionMode: "SPLIT_ELIGIBLE"
+  }), ["non_divisible_reward_cannot_split"]);
+});
+
+test("random reward modes require a positive recipient count", () => {
+  assert.ok(validateRewardDefinition({
+    placement: 1,
+    rewardType: "RANK",
+    distributionMode: "RANDOM_ELIGIBLE",
+    randomCount: 0
+  }).includes("random_recipient_count_invalid"));
+});
+
+test("recipient selection de-duplicates candidates and supports owner/all/random modes", () => {
+  assert.deepEqual(selectRewardRecipients({
+    distributionMode: "OWNER_ONLY",
+    ownerUuid: "owner"
+  }), ["owner"]);
+
+  assert.deepEqual(selectRewardRecipients({
+    distributionMode: "EACH_ELIGIBLE",
+    eligibleParticipantUuids: ["b", "a", "a"]
+  }), ["a", "b"]);
+
+  const first = selectRewardRecipients({
+    distributionMode: "RANDOM_ELIGIBLE",
+    eligibleParticipantUuids: ["a", "b", "c"],
+    randomCount: 2,
+    selectionSeed: "reward-seed-1"
+  });
+  const retry = selectRewardRecipients({
+    distributionMode: "RANDOM_ELIGIBLE",
+    eligibleParticipantUuids: ["c", "a", "b"],
+    randomCount: 2,
+    selectionSeed: "reward-seed-1"
+  });
+  assert.deepEqual(retry, first);
+  assert.equal(first.length, 2);
+});
+
+test("random distribution refuses to run without a persisted seed", () => {
+  assert.throws(() => selectRewardRecipients({
+    distributionMode: "RANDOM_ELIGIBLE",
+    eligibleParticipantUuids: ["a", "b"],
+    randomCount: 1
+  }), /persisted selection seed/);
+});
+
+test("integer reward splitting preserves the exact total and is deterministic", () => {
+  const shares = splitIntegerReward(10, ["c", "a", "b"]);
+  assert.deepEqual(shares, [
+    { recipientUuid: "a", amount: 4 },
+    { recipientUuid: "b", amount: 3 },
+    { recipientUuid: "c", amount: 3 }
+  ]);
+  assert.equal(shares.reduce((sum, share) => sum + share.amount, 0), 10);
+});
+
+test("weighted integer splitting gives helpers half weight and preserves the exact total", () => {
+  const shares = splitWeightedIntegerReward(10, [
+    { recipientUuid: "helper", weight: 0.5 },
+    { recipientUuid: "main", weight: 1 },
+    { recipientUuid: "owner", weight: 1 }
+  ]);
+  assert.deepEqual(shares, [
+    { recipientUuid: "helper", amount: 2 },
+    { recipientUuid: "main", amount: 4 },
+    { recipientUuid: "owner", amount: 4 }
+  ]);
+  assert.equal(shares.reduce((sum, share) => sum + share.amount, 0), 10);
+});
+
+test("weighted integer splitting is input-order independent and deterministically assigns remainders", () => {
+  const first = splitWeightedIntegerReward(11, [
+    { recipientUuid: "owner", weight: 1 },
+    { recipientUuid: "helper", weight: 0.5 },
+    { recipientUuid: "main", weight: 1 }
+  ]);
+  const retry = splitWeightedIntegerReward(11, [
+    { recipientUuid: "main", weight: 1 },
+    { recipientUuid: "owner", weight: 1 },
+    { recipientUuid: "helper", weight: 0.5 }
+  ]);
+  assert.deepEqual(retry, first);
+  assert.deepEqual(first, [
+    { recipientUuid: "helper", amount: 2 },
+    { recipientUuid: "main", amount: 5 },
+    { recipientUuid: "owner", amount: 4 }
+  ]);
+  assert.equal(first.reduce((sum, share) => sum + share.amount, 0), 11);
+});
+
+test("weighted splitting rejects duplicate or invalid recipients", () => {
+  assert.throws(() => splitWeightedIntegerReward(10, [
+    { recipientUuid: "player", weight: 1 },
+    { recipientUuid: "player", weight: 0.5 }
+  ]), /unique/);
+  assert.throws(() => splitWeightedIntegerReward(10, [
+    { recipientUuid: "player", weight: -1 }
+  ]), /weight/);
+});
+
+test("reward operation keys are stable per reward/submission/recipient", () => {
+  assert.equal(
+    rewardOperationKey("reward-1", "submission-2", "player-3"),
+    "competition-reward:reward-1:submission-2:player-3"
+  );
+  assert.throws(() => rewardOperationKey("bad key", "submission", "player"));
+});

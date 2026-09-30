@@ -1,3 +1,5 @@
+import("./site-navigation.js").catch(() => {});
+
 const STATUS_REFRESH_INTERVAL_MS = 60000;
 const SCREENSHOT_AUTOPLAY_MS = 3000;
 const SCREENSHOT_MANUAL_PAUSE_MS = 7000;
@@ -318,6 +320,10 @@ function initMobileNavigation() {
       } else {
         mainLinks.append(clonedLink);
       }
+      return;
+    }
+    if (item.matches(".site-account")) {
+      mainLinks.append(item.cloneNode(true));
       return;
     }
     if (!item.matches(".nav-dropdown")) return;
@@ -738,18 +744,23 @@ function getRoleClassName(role) {
     return "role-mod";
   }
 
+  if (normalizedRole === "helper") {
+    return "role-helper";
+  }
+
   return "role-default";
 }
 
 function getStaffIdentity(member) {
   const username = normalizeText(member?.username);
+  const avatarUsername = normalizeText(member?.avatarUsername) || username;
   const displayName = normalizeText(member?.name) || username || "Staff";
   const role = normalizeText(member?.role) || "Staff";
-  return { username, displayName, role };
+  return { username, avatarUsername, displayName, role };
 }
 
 function createStaffVisual(identity, hidden) {
-  const { username, displayName } = identity;
+  const { username, avatarUsername, displayName } = identity;
   const profileUrl = username ? `https://laby.net/@${encodeURIComponent(username)}` : "";
 
   const visual = document.createElement(profileUrl ? "a" : "div");
@@ -763,7 +774,7 @@ function createStaffVisual(identity, hidden) {
 
   const avatar = document.createElement("img");
   avatar.className = "staff-avatar";
-  avatar.src = `https://minotar.net/helm/${encodeURIComponent(username || displayName)}/96`;
+  avatar.src = `https://minotar.net/helm/${encodeURIComponent(avatarUsername || displayName)}/96`;
   avatar.alt = hidden ? "" : `${displayName} Minecraft head`;
   avatar.width = 78;
   avatar.height = 78;
@@ -1654,7 +1665,6 @@ function initWorldEffects() {
     const testProgress = Number.parseFloat(document.body.dataset.celestialProgress || "");
     currentProgress = Number.isFinite(testProgress) ? clamp(testProgress, 0, 1) : clamp(window.scrollY / maximum, 0, 1);
     let nightLevel = 0;
-    let warmth = 0;
     let phaseBlend = { from: "day", to: "day", amount: 0 };
     if (currentProgress < 0.28) {
       const amount = smooth(clamp((currentProgress - 0.06) / 0.22, 0, 1));
@@ -1663,7 +1673,6 @@ function initWorldEffects() {
       phaseBlend = { from: "day", to: "sunset", amount };
       setAmbient(ambientPalettes.day, ambientPalettes.sunset, amount);
       setEdgeScene("minecraft-day-valley-v1.png", "minecraft-sunset-right-v1.png", amount);
-      warmth = amount;
     } else if (currentProgress < 0.4) {
       const amount = smooth((currentProgress - 0.28) / 0.12);
       setTransition(scenes, "sunset", "night", amount);
@@ -1671,7 +1680,6 @@ function initWorldEffects() {
       phaseBlend = { from: "sunset", to: "night", amount };
       setAmbient(ambientPalettes.sunset, ambientPalettes.night, amount);
       setEdgeScene("minecraft-sunset-right-v1.png", "minecraft-night-valley-v3.png", amount);
-      warmth = 1 - amount;
       nightLevel = amount;
     } else if (currentProgress < 0.66) {
       setTransition(scenes, "night", "night", 0);
@@ -1687,7 +1695,6 @@ function initWorldEffects() {
       phaseBlend = { from: "night", to: "sunrise", amount };
       setAmbient(ambientPalettes.night, ambientPalettes.sunrise, amount);
       setEdgeScene("minecraft-night-valley-v3.png", "minecraft-sunrise-left-v1.png", amount);
-      warmth = amount;
       nightLevel = 1 - amount;
     } else {
       const amount = smooth((currentProgress - 0.82) / 0.18);
@@ -1696,7 +1703,6 @@ function initWorldEffects() {
       phaseBlend = { from: "sunrise", to: "day", amount };
       setAmbient(ambientPalettes.sunrise, ambientPalettes.day, amount);
       setEdgeScene("minecraft-sunrise-left-v1.png", "minecraft-day-valley-v1.png", amount);
-      warmth = 1 - amount;
     }
 
     const screenToScene = (x, y) => ({ x: (x - sceneOrigin.x) / sceneScale, y: (y - sceneOrigin.y) / sceneScale });
@@ -1849,6 +1855,7 @@ async function initSite(cfg) {
 
   setExternalLinkTargets(normalizedConfig);
   setContactEmail(normalizedConfig);
+  await import("./site-account.js?v=8");
   initWorldEffects();
   initCinematicHeader();
   initDesktopDropdownGrace();

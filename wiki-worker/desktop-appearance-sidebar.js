@@ -26,7 +26,9 @@
   function storageSet() {
     try {
       if (window.localStorage) localStorage.setItem(DEFAULTED_KEY, '1');
-    } catch (e) {}
+    } catch {
+      // Storage can be unavailable in private or restricted browser sessions.
+    }
   }
 
   function isVector2022() {

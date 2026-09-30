@@ -68,8 +68,9 @@ def validate_inputs() -> tuple[Image.Image, Image.Image, Image.Image, dict, dict
     base = load_rgba(baseline_path).getchannel("A")
     add = load_rgba(REPAIR_ADD).getchannel("A")
     subtract = load_rgba(REPAIR_SUBTRACT).getchannel("A")
-    strong_add = add.point(lambda value: 255 if value >= 200 else 0)
-    strong_subtract = subtract.point(lambda value: 255 if value >= 200 else 0)
+    strong_threshold = [0] * 200 + [255] * 56
+    strong_add = add.point(strong_threshold)
+    strong_subtract = subtract.point(strong_threshold)
     strong_overlap = sum(ImageChops.multiply(strong_add, strong_subtract).histogram()[255:])
     if strong_overlap:
         raise ValueError(f"{strong_overlap} strongly conflicting repair pixels remain")
@@ -113,12 +114,12 @@ def propagate_terrain_rgb(rgb: Image.Image, alpha: Image.Image, radius: int = 8)
     return output
 
 
-def output_statistics(alpha: Image.Image, base: Image.Image) -> dict[str, int | bool | str | dict[str, str]]:
+def output_statistics(alpha: Image.Image, base: Image.Image) -> dict[str, object]:
     phase_hashes = {path.name: sha256(path) for path in PHASE_OUTPUTS.values()}
     histogram = alpha.histogram()
     added = ImageChops.subtract(alpha, base).histogram()
     removed = ImageChops.subtract(base, alpha).histogram()
-    return {
+    report: dict[str, object] = {
         "addedPixelCount": sum(added[1:]),
         "removedPixelCount": sum(removed[1:]),
         "partialAlphaPixelCount": sum(histogram[1:255]),
@@ -128,6 +129,7 @@ def output_statistics(alpha: Image.Image, base: Image.Image) -> dict[str, int | 
         "finalMaskSha256": sha256(BASE_MASK),
         "phaseForegroundSha256": phase_hashes,
     }
+    return report
 
 
 def validate_outputs(expected_alpha: Image.Image) -> None:
