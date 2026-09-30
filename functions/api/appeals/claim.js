@@ -46,7 +46,7 @@ export async function onRequestPost(context) {
     const binding = sanitizePunishmentBinding(await upstream.json());
     if (!binding) return json({ error: "invalid_punishment_binding" }, 502);
 
-    await saveClaimedPunishmentBinding(context.env?.COMPETITIONS_DB, session.discord.id, binding);
+    await saveClaimedPunishmentBinding(context.env?.COMPETITIONS_DB, session.subject, binding);
     return json(binding, 200, { "cache-control": "private, no-store" });
   } catch {
     return serviceUnavailable();

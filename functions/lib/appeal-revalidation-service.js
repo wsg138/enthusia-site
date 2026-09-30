@@ -14,7 +14,7 @@ const defaults = Object.freeze({
 export async function revalidateOwnedPunishmentBinding(input, dependencies = defaults) {
   const current = await dependencies.findBinding(
     input.db,
-    input.ownerDiscordId,
+    input.ownerIdentity,
     input.punishmentId
   );
   if (!current) return Object.freeze({ kind: "NOT_FOUND" });
@@ -31,7 +31,7 @@ export async function revalidateOwnedPunishmentBinding(input, dependencies = def
 
   const saved = await dependencies.saveBinding(
     input.db,
-    input.ownerDiscordId,
+    input.ownerIdentity,
     binding
   );
   return Object.freeze({ kind: "OK", binding: saved });

@@ -10,7 +10,7 @@ export async function onRequestGet(context) {
 
   try {
     return json(
-      { bindings: await listPunishmentBindings(context.env?.COMPETITIONS_DB, session.discord.id) },
+      { bindings: await listPunishmentBindings(context.env?.COMPETITIONS_DB, session.subject) },
       200,
       { "cache-control": "private, no-store" }
     );

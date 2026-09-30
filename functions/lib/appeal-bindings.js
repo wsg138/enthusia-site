@@ -3,10 +3,20 @@ import { isCanonicalUuid } from "./validation.js";
 
 const TOKEN = /^[A-Z0-9_:-]{1,64}$/;
 const USERNAME = /^[A-Za-z0-9_]{3,16}$/;
+const OWNER = /^(?:discord:\d{16,22}|email:[0-9a-f-]{36})$/;
 
 function database(db) {
   if (!db || typeof db.prepare !== "function") throw new TypeError("Appeal database is unavailable");
   return db;
+}
+
+function ownerIdentity(value) {
+  const owner = String(value ?? "").trim().toLowerCase();
+  if (!OWNER.test(owner)) throw new TypeError("Appeal binding owner is invalid");
+  if (owner.startsWith("email:") && !isCanonicalUuid(owner.slice(6))) {
+    throw new TypeError("Appeal binding owner is invalid");
+  }
+  return owner;
 }
 
 function rows(result) {
@@ -61,18 +71,19 @@ function bindingFromRow(row) {
   });
 }
 
-export async function saveClaimedPunishmentBinding(db, ownerDiscordId, binding, now = new Date()) {
+export async function saveClaimedPunishmentBinding(db, owner, binding, now = new Date()) {
   const store = database(db);
+  const identity = ownerIdentity(owner);
   const value = sanitizePunishmentBinding(binding);
   if (!value) throw new TypeError("Staff punishment binding is invalid");
   const timestamp = now.toISOString();
   await store.prepare(`
     INSERT INTO appeal_punishment_bindings (
-      punishment_id, owner_discord_id, case_id, code_generation, punishment_type,
+      punishment_id, owner_identity, case_id, code_generation, punishment_type,
       bound_username, eligible, eligibility_state, created_at, updated_at, last_validated_at
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(punishment_id) DO UPDATE SET
-      owner_discord_id = excluded.owner_discord_id,
+      owner_identity = excluded.owner_identity,
       case_id = excluded.case_id,
       code_generation = excluded.code_generation,
       punishment_type = excluded.punishment_type,
@@ -83,7 +94,7 @@ export async function saveClaimedPunishmentBinding(db, ownerDiscordId, binding, 
       last_validated_at = excluded.last_validated_at
   `).bind(
     value.punishmentId,
-    ownerDiscordId,
+    identity,
     value.caseId,
     value.codeGeneration,
     value.punishmentType,
@@ -97,20 +108,20 @@ export async function saveClaimedPunishmentBinding(db, ownerDiscordId, binding, 
   return value;
 }
 
-export async function listPunishmentBindings(db, ownerDiscordId) {
+export async function listPunishmentBindings(db, owner) {
   const result = await database(db).prepare(`
     SELECT punishment_id AS punishmentId, case_id AS caseId,
            code_generation AS codeGeneration, punishment_type AS punishmentType,
            bound_username AS boundUsername, eligible, eligibility_state AS eligibilityState,
            created_at AS createdAt, updated_at AS updatedAt, last_validated_at AS lastValidatedAt
     FROM appeal_punishment_bindings
-    WHERE owner_discord_id = ?
+    WHERE owner_identity = ?
     ORDER BY updated_at DESC, punishment_id ASC
-  `).bind(ownerDiscordId).all();
+  `).bind(ownerIdentity(owner)).all();
   return rows(result).map(bindingFromRow);
 }
 
-export async function findPunishmentBinding(db, ownerDiscordId, punishmentId) {
+export async function findPunishmentBinding(db, owner, punishmentId) {
   if (!isCanonicalUuid(punishmentId)) return null;
   const row = await database(db).prepare(`
     SELECT punishment_id AS punishmentId, case_id AS caseId,
@@ -118,14 +129,15 @@ export async function findPunishmentBinding(db, ownerDiscordId, punishmentId) {
            bound_username AS boundUsername, eligible, eligibility_state AS eligibilityState,
            created_at AS createdAt, updated_at AS updatedAt, last_validated_at AS lastValidatedAt
     FROM appeal_punishment_bindings
-    WHERE owner_discord_id = ? AND punishment_id = ?
+    WHERE owner_identity = ? AND punishment_id = ?
     LIMIT 1
-  `).bind(ownerDiscordId, punishmentId).first();
+  `).bind(ownerIdentity(owner), punishmentId).first();
   return row ? bindingFromRow(row) : null;
 }
 
-export async function saveRevalidatedPunishmentBinding(db, ownerDiscordId, binding, now = new Date()) {
+export async function saveRevalidatedPunishmentBinding(db, owner, binding, now = new Date()) {
   const store = database(db);
+  const identity = ownerIdentity(owner);
   const value = sanitizePunishmentBinding(binding);
   if (!value) throw new TypeError("Staff punishment binding is invalid");
   const timestamp = now.toISOString();
@@ -136,7 +148,7 @@ export async function saveRevalidatedPunishmentBinding(db, ownerDiscordId, bindi
         code_generation = CASE WHEN ? THEN code_generation ELSE ? END,
         punishment_type = ?, bound_username = ?, eligible = ?, eligibility_state = ?,
         updated_at = ?, last_validated_at = ?
-    WHERE owner_discord_id = ? AND punishment_id = ?
+    WHERE owner_identity = ? AND punishment_id = ?
   `).bind(
     value.caseId,
     preserveClaimGeneration ? 1 : 0,
@@ -147,9 +159,9 @@ export async function saveRevalidatedPunishmentBinding(db, ownerDiscordId, bindi
     value.eligibilityState,
     timestamp,
     timestamp,
-    ownerDiscordId,
+    identity,
     value.punishmentId
   ).run();
   if (Number(result?.meta?.changes ?? 0) !== 1) throw new Error("Punishment binding was not updated");
-  return findPunishmentBinding(store, ownerDiscordId, value.punishmentId);
+  return findPunishmentBinding(store, identity, value.punishmentId);
 }

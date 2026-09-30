@@ -8,6 +8,7 @@ import { revalidateOwnedPunishmentBinding } from "../functions/lib/appeal-revali
 
 const ACCOUNT_ID = "123e4567-e89b-42d3-a456-426614174001";
 const PUNISHMENT_ID = "123e4567-e89b-42d3-a456-426614174099";
+const OWNER_IDENTITY = `discord:${"3".repeat(18)}`;
 const ENV = {
   STAFF_API_TARGET: "production",
   STAFF_API_BEARER_TOKEN: "test".repeat(8),
@@ -64,6 +65,7 @@ function bindingDatabase(initialGeneration = 4) {
           return {
             async run() {
               assert.match(sql, /UPDATE appeal_punishment_bindings/);
+              assert.equal(values[9], OWNER_IDENTITY);
               if (!values[1]) row.codeGeneration = values[2];
               row.caseId = values[0];
               row.punishmentType = values[3];
@@ -76,6 +78,7 @@ function bindingDatabase(initialGeneration = 4) {
             },
             async first() {
               assert.match(sql, /SELECT punishment_id AS punishmentId/);
+              assert.equal(values[0], OWNER_IDENTITY);
               return row;
             }
           };
@@ -89,7 +92,7 @@ function serviceInput() {
   return {
     db: {},
     env: ENV,
-    ownerDiscordId: "3".repeat(18),
+    ownerIdentity: OWNER_IDENTITY,
     accountId: ACCOUNT_ID,
     punishmentId: PUNISHMENT_ID
   };
@@ -122,7 +125,7 @@ test("Staff revalidation uses server-owned account and generation values", async
 
 test("rotated-code revalidation preserves the last claimed generation", async () => {
   const db = bindingDatabase(4);
-  const saved = await saveRevalidatedPunishmentBinding(db, "3".repeat(18), {
+  const saved = await saveRevalidatedPunishmentBinding(db, OWNER_IDENTITY, {
     ...BINDING,
     codeGeneration: 5,
     eligible: false,
@@ -158,11 +161,15 @@ test("malformed Staff success never mutates the stored binding", async () => {
 test("valid Staff success is persisted after validation", async () => {
   let saves = 0;
   const result = await revalidateOwnedPunishmentBinding(serviceInput(), {
-    async findBinding() { return BINDING; },
+    async findBinding(_db, owner, punishmentId) {
+      assert.equal(owner, OWNER_IDENTITY);
+      assert.equal(punishmentId, PUNISHMENT_ID);
+      return BINDING;
+    },
     async requestStaff() { return new Response(JSON.stringify(BINDING), { status: 200 }); },
-    async saveBinding(_db, ownerDiscordId, binding) {
+    async saveBinding(_db, owner, binding) {
       saves += 1;
-      assert.equal(ownerDiscordId, "3".repeat(18));
+      assert.equal(owner, OWNER_IDENTITY);
       assert.deepEqual(binding, BINDING);
       return binding;
     }
@@ -173,7 +180,7 @@ test("valid Staff success is persisted after validation", async () => {
 
 test("revalidation is account-keyed and rate limited", async () => {
   const context = { env: { COMPETITIONS_DB: rateLimitDatabase() } };
-  const session = { subject: `discord:${"3".repeat(18)}` };
+  const session = { subject: OWNER_IDENTITY };
   for (let attempt = 1; attempt <= 12; attempt += 1) {
     assert.equal(await revalidationRateLimit(context, session), null);
   }

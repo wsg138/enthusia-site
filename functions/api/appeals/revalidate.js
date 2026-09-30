@@ -53,7 +53,7 @@ export async function onRequestPost(context) {
     const result = await revalidateOwnedPunishmentBinding({
       db: context.env?.COMPETITIONS_DB,
       env: context.env,
-      ownerDiscordId: session.discord.id,
+      ownerIdentity: session.subject,
       accountId: session.accountId,
       punishmentId: request.punishmentId
     });

@@ -3,11 +3,12 @@ import test from "node:test";
 
 import { buildAppealPayload } from "../functions/api/appeals.js";
 import { requestEligiblePunishments } from "../functions/lib/appeal-eligibility.js";
-import { discordAppealAccountId } from "../functions/lib/appeal-session.js";
+import { discordAppealAccountId, websiteAppealAccountId } from "../functions/lib/appeal-session.js";
 
 const MINECRAFT_UUID = "123e4567-e89b-42d3-a456-426614174000";
 const PUNISHMENT_ID = "123e4567-e89b-42d3-a456-426614174099";
 const DISCORD_SUBJECT = `discord:${"3".repeat(18)}`;
+const EMAIL_SUBJECT = "email:123e4567-e89b-42d3-a456-426614174777";
 const ENV = {
   STAFF_API_TARGET: "production",
   STAFF_API_BEARER_TOKEN: "b".repeat(32),
@@ -21,6 +22,15 @@ test("Discord appeal accounts use a stable website ID distinct from Minecraft id
   assert.match(one, /^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
   assert.equal(one, two);
   assert.notEqual(one, MINECRAFT_UUID);
+});
+
+test("verified email identities receive the same opaque website-account UUID contract", async () => {
+  const one = await websiteAppealAccountId(EMAIL_SUBJECT);
+  const two = await websiteAppealAccountId(EMAIL_SUBJECT);
+  assert.match(one, /^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+  assert.equal(one, two);
+  assert.notEqual(one, EMAIL_SUBJECT.slice("email:".length));
+  await assert.rejects(() => websiteAppealAccountId("email:not-a-uuid"), /identity is invalid/);
 });
 
 test("appeal payload keeps the website account binding separate from Minecraft username", async () => {
