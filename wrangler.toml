@@ -16,3 +16,7 @@ binding = "DONATOR_LEADERBOARDS"
 [[env.production.r2_buckets]]
 bucket_name = "playtime-leaderboard"
 binding = "PLAYTIME_LEADERBOARDS"
+
+[[env.production.r2_buckets]]
+bucket_name = "events-leaderboard"
+binding = "EVENTS_DATA"
