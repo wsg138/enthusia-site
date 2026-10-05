@@ -79,6 +79,7 @@ test("sanitizeReopen rejects bad versions and replay keys", () => {
 });
 
 test("Staff API allowlist accepts the appeal lifecycle routes", () => {
+  assert.equal(staffRoute("/v1/website/appeals/mine"), "/v1/website/appeals/mine");
   assert.equal(
     staffRoute(`/v1/website/appeals/${APPEAL_ID}/edit`),
     `/v1/website/appeals/${APPEAL_ID}/edit`

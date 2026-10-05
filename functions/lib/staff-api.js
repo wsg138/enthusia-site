@@ -3,6 +3,7 @@ const STAFF_API_ORIGIN = "https://staff-api.enthusia.info";
 const STAFF_API_TIMEOUT_MS = 7000;
 const STATIC_ROUTES = new Set([
   "/v1/website/appeals/eligible",
+  "/v1/website/appeals/mine",
   "/v1/website/appeals/submit",
   "/v1/website/appeals/reviewer/list"
 ]);
