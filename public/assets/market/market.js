@@ -48,7 +48,9 @@
   const mapSubscribers = new Set();
   window.EnthusiaMarketMap = {
     layout, svg: el.svg, buildingElements, stallElements, tooltipLine: null,
-    getSnapshot: () => snapshot, subscribe: callback => { mapSubscribers.add(callback); return () => mapSubscribers.delete(callback); }
+    shopBadge: null, getSnapshot: () => snapshot,
+    showStall: stallId => { const stall = adapter.getStall(stallId); if (!stall) return false; el.viewport.scrollIntoView({ behavior: "smooth", block: "center" }); focusBuilding(stall.buildingId); openStall(stall, null); return true; },
+    subscribe: callback => { mapSubscribers.add(callback); return () => mapSubscribers.delete(callback); }
   };
   const px = point => ({ x: (point.x - t.originX) * t.pixelsPerBlock, y: (point.z - t.originZ) * t.pixelsPerBlock });
   const esc = value => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
@@ -606,7 +608,7 @@
   function shopCard(shop, highlight) {
     const labels = transactionLabels(shop.direction), action = { SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction];
     const out = shop.stockCount <= 0;
-    return `<article class="shop-card${highlight ? " highlight" : ""}${out ? " out-of-stock" : ""}" data-shop="${shop.id}" tabindex="0" role="button" aria-label="Inspect ${action.toLowerCase()} shop by ${esc(shop.owner.name)}"><header><span class="direction">${action}</span><small>Shop by <strong title="${esc(shop.owner.name)}">${esc(shop.owner.name)}</strong></small></header>${out ? `<strong class="stock-badge">Out of stock</strong>` : ""}<div class="transaction-grid">${itemPanel(shop.sellItem, shop.sellAmount, labels[0], shop.id, shop.direction, "sellItem")}<span class="transaction-arrow" aria-hidden="true">⇄</span>${itemPanel(shop.costItem, shop.costAmount, labels[1], shop.id, shop.direction, "costItem")}</div><footer><span>${shop.stockCount} in stock · ${shop.availableTrades} trades available</span>${locationMarkup(shop.interaction, true)}</footer></article>`;
+    return `<article class="shop-card${highlight ? " highlight" : ""}${out ? " out-of-stock" : ""}" data-shop="${shop.id}" tabindex="0" role="button" aria-label="Inspect ${action.toLowerCase()} shop by ${esc(shop.owner.name)}"><header><span class="direction">${action}</span><small>Shop by <strong title="${esc(shop.owner.name)}">${esc(shop.owner.name)}</strong></small></header>${window.EnthusiaMarketMap.shopBadge?.(shop) || ""}${out ? `<strong class="stock-badge">Out of stock</strong>` : ""}<div class="transaction-grid">${itemPanel(shop.sellItem, shop.sellAmount, labels[0], shop.id, shop.direction, "sellItem")}<span class="transaction-arrow" aria-hidden="true">⇄</span>${itemPanel(shop.costItem, shop.costAmount, labels[1], shop.id, shop.direction, "costItem")}</div><footer><span>${shop.stockCount} in stock · ${shop.availableTrades} trades available</span>${locationMarkup(shop.interaction, true)}</footer></article>`;
   }
   function bindDrawerActions() {
     bindCopy(el.content);

@@ -72,7 +72,12 @@
     }
   }
 
-  function layerById(id) { return LAYERS.find(layer => layer.id === id) || LAYERS[0]; }
+  // Optional extra layers (Prices, Weekly gold) come from root.EnthusiaMarketLayerProvider once the sales API exists:
+  // { layers: [{ id, label, legend }], describe(layerId, building, stallsById) -> { bucket, label, line } }
+  const allLayers = () => LAYERS.concat(root.EnthusiaMarketLayerProvider?.layers || []);
+  function layerById(id) { return allLayers().find(layer => layer.id === id) || LAYERS[0]; }
+
+  const api = { LAYERS, allLayers, rentInfo, summarize, describe, heat, refresh() {} };
 
   // ---------- page wiring ----------
   function init() {
@@ -87,12 +92,17 @@
     const bar = document.createElement("div");
     bar.className = "layer-bar"; bar.setAttribute("role", "group"); bar.setAttribute("aria-label", "Map layer");
     const caption = document.createElement("span"); caption.className = "layer-caption"; caption.textContent = "Layer"; bar.append(caption);
-    const buttons = LAYERS.map(layer => {
-      const button = document.createElement("button");
-      button.type = "button"; button.className = "layer-button"; button.dataset.layer = layer.id; button.textContent = layer.label;
-      button.addEventListener("click", () => select(layer.id));
-      bar.append(button); return button;
-    });
+    let buttons = [];
+    function buildButtons() {
+      buttons.forEach(button => button.remove());
+      buttons = allLayers().map(layer => {
+        const button = document.createElement("button");
+        button.type = "button"; button.className = "layer-button"; button.dataset.layer = layer.id; button.textContent = layer.label;
+        button.addEventListener("click", () => select(layer.id));
+        bar.append(button); return button;
+      });
+    }
+    buildButtons();
     heading.after(bar);
     const legend = document.createElement("div");
     legend.id = "layer-legend"; legend.className = "layer-legend"; legend.setAttribute("aria-live", "polite");
@@ -122,7 +132,9 @@
       const stallsById = new Map((snapshot?.stalls || []).map(stall => [stall.id, stall]));
       for (const building of map.layout.buildings) {
         const shape = map.buildingElements.get(building.id), text = texts.get(building.id);
-        const info = describe(current, snapshot ? summarize(building, stallsById) : null);
+        const extra = root.EnthusiaMarketLayerProvider?.layers?.some(layer => layer.id === current);
+        const info = extra ? (snapshot ? root.EnthusiaMarketLayerProvider.describe(current, building, stallsById) : { bucket: "none", label: "", line: "" })
+          : describe(current, snapshot ? summarize(building, stallsById) : null);
         lines.set(building.id, info.line);
         if (shape) { if (current === "default") shape.removeAttribute("data-bucket"); else shape.dataset.bucket = info.bucket; }
         text.textContent = current === "default" ? "" : info.label;
@@ -135,6 +147,7 @@
       render();
     }
     map.subscribe(render);
+    api.refresh = () => { if (buttons.length !== allLayers().length) buildButtons(); current = layerById(current).id; render(); };
     map.tooltipLine = building => lines.get(building.id) || "";
     render();
   }
@@ -142,5 +155,5 @@
   if (typeof document !== "undefined") {
     if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
   }
-  return { LAYERS, rentInfo, summarize, describe, heat };
+  return api;
 });
