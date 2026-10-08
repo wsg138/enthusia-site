@@ -102,3 +102,24 @@
 .market-page .site-footer{position:relative;z-index:1}.market-page .footer-inner.market-footer{display:grid;gap:8px;position:relative;padding-block:24px;background:transparent}.market-page .footer-inner.market-footer>p{margin:0}.market-page .footer-inner.market-footer .minecraft-disclaimer{font-size:11px;line-height:1.35;color:var(--muted)}@media(max-width:600px),(max-height:500px){.market-page .footer-inner.market-footer{gap:5px;padding-block:15px calc(15px + env(safe-area-inset-bottom));font-size:14px}.market-page .footer-inner.market-footer>p:nth-child(n+2){font-size:9px;line-height:1.25;color:var(--muted)}}
 html.market-viewer-active,html.market-viewer-active body{scrollbar-width:none}html.market-viewer-active::-webkit-scrollbar,html.market-viewer-active body::-webkit-scrollbar{display:none;width:0;height:0}
 @media(max-width:600px){.filter-meta{flex-wrap:wrap}.market-connection-status{width:100%;margin-left:0}}
+
+.layer-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:0 14px 10px}.layer-caption{color:var(--soft);font:750 12px "Segoe UI",sans-serif;text-transform:uppercase;letter-spacing:.06em;margin-right:4px}.layer-button{min-height:34px;padding:0 12px;border:1px solid #754027;border-radius:7px;background:#32170d;color:var(--text);font:750 12px "Segoe UI",sans-serif;cursor:pointer}.layer-button:hover{border-color:var(--orange)}.layer-button[aria-pressed="true"]{background:var(--orange);border-color:#fff1c7;color:#1a0c08}
+.layer-legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 14px;min-height:34px;color:var(--muted);font:600 12px "Segoe UI",sans-serif;border-top:1px solid #4f2b1c}.layer-legend:empty{display:none}.layer-key{display:inline-flex;align-items:center;gap:6px}.layer-key i{width:14px;height:14px;border:1px solid #fff5df;border-radius:3px;display:inline-block}
+.map-tooltip-line{display:block;margin-top:2px;color:var(--muted);font-size:11px}
+.layer-label{fill:#fff8ed;font:800 11px "Bahnschrift SemiCondensed","Arial Narrow","Segoe UI",sans-serif;text-anchor:middle;dominant-baseline:middle;paint-order:stroke;stroke:#130906;stroke-width:3px;stroke-linejoin:round}.layer-label[data-hidden="true"]{display:none}
+.map-card[data-layer="free"] [data-bucket="free"],.layer-key i[data-bucket="free"]{fill:rgba(67,196,255,.5);background:rgba(67,196,255,.7)}
+.map-card[data-layer="rent"] [data-bucket="overdue"],.layer-key i[data-bucket="overdue"]{fill:rgba(240,91,72,.62);background:#f05b48}
+.map-card[data-layer="rent"] [data-bucket="urgent"],.layer-key i[data-bucket="urgent"]{fill:rgba(255,138,0,.62);background:#ff8a00}
+.map-card[data-layer="rent"] [data-bucket="soon"],.layer-key i[data-bucket="soon"]{fill:rgba(255,211,106,.5);background:#ffd36a}
+.map-card[data-layer="rent"] [data-bucket="healthy"],.layer-key i[data-bucket="healthy"]{fill:rgba(68,209,122,.45);background:#44d17a}
+.map-card[data-layer="rent"] [data-bucket="auction"],.layer-key i[data-bucket="auction"]{fill:rgba(176,124,255,.5);background:#b07cff}
+.map-card[data-layer="shops"] [data-bucket="heat1"],.layer-key i[data-bucket="heat1"]{fill:rgba(255,138,0,.2);background:rgba(255,138,0,.35)}
+.map-card[data-layer="shops"] [data-bucket="heat2"],.layer-key i[data-bucket="heat2"]{fill:rgba(255,138,0,.4);background:rgba(255,138,0,.6)}
+.map-card[data-layer="shops"] [data-bucket="heat3"],.layer-key i[data-bucket="heat3"]{fill:rgba(255,138,0,.6);background:rgba(255,138,0,.8)}
+.map-card[data-layer="shops"] [data-bucket="heat4"],.layer-key i[data-bucket="heat4"]{fill:rgba(255,100,20,.8);background:#ff6414}
+.map-card[data-layer="stock"] [data-bucket="in"],.layer-key i[data-bucket="in"]{fill:rgba(68,209,122,.45);background:#44d17a}
+.map-card[data-layer="stock"] [data-bucket="mixed"],.layer-key i[data-bucket="mixed"]{fill:rgba(255,211,106,.5);background:#ffd36a}
+.map-card[data-layer="stock"] [data-bucket="out"],.layer-key i[data-bucket="out"]{fill:rgba(240,91,72,.62);background:#f05b48}
+.layer-key i[data-bucket="none"]{background:transparent}
+.map-card[data-layer]:not([data-layer="default"]) .building-shape[data-bucket]{stroke:#fff1c7}.map-card[data-layer]:not([data-layer="default"]) .building-shape.hovered,.map-card[data-layer]:not([data-layer="default"]) .building-shape.selected{filter:brightness(1.35)}
+@media (max-width:600px){.layer-bar{padding:0 10px 8px}.layer-button{min-height:40px}}

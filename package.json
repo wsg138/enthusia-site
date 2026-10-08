@@ -10,6 +10,7 @@
     "test:potions": "node --test tests/potion-preview.test.mjs",
     "mask-editor": "python scripts/cinematic-mask-editor.py",
     "validate:cinematic": "python scripts/generate-terrain-mask.py --validate-only",
-    "test": "npm run check && npm run test:appeals && npm run test:potions"
+    "test": "npm run check && npm run test:appeals && npm run test:potions && npm run test:market-layers",
+    "test:market-layers": "node scripts/test-market-layers.mjs"
   }
 }

@@ -45,6 +45,11 @@
   let connectionStatus = {state: "connecting", source: "unavailable", updatedAt: null};
   const buildingElements = new Map();
   const stallElements = new Map();
+  const mapSubscribers = new Set();
+  window.EnthusiaMarketMap = {
+    layout, svg: el.svg, buildingElements, stallElements, tooltipLine: null,
+    getSnapshot: () => snapshot, subscribe: callback => { mapSubscribers.add(callback); return () => mapSubscribers.delete(callback); }
+  };
   const px = point => ({ x: (point.x - t.originX) * t.pixelsPerBlock, y: (point.z - t.originZ) * t.pixelsPerBlock });
   const esc = value => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
   const displayStall = id => `Stall ${String(id).match(/\d+/)?.[0] || id}`;
@@ -114,6 +119,8 @@
     const rect = el.viewport.getBoundingClientRect();
     el.tooltip.hidden = false;
     el.tooltip.textContent = building.label;
+    const line = window.EnthusiaMarketMap.tooltipLine?.(building);
+    if (line) { const detail = document.createElement("small"); detail.className = "map-tooltip-line"; detail.textContent = line; el.tooltip.append(detail); }
     el.tooltip.style.left = `${clientX - rect.left + 12}px`;
     el.tooltip.style.top = `${clientY - rect.top + 12}px`;
   }
@@ -820,6 +827,7 @@
     $("#filter-chips").querySelectorAll("[data-remove-filter]").forEach(button => button.onclick = () => { const key = button.dataset.removeFilter; state.filters[key] = "ALL"; $(selectors[key]).value = "ALL"; applyFilters(); });
     $("#clear-active-filters")?.addEventListener("click", clearFilters);
     if (state.drawerMode === "building" && state.drawerBuilding) renderBuildingDrawer();
+    mapSubscribers.forEach(callback => callback());
   }
   function clearFilters() {
     state.filters = { floor: "ALL", owner: "ALL", shop: "ALL", stock: "ALL", rent: "ALL" };
