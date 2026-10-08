@@ -63,8 +63,9 @@
     return node;
   };
 
+  const siteHeader = document.querySelector(".site-header, .site-head"), marketFooter = document.querySelector(".market-footer, .site-foot");
   function updateViewportMetrics() {
-    const header = document.querySelector(".site-header"), footer = document.querySelector(".market-footer");
+    const header = siteHeader, footer = marketFooter;
     const viewport = window.visualViewport;
     const viewportTop = viewport?.offsetTop || 0, viewportHeight = viewport?.height || innerHeight, viewportBottom = viewportTop + viewportHeight;
     const headerBottom = header?.getBoundingClientRect().bottom || 0;
@@ -77,11 +78,11 @@
     document.documentElement.style.setProperty("--collapsed-context-height", `${contextHeight}px`);
   }
   const viewportObserver = new ResizeObserver(() => requestAnimationFrame(updateViewportMetrics));
-  viewportObserver.observe(document.querySelector(".site-header"));
-  viewportObserver.observe(document.querySelector(".market-footer"));
+  if (siteHeader) viewportObserver.observe(siteHeader);
+  if (marketFooter) viewportObserver.observe(marketFooter);
   const headerObserver = new MutationObserver(() => requestAnimationFrame(updateViewportMetrics));
-  headerObserver.observe(document.querySelector(".site-header"), {attributes:true, attributeFilter:["class","style"]});
-  document.querySelector(".site-header").addEventListener("transitionrun", () => { const track = () => { updateViewportMetrics(); if (document.getAnimations().some(animation => animation.playState === "running")) requestAnimationFrame(track); }; track(); });
+  if (siteHeader) headerObserver.observe(siteHeader, {attributes:true, attributeFilter:["class","style"]});
+  siteHeader?.addEventListener("transitionrun", () => { const track = () => { updateViewportMetrics(); if (document.getAnimations().some(animation => animation.playState === "running")) requestAnimationFrame(track); }; track(); });
   addEventListener("scroll", updateViewportMetrics, {passive: true});
   addEventListener("resize", updateViewportMetrics, {passive: true});
   visualViewport?.addEventListener("resize", updateViewportMetrics, {passive: true});
