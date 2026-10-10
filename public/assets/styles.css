@@ -4925,3 +4925,81 @@ h1,h2,h3,
 @media(prefers-reduced-motion:reduce){
   .nav-drop-trigger::after{transition:none}
 }
+
+.event-steps{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+.event-steps .card{
+  list-style:none;
+}
+
+.events-live-note,
+.events-upcoming{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 22px;
+}
+
+.events-upcoming p{
+  margin:0;
+}
+
+.events-rank{
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+  min-width:2ch;
+}
+
+.events-champs-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:12px;
+}
+
+.events-winners{
+  margin:0;
+  padding:0;
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.events-winners li{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.events-recent{
+  margin:0;
+  padding:0;
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.events-recent li{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.events-meta{
+  opacity:.75;
+  font-size:.9em;
+}
+
+@media(max-width:900px){
+  .event-steps,
+  .events-champs-grid{
+    grid-template-columns:1fr;
+  }
+}
