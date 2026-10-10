@@ -29,6 +29,13 @@ test("appeal and staff reviewer interfaces comply with script-src self", () => {
   }
 });
 
+test("public case renderer never enumerates unapproved case fields", () => {
+  const script = readFileSync(new URL("../public/assets/moderation.js", import.meta.url), "utf8");
+  assert.doesNotMatch(script, /Object\\.keys\\(detail\\)/);
+  assert.doesNotMatch(script, /JSON\\.stringify\\(value\\)/);
+  assert.match(script, /"publicReason"/);
+});
+
 test("buildPunishmentsTarget defaults to limit=30 with no other params", () => {
   assert.equal(buildPunishmentsTarget(), "/v1/public/punishments?limit=30");
   assert.equal(buildPunishmentsTarget({}), "/v1/public/punishments?limit=30");
