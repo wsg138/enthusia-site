@@ -5,7 +5,7 @@ const SEARCH_PATH = "/v1/public/search";
 const MAX_QUERY_LENGTH = 64;
 
 export function isValidSearchQuery(q) {
-  return typeof q === "string" && q.trim().length >= 1 && q.length <= MAX_QUERY_LENGTH;
+  return typeof q === "string" && q.trim().length >= 2 && q.length <= MAX_QUERY_LENGTH;
 }
 
 export function buildSearchTarget(q) {
