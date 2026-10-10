@@ -118,12 +118,14 @@ test("buildCaseTarget appends the validated id to the path", () => {
   assert.equal(buildCaseTarget("CASE-1234"), "/v1/public/cases/CASE-1234");
 });
 
-test("isValidSearchQuery requires 1-64 non-blank characters", () => {
+test("isValidSearchQuery requires 2-64 non-blank characters", () => {
   assert.ok(isValidSearchQuery("Notch"));
   assert.ok(isValidSearchQuery("CASE-1234"));
   assert.ok(isValidSearchQuery("  padded  "));
   assert.ok(isValidSearchQuery("x".repeat(64)));
   assert.ok(!isValidSearchQuery(""));
+  assert.ok(!isValidSearchQuery("A"));
+  assert.ok(isValidSearchQuery("AB"));
   assert.ok(!isValidSearchQuery("   "));
   assert.ok(!isValidSearchQuery("x".repeat(65)));
   assert.ok(!isValidSearchQuery(null));
