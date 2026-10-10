@@ -96,22 +96,16 @@
     if (!detail || typeof detail !== "object") {
       addMetaRow(caseFields, "Detail", "No detail available.");
     } else {
-      // Known fields first, in a stable order; everything else rendered
-      // defensively below so unknown fields never break the page.
-      var shown = {};
+      // Render only the explicit PUBLIC registry projection; even an accidentally
+      // expanded API response must never surface private case/evidence fields.
       ["player", "punishmentType", "broadReason", "publicReason"].forEach(function (key) {
-        if (detail[key] !== undefined) { addMetaRow(caseFields, key, detail[key]); shown[key] = true; }
+        if (detail[key] !== undefined) addMetaRow(caseFields, key, detail[key]);
       });
       ["issuedAt", "expiresAt"].forEach(function (key) {
-        if (detail[key] !== undefined) { addMetaRow(caseFields, key, formatDate(detail[key])); shown[key] = true; }
+        if (detail[key] !== undefined) addMetaRow(caseFields, key, formatDate(detail[key]));
       });
       ["state", "caseId", "appealAvailable"].forEach(function (key) {
-        if (detail[key] !== undefined) { addMetaRow(caseFields, key, detail[key]); shown[key] = true; }
-      });
-      Object.keys(detail).forEach(function (key) {
-        if (shown[key]) return;
-        var value = detail[key];
-        addMetaRow(caseFields, key, (value !== null && typeof value === "object") ? JSON.stringify(value) : value);
+        if (detail[key] !== undefined) addMetaRow(caseFields, key, detail[key]);
       });
       if (detail.appealAvailable) {
         var link = document.createElement("a");
