@@ -180,7 +180,7 @@
       setStatus(items.length === 0 ? "No matches found." : "");
     } catch (error) {
       setStatus(error.status === 400
-        ? "Search text must be 1–64 characters."
+        ? "Search text must be 2–64 characters."
         : "Search is unavailable right now. Please try again later.");
     }
   }
