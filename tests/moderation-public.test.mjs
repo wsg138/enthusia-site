@@ -1,5 +1,17 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
+
+test("moderation page uses a CSP-compliant external same-origin script", () => {
+  const html = readFileSync(new URL("../public/moderation.html", import.meta.url), "utf8");
+  const policy = readFileSync(new URL("../public/_headers", import.meta.url), "utf8");
+  assert.match(policy, /script-src 'self'/);
+  assert.match(html, /<script src="assets\\/moderation\\.js\\?v=1" defer><\\/script>/);
+  assert.doesNotMatch(html, /<script\\s*>/i);
+  const script = readFileSync(new URL("../public/assets/moderation.js", import.meta.url), "utf8");
+  assert.match(script, /loadRecent\\(true\\)/);
+});
+
 import { buildPunishmentsTarget, clampLimit } from "../functions/api/moderation/punishments.js";
 import { buildSearchTarget, isValidSearchQuery } from "../functions/api/moderation/search.js";
 import { buildCaseTarget, isValidCaseId } from "../functions/api/moderation/cases/[id].js";
