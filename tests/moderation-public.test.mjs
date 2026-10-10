@@ -16,6 +16,19 @@ import { buildPunishmentsTarget, clampLimit } from "../functions/api/moderation/
 import { buildSearchTarget, isValidSearchQuery } from "../functions/api/moderation/search.js";
 import { buildCaseTarget, isValidCaseId } from "../functions/api/moderation/cases/[id].js";
 
+test("appeal and staff reviewer interfaces comply with script-src self", () => {
+  const cases = [
+    ["../public/appeal.html", "assets/appeal.js?v=1", "../public/assets/appeal.js"],
+    ["../public/reviewer/appeals.html", "../assets/reviewer-appeals.js?v=1", "../public/assets/reviewer-appeals.js"]
+  ];
+  for (const [htmlPath, src, jsPath] of cases) {
+    const html = readFileSync(new URL(htmlPath, import.meta.url), "utf8");
+    assert.doesNotMatch(html, /<script(?:\\s+type="module")?\\s*>/i);
+    assert.ok(html.includes(`src="${src}"`));
+    assert.ok(readFileSync(new URL(jsPath, import.meta.url), "utf8").includes("fetch("));
+  }
+});
+
 test("buildPunishmentsTarget defaults to limit=30 with no other params", () => {
   assert.equal(buildPunishmentsTarget(), "/v1/public/punishments?limit=30");
   assert.equal(buildPunishmentsTarget({}), "/v1/public/punishments?limit=30");
