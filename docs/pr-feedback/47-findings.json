@@ -1,0 +1,72 @@
+[
+  {
+    "issueId": "8244ffe6949b98da0f042798fbba874c",
+    "file": "public/assets/enthusia.js",
+    "line": 578,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '604800000' will have at different value at runtime."
+  },
+  {
+    "issueId": "8e650cfb70a0a3e6528a1fa5c8bad619",
+    "file": "public/assets/market/map-layers.js",
+    "line": 52,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method describe has a cyclomatic complexity of 11 (limit is 8)"
+  },
+  {
+    "issueId": "6841cf106b4d86caa7e4deda33ebc7da",
+    "file": "public/assets/enthusia.js",
+    "line": 586,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method render has 100 lines of code (limit is 50)"
+  },
+  {
+    "issueId": "1cf05ea50d0bb680f48a730bd22829f2",
+    "file": "public/assets/enthusia.js",
+    "line": 403,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method normalizeGuild has a cyclomatic complexity of 12 (limit is 8)"
+  },
+  {
+    "issueId": "865a1c4450ca80fba0f4dd23518b901c",
+    "file": "public/assets/enthusia.js",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File public/assets/enthusia.js has 577 non-comment lines of code"
+  },
+  {
+    "issueId": "8255f22c6247d03b74efd5f2b0dbad5f",
+    "file": "public/assets/enthusia.js",
+    "line": 586,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method render has a cyclomatic complexity of 27 (limit is 8)"
+  },
+  {
+    "issueId": "7bf37374f0a6902b2da129c876435006",
+    "file": "public/assets/enthusia.js",
+    "line": 300,
+    "pattern": "Semgrep_javascript.jquery.security.audit.jquery-insecure-selector.jquery-insecure-selector",
+    "message": "User controlled data in a `$(...)` is an anti-pattern that can lead to XSS vulnerabilities"
+  },
+  {
+    "issueId": "1620bb05c21878ad0394abeaa24bcd9c",
+    "file": "public/assets/enthusia.js",
+    "line": 628,
+    "pattern": "Semgrep_javascript.jquery.security.audit.jquery-insecure-method.jquery-insecure-method",
+    "message": "User controlled data in a jQuery's `.append(...)` is an anti-pattern that can lead to XSS vulnerabilities"
+  },
+  {
+    "issueId": "d26d899ba9c976ae79af2aa6d25d55c3",
+    "file": "public/assets/market/market.js",
+    "line": 615,
+    "pattern": "Semgrep_javascript.lang.security.html-in-template-string.html-in-template-string",
+    "message": "This template literal looks like HTML and has interpolated variables."
+  },
+  {
+    "issueId": "6b19ad6bfdaeee63299063e968d48e6e",
+    "file": "public/assets/market/market.js",
+    "line": 620,
+    "pattern": "Semgrep_javascript.lang.security.html-in-template-string.html-in-template-string",
+    "message": "This template literal looks like HTML and has interpolated variables."
+  }
+]

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enthusia SMP | Moderation</title>
+  <meta name="description" content="Public moderation record for Enthusia SMP: recent punishments, case details, and registry search." />
+  <meta name="theme-color" content="#100d0a" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css?v=vision63" />
+  <style>
+    .mod-search {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: end;
+    }
+    .mod-search label {
+      flex: 1 1 16rem;
+      display: grid;
+      gap: 0.35rem;
+      font-weight: 650;
+    }
+    .mod-search input,
+    .mod-filter select {
+      padding: 0.6rem 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid currentColor;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+    }
+    .mod-filter {
+      display: grid;
+      gap: 0.35rem;
+      max-width: 18rem;
+      font-weight: 650;
+    }
+    .mod-list {
+      display: grid;
+      gap: 1rem;
+    }
+    .mod-card-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .mod-type {
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .mod-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      gap: 0.25rem 1rem;
+      margin: 0.75rem 0 0;
+      font-size: 0.9rem;
+    }
+    .mod-meta dt {
+      font-weight: 650;
+      opacity: 0.75;
+    }
+    .mod-meta dd {
+      margin: 0;
+    }
+    .mod-card-foot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+    }
+    .mod-more {
+      justify-self: center;
+    }
+    .mod-status {
+      min-height: 1.5em;
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="bg" aria-hidden="true"><div class="bg-grid"></div><div class="bg-vignette"></div><div class="bg-heat"></div></div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Enthusia SMP home">
+      <img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="46" height="46" />
+      <span class="brand-name">Enthusia SMP</span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="plugins.html">About</a>
+      <a href="rules.html">Rules</a>
+      <a href="market.html">Market</a>
+      <div class="nav-dropdown">
+        <button class="nav-drop-trigger" type="button">Community</button>
+        <div class="nav-menu" aria-label="Community links">
+          <a href="leaderboards.html">Leaderboards</a>
+          <a href="events.html">Events</a>
+          <a href="moderation.html">Moderation</a>
+          <a href="staff.html">Staff</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="vote.html">Vote</a>
+          <a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+        </div>
+      </div>
+      <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+      <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-main">
+  <!--
+    Public moderation registry. Data comes from the EnthusiaStaff plugin's
+    public website API (https://staff-api.enthusia.info/v1/public/*), proxied
+    through this site's /api/moderation/* functions. Entries appear after the
+    plugin's public-registry sync runs; the page never shows private staff data.
+  -->
+  <section class="subhero" aria-labelledby="moderation-title">
+    <div class="container">
+      <p class="eyebrow">Community</p>
+      <h1 id="moderation-title">Moderation</h1>
+      <p class="page-lead">Public record of moderation actions on Enthusia SMP.</p>
+    </div>
+  </section>
+
+  <section class="page-section band" aria-label="Public moderation registry">
+    <div class="container stack-lg">
+      <form id="moderation-search-form" class="card mod-search">
+        <label for="moderation-q">Search by username or case ID
+          <input id="moderation-q" name="q" type="search" maxlength="64" autocomplete="off"
+                 placeholder="e.g. Notch or CASE-1234" />
+        </label>
+        <button class="btn" type="submit">Search</button>
+        <button class="btn ghost" type="button" id="moderation-clear" hidden>Clear</button>
+      </form>
+
+      <p id="moderation-status" class="mod-status" role="status" aria-live="polite"></p>
+
+      <div id="moderation-list-block">
+        <div class="section-heading">
+          <p class="eyebrow">Recent</p>
+          <h2>Recent punishments</h2>
+        </div>
+        <div class="mod-filter">
+          <label for="moderation-type">Filter by type</label>
+          <select id="moderation-type">
+            <option value="">All types</option>
+            <option value="BAN">Ban</option>
+            <option value="MUTE">Mute</option>
+            <option value="WARN">Warn</option>
+            <option value="KICK">Kick</option>
+          </select>
+        </div>
+        <div id="moderation-list" class="mod-list stack-md" aria-label="Punishment entries"></div>
+        <button id="moderation-more" class="btn ghost mod-more" type="button" hidden>Load more</button>
+      </div>
+
+      <section id="moderation-case" class="card" hidden aria-label="Case detail">
+        <div class="section-heading">
+          <p class="eyebrow">Case</p>
+          <h2 id="moderation-case-title">Case detail</h2>
+        </div>
+        <dl id="moderation-case-fields" class="mod-meta"></dl>
+        <div class="mod-card-foot">
+          <button id="moderation-case-close" class="btn ghost" type="button">Close</button>
+        </div>
+      </section>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner"><p>&copy; <span id="year"></span> Enthusia SMP</p><p><a href="market.html">Market</a> · Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p></div></footer>
+<script src="assets/site-config.js?v=vision41" defer></script>
+<script src="assets/script.js?v=banner1" defer></script>
+<script src="assets/moderation.js?v=1" defer></script>
+</body>
+</html>

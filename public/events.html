@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enthusia SMP | Events & Competitions</title>
+  <meta name="description" content="Enthusia SMP events: hourly physical event votes, 15-minute chat events, and event champions." />
+  <meta name="theme-color" content="#100d0a" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css?v=vision63" />
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="bg" aria-hidden="true"><div class="bg-grid"></div><div class="bg-vignette"></div><div class="bg-heat"></div></div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Enthusia SMP home">
+      <img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="46" height="46" />
+      <span class="brand-name">Enthusia SMP</span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="plugins.html">About</a>
+      <a href="rules.html">Rules</a>
+      <a href="market.html">Market</a>
+      <div class="nav-dropdown">
+        <button class="nav-drop-trigger active" type="button" aria-current="page">Community</button>
+        <div class="nav-menu" aria-label="Community links">
+          <a href="leaderboards.html">Leaderboards</a>
+          <a href="events.html">Events</a>
+          <a href="moderation.html">Moderation</a><a href="staff.html">Staff</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="vote.html">Vote</a>
+          <a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+        </div>
+      </div>
+      <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+      <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content" class="page-main">
+  <section class="subhero" aria-labelledby="events-title">
+    <div class="container">
+      <p class="eyebrow">Community</p>
+      <h1 id="events-title">Events &amp; Competitions</h1>
+      <p class="page-lead">Hourly arena events picked by player vote, chat games every 15 minutes, and a running list of our champions.</p>
+    </div>
+  </section>
+
+  <section class="page-section band" aria-labelledby="how-events-work-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">The loop</p>
+          <h2 id="how-events-work-title">How events work</h2>
+        </div>
+      </div>
+      <ol class="event-steps">
+        <li class="card feature-card">
+          <span class="card-kicker">1 · Vote</span>
+          <h3>Players pick the event</h3>
+          <p>Before each physical event, five random events go up for vote. The one with the most votes wins the slot.</p>
+        </li>
+        <li class="card feature-card">
+          <span class="card-kicker">2 · Join</span>
+          <h3>Queue up in game</h3>
+          <p>Once voting closes, the join phase opens. Sign up in chat to lock in your spot before the countdown starts.</p>
+        </li>
+        <li class="card feature-card">
+          <span class="card-kicker">3 · Countdown</span>
+          <h3>Get to the arena</h3>
+          <p>A countdown timer runs so everyone can get ready. When it hits zero, the event begins and late entries close.</p>
+        </li>
+        <li class="card feature-card">
+          <span class="card-kicker">4 · Event</span>
+          <h3>Play it out</h3>
+          <p>Compete in the chosen event. Last one standing, fastest finisher, or highest score takes the win.</p>
+        </li>
+        <li class="card feature-card">
+          <span class="card-kicker">5 · Trophy room</span>
+          <h3>Winners get their moment</h3>
+          <p>Winners are shown off in the trophy room so the whole server can see who took the crown.</p>
+        </li>
+        <li class="card feature-card">
+          <span class="card-kicker">6 · Payouts</span>
+          <h3>Collect your reward</h3>
+          <p>Payouts are sent to the winners after the event wraps up. Every win also counts toward your event stats.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="page-section" aria-labelledby="schedule-title">
+    <div class="container stack-lg">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Cadence</p>
+          <h2 id="schedule-title">Schedule</h2>
+        </div>
+      </div>
+      <div id="eventsLiveSchedule" aria-live="polite"></div>
+      <div class="feature-grid">
+        <article class="card feature-card">
+          <span class="card-kicker">Every hour</span>
+          <h3>Physical events</h3>
+          <p>A player-voted physical event runs every hour, on the hour. Voting opens before the event, then players join during the join phase.</p>
+        </article>
+        <article class="card feature-card">
+          <span class="card-kicker">Every 15 minutes</span>
+          <h3>Chat events</h3>
+          <p>Quick chat games drop at :15, :30, and :45 past the hour. First correct answer in chat wins &mdash; no sign-up needed.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section band" aria-labelledby="champions-title">
+    <div class="container stack-lg">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Hall of fame</p>
+          <h2 id="champions-title">Champions</h2>
+        </div>
+      </div>
+      <div id="eventsChampions" aria-live="polite">
+        <article class="card feature-card">
+          <span class="card-kicker">Coming soon</span>
+          <h3>Event stats are on their way</h3>
+          <p>Top winners and recent event results will show up here once the events feed goes live. Keep playing &mdash; every win is already being tracked.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" aria-labelledby="event-types-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Rotations</p>
+          <h2 id="event-types-title">Event types</h2>
+        </div>
+      </div>
+      <div class="feature-grid">
+        <article class="card feature-card">
+          <span class="card-kicker">Arena games</span>
+          <h3>Physical events</h3>
+          <p>Action events played out in the world &mdash; chosen by player vote from five random options every hour.</p>
+        </article>
+        <article class="card feature-card">
+          <span class="card-kicker">Chat game</span>
+          <h3>Trivia</h3>
+          <p>A question drops in chat and the first player with the right answer wins. Speed and knowledge both count.</p>
+        </article>
+        <article class="card feature-card">
+          <span class="card-kicker">Chat game</span>
+          <h3>Math</h3>
+          <p>An equation appears in chat &mdash; be the first to solve it correctly and take the prize.</p>
+        </article>
+        <article class="card feature-card">
+          <span class="card-kicker">Chat game</span>
+          <h3>Word scramble</h3>
+          <p>A scrambled word shows up in chat. Unscramble it first to win.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner"><p>&copy; <span id="year"></span> Enthusia SMP</p><p><a href="market.html">Market</a> · Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p></div></footer>
+<script src="assets/site-config.js?v=vision41" defer></script>
+<script src="assets/guild-banner-renderer.js?v=banner4" defer></script>
+<script src="assets/script.js?v=banner1" defer></script>
+<script src="assets/events.js?v=events1" defer></script>
+</body>
+</html>

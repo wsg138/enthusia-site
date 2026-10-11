@@ -6,10 +6,14 @@ const STATIC_ROUTES = new Set([
   "/v1/website/punishment-codes/claim",
   "/v1/website/punishment-codes/revalidate",
   "/v1/website/appeals/eligible",
+  "/v1/website/appeals/mine",
   "/v1/website/appeals/submit",
   "/v1/website/appeals/reviewer/list"
 ]);
 const DECISION_ROUTE = /^\/v1\/website\/appeals\/reviewer\/[0-9a-f-]{36}\/decision$/i;
+const EDIT_ROUTE = /^\/v1\/website\/appeals\/[0-9a-f-]{36}\/edit$/i;
+const CLAIM_ROUTE = /^\/v1\/website\/appeals\/reviewer\/[0-9a-f-]{36}\/claim$/i;
+const REOPEN_ROUTE = /^\/v1\/website\/appeals\/reviewer\/[0-9a-f-]{36}\/reopen$/i;
 const PUBLIC_ROUTES = new Set([
   "/v1/public/punishments",
   "/v1/public/search"
@@ -52,7 +56,7 @@ function staffApiConfiguration(env) {
 }
 
 function staffRoute(path) {
-  if (!STATIC_ROUTES.has(path) && !DECISION_ROUTE.test(path)) {
+  if (!STATIC_ROUTES.has(path) && !DECISION_ROUTE.test(path) && !EDIT_ROUTE.test(path) && !CLAIM_ROUTE.test(path) && !REOPEN_ROUTE.test(path)) {
     throw new Error("Invalid Staff API route");
   }
   return path;
@@ -108,6 +112,35 @@ export async function signedStaffRequest(env, path, body) {
       "x-enthusia-signature": signature
     },
     body: payload
+  });
+}
+
+function staffGetRoute(requestTarget) {
+  const path = requestTarget.split("?", 1)[0];
+  const publicCase = /^\/v1\/public\/cases\/[A-Za-z0-9_-]{1,64}$/;
+  if (!PUBLIC_ROUTES.has(path) && !publicCase.test(path)) throw new Error("Invalid Staff API GET route");
+  return requestTarget;
+}
+
+export async function signedStaffGet(env, requestTarget) {
+  const configuration = staffApiConfiguration(env);
+  const target = staffGetRoute(requestTarget);
+  const method = "GET";
+  const timestamp = String(Date.now());
+  const nonce = crypto.randomUUID();
+  const contentHash = base64Url(await sha256(new Uint8Array(0)));
+  const canonical = `${method}\n${target}\n${timestamp}\n${nonce}\n${contentHash}`;
+  const signature = base64Url(await hmacSha256(configuration.secret, canonical));
+
+  return boundedFetch(`${staffApiOrigin(env)}${target}`, {
+    method,
+    headers: {
+      authorization: `Bearer ${configuration.bearer}`,
+      "x-enthusia-timestamp": timestamp,
+      "x-enthusia-nonce": nonce,
+      "x-enthusia-content-sha256": contentHash,
+      "x-enthusia-signature": signature
+    }
   });
 }
 
