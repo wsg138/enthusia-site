@@ -153,13 +153,21 @@
     }
   }
 
+  function configuredBoards() {
+    if (!cfg.leaderboards) return [];
+    if (!Array.isArray(cfg.leaderboards.active)) return [];
+    return cfg.leaderboards.active;
+  }
+  function boardLimit(container, board) {
+    return Number(container.getAttribute("data-limit")) || (board && board.limit) || 10;
+  }
   function loadBoard(container) {
     var id = container.getAttribute("data-board");
-    var boards = (cfg.leaderboards && Array.isArray(cfg.leaderboards.active)) ? cfg.leaderboards.active : [];
+    var boards = configuredBoards();
     var board = boards.filter(function (candidate) { return candidate.id === id; })[0];
     var rows = selectOne("[data-board-rows]", container);
     var podium = selectOne("[data-board-podium]", container);
-    var limit = Number(container.getAttribute("data-limit")) || (board && board.limit) || 10;
+    var limit = boardLimit(container, board);
     var endpoint = board ? boardEndpoint(board) : "";
     var retry = function () { loadBoard(container); };
 
