@@ -1,0 +1,68 @@
+.competition-gallery-section {
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+
+.competition-gallery-heading {
+  max-width: 760px;
+}
+
+.competition-gallery-heading h2 {
+  margin: .2rem 0 .65rem;
+}
+
+.competition-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.competition-gallery-card {
+  overflow: hidden;
+  padding: 0;
+}
+
+.competition-gallery-image-link {
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(0,0,0,.25);
+}
+
+.competition-gallery-image-link img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .18s ease;
+}
+
+.competition-gallery-card:hover .competition-gallery-image-link img {
+  transform: scale(1.015);
+}
+
+.competition-gallery-copy {
+  display: grid;
+  gap: .45rem;
+  padding: 1rem;
+}
+
+.competition-gallery-copy h3,
+.competition-gallery-copy p {
+  margin: 0;
+}
+
+.competition-gallery-caption,
+.competition-gallery-meta {
+  color: var(--muted, #b8afa6);
+}
+
+.competition-gallery-link {
+  width: fit-content;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .competition-gallery-image-link img {
+    transition: none;
+  }
+}

@@ -17,6 +17,6 @@ export function error(code: string, message: string, status: number, extra: Head
 export function withPublicCors(response: Response, origin: string | null): Response {
   const copy = new Response(response.body, response);
   copy.headers.set("Vary", "Origin");
-  if (origin) copy.headers.set("Access-Control-Allow-Origin", origin);
+  if (origin !== null) copy.headers.set("Access-Control-Allow-Origin", origin);
   return copy;
 }

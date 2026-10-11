@@ -1,21 +1,32 @@
 import fs from 'node:fs';
-import path from 'node:path';
 import vm from 'node:vm';
+import {
+  containedFilename,
+  projectInputPath,
+  wikiOutputPath,
+  wikiPageFilename
+} from './project-paths.mjs';
 
-const SOURCE = process.env.WIKI_DEMO_SOURCE || 'public/wiki-demo';
-const OUT = process.env.WIKI_RENDER_OUT || 'wiki-worker-output/rendered';
-const STYLE_SOURCE = process.env.WIKI_STYLE_SOURCE || 'wiki-worker/wiki-template.css';
+const SOURCE = projectInputPath(process.env.WIKI_DEMO_SOURCE, 'public/wiki-demo', 'Wiki source');
+const OUT = wikiOutputPath(process.env.WIKI_RENDER_OUT);
+const STYLE_SOURCE = projectInputPath(process.env.WIKI_STYLE_SOURCE, 'wiki-worker/wiki-template.css', 'Wiki stylesheet');
 const loadOrder = ['v2-core.js','v2-support.js','v2-commands.js','v2-detail.js','v2-final.js','v2-polish.js','v2-reputation.js'];
 const STYLE_TITLE = 'Template:EnthusiaWiki/styles.css';
 const STYLE_TAG = `<templatestyles src="${STYLE_TITLE}" />`;
+const attributePatterns = Object.freeze({
+  class: /\bclass\s*=\s*"([^"]*)"/i,
+  'data-page': /\bdata-page\s*=\s*"([^"]*)"/i,
+  'data-special': /\bdata-special\s*=\s*"([^"]*)"/i,
+  'data-community': /\bdata-community\s*=\s*"([^"]*)"/i
+});
 
 globalThis.window = {};
 for (const name of loadOrder) {
-  const file = path.join(SOURCE, name);
+  const file = containedFilename(SOURCE, name, 'Wiki source filename');
   if (!fs.existsSync(file)) throw new Error(`Missing wiki source file: ${file}`);
   vm.runInThisContext(fs.readFileSync(file, 'utf8'), { filename: file });
 }
-const pages = window.WIKI_V2?.pages;
+const pages = globalThis.window.WIKI_V2?.pages;
 if (!pages) throw new Error('WIKI_V2 pages did not load');
 if (!fs.existsSync(STYLE_SOURCE)) throw new Error(`Missing wiki TemplateStyles source: ${STYLE_SOURCE}`);
 
@@ -36,8 +47,9 @@ function stripTags(s) {
 }
 
 function attrValue(attrs, name) {
-  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const match = String(attrs).match(new RegExp(`\\b${escaped}\\s*=\\s*"([^"]*)"`, 'i'));
+  const pattern = attributePatterns[name];
+  if (!pattern) throw new Error(`Unsupported wiki attribute: ${name}`);
+  const match = String(attrs).match(pattern);
   return match ? match[1] : '';
 }
 
@@ -135,13 +147,13 @@ fs.mkdirSync(OUT, { recursive: true });
 const manifest = [];
 for (const [id, page] of Object.entries(pages)) {
   if (!page?.title || typeof page.body !== 'string') continue;
-  const filename = `${id}.wiki`;
-  fs.writeFileSync(path.join(OUT, filename), sanitize(page.body));
+  const filename = wikiPageFilename(id);
+  fs.writeFileSync(containedFilename(OUT, filename), sanitize(page.body));
   manifest.push({ id, title: page.title, filename, summary: page.summary || '', section: page.section || '' });
 }
-fs.writeFileSync(path.join(OUT, 'Main_Page.wiki'), mainPage());
+fs.writeFileSync(containedFilename(OUT, 'Main_Page.wiki'), mainPage());
 manifest.unshift({ id: 'main-page', title: 'Main Page', filename: 'Main_Page.wiki', summary: 'Enthusia wiki home page', section: 'Home' });
-fs.writeFileSync(path.join(OUT, 'EnthusiaWiki.styles.css'), css + '\n');
+fs.writeFileSync(containedFilename(OUT, 'EnthusiaWiki.styles.css'), css + '\n');
 manifest.unshift({ id: 'template-styles', title: STYLE_TITLE, filename: 'EnthusiaWiki.styles.css', contentModel: 'sanitized-css' });
-fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify({ generatedAt: new Date().toISOString(), pages: manifest }, null, 2) + '\n');
+fs.writeFileSync(containedFilename(OUT, 'manifest.json'), JSON.stringify({ generatedAt: new Date().toISOString(), pages: manifest }, null, 2) + '\n');
 console.log(`Rendered ${manifest.length} wiki targets.`);

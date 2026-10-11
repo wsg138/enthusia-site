@@ -2,7 +2,7 @@ import { SELF } from "cloudflare:test";
 import { EXPECTED_STALL_IDS } from "../src/expected-stalls";
 import type { Stall } from "../src/schemas";
 
-export const TEST_SECRET = "local-test-secret-with-sufficient-entropy";
+export const TEST_SIGNING_KEY = "market-api-test-key".padEnd(48, "-");
 const SERVER_ID = "enthusia-main";
 const encoder = new TextEncoder();
 
@@ -40,7 +40,7 @@ function hex(buffer: ArrayBuffer): string {
   return [...new Uint8Array(buffer)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-export async function signature(method: string, pathname: string, body: string, timestamp: string, eventId: string, secret = TEST_SECRET): Promise<string> {
+export async function signature(method: string, pathname: string, body: string, timestamp: string, eventId: string, secret = TEST_SIGNING_KEY): Promise<string> {
   const bodyHash = hex(await crypto.subtle.digest("SHA-256", encoder.encode(body)));
   const canonical = ["v1", method, pathname, SERVER_ID, timestamp, eventId, bodyHash].join("\n");
   const key = await crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);

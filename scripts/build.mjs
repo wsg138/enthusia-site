@@ -12,7 +12,6 @@ await mkdir(client, { recursive: true });
 await cp(source, client, { recursive: true });
 await cp(path.join(source, "plugins.html"), path.join(client, "about.html"));
 await cp(path.join(source, "404.html"), path.join(client, "branded-not-found.html"));
-await rm(path.join(client, "northstar-a7k3m9"), { recursive: true, force: true });
 await mkdir(path.join(output, ".openai"), { recursive: true });
 await cp(path.join(root, ".openai", "hosting.json"), path.join(output, ".openai", "hosting.json"));
 await mkdir(path.join(output, "server"), { recursive: true });

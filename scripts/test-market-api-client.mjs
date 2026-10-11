@@ -119,6 +119,21 @@ await test("transaction quantities are required and may exceed item stack limits
   assert.equal(validateSnapshot(apiSnapshot(10, stalls), expectedStallIds), null);
 });
 
+await test("displayed location and building fields reject markup and invalid coordinates", async () => {
+  const {validateSnapshot} = loadClient();
+  const invalidLocation = structuredClone(authoritativeStalls);
+  invalidLocation[0].location.x = '"><img src=x onerror=alert(1)>';
+  assert.equal(validateSnapshot(apiSnapshot(10, invalidLocation), expectedStallIds), null);
+
+  const invalidInteraction = structuredClone(authoritativeStalls);
+  invalidInteraction.find(stall => stall.shops.length).shops[0].interaction.z = Number.POSITIVE_INFINITY;
+  assert.equal(validateSnapshot(apiSnapshot(10, invalidInteraction), expectedStallIds), null);
+
+  const invalidBuilding = structuredClone(authoritativeStalls);
+  invalidBuilding[0].buildingId = '"><svg onload=alert(1)>';
+  assert.equal(validateSnapshot(apiSnapshot(10, invalidBuilding), expectedStallIds), null);
+});
+
 await test("stall.updated replaces only one stall", async () => {
   const h = harness([response(apiSnapshot())]); await h.client.loadInitialSnapshot();
   const before = h.client.snapshot.stalls, untouched = before[1], changed = {...before[0], members: [...before[0].members, "LiveTest"]};

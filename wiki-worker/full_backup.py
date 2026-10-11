@@ -8,14 +8,15 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from pathlib import Path
+from safety import baseline_manifest_url, project_output_path, wiki_api_url
 
-API = os.environ.get('WIKI_API', 'https://enthusia.miraheze.org/w/api.php')
-OUT = Path(os.environ.get('WIKI_FULL_BACKUP_OUT', 'wiki-worker-output/full-backup'))
-OLD_BASELINE = os.environ.get(
-    'WIKI_OLD_BASELINE_URL',
-    'https://raw.githubusercontent.com/wsg138/EnthusiaSentinel-Docs/wiki-preservation-baseline/manifest.json',
+API = wiki_api_url(os.environ.get('WIKI_API'))
+OUT = project_output_path(
+    os.environ.get('WIKI_FULL_BACKUP_OUT'),
+    default='wiki-worker-output/full-backup',
+    allow_root=False,
 )
+OLD_BASELINE = baseline_manifest_url(os.environ.get('WIKI_OLD_BASELINE_URL'))
 UA = 'EnthusiaWikiPublisher/2.1 (read-only full pre-publish backup)'
 
 
@@ -46,7 +47,7 @@ def request(params, method='GET', retries=4):
                 time.sleep(2 + attempt * 2)
                 continue
             raise RuntimeError(f'HTTP {exc.code}: {body[:1000]}') from exc
-        except (urllib.error.URLError, TimeoutError) as exc:
+        except (urllib.error.URLError, TimeoutError):
             if attempt + 1 < retries:
                 time.sleep(2 + attempt * 2)
                 continue

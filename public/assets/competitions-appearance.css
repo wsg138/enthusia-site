@@ -1,0 +1,86 @@
+.competition-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.competition-title-row > h1,
+.competition-title-row > h2,
+.competition-title-row > h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.competition-title-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: 0 0 2.4rem;
+  object-fit: cover;
+  border-radius: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--competition-accent, #ff8a00) 45%, transparent);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.competition-title-icon-featured,
+.competition-title-icon-detail {
+  width: 3.5rem;
+  height: 3.5rem;
+  flex-basis: 3.5rem;
+  border-radius: 0.9rem;
+}
+
+.competition-category-art {
+  width: 100%;
+  max-height: 8rem;
+  object-fit: cover;
+  border-radius: 0.8rem;
+  margin: 0.75rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.competition-featured-category-art {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 0.9rem;
+  margin-bottom: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.competition-detail-category-art-frame {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  min-width: min(18rem, 32vw);
+}
+
+.competition-detail-category-art {
+  width: min(18rem, 100%);
+  max-height: 11rem;
+  object-fit: cover;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--competition-accent, #ff8a00) 18%, transparent);
+}
+
+@media (max-width: 760px) {
+  .competition-title-icon-featured,
+  .competition-title-icon-detail {
+    width: 3rem;
+    height: 3rem;
+    flex-basis: 3rem;
+  }
+
+  .competition-detail-category-art-frame {
+    min-width: 0;
+    width: 100%;
+    padding-top: 0;
+  }
+
+  .competition-detail-category-art {
+    width: 100%;
+  }
+}

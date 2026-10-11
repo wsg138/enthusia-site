@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/styles.css?v=vision64" />
+  <link rel="stylesheet" href="assets/styles.css?v=vision86" />
 </head>
 <body class="about-page">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -95,6 +95,7 @@
         <a href="#pvp">Combat</a>
         <a href="#economy">Economy</a>
         <a href="#guilds">Guilds</a>
+        <a href="#piecloak">PieCloak</a>
         <a href="#events">Events</a>
       </aside>
 
@@ -156,6 +157,23 @@
           </div>
         </section>
 
+        <section id="piecloak" class="content-panel card">
+          <p class="eyebrow">Base privacy</p>
+          <h2>How PieCloak works</h2>
+          <p>PieCloak reduces information exposed to client-side ESP, pie-chart, and block-entity base-finding tools. It hides selected entities and blocks from a player's client when terrain or walls block legitimate visibility. They still exist and continue working normally on the server.</p>
+          <div class="detail-grid">
+            <div><strong>Within 24 blocks</strong><span>Managed entities and blocks are always shown. PieCloak does not conceal nearby activity.</span></div>
+            <div><strong>From 24–48 blocks</strong><span>The server checks the view through terrain. Three occluding block samples are enough to hide a managed entity or block.</span></div>
+            <div><strong>Beyond 48 blocks</strong><span>Managed entities and blocks remain outside the visibility radius until the player moves close enough.</span></div>
+          </div>
+          <h3>What it protects</h3>
+          <p>The current managed entity list includes villagers, copper golems, armadillos, wolves, cats, ocelots, allays, bees, iron golems, snow golems, item frames, glow item frames, armor stands, and paintings. Managed blocks include campfires, soul campfires, decorated pots, bells, jukeboxes, conduits, beacons, moving pistons, shulker boxes, signs, hanging signs, banners, beds, heads, and skulls.</p>
+          <h3>What it does not do</h3>
+          <ul class="clean-list"><li>It does not hide players or ordinary base blocks.</li><li>It does not stop mob AI, farms, breeding, villagers, trades, or block behavior.</li><li>It does not protect exposed builds, player trails, shared coordinates, maps, or normal exploration.</li></ul>
+          <p>For the best protection, build underground. Avoid relying on entities that appear in the pie chart unless they are included in the managed list above.</p>
+          <p><a class="btn quiet" href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Read the Enthusia wiki</a></p>
+        </section>
+
         <section id="events" class="content-panel card">
           <p class="eyebrow">Events, KOTH &amp; duels</p>
           <h2>Competition outside the wilderness</h2>
@@ -179,7 +197,7 @@
 </footer>
 
 <script src="assets/site-config.js?v=vision41" defer></script>
-<script src="assets/script.js?v=vision64" defer></script>
+<script src="assets/script.js?v=vision70" defer></script>
 </body>
 </html>
 

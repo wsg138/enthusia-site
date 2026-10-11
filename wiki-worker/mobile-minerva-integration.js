@@ -13,7 +13,10 @@
   }
 
   function wikiUrl(title) {
-    if (window.mw && mw.util && typeof mw.util.getUrl === 'function') return mw.util.getUrl(title);
+    const mediaWiki = window.mw;
+    if (mediaWiki && mediaWiki.util && typeof mediaWiki.util.getUrl === 'function') {
+      return mediaWiki.util.getUrl(title);
+    }
     return '/wiki/' + String(title).replace(/ /g, '_');
   }
 
@@ -51,7 +54,8 @@
     return header.querySelector('.branding-box') ||
       header.querySelector('.mw-logo') ||
       Array.from(header.querySelectorAll('a[href]')).find(function (link) {
-        return /^enthusia(?:\s+smp)?$/i.test((link.textContent || '').trim());
+        const label = (link.textContent || '').trim().toLowerCase().replace(/\s+/g, ' ');
+        return label === 'enthusia' || label === 'enthusia smp';
       }) || null;
   }
 

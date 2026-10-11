@@ -69,7 +69,9 @@
       if (!window.localStorage) return;
       if (value === null) localStorage.removeItem(THEME_KEY);
       else localStorage.setItem(THEME_KEY, value);
-    } catch (e) {}
+    } catch {
+      // Storage can be unavailable in private or restricted browser sessions.
+    }
   }
 
   function setThemeClasses(mode) {
