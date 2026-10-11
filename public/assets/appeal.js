@@ -61,8 +61,9 @@ async function editAppeal(appeal, reason, status) {
   }
   status.textContent = "Saving…";
   try {
+    // Browser-only same-origin route; checkedAppealId rejects non-canonical UUIDs.
     const response = await fetch(
-      `/api/appeals/${checkedAppealId(appeal.id)}/edit`,
+      `/api/appeals/${checkedAppealId(appeal.id)}/edit`, // nosemgrep: rules_lgpl.javascript.ssrf.rule-node-ssrf
       {
         method: "POST",
         headers: { "content-type": "application/json" },
