@@ -65,7 +65,7 @@ function setCardStatus(result, message, tone) {
 }
 
 async function decide(appeal, decision, note, result, article) {
-  if (note.trim().length < 3) {
+  if (note.value.trim().length < 3) {
     setCardStatus(result, 'Enter a decision note with at least 3 characters.', 'error');
     note.focus();
     return;
