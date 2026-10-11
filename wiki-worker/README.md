@@ -6,6 +6,21 @@ This directory owns the guarded publication path from the approved Enthusia wiki
 
 The approved player-facing content is loaded from `public/wiki-demo/v2-*.js` on the publishing branch. Existing community-authored player, guild, staff, mapart, template and lore pages are not generated or replaced by this worker.
 
+## Stable community navigation
+
+`MediaWiki:Sidebar` should keep the community directory entries pointed at the pages that actually contain those directories:
+
+```text
+** Players|Players
+** Guild list|Guilds
+```
+
+`Guilds` is the server's guild-plugin/how-to documentation page; it is not the community guild directory. The community guild directory is `Guild list`, which dynamically lists pages using `Template:Guild` in the `Guilds` category. Do not repoint the sidebar Guilds entry to the plugin documentation page.
+
+Likewise, keep the Players entry pointed at `Players` rather than the older `Noteable Players` page. If either community directory is replaced later, verify the actual current wiki structure and content before changing the protected interface sidebar.
+
+The live Guilds sidebar target was corrected to `Guild list` on 2026-09-03 after a fresh full-wiki inspection confirmed the distinction. The correction changed only the Guilds target and preserved the Players target and all community page content.
+
 ## Required gates
 
 The `Publish Enthusia wiki` workflow performs these steps in order:

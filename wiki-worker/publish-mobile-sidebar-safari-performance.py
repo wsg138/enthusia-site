@@ -123,7 +123,7 @@ def backup_revision(bmap, title):
     return (rec.get('currentRevision') or {}).get('revid')
 
 
-def validate_sources(corrections, minerva, close_controls, native_css):
+def validate_native_state(corrections, close_controls):
     if 'SIDEBAR_GROUPS' not in corrections or 'toggle.click()' not in corrections:
         raise RuntimeError('Mobile corrections no longer contain the approved native-menu bridge')
     forbidden_native_state_markers = [
@@ -139,6 +139,10 @@ def validate_sources(corrections, minerva, close_controls, native_css):
         marker = next((item for item in forbidden_native_state_markers if item in source), None)
         if marker:
             raise RuntimeError(f'{source_name} still synthesizes native menu state changes: {marker}')
+
+
+def validate_sources(corrections, minerva, close_controls, native_css):
+    validate_native_state(corrections, close_controls)
     if 'MutationObserver' in minerva:
         raise RuntimeError('Minerva branding still watches the whole mobile DOM')
     if "document.createElement('label')" not in close_controls or 'htmlFor = input.id' not in close_controls:
@@ -187,6 +191,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Exception as exc:
+    except (OSError, RuntimeError, ValueError, KeyError) as exc:
         print(f'MOBILE SIDEBAR NATIVE PERFORMANCE ERROR: {exc}', file=sys.stderr)
         sys.exit(1)
