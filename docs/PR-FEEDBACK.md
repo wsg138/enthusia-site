@@ -10,7 +10,7 @@ The original Added findings are recorded in [pr-feedback-findings.json](pr-feedb
 
 ## Engine and architecture
 - Corrected reviewer decisions to read textarea.value before trimming; valid notes now reach the decision endpoint and retain 409 conflict handling.
-- Merged current canonical main into the existing branch without discarding its changes.
+- Inspected current canonical main; kept the repair focused on the existing reviewer branch. Unrelated wiki updates remain in canonical main and are not pulled into this repair.
 - Added regression coverage for invalid request destinations and reviewer decision submission.
 
 ## Refine / verification
