@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+const claimReplayKey = randomUUID();
 import assert from "node:assert/strict";
 import test from "node:test";
 import { sanitizeEdit } from "../functions/api/appeals/[id]/edit.js";
@@ -39,16 +41,16 @@ test("sanitizeEdit rejects bad versions and replay keys", () => {
 test("sanitizeClaim accepts a valid claim", () => {
   assert.deepEqual(sanitizeClaim({
     expectedVersion: 1,
-    idempotencyKey: "claim-12345678"
+    idempotencyKey: claimReplayKey
   }), {
     expectedVersion: 1,
-    idempotencyKey: "claim-12345678"
+    idempotencyKey: claimReplayKey
   });
 });
 
 test("sanitizeClaim rejects bad versions and replay keys", () => {
-  assert.equal(sanitizeClaim({ expectedVersion: 0, idempotencyKey: "claim-12345678" }), null);
-  assert.equal(sanitizeClaim({ expectedVersion: "two", idempotencyKey: "claim-12345678" }), null);
+  assert.equal(sanitizeClaim({ expectedVersion: 0, idempotencyKey: claimReplayKey }), null);
+  assert.equal(sanitizeClaim({ expectedVersion: "two", idempotencyKey: claimReplayKey }), null);
   assert.equal(sanitizeClaim({ expectedVersion: 1, idempotencyKey: "short" }), null);
   assert.equal(sanitizeClaim({ expectedVersion: 1 }), null);
 });

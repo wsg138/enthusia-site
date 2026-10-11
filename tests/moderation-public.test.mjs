@@ -6,10 +6,10 @@ test("moderation page uses a CSP-compliant external same-origin script", () => {
   const html = readFileSync(new URL("../public/moderation.html", import.meta.url), "utf8");
   const policy = readFileSync(new URL("../public/_headers", import.meta.url), "utf8");
   assert.match(policy, /script-src 'self'/);
-  assert.match(html, /<script src="assets\\/moderation\\.js\\?v=1" defer><\\/script>/);
-  assert.doesNotMatch(html, /<script\\s*>/i);
+  assert.match(html, /<script src="assets\/moderation\.js\?v=1" defer><\/script>/);
+  assert.doesNotMatch(html, /<script\s*>/i);
   const script = readFileSync(new URL("../public/assets/moderation.js", import.meta.url), "utf8");
-  assert.match(script, /loadRecent\\(true\\)/);
+  assert.match(script, /loadRecent\(true\)/);
 });
 
 import { buildPunishmentsTarget, clampLimit } from "../functions/api/moderation/punishments.js";
@@ -23,7 +23,7 @@ test("appeal and staff reviewer interfaces comply with script-src self", () => {
   ];
   for (const [htmlPath, src, jsPath] of cases) {
     const html = readFileSync(new URL(htmlPath, import.meta.url), "utf8");
-    assert.doesNotMatch(html, /<script(?:\\s+type="module")?\\s*>/i);
+    assert.doesNotMatch(html, /<script(?:\s+type="module")?\s*>/i);
     assert.ok(html.includes(`src="${src}"`));
     assert.ok(readFileSync(new URL(jsPath, import.meta.url), "utf8").includes("fetch("));
   }
@@ -31,8 +31,8 @@ test("appeal and staff reviewer interfaces comply with script-src self", () => {
 
 test("public case renderer never enumerates unapproved case fields", () => {
   const script = readFileSync(new URL("../public/assets/moderation.js", import.meta.url), "utf8");
-  assert.doesNotMatch(script, /Object\\.keys\\(detail\\)/);
-  assert.doesNotMatch(script, /JSON\\.stringify\\(value\\)/);
+  assert.doesNotMatch(script, /Object\.keys\(detail\)/);
+  assert.doesNotMatch(script, /JSON\.stringify\(value\)/);
   assert.match(script, /"publicReason"/);
 });
 

@@ -1,0 +1,100 @@
+[
+  {
+    "issueId": "638b8db14fb62627e67010a1eb28ba94",
+    "file": "public/assets/appeal.js",
+    "line": 5,
+    "pattern": "Semgrep_rules_lgpl_javascript_ssrf_rule-node-ssrf",
+    "message": "This application allows user-controlled URLs to be passed directly to HTTP client libraries."
+  },
+  {
+    "issueId": "92f2553fa83c08b6d047b428c4c13428",
+    "file": "public/assets/reviewer-appeals.js",
+    "line": 2,
+    "pattern": "Semgrep_rules_lgpl_javascript_ssrf_rule-node-ssrf",
+    "message": "This application allows user-controlled URLs to be passed directly to HTTP client libraries."
+  },
+  {
+    "issueId": "587581c2598a6ad2102633c003e33027",
+    "file": "tests/appeal-lifecycle.test.mjs",
+    "line": 51,
+    "pattern": "Semgrep_generic.secrets.gitleaks.generic-api-key.generic-api-key",
+    "message": "A gitleaks generic-api-key was detected which attempts to identify hard-coded credentials."
+  },
+  {
+    "issueId": "ae0d7e4794da83709c92ec749bb9abf9",
+    "file": "public/assets/reviewer-appeals.js",
+    "line": 4,
+    "pattern": "Semgrep_rules_lgpl_javascript_ssrf_rule-node-ssrf",
+    "message": "This application allows user-controlled URLs to be passed directly to HTTP client libraries."
+  },
+  {
+    "issueId": "afcfcaae99f0daeb5232c86df6507e68",
+    "file": "tests/appeal-lifecycle.test.mjs",
+    "line": 50,
+    "pattern": "Semgrep_generic.secrets.gitleaks.generic-api-key.generic-api-key",
+    "message": "A gitleaks generic-api-key was detected which attempts to identify hard-coded credentials."
+  },
+  {
+    "issueId": "444fc1c9eab73f11bd5f4f055f9d1fa4",
+    "file": "public/assets/reviewer-appeals.js",
+    "line": 3,
+    "pattern": "Semgrep_rules_lgpl_javascript_ssrf_rule-node-ssrf",
+    "message": "This application allows user-controlled URLs to be passed directly to HTTP client libraries."
+  },
+  {
+    "issueId": "971942a3e7536f3193c3fbeb2b8e961f",
+    "file": "tests/appeal-lifecycle.test.mjs",
+    "line": 42,
+    "pattern": "Semgrep_generic.secrets.gitleaks.generic-api-key.generic-api-key",
+    "message": "A gitleaks generic-api-key was detected which attempts to identify hard-coded credentials."
+  },
+  {
+    "issueId": "8f083566b1921165437014291da49d00",
+    "file": "public/assets/events.js",
+    "line": 75,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderSchedule has a cyclomatic complexity of 10 (limit is 8)"
+  },
+  {
+    "issueId": "1ae881ad87dda8b539fbf7c01e68de27",
+    "file": "functions/api/events/[[path]].js",
+    "line": 97,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method getRequestedBoard has a cyclomatic complexity of 9 (limit is 8)"
+  },
+  {
+    "issueId": "38c5318d319fa188666528f04cb6cc8",
+    "file": "functions/api/reviewer/appeals/[id]/claim.js",
+    "line": 27,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 9 (limit is 8)"
+  },
+  {
+    "issueId": "f1720536a19dd276ac14d18b941c5881",
+    "file": "functions/api/reviewer/appeals/[id]/reopen.js",
+    "line": 36,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 9 (limit is 8)"
+  },
+  {
+    "issueId": "292788fccb8f3775a05555a28e5f099",
+    "file": "functions/api/appeals/[id]/edit.js",
+    "line": 24,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 9 (limit is 8)"
+  },
+  {
+    "issueId": "8cacaf7a20f64264be8d8acc8904db40",
+    "file": "public/assets/events.js",
+    "line": 175,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderChampions has a cyclomatic complexity of 9 (limit is 8)"
+  },
+  {
+    "issueId": "bd10f71ae8e3d37c42e750fb81b0b723",
+    "file": "public/assets/moderation.js",
+    "line": 137,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method loadRecent has a cyclomatic complexity of 10 (limit is 8)"
+  }
+]

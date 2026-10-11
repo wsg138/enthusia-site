@@ -95,7 +95,7 @@ function json(data, status) {
 }
 
 export function getRequestedBoard(params) {
-  const rawPath = params && (params.path || params["path"] || params["path*"]);
+  const rawPath = params?.path || params?.["path*"];
   const path = Array.isArray(rawPath) ? rawPath.join("/") : rawPath;
   let board = String(path || "");
   while (board.startsWith("/")) {
