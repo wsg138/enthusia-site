@@ -1,3 +1,11 @@
+const canonicalAppealId =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+function checkedAppealId(value) {
+  if (typeof value !== "string" || !canonicalAppealId.test(value))
+    throw new Error("Invalid appeal identifier");
+  return value;
+}
+
 import { renderAppealMarkup } from "./appeal-markup.js";
 
 const root = document.querySelector("#appeals");
@@ -75,7 +83,7 @@ async function decide(appeal, decision, note, actionRoot, actionStatus) {
   actionStatus.textContent = "Saving decision…";
   setActionsDisabled(actionRoot, true);
   try {
-    const response = await fetch(`/api/reviewer/appeals/${encodeURIComponent(appeal.id)}`, {
+    const response = await fetch(`/api/reviewer/appeals/${checkedAppealId(appeal.id)}`, {
       method: "POST",
       credentials: "same-origin",
       headers: { "content-type": "application/json", accept: "application/json" },
@@ -208,7 +216,7 @@ async function postComment(appeal, body, button, input, result) {
   input.disabled = true;
   result.textContent = "Sending…";
   try {
-    const response = await fetch(`/api/reviewer/appeals/${encodeURIComponent(appeal.id)}/comments`, {
+    const response = await fetch(`/api/reviewer/appeals/${checkedAppealId(appeal.id)}/comments`, {
       method: "POST",
       credentials: "same-origin",
       headers: { "content-type": "application/json", accept: "application/json" },

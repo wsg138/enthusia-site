@@ -1,5 +1,6 @@
+import { publicModerationResponse } from "../../lib/moderation-projection.js";
 import { json, methodNotAllowed, serviceUnavailable } from "../../lib/responses.js";
-import { signedStaffGet, staffApiResponse } from "../../lib/staff-api.js";
+import { signedStaffGet } from "../../lib/staff-api.js";
 
 const SEARCH_PATH = "/v1/public/search";
 const MAX_QUERY_LENGTH = 64;
@@ -22,7 +23,7 @@ export async function onRequestGet(context) {
 
   try {
     const upstream = await signedStaffGet(context.env, buildSearchTarget(q));
-    return staffApiResponse(upstream, "public, max-age=30");
+    return publicModerationResponse(upstream, "search", "public, max-age=30");
   } catch {
     return serviceUnavailable();
   }

@@ -11,15 +11,16 @@
 <link rel="stylesheet" href="assets/enthusia.css?v=red1">
 <link rel="stylesheet" href="assets/market/market.css?v=layers1">
 <link rel="stylesheet" href="assets/market/market-theme.css?v=red1">
+<link rel="stylesheet" href="assets/integration.css?v=1">
 </head>
 <body>
 <a class="skip-link" href="#market-map">Skip to main content</a>
 <div class="en">
 
-<header class="site-head s-red">
+<header class="site-head site-header s-red">
 <div class="site-head-in">
 <a class="brand" href="index.html" aria-label="Enthusia SMP home">
-<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<img class="brand-logo" src="assets/ui/logo-256.png" alt="" width="44" height="44">
 <span>ENTHUSIA SMP</span>
 </a>
 <button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
@@ -30,14 +31,16 @@
 <a href="plugins.html">About</a>
 <a href="rules.html">Rules</a>
 <a href="vote.html">Vote</a>
-<a href="appeal.html">Appeals</a>
+
 </div>
 </div>
 <div class="nav-group">
-<button class="navbtn cur" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="market.html" class="active" aria-current="page">Market</a>
 <a href="gallery.html">Gallery</a>
+<a href="moderation.html">Moderation</a>
+<a href="punishments.html">Punishments</a>
 </div>
 </div>
 <div class="nav-group">
@@ -45,11 +48,16 @@
 <div class="panel nav-menu">
 <a href="leaderboards.html">Leaderboards</a>
 <a href="staff.html">Staff</a>
+<a href="events.html">Events</a>
+<a href="competitions/index.html">Competitions</a>
 <a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
 </div>
 </div>
+<a href="appeal.html">Appeals</a>
+<a href="account.html">Profile</a>
 <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
 <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+<span class="site-account" data-site-account></span>
 </nav>
 <a class="btn btn-gold hdr-play" href="index.html#join">Play now!</a>
 </div>
@@ -128,7 +136,7 @@
 
 <script src="assets/site-config.js?v=red1" defer></script>
 <script src="assets/enthusia.js?v=red1" defer></script>
-<script src="assets/enthusia.js?v=red1" defer></script>
+
 <script src="assets/guild-banner-renderer.js?v=banner4"></script>
 <script src="assets/market/map-core.js?v=items9"></script>
 <script src="assets/market/minecraft/material-icon-manifest.js?v=honey4"></script>
@@ -139,7 +147,9 @@
 <script src="assets/market/market-adapter.js?v=live1"></script>
 <script src="assets/market/market-api-client.js?v=live1"></script>
 <script src="assets/market/potion-preview-fix.js?v=1"></script>
+<script src="assets/market/market-owner-url.js?v=1"></script>
 <script src="assets/market/market.js?v=live4"></script>
 <script src="assets/market/map-layers.js?v=layers1"></script>
+<script src="assets/site-account.js?v=integration1" type="module"></script>
 </body>
 </html>

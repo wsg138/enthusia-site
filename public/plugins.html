@@ -9,26 +9,27 @@
 <link rel="icon" href="assets/enthusia-logo-v2.png" type="image/png">
 <link rel="preload" href="assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="assets/enthusia.css?v=red1">
+<link rel="stylesheet" href="assets/integration.css?v=1">
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="en">
 
-<header class="site-head s-red">
+<header class="site-head site-header s-red">
 <div class="site-head-in">
 <a class="brand" href="index.html" aria-label="Enthusia SMP home">
-<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<img class="brand-logo" src="assets/ui/logo-256.png" alt="" width="44" height="44">
 <span>ENTHUSIA SMP</span>
 </a>
 <button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
 <nav class="nav" id="site-nav" aria-label="Primary navigation">
 <div class="nav-group">
-<button class="navbtn cur" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="plugins.html" class="active" aria-current="page">About</a>
 <a href="rules.html">Rules</a>
 <a href="vote.html">Vote</a>
-<a href="appeal.html">Appeals</a>
+
 </div>
 </div>
 <div class="nav-group">
@@ -36,6 +37,8 @@
 <div class="panel nav-menu">
 <a href="market.html">Market</a>
 <a href="gallery.html">Gallery</a>
+<a href="moderation.html">Moderation</a>
+<a href="punishments.html">Punishments</a>
 </div>
 </div>
 <div class="nav-group">
@@ -43,11 +46,16 @@
 <div class="panel nav-menu">
 <a href="leaderboards.html">Leaderboards</a>
 <a href="staff.html">Staff</a>
+<a href="events.html">Events</a>
+<a href="competitions/index.html">Competitions</a>
 <a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
 </div>
 </div>
+<a href="appeal.html">Appeals</a>
+<a href="account.html">Profile</a>
 <a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
 <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+<span class="site-account" data-site-account></span>
 </nav>
 <a class="btn btn-gold hdr-play" href="index.html#join">Play now!</a>
 </div>
@@ -136,7 +144,7 @@
 </div>
 <div class="cardgrid"><div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Shared identity</h3><p style="color: var(--muted)">Create a recognizable name and banner for your group.</p></div><div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Progression</h3><p style="color: var(--muted)">Develop the guild over time and compete on the public leaderboard.</p></div><div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Server history</h3><p style="color: var(--muted)">Trade, build, fight, and create the stories other players remember.</p></div></div>
 </div>
-<div class="swap hide" style="display: flex; flex-direction: column; gap: 24px" data-switch-panel="about" data-value="piecloak">
+<div class="swap hide" style="display: flex; flex-direction: column; gap: 24px" id="piecloak" data-switch-panel="about" data-value="piecloak">
 <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px 32px">
 <div style="flex: 2 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
 <p style="color: var(--kick); letter-spacing: 2px">BASE PRIVACY</p>
@@ -144,7 +152,7 @@
 <p>PieCloak reduces information exposed to client-side ESP, pie-chart, and block-entity base-finding tools. It hides selected entities and blocks from a player's client when terrain or walls block legitimate visibility. They still exist and continue working normally on the server.</p>
 </div>
 </div>
-<div class="cardgrid"><div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Within 24 blocks</h3><p style="color: var(--muted)">Managed entities and blocks are always shown. PieCloak does not conceal nearby activity.</p></div><div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">From 24 to 48 blocks</h3><p style="color: var(--muted)">The server checks the view through terrain. Three occluding block samples are enough to hide a managed entity or block.</p></div><div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Beyond 48 blocks</h3><p style="color: var(--muted)">Managed entities and blocks remain outside the visibility radius until the player moves close enough.</p></div></div>
+<div class="cardgrid"><div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Within 24 blocks</h3><p style="color: var(--muted)">Managed entities and blocks are always shown. PieCloak does not conceal nearby activity.</p></div><div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">From 24–48 blocks</h3><p style="color: var(--muted)">The server checks the view through terrain. Three occluding block samples are enough to hide a managed entity or block.</p></div><div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Beyond 48 blocks</h3><p style="color: var(--muted)">Managed entities and blocks remain outside the visibility radius until the player moves close enough.</p></div></div>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 16px; align-items: start">
 <div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
 <h3 style="font-size: 24px; line-height: 32px; color: var(--head)">What it protects</h3>
@@ -233,5 +241,6 @@
 
 <script src="assets/site-config.js?v=red1" defer></script>
 <script src="assets/enthusia.js?v=red1" defer></script>
+<script src="assets/site-account.js?v=integration1" type="module"></script>
 </body>
 </html>

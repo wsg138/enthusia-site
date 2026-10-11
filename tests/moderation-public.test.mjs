@@ -18,8 +18,8 @@ import { buildCaseTarget, isValidCaseId } from "../functions/api/moderation/case
 
 test("appeal and staff reviewer interfaces comply with script-src self", () => {
   const cases = [
-    ["../public/appeal.html", "assets/appeal.js?v=1", "../public/assets/appeal.js"],
-    ["../public/reviewer/appeals.html", "../assets/reviewer-appeals.js?v=1", "../public/assets/reviewer-appeals.js"]
+    ["../public/appeal.html", "assets/appeals.js?v=4", "../public/assets/appeals.js"],
+    ["../public/reviewer/appeals.html", "../assets/reviewer-appeals.js?v=3", "../public/assets/reviewer-appeals.js"]
   ];
   for (const [htmlPath, src, jsPath] of cases) {
     const html = readFileSync(new URL(htmlPath, import.meta.url), "utf8");

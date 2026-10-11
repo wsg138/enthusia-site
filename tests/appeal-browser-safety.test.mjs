@@ -9,6 +9,7 @@ function browser(file) {
   vm.createContext(context);
   let source = readFileSync(new URL('../public/assets/' + file, import.meta.url), 'utf8');
   source = source.replace(/Promise.all\(\[loadEligible\(\),\s*loadMine\(\)\]\);?\s*$/, '').replace(/load\(\);\s*$/, '');
+  source = source.slice(0, source.indexOf("import "));
   vm.runInContext(source, context);
   return { context, calls, node };
 }

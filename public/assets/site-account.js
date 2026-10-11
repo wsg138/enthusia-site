@@ -115,7 +115,9 @@ function ensureRoot() {
 
 function menuLink(label, href, description) {
   const link = document.createElement("a");
-  link.href = href;
+  const root = document.documentElement.getAttribute("data-preview-root");
+  const base = root ? new URL(root, document.baseURI) : new URL("../", import.meta.url);
+  link.href = href.startsWith("/") ? new URL(href.slice(1), base).href : href;
   if (!description) {
     link.textContent = label;
     return link;

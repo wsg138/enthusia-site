@@ -156,7 +156,7 @@ function bannerMediaUrl(competition) {
 }
 
 function bannerImage(competition, className, alt = "") {
-  const url = bannerMediaUrl(competition) ?? "../assets/screenshots/slide-01.webp";
+  const url = bannerMediaUrl(competition) ?? new URL("./screenshots/slide-01.webp", import.meta.url).href;
   const image = document.createElement("img");
   image.className = className;
   image.src = url;
@@ -164,7 +164,7 @@ function bannerImage(competition, className, alt = "") {
   image.loading = "lazy";
   image.decoding = "async";
   image.referrerPolicy = "same-origin";
-  image.addEventListener("error", () => { image.src = "../assets/enthusia-logo-v2.png"; }, { once: true });
+  image.addEventListener("error", () => { image.src = new URL("./enthusia-logo-v2.png", import.meta.url).href; }, { once: true });
   return image;
 }
 
@@ -331,7 +331,7 @@ function renderOverview(root, payload) {
     const winner = document.createElement("div");
     winner.className = "competition-winner";
     const image = document.createElement("img");
-    image.src = winnerEntry?.coverImageUrl || "../assets/screenshots/slide-01.webp";
+    image.src = winnerEntry?.coverImageUrl || new URL("./screenshots/slide-01.webp", import.meta.url).href;
     image.alt = winnerEntry?.coverImageUrl ? `${winnerEntry.title} cover image` : "Placeholder winning entry image";
     winner.append(image);
     const copy = document.createElement("div"); copy.className = "competition-winner-copy";
@@ -493,7 +493,7 @@ function renderEntries(root, payload) {
     card.setAttribute("role", "button");
     const preview = document.createElement("img");
     preview.className = "submission-card-cover";
-    preview.src = submission.coverImageUrl || "../assets/screenshots/slide-01.webp";
+    preview.src = submission.coverImageUrl || new URL("./screenshots/slide-01.webp", import.meta.url).href;
     preview.alt = submission.coverImageUrl ? `${submission.title} cover image` : "Placeholder competition entry image";
     const type = document.createElement("span");
     type.className = "competition-badge";
@@ -718,7 +718,7 @@ function renderJudges(root, payload) {
   const grid = document.createElement("div"); grid.className = "competition-judges-grid";
   for (const judge of payload.judges ?? []) {
     const card = document.createElement("article"); card.className = "competition-judge-card";
-    const image = document.createElement("img"); image.src = `https://mc-heads.net/avatar/${encodeURIComponent(judge.playerName)}/128`; image.alt = `${judge.playerName} Minecraft head`; image.loading = "lazy"; image.addEventListener("error", () => { image.src = "../assets/enthusia-logo-v2.png"; }, { once: true });
+    const image = document.createElement("img"); image.src = `https://mc-heads.net/avatar/${encodeURIComponent(judge.playerName)}/128`; image.alt = `${judge.playerName} Minecraft head`; image.loading = "lazy"; image.addEventListener("error", () => { image.src = new URL("./enthusia-logo-v2.png", import.meta.url).href; }, { once: true });
     const copy = document.createElement("div"); const name = document.createElement("strong"); name.textContent = judge.playerName; const role = document.createElement("span"); role.textContent = "Competition judge"; copy.append(name, role); card.append(image, copy); grid.append(card);
   }
   section.append(title, intro);

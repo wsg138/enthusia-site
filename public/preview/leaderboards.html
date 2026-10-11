@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html data-preview-root="./" lang="en" class="no-js">
+<head>
+<script src="./fixtures.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enthusia SMP | Leaderboards</title>
+<meta name="description" content="Enthusia SMP leaderboards for playtime, balance, guild rankings, and top donors.">
+<meta name="theme-color" content="#c0261d">
+<link rel="icon" href="../assets/enthusia-logo-v2.png" type="image/png">
+<link rel="preload" href="../assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
+<link rel="stylesheet" href="../assets/enthusia.css?v=red1">
+<link rel="stylesheet" href="../assets/integration.css?v=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="en">
+
+<header class="site-head site-header s-red">
+<div class="site-head-in">
+<a class="brand" href="index.html" aria-label="Enthusia SMP home">
+<img class="brand-logo" src="../assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="plugins.html">About</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="moderation.html">Moderation</a>
+<a href="punishments.html">Punishments</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="leaderboards.html" class="active" aria-current="page">Leaderboards</a>
+<a href="staff.html">Staff</a>
+<a href="events.html">Events</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<a href="appeal.html">Appeals</a>
+<a href="account.html">Profile</a>
+<a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+<span class="site-account" data-site-account></span>
+</nav>
+<a class="btn btn-gold hdr-play" href="index.html#join">Play now!</a>
+</div>
+</header>
+
+<main id="main-content" class="page-main">
+<section class="hero hero-vars hero-leaderboards" aria-labelledby="leaderboards-title">
+<div class="hero-in">
+<p class="tag tag-gold kicker-tag">COMMUNITY</p>
+<h1 id="leaderboards-title" class="t-hero2 hero-title">LEADERBOARDS</h1>
+<p class="hero-lead">Live rankings for playtime, balance, guilds, and top donors.</p>
+</div>
+<div class="crenel"></div>
+</section>
+
+<section class="s-cream" aria-label="Rankings" style="padding: 72px 0">
+<div class="wrap stack">
+<div class="tab-head" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div class="tabs" role="group" aria-label="Choose a leaderboard" style="display: flex; flex-wrap: wrap; gap: 12px">
+<button class="chip" type="button" aria-pressed="true" data-switch="board" data-value="playtime">Playtime</button>
+<button class="chip" type="button" aria-pressed="false" data-switch="board" data-value="balance">Balance</button>
+<button class="chip" type="button" aria-pressed="false" data-switch="board" data-value="guilds">Guilds</button>
+<button class="chip" type="button" aria-pressed="false" data-switch="board" data-value="donors">Top Donors</button>
+</div>
+<p style="display: flex; align-items: center; gap: 12px; color: var(--good)"><span class="live"></span>Live from the server</p>
+</div>
+<div class="swap board-panel" data-switch-panel="board" data-value="playtime" data-board="playtime-active-all" data-limit="10" data-layout="podium">
+<p class="muted">Top players by active playtime.</p>
+<div class="board-body">
+<div class="podium staff" data-board-podium aria-label="Top three" hidden></div>
+<div class="tip fret board-card">
+<div class="lb-cols"><span>Player</span><span>Hours</span></div>
+<ol class="lb-list" data-board-rows hidden></ol>
+<div class="board-state" data-board-state><p>Loading the leaderboard...</p></div>
+</div>
+</div>
+</div>
+<div class="swap board-panel hide" data-switch-panel="board" data-value="balance" data-board="balance-active-all" data-limit="10" data-layout="podium">
+<p class="muted">Richest players on the server.</p>
+<div class="board-body">
+<div class="podium staff" data-board-podium aria-label="Top three" hidden></div>
+<div class="tip fret board-card">
+<div class="lb-cols"><span>Player</span><span>Dollars</span></div>
+<ol class="lb-list" data-board-rows hidden></ol>
+<div class="board-state" data-board-state><p>Loading the leaderboard...</p></div>
+</div>
+</div>
+</div>
+<div class="swap board-panel hide" data-switch-panel="board" data-value="guilds" data-board="guilds" data-limit="5" data-layout="podium">
+<p class="muted">Top guilds by level.</p>
+<div class="board-body">
+<div class="podium staff" data-board-podium aria-label="Top three" hidden></div>
+<div class="tip fret board-card">
+<div class="lb-cols"><span>Guild</span><span>Level</span></div>
+<ol class="lb-list" data-board-rows hidden></ol>
+<div class="board-state" data-board-state><p>Loading the leaderboard...</p></div>
+</div>
+</div>
+</div>
+<div class="swap board-panel hide" data-switch-panel="board" data-value="donors" data-board="donators-all-time" data-limit="5" data-layout="list">
+<p class="muted">Top supporters.</p>
+<div class="board-body">
+<div class="podium staff" data-board-podium aria-label="Top three" hidden></div>
+<div class="tip fret board-card">
+<div class="lb-cols"><span>Player</span><span>Support</span></div>
+<ol class="lb-list" data-board-rows hidden></ol>
+<div class="board-state" data-board-state><p>Loading the leaderboard...</p></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="index.html">
+<img src="../assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="index.html#join">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="plugins.html">About</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="staff.html">Staff</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+<a href="index.html#faq">FAQ</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p>&copy; <span data-year>2026</span> Enthusia SMP · Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
+
+<div class="toast hide" role="status" data-toast>
+<img src="../assets/ui/logo-256.png" alt="" width="48" height="48">
+<div><p class="toast-title" data-toast-title>Address copied!</p><p data-server-ip>enthusia.net</p></div>
+</div>
+</div>
+
+<script src="../assets/guild-banner-renderer.js?v=banner4" defer></script>
+<script src="../assets/site-config.js?v=red1" defer></script>
+<script src="../assets/enthusia.js?v=red1" defer></script>
+<script src="../assets/page-leaderboards.js" defer></script>
+<script src="../assets/site-account.js?v=integration1" type="module"></script>
+</body>
+</html>

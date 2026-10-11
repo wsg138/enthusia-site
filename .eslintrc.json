@@ -73,6 +73,15 @@
       "rules": {
         "no-control-regex": "off"
       }
+    },
+    {
+      "files": [
+        "wiki-worker/validate-live-mobile-sidebar-webkit.mjs"
+      ],
+      "env": {
+        "node": true,
+        "browser": true
+      }
     }
   ]
 }

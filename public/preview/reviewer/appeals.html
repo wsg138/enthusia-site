@@ -1,0 +1,93 @@
+<!doctype html>
+<html data-preview-root="../" lang="en" id="top">
+<head>
+<script src="../fixtures.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Private Enthusia staff workspace for reviewing punishment appeals.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#100d0a">
+  <title>Appeal review | Enthusia Staff</title>
+  <link rel="icon" href="../../assets/enthusia-logo-v2.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/enthusia.css?v=red1">
+<link rel="stylesheet" href="../../assets/platform-workflows.css?v=1">
+<script src="../../assets/site-config.js" defer></script>
+<link rel="stylesheet" href="../../assets/integration.css?v=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+</head>
+<body class="appeal-review-page moderation-page en workflow-page s-cream">
+<a class="skip-link" href="#main-content">Skip to appeals</a>
+
+
+<header class="site-head site-header s-red">
+<div class="site-head-in">
+<a class="brand" href="../index.html" aria-label="Enthusia SMP home">
+<img class="brand-logo" src="../../assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="../plugins.html">About</a>
+<a href="../rules.html">Rules</a>
+<a href="../vote.html">Vote</a>
+
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="../market.html">Market</a>
+<a href="../gallery.html">Gallery</a>
+<a href="../moderation.html">Moderation</a>
+<a href="../punishments.html">Punishments</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="../leaderboards.html">Leaderboards</a>
+<a href="../staff.html">Staff</a>
+<a href="../events.html">Events</a>
+<a href="../competitions/index.html">Competitions</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<a href="../appeal.html">Appeals</a>
+<a href="../account.html">Profile</a>
+<a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+<span class="site-account" data-site-account></span>
+</nav>
+<a class="btn btn-gold hdr-play" href="../index.html#join">Play now!</a>
+</div>
+</header>
+
+<main id="main-content" class="page-main reviewer-main">
+  <section class="container reviewer-hero" aria-labelledby="reviewer-title">
+    <div><p class="eyebrow">Staff workspace</p><h1 id="reviewer-title">Appeal reviews</h1><p>Open a case, read the appeal and conversation, then record the outcome.</p></div>
+  </section>
+
+  <section class="container reviewer-workspace" aria-label="Appeal queue">
+    <div class="card reviewer-toolbar">
+      <label for="status"><span>Show appeals</span><select id="status"><option value="OPEN">Open</option><option value="INFORMATION_REQUESTED">Waiting for player</option><option value="APPROVAL_PENDING">Approval pending</option><option value="APPLIED">Approved</option><option value="DENIED">Denied</option><option value="REJECTED">Approval failed</option><option value="ALL">All</option></select></label>
+      <label for="review-search"><span>Find in this list</span><input id="review-search" type="search" maxlength="80" autocomplete="off" placeholder="Player, case, or appeal ID"></label>
+      <button id="refresh" class="btn ghost" type="button">Refresh</button>
+      <p id="reviewer-status" role="status">Loading appeals…</p>
+    </div>
+    <div id="appeals" class="reviewer-appeals" aria-live="polite" aria-busy="true"></div>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner"><p>&copy; <span id="year"></span> Enthusia SMP</p><p>Authorized staff access only</p></div></footer>
+<script src="../../assets/enthusia.js?v=integration1" defer></script>
+<script type="module" src="../../assets/reviewer-appeals.js?v=3"></script>
+<script type="module" src="../../assets/reviewer-appeals-lifecycle.js?v=1"></script>
+<script src="../../assets/site-account.js?v=integration1" type="module"></script>
+</body>
+</html>

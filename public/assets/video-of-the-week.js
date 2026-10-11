@@ -4,7 +4,6 @@
   var doc = document;
   function selectOne(selector, scope) { return (scope || doc).querySelector(selector); }
   function selectAll(selector, scope) { return Array.prototype.slice.call((scope || doc).querySelectorAll(selector)); }
-  function text(value) { return typeof value === "string" ? value.trim() : ""; }
   function el(tag, className, content) {
     var node = doc.createElement(tag);
     if (className) node.className = className;

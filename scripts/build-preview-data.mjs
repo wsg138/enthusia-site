@@ -1,0 +1,12 @@
+import { initialCompetitionConfig } from '../functions/lib/competitions/config.js';
+import { publicCompetitionConfig } from '../functions/lib/competitions/public.js';
+import { writeFile } from 'node:fs/promises';
+const config=initialCompetitionConfig({summary:'A sample competition for exploring the combined site.'});
+config.public.description='Build a welcoming town square and share screenshots of your entry. This is preview content.';
+config.public.rules='Use your own build. Include screenshots. Follow the server rules.';
+config.schedule={submissionsOpenAt:'2026-10-01T12:00:00Z',submissionsCloseAt:'2026-10-15T12:00:00Z',votingOpenAt:'2026-10-16T12:00:00Z',votingCloseAt:'2026-10-20T12:00:00Z',judgingOpenAt:'2026-10-20T12:00:00Z',judgingCloseAt:'2026-10-25T12:00:00Z'};
+config.entries.allowedTypes=['SOLO','GROUP','GUILD'];config.voting.enabled=true;config.judging.enabled=true;
+config.judging.criteria=[{id:'build',label:'Build quality',maxScore:10,weight:1}];
+const base={id:'123e4567-e89b-42d3-a456-426614174100',slug:'town-square',title:'Town Square Showcase',category:'BUILD',visibility:'PUBLIC',configVersion:1,publishedAt:'2026-10-01T12:00:00Z',config:publicCompetitionConfig(config)};
+const competitions=[{...base,lifecycleState:'SUBMISSIONS_OPEN'},{...base,id:'123e4567-e89b-42d3-a456-426614174101',slug:'community-vote',title:'Community Build Vote',lifecycleState:'VOTING'},{...base,id:'123e4567-e89b-42d3-a456-426614174102',slug:'winter-build',title:'Winter Build Preview',lifecycleState:'UPCOMING'},{...base,id:'123e4567-e89b-42d3-a456-426614174103',slug:'autumn-results',title:'Autumn Build Results',lifecycleState:'COMPLETED'}];
+await writeFile('public/preview/data.json',JSON.stringify({competitions,adminConfig:config},null,2)+'\n');

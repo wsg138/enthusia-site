@@ -1,5 +1,6 @@
+import { publicModerationResponse } from "../../../lib/moderation-projection.js";
 import { json, methodNotAllowed, serviceUnavailable } from "../../../lib/responses.js";
-import { signedStaffGet, staffApiResponse } from "../../../lib/staff-api.js";
+import { signedStaffGet } from "../../../lib/staff-api.js";
 
 const CASES_PATH = "/v1/public/cases";
 const CASE_ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
@@ -21,7 +22,7 @@ export async function onRequestGet(context) {
 
   try {
     const upstream = await signedStaffGet(context.env, buildCaseTarget(id));
-    return staffApiResponse(upstream, "public, max-age=60");
+    return publicModerationResponse(upstream, "case", "public, max-age=60");
   } catch {
     return serviceUnavailable();
   }

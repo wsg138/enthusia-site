@@ -53,7 +53,7 @@ test("home carousel matches the maintained staff roster", async () => {
 
   const pageRoster = Array.from(
     staffPage.matchAll(
-      /<span class="staff-role [^"]+">([^<]+)<\/span>[\s\S]*?<dt>Minecraft<\/dt><dd>([^<]+)<\/dd>/g
+      /<article[^>]*data-value="([^"]+)"[\s\S]*?<p>Minecraft <span>([^<]+)<\/span>/g
     ),
     ([, role, username]) => ({ username, role })
   );

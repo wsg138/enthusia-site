@@ -51,9 +51,25 @@ function communityMenu(nav) {
   return { dropdown, menu, trigger };
 }
 
+function markUnifiedNavigation(nav) {
+  const links = [...nav.querySelectorAll("a[href]")];
+  const current = trimTrailingSlashes(window.location.pathname);
+  for (const link of links) {
+    const target = localPath(link);
+    const active = target === current || (target?.endsWith("/competitions/index.html") && current.includes("/competitions/") && !current.includes("/admin/"));
+    link.classList.toggle("active", active);
+    if (active) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  }
+}
+
 export function normalizeSiteNavigation() {
   const nav = document.querySelector(".site-header .nav");
   if (!nav) return;
+  if (nav.closest(".site-head")) {
+    markUnifiedNavigation(nav);
+    return;
+  }
   const { dropdown, menu, trigger } = communityMenu(nav);
   const appeal = internalLink(nav, "/appeal.html", "Appeals");
   const punishments = internalLink(nav, "/punishments.html", "Punishments");

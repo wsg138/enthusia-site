@@ -1,0 +1,364 @@
+{
+  "competitions": [
+    {
+      "id": "123e4567-e89b-42d3-a456-426614174100",
+      "slug": "town-square",
+      "title": "Town Square Showcase",
+      "category": "BUILD",
+      "visibility": "PUBLIC",
+      "configVersion": 1,
+      "publishedAt": "2026-10-01T12:00:00Z",
+      "config": {
+        "public": {
+          "summary": "A sample competition for exploring the combined site.",
+          "description": "Build a welcoming town square and share screenshots of your entry. This is preview content.",
+          "rules": "Use your own build. Include screenshots. Follow the server rules."
+        },
+        "appearance": {
+          "bannerImageId": null,
+          "iconImageId": null,
+          "categoryImageId": null,
+          "accent": null
+        },
+        "schedule": {
+          "submissionsOpenAt": "2026-10-01T12:00:00Z",
+          "submissionsCloseAt": "2026-10-15T12:00:00Z",
+          "reviewCloseAt": null,
+          "votingOpenAt": "2026-10-16T12:00:00Z",
+          "votingCloseAt": "2026-10-20T12:00:00Z",
+          "judgingOpenAt": "2026-10-20T12:00:00Z",
+          "judgingCloseAt": "2026-10-25T12:00:00Z"
+        },
+        "entries": {
+          "allowedTypes": [
+            "SOLO",
+            "GROUP",
+            "GUILD"
+          ],
+          "maxEntriesPerPlayer": 3,
+          "maxEntriesPerGuild": 1,
+          "minImages": 1,
+          "maxDescriptionChars": 2500,
+          "coordinatesRequested": false,
+          "judgesCanViewCoordinates": false,
+          "maxMainMembers": null,
+          "maxHelpers": null
+        },
+        "voting": {
+          "enabled": true,
+          "votesPerVoter": 3,
+          "minimumActiveMinutes": 120,
+          "allowChangesUntilClose": true
+        },
+        "judging": {
+          "enabled": true,
+          "criteria": [
+            {
+              "id": "build",
+              "label": "Build quality",
+              "maxScore": 10,
+              "weight": 1
+            }
+          ],
+          "communityWeight": null,
+          "judgeWeight": null,
+          "tiebreakRule": null,
+          "publicFeedbackOptional": true
+        },
+        "rewards": {
+          "definitions": []
+        }
+      },
+      "lifecycleState": "SUBMISSIONS_OPEN"
+    },
+    {
+      "id": "123e4567-e89b-42d3-a456-426614174101",
+      "slug": "community-vote",
+      "title": "Community Build Vote",
+      "category": "BUILD",
+      "visibility": "PUBLIC",
+      "configVersion": 1,
+      "publishedAt": "2026-10-01T12:00:00Z",
+      "config": {
+        "public": {
+          "summary": "A sample competition for exploring the combined site.",
+          "description": "Build a welcoming town square and share screenshots of your entry. This is preview content.",
+          "rules": "Use your own build. Include screenshots. Follow the server rules."
+        },
+        "appearance": {
+          "bannerImageId": null,
+          "iconImageId": null,
+          "categoryImageId": null,
+          "accent": null
+        },
+        "schedule": {
+          "submissionsOpenAt": "2026-10-01T12:00:00Z",
+          "submissionsCloseAt": "2026-10-15T12:00:00Z",
+          "reviewCloseAt": null,
+          "votingOpenAt": "2026-10-16T12:00:00Z",
+          "votingCloseAt": "2026-10-20T12:00:00Z",
+          "judgingOpenAt": "2026-10-20T12:00:00Z",
+          "judgingCloseAt": "2026-10-25T12:00:00Z"
+        },
+        "entries": {
+          "allowedTypes": [
+            "SOLO",
+            "GROUP",
+            "GUILD"
+          ],
+          "maxEntriesPerPlayer": 3,
+          "maxEntriesPerGuild": 1,
+          "minImages": 1,
+          "maxDescriptionChars": 2500,
+          "coordinatesRequested": false,
+          "judgesCanViewCoordinates": false,
+          "maxMainMembers": null,
+          "maxHelpers": null
+        },
+        "voting": {
+          "enabled": true,
+          "votesPerVoter": 3,
+          "minimumActiveMinutes": 120,
+          "allowChangesUntilClose": true
+        },
+        "judging": {
+          "enabled": true,
+          "criteria": [
+            {
+              "id": "build",
+              "label": "Build quality",
+              "maxScore": 10,
+              "weight": 1
+            }
+          ],
+          "communityWeight": null,
+          "judgeWeight": null,
+          "tiebreakRule": null,
+          "publicFeedbackOptional": true
+        },
+        "rewards": {
+          "definitions": []
+        }
+      },
+      "lifecycleState": "VOTING"
+    },
+    {
+      "id": "123e4567-e89b-42d3-a456-426614174102",
+      "slug": "winter-build",
+      "title": "Winter Build Preview",
+      "category": "BUILD",
+      "visibility": "PUBLIC",
+      "configVersion": 1,
+      "publishedAt": "2026-10-01T12:00:00Z",
+      "config": {
+        "public": {
+          "summary": "A sample competition for exploring the combined site.",
+          "description": "Build a welcoming town square and share screenshots of your entry. This is preview content.",
+          "rules": "Use your own build. Include screenshots. Follow the server rules."
+        },
+        "appearance": {
+          "bannerImageId": null,
+          "iconImageId": null,
+          "categoryImageId": null,
+          "accent": null
+        },
+        "schedule": {
+          "submissionsOpenAt": "2026-10-01T12:00:00Z",
+          "submissionsCloseAt": "2026-10-15T12:00:00Z",
+          "reviewCloseAt": null,
+          "votingOpenAt": "2026-10-16T12:00:00Z",
+          "votingCloseAt": "2026-10-20T12:00:00Z",
+          "judgingOpenAt": "2026-10-20T12:00:00Z",
+          "judgingCloseAt": "2026-10-25T12:00:00Z"
+        },
+        "entries": {
+          "allowedTypes": [
+            "SOLO",
+            "GROUP",
+            "GUILD"
+          ],
+          "maxEntriesPerPlayer": 3,
+          "maxEntriesPerGuild": 1,
+          "minImages": 1,
+          "maxDescriptionChars": 2500,
+          "coordinatesRequested": false,
+          "judgesCanViewCoordinates": false,
+          "maxMainMembers": null,
+          "maxHelpers": null
+        },
+        "voting": {
+          "enabled": true,
+          "votesPerVoter": 3,
+          "minimumActiveMinutes": 120,
+          "allowChangesUntilClose": true
+        },
+        "judging": {
+          "enabled": true,
+          "criteria": [
+            {
+              "id": "build",
+              "label": "Build quality",
+              "maxScore": 10,
+              "weight": 1
+            }
+          ],
+          "communityWeight": null,
+          "judgeWeight": null,
+          "tiebreakRule": null,
+          "publicFeedbackOptional": true
+        },
+        "rewards": {
+          "definitions": []
+        }
+      },
+      "lifecycleState": "UPCOMING"
+    },
+    {
+      "id": "123e4567-e89b-42d3-a456-426614174103",
+      "slug": "autumn-results",
+      "title": "Autumn Build Results",
+      "category": "BUILD",
+      "visibility": "PUBLIC",
+      "configVersion": 1,
+      "publishedAt": "2026-10-01T12:00:00Z",
+      "config": {
+        "public": {
+          "summary": "A sample competition for exploring the combined site.",
+          "description": "Build a welcoming town square and share screenshots of your entry. This is preview content.",
+          "rules": "Use your own build. Include screenshots. Follow the server rules."
+        },
+        "appearance": {
+          "bannerImageId": null,
+          "iconImageId": null,
+          "categoryImageId": null,
+          "accent": null
+        },
+        "schedule": {
+          "submissionsOpenAt": "2026-10-01T12:00:00Z",
+          "submissionsCloseAt": "2026-10-15T12:00:00Z",
+          "reviewCloseAt": null,
+          "votingOpenAt": "2026-10-16T12:00:00Z",
+          "votingCloseAt": "2026-10-20T12:00:00Z",
+          "judgingOpenAt": "2026-10-20T12:00:00Z",
+          "judgingCloseAt": "2026-10-25T12:00:00Z"
+        },
+        "entries": {
+          "allowedTypes": [
+            "SOLO",
+            "GROUP",
+            "GUILD"
+          ],
+          "maxEntriesPerPlayer": 3,
+          "maxEntriesPerGuild": 1,
+          "minImages": 1,
+          "maxDescriptionChars": 2500,
+          "coordinatesRequested": false,
+          "judgesCanViewCoordinates": false,
+          "maxMainMembers": null,
+          "maxHelpers": null
+        },
+        "voting": {
+          "enabled": true,
+          "votesPerVoter": 3,
+          "minimumActiveMinutes": 120,
+          "allowChangesUntilClose": true
+        },
+        "judging": {
+          "enabled": true,
+          "criteria": [
+            {
+              "id": "build",
+              "label": "Build quality",
+              "maxScore": 10,
+              "weight": 1
+            }
+          ],
+          "communityWeight": null,
+          "judgeWeight": null,
+          "tiebreakRule": null,
+          "publicFeedbackOptional": true
+        },
+        "rewards": {
+          "definitions": []
+        }
+      },
+      "lifecycleState": "COMPLETED"
+    }
+  ],
+  "adminConfig": {
+    "schemaVersion": 1,
+    "public": {
+      "summary": "A sample competition for exploring the combined site.",
+      "description": "Build a welcoming town square and share screenshots of your entry. This is preview content.",
+      "rules": "Use your own build. Include screenshots. Follow the server rules."
+    },
+    "appearance": {
+      "bannerImageId": null,
+      "iconImageId": null,
+      "categoryImageId": null,
+      "accent": null
+    },
+    "schedule": {
+      "submissionsOpenAt": "2026-10-01T12:00:00Z",
+      "submissionsCloseAt": "2026-10-15T12:00:00Z",
+      "votingOpenAt": "2026-10-16T12:00:00Z",
+      "votingCloseAt": "2026-10-20T12:00:00Z",
+      "judgingOpenAt": "2026-10-20T12:00:00Z",
+      "judgingCloseAt": "2026-10-25T12:00:00Z"
+    },
+    "entries": {
+      "allowedTypes": [
+        "SOLO",
+        "GROUP",
+        "GUILD"
+      ],
+      "maxEntriesPerPlayer": 3,
+      "maxEntriesPerGuild": 1,
+      "maxImages": 8,
+      "minImages": 1,
+      "maxDescriptionChars": 2500,
+      "coordinatesRequested": false,
+      "judgesCanViewCoordinates": false,
+      "maxMainMembers": null,
+      "maxHelpers": null,
+      "guildSubmissionPermission": "competition.submit"
+    },
+    "voting": {
+      "enabled": true,
+      "votesPerVoter": 3,
+      "minimumActiveMinutes": 120,
+      "allowChangesUntilClose": true,
+      "communityScoreMode": "BALLOT_APPROVAL_RATE",
+      "showTotalsToStaff": true,
+      "showTotalsPublicWhileOpen": false,
+      "helpersCanVoteOwnEntry": true,
+      "guildMembersCanVoteOwnEntry": false,
+      "judgesCanVote": false
+    },
+    "judging": {
+      "enabled": true,
+      "allowNonStaffJudges": true,
+      "publicFeedbackOptional": true,
+      "criteria": [
+        {
+          "id": "build",
+          "label": "Build quality",
+          "maxScore": 10,
+          "weight": 1
+        }
+      ],
+      "communityWeight": null,
+      "judgeWeight": null,
+      "tiebreakRule": null
+    },
+    "rewards": {
+      "definitions": []
+    },
+    "moderation": {
+      "requireStaffApproval": true,
+      "reviewGraceMinutes": 1440,
+      "openAIModeration": true,
+      "minecraftPrivacyReview": "MANUAL_STAFF"
+    }
+  }
+}
