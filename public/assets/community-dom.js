@@ -4,12 +4,12 @@ export function el(tag,attributes={},children=[]){
     if(key==='text')node.textContent=String(value??'');
     else if(key==='class')node.className=value;
     else if(key.startsWith('on'))node.addEventListener(key.slice(2),value);
-    else if(value!==null&&value!==undefined)node.setAttribute(key,String(value));
+    else if(value!==null&&value!==undefined)node.setAttribute(key,key==='src'&&String(value).startsWith('/assets/')?new URL(String(value).slice(8),import.meta.url).href:String(value));
   }
   node.append(...children.filter(Boolean));return node;
 }
 export function link(url,label,className='btn btn-gold'){
-  let parsed;try{parsed=new URL(url,location.href);}catch{return el('span',{text:label});}
+  let parsed;try{parsed=String(url).startsWith('/assets/')?new URL(String(url).slice(8),import.meta.url):new URL(url,location.href);}catch{return el('span',{text:label});}
   if(!['https:','http:'].includes(parsed.protocol))return el('span',{text:label});
   return el('a',{href:parsed.href,class:className,text:label,...(parsed.origin!==location.origin?{target:'_blank',rel:'noopener noreferrer'}:{})});
 }
