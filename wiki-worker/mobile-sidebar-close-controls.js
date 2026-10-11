@@ -30,12 +30,7 @@
     }) || menu.querySelector('.enthusia-native-sidebar-brand');
   }
 
-  function ensureCloseControl() {
-    if (!isMobile() || !isMinerva()) return false;
-    const menu = sidebar();
-    const input = toggle();
-    if (!menu || !input) return false;
-
+  function closeHeader(menu) {
     let header = menu.querySelector('.enthusia-native-sidebar-header');
     const brand = directBrandChild(menu);
     if (!header) {
@@ -52,6 +47,10 @@
       header.prepend(brand);
     }
 
+    return header;
+  }
+
+  function closeLabel(header, input) {
     let control = header.querySelector('.enthusia-native-sidebar-close');
     if (!control || control.tagName !== 'LABEL') {
       const label = document.createElement('label');
@@ -68,6 +67,10 @@
     }
     control.htmlFor = input.id;
 
+    return control;
+  }
+
+  function bindCloseKeyboard(control) {
     if (control.dataset.enthusiaKeyboardBound !== '1') {
       control.addEventListener('keydown', function (event) {
         if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -77,6 +80,17 @@
       });
       control.dataset.enthusiaKeyboardBound = '1';
     }
+    return true;
+  }
+
+  function ensureCloseControl() {
+    if (!isMobile() || !isMinerva()) return false;
+    const menu = sidebar();
+    const input = toggle();
+    if (!menu || !input) return false;
+    const header = closeHeader(menu);
+    const control = closeLabel(header, input);
+    bindCloseKeyboard(control);
     return true;
   }
 

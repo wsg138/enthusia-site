@@ -1,23 +1,13 @@
 name: Publish mobile sidebar Safari performance fix
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'wiki-worker/mobile-corrections.js'
-      - 'wiki-worker/mobile-minerva-integration.js'
-      - 'wiki-worker/mobile-sidebar-close-controls.js'
-      - 'wiki-worker/mobile-native-sidebar.css'
-      - 'wiki-worker/publish-mobile-sidebar-safari-performance.py'
-      - 'wiki-worker/validate-live-mobile-sidebar-webkit.mjs'
-      - 'wiki-mobile-sidebar-safari-performance-trigger.txt'
-      - '.github/workflows/wiki-mobile-sidebar-safari-performance.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: wiki-mobile-sidebar-safari-performance-${{ github.event.pull_request.number }}
+  group: wiki-mobile-sidebar-safari-performance
   cancel-in-progress: false
 
 jobs:
@@ -33,7 +23,7 @@ jobs:
       - name: Check out exact PR head
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
 
       - name: Validate fix sources

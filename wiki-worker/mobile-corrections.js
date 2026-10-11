@@ -213,12 +213,7 @@
   }
 
   function openNativeMenu() {
-    if (isMinerva()) {
-      const toggle = document.querySelector('#main-menu-input');
-      if (!toggle) return false;
-      if (!toggle.checked) toggle.click();
-      return true;
-    }
+    if (isMinerva()) return clickNativeToggle(document.querySelector('#main-menu-input'));
 
     const control = Array.from(document.querySelectorAll(VECTOR_MENU_CONTROL_SELECTOR)).find(function (node) {
       return !node.closest('.enthusia-mobile-quickbar, .enthusia-mobile-drawer');
@@ -229,11 +224,13 @@
     }
 
     const toggle = document.querySelector('#vector-main-menu-dropdown-checkbox, #mw-mf-main-menu-input');
-    if (toggle && typeof toggle.click === 'function') {
-      if (!toggle.checked) toggle.click();
-      return true;
-    }
-    return false;
+    return clickNativeToggle(toggle);
+  }
+
+  function clickNativeToggle(toggle) {
+    if (!toggle || typeof toggle.click !== 'function') return false;
+    if (!toggle.checked) toggle.click();
+    return true;
   }
 
   function bottomMenuButton() {

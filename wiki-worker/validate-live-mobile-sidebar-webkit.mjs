@@ -2,7 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { webkit } from 'playwright';
 
-const outDir = process.env.WIKI_SAFARI_OUT || 'wiki-safari-output';
+const outDir = 'wiki-safari-output';
+if (process.env.WIKI_SAFARI_OUT && process.env.WIKI_SAFARI_OUT !== outDir) {
+  throw new Error('WIKI_SAFARI_OUT must be wiki-safari-output');
+}
 fs.mkdirSync(outDir, { recursive: true });
 const browser = await webkit.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Mobile/15E148 Safari/604.1' });
@@ -70,9 +73,9 @@ if (finalState.mirroredMenuClass || mirroredMutation) throw new Error(`Menu open
 if (finalState.legacyDrawerCount !== 0) throw new Error(`Legacy drawer reappeared during interactions: ${JSON.stringify(finalState)}`);
 if (pageErrors.length) throw new Error(`Browser errors: ${JSON.stringify(pageErrors)}`);
 await tapToState('#main-menu-input', true);
-await page.screenshot({ path: path.join(outDir, 'webkit-native-menu-open.png'), fullPage: false });
+await page.screenshot({ path: 'wiki-safari-output/webkit-native-menu-open.png', fullPage: false });
 await tapToState('label.enthusia-native-sidebar-close[for="main-menu-input"]', false);
 const result = { initial, timings, finalState, pageErrors };
-fs.writeFileSync(path.join(outDir, 'webkit-native-menu-performance.json'), JSON.stringify(result, null, 2) + '\n');
+fs.writeFileSync('wiki-safari-output/webkit-native-menu-performance.json', JSON.stringify(result, null, 2) + '\n');
 console.log(JSON.stringify(result, null, 2));
 await browser.close();
