@@ -56,6 +56,13 @@
   let connectionStatus = {state: "connecting", source: "unavailable", updatedAt: null};
   const buildingElements = new Map();
   const stallElements = new Map();
+  const mapSubscribers = new Set();
+  window.EnthusiaMarketMap = {
+    layout, svg: el.svg, buildingElements, stallElements, tooltipLine: null,
+    shopBadge: null, getSnapshot: () => snapshot,
+    showStall: stallId => { const stall = adapter.getStall(stallId); if (!stall) return false; el.viewport.scrollIntoView({ behavior: "smooth", block: "center" }); focusBuilding(stall.buildingId); openStall(stall, null); return true; },
+    subscribe: callback => { mapSubscribers.add(callback); return () => mapSubscribers.delete(callback); }
+  };
   const px = point => ({ x: (point.x - t.originX) * t.pixelsPerBlock, y: (point.z - t.originZ) * t.pixelsPerBlock });
   const esc = value => String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
   function numberedLabel(id, prefix, label) {
@@ -76,8 +83,9 @@
     return node;
   };
 
+  const siteHeader = document.querySelector(".site-header, .site-head"), marketFooter = document.querySelector(".market-footer, .site-foot");
   function updateViewportMetrics() {
-    const header = document.querySelector(".site-header"), footer = document.querySelector(".market-footer");
+    const header = siteHeader, footer = marketFooter;
     const viewport = window.visualViewport;
     const viewportTop = viewport?.offsetTop || 0, viewportHeight = viewport?.height || innerHeight, viewportBottom = viewportTop + viewportHeight;
     const headerBottom = header?.getBoundingClientRect().bottom || 0;
@@ -90,11 +98,11 @@
     document.documentElement.style.setProperty("--collapsed-context-height", `${contextHeight}px`);
   }
   const viewportObserver = new ResizeObserver(() => requestAnimationFrame(updateViewportMetrics));
-  viewportObserver.observe(document.querySelector(".site-header"));
-  viewportObserver.observe(document.querySelector(".market-footer"));
+  if (siteHeader) viewportObserver.observe(siteHeader);
+  if (marketFooter) viewportObserver.observe(marketFooter);
   const headerObserver = new MutationObserver(() => requestAnimationFrame(updateViewportMetrics));
-  headerObserver.observe(document.querySelector(".site-header"), {attributes:true, attributeFilter:["class","style"]});
-  document.querySelector(".site-header").addEventListener("transitionrun", () => { const track = () => { updateViewportMetrics(); if (document.getAnimations().some(animation => animation.playState === "running")) requestAnimationFrame(track); }; track(); });
+  if (siteHeader) headerObserver.observe(siteHeader, {attributes:true, attributeFilter:["class","style"]});
+  siteHeader?.addEventListener("transitionrun", () => { const track = () => { updateViewportMetrics(); if (document.getAnimations().some(animation => animation.playState === "running")) requestAnimationFrame(track); }; track(); });
   addEventListener("scroll", updateViewportMetrics, {passive: true});
   addEventListener("resize", updateViewportMetrics, {passive: true});
   visualViewport?.addEventListener("resize", updateViewportMetrics, {passive: true});
@@ -134,6 +142,8 @@
     const rect = el.viewport.getBoundingClientRect();
     el.tooltip.hidden = false;
     el.tooltip.textContent = building.label;
+    const line = window.EnthusiaMarketMap.tooltipLine?.(building);
+    if (line) { const detail = document.createElement("small"); detail.className = "map-tooltip-line"; detail.textContent = line; el.tooltip.append(detail); }
     el.tooltip.style.left = `${clientX - rect.left + 12}px`;
     el.tooltip.style.top = `${clientY - rect.top + 12}px`;
   }
@@ -631,12 +641,28 @@
     state.mobileStack = [...state.mobileStack.filter(entry => entry.type !== "stall"), {type: "stall", id: stall.id}]; showDrawer(); bindDrawerActions();
     if (shopId) requestAnimationFrame(() => el.content.querySelector(".shop-card.highlight")?.scrollIntoView({ block: "center" }));
   }
+
+  // Extra data (a price verdict) can add a badge to a shop card. It arrives as {kind, text}, never as markup.
+  const PRICE_BADGE_KINDS = new Set(["cheap", "fair", "pricey"]);
+  function hydratePriceBadges(container) {
+    container.querySelectorAll('.shop-card[data-shop]').forEach(card => {
+      const shop = adapter.getShops().find(candidate => String(candidate.id) === card.dataset.shop);
+      if (!shop) return;
+      const badge = window.EnthusiaMarketMap.shopBadge?.(shop);
+      if (!badge || typeof badge !== 'object' || !PRICE_BADGE_KINDS.has(badge.kind)) return;
+      const node = document.createElement('span');
+      node.className = 'price-badge ' + badge.kind;
+      node.textContent = String(badge.text || '');
+      card.querySelector('header').after(node);
+    });
+  }
   function shopCard(shop, highlight) {
     const labels = transactionLabels(shop.direction), action = { SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction];
     const out = shop.stockCount <= 0;
     return `<article class="shop-card${highlight ? " highlight" : ""}${out ? " out-of-stock" : ""}" data-shop="${shop.id}" tabindex="0" role="button" aria-label="Inspect ${action.toLowerCase()} shop by ${esc(shop.owner.name)}"><header><span class="direction">${action}</span><small>Shop by <strong title="${esc(shop.owner.name)}">${esc(shop.owner.name)}</strong></small></header>${out ? `<strong class="stock-badge">Out of stock</strong>` : ""}<div class="transaction-grid">${itemPanel(shop.sellItem, shop.sellAmount, labels[0], shop.id, shop.direction, "sellItem")}<span class="transaction-arrow" aria-hidden="true">⇄</span>${itemPanel(shop.costItem, shop.costAmount, labels[1], shop.id, shop.direction, "costItem")}</div><footer><span>${shop.stockCount} in stock · ${shop.availableTrades} trades available</span>${locationMarkup(shop.interaction, true)}</footer></article>`;
   }
   function bindDrawerActions() {
+    hydratePriceBadges(el.content);
     bindCopy(el.content);
     observeItemText(el.content);
     el.content.querySelectorAll(".shop-card[data-shop]").forEach(card => {
@@ -873,6 +899,7 @@
     }
     selectOne("#filter-chips").replaceChildren(...chips);
     if (state.drawerMode === "building" && state.drawerBuilding) renderBuildingDrawer();
+    mapSubscribers.forEach(callback => callback());
   }
   function clearFilters() {
     state.filters = { floor: "ALL", owner: "ALL", shop: "ALL", stock: "ALL", rent: "ALL" };
