@@ -28,7 +28,7 @@ Every snapshot item has `id`, `name`, optional public `description`. Additional 
 
 | Kind | Public fields |
 | --- | --- |
-| guilds | level, members (count), elo, recruiting, peaceful, membersList (public names only), links (`label`, HTTPS `url`) |
+| guilds | level, members (count), elo, recruiting, peaceful, membersList (public names only), banner (`baseColor`, `patterns` with `type`/`color`), links (`label`, HTTPS `url`) |
 | players | guild, rank, playtime (hours), balance (raw gold), reputation, achievements (public labels), links |
 | bounties | gold (raw gold), state (`open`, `claimed`, `expired`), hunter (public name), expiresAt |
 | achievements | category, reward (description), completed (count) |

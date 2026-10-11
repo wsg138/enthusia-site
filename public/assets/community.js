@@ -8,6 +8,7 @@ document.body.classList.add('community-page');
 const metric=(label,value)=>el('div',{class:'community-stat'},[el('span',{text:label}),el('strong',{text:value??'Unavailable'})]);
 function detail(item,container){
   container.replaceChildren(el('h2',{text:item.name??item.title}),markdown(item.description??item.body));
+  if(item.banner&&window.EnthusiaGuildBannerRenderer)container.prepend(window.EnthusiaGuildBannerRenderer.create(item.banner,item.name+' banner'));
   if(item.image)container.append(el('img',{src:item.image,alt:item.title,loading:'lazy',style:'max-width:100%'}));
   const stats=el('div',{class:'community-stats'});
   for(const [key,label] of [['level','Level'],['members','Members'],['elo','ELO'],['gold','Raw gold'],['balance','Raw gold'],['playtime','Playtime'],['reputation','Reputation'],['completed','Completed']])if(key in item)stats.append(metric(label,item[key]));

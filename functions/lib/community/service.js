@@ -130,7 +130,7 @@ export async function handleCommunity(context,dependencies={editor,identity}){
         const response=await leaderboard({...context,params:{path:'guilds'}});
         if(!response.ok)return unavailable();const data=await response.json();
         if(!Array.isArray(data.entries))return unavailable();
-        const projected=projectSnapshot('guilds',{items:data.entries.map(row=>({id:row.id,name:row.name,level:row.level,members:row.memberCount}))});
+        const projected=projectSnapshot('guilds',{items:data.entries.map(row=>({id:row.id,name:row.name,level:row.level,members:row.memberCount,banner:row.banner}))});
         return json({...projected,updatedAt:data.generatedAt??null,limited:true,stale:data.generatedAt?Date.now()-Date.parse(data.generatedAt)>900000:true});
       }catch{return unavailable();}
     }

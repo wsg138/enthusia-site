@@ -50,13 +50,19 @@ export function publicRecord(row) {
 }
 function links(input) {return Array.isArray(input)?input.slice(0,8).map(v=>({label:text(v.label,80,true),url:publicUrl(v.url)})):[];}
 function memberNames(input){return Array.isArray(input)?input.slice(0,200).map(v=>text(v,40,true)):[];}
+function banner(input){
+  if(!input)return null;
+  const dyes=new Set(['WHITE','ORANGE','MAGENTA','LIGHT_BLUE','YELLOW','LIME','PINK','GRAY','LIGHT_GRAY','CYAN','PURPLE','BLUE','BROWN','GREEN','RED','BLACK']);
+  if(!dyes.has(input.baseColor)||!Array.isArray(input.patterns)||input.patterns.length>20)throw new Error('invalid_banner');
+  return {baseColor:input.baseColor,patterns:input.patterns.map(p=>{if(!dyes.has(p.color)||typeof p.type!=='string'||!/^[A-Z_]{1,40}$/.test(p.type))throw new Error('invalid_banner');return {type:p.type,color:p.color};})};
+}
 export function projectSnapshot(kind,input) {
   if(!SNAPSHOT_KINDS.has(kind)||!Array.isArray(input?.items)||input.items.length>1000)throw new Error('invalid_snapshot');
   const ids=new Set();
   const items=input.items.map(row=>{
     const id=identifier(row.id);if(ids.has(id))throw new Error('duplicate_id');ids.add(id);
     const base={id,name:text(row.name,80,true),description:text(row.description,2000)};
-    if(kind==='guilds')return {...base,level:number(row.level),members:number(row.members,20000),elo:number(row.elo),recruiting:typeof row.recruiting==='boolean'?row.recruiting:null,peaceful:typeof row.peaceful==='boolean'?row.peaceful:null,membersList:memberNames(row.membersList),links:links(row.links)};
+    if(kind==='guilds')return {...base,level:number(row.level),members:number(row.members,20000),elo:number(row.elo),recruiting:typeof row.recruiting==='boolean'?row.recruiting:null,peaceful:typeof row.peaceful==='boolean'?row.peaceful:null,membersList:memberNames(row.membersList),banner:banner(row.banner),links:links(row.links)};
     if(kind==='players')return {...base,guild:text(row.guild,80),rank:text(row.rank,80),playtime:number(row.playtime),balance:number(row.balance),reputation:number(row.reputation),achievements:memberNames(row.achievements),links:links(row.links)};
     if(kind==='bounties')return {...base,gold:number(row.gold),state:['open','claimed','expired'].includes(row.state)?row.state:'open',hunter:text(row.hunter,80),expiresAt:timestamp(row.expiresAt)};
     return {...base,category:text(row.category,80),reward:text(row.reward,200),completed:number(row.completed,1e8)};

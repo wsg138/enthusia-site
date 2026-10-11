@@ -23,7 +23,8 @@ Public view controllers consume same-origin APIs. Community persistence uses a s
 - [x] Implement publishing/editor, public collections, polls and signed snapshots.
 - [x] Implement market ledger and insight controls.
 - [x] Verify local tests/build, responsive interactions and production unavailable states.
-- [ ] Update PR #52, inspect exact-head checks and deliver a mobile-accessible preview.
+- [x] Update PR #52, inspect delivered-head checks and deliver a mobile-accessible preview.
+- [ ] Hosted CI/static analysis and live integration acceptance.
 
 No project-local EARS/state tooling exists; this manual record is the workflow evidence. No production provisioning, migration application, merge, deployment or bot messages are authorized by this implementation request.
 
@@ -32,3 +33,7 @@ No project-local EARS/state tooling exists; this manual record is the workflow e
 478 tests pass, including 13 community contract/SQLite persistence tests. Lint, 77 HTML page/asset validation, 15-building/71-stall/94-shop map validation and static build pass. The final browser pass covers 84 route/width/failure-state cases at 390px and 1440px with no overflow or uncaught errors and Minecraft heading fonts. Focused interactions cover guild filtering/profile selection, guide checklist/search, news formatting/spoilers, editor/poll blocked preview writes, keyboard chart readouts, weekly map layers and 1200x630 share images. No backend API network requests occurred in those preview interactions. Production controllers were checked with unavailable APIs; no preview samples appeared as live data.
 
 The signed server producer contracts are complete website boundaries, not evidence that plugin exporters are installed. Full profile/bounty/advancement/sale producer adapters, live D1/OAuth resources, Discord bot activation and the custom hosted Tebex theme remain bring-up work. See COMMUNITY-OPERATIONS.md for inspected repository heads and exact contracts. Java bridge sources were not changed in this update; the prior 14-test bridge evidence is not presented as a fresh runtime test.
+
+## Review delivery
+
+The implementation was pushed through existing draft PR #52. The publicly hosted phone preview was verified through native navigation and guild filtering/profile selection. At the first implementation head, Site validation and Wiki validation require maintainer approval, Codacy is analyzing and CodeRabbit skips drafts. Exact source/check checkpoints are recorded in the PR body and local delivery handoff; no hosted green result is claimed.
