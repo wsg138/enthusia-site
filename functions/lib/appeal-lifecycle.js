@@ -55,6 +55,10 @@ export function sanitizeReviewerReopen(input) {
   return Object.freeze({ expectedVersion, idempotencyKey, note });
 }
 
+function boundedMutationText(value, maximum, fallback = null) {
+  return typeof value === "string" ? value.slice(0, maximum) : fallback;
+}
+
 export function projectAppealMutation(payload, appealId) {
   if (!payload || !isCanonicalUuid(payload.id) || payload.id.toLowerCase() !== appealId) return null;
   if (!isCanonicalUuid(payload.punishmentId) || !APPEAL_STATUSES.has(payload.status)) return null;
@@ -63,14 +67,14 @@ export function projectAppealMutation(payload, appealId) {
   return Object.freeze({
     id: payload.id.toLowerCase(),
     punishmentId: payload.punishmentId.toLowerCase(),
-    caseId: typeof payload.caseId === "string" ? payload.caseId.slice(0, 32) : null,
-    punishmentType: typeof payload.punishmentType === "string" ? payload.punishmentType.slice(0, 64) : null,
-    player: typeof payload.player === "string" ? payload.player.slice(0, 64) : null,
-    reason: typeof payload.reason === "string" ? payload.reason.slice(0, 1000) : "",
+    caseId: boundedMutationText(payload.caseId, 32, null),
+    punishmentType: boundedMutationText(payload.punishmentType, 64, null),
+    player: boundedMutationText(payload.player, 64, null),
+    reason: boundedMutationText(payload.reason, 1000, ""),
     status: payload.status,
     version: normalizedVersion,
-    decision: typeof payload.decision === "string" ? payload.decision.slice(0, 32) : null,
-    decisionNote: typeof payload.decisionNote === "string" ? payload.decisionNote.slice(0, 1000) : null,
+    decision: boundedMutationText(payload.decision, 32, null),
+    decisionNote: boundedMutationText(payload.decisionNote, 1000, null),
     createdAt: typeof payload.createdAt === "string" ? payload.createdAt : null,
     updatedAt: typeof payload.updatedAt === "string" ? payload.updatedAt : null,
     replayed: payload.replayed === true,

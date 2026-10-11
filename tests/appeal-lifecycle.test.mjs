@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+const claimReplayKey = randomUUID();
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
@@ -63,12 +65,12 @@ test("player appeal edits use an explicit browser request allowlist", () => {
 
 test("reviewer lifecycle inputs cannot override staff identity or claim state", () => {
   assert.deepEqual(
-    sanitizeReviewerClaim({ expectedVersion: 4, idempotencyKey: "claim-key-1234" }),
-    { expectedVersion: 4, idempotencyKey: "claim-key-1234" }
+    sanitizeReviewerClaim({ expectedVersion: 4, idempotencyKey: claimReplayKey }),
+    { expectedVersion: 4, idempotencyKey: claimReplayKey }
   );
   assert.equal(sanitizeReviewerClaim({
     expectedVersion: 4,
-    idempotencyKey: "claim-key-1234",
+    idempotencyKey: claimReplayKey,
     actorRank: "FOUNDER"
   }), null);
   assert.deepEqual(
