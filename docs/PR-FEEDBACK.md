@@ -13,6 +13,8 @@ The original Added findings are recorded in [pr-feedback-findings.json](pr-feedb
 - Replaced nested email matching with bounded linear validation, preserving the accepted grammar.
 - Restricted punishment-binding requests to two exact local routes and lifecycle requests to canonical UUIDs and claim/reopen actions. Added behavior tests that verify rejected values never reach fetch.
 - Separated appeal projection/binding/public punishment validation and competition notification/scoring/ordering/reward eligibility responsibilities without changing permissions, data allowlists, deterministic reward ordering, or version/readiness checks.
+- Further separated vote/judge components, tie grouping/resolution and result snapshot evidence. The new standings and weighted-recipient helpers pass local CCN <= 8 and NLOC <= 50 checks; pre-existing reward-definition/recipient-selection complexity remains in the recorded backlog.
+- Added a 36-character UUID bound and a rule-specific annotation for a verified finite-quantifier regex false positive; request destination behavior tests still run.
 - Replaced fixed replay-key test literals with generated UUIDs. Updated the vulnerable brace-expansion dependency; npm audit reports no vulnerabilities.
 
 ## Refine / verification
@@ -29,4 +31,4 @@ The original report contains 207 Added findings, including a substantial existin
 - [ ] Confirm hosted checks and fresh Codacy analysis at the delivered commit (recorded in the follow-up PR or final handoff).
 - [ ] Resolve remaining analyzer configuration/complexity findings where applicable.
 
-No merge, production deployment, live wiki publication, or rule disabling was performed. The connected account can update fork-owned PRs #46/#47 directly; fixes to owner-owned branches are delivered as follow-up PRs targeting those original branches.
+No merge, production deployment, live wiki publication, or global rule disabling was performed. The connected account can update fork-owned PRs #46/#47 directly; fixes to owner-owned branches are delivered as follow-up PRs targeting those original branches.

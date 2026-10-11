@@ -4,7 +4,7 @@ import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 function loadFunction(file, name, next) {
   const source=readFileSync(new URL('../public/assets/'+file, import.meta.url),'utf8');
-  const start=source.indexOf('async function '+name+'(');
+  const start=source.indexOf(name === 'postLifecycle' ? 'function validLifecycleRoute(' : 'async function '+name+'(');
   const end=source.indexOf('\nfunction '+next+'(',start);
   assert.ok(start>=0 && end>start);
   const calls=[];

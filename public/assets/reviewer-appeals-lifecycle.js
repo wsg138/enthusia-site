@@ -20,11 +20,19 @@ function setDisabled(container, disabled) {
   for (const control of container.querySelectorAll("button, textarea")) control.disabled = disabled;
 }
 
+function validLifecycleRoute(appeal, action) {
+  if (typeof appeal.id !== "string" || appeal.id.length !== 36) return false;
+  // Fixed-length UUID regex, finite quantifiers, no nested repetition; no ReDoS path.
+  // nosemgrep: rules_lgpl_javascript_dos_rule-regex-dos
+  const canonical = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(appeal.id);
+  return canonical && ["claim", "reopen"].includes(action);
+}
+
 async function postLifecycle(appeal, action, body, container, status) {
   setDisabled(container, true);
   status.textContent = action === "claim" ? "Claiming appeal…" : "Reopening appeal…";
   try {
-    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(appeal.id) || !["claim", "reopen"].includes(action)) {
+    if (!validLifecycleRoute(appeal, action)) {
       throw new Error("Invalid appeal lifecycle route");
     }
     const response = await fetch(`/api/reviewer/appeals/${encodeURIComponent(appeal.id)}/${action}`, {

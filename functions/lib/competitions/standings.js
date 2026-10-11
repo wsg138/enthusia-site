@@ -1,7 +1,7 @@
 import {
   aggregateJudgeScores,
   combineCompetitionComponents,
-  createResultSnapshot,
+  createResultSnapshot
 } from "./scoring.js";
 
 export const COMMUNITY_SCORE_MODE = "BALLOT_APPROVAL_RATE";
@@ -13,7 +13,7 @@ function round6(value) {
 export function communityComponentFromVotes({
   voteCount,
   ballotCount,
-  mode = COMMUNITY_SCORE_MODE,
+  mode = COMMUNITY_SCORE_MODE
 }) {
   if (mode !== COMMUNITY_SCORE_MODE)
     throw new TypeError("Unsupported community scoring mode");
@@ -48,33 +48,27 @@ function tieOrderValue(tieOrder, submissionId) {
   return Number.isInteger(value) && value >= 1 ? value : null;
 }
 
-function resolveTieGroup(group, rule, tieOrder) {
-  const comparator = tiebreakComparator(rule);
-  const sorted = [...group].sort(
-    (left, right) =>
-      comparator(left, right) ||
-      left.submissionId.localeCompare(right.submissionId),
-  );
+const AUTOMATIC_TIEBREAK_METRICS = new Map([
+  ["HIGHEST_JUDGE_SCORE", "judgeComponent"],
+  ["HIGHEST_COMMUNITY_SCORE", "communityComponent"]
+]);
 
-  if (rule === "HIGHEST_JUDGE_SCORE" || rule === "HIGHEST_COMMUNITY_SCORE") {
-    const metric =
-      rule === "HIGHEST_JUDGE_SCORE" ? "judgeComponent" : "communityComponent";
-    const unresolvedBuckets = new Map();
-    for (const entry of sorted) {
-      const key =
-        entry[metric] === null ? "null" : scoreGroupKey(entry[metric]);
-      if (!unresolvedBuckets.has(key)) unresolvedBuckets.set(key, []);
-      unresolvedBuckets.get(key).push(entry);
-    }
-    const hasResidualTie = [...unresolvedBuckets.values()].some(
-      (bucket) => bucket.length > 1,
-    );
-    if (!hasResidualTie) return { resolved: sorted, unresolved: [] };
+function automaticTiebreakResolves(sorted, rule) {
+  const metric = AUTOMATIC_TIEBREAK_METRICS.get(rule);
+  if (!metric) return false;
+  const buckets = new Map();
+  for (const entry of sorted) {
+    const key = entry[metric] === null ? "null" : scoreGroupKey(entry[metric]);
+    if (!buckets.has(key)) buckets.set(key, []);
+    buckets.get(key).push(entry);
   }
+  return ![...buckets.values()].some((bucket) => bucket.length > 1);
+}
 
+function manualTieGroup(group, sorted, tieOrder) {
   const ordered = group.map((entry) => ({
     entry,
-    order: tieOrderValue(tieOrder, entry.submissionId),
+    order: tieOrderValue(tieOrder, entry.submissionId)
   }));
   if (
     ordered.some((item) => item.order === null) ||
@@ -82,15 +76,27 @@ function resolveTieGroup(group, rule, tieOrder) {
   ) {
     return {
       resolved: sorted,
-      unresolved: group.map((entry) => entry.submissionId).sort(),
+      unresolved: group.map((entry) => entry.submissionId).sort()
     };
   }
   ordered.sort(
     (left, right) =>
       left.order - right.order ||
-      left.entry.submissionId.localeCompare(right.entry.submissionId),
+      left.entry.submissionId.localeCompare(right.entry.submissionId)
   );
   return { resolved: ordered.map((item) => item.entry), unresolved: [] };
+}
+
+function resolveTieGroup(group, rule, tieOrder) {
+  const comparator = tiebreakComparator(rule);
+  const sorted = [...group].sort(
+    (left, right) =>
+      comparator(left, right) ||
+      left.submissionId.localeCompare(right.submissionId)
+  );
+  if (automaticTiebreakResolves(sorted, rule))
+    return { resolved: sorted, unresolved: [] };
+  return manualTieGroup(group, sorted, tieOrder);
 }
 
 function judgeEvidence(scores) {
@@ -102,56 +108,62 @@ function judgeEvidence(scores) {
     publicFeedback:
       typeof score.publicFeedback === "string" && score.publicFeedback.trim()
         ? score.publicFeedback.trim()
-        : null,
+        : null
   }));
 }
 
-function computeSubmissionScore(submission, context) {
-  const {
-    votingEnabled,
-    judgingEnabled,
-    voteMap,
-    judgeMap,
-    configVersion,
-    config,
-    ballotCount,
-    activeJudgeCount,
-    readinessErrors,
-  } = context;
-  const voteCount = votingEnabled ? (voteMap.get(submission.id) ?? 0) : 0;
-  const communityComponent = votingEnabled
-    ? communityComponentFromVotes({
-        voteCount,
-        ballotCount,
-        mode: config.voting.communityScoreMode ?? COMMUNITY_SCORE_MODE,
-      })
-    : null;
+function submissionVotes(submission, context) {
+  if (!context.votingEnabled) return { voteCount: 0, communityComponent: null };
+  const voteCount = context.voteMap.get(submission.id) ?? 0;
+  const communityComponent = communityComponentFromVotes({
+    voteCount,
+    ballotCount: context.ballotCount,
+    mode: context.config.voting.communityScoreMode ?? COMMUNITY_SCORE_MODE
+  });
+  return { voteCount, communityComponent };
+}
 
-  const scores = judgingEnabled ? (judgeMap.get(submission.id) ?? []) : [];
+function submissionJudges(submission, context) {
+  const scores = context.judgingEnabled
+    ? (context.judgeMap.get(submission.id) ?? [])
+    : [];
   const currentScores = scores.filter(
-    (score) => Number(score.configVersion) === configVersion,
+    (score) => Number(score.configVersion) === context.configVersion
   );
-  if (judgingEnabled && currentScores.length !== activeJudgeCount) {
-    readinessErrors.push(
-      `judge_scores_incomplete:${submission.id}:${currentScores.length}/${activeJudgeCount}`,
+  if (
+    context.judgingEnabled &&
+    currentScores.length !== context.activeJudgeCount
+  ) {
+    context.readinessErrors.push(
+      `judge_scores_incomplete:${submission.id}:${currentScores.length}/${context.activeJudgeCount}`
     );
   }
-  const judgeComponent = judgingEnabled
+  const judgeComponent = context.judgingEnabled
     ? aggregateJudgeScores(
-        currentScores.map((score) => Number(score.computedScore)),
+        currentScores.map((score) => Number(score.computedScore))
       )
     : null;
+  return { currentScores, judgeComponent };
+}
 
+function computeSubmissionScore(submission, context) {
+  const { voteCount, communityComponent } = submissionVotes(
+    submission,
+    context
+  );
+  const { currentScores, judgeComponent } = submissionJudges(
+    submission,
+    context
+  );
   const componentResult = combineCompetitionComponents({
-    votingEnabled,
-    judgingEnabled,
+    votingEnabled: context.votingEnabled,
+    judgingEnabled: context.judgingEnabled,
     communityComponent,
     judgeComponent:
-      judgingEnabled && judgeComponent === null ? 0 : judgeComponent,
-    communityWeight: config?.judging?.communityWeight,
-    judgeWeight: config?.judging?.judgeWeight,
+      context.judgingEnabled && judgeComponent === null ? 0 : judgeComponent,
+    communityWeight: context.config?.judging?.communityWeight,
+    judgeWeight: context.config?.judging?.judgeWeight
   });
-
   return {
     submissionId: submission.id,
     title: submission.title,
@@ -159,21 +171,15 @@ function computeSubmissionScore(submission, context) {
     communityComponent: componentResult.communityComponent,
     judgeComponent: componentResult.judgeComponent,
     voteCount,
-    ballotCount,
+    ballotCount: context.ballotCount,
     judgeScoreCount: currentScores.length,
     componentResult,
-    judgeEvidence: judgeEvidence(currentScores),
+    judgeEvidence: judgeEvidence(currentScores)
   };
 }
 
-function orderStandings(computed, config, tieOrder) {
-  computed.sort(
-    (left, right) =>
-      right.finalScore - left.finalScore ||
-      left.submissionId.localeCompare(right.submissionId),
-  );
-  const finalOrder = [];
-  const unresolvedTies = [];
+function scoreGroups(computed) {
+  const groups = [];
   for (let index = 0; index < computed.length; ) {
     const key = scoreGroupKey(computed[index].finalScore);
     const group = [];
@@ -184,6 +190,20 @@ function orderStandings(computed, config, tieOrder) {
       group.push(computed[index]);
       index += 1;
     }
+    groups.push(group);
+  }
+  return groups;
+}
+
+function orderStandings(computed, config, tieOrder) {
+  computed.sort(
+    (left, right) =>
+      right.finalScore - left.finalScore ||
+      left.submissionId.localeCompare(right.submissionId)
+  );
+  const finalOrder = [],
+    unresolvedTies = [];
+  for (const group of scoreGroups(computed)) {
     if (group.length === 1) {
       finalOrder.push(group[0]);
       continue;
@@ -191,16 +211,52 @@ function orderStandings(computed, config, tieOrder) {
     const resolved = resolveTieGroup(
       group,
       config?.judging?.tiebreakRule ?? "MANUAL_STAFF",
-      tieOrder,
+      tieOrder
     );
     finalOrder.push(...resolved.resolved);
     if (resolved.unresolved.length) unresolvedTies.push(resolved.unresolved);
   }
-
   return { finalOrder, unresolvedTies };
 }
 
-export function buildCompetitionStandings(input) {
+function validateStandingsIdentity(input) {
+  if (
+    !input.competitionId ||
+    !Number.isInteger(input.configVersion) ||
+    input.configVersion < 1
+  ) {
+    throw new TypeError("Competition standings identity is invalid");
+  }
+  if (!Array.isArray(input.submissions) || !input.submissions.length) {
+    throw new TypeError("At least one approved submission is required");
+  }
+}
+
+function scoringModes(config) {
+  const votingEnabled = Boolean(config?.voting?.enabled);
+  const judgingEnabled = Boolean(config?.judging?.enabled);
+  if (!votingEnabled && !judgingEnabled)
+    throw new TypeError("Competition has no scoring component");
+  return { votingEnabled, judgingEnabled };
+}
+
+function groupedJudgeScores(judgeScores) {
+  const map = new Map();
+  for (const score of judgeScores) {
+    if (!map.has(score.submissionId)) map.set(score.submissionId, []);
+    map.get(score.submissionId).push(score);
+  }
+  return map;
+}
+
+function initialReadinessErrors(judgingEnabled, activeJudgeCount) {
+  return judgingEnabled &&
+    (!Number.isInteger(activeJudgeCount) || activeJudgeCount < 1)
+    ? ["no_active_judges"]
+    : [];
+}
+
+function scoreContext(input) {
   const {
     competitionId,
     configVersion,
@@ -210,119 +266,101 @@ export function buildCompetitionStandings(input) {
     ballotCount = 0,
     judgeScores = [],
     activeJudgeCount = 0,
-    tieOrder = null,
+    tieOrder = null
   } = input;
-  if (!competitionId || !Number.isInteger(configVersion) || configVersion < 1) {
-    throw new TypeError("Competition standings identity is invalid");
-  }
-  if (!Array.isArray(submissions) || !submissions.length) {
-    throw new TypeError("At least one approved submission is required");
-  }
-
-  const votingEnabled = Boolean(config?.voting?.enabled);
-  const judgingEnabled = Boolean(config?.judging?.enabled);
-  if (!votingEnabled && !judgingEnabled)
-    throw new TypeError("Competition has no scoring component");
-
-  const voteMap = new Map(
-    voteTotals.map((row) => [row.submissionId, Number(row.voteCount ?? 0)]),
-  );
-  const judgeMap = new Map();
-  for (const score of judgeScores) {
-    if (!judgeMap.has(score.submissionId)) judgeMap.set(score.submissionId, []);
-    judgeMap.get(score.submissionId).push(score);
-  }
-
-  const readinessErrors = [];
-  if (
-    judgingEnabled &&
-    (!Number.isInteger(activeJudgeCount) || activeJudgeCount < 1)
-  ) {
-    readinessErrors.push("no_active_judges");
-  }
-
-  const scoreContext = {
-    votingEnabled,
-    judgingEnabled,
-    voteMap,
-    judgeMap,
+  validateStandingsIdentity(input);
+  const { votingEnabled, judgingEnabled } = scoringModes(config);
+  return {
+    competitionId,
     configVersion,
     config,
+    submissions,
     ballotCount,
     activeJudgeCount,
-    readinessErrors,
+    tieOrder,
+    votingEnabled,
+    judgingEnabled,
+    voteMap: new Map(
+      voteTotals.map((row) => [row.submissionId, Number(row.voteCount ?? 0)])
+    ),
+    judgeMap: groupedJudgeScores(judgeScores),
+    readinessErrors: initialReadinessErrors(judgingEnabled, activeJudgeCount)
   };
-  const computed = submissions.map((submission) =>
-    computeSubmissionScore(submission, scoreContext),
-  );
+}
 
-  if (readinessErrors.length) {
+function communitySnapshotEvidence(entry, context) {
+  if (!context.votingEnabled) return null;
+  return {
+    scoringMode:
+      context.config.voting.communityScoreMode ?? COMMUNITY_SCORE_MODE,
+    rawWholeNumberPoints: entry.voteCount,
+    ballotCount: entry.ballotCount
+  };
+}
+
+function judgeSnapshotEvidence(entry, context) {
+  if (!context.judgingEnabled) return null;
+  return {
+    activeJudgeCount: context.activeJudgeCount,
+    completedJudgeCount: entry.judgeScoreCount,
+    scorecards: entry.judgeEvidence
+  };
+}
+
+function standingEntry(entry, index, context, unresolvedTies) {
+  const snapshot = createResultSnapshot({
+    competitionId: context.competitionId,
+    submissionId: entry.submissionId,
+    configVersion: context.configVersion,
+    componentResult: entry.componentResult,
+    communityEvidence: communitySnapshotEvidence(entry, context),
+    judgeEvidence: judgeSnapshotEvidence(entry, context),
+    tiebreak: {
+      rule: context.config?.judging?.tiebreakRule ?? "MANUAL_STAFF",
+      resolved: !unresolvedTies.some((group) =>
+        group.includes(entry.submissionId)
+      )
+    }
+  });
+  return {
+    submissionId: entry.submissionId,
+    title: entry.title,
+    placement: index + 1,
+    finalScore: entry.finalScore,
+    communityComponent: entry.communityComponent,
+    judgeComponent: entry.judgeComponent,
+    voteCount: entry.voteCount,
+    ballotCount: entry.ballotCount,
+    judgeScoreCount: entry.judgeScoreCount,
+    snapshot
+  };
+}
+
+export function buildCompetitionStandings(input) {
+  const context = scoreContext(input);
+  const computed = context.submissions.map((submission) =>
+    computeSubmissionScore(submission, context)
+  );
+  if (context.readinessErrors.length) {
     return {
       ready: false,
-      errors: [...new Set(readinessErrors)],
+      errors: [...new Set(context.readinessErrors)],
       standings: [],
-      unresolvedTies: [],
+      unresolvedTies: []
     };
   }
-
   const { finalOrder, unresolvedTies } = orderStandings(
     computed,
-    config,
-    tieOrder,
+    context.config,
+    context.tieOrder
   );
-
-  const standings = finalOrder.map((entry, index) => {
-    const placement = index + 1;
-    const snapshot = createResultSnapshot({
-      competitionId,
-      submissionId: entry.submissionId,
-      configVersion,
-      componentResult: entry.componentResult,
-      communityEvidence: votingEnabled
-        ? {
-            scoringMode:
-              config.voting.communityScoreMode ?? COMMUNITY_SCORE_MODE,
-            rawWholeNumberPoints: entry.voteCount,
-            ballotCount: entry.ballotCount,
-          }
-        : null,
-      judgeEvidence: judgingEnabled
-        ? {
-            activeJudgeCount,
-            completedJudgeCount: entry.judgeScoreCount,
-            scorecards: entry.judgeEvidence,
-          }
-        : null,
-      tiebreak: unresolvedTies.some((group) =>
-        group.includes(entry.submissionId),
-      )
-        ? {
-            rule: config?.judging?.tiebreakRule ?? "MANUAL_STAFF",
-            resolved: false,
-          }
-        : {
-            rule: config?.judging?.tiebreakRule ?? "MANUAL_STAFF",
-            resolved: true,
-          },
-    });
-    return {
-      submissionId: entry.submissionId,
-      title: entry.title,
-      placement,
-      finalScore: entry.finalScore,
-      communityComponent: entry.communityComponent,
-      judgeComponent: entry.judgeComponent,
-      voteCount: entry.voteCount,
-      ballotCount: entry.ballotCount,
-      judgeScoreCount: entry.judgeScoreCount,
-      snapshot,
-    };
-  });
-
+  const standings = finalOrder.map((entry, index) =>
+    standingEntry(entry, index, context, unresolvedTies)
+  );
   return {
     ready: unresolvedTies.length === 0,
     errors: unresolvedTies.length ? ["tiebreak_required"] : [],
     standings,
-    unresolvedTies,
+    unresolvedTies
   };
 }

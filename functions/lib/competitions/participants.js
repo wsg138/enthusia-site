@@ -14,13 +14,13 @@ export function judgeCanHoldParticipantRole(role) {
 export function canChangeParticipantRoster(
   lifecycleState,
   operation,
-  { existingPendingInvite = false } = {},
+  { existingPendingInvite = false } = {}
 ) {
   const beforeVoting = new Set([
     "DRAFT",
     "UPCOMING",
     "SUBMISSIONS_OPEN",
-    "REVIEW",
+    "REVIEW"
   ]);
   if (beforeVoting.has(lifecycleState)) {
     return (
@@ -49,7 +49,7 @@ export function participantCanReceiveRewards({
   isAssignedJudge = false,
   includeHelpers = false,
   acceptedAt = null,
-  rewardsDeliveredAt = null,
+  rewardsDeliveredAt = null
 }) {
   if (!ENTRY_TYPES.has(entryType) || !PARTICIPANT_ROLES.has(role)) return false;
   if (isAssignedJudge) return false;
@@ -92,7 +92,7 @@ export function participantRewardWeight({
   includeHelpers = false,
   helperWeight = 0.5,
   acceptedAt = null,
-  rewardsDeliveredAt = null,
+  rewardsDeliveredAt = null
 }) {
   if (
     !participantCanReceiveRewards({
@@ -101,7 +101,7 @@ export function participantRewardWeight({
       isAssignedJudge,
       includeHelpers,
       acceptedAt,
-      rewardsDeliveredAt,
+      rewardsDeliveredAt
     })
   )
     return 0;
@@ -123,7 +123,7 @@ export function canVoterVoteForSubmission({
   voterUuid,
   isAssignedJudge = false,
   acceptedParticipants = [],
-  voterIsGuildMember = false,
+  voterIsGuildMember = false
 }) {
   if (!ENTRY_TYPES.has(entryType) || !voterUuid || isAssignedJudge)
     return false;
@@ -133,7 +133,7 @@ export function canVoterVoteForSubmission({
   }
 
   const participant = acceptedParticipants.find(
-    (candidate) => candidate?.playerUuid === voterUuid,
+    (candidate) => candidate?.playerUuid === voterUuid
   );
   if (!participant) return true;
 

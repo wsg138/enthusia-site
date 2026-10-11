@@ -5,7 +5,7 @@ const REWARD_TYPES = new Set([
   "RANK",
   "LORE_ITEM",
   "COMMAND",
-  "MANUAL",
+  "MANUAL"
 ]);
 
 const DISTRIBUTION_MODES = new Set([
@@ -15,7 +15,7 @@ const DISTRIBUTION_MODES = new Set([
   "RANDOM_ELIGIBLE",
   "ALL_GUILD_MEMBERS",
   "RANDOM_GUILD_MEMBERS",
-  "MANUAL",
+  "MANUAL"
 ]);
 
 const NON_DIVISIBLE_TYPES = new Set([
@@ -23,7 +23,7 @@ const NON_DIVISIBLE_TYPES = new Set([
   "RANK",
   "LORE_ITEM",
   "COMMAND",
-  "MANUAL",
+  "MANUAL"
 ]);
 
 function uniqueSorted(values) {
@@ -34,7 +34,7 @@ function seededRandom(seed) {
   const text = String(seed ?? "");
   if (!text)
     throw new TypeError(
-      "Random reward selection requires a persisted selection seed",
+      "Random reward selection requires a persisted selection seed"
     );
 
   let state = 2166136261;
@@ -45,7 +45,7 @@ function seededRandom(seed) {
   state >>>= 0;
 
   return () => {
-    state += 0x6d2b79f5;
+    state += 1831565813;
     let value = state;
     value = Math.imul(value ^ (value >>> 15), value | 1);
     value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
@@ -110,7 +110,7 @@ export function selectRewardRecipients({
   eligibleParticipantUuids = [],
   guildMemberUuids = [],
   randomCount = 1,
-  selectionSeed = null,
+  selectionSeed = null
 }) {
   const eligible = uniqueSorted(eligibleParticipantUuids);
   const guildMembers = uniqueSorted(guildMemberUuids);
@@ -152,22 +152,28 @@ export function splitIntegerReward(totalAmount, recipientUuids) {
   });
 }
 
+function validatedRecipientId(recipient) {
+  const recipientUuid = String(recipient?.recipientUuid ?? "").trim();
+  if (!recipientUuid || !/^[A-Za-z0-9._:-]+$/.test(recipientUuid))
+    throw new TypeError("Weighted reward recipient UUID is invalid");
+  return recipientUuid;
+}
+function validatedRecipientWeight(recipient) {
+  const weight = recipient?.weight;
+  if (
+    typeof weight !== "number" ||
+    !Number.isFinite(weight) ||
+    weight < 0 ||
+    weight > 1_000_000
+  )
+    throw new TypeError("Weighted reward recipient weight is invalid");
+  return weight;
+}
 function normalizedWeightedRecipients(weightedRecipients) {
   const byUuid = new Map();
   for (const recipient of weightedRecipients) {
-    const recipientUuid = String(recipient?.recipientUuid ?? "").trim();
-    const weight = recipient?.weight;
-    if (!recipientUuid || !/^[A-Za-z0-9._:-]+$/.test(recipientUuid)) {
-      throw new TypeError("Weighted reward recipient UUID is invalid");
-    }
-    if (
-      typeof weight !== "number" ||
-      !Number.isFinite(weight) ||
-      weight < 0 ||
-      weight > 1_000_000
-    ) {
-      throw new TypeError("Weighted reward recipient weight is invalid");
-    }
+    const recipientUuid = validatedRecipientId(recipient);
+    const weight = validatedRecipientWeight(recipient);
     if (byUuid.has(recipientUuid)) {
       throw new TypeError("Weighted reward recipients must be unique");
     }
@@ -177,25 +183,28 @@ function normalizedWeightedRecipients(weightedRecipients) {
   const recipients = [...byUuid.entries()]
     .map(([recipientUuid, weight]) => ({ recipientUuid, weight }))
     .sort((left, right) =>
-      left.recipientUuid.localeCompare(right.recipientUuid),
+      left.recipientUuid.localeCompare(right.recipientUuid)
     );
   return recipients;
 }
 
-export function splitWeightedIntegerReward(totalAmount, weightedRecipients) {
+function validateWeightedInput(totalAmount, weightedRecipients) {
   if (!Number.isSafeInteger(totalAmount) || totalAmount < 0) {
     throw new TypeError("Reward amount must be a non-negative safe integer");
   }
   if (!Array.isArray(weightedRecipients)) {
     throw new TypeError("Weighted reward recipients must be an array");
   }
+}
 
+export function splitWeightedIntegerReward(totalAmount, weightedRecipients) {
+  validateWeightedInput(totalAmount, weightedRecipients);
   const recipients = normalizedWeightedRecipients(weightedRecipients);
   if (!recipients.length) return [];
 
   const totalWeight = recipients.reduce(
     (sum, recipient) => sum + recipient.weight,
-    0,
+    0
   );
   if (!(totalWeight > 0) || !Number.isFinite(totalWeight)) {
     throw new TypeError("Weighted reward total weight is invalid");
@@ -209,7 +218,7 @@ export function splitWeightedIntegerReward(totalAmount, weightedRecipients) {
     return {
       recipientUuid: recipient.recipientUuid,
       amount,
-      fractionalRemainder: exact - amount,
+      fractionalRemainder: exact - amount
     };
   });
 
@@ -217,7 +226,7 @@ export function splitWeightedIntegerReward(totalAmount, weightedRecipients) {
   const remainderOrder = [...shares].sort(
     (left, right) =>
       right.fractionalRemainder - left.fractionalRemainder ||
-      left.recipientUuid.localeCompare(right.recipientUuid),
+      left.recipientUuid.localeCompare(right.recipientUuid)
   );
   for (
     let index = 0;
@@ -230,7 +239,7 @@ export function splitWeightedIntegerReward(totalAmount, weightedRecipients) {
 
   return shares
     .sort((left, right) =>
-      left.recipientUuid.localeCompare(right.recipientUuid),
+      left.recipientUuid.localeCompare(right.recipientUuid)
     )
     .map(({ recipientUuid, amount }) => ({ recipientUuid, amount }));
 }
@@ -238,10 +247,10 @@ export function splitWeightedIntegerReward(totalAmount, weightedRecipients) {
 export function rewardOperationKey(
   rewardId,
   submissionId,
-  recipientUuid = "entry",
+  recipientUuid = "entry"
 ) {
   const safe = [rewardId, submissionId, recipientUuid].map((value) =>
-    String(value ?? "").trim(),
+    String(value ?? "").trim()
   );
   if (safe.some((value) => !value || !/^[A-Za-z0-9._:-]+$/.test(value))) {
     throw new TypeError("Reward operation key components are invalid");
