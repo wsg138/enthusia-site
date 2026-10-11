@@ -1,5 +1,155 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Submit an authenticated appeal for an eligible Enthusia SMP punishment."><title>Appeal a punishment | Enthusia</title><link rel="stylesheet" href="assets/styles.css?v=vision63"></head>
-<body><header class="site-header"><div class="container header-inner"><a class="brand" href="index.html">Enthusia SMP</a><nav class="nav" aria-label="Primary navigation"><a href="index.html">Home</a><a href="rules.html">Rules</a><a href="market.html">Market</a></nav></div></header><main class="page-main container"><h1>Appeal a punishment</h1><p>Your linked Minecraft identity is supplied by your signed-in account and cannot be changed here.</p><form id="appeal-form"><label>Punishment <select name="punishmentId" id="punishment" required><option value="">Loading appealable punishments…</option></select></label><section id="sanction" aria-live="polite"></section><label>Why should this punishment be reviewed? <textarea name="reason" minlength="10" maxlength="1000" required></textarea></label><button type="submit">Submit appeal</button><p id="result" role="status"></p></form></main><script type="module">
-const form=document.querySelector('#appeal-form');const result=document.querySelector('#result');const select=document.querySelector('#punishment');const sanction=document.querySelector('#sanction');let sanctions=[];function render(){const item=sanctions.find(x=>String(x.id)===select.value);sanction.textContent=item?`${item.type??'Punishment'} · issued ${item.createdAt??'unknown date'} · ${item.reason??'No public reason provided'}`:'';}function loadError(){sanctions=[];select.innerHTML='<option value="">Unable to load punishments — retry later</option>';sanction.textContent='';}async function load(){select.innerHTML='<option value="">Loading appealable punishments…</option>';try{const response=await fetch('/api/appeals/eligible');if(!response.ok){loadError();return;}const payload=await response.json();sanctions=Array.isArray(payload)?payload:payload.punishments??[];select.replaceChildren(new Option(sanctions.length?'Select a punishment':'No appealable punishments',''));for(const item of sanctions)select.add(new Option(`${item.type??'Punishment'} — ${item.createdAt??item.id}`,item.id));render();}catch{loadError();}}select.addEventListener('change',render);form.addEventListener('submit',async(event)=>{event.preventDefault();result.textContent='Submitting…';const data=Object.fromEntries(new FormData(form));try{const response=await fetch('/api/appeals',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});const payload=await response.json().catch(()=>({}));result.textContent=response.ok?'Appeal submitted.':payload.error==='rate_limited'?`Too many attempts. Try again in ${payload.retryAfter} seconds.`:`Unable to submit appeal (${response.status}).`;if(response.ok){form.reset();await load();}}catch{result.textContent='Unable to reach the appeal service. Retry in a moment.';}});load();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Appeal a punishment | Enthusia SMP</title>
+<meta name="description" content="Submit an authenticated appeal for an eligible Enthusia SMP punishment.">
+<meta name="theme-color" content="#c0261d">
+<link rel="icon" href="assets/enthusia-logo-v2.png" type="image/png">
+<link rel="preload" href="assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
+<link rel="stylesheet" href="assets/enthusia.css?v=red1">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="en">
+
+<header class="site-head s-red">
+<div class="site-head-in">
+<a class="brand" href="index.html" aria-label="Enthusia SMP home">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn cur" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="plugins.html">About</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html" class="active" aria-current="page">Appeals</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="leaderboards.html">Leaderboards</a>
+<a href="staff.html">Staff</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+</nav>
+<a class="btn btn-gold hdr-play" href="index.html#join">Play now!</a>
+</div>
+</header>
+
+<main id="main-content" class="page-main">
+<section class="hero hero-vars hero-appeal" aria-labelledby="appeal-title">
+<div class="hero-in" style="min-height: 240px; padding: 48px 24px 32px">
+<p class="tag tag-gold" style="letter-spacing: 2px">PUNISHMENT APPEALS</p>
+<h1 id="appeal-title" class="t-hero2 hero-title">APPEAL A PUNISHMENT</h1>
+<p class="hero-lead">Ask staff to review a punishment on your account.</p>
+</div>
+<div class="crenel"></div>
+</section>
+
+<section class="s-cream" aria-label="Appeal form" style="padding: 72px 0">
+<div class="wrap-narrow stack">
+<ol style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 16px">
+<li class="panel" style="padding: 20px; display: flex; align-items: center; gap: 16px"><span class="slot" style="width: 56px; height: 56px; font-size: 24px; line-height: 24px">1</span><span style="display: flex; flex-direction: column; min-width: 0"><span style="color: var(--head)">Sign in</span><span class="muted">Your Minecraft account comes from your website session</span></span></li>
+<li class="panel" style="padding: 20px; display: flex; align-items: center; gap: 16px"><span class="slot" style="width: 56px; height: 56px; font-size: 24px; line-height: 24px">2</span><span style="display: flex; flex-direction: column; min-width: 0"><span style="color: var(--head)">Choose</span><span class="muted">Pick the punishment you want reviewed</span></span></li>
+<li class="panel" style="padding: 20px; display: flex; align-items: center; gap: 16px"><span class="slot" style="width: 56px; height: 56px; font-size: 24px; line-height: 24px">3</span><span style="display: flex; flex-direction: column; min-width: 0"><span style="color: var(--head)">Explain</span><span class="muted">Tell staff why it should be reviewed</span></span></li>
+</ol>
+
+<div class="panel" style="padding: 28px">
+<form id="appeal-form" class="form">
+<div class="head-block">
+<p class="kicker">YOUR APPEAL</p>
+<h2 class="t-h3">What should staff review?</h2>
+<p class="muted">Your linked Minecraft identity is supplied by your signed-in account and cannot be changed here. Only punishments that can be appealed are listed.</p>
+</div>
+<label>Punishment
+<select name="punishmentId" id="punishment" required><option value="">Loading appealable punishments...</option></select>
+</label>
+<p id="sanction" class="note" aria-live="polite" hidden></p>
+<label>Why should this punishment be reviewed?
+<textarea name="reason" minlength="10" maxlength="1000" required></textarea>
+<span class="muted">Between 10 and 1,000 characters. Write in your own words.</span>
+</label>
+<div style="display: flex"><button class="btn btn-gold" type="submit" style="min-height: 56px; font-size: 24px; line-height: 32px">Submit appeal</button></div>
+<p id="result" class="form-status" role="status"></p>
+</form>
+</div>
+
+<div class="tip fret-sm" style="padding: 24px 28px; display: flex; flex-direction: column; gap: 8px">
+<h2 class="t-h3">Before you appeal</h2>
+<p>Read the rule involved on the <a href="rules.html">Rules page</a>. For anything else, open a ticket on the <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>.</p>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="index.html">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="index.html#join">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="plugins.html">About</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="staff.html">Staff</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a>
+<a href="index.html#faq">FAQ</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p>&copy; <span data-year>2026</span> Enthusia SMP · Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
+
+<div class="toast hide" role="status" data-toast>
+<img src="assets/ui/logo-256.png" alt="" width="48" height="48">
+<div><p class="toast-title" data-toast-title>Address copied!</p><p data-server-ip>enthusia.net</p></div>
+</div>
+</div>
+
+<script src="assets/site-config.js?v=red1" defer></script>
+<script src="assets/enthusia.js?v=red1" defer></script>
+<script src="assets/appeal.js?v=red1" defer></script>
+</body>
+</html>
