@@ -44,12 +44,20 @@ function isoAfter(now, seconds) {
   return new Date(timestamp(now) + seconds * 1000).toISOString();
 }
 
+function validEmailDomain(domain) {
+  const labels = domain.split(".");
+  return labels.length >= 2 && labels.every(label =>
+    /^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/.test(label) || /^[a-z0-9]$/.test(label));
+}
+
 export function normalizeAppealEmail(value) {
   if (typeof value !== "string") return null;
   const email = value.trim().toLowerCase();
   if (email.length < 5 || email.length > 254) return null;
-  if (!/^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/.test(email)) return null;
-  return email;
+  const parts = email.split("@");
+  if (parts.length !== 2) return null;
+  if (!/^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+$/.test(parts[0])) return null;
+  return validEmailDomain(parts[1]) ? email : null;
 }
 
 export function validAppealPassword(value) {

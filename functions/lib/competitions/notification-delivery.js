@@ -50,7 +50,7 @@ function contributorPayload(env, notification, action) {
   };
 }
 
-export async function deliverCompetitionNotification(env, notification) {
+function notificationRequest(env, notification) {
   let path;
   let body;
   if (notification.eventType === "CONTRIBUTOR_INVITE") {
@@ -74,6 +74,11 @@ export async function deliverCompetitionNotification(env, notification) {
     throw new Error(`Unsupported competition notification event: ${notification.eventType}`);
   }
 
+  return { path, body };
+}
+
+export async function deliverCompetitionNotification(env, notification) {
+  const { path, body } = notificationRequest(env, notification);
   const response = await signedCompetitionBridgeRequest(env, path, body);
   const responseBody = await response.json().catch(() => null);
   if (!response.ok) {

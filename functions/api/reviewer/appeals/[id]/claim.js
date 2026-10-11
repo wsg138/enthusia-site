@@ -4,7 +4,7 @@ import { authenticateRequest, canReview } from "../../../../lib/auth.js";
 import { forbidden, json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../lib/security.js";
 import { reviewerRank, signedStaffRequest, staffApiResponse } from "../../../../lib/staff-api.js";
-import { isCanonicalUuid } from "../../../../lib/validation.js";
+import { isCanonicalUuid, sanitizedJson } from "../../../../lib/validation.js";
 
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
@@ -19,9 +19,7 @@ export async function onRequestPost(context) {
   const actorRank = reviewerRank(session);
   if (!actorRank) return forbidden();
 
-  let input;
-  try { input = sanitizeReviewerClaim(await context.request.json()); }
-  catch { input = null; }
+  const input = await sanitizedJson(context.request, sanitizeReviewerClaim);
   if (!input) return json({ error: "invalid_claim" }, 400);
 
   try {

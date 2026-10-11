@@ -8,6 +8,9 @@ function element(tag, className, text) {
 }
 
 async function api(path, options = {}) {
+  if (!new Set(["/api/appeals/bindings", "/api/appeals/revalidate"]).has(path)) {
+    throw new Error("Unsupported punishment binding route");
+  }
   const response = await fetch(path, {
     credentials: "same-origin",
     ...options,

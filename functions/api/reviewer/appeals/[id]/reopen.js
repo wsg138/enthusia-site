@@ -4,7 +4,7 @@ import { authenticateRequest, canReview } from "../../../../lib/auth.js";
 import { forbidden, json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../../lib/responses.js";
 import { requireSameOrigin } from "../../../../lib/security.js";
 import { reviewerRank, signedStaffRequest, staffApiResponse } from "../../../../lib/staff-api.js";
-import { isCanonicalUuid } from "../../../../lib/validation.js";
+import { isCanonicalUuid, sanitizedJson } from "../../../../lib/validation.js";
 
 const REOPEN_RANKS = new Set(["ADMIN", "FOUNDER"]);
 
@@ -21,9 +21,7 @@ export async function onRequestPost(context) {
   const actorRank = reviewerRank(session);
   if (!REOPEN_RANKS.has(actorRank)) return forbidden();
 
-  let input;
-  try { input = sanitizeReviewerReopen(await context.request.json()); }
-  catch { input = null; }
+  const input = await sanitizedJson(context.request, sanitizeReviewerReopen);
   if (!input) return json({ error: "invalid_reopen" }, 400);
 
   try {

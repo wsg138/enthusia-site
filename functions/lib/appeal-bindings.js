@@ -28,14 +28,26 @@ function positiveInteger(value) {
   return Number.isSafeInteger(number) && number >= 1 ? number : null;
 }
 
+function bindingIdentifiers(value) {
+  return {
+    punishmentId: String(value.punishmentId ?? "").trim().toLowerCase(),
+    caseId: canonicalCaseId(value.caseId),
+    codeGeneration: positiveInteger(value.codeGeneration)
+  };
+}
+
+function bindingDisplay(value) {
+  return {
+    punishmentType: String(value.punishmentType ?? "").trim().toUpperCase(),
+    boundUsername: String(value.boundUsername ?? "").trim(),
+    eligibilityState: String(value.eligibilityState ?? "").trim().toUpperCase()
+  };
+}
+
 export function sanitizePunishmentBinding(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
-  const punishmentId = String(value.punishmentId ?? "").trim().toLowerCase();
-  const caseId = canonicalCaseId(value.caseId);
-  const codeGeneration = positiveInteger(value.codeGeneration);
-  const punishmentType = String(value.punishmentType ?? "").trim().toUpperCase();
-  const boundUsername = String(value.boundUsername ?? "").trim();
-  const eligibilityState = String(value.eligibilityState ?? "").trim().toUpperCase();
+  const { punishmentId, caseId, codeGeneration } = bindingIdentifiers(value);
+  const { punishmentType, boundUsername, eligibilityState } = bindingDisplay(value);
   if (!isCanonicalUuid(punishmentId)
       || !caseId
       || !codeGeneration

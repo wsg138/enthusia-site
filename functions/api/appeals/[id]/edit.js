@@ -1,13 +1,13 @@
-import { sanitizeAppealEdit, projectAppealMutation } from "../../../../lib/appeal-lifecycle.js";
+import { sanitizeAppealEdit, projectAppealMutation } from "../../../lib/appeal-lifecycle.js";
 import {
   findOwnedAppealLifecycle,
   recordAppealEditMirror
-} from "../../../../lib/appeal-lifecycle-repository.js";
-import { authenticateLinkedAppealRequest } from "../../../../lib/appeal-session.js";
-import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../../lib/responses.js";
-import { requireSameOrigin } from "../../../../lib/security.js";
-import { signedStaffRequest, staffApiResponse } from "../../../../lib/staff-api.js";
-import { isCanonicalUuid } from "../../../../lib/validation.js";
+} from "../../../lib/appeal-lifecycle-repository.js";
+import { authenticateLinkedAppealRequest } from "../../../lib/appeal-session.js";
+import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../lib/responses.js";
+import { requireSameOrigin } from "../../../lib/security.js";
+import { signedStaffRequest, staffApiResponse } from "../../../lib/staff-api.js";
+import { isCanonicalUuid, sanitizedJson } from "../../../lib/validation.js";
 
 export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
@@ -20,9 +20,7 @@ export async function onRequestPost(context) {
   catch { return serviceUnavailable(); }
   if (!session) return unauthorized();
 
-  let input;
-  try { input = sanitizeAppealEdit(await context.request.json()); }
-  catch { input = null; }
+  const input = await sanitizedJson(context.request, sanitizeAppealEdit);
   if (!input) return json({ error: "invalid_appeal_edit" }, 400);
 
   try {

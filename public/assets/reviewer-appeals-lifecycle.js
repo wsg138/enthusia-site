@@ -24,6 +24,9 @@ async function postLifecycle(appeal, action, body, container, status) {
   setDisabled(container, true);
   status.textContent = action === "claim" ? "Claiming appeal…" : "Reopening appeal…";
   try {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(appeal.id) || !["claim", "reopen"].includes(action)) {
+      throw new Error("Invalid appeal lifecycle route");
+    }
     const response = await fetch(`/api/reviewer/appeals/${encodeURIComponent(appeal.id)}/${action}`, {
       method: "POST",
       credentials: "same-origin",
