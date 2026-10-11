@@ -31,4 +31,3 @@ test('lifecycle requests reject invalid identifiers and actions before fetching'
     '/api/reviewer/appeals/'+id+'/reopen'
   ]);
 });
-
