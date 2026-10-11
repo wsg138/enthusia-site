@@ -123,6 +123,23 @@
     }
 
     const lines = new Map();
+    function buildingDescription(building, snapshot, stallsById) {
+      const extra = root.EnthusiaMarketLayerProvider?.layers?.some(layer => layer.id === current);
+      if (!extra) return describe(current, snapshot ? summarize(building, stallsById) : null);
+      if (!snapshot) return { bucket: "none", label: "", line: "" };
+      return root.EnthusiaMarketLayerProvider.describe(current, building, stallsById);
+    }
+    function renderBuilding(building, snapshot, stallsById) {
+      const shape = map.buildingElements.get(building.id), text = texts.get(building.id);
+      const info = buildingDescription(building, snapshot, stallsById);
+      lines.set(building.id, info.line);
+      if (shape) {
+        if (current === "default") shape.removeAttribute("data-bucket");
+        else shape.dataset.bucket = info.bucket;
+      }
+      text.textContent = current === "default" ? "" : info.label;
+      text.dataset.hidden = String(!info.label || !!shape?.classList.contains("filtered"));
+    }
     function render() {
       const snapshot = map.getSnapshot();
       card.dataset.layer = current;
@@ -135,14 +152,7 @@
       }
       const stallsById = new Map((snapshot?.stalls || []).map(stall => [stall.id, stall]));
       for (const building of map.layout.buildings) {
-        const shape = map.buildingElements.get(building.id), text = texts.get(building.id);
-        const extra = root.EnthusiaMarketLayerProvider?.layers?.some(layer => layer.id === current);
-        const info = extra ? (snapshot ? root.EnthusiaMarketLayerProvider.describe(current, building, stallsById) : { bucket: "none", label: "", line: "" })
-          : describe(current, snapshot ? summarize(building, stallsById) : null);
-        lines.set(building.id, info.line);
-        if (shape) { if (current === "default") shape.removeAttribute("data-bucket"); else shape.dataset.bucket = info.bucket; }
-        text.textContent = current === "default" ? "" : info.label;
-        text.dataset.hidden = String(!info.label || !!shape?.classList.contains("filtered"));
+        renderBuilding(building, snapshot, stallsById);
       }
     }
     function select(id) {
