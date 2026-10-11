@@ -1,0 +1,12 @@
+name = "enthusia-market-alerts"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+MARKET_ALERTS_ENABLED = "false"
+
+[triggers]
+crons = ["*/15 * * * *"]
+
+# Configure COMMUNITY_DB to the same database used by Pages, and set the
+# DISCORD_BOT_TOKEN secret for the existing Enthusia bot. Do not commit IDs/secrets.

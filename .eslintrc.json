@@ -82,6 +82,14 @@
         "node": true,
         "browser": true
       }
+    },
+    {
+      "files": [
+        "cloudflare/market-alerts/*.js"
+      ],
+      "env": {
+        "worker": true
+      }
     }
   ]
 }

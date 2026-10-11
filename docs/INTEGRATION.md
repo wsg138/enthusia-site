@@ -44,3 +44,7 @@ Local integration and reviewable PR authorized. No production merge/deployment, 
 ## Remaining acceptance
 
 The original competition feature has a main-based Codacy complexity/configuration backlog documented in CODACY-BASELINE.md and the branch feedback snapshots. Integration does not claim to clear that inherited backlog. Fresh main-based analysis and hosted Actions status are recorded in the PR handoff. Cloudflare preview resource bindings, D1 migrations, Staff/Competition Bridge runtime validation, OAuth/Turnstile and real client/player acceptance remain the development bring-up gates; feature flags/defaults are unchanged.
+
+## Exported designs and missing website features
+
+The user supplied the full design ZIPs and authorized updating this PR on 11 October 2026. See DESIGN-IMPLEMENTATION.md and COMMUNITY-OPERATIONS.md for the new community pages, staff publishing, polling, signed public snapshots, sales-ledger insights, opt-in alert worker, historical drafts and integration boundaries. The earlier term "complete preview" meant combined existing branches; it did not mean every Claude mockup feature was implemented or live.

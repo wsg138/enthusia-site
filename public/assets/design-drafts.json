@@ -1,0 +1,953 @@
+{
+  "source": "User-supplied Claude design export, 11 October 2026. All historical entries require source review.",
+  "items": [
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-00",
+      "title": "Enthusia SMP Discord created",
+      "body": "Design date: 27 Aug  2025\n\nThe Discord server for the new SMP is set up.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-01",
+      "title": "Enthusia SMP introduced",
+      "body": "Design date: 4 Sep  2025\n\nFain introduces the server, built with sharpmatt, p2wn and Borlyn. The goals: community driven, no resets and no pay-to-win.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-02",
+      "title": "First feature plan",
+      "body": "Design date: 10 Sep  2025\n\nThe plan sets out the Diary, an item economy, market stalls, guilds by AngryBadger, bounties, custom advancements and donor ranks. Diamonds are the planned currency. Work starts on the website.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-03",
+      "title": "Polls shape the server",
+      "body": "Design date: Sep to Oct  2025\n\nThe community votes for KOTH (91%), a virtual bank, build-your-own market stalls and a 50-plot market.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "community",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-04",
+      "title": "$100 advertisement event begins",
+      "body": "Design date: 28 Sep  2025\n\nA cash prize for whoever invites the most members to the Discord before the end of October.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "community",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-05",
+      "title": "Closed Beta",
+      "body": "Design date: 3 Oct  2025\n\nA whitelisted test for redstoners and farm builders, in creative, to push server performance. It is also the first test of the guild plugin. Extended to 13 October.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-06",
+      "title": "First builders join",
+      "body": "Design date: 30 Oct  2025\n\nMarvus, Zom_B_Kitty_26 and Toxik are introduced as the builders of the first spawn.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-07",
+      "title": "First Open Beta opens",
+      "body": "Design date: 31 Oct  2025\n\nThe whitelist comes off at 5pm ET with the End open from the start. Players get the Diary, market stalls, bounties and KOTH at Haunted Hill.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-08",
+      "title": "Guilds for everyone",
+      "body": "Design date: 31 Oct  2025\n\nThe guild plugin by AngryBadger opens to all players with custom ranks, guild wars, a guild vault and guild levels.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-09",
+      "title": "The first truce",
+      "body": "Design date: 31 Oct  2025\n\nGuild rivalries start on day one: Kingsmould and Everlights call a truce within hours of the beta opening.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-10",
+      "title": "Raw Gold replaces Diamonds",
+      "body": "Design date: 1 Nov  2025\n\nThe currency changes to Raw Gold on the first full day, alongside the first PvP arena test.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-11",
+      "title": "Guild KOTH and combat logging",
+      "body": "Design date: 11 Nov  2025\n\nGuilds can enter KOTH as teams, logging out in combat leaves an NPC behind, and new players get 30 minutes of protection.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-12",
+      "title": "KOTH at Haunted Hill",
+      "body": "Design date: 15 Nov  2025\n\nA server-wide King of the Hill fight recorded for the promo video. p2wn, Borlyn and Doge198_ capture the hill.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-13",
+      "title": "$100 advertisement event winners",
+      "body": "Design date: 15 Nov  2025\n\nFlashStrength and p2wn both win for inviting the most members to the Discord.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "community",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-14",
+      "title": "First Open Beta closes",
+      "body": "Design date: 17 Nov  2025\n\nAcross the two betas: 239 first-time players, 28 guilds formed, 463 PvP kills and 72 verified bugs.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-15",
+      "title": "Beta Tester and Bug Hunter rewards",
+      "body": "Design date: 18 Nov  2025\n\nTags for testers with 4 or more hours and a lore item for 13 or more. RedstoneIsGreat tops the bug hunters with 49 verified reports.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "community",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-16",
+      "title": "End Fight test",
+      "body": "Design date: 9 Dec  2025\n\nA whitelisted test of the End main-island rules ahead of the next beta.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-17",
+      "title": "Store opens",
+      "body": "Design date: 19 Dec  2025\n\nThe store goes live with the Founder's Badge, Avid and Devotee, and no pay-to-win perks.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-18",
+      "title": "Resource pack and Christmas logo",
+      "body": "Design date: 19 Dec  2025\n\nWork begins on the server resource pack with artist sucrash, and the Christmas logo is revealed.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-19",
+      "title": "Final Open Beta opens",
+      "body": "Design date: 20 Dec  2025\n\nThe server reopens at noon ET with commendations, a rebuilt playtime system and a 44-stall market.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-20",
+      "title": "Guilds form for the End fight",
+      "body": "Design date: Late Dec  2025\n\nGuilds form and gear up ahead of the End event, among them Enthusiast, Blood Guard and ScarEye, whose banner goes up near spawn.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-21",
+      "title": "The beta End event",
+      "body": "Design date: 26 Dec  2025\n\nVoted back from Christmas Eve, the End opens at 1pm ET. Enthusiast and Blood Guard win the fight for the Dragon Egg.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2025"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-22",
+      "title": "Beta extended",
+      "body": "Design date: 1 Jan  2026\n\nThe Open Beta carries on past 5 January, with full release projected for March 2026.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-23",
+      "title": "The Prologue begins",
+      "body": "Design date: 2 Jan  2026\n\nThe extended beta is named the Prologue. Borders grow to 20k in the Overworld and 25k in the End, and balances and bounties are reset after a major dupe.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-24",
+      "title": "Guild stalls, linking and mod applications",
+      "body": "Design date: 2 Jan  2026\n\nGuild stalls open for testing, Minecraft to Discord linking goes live and moderator applications open.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-25",
+      "title": "Enthusiast opens its Enthusia branch",
+      "body": "Design date: 2 Jan  2026\n\nEnthusiast sets up a dedicated branch for the server and starts recruiting on it.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-26",
+      "title": "The ScarEye War begins",
+      "body": "Design date: 5 Jan  2026\n\nEnthusiast and Blood Guard declare war on ScarEye, led by RadiOwO_. The two sides fight on and off through January and February.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-27",
+      "title": "Death Duels and Enthusia Express voted in",
+      "body": "Design date: 12 Jan  2026\n\nPolls approve Death Duels (78%) and package mail (66%).\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "community",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-28",
+      "title": "Bank and reputation update",
+      "body": "Design date: 23 Jan  2026\n\nRaw Gold can be banked with /deposit, teleports are rebuilt in-house and the commendation system gets its first effects.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-29",
+      "title": "Wiki goes live",
+      "body": "Design date: 25 Jan  2026\n\nThe Enthusia wiki opens to community editing, builder and developer applications open, and Enthusia.net becomes the main address.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-30",
+      "title": "Betrayal in the ScarEye War",
+      "body": "Design date: 4 Feb  2026\n\nAn Enthusiast member brings two ScarEye players into the guild base. Both are killed, but Enthusiast has to move its main base.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-31",
+      "title": "Raid on ScarEye",
+      "body": "Design date: 6 Feb  2026\n\nEnthusiast and Blood Guard raid a ScarEye base and carry off its loot.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-32",
+      "title": "Release moved to April",
+      "body": "Design date: 25 Feb  2026\n\nLaunch is pushed back to April. The Historian role is created for the wiki, and new builders and moderators join the team.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-33",
+      "title": "1.21.11 update",
+      "body": "Design date: 21 Mar  2026\n\nThe beta updates to 1.21.11 with spears, guild history lookups and a first Survival Games playtest, after a Minecraft Live watch party.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-34",
+      "title": "Host upgrade",
+      "body": "Design date: 4 Apr  2026\n\nThe server moves to a host that can carry a 100k world border.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-35",
+      "title": "End of the World",
+      "body": "Design date: 11 Apr  2026\n\nThe border shrinks to the Warzone for a one-life final fight, ending with Blood Guard against the newly formed OverHeaven. Flomish is the last player standing and Prologue Champion.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-36",
+      "title": "Enthusiast rebuilds",
+      "body": "Design date: 12 Apr  2026\n\nAfter EOTW most of the active Enthusiast roster on the server moves on, and the guild regroups for full release.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-37",
+      "title": "Release date announced",
+      "body": "Design date: 24 Apr  2026\n\nFull release is set for 2 May. The final beta counted 837 first-time players, 62 guilds and 5,765 PvP kills.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-38",
+      "title": "Full release",
+      "body": "Design date: 2 May  2026\n\nEnthusia SMP launches at 1pm ET with a 100k Overworld border, the Raw Gold economy, guilds, reputation, bounties and proximity voice chat.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-39",
+      "title": "Eyes of Ender enabled",
+      "body": "Design date: 6 May  2026\n\nThe hunt for the stronghold begins.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-40",
+      "title": "The End Fight",
+      "body": "Design date: 9 May  2026\n\nThe End opens at 3pm ET. The allied guilds Vibe, Dogeclan and BoopGang win, woulves1 takes the Dragon Egg, and the server hits a record 96 players online.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-41",
+      "title": "The gold farm raid",
+      "body": "Design date: Early May  2026\n\nBelovedOnes raid Vibe's gold farm in the first week. Vibe's leader later calls it the reason the guild turned to raiding.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-42",
+      "title": "Nether roof opens",
+      "body": "Design date: 11 May  2026\n\nPlayers can build and travel on the Nether roof.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-43",
+      "title": "Death Duels",
+      "body": "Design date: 16 May  2026\n\n1v1 duels to the death arrive in the spawn arena, with custom rules, wagers and a loot vault for the winner.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-44",
+      "title": "Media Event begins",
+      "body": "Design date: 16 May  2026\n\nA video contest with cash prizes and the Media rank. The deadline later moves from 16 June to 30 June.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-45",
+      "title": "Wiki infoboxes",
+      "body": "Design date: 19 May  2026\n\nThe wiki gets working infoboxes, fixed by Michael Lubker.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-46",
+      "title": "1,000 Discord members",
+      "body": "Design date: 29 May  2026\n\nCelebrated with a rank giveaway. Enthusia is also listed on Modrinth and gets a Discord server tag.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "community",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-47",
+      "title": "Market delayed",
+      "body": "Design date: 29 May  2026\n\nPlanned for 30 May, the Market moves to 6 June. On 6 June it is held back with no date until it is ready.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-48",
+      "title": "PieCloak",
+      "body": "Design date: 1 Jun  2026\n\np2wn's PieCloak makes pie-chart base hunting less reliable by hiding common base blocks and entities at a distance.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-49",
+      "title": "Founder ranks retired",
+      "body": "Design date: 2 Jun  2026\n\nThe Founder ranks and the Founder Star leave the store for good.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-50",
+      "title": "Vibe raids WOT",
+      "body": "Design date: 7 Jun  2026\n\nVibe begins a run of raids on WOT bases and declares war on guild after guild. Four WOT bases have fallen by mid-June.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-51",
+      "title": "Enthusiast allies with PTC",
+      "body": "Design date: 18 Jun  2026\n\nEnthusiast votes 12 to 0 to ally with PTC, a guild that takes contracts.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-52",
+      "title": "New enemies",
+      "body": "Design date: 19 Jun  2026\n\nAfter a clash between their members, Enthusiast names WOT and BelovedOnes as enemies.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-53",
+      "title": "First PvP Tournament",
+      "body": "Design date: 21 Jun  2026\n\nHosted by auhfuls in the Duels Arena: sword PvP with totems and cobwebs, no maces. OinkerMC wins, with Currut second and Nicusormeow third.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-54",
+      "title": "26.2 clients supported",
+      "body": "Design date: 27 Jun  2026\n\nPlayers on Minecraft 26.2 can join.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-55",
+      "title": "First guild to level 100",
+      "body": "Design date: 28 Jun  2026\n\nVibe becomes the first guild to reach level 100, with BelovedOnes close behind at 88. A rework of guild progression is announced.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-56",
+      "title": "Official autoclicker mod",
+      "body": "Design date: 28 Jun  2026\n\nAn official Enthusia autoclicker mod by p2wn is published on Modrinth.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-57",
+      "title": "Events playtest",
+      "body": "Design date: Summer  2026\n\nAbout 15 donors test every event in p2wn's new Events plugin.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-58",
+      "title": "Media Event winner",
+      "body": "Design date: 1 Jul  2026\n\nStepSoy wins the video contest. KILLTEAM and Jacco1OO also earn the Media rank. Real-world politics are barred from chat, guild names and items.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "community",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-59",
+      "title": "Market opens, then pauses",
+      "body": "Design date: 3 Jul  2026\n\nThe Market releases at 2pm ET alongside a new advertisement, but auction problems put it on hold within hours. Everyone is refunded.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-60",
+      "title": "Market auction",
+      "body": "Design date: 9 Jul  2026\n\nThe Market relaunches with a stall auction. Server trouble forces a re-bid on 10 July, and the auction closes that evening.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-61",
+      "title": "Emergency maintenance",
+      "body": "Design date: 15 Jul  2026\n\nThe SMP goes down for most of a day to fix a homes exploit and a duel-spectating exploit.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-62",
+      "title": "Website overhaul",
+      "body": "Design date: 19 Jul  2026\n\nThe website gets a new look and an interactive Market showing every stall, its owner and its stock.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-63",
+      "title": "BoopGang against everyone",
+      "body": "Design date: 13 Jul  2026\n\nBoopGang declares war on every guild on the server.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-64",
+      "title": "Vibe and BoopGang raid WOT",
+      "body": "Design date: 22 Jul  2026\n\nVibe and BoopGang raid WOT together. WOT says it wrecked five Vibe farms in return.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-65",
+      "title": "BoopGang raid night",
+      "body": "Design date: 31 Jul  2026\n\nBoopGang raids through the night. Enthusiast's base falls, while WOT fights its raid off.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-66",
+      "title": "Go Touch Grass Day",
+      "body": "Design date: 2 Aug  2026\n\nThe server shuts for a full day of maintenance while players earn the Grass Toucher tag for photos of the outdoors. It returns on 4 August.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-67",
+      "title": "August update",
+      "body": "Design date: 4 Aug  2026\n\nJava 25, a network tab list, /daily rewards and 100 achievements. New builder and helpers join the team.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-68",
+      "title": "Warzone Rotators",
+      "body": "Design date: Aug  2026\n\nWeekly rotating Warzone kits arrive, voted in during May.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "update",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-69",
+      "title": "The Imperials under siege",
+      "body": "Design date: Mid-Aug  2026\n\nThe Imperials are raided again and again through mid-August. The guild disbands in early September.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-70",
+      "title": "The GDTO and the Vibe declaration",
+      "body": "Design date: 28 Aug  2026\n\nGuilds band together as the GDTO against WOT. Vibe turns on the alliance and raids across the server, and Enthusiast answers with a declaration of war.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-71",
+      "title": "One year of Enthusia",
+      "body": "Design date: 4 Sep  2026\n\nFain looks back on the first year and previews the Chapter 2 guild rework.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "community",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-72",
+      "title": "Asgard raids EnthOpen",
+      "body": "Design date: 10 Sep  2026\n\nAsgard raids the base of EnthOpen, Enthusiast's open guild, in what its raiders call the biggest base raid yet.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-73",
+      "title": "Last raids of Chapter 1",
+      "body": "Design date: 19 Sep  2026\n\nWith the chapter ending, Vibe raids PTC, Everlights and Enthusiast bases, while Asgard and WOT hit Vibe's surface base, skull farm and guild home.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "guild",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-74",
+      "title": "Chapter 2 announced",
+      "body": "Design date: 24 Sep  2026\n\nChapter 2 is announced for 1 October, with a temporary server during maintenance.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-75",
+      "title": "Chapter 2 maintenance",
+      "body": "Design date: 28 Sep  2026\n\nThe main SMP goes offline and a temporary fresh server opens that evening, with small borders, the End open from the start and hidden challenges whose tags carry over.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-76",
+      "title": "Temp server stress test",
+      "body": "Design date: 30 Sep  2026\n\nThe temporary world border jumps to 300k and players are challenged to beat the dragon again.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "event",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-77",
+      "title": "Chapter 2 launches",
+      "body": "Design date: 2 Oct  2026\n\nA day later than planned, the server reopens on Minecraft 26.2 with a Halloween spawn and Warzone, a bigger border, guild Prestige and Seasonal ELO, EnthusiaExpress mail and new donor perks.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "milestone",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    },
+    {
+      "kind": "timeline",
+      "slug": "design-timeline-78",
+      "title": "Public advertisement",
+      "body": "Design date: 3 Oct  2026\n\nThe server advertisement goes live at 9am ET and a wave of new players is welcomed in.\n\nImported from the design export; verify the source and date before publishing.",
+      "category": "community",
+      "tags": [
+        "2026"
+      ],
+      "status": "draft",
+      "verification": "unverified"
+    }
+  ]
+}

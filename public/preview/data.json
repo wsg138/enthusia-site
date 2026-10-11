@@ -360,5 +360,289 @@
       "openAIModeration": true,
       "minecraftPrivacyReview": "MANUAL_STAFF"
     }
+  },
+  "community": {
+    "guilds": {
+      "updatedAt": "2026-10-11T12:00:00Z",
+      "items": [
+        {
+          "id": "preview-guild",
+          "name": "Preview Guild",
+          "description": "Sample recruiting guild",
+          "level": 100,
+          "members": 12,
+          "elo": 1200,
+          "recruiting": true,
+          "peaceful": false,
+          "membersList": [
+            "PreviewPlayer",
+            "BuilderTwo"
+          ],
+          "links": []
+        },
+        {
+          "id": "builders",
+          "name": "Builders",
+          "description": "A sample peaceful guild",
+          "level": 40,
+          "members": 5,
+          "elo": 1000,
+          "recruiting": false,
+          "peaceful": true,
+          "membersList": [],
+          "links": []
+        }
+      ]
+    },
+    "players": {
+      "items": [
+        {
+          "id": "preview-player",
+          "name": "PreviewPlayer",
+          "description": "Sample player profile",
+          "rank": "Avid",
+          "guild": "Preview Guild",
+          "balance": 500,
+          "playtime": 120,
+          "reputation": 3,
+          "achievements": [
+            "Explorer"
+          ],
+          "links": []
+        }
+      ]
+    },
+    "achievements": {
+      "items": [
+        {
+          "id": "explorer",
+          "name": "Explorer",
+          "description": "Sample progression milestone",
+          "category": "Exploration",
+          "reward": "Sample reward",
+          "completed": 5
+        }
+      ]
+    },
+    "bounties": {
+      "items": [
+        {
+          "id": "sample-bounty",
+          "name": "PreviewPlayer",
+          "description": "Sample bounty",
+          "gold": 50,
+          "state": "open",
+          "hunter": "",
+          "expiresAt": null
+        }
+      ]
+    },
+    "news": {
+      "items": [
+        {
+          "kind": "news",
+          "slug": "news-sample",
+          "title": "Community announcement",
+          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
+          "category": "Community",
+          "status": "published",
+          "revision": 1,
+          "verification": "unverified",
+          "date": "2026-10-02T12:00:00Z"
+        }
+      ]
+    },
+    "changelog": {
+      "items": [
+        {
+          "kind": "changelog",
+          "slug": "changelog-sample",
+          "title": "Sample update",
+          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
+          "category": "Community",
+          "status": "published",
+          "revision": 1,
+          "verification": "unverified",
+          "date": "2026-10-02T12:00:00Z"
+        }
+      ]
+    },
+    "roadmap": {
+      "items": [
+        {
+          "kind": "roadmap",
+          "slug": "roadmap-sample",
+          "title": "A future milestone",
+          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
+          "category": "Planned",
+          "status": "published",
+          "revision": 1,
+          "verification": "unverified",
+          "date": "2026-10-02T12:00:00Z"
+        }
+      ]
+    },
+    "timeline": {
+      "items": [
+        {
+          "kind": "timeline",
+          "slug": "timeline-sample",
+          "title": "Chapter 2 launch",
+          "body": "Chapter 2 launched on 2 October 2026.",
+          "category": "Community",
+          "status": "published",
+          "revision": 1,
+          "verification": "verified",
+          "date": "2026-10-02T12:00:00Z"
+        }
+      ]
+    },
+    "halloffame": {
+      "items": [
+        {
+          "kind": "halloffame",
+          "slug": "halloffame-sample",
+          "title": "Sample competition winner",
+          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
+          "category": "Community",
+          "status": "published",
+          "revision": 1,
+          "verification": "unverified",
+          "date": "2026-10-02T12:00:00Z"
+        }
+      ]
+    },
+    "creators": {
+      "items": [
+        {
+          "kind": "creators",
+          "slug": "creators-sample",
+          "title": "Sample creator",
+          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
+          "category": "Community",
+          "status": "published",
+          "revision": 1,
+          "verification": "unverified",
+          "date": "2026-10-02T12:00:00Z",
+          "image": "/assets/screenshots/slide-01.webp"
+        }
+      ]
+    },
+    "museum": {
+      "items": [
+        {
+          "kind": "museum",
+          "slug": "museum-sample",
+          "title": "Sample mapart exhibit",
+          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
+          "category": "Community",
+          "status": "published",
+          "revision": 1,
+          "verification": "unverified",
+          "date": "2026-10-02T12:00:00Z",
+          "image": "/assets/screenshots/slide-02.webp"
+        }
+      ]
+    },
+    "polls": {
+      "items": [
+        {
+          "kind": "polls",
+          "slug": "polls-sample",
+          "title": "Choose a sample event",
+          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
+          "category": "Community",
+          "status": "published",
+          "revision": 1,
+          "verification": "unverified",
+          "date": "2026-10-02T12:00:00Z",
+          "options": [
+            "Build",
+            "Mapart",
+            "PvP"
+          ],
+          "closesAt": "2099-01-01T00:00:00Z"
+        }
+      ]
+    },
+    "insights": {
+      "week": "2026-10-05T00:00:00Z",
+      "mode": "stall",
+      "sales": 8,
+      "updatedAt": "2026-10-11T12:00:00Z",
+      "leaders": [
+        {
+          "name": "stall-1",
+          "gold": 200,
+          "quantity": 400,
+          "streak": 3
+        },
+        {
+          "name": "stall-2",
+          "gold": 100,
+          "quantity": 300,
+          "streak": 1
+        }
+      ],
+      "stallTotals": [
+        {
+          "stall": "stall-1",
+          "gold": 200
+        },
+        {
+          "stall": "stall-2",
+          "gold": 100
+        }
+      ],
+      "prices": [
+        {
+          "item": "stone",
+          "price": 0.5,
+          "quantity": 400,
+          "trades": 4,
+          "change": 10
+        },
+        {
+          "item": "diamond",
+          "price": 12,
+          "quantity": 20,
+          "trades": 2,
+          "change": -5
+        }
+      ],
+      "history": [
+        {
+          "day": "2026-10-08",
+          "item": "stone",
+          "price": 0.4,
+          "quantity": 100
+        },
+        {
+          "day": "2026-10-09",
+          "item": "stone",
+          "price": 0.6,
+          "quantity": 120
+        },
+        {
+          "day": "2026-10-10",
+          "item": "stone",
+          "price": 0.5,
+          "quantity": 180
+        }
+      ],
+      "weeks": [
+        "2026-10-05",
+        "2026-09-28"
+      ],
+      "hallOfFame": [
+        {
+          "week": "2026-10-05",
+          "winner": {
+            "name": "stall-1",
+            "gold": 200
+          }
+        }
+      ]
+    }
   }
 }

@@ -62,6 +62,17 @@ const groups = [
   [path=>path.startsWith('/api/competitions/'),competitionPreview]
 ];
 function previewApi(url) {
+  if(url.pathname.startsWith('/api/community/')){
+    const parts=url.pathname.slice('/api/community/'.length).split('/');
+    if(parts[0]==='admin'){
+      if(!staff)return json({error:'editor_role_required'},403);
+      if(parts[1]==='session')return json({editor:true});
+      return json(dataset.community[parts[1]]??{items:[]});
+    }
+    if(parts[0]==='polls'&&parts[1])return json({poll:dataset.community.polls.items[0],choice:null,totals:null});
+    if(parts[0]==='insights')return json({...dataset.community.insights,week:(url.searchParams.get('week')||'2026-10-05')+'T00:00:00Z',mode:url.searchParams.get('mode')||'stall'});
+    return json(dataset.community[parts[0]]??{items:[]});
+  }
   const route=routes.get(url.pathname);
   if(route)return route(url);
   for(const [matches,render] of groups)if(matches(url.pathname))return render(url.pathname);
