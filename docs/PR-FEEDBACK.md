@@ -20,7 +20,7 @@ npm test: all 56 unique tests passed (the existing potion command also repeats 3
 Browser checks use Edge and fixtures/mocked unavailable APIs. They do not establish real mobile device, live API, Safari, or production acceptance.
 
 ## Remaining findings and delivery
-Browser fetch calls are incorrectly labeled server-side SSRF by the analyzer; canonical IDs and same-origin paths are now explicit. Four verified browser-only SSRF false positives have rule-specific inline annotations at their validated request arguments. Only rules_lgpl.javascript.ssrf.rule-node-ssrf is annotated; UUID validation and behavioral tests remain active. No organization rule configuration was changed. Fresh analysis cleared the original complexity/test-key findings; hosted analysis must confirm these targeted annotations.
+Browser fetch calls are incorrectly labeled server-side SSRF by the analyzer; canonical IDs and same-origin paths are now explicit. Four verified browser-only SSRF false positives have rule-specific inline annotations at their validated request arguments. Only rules_lgpl_javascript_ssrf_rule-node-ssrf is annotated; UUID validation and behavioral tests remain active. No organization rule configuration was changed. Fresh analysis cleared the original complexity/test-key findings; hosted analysis must confirm these targeted annotations.
 
 - [x] Inspect comments and current base.
 - [x] Implement supported fixes and focused behavioral regressions.

@@ -14,7 +14,7 @@ async function claim(appeal, result, article) {
   try {
     // Browser-only same-origin route; checkedAppealId rejects non-canonical UUIDs.
     const response = await fetch(
-      `/api/reviewer/appeals/${checkedAppealId(appeal.id)}/claim`, // nosemgrep: rules_lgpl.javascript.ssrf.rule-node-ssrf
+      `/api/reviewer/appeals/${checkedAppealId(appeal.id)}/claim`, // nosemgrep: rules_lgpl_javascript_ssrf_rule-node-ssrf
       {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -54,7 +54,7 @@ async function decide(appeal, decision, note, result) {
   try {
     // Browser-only same-origin route; checkedAppealId rejects non-canonical UUIDs.
     const response = await fetch(
-      `/api/reviewer/appeals/${checkedAppealId(appeal.id)}`, // nosemgrep: rules_lgpl.javascript.ssrf.rule-node-ssrf
+      `/api/reviewer/appeals/${checkedAppealId(appeal.id)}`, // nosemgrep: rules_lgpl_javascript_ssrf_rule-node-ssrf
       {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -92,7 +92,7 @@ async function reopen(appeal, note, result) {
   try {
     // Browser-only same-origin route; checkedAppealId rejects non-canonical UUIDs.
     const response = await fetch(
-      `/api/reviewer/appeals/${checkedAppealId(appeal.id)}/reopen`, // nosemgrep: rules_lgpl.javascript.ssrf.rule-node-ssrf
+      `/api/reviewer/appeals/${checkedAppealId(appeal.id)}/reopen`, // nosemgrep: rules_lgpl_javascript_ssrf_rule-node-ssrf
       {
         method: "POST",
         headers: { "content-type": "application/json" },
