@@ -606,10 +606,18 @@
     state.mobileStack = [...state.mobileStack.filter(entry => entry.type !== "stall"), {type: "stall", id: stall.id}]; showDrawer(); bindDrawerActions();
     if (shopId) requestAnimationFrame(() => el.content.querySelector(".shop-card.highlight")?.scrollIntoView({ block: "center" }));
   }
+
+  // Extra data (a price verdict) can add a badge to a shop card. It arrives as {kind, text}, never as markup.
+  const PRICE_BADGE_KINDS = new Set(["cheap", "fair", "pricey"]);
+  function priceBadge(shop) {
+    const badge = window.EnthusiaMarketMap.shopBadge?.(shop);
+    if (!badge || typeof badge !== "object" || !PRICE_BADGE_KINDS.has(badge.kind)) return "";
+    return `<span class="price-badge ${badge.kind}">${esc(String(badge.text || ""))}</span>`;
+  }
   function shopCard(shop, highlight) {
     const labels = transactionLabels(shop.direction), action = { SELL: "Selling", BUY: "Buying", TRADE: "Trading" }[shop.direction];
     const out = shop.stockCount <= 0;
-    return `<article class="shop-card${highlight ? " highlight" : ""}${out ? " out-of-stock" : ""}" data-shop="${shop.id}" tabindex="0" role="button" aria-label="Inspect ${action.toLowerCase()} shop by ${esc(shop.owner.name)}"><header><span class="direction">${action}</span><small>Shop by <strong title="${esc(shop.owner.name)}">${esc(shop.owner.name)}</strong></small></header>${window.EnthusiaMarketMap.shopBadge?.(shop) || ""}${out ? `<strong class="stock-badge">Out of stock</strong>` : ""}<div class="transaction-grid">${itemPanel(shop.sellItem, shop.sellAmount, labels[0], shop.id, shop.direction, "sellItem")}<span class="transaction-arrow" aria-hidden="true">⇄</span>${itemPanel(shop.costItem, shop.costAmount, labels[1], shop.id, shop.direction, "costItem")}</div><footer><span>${shop.stockCount} in stock · ${shop.availableTrades} trades available</span>${locationMarkup(shop.interaction, true)}</footer></article>`;
+    return `<article class="shop-card${highlight ? " highlight" : ""}${out ? " out-of-stock" : ""}" data-shop="${shop.id}" tabindex="0" role="button" aria-label="Inspect ${action.toLowerCase()} shop by ${esc(shop.owner.name)}"><header><span class="direction">${action}</span><small>Shop by <strong title="${esc(shop.owner.name)}">${esc(shop.owner.name)}</strong></small></header>${priceBadge(shop)}${out ? `<strong class="stock-badge">Out of stock</strong>` : ""}<div class="transaction-grid">${itemPanel(shop.sellItem, shop.sellAmount, labels[0], shop.id, shop.direction, "sellItem")}<span class="transaction-arrow" aria-hidden="true">⇄</span>${itemPanel(shop.costItem, shop.costAmount, labels[1], shop.id, shop.direction, "costItem")}</div><footer><span>${shop.stockCount} in stock · ${shop.availableTrades} trades available</span>${locationMarkup(shop.interaction, true)}</footer></article>`;
   }
   function bindDrawerActions() {
     bindCopy(el.content);

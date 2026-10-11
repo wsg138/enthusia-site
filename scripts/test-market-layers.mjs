@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-new Function(await readFile("public/assets/market/map-layers.js", "utf8")).call(globalThis);
+// Loading the browser file sets globalThis.EnthusiaMarketLayers, as it sets window.EnthusiaMarketLayers on the page.
+await import("../public/assets/market/map-layers.js");
 const { rentInfo, summarize, describe, heat, LAYERS } = globalThis.EnthusiaMarketLayers;
 const layout = JSON.parse(await readFile("public/assets/market/market-layout.json", "utf8"));
 const snapshot = JSON.parse(await readFile("public/assets/market/sample-market-snapshot.json", "utf8"));
