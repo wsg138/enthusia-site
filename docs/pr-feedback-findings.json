@@ -1,0 +1,23 @@
+[
+  {
+    "issueId": "8e650cfb70a0a3e6528a1fa5c8bad619",
+    "file": "public/assets/market/map-layers.js",
+    "line": 52,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method describe has a cyclomatic complexity of 11 (limit is 8)"
+  },
+  {
+    "issueId": "d26d899ba9c976ae79af2aa6d25d55c3",
+    "file": "public/assets/market/market.js",
+    "line": 615,
+    "pattern": "Semgrep_javascript.lang.security.html-in-template-string.html-in-template-string",
+    "message": "This template literal looks like HTML and has interpolated variables."
+  },
+  {
+    "issueId": "6b19ad6bfdaeee63299063e968d48e6e",
+    "file": "public/assets/market/market.js",
+    "line": 620,
+    "pattern": "Semgrep_javascript.lang.security.html-in-template-string.html-in-template-string",
+    "message": "This template literal looks like HTML and has interpolated variables."
+  }
+]

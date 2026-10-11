@@ -49,27 +49,31 @@
   const heat = shops => (shops >= 15 ? "heat4" : shops >= 9 ? "heat3" : shops >= 4 ? "heat2" : shops >= 1 ? "heat1" : "none");
 
   // The map colour bucket, short map label and tooltip line for one building under one layer.
-  function describe(layer, summary) {
-    if (!summary || !summary.stalls) return { bucket: "none", label: "", line: "" };
-    const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
-    switch (layer) {
-      case "free":
-        return { bucket: summary.free ? "free" : "none", label: summary.free ? String(summary.free) : "", line: `${summary.free} of ${plural(summary.stalls, "stall")} free` };
-      case "rent": {
+  function describeRent(summary) {
         const worst = summary.worst, bucket = worst.rent.bucket;
         const name = `Stall ${String(worst.stall.id).match(/\d+/)?.[0] || worst.stall.id}`;
         return { bucket: bucket === "unknown" || bucket === "available" ? "none" : bucket, label: bucket === "available" ? "" : worst.rent.label, line: bucket === "available" ? "Every stall here is free" : `${worst.rent.text} · ${name}` };
       }
-      case "shops":
-        return { bucket: heat(summary.shops), label: summary.shops ? String(summary.shops) : "", line: `${plural(summary.shops, "shop")} across ${plural(summary.stalls, "stall")}` };
-      case "stock": {
-        if (!summary.shops) return { bucket: "none", label: "", line: "No shops listed" };
-        const bucket = summary.outOfStock === 0 ? "in" : summary.inStock === 0 ? "out" : "mixed";
-        return { bucket, label: `${summary.inStock}/${summary.shops}`, line: `${summary.inStock} in stock · ${summary.outOfStock} sold out` };
-      }
-      default:
-        return { bucket: "none", label: "", line: `${plural(summary.stalls, "stall")} · ${plural(summary.shops, "shop")}` };
-    }
+
+  const plural = (n, word) => n + " " + word + (n === 1 ? "" : "s");
+  function describeFree(summary) {
+    return { bucket: summary.free ? "free" : "none", label: summary.free ? String(summary.free) : "", line: summary.free + " of " + plural(summary.stalls, "stall") + " free" };
+  }
+  function describeShops(summary) {
+    return { bucket: heat(summary.shops), label: summary.shops ? String(summary.shops) : "", line: plural(summary.shops, "shop") + " across " + plural(summary.stalls, "stall") };
+  }
+  function describeStock(summary) {
+    if (!summary.shops) return { bucket: "none", label: "", line: "No shops listed" };
+    const bucket = summary.outOfStock === 0 ? "in" : summary.inStock === 0 ? "out" : "mixed";
+    return { bucket, label: summary.inStock + "/" + summary.shops, line: summary.inStock + " in stock · " + summary.outOfStock + " sold out" };
+  }
+  function describeDefault(summary) {
+    return { bucket: "none", label: "", line: plural(summary.stalls, "stall") + " · " + plural(summary.shops, "shop") };
+  }
+  const describers = new Map([["free", describeFree], ["rent", describeRent], ["shops", describeShops], ["stock", describeStock]]);
+  function describe(layer, summary) {
+    if (!summary || !summary.stalls) return { bucket: "none", label: "", line: "" };
+    return (describers.get(layer) || describeDefault)(summary);
   }
 
   // Optional extra layers (Prices, Weekly gold) come from root.EnthusiaMarketLayerProvider once the sales API exists:
