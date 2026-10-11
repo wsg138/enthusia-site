@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/validate-site.mjs",
-    "test:appeals": "node --test tests/appeal-auth.test.mjs",
+    "test:appeals": "node --test tests/appeal-auth.test.mjs tests/appeal-browser-safety.test.mjs",
     "test:potions": "node --test tests/potion-preview.test.mjs",
     "mask-editor": "python scripts/cinematic-mask-editor.py",
     "validate:cinematic": "python scripts/generate-terrain-mask.py --validate-only",
