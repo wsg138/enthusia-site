@@ -2,7 +2,7 @@ import { authenticateRequest, canReview } from "../../../../lib/auth.js";
 import { forbidden, json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../../lib/responses.js";
 import { boundedIdempotencyKey, requireSameOrigin } from "../../../../lib/security.js";
 import { reviewerRank, signedStaffRequest, staffApiResponse } from "../../../../lib/staff-api.js";
-import { isCanonicalUuid } from "../../../../lib/validation.js";
+import { isCanonicalUuid, sanitizedJson } from "../../../../lib/validation.js";
 
 function sanitizeClaim(input) {
   const expectedVersion = Number(input?.expectedVersion);
@@ -28,12 +28,7 @@ export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   const reviewer = await authenticatedReviewer(context);
   if (reviewer.error) return reviewer.error;
-  let claim;
-  try {
-    claim = sanitizeClaim(await context.request.json());
-  } catch {
-    claim = null;
-  }
+  const claim = await sanitizedJson(context.request, sanitizeClaim);
   const appealId = String(context.params.id ?? "").trim();
   if (!claim || !isCanonicalUuid(appealId)) return json({ error: "invalid_claim" }, 400);
   try {

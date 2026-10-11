@@ -82,21 +82,10 @@
     var physical = doc.physicalEvents;
     var chat = doc.chatEvents;
 
-    var hasPhysical = physical.nextVoteAt || physical.nextEventAt;
-    var hasChat = chat.nextChatEventAt;
-    if (!hasPhysical && !hasChat) {
-      return;
-    }
-
-    if (physical.nextVoteAt) {
-      addUpcomingLine(lines, "Next vote opens", physical.nextVoteAt);
-    }
-    if (physical.nextEventAt) {
-      addUpcomingLine(lines, "Next physical event", physical.nextEventAt);
-    }
-    if (chat.nextChatEventAt) {
-      addUpcomingLine(lines, "Next chat event", chat.nextChatEventAt);
-    }
+    addUpcomingLine(lines, "Next vote opens", physical.nextVoteAt);
+    addUpcomingLine(lines, "Next physical event", physical.nextEventAt);
+    addUpcomingLine(lines, "Next chat event", chat.nextChatEventAt);
+    if (!lines.firstChild) return;
 
     var card = el("article", "card feature-card");
     var kicker = el("span", "card-kicker");
@@ -177,7 +166,7 @@
     if (!mount || !Array.isArray(doc.topWins) || !Array.isArray(doc.recentEvents)) {
       return;
     }
-    if (doc.topWins.length === 0 && doc.recentEvents.length === 0) {
+    if (doc.topWins.length + doc.recentEvents.length === 0) {
       return;
     }
     while (mount.firstChild) {

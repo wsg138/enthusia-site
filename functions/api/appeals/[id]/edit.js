@@ -2,7 +2,7 @@ import { authenticateRequest } from "../../../lib/auth.js";
 import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../lib/responses.js";
 import { boundedIdempotencyKey, requireSameOrigin } from "../../../lib/security.js";
 import { signedStaffRequest, staffApiResponse } from "../../../lib/staff-api.js";
-import { isCanonicalUuid } from "../../../lib/validation.js";
+import { isCanonicalUuid, sanitizedJson } from "../../../lib/validation.js";
 
 const MIN_REASON_LENGTH = 10;
 const MAX_REASON_LENGTH = 1000;
@@ -26,8 +26,7 @@ export async function onRequestPost(context) {
   let session;
   try { session = await authenticateRequest(context.request, context.env); } catch { return unauthorized(); }
 
-  let edit;
-  try { edit = sanitizeEdit(await context.request.json()); } catch { edit = null; }
+  const edit = await sanitizedJson(context.request, sanitizeEdit);
   const appealId = String(context.params.id ?? "").trim();
   if (!edit || !isCanonicalUuid(appealId)) return json({ error: "invalid_edit" }, 400);
 

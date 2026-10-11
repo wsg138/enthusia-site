@@ -134,6 +134,13 @@
     return response.json();
   }
 
+  function recentQuery() {
+    var params = new URLSearchParams({ limit: "30" });
+    if (typeSelect.value) params.set("type", typeSelect.value);
+    if (cursor) params.set("cursor", cursor);
+    return params.toString();
+  }
+
   async function loadRecent(reset) {
     if (loading) return;
     loading = true;
@@ -144,11 +151,7 @@
     }
     setStatus("Loading…");
     try {
-      var params = new URLSearchParams({ limit: "30" });
-      var type = typeSelect.value;
-      if (type) params.set("type", type);
-      if (cursor) params.set("cursor", cursor);
-      var payload = await fetchJson("/api/moderation/punishments?" + params.toString());
+      var payload = await fetchJson("/api/moderation/punishments?" + recentQuery());
       var items = Array.isArray(payload.items) ? payload.items : [];
       items.forEach(function (item) { listEl.append(punishmentCard(item)); });
       cursor = payload.nextCursor || null;

@@ -5,3 +5,7 @@ export function isCanonicalUuid(value) {
 }
 
 export { CANONICAL_UUID };
+
+export async function sanitizedJson(request, sanitize) {
+  try { return sanitize(await request.json()); } catch { return null; }
+}

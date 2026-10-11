@@ -2,7 +2,7 @@ import { authenticateRequest, canReview } from "../../../../lib/auth.js";
 import { forbidden, json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../../../lib/responses.js";
 import { boundedIdempotencyKey, requireSameOrigin } from "../../../../lib/security.js";
 import { reviewerRank, signedStaffRequest, staffApiResponse } from "../../../../lib/staff-api.js";
-import { isCanonicalUuid } from "../../../../lib/validation.js";
+import { isCanonicalUuid, sanitizedJson } from "../../../../lib/validation.js";
 
 const MIN_NOTE_LENGTH = 3;
 const MAX_NOTE_LENGTH = 1000;
@@ -37,12 +37,7 @@ export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   const reviewer = await authenticatedReviewer(context);
   if (reviewer.error) return reviewer.error;
-  let reopen;
-  try {
-    reopen = sanitizeReopen(await context.request.json());
-  } catch {
-    reopen = null;
-  }
+  const reopen = await sanitizedJson(context.request, sanitizeReopen);
   const appealId = String(context.params.id ?? "").trim();
   if (!reopen || !isCanonicalUuid(appealId)) return json({ error: "invalid_reopen" }, 400);
   try {
