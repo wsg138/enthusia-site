@@ -15,6 +15,7 @@ export async function onRequestGet(context) {
       discordGuildMember: session.discordGuildMember,
       linkedMinecraftAccounts: session.linkedMinecraftAccounts,
       networkAccounts: session.networkAccounts,
+      networkAccountsPending: String(context.env.NETWORK_ACCOUNT_LINKS ?? "").trim().toLowerCase() === "false",
       expiresAt: session.expiresAt
     });
   } catch {
