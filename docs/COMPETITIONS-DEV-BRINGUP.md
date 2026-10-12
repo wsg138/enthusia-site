@@ -169,12 +169,13 @@ Do not directly port-forward the bridge. `cloudflared` should be the only path f
 Deploy the exact green `dev/competitions` commit to the primary environment of the dedicated development project. Pass `--branch main` because `main` is this dev project's configured production-branch selector; the supplied commit hash still records the reviewed `dev/competitions` source:
 
 ```bash
-npx wrangler pages deploy dist/client \
+npx wrangler pages deploy site \
   --project-name enthusia-competitions-dev \
   --branch main \
-  --commit-hash <EXACT_GREEN_DEV_SHA> \
-  --config cloudflare/competition-preview/wrangler.dev.jsonc
+  --commit-hash <EXACT_GREEN_DEV_SHA>
 ```
+
+Run this command from a separate deployment staging directory containing the verified static build as `site`, the exact Functions source as `functions`, and the intended development profile named `wrangler.jsonc` at its root with `pages_build_output_dir="./site"`. Current Wrangler rejects custom Pages configuration paths. Supply the intended account through `CLOUDFLARE_ACCOUNT_ID`; do not put `account_id` in the Pages config or replace the production repository's root configuration. See `PR52-LIVE-BRINGUP.md` for the verified deployment checkpoint.
 
 Use `https://enthusia-competitions-dev.pages.dev` as the stable development origin and OAuth callback host. Deployment-specific aliases are diagnostic links, not OAuth origins. Configure the origin, callback, D1/R2 bindings and secrets in this dedicated environment before testing authenticated flows.
 
