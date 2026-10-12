@@ -66,7 +66,7 @@ function previewApi(url) {
     const parts=url.pathname.slice('/api/community/'.length).split('/');
     if(parts[0]==='warzone'){
       const state=new URL(location.href).searchParams.get('warzone-state')??'captured';
-      if(state==='captured'||state==='last-week')return nativeFetch(new URL('warzone-server-snapshot.json',root)).then(response=>{if(!response.ok)throw new Error('Captured snapshot unavailable');return response.json();}).then(snapshot=>json(snapshot.weeks[state==='last-week'?snapshot.previousWeek:snapshot.currentWeek]));
+      if(state==='captured'||state==='last-week')return nativeFetch(new URL('warzone-server-snapshot.json',root)).then(response=>{if(!response.ok)throw new Error('Captured snapshot unavailable');return response.json();}).then(snapshot=>json({...snapshot.weeks[state==='last-week'?snapshot.previousWeek:snapshot.currentWeek],availableWeeks:[snapshot.currentWeek,snapshot.previousWeek]}));
       if(state==='unavailable')return json({error:'community_service_unavailable'},503);
       const monday=new Date();monday.setUTCHours(0,0,0,0);monday.setUTCDate(monday.getUTCDate()-((monday.getUTCDay()+6)%7));
       const endsAt=new Date(Date.now()+3600000).toISOString();

@@ -14,14 +14,19 @@
           "id": "current-meta",
           "type": "kit",
           "name": "Elytra, No Rockets",
-          "description": "Elytra gliding is allowed, but actual firework boosting is blocked. Manual override until the next scheduled change.",
-          "endsAt": "2026-10-18T16:00:00Z"
+          "description": "Elytra gliding allowed. Rocket boosts blocked.",
+          "endsAt": "2026-10-18T16:00:00Z",
+          "rules": [
+            "Elytra gliding allowed",
+            "Rocket boosts blocked"
+          ],
+          "manualOverride": true
         },
         {
           "id": "next-meta",
           "type": "activity",
-          "name": "Scheduled rotation",
-          "description": "Configured next kit: Vanilla. Next scheduled change: 2026-10-18T16:00:00Z."
+          "name": "Vanilla",
+          "description": ""
         },
         {
           "id": "duels-status",
@@ -41,14 +46,19 @@
           "id": "current-meta",
           "type": "kit",
           "name": "Elytra, No Rockets",
-          "description": "Elytra gliding is allowed, but actual firework boosting is blocked. Manual override until the next scheduled change.",
-          "endsAt": "2026-10-18T16:00:00Z"
+          "description": "Elytra gliding allowed. Rocket boosts blocked.",
+          "endsAt": "2026-10-18T16:00:00Z",
+          "rules": [
+            "Elytra gliding allowed",
+            "Rocket boosts blocked"
+          ],
+          "manualOverride": true
         },
         {
           "id": "next-meta",
           "type": "activity",
-          "name": "Scheduled rotation",
-          "description": "Configured next kit: Vanilla. Next scheduled change: 2026-10-18T16:00:00Z."
+          "name": "Vanilla",
+          "description": ""
         },
         {
           "id": "duels-status",
