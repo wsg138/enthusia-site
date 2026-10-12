@@ -1,0 +1,16 @@
+{
+  "name": "enthusia-community-sync",
+  "main": "index.js",
+  "compatibility_date": "2025-09-08",
+  "vars": {"COMMUNITY_SYNC_ENABLED": "false"},
+  "triggers": {"crons": ["*/5 * * * *"]},
+  "r2_buckets": [
+    {"binding":"PLAYTIME_LEADERBOARDS","bucket_name":"playtime-leaderboard"},
+    {"binding":"BALANCE_LEADERBOARDS","bucket_name":"balance-leaderboard"}
+  ],
+  "d1_databases": [{
+    "binding": "COMMUNITY_DB",
+    "database_name": "enthusia-community",
+    "database_id": "1519be01-f6e5-4122-bdde-ef03fff5df27"
+  }]
+}

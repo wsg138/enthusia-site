@@ -2,9 +2,13 @@ import { authenticateRequest } from '../auth.js';
 import { getCompetitionIdentitySession } from '../competitions/identity.js';
 import { requireSameOrigin } from '../security.js';
 import { json } from '../responses.js';
-import { onRequestGet as leaderboard } from '../../api/leaderboards/[[path]].js';
+import { readGuildDirectory } from '../../api/leaderboards/[[path]].js';
 import { projectGuildDirectory } from '../guild-directory-source.js';
-import { CONTENT_KINDS, SNAPSHOT_KINDS, identifier, validateRecord, decodeRow, publicRecord, projectSnapshot, validateSale, verifyProducer } from './contracts.js';
+import { readPublicPlayerDirectory } from '../player-directory-source.js';
+import { readCommunityUpstream } from './upstream.js';
+import { salesStatements,snapshotStatement } from './persistence.js';
+import { topFiveByWeek,consecutiveTopWeeks } from './market-history.js';
+import { CONTENT_KINDS, SNAPSHOT_KINDS, identifier, validateRecord, decodeRow, publicRecord, projectSnapshot, verifyProducer } from './contracts.js';
 
 const unavailable=()=>json({error:'community_service_unavailable'},503);
 async function identity(request,env){
@@ -34,15 +38,15 @@ async function recordList(db,kind,staff){
   if(kind==='news')items.sort((a,b)=>Number(Boolean(b.pinned))-Number(Boolean(a.pinned)));
   return json({items});
 }
-async function saveRecord(db,input,actor){
-  const record={...validateRecord(input),authorName:actor.name??'Staff',authorRank:actor.rank??'Staff'},revision=input.revision??0;
-  if(!Number.isInteger(revision)||revision<0)throw new Error('invalid_revision');
+function staffRecord(input,actor){
+  return {...validateRecord(input),authorName:actor.name??'Staff',authorRank:actor.rank??'Staff'};
+}
+async function pollOptionsLocked(db,record){
   const existing=decodeRow(await db.prepare('SELECT payload,revision,updated_at FROM community_records WHERE kind=? AND slug=?').bind(record.kind,record.slug).first());
-  if(existing&&record.kind==='polls'&&JSON.stringify(existing.options)!==JSON.stringify(record.options)){
-    const vote=await db.prepare('SELECT 1 AS voted FROM community_votes WHERE poll=? LIMIT 1').bind(record.slug).first();
-    if(vote)return json({error:'poll_options_locked'},409);
-  }
-  const now=new Date().toISOString();
+  if(!existing||record.kind!=='polls'||JSON.stringify(existing.options)===JSON.stringify(record.options))return false;
+  return Boolean(await db.prepare('SELECT 1 AS voted FROM community_votes WHERE poll=? LIMIT 1').bind(record.slug).first());
+}
+function recordStatements(db,record,actor,revision,now){
   // The revision predicate is evaluated within the transaction, including concurrent creators.
   const write=db.prepare(`INSERT INTO community_records(kind,slug,status,payload,revision,editor,updated_at)
     SELECT ?,?,?,?,?,?,? WHERE ?=0
@@ -54,7 +58,14 @@ async function saveRecord(db,input,actor){
     .bind(record.status,JSON.stringify(record),actor.id,now,record.kind,record.slug,revision,record.kind,JSON.stringify(record.options),record.slug);
   const audit=db.prepare(`INSERT INTO community_audit(actor,action,kind,slug,revision,occurred_at) SELECT ?,?,?,?,?,? WHERE changes()>0`)
     .bind(actor.id,record.status,record.kind,record.slug,revision+1,now);
-  const result=await db.batch([revision===0?write:update,audit]);
+  return [revision===0?write:update,audit];
+}
+async function saveRecord(db,input,actor){
+  const record=staffRecord(input,actor),revision=input.revision??0;
+  if(!Number.isInteger(revision)||revision<0)throw new Error('invalid_revision');
+  if(await pollOptionsLocked(db,record))return json({error:'poll_options_locked'},409);
+  const now=new Date().toISOString();
+  const result=await db.batch(recordStatements(db,record,actor,revision,now));
   if(!result[0].meta.changes)return json({error:'revision_conflict'},409);
   return json({...record,revision:revision+1,updatedAt:now});
 }
@@ -80,15 +91,6 @@ async function castVote(db,slug,request,actor,row,now){
       .bind(actor.id,choice,now,slug,now,choice,row.revision).run();
   return result.meta.changes?null:json({error:'poll_closed_or_changed'},409);
 }
-async function salesStatements(db,input){
-  if(!Array.isArray(input.items)||input.items.length>250)throw new Error('invalid_sales_batch');
-  const sales=input.items.map(v=>validateSale(v));
-  const seen=new Map();for(const sale of sales){
-    const stored=await db.prepare('SELECT id,stall,guild,item,quantity,gold,occurred_at AS occurredAt FROM market_sales WHERE id=?').bind(sale.id).first();
-    const existing=stored??seen.get(sale.id);if(existing&&Object.keys(sale).some(key=>sale[key]!==existing[key]))throw new Error('invalid_sale_id_reuse');seen.set(sale.id,sale);
-  }
-  return sales.map(sale=>db.prepare('INSERT INTO market_sales(id,stall,guild,item,quantity,gold,occurred_at) VALUES (?,?,?,?,?,?,?) ON CONFLICT(id) DO NOTHING').bind(sale.id,sale.stall,sale.guild,sale.item,sale.quantity,sale.gold,sale.occurredAt));
-}
 async function ingest(db,request,env){
   const raw=await body(request);
   if(!await verifyProducer(request,env,raw))return json({error:'invalid_producer_signature'},401);
@@ -100,8 +102,7 @@ async function ingest(db,request,env){
     statements=await salesStatements(db,input);
   }else{
     const snapshot=projectSnapshot(input.kind,input);
-    statements=[db.prepare(`INSERT INTO community_snapshots(kind,payload,updated_at) VALUES (?,?,?) ON CONFLICT(kind) DO UPDATE SET payload=excluded.payload,updated_at=excluded.updated_at
-      WHERE excluded.kind<>'guildquests' OR json_extract(excluded.payload,'$.generatedAt')>json_extract(community_snapshots.payload,'$.generatedAt')`).bind(input.kind,JSON.stringify(snapshot),now)];
+    statements=[snapshotStatement(db,input.kind,snapshot,now)];
   }
   try{const result=await db.batch([first,...statements,cleanup]);if(input.kind==='guildquests'&&!result[1].meta.changes)return json({error:'stale_quest_snapshot'},409);}catch(error){if(String(error).includes('UNIQUE'))return json({error:'producer_replay'},409);throw error;}
   return json({ok:true,received:input.items.length});
@@ -122,8 +123,8 @@ async function insights(db,url){
   const weeks=await db.prepare("SELECT DISTINCT date(occurred_at,'weekday 0','-6 days') AS week FROM market_sales ORDER BY week DESC LIMIT 52").all();
   const recent=await db.prepare('SELECT MAX(occurred_at) AS updatedAt,COUNT(*) AS sales FROM market_sales').first();
   const hall=await db.prepare(`SELECT date(occurred_at,'weekday 0','-6 days') AS week,${mode} AS name,SUM(gold) AS gold FROM market_sales WHERE ${mode}<>'' GROUP BY week,${mode} ORDER BY week DESC,gold DESC,${mode} ASC LIMIT 1000`).all();
-  const topWeeks=new Map();for(const row of hall.results){const rows=topWeeks.get(row.week)??[];if(rows.length<5)rows.push(row);topWeeks.set(row.week,rows);}
-  const selected=start.slice(0,10);const streaks=new Map();for(const leader of leaders.results){let streak=0;for(let i=0;i<52;i++){const week=new Date(Date.parse(start)-i*7*86400000).toISOString().slice(0,10);if(!topWeeks.get(week)?.some(v=>v.name===leader.name))break;streak++;}streaks.set(leader.name,streak);}
+  const topWeeks=topFiveByWeek(hall.results);
+  const selected=start.slice(0,10),streaks=consecutiveTopWeeks(leaders.results,topWeeks,start);
   const stallTotals=await db.prepare('SELECT stall,SUM(gold) AS gold FROM market_sales WHERE occurred_at>=? AND occurred_at<? GROUP BY stall').bind(start,end).all();
   return json({week:start,mode,leaders:leaders.results.map(v=>({...v,streak:streaks.get(v.name)??0})),hallOfFame:[...topWeeks.entries()].filter(([week])=>week<=selected).map(([week,rows])=>({week,winner:rows[0]})),stallTotals:stallTotals.results,prices:prices.results.map(v=>({...v,change:older.has(v.item)?(v.price/older.get(v.item)-1)*100:null})),history:history.results,weeks:weeks.results.map(v=>v.week),updatedAt:recent.updatedAt,sales:recent.sales});
 }
@@ -132,8 +133,10 @@ async function guildFallback(context, db) {
   try { snapshot = db ? await db.prepare("SELECT payload,updated_at FROM community_snapshots WHERE kind='guilds'").first() : null; }
   catch { /* Guild rankings can operate without the community database. */ }
   if (snapshot) return null;
+  const upstream=await readCommunityUpstream('guilds',context.env);
+  if(upstream)return json(upstream);
   try {
-    const response = await leaderboard({...context,params:{path:'guilds'}});
+    const response = await readGuildDirectory(context.env);
     if (!response.ok) return unavailable();
     const data = await response.json();
     if (!Array.isArray(data.entries)) return unavailable();
@@ -201,10 +204,16 @@ async function alertsRoute(context, parts, dependencies) {
   return saveAlert(db,context.request,actor);
 }
 
-async function snapshotRoute(db, kind) {
+async function snapshotRoute(db, kind, env) {
   const row = await db.prepare('SELECT payload,updated_at FROM community_snapshots WHERE kind=?').bind(kind).first();
   if (row) return json({...projectSnapshot(kind,JSON.parse(row.payload)),updatedAt:row.updated_at,
     stale:Date.now()-Date.parse(JSON.parse(row.payload).generatedAt??row.updated_at)>900000});
+  const upstream=await readCommunityUpstream(kind,env);
+  if(upstream)return json(upstream);
+  if (kind==='players') {
+    const data=await readPublicPlayerDirectory(env);
+    return data?json(data):unavailable();
+  }
   if (kind!=='achievements') return unavailable();
   const response = await recordList(db,'achievements',false);
   return json({...await response.json(),curated:true});
@@ -213,7 +222,7 @@ async function snapshotRoute(db, kind) {
 async function publicRoute(context, parts) {
   if (context.request.method!=='GET' || parts.length!==1) return notFound();
   const db = context.env.COMMUNITY_DB, kind = parts[0];
-  if (SNAPSHOT_KINDS.has(kind)) return snapshotRoute(db,kind);
+  if (SNAPSHOT_KINDS.has(kind)) return snapshotRoute(db,kind,context.env);
   return CONTENT_KINDS.has(kind) ? recordList(db,kind,false) : notFound();
 }
 
@@ -243,13 +252,17 @@ function requestBoundary(request, parts) {
   return null;
 }
 
+function contextParts(params){
+  const path = Array.isArray(params.path) ? params.path.join('/') : String(params.path??'');
+  return path.split('/').filter(Boolean);
+}
+function isGuildRead(request,parts){return parts[0]==='guilds'&&parts.length===1&&request.method==='GET';}
 export async function handleCommunity(context,dependencies={editor,identity}) {
   const {request,env,params} = context, db = env.COMMUNITY_DB;
-  const path = Array.isArray(params.path) ? params.path.join('/') : String(params.path??'');
-  const parts = path.split('/').filter(Boolean);
+  const parts=contextParts(params);
   const rejected = requestBoundary(request,parts);
   if (rejected) return rejected;
-  if (parts[0]==='guilds' && parts.length===1 && request.method==='GET') {
+  if (isGuildRead(request,parts)) {
     const fallback = await guildFallback(context,db);
     if (fallback) return fallback;
   }

@@ -30,7 +30,8 @@
     {
       "files": [
         "functions/**/*.js",
-        "cloudflare/competition-jobs/**/*.js"
+        "cloudflare/competition-jobs/**/*.js",
+        "cloudflare/community-sync/**/*.js"
       ],
       "env": {
         "worker": true

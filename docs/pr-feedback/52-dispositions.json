@@ -971,8 +971,8 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "poll",
-      "start": 61,
-      "end": 72,
+      "start": 72,
+      "end": 83,
       "ccn": 7,
       "sourceLines": 12
     },
@@ -988,10 +988,10 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "ingest",
-      "start": 92,
-      "end": 108,
+      "start": 94,
+      "end": 109,
       "ccn": 7,
-      "sourceLines": 17
+      "sourceLines": 16
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1304,8 +1304,8 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "body",
-      "start": 22,
-      "end": 30,
+      "start": 26,
+      "end": 34,
       "ccn": 8,
       "sourceLines": 9
     },
@@ -2524,15 +2524,15 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method insights has a cyclomatic complexity of 12 (limit is 8)",
     "code": "async function insights(db,url){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "insights",
-      "start": 114,
-      "end": 129,
-      "ccn": 9,
+      "start": 115,
+      "end": 130,
+      "ccn": 3,
       "sourceLines": 16
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "d2c3d33d818739215327274c690af1bc",
@@ -2792,8 +2792,8 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "clone",
-      "start": 22,
-      "end": 28,
+      "start": 23,
+      "end": 29,
       "ccn": 10,
       "sourceLines": 7
     },
@@ -3312,9 +3312,9 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "start",
-      "start": 79,
-      "end": 94,
-      "ccn": 29,
+      "start": 59,
+      "end": 74,
+      "ccn": 31,
       "sourceLines": 16
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
@@ -3571,10 +3571,10 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "handleCommunity",
-      "start": 246,
-      "end": 259,
-      "ccn": 10,
-      "sourceLines": 14
+      "start": 260,
+      "end": 272,
+      "ccn": 6,
+      "sourceLines": 13
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3996,15 +3996,15 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method saveRecord has a cyclomatic complexity of 11 (limit is 8)",
     "code": "async function saveRecord(db,input,actor){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "saveRecord",
-      "start": 37,
-      "end": 60,
-      "ccn": 12,
-      "sourceLines": 24
+      "start": 63,
+      "end": 71,
+      "ccn": 6,
+      "sourceLines": 9
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "fa3fe0c97e62219e95da3892abbb44b8",
@@ -4030,15 +4030,15 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method handleCommunity has a cyclomatic complexity of 53 (limit is 8)",
     "code": "export async function handleCommunity(context,dependencies={editor,identity}){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "handleCommunity",
-      "start": 246,
-      "end": 259,
-      "ccn": 10,
-      "sourceLines": 14
+      "start": 260,
+      "end": 272,
+      "ccn": 6,
+      "sourceLines": 13
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "f300a1686151279706adf26eacc07c17",
@@ -4418,15 +4418,15 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method hydrateProfile has a cyclomatic complexity of 30 (limit is 8)",
     "code": "function hydrateProfile(node,item){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "hydrateProfile",
       "start": 32,
-      "end": 58,
-      "ccn": 31,
-      "sourceLines": 27
+      "end": 38,
+      "ccn": 4,
+      "sourceLines": 7
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "eb36f607cfc3f0fe973ad4fc2e1bff9",
