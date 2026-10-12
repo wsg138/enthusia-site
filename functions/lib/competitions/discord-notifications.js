@@ -256,13 +256,7 @@ export function discordDmFailureIsPermanent(error) {
   return error?.status === 403 && error?.discordCode === 50007;
 }
 
-export async function sendDiscordDirectMessage(env, recipientValue, payload, fetchImpl = fetch) {
-  const config = discordBotConfiguration(env);
-  if (!config) return { status: "NOT_CONFIGURED" };
-  const recipient = String(recipientValue ?? "").trim();
-  if (!/^\d{16,22}$/.test(recipient)) throw new Error("Discord DM recipient is invalid");
-
-  const auth = { authorization: `Bot ${config.token}`, "content-type": "application/json" };
+async function openDirectMessageChannel(recipient, auth, fetchImpl) {
   const channelResponse = await boundedFetch(`${DISCORD_API_ROOT}/users/@me/channels`, {
     method: "POST",
     headers: auth,
@@ -273,7 +267,11 @@ export async function sendDiscordDirectMessage(env, recipientValue, payload, fet
     throw discordDeliveryError("Discord DM channel failed", channelResponse.status, channel);
   }
 
-  const messageResponse = await boundedFetch(`${DISCORD_API_ROOT}/channels/${channel.id}/messages`, {
+  return channel.id;
+}
+
+async function postDirectMessage(channelId, payload, auth, fetchImpl) {
+  const messageResponse = await boundedFetch(`${DISCORD_API_ROOT}/channels/${channelId}/messages`, {
     method: "POST",
     headers: auth,
     body: JSON.stringify({ ...payload, allowed_mentions: { parse: [] } })
@@ -283,6 +281,16 @@ export async function sendDiscordDirectMessage(env, recipientValue, payload, fet
     throw discordDeliveryError("Discord DM failed", messageResponse.status, message);
   }
   return { status: "DELIVERED", messageId: message?.id ?? null };
+}
+
+export async function sendDiscordDirectMessage(env, recipientValue, payload, fetchImpl = fetch) {
+  const config = discordBotConfiguration(env);
+  if (!config) return { status: "NOT_CONFIGURED" };
+  const recipient = String(recipientValue ?? "").trim();
+  if (!/^\d{16,22}$/.test(recipient)) throw new Error("Discord DM recipient is invalid");
+  const auth = { authorization: `Bot ${config.token}`, "content-type": "application/json" };
+  const channelId = await openDirectMessageChannel(recipient, auth, fetchImpl);
+  return postDirectMessage(channelId, payload, auth, fetchImpl);
 }
 
 export async function deliverCompetitionDiscordNotification(env, notification, fetchImpl = fetch) {
@@ -305,6 +313,24 @@ function eventConfigured(env, eventType) {
   }
 }
 
+async function deliverClaimedNotification(env, db, notification, fetchImpl) {
+    try {
+      const delivery = await deliverCompetitionDiscordNotification(env, notification, fetchImpl);
+      if (delivery.status === "NOT_CONFIGURED") return null;
+      const deliveredAt = new Date().toISOString();
+      await completeCompetitionDiscordNotification(db, notification.id, deliveredAt);
+      return { id: notification.id, status: delivery.status };
+    } catch (error) {
+      const failedAt = new Date().toISOString();
+      await failCompetitionDiscordNotification(db, notification.id, {
+        failedAt,
+        nextAttemptAt: discordRetryAt(failedAt, Number(notification.attempts ?? 0) + 1),
+        error: String(error?.message ?? error)
+      });
+      return { id: notification.id, status: "FAILED" };
+    }
+}
+
 export async function drainCompetitionDiscordNotifications(env, db, { limit = 25, fetchImpl = fetch } = {}) {
   const now = new Date().toISOString();
   const pending = await listPendingCompetitionDiscordNotifications(db, now, limit);
@@ -313,21 +339,8 @@ export async function drainCompetitionDiscordNotifications(env, db, { limit = 25
     if (!eventConfigured(env, notification.eventType)) continue;
     const claimedAt = new Date().toISOString();
     if (!await claimCompetitionDiscordNotification(db, notification.id, claimedAt)) continue;
-    try {
-      const delivery = await deliverCompetitionDiscordNotification(env, notification, fetchImpl);
-      if (delivery.status === "NOT_CONFIGURED") continue;
-      const deliveredAt = new Date().toISOString();
-      await completeCompetitionDiscordNotification(db, notification.id, deliveredAt);
-      outcomes.push({ id: notification.id, status: delivery.status });
-    } catch (error) {
-      const failedAt = new Date().toISOString();
-      await failCompetitionDiscordNotification(db, notification.id, {
-        failedAt,
-        nextAttemptAt: discordRetryAt(failedAt, Number(notification.attempts ?? 0) + 1),
-        error: String(error?.message ?? error)
-      });
-      outcomes.push({ id: notification.id, status: "FAILED" });
-    }
+    const outcome = await deliverClaimedNotification(env, db, notification, fetchImpl);
+    if (outcome) outcomes.push(outcome);
   }
   return outcomes;
 }

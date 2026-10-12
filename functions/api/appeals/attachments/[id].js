@@ -9,6 +9,15 @@ import { json, methodNotAllowed, unauthorized } from "../../../lib/responses.js"
 import { requireSameOrigin } from "../../../lib/security.js";
 import { isCanonicalUuid } from "../../../lib/validation.js";
 
+async function ownedRecord(context, session) {
+  const id = String(context.params.id ?? "").trim().toLowerCase();
+  if (!isCanonicalUuid(id)) return { response: json({ error: "attachment_not_found" }, 404) };
+  let record;
+  try { record = await findOwnedAppealAttachment(context.env.COMPETITIONS_DB, session.discord.id, id); }
+  catch { return { response: json({ error: "appeal_attachments_unavailable" }, 503) }; }
+  return record ? { session, record } : { response: json({ error: "attachment_not_found" }, 404) };
+}
+
 async function resolve(context) {
   if (!context.env?.COMPETITIONS_DB || !context.env?.COMPETITIONS_MEDIA) {
     return { response: json({ error: "attachment_not_found" }, 404) };
@@ -17,12 +26,7 @@ async function resolve(context) {
   try { session = await authenticateLinkedAppealRequest(context.request, context.env); }
   catch { return { response: json({ error: "appeal_identity_unavailable" }, 503) }; }
   if (!session) return { response: unauthorized() };
-  const id = String(context.params.id ?? "").trim().toLowerCase();
-  if (!isCanonicalUuid(id)) return { response: json({ error: "attachment_not_found" }, 404) };
-  let record;
-  try { record = await findOwnedAppealAttachment(context.env.COMPETITIONS_DB, session.discord.id, id); }
-  catch { return { response: json({ error: "appeal_attachments_unavailable" }, 503) }; }
-  return record ? { session, record } : { response: json({ error: "attachment_not_found" }, 404) };
+  return ownedRecord(context, session);
 }
 
 export async function onRequestGet(context) {

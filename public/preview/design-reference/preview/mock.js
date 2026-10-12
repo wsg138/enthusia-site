@@ -27,6 +27,7 @@
     Object.keys(spec || {}).forEach(function (key) { props[key] = spec[key] && spec[key].default; });
     var instance = new Component(props);
     var vals = {};
+    var handlers = new Map();
     var bound = [];
 
     Array.prototype.forEach.call(doc.querySelectorAll("*"), function (node) {
@@ -55,6 +56,7 @@
 
     function render() {
       vals = instance.renderVals() || {};
+      handlers = new Map(Object.entries(vals).filter(function (entry) { return typeof entry[1] === 'function'; }));
       bound.forEach(function (item) {
         var node = item.node;
         if (item.name === "text") {
@@ -80,8 +82,9 @@
       var node = event.target;
       while (node && node !== doc) {
         var name = node.getAttribute && node.getAttribute("data-on-" + key);
-        if (name && typeof vals[name] === "function") {
-          vals[name](event);
+        var handler = handlers.get(name);
+        if (handler) {
+          handler.call(vals,event);
           if (event.cancelBubble) return;
         }
         node = node.parentNode;

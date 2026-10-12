@@ -63,18 +63,31 @@ async function poll(db,slug,request,actor){
   if(!row)return json({error:'not_found'},404);
   const now=new Date().toISOString();
   if(request.method==='POST'){
-    const input=JSON.parse(await body(request));const choice=input.choice;
-    if(!Number.isInteger(choice)||choice<0||choice>=row.options.length)return json({error:'invalid_choice'},400);
-    const result=await db.prepare(`INSERT INTO community_votes(poll,voter,choice,updated_at)
-      SELECT slug,?,?,? FROM community_records WHERE kind='polls' AND slug=? AND status='published' AND json_extract(payload,'$.closesAt')>?
-      AND ?<json_array_length(json_extract(payload,'$.options')) AND revision=?
-      ON CONFLICT(poll,voter) DO UPDATE SET choice=excluded.choice,updated_at=excluded.updated_at`)
-      .bind(actor.id,choice,now,slug,now,choice,row.revision).run();
-    if(!result.meta.changes)return json({error:'poll_closed_or_changed'},409);
+    const response=await castVote(db,slug,request,actor,row,now);
+    if(response)return response;
   }
   const vote=actor?await db.prepare('SELECT choice FROM community_votes WHERE poll=? AND voter=?').bind(slug,actor.id).first():null;
   const totals=Date.parse(row.closesAt)<=Date.now()?(await db.prepare('SELECT choice,COUNT(*) AS votes FROM community_votes WHERE poll=? GROUP BY choice').bind(slug).all()).results:null;
   return json({poll:publicRecord(row),choice:vote?.choice??null,totals});
+}
+async function castVote(db,slug,request,actor,row,now){
+  const input=JSON.parse(await body(request));const choice=input.choice;
+  if(!Number.isInteger(choice)||choice<0||choice>=row.options.length)return json({error:'invalid_choice'},400);
+  const result=await db.prepare(`INSERT INTO community_votes(poll,voter,choice,updated_at)
+      SELECT slug,?,?,? FROM community_records WHERE kind='polls' AND slug=? AND status='published' AND json_extract(payload,'$.closesAt')>?
+      AND ?<json_array_length(json_extract(payload,'$.options')) AND revision=?
+      ON CONFLICT(poll,voter) DO UPDATE SET choice=excluded.choice,updated_at=excluded.updated_at`)
+      .bind(actor.id,choice,now,slug,now,choice,row.revision).run();
+  return result.meta.changes?null:json({error:'poll_closed_or_changed'},409);
+}
+async function salesStatements(db,input){
+  if(!Array.isArray(input.items)||input.items.length>250)throw new Error('invalid_sales_batch');
+  const sales=input.items.map(v=>validateSale(v));
+  const seen=new Map();for(const sale of sales){
+    const stored=await db.prepare('SELECT id,stall,guild,item,quantity,gold,occurred_at AS occurredAt FROM market_sales WHERE id=?').bind(sale.id).first();
+    const existing=stored??seen.get(sale.id);if(existing&&Object.keys(sale).some(key=>sale[key]!==existing[key]))throw new Error('invalid_sale_id_reuse');seen.set(sale.id,sale);
+  }
+  return sales.map(sale=>db.prepare('INSERT INTO market_sales(id,stall,guild,item,quantity,gold,occurred_at) VALUES (?,?,?,?,?,?,?) ON CONFLICT(id) DO NOTHING').bind(sale.id,sale.stall,sale.guild,sale.item,sale.quantity,sale.gold,sale.occurredAt));
 }
 async function ingest(db,request,env){
   const raw=await body(request);
@@ -84,13 +97,7 @@ async function ingest(db,request,env){
   const cleanup=db.prepare('DELETE FROM community_nonces WHERE occurred_at<?').bind(new Date(Date.now()-86400000).toISOString());
   let statements;
   if(input.kind==='sales'){
-    if(!Array.isArray(input.items)||input.items.length>250)throw new Error('invalid_sales_batch');
-    const sales=input.items.map(v=>validateSale(v));
-    const seen=new Map();for(const sale of sales){
-      const stored=await db.prepare('SELECT id,stall,guild,item,quantity,gold,occurred_at AS occurredAt FROM market_sales WHERE id=?').bind(sale.id).first();
-      const existing=stored??seen.get(sale.id);if(existing&&Object.keys(sale).some(key=>sale[key]!==existing[key]))throw new Error('invalid_sale_id_reuse');seen.set(sale.id,sale);
-    }
-    statements=sales.map(sale=>db.prepare('INSERT INTO market_sales(id,stall,guild,item,quantity,gold,occurred_at) VALUES (?,?,?,?,?,?,?) ON CONFLICT(id) DO NOTHING').bind(sale.id,sale.stall,sale.guild,sale.item,sale.quantity,sale.gold,sale.occurredAt));
+    statements=await salesStatements(db,input);
   }else{
     const snapshot=projectSnapshot(input.kind,input);
     statements=[db.prepare('INSERT INTO community_snapshots(kind,payload,updated_at) VALUES (?,?,?) ON CONFLICT(kind) DO UPDATE SET payload=excluded.payload,updated_at=excluded.updated_at').bind(input.kind,JSON.stringify(snapshot),now)];
@@ -119,66 +126,133 @@ async function insights(db,url){
   const stallTotals=await db.prepare('SELECT stall,SUM(gold) AS gold FROM market_sales WHERE occurred_at>=? AND occurred_at<? GROUP BY stall').bind(start,end).all();
   return json({week:start,mode,leaders:leaders.results.map(v=>({...v,streak:streaks.get(v.name)??0})),hallOfFame:[...topWeeks.entries()].filter(([week])=>week<=selected).map(([week,rows])=>({week,winner:rows[0]})),stallTotals:stallTotals.results,prices:prices.results.map(v=>({...v,change:older.has(v.item)?(v.price/older.get(v.item)-1)*100:null})),history:history.results,weeks:weeks.results.map(v=>v.week),updatedAt:recent.updatedAt,sales:recent.sales});
 }
-export async function handleCommunity(context,dependencies={editor,identity}){
-  const {request,env,params}=context;const db=env.COMMUNITY_DB;
-  const path=Array.isArray(params.path)?params.path.join('/'):String(params.path??'');
-  const parts=path.split('/').filter(Boolean),url=new URL(request.url),method=request.method;
-  if(!['GET','POST'].includes(method))return json({error:'method_not_allowed'},405,{allow:'GET, POST'});
-  if(method==='POST'&&parts[0]!=='ingest'&&!requireSameOrigin(request))return json({error:'origin_required'},403);
-  if(parts[0]==='guilds'&&parts.length===1&&method==='GET'){
-    let snapshot=null;
-    try{snapshot=db?await db.prepare("SELECT payload,updated_at FROM community_snapshots WHERE kind='guilds'").first():null;}catch{/* The existing leaderboard can operate without the new database. */}
-    if(!snapshot){
-      try{
-        const response=await leaderboard({...context,params:{path:'guilds'}});
-        if(!response.ok)return unavailable();const data=await response.json();
-        if(!Array.isArray(data.entries))return unavailable();
-        const projected=projectGuildDirectory(data);
-        return json({...projected,updatedAt:data.generatedAt??null,limited:true,stale:data.generatedAt?Date.now()-Date.parse(data.generatedAt)>900000:true});
-      }catch{return unavailable();}
-    }
+async function guildFallback(context, db) {
+  let snapshot = null;
+  try { snapshot = db ? await db.prepare("SELECT payload,updated_at FROM community_snapshots WHERE kind='guilds'").first() : null; }
+  catch { /* Guild rankings can operate without the community database. */ }
+  if (snapshot) return null;
+  try {
+    const response = await leaderboard({...context,params:{path:'guilds'}});
+    if (!response.ok) return unavailable();
+    const data = await response.json();
+    if (!Array.isArray(data.entries)) return unavailable();
+    return json({...projectGuildDirectory(data),updatedAt:data.generatedAt??null,limited:true,
+      stale:data.generatedAt ? Date.now()-Date.parse(data.generatedAt)>900000 : true});
+  } catch { return unavailable(); }
+}
+
+const notFound = () => json({error:'not_found'},404);
+
+async function adminRoute(context, parts, dependencies) {
+  const {request,env} = context, db = env.COMMUNITY_DB;
+  let actor;
+  try { actor = await dependencies.editor(request,env); }
+  catch { return json({error:'authentication_required'},401); }
+  if (!actor) return json({error:'editor_role_required'},403);
+  if (parts[1]==='session' && request.method==='GET') {
+    return json({editor:true,name:actor.name??'Staff',rank:actor.rank??'Staff'});
   }
-  if(!db)return unavailable();
-  try{
-    if(parts.length===1&&parts[0]==='ingest'&&method==='POST')return await ingest(db,request,env);
-    if(parts[0]==='admin'){
-      let actor;try{actor=await dependencies.editor(request,env);}catch{return json({error:'authentication_required'},401);}
-      if(!actor)return json({error:'editor_role_required'},403);
-      if(parts[1]==='session'&&method==='GET')return json({editor:true,name:actor.name??'Staff',rank:actor.rank??'Staff'});
-      if(CONTENT_KINDS.has(parts[1])&&parts.length===2){
-        if(method==='GET')return await recordList(db,parts[1],true);
-        const input=JSON.parse(await body(request));if(input.kind!==parts[1])return json({error:'invalid_kind'},400);
-        return await saveRecord(db,input,actor);
-      }
-    }
-    if(parts[0]==='polls'&&parts.length===2){
-      const slug=identifier(parts[1]);let actor=null;try{actor=await dependencies.identity(request,env);}catch{/* Signed out viewing is allowed. */}
-      if(method==='POST'&&!actor)return json({error:'linked_account_required'},401);
-      return await poll(db,slug,request,actor);
-    }
-    if(parts[0]==='alerts'&&parts.length===1){
-      let actor=null;try{actor=await dependencies.identity(request,env);}catch{/* Linked-account access fails closed. */}
-      if(!actor)return json({error:'linked_account_required'},401);
-      if(method==='GET')return json({items:(await db.prepare('SELECT item,threshold,last_sent_at AS lastSentAt FROM market_alerts WHERE subscriber=?').bind(actor.id).all()).results});
-      const input=JSON.parse(await body(request)),item=identifier(input.item);
-      if(input.remove===true){await db.prepare('DELETE FROM market_alerts WHERE subscriber=? AND item=?').bind(actor.id,item).run();return json({ok:true});}
-      if(!Number.isFinite(input.threshold)||input.threshold<=0||input.threshold>1e12)return json({error:'invalid_threshold'},400);
-      const saved=await db.prepare(`INSERT INTO market_alerts(subscriber,item,threshold,updated_at) SELECT ?,?,?,? WHERE (SELECT COUNT(*) FROM market_alerts WHERE subscriber=?)<20 OR EXISTS(SELECT 1 FROM market_alerts WHERE subscriber=? AND item=?)
-        ON CONFLICT(subscriber,item) DO UPDATE SET threshold=excluded.threshold,updated_at=excluded.updated_at`).bind(actor.id,item,input.threshold,new Date().toISOString(),actor.id,actor.id,item).run();
-      if(!saved.meta.changes)return json({error:'alert_limit_reached'},409);
-      return json({ok:true});
-    }
-    if(parts[0]==='insights'&&method==='GET')return await insights(db,url);
-    if(SNAPSHOT_KINDS.has(parts[0])&&parts.length===1&&method==='GET'){
-      const row=await db.prepare('SELECT payload,updated_at FROM community_snapshots WHERE kind=?').bind(parts[0]).first();
-      if(!row){if(parts[0]==='achievements'){const response=await recordList(db,'achievements',false);const data=await response.json();return json({...data,curated:true});}return unavailable();}
-      return json({...projectSnapshot(parts[0],JSON.parse(row.payload)),updatedAt:row.updated_at,stale:Date.now()-Date.parse(row.updated_at)>900000});
-    }
-    if(CONTENT_KINDS.has(parts[0])&&parts.length===1&&method==='GET')return await recordList(db,parts[0],false);
-    return json({error:'not_found'},404);
-  }catch(error){
-    if(error instanceof SyntaxError)return json({error:'invalid_json'},400);
-    if(/^(invalid_|missing_|body_too_large|duplicate_)/.test(error.message))return json({error:error.message},400);
-    return unavailable();
+  if (parts.length!==2 || !CONTENT_KINDS.has(parts[1])) return notFound();
+  if (request.method==='GET') return recordList(db,parts[1],true);
+  const input = JSON.parse(await body(request));
+  if (input.kind!==parts[1]) return json({error:'invalid_kind'},400);
+  return saveRecord(db,input,actor);
+}
+
+async function linkedActor(context, dependencies) {
+  try { return await dependencies.identity(context.request,context.env); }
+  catch { return null; }
+}
+
+async function pollRoute(context, parts, dependencies) {
+  if (parts.length===1 && context.request.method==='GET') return recordList(context.env.COMMUNITY_DB,'polls',false);
+  if (parts.length!==2) return notFound();
+  const slug = identifier(parts[1]);
+  const actor = await linkedActor(context,dependencies);
+  if (context.request.method==='POST' && !actor) return json({error:'linked_account_required'},401);
+  return poll(context.env.COMMUNITY_DB,slug,context.request,actor);
+}
+
+async function saveAlert(db, request, actor) {
+  const input = JSON.parse(await body(request)), item = identifier(input.item);
+  if (input.remove===true) {
+    await db.prepare('DELETE FROM market_alerts WHERE subscriber=? AND item=?').bind(actor.id,item).run();
+    return json({ok:true});
   }
+  if (!Number.isFinite(input.threshold) || input.threshold<=0 || input.threshold>1e12) {
+    return json({error:'invalid_threshold'},400);
+  }
+  const saved = await db.prepare(`INSERT INTO market_alerts(subscriber,item,threshold,updated_at) SELECT ?,?,?,? WHERE (SELECT COUNT(*) FROM market_alerts WHERE subscriber=?)<20 OR EXISTS(SELECT 1 FROM market_alerts WHERE subscriber=? AND item=?)
+    ON CONFLICT(subscriber,item) DO UPDATE SET threshold=excluded.threshold,updated_at=excluded.updated_at`)
+    .bind(actor.id,item,input.threshold,new Date().toISOString(),actor.id,actor.id,item).run();
+  return saved.meta.changes ? json({ok:true}) : json({error:'alert_limit_reached'},409);
+}
+
+async function alertsRoute(context, parts, dependencies) {
+  if (parts.length!==1) return notFound();
+  const actor = await linkedActor(context,dependencies);
+  if (!actor) return json({error:'linked_account_required'},401);
+  const db = context.env.COMMUNITY_DB;
+  if (context.request.method==='GET') {
+    const rows = await db.prepare('SELECT item,threshold,last_sent_at AS lastSentAt FROM market_alerts WHERE subscriber=?').bind(actor.id).all();
+    return json({items:rows.results});
+  }
+  return saveAlert(db,context.request,actor);
+}
+
+async function snapshotRoute(db, kind) {
+  const row = await db.prepare('SELECT payload,updated_at FROM community_snapshots WHERE kind=?').bind(kind).first();
+  if (row) return json({...projectSnapshot(kind,JSON.parse(row.payload)),updatedAt:row.updated_at,
+    stale:Date.now()-Date.parse(row.updated_at)>900000});
+  if (kind!=='achievements') return unavailable();
+  const response = await recordList(db,'achievements',false);
+  return json({...await response.json(),curated:true});
+}
+
+async function publicRoute(context, parts) {
+  if (context.request.method!=='GET' || parts.length!==1) return notFound();
+  const db = context.env.COMMUNITY_DB, kind = parts[0];
+  if (SNAPSHOT_KINDS.has(kind)) return snapshotRoute(db,kind);
+  return CONTENT_KINDS.has(kind) ? recordList(db,kind,false) : notFound();
+}
+
+async function routeCommunity(context, parts, dependencies) {
+  switch (parts[0]) {
+    case 'ingest':
+      return parts.length===1 && context.request.method==='POST'
+        ? ingest(context.env.COMMUNITY_DB,context.request,context.env) : notFound();
+    case 'admin': return adminRoute(context,parts,dependencies);
+    case 'polls': return pollRoute(context,parts,dependencies);
+    case 'alerts': return alertsRoute(context,parts,dependencies);
+    case 'insights':
+      return context.request.method==='GET' ? insights(context.env.COMMUNITY_DB,new URL(context.request.url)) : notFound();
+    default: return publicRoute(context,parts);
+  }
+}
+
+function requestError(error) {
+  if (error instanceof SyntaxError) return json({error:'invalid_json'},400);
+  if (/^(invalid_|missing_|body_too_large|duplicate_)/.test(error.message)) return json({error:error.message},400);
+  return unavailable();
+}
+
+function requestBoundary(request, parts) {
+  if (!['GET','POST'].includes(request.method)) return json({error:'method_not_allowed'},405,{allow:'GET, POST'});
+  if (request.method==='POST' && parts[0]!=='ingest' && !requireSameOrigin(request)) return json({error:'origin_required'},403);
+  return null;
+}
+
+export async function handleCommunity(context,dependencies={editor,identity}) {
+  const {request,env,params} = context, db = env.COMMUNITY_DB;
+  const path = Array.isArray(params.path) ? params.path.join('/') : String(params.path??'');
+  const parts = path.split('/').filter(Boolean);
+  const rejected = requestBoundary(request,parts);
+  if (rejected) return rejected;
+  if (parts[0]==='guilds' && parts.length===1 && request.method==='GET') {
+    const fallback = await guildFallback(context,db);
+    if (fallback) return fallback;
+  }
+  if (!db) return unavailable();
+  try { return await routeCommunity(context,parts,dependencies); }
+  catch (error) { return requestError(error); }
 }

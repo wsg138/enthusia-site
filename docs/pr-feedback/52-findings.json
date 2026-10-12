@@ -1,0 +1,2538 @@
+[
+  {
+    "id": "dfb2f180b6611530aedc75a3f0f08492",
+    "file": "migrations/0032_appeal_punishment_bindings.sql",
+    "line": 1,
+    "pattern": "TSQLLint_set-ansi",
+    "message": "Expected SET ANSI_NULLS ON near top of file",
+    "code": "PRAGMA foreign_keys = ON;"
+  },
+  {
+    "id": "7e0b02cf03f54e519365cb1bd03afcc6",
+    "file": "migrations/0032_appeal_punishment_bindings.sql",
+    "line": 1,
+    "pattern": "TSQLLint_set-transaction-isolation-level",
+    "message": "Expected SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED near top of file",
+    "code": "PRAGMA foreign_keys = ON;"
+  },
+  {
+    "id": "b56ecb742986623066020b9b2065fa65",
+    "file": "migrations/community/0001_community.sql",
+    "line": 1,
+    "pattern": "TSQLLint_set-transaction-isolation-level",
+    "message": "Expected SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED near top of file",
+    "code": "CREATE TABLE IF NOT EXISTS community_records ("
+  },
+  {
+    "id": "7ddc39c2d56f12c6189f5a0b3a6b44ac",
+    "file": "migrations/community/0001_community.sql",
+    "line": 1,
+    "pattern": "TSQLLint_set-quoted-identifier",
+    "message": "Expected SET QUOTED_IDENTIFIER ON near top of file",
+    "code": "CREATE TABLE IF NOT EXISTS community_records ("
+  },
+  {
+    "id": "e8371b8ae468fec18b111b25b50898e4",
+    "file": "migrations/0032_appeal_punishment_bindings.sql",
+    "line": 1,
+    "pattern": "TSQLLint_set-nocount",
+    "message": "Expected SET NOCOUNT ON near top of file",
+    "code": "PRAGMA foreign_keys = ON;"
+  },
+  {
+    "id": "4e3d7c83c8a69e9cbde40260ada536ec",
+    "file": "migrations/community/0001_community.sql",
+    "line": 1,
+    "pattern": "TSQLLint_set-ansi",
+    "message": "Expected SET ANSI_NULLS ON near top of file",
+    "code": "CREATE TABLE IF NOT EXISTS community_records ("
+  },
+  {
+    "id": "a5f310847bfcf9707e94d200c6377e1f",
+    "file": "migrations/community/0001_community.sql",
+    "line": 1,
+    "pattern": "TSQLLint_set-nocount",
+    "message": "Expected SET NOCOUNT ON near top of file",
+    "code": "CREATE TABLE IF NOT EXISTS community_records ("
+  },
+  {
+    "id": "db3cf1f46d2c2276d3eb4f85fd76c25c",
+    "file": "migrations/0032_appeal_punishment_bindings.sql",
+    "line": 1,
+    "pattern": "TSQLLint_set-quoted-identifier",
+    "message": "Expected SET QUOTED_IDENTIFIER ON near top of file",
+    "code": "PRAGMA foreign_keys = ON;"
+  },
+  {
+    "id": "832d13fcc2355fc7d0129b25126bbf01",
+    "file": "wiki-worker/safety.py",
+    "line": 19,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method _trusted_https_url has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "def _trusted_https_url(value, expected, label):"
+  },
+  {
+    "id": "98283db01d9f3dc605f884dedb305f27",
+    "file": "public/assets/site-refinements.css",
+    "line": 38,
+    "pattern": "Stylelint_selector-not-notation",
+    "message": "Expected complex :not() pseudo-class notation (selector-not-notation)",
+    "code": ".exact-detail-inner :where(input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea){font:inherit;box-sizing:border-box;min-height:48px;background:#fff;color:#3a0d0a;border:4px solid #b3201a;border-radius:0;padding:8px 12px;max-width:100%}"
+  },
+  {
+    "id": "6e92f83893577d011f1d2583032cc82e",
+    "file": "public/assets/exact-workflows.css",
+    "line": 17,
+    "pattern": "Stylelint_selector-not-notation",
+    "message": "Expected complex :not() pseudo-class notation (selector-not-notation)",
+    "code": "body[data-exact-workflow] .btn,body[data-exact-workflow] button:not(.navbtn):not(.format-button){font:inherit;min-height:48px;padding:8px 20px;border:4px solid #4a0b08;border-radius:0;background:#ffcf1f;color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 #e08f00;cursor:pointer}body[data-exact-workflow] .button-secondary,body[data-exact-workflow] .ghost,body[data-exact-workflow] .btn-dark{background:#fff8e6;color:#b3201a;box-shadow:inset 4px 4px 0 #fff,inset -4px -4px 0 #ecc873}"
+  },
+  {
+    "id": "bfcb00bb09bb86159774348ae4031e68",
+    "file": "functions/lib/community/service.js",
+    "line": 83,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "  const cleanup=db.prepare('DELETE FROM community_nonces WHERE occurred_at<?').bind(new Date(Date.now()-86400000).toISOString());"
+  },
+  {
+    "id": "e19cfbe5d4ce1e38de9b1a072587b2d0",
+    "file": "functions/lib/community/service.js",
+    "line": 164,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '1e12' will have at different value at runtime.",
+    "code": "      if(!Number.isFinite(input.threshold)||input.threshold<=0||input.threshold>1e12)return json({error:'invalid_threshold'},400);"
+  },
+  {
+    "id": "b1a62eababb2e78e3133ed4693bacba",
+    "file": "public/preview/design-reference/mock/events.js",
+    "line": 31,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "    v.nextDays = nx ? String(Math.floor(nx.left / 86400000)) : '0';"
+  },
+  {
+    "id": "b81589a3e1ff688a54d5f3bff13fd2c5",
+    "file": "public/preview/design-reference/mock/home-christmas.js",
+    "line": 149,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "        var wzDays = Math.ceil((wzDates[i][0] - Date.now()) / 86400000);"
+  },
+  {
+    "id": "446aa65a55375ee754aaca100e4de31c",
+    "file": "public/assets/market/exact-view.js",
+    "line": 53,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "    if(!model.preview){return new Date(Date.parse(model.currentWeek)+offsetWeeks*7*86400000);}"
+  },
+  {
+    "id": "f4364d145c81417e16fbb7745c5529c3",
+    "file": "public/assets/market/exact-view.js",
+    "line": 432,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '.9' will have at different value at runtime.",
+    "code": "    var price=h('input',{class:'field',type:'number',min:'0',max:'1000000000000',required:'',step:'any',inputmode:'decimal','aria-label':'Price in raw gold',value:String(it.price*.9)});"
+  },
+  {
+    "id": "62c7434fa8a84a4a2e7d71db568a33d5",
+    "file": "public/preview/design-reference/mock/home-christmas.js",
+    "line": 112,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '604800000' will have at different value at runtime.",
+    "code": "    var nowWeek = Math.floor((Date.now() - weekStart(0).getTime()) / 604800000);"
+  },
+  {
+    "id": "2942f788876c37410f338bdd51868c47",
+    "file": "public/preview/design-reference/mock/market-insights.js",
+    "line": 73,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '0.10' will have at different value at runtime.",
+    "code": "    [\"Diamond\", 14.2, 0.10, 0.025, 4120],"
+  },
+  {
+    "id": "165de505fc68023214d090272fc04a84",
+    "file": "public/assets/exact-controls/events.js",
+    "line": 34,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "    v.nextDays = nx ? String(Math.floor(nx.left / 86400000)) : '0';"
+  },
+  {
+    "id": "73891ff9de647fcdaed3d34fd8806f62",
+    "file": "public/preview/design-reference/preview/market-shim.js",
+    "line": 15,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '0x6D2B79F5' will have at different value at runtime.",
+    "code": "      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;"
+  },
+  {
+    "id": "bfbe66af67c780274a9fb0eab2699660",
+    "file": "public/preview/design-reference/mock/home-warzone.js",
+    "line": 149,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "        var wzDays = Math.ceil((wzDates[i][0] - Date.now()) / 86400000);"
+  },
+  {
+    "id": "a3e98eb55c540621075a8ba2fe96470a",
+    "file": "public/assets/exact-home.js",
+    "line": 8,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "if(preview){set('wzNext','Build Competition voting opens');set('wzNextIn','In '+Math.ceil((Date.UTC(2026,9,14,4)-Date.now())/86400000)+' days');}"
+  },
+  {
+    "id": "d456a58c1934df86dd1cfcda128bd5ff",
+    "file": "functions/lib/community/service.js",
+    "line": 103,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "  return [date.toISOString(),new Date(date.getTime()+7*86400000).toISOString()];"
+  },
+  {
+    "id": "52e0501a9f66b0b3607e45519a5e3393",
+    "file": "public/preview/design-reference/mock/home-warzone.js",
+    "line": 112,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '604800000' will have at different value at runtime.",
+    "code": "    var nowWeek = Math.floor((Date.now() - weekStart(0).getTime()) / 604800000);"
+  },
+  {
+    "id": "ff13bdf2b4d420c3f92c153d817c0516",
+    "file": "public/assets/community.js",
+    "line": 139,
+    "pattern": "PMD_category_ecmascript_bestpractices_ConsistentReturn",
+    "message": "A function should not mix return statements with and without a result.",
+    "code": "async function start(){"
+  },
+  {
+    "id": "e8ae5bb05faf3bbaf2a5191455c2065b",
+    "file": "cloudflare/market-alerts/worker.js",
+    "line": 5,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "  const db=env.COMMUNITY_DB,cutoff=new Date(now.getTime()-3600000).toISOString(),recent=new Date(now.getTime()-86400000).toISOString();"
+  },
+  {
+    "id": "21a1a785544c3bed1c52da1a42ae562",
+    "file": "public/assets/exact-controls/events.js",
+    "line": 35,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "    v.nextHours = nx ? String(Math.floor((nx.left % 86400000) / 3600000)) : '0';"
+  },
+  {
+    "id": "ca19a0d3645e41ab0e1820168670a1d2",
+    "file": "public/preview/design-reference/mock/market-insights.js",
+    "line": 68,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '4294967296' will have at different value at runtime.",
+    "code": "      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;"
+  },
+  {
+    "id": "f8e5b384cadf7efabff0260a366d47da",
+    "file": "public/assets/market/exact-view.js",
+    "line": 64,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "    return Math.max(0, Math.ceil((end - n) / 86400000));"
+  },
+  {
+    "id": "6b5234a13d1d60262038ddec73f17ac8",
+    "file": "public/assets/market/insights.js",
+    "line": 12,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '.9' will have at different value at runtime.",
+    "code": "  return {kind:ratio<.9?'cheap':ratio>1.1?'pricey':'fair',text:ratio<.9?'Below market':ratio>1.1?'Above market':'Near market'};"
+  },
+  {
+    "id": "87ed0ef71ffc9ea0d393de5be82d8f36",
+    "file": "public/preview/design-reference/preview/market-shim.js",
+    "line": 18,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '4294967296' will have at different value at runtime.",
+    "code": "      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;"
+  },
+  {
+    "id": "1b203efe7db73d489da753a159c9b760",
+    "file": "public/preview/design-reference/mock/market-insights.js",
+    "line": 65,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '0x6D2B79F5' will have at different value at runtime.",
+    "code": "      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;"
+  },
+  {
+    "id": "e2b69ec91a0f03b2f0c73360eecb9057",
+    "file": "public/preview/design-reference/mock/market-insights.js",
+    "line": 124,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "    return Math.max(0, Math.ceil((end - n) / 86400000));"
+  },
+  {
+    "id": "67084e224d219c33ff27c3cf300c6e01",
+    "file": "public/assets/exact-controls/home-christmas.js",
+    "line": 149,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "        var wzDays = Math.ceil((wzDates[i][0] - Date.now()) / 86400000);"
+  },
+  {
+    "id": "d23c2c52f735df414c236bac5d27249d",
+    "file": "public/preview/design-reference/mock/events.js",
+    "line": 32,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "    v.nextHours = nx ? String(Math.floor((nx.left % 86400000) / 3600000)) : '0';"
+  },
+  {
+    "id": "407886794e8e4615912fb9b53a09d960",
+    "file": "functions/lib/community/service.js",
+    "line": 117,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '86400000' will have at different value at runtime.",
+    "code": "  const selected=start.slice(0,10);const streaks=new Map();for(const leader of leaders.results){let streak=0;for(let i=0;i<52;i++){const week=new Date(Date.parse(start)-i*7*86400000).toISOString().slice(0,10);if(!topWeeks.get(week)?.some(v=>v.name===leader.name))break;streak++;}streaks.set(leader.name,streak);}"
+  },
+  {
+    "id": "fc4958c2a38303f1efc2fd210ffb8cc3",
+    "file": "public/assets/exact-controls/home-christmas.js",
+    "line": 112,
+    "pattern": "PMD_category_ecmascript_errorprone_InnaccurateNumericLiteral",
+    "message": "The numeric literal '604800000' will have at different value at runtime.",
+    "code": "    var nowWeek = Math.floor((Date.now() - weekStart(0).getTime()) / 604800000);"
+  },
+  {
+    "id": "759c8f9e95f7bd96b84132cb3ee21a74",
+    "file": "public/assets/exact-competition-catalog.js",
+    "line": 13,
+    "pattern": "Semgrep_javascript.lang.correctness.no-replaceall.no-replaceall",
+    "message": "The string method replaceAll is not supported in all versions of javascript, and is not supported by older browser versions.",
+    "code": "    const tags=node.querySelectorAll('.tip .tag');if(tags[0])tags[0].textContent=competition.lifecycleState.replaceAll('_',' ');if(tags[1])tags[1].textContent='Theme: '+(competition.config?.public?.theme??competition.category);"
+  },
+  {
+    "id": "6ce5cea324741892733b6111645fef6",
+    "file": "public/assets/reviewer-appeals-lifecycle.js",
+    "line": 38,
+    "pattern": "Semgrep_rules_lgpl_javascript_ssrf_rule-node-ssrf",
+    "message": "This application allows user-controlled URLs to be passed directly to HTTP client libraries.",
+    "code": "    const response = await fetch(`/api/reviewer/appeals/${encodeURIComponent(appeal.id)}/${action}`, {"
+  },
+  {
+    "id": "4f37ce22916b1b2da9efeea91dd185df",
+    "file": "tests/appeal-discord-notifications.test.mjs",
+    "line": 52,
+    "pattern": "Semgrep_javascript.lang.correctness.missing-template-string-indicator.missing-template-string-indicator",
+    "message": "This looks like a JavaScript template string.",
+    "code": "  database.prepare(`"
+  },
+  {
+    "id": "b32085be1d3152b102405265c717e002",
+    "file": "functions/lib/community/service.js",
+    "line": 57,
+    "pattern": "Semgrep_javascript.lang.correctness.no-stringify-keys.no-stringify-keys",
+    "message": "JSON stringify does not produce a stable key ordering, and should not be relied on for producing object keys.",
+    "code": "  if(!result[0].meta.changes)return json({error:'revision_conflict'},409);"
+  },
+  {
+    "id": "aa0a3e2288efe6b144cc25ab463561b8",
+    "file": "public/assets/account-punishments.js",
+    "line": 36,
+    "pattern": "Semgrep_javascript.lang.correctness.no-replaceall.no-replaceall",
+    "message": "The string method replaceAll is not supported in all versions of javascript, and is not supported by older browser versions.",
+    "code": "  return String(binding.eligibilityState || \"Not eligible\").replaceAll(\"_\", \" \").toLowerCase();"
+  },
+  {
+    "id": "595d8ac6bc8d97033bed6433c6d5a24",
+    "file": "public/preview/design-reference/preview/mock.js",
+    "line": 84,
+    "pattern": "Semgrep_javascript.lang.security.audit.unsafe-dynamic-method.unsafe-dynamic-method",
+    "message": "Using non-static data to retrieve and run functions from the object is dangerous.",
+    "code": "          vals[name](event);"
+  },
+  {
+    "id": "86c6e43c9e8a7cb7f96cf55c0dfed223",
+    "file": "tests/appeal-lifecycle.test.mjs",
+    "line": 171,
+    "pattern": "Semgrep_javascript_pathtraversal_rule-non-literal-fs-filename",
+    "message": "The application dynamically constructs file or path information.",
+    "code": "  const migration = fs.readFileSync("
+  },
+  {
+    "id": "8bc9db7bcb9f7c96577cefd24018bbac",
+    "file": "tests/appeal-discord-notifications.test.mjs",
+    "line": 133,
+    "pattern": "Semgrep_javascript.lang.correctness.no-stringify-keys.no-stringify-keys",
+    "message": "JSON stringify does not produce a stable key ordering, and should not be relied on for producing object keys.",
+    "code": "  const serialized = JSON.stringify(rows[0]);"
+  },
+  {
+    "id": "4ddb80fbc984e56c0bc721255c830f3c",
+    "file": "migrations/0031_appeal_discord_notifications.sql",
+    "line": 36,
+    "pattern": "Semgrep_codacy.generic.sql.rac-table-access",
+    "message": "All queries must target RAC_* tables.Query does not reference RAC_* table.",
+    "code": "  SELECT"
+  },
+  {
+    "id": "2b8f6774415696ff950094e23a5463c8",
+    "file": "tests/community-service.test.mjs",
+    "line": 89,
+    "pattern": "Semgrep_javascript.lang.correctness.no-stringify-keys.no-stringify-keys",
+    "message": "JSON stringify does not produce a stable key ordering, and should not be relied on for producing object keys.",
+    "code": " assert.equal(publicItems[0].slug,'pinned');assert.equal(publicItems[0].pinned,true);assert.equal(publicItems[0].authorName,'RealEditor');assert.equal(publicItems[0].authorRank,'Admin');"
+  },
+  {
+    "id": "8aff4b2677fddb1177fd29cf156d21da",
+    "file": "migrations/0033_appeal_claim_lifecycle.sql",
+    "line": 20,
+    "pattern": "Semgrep_codacy.generic.sql.rac-table-access",
+    "message": "All queries must target RAC_* tables.Query does not reference RAC_* table.",
+    "code": "    SELECT RAISE(ABORT, 'appeal_submission_identity_immutable');"
+  },
+  {
+    "id": "751c45d9409ae3ba6db66deef0b827b2",
+    "file": "tests/appeal-lifecycle-ui.test.mjs",
+    "line": 6,
+    "pattern": "Semgrep_javascript_pathtraversal_rule-non-literal-fs-filename",
+    "message": "The application dynamically constructs file or path information.",
+    "code": "  return fs.readFileSync(new URL(`../${path}`, import.meta.url), \"utf8\");"
+  },
+  {
+    "id": "488f9c2545c0f303b4ad3cda93f19608",
+    "file": "public/assets/reviewer-appeals.js",
+    "line": 86,
+    "pattern": "Semgrep_rules_lgpl_javascript_ssrf_rule-node-ssrf",
+    "message": "This application allows user-controlled URLs to be passed directly to HTTP client libraries.",
+    "code": "    const response = await fetch(`/api/reviewer/appeals/${checkedAppealId(appeal.id)}`, {"
+  },
+  {
+    "id": "c00728358c318b502944b15cf1c01895",
+    "file": "public/assets/exact-competition-catalog.js",
+    "line": 25,
+    "pattern": "Semgrep_javascript.lang.correctness.no-replaceall.no-replaceall",
+    "message": "The string method replaceAll is not supported in all versions of javascript, and is not supported by older browser versions.",
+    "code": "    if(!(preview()&&competition.visualVariant==='reference')){node.querySelector('h3').textContent=competition.title;node.querySelector('p').textContent=competition.config?.public?.summary??'';node.querySelector('.tag').textContent=competition.lifecycleState.replaceAll('_',' ');}"
+  },
+  {
+    "id": "93d958a1e902553ee42b3e253cb593eb",
+    "file": "public/assets/reviewer-appeals.js",
+    "line": 219,
+    "pattern": "Semgrep_rules_lgpl_javascript_ssrf_rule-node-ssrf",
+    "message": "This application allows user-controlled URLs to be passed directly to HTTP client libraries.",
+    "code": "    const response = await fetch(`/api/reviewer/appeals/${checkedAppealId(appeal.id)}/comments`, {"
+  },
+  {
+    "id": "f26adc4e1c52f84d86c9e5349a5f06e6",
+    "file": "public/assets/account-punishments.js",
+    "line": 14,
+    "pattern": "Semgrep_rules_lgpl_javascript_ssrf_rule-node-ssrf",
+    "message": "This application allows user-controlled URLs to be passed directly to HTTP client libraries.",
+    "code": "  const response = await fetch(path, {"
+  },
+  {
+    "id": "647ebc33ee8fac1ed44761a2ff9a67f",
+    "file": "public/assets/exact-competition-catalog.js",
+    "line": 16,
+    "pattern": "Semgrep_javascript.lang.correctness.no-replaceall.no-replaceall",
+    "message": "The string method replaceAll is not supported in all versions of javascript, and is not supported by older browser versions.",
+    "code": "    const steps=node.querySelectorAll('.trk');steps.forEach((step,i)=>{step.classList.toggle('now',i===0&&competition.lifecycleState==='UPCOMING');step.querySelector('small').textContent=i===0?competition.lifecycleState.replaceAll('_',' '):'See competition schedule';});"
+  },
+  {
+    "id": "4174d99ce46ac5c6cabbf77dbaa35c60",
+    "file": "migrations/0033_appeal_claim_lifecycle.sql",
+    "line": 10,
+    "pattern": "Semgrep_codacy.generic.sql.rac-table-access",
+    "message": "All queries must target RAC_* tables.Query does not reference RAC_* table.",
+    "code": "BEFORE UPDATE ON appeal_submissions"
+  },
+  {
+    "id": "c6eae7c863fa6466ac583d3c45fdb36b",
+    "file": "public/preview/design-reference/preview/market-shim.js",
+    "line": 33,
+    "pattern": "Semgrep_javascript.lang.correctness.no-stringify-keys.no-stringify-keys",
+    "message": "JSON stringify does not produce a stable key ordering, and should not be relied on for producing object keys.",
+    "code": "      [\"nextRentAt\", \"graceEndsAt\", \"ownerSince\"].forEach(function (k) { if (stall[k]) stall[k] = moved(stall[k]); });"
+  },
+  {
+    "id": "8d55cf745bce37de6c67e9b2f4df300d",
+    "file": "migrations/0034_appeal_email_identity.sql",
+    "line": 21,
+    "pattern": "Semgrep_codacy.generic.sql.rac-table-access",
+    "message": "All queries must target RAC_* tables.Query does not reference RAC_* table.",
+    "code": "SELECT"
+  },
+  {
+    "id": "ce275e225fc8bfaee4e34f2ff0c839f2",
+    "file": "public/assets/community-dom.js",
+    "line": 18,
+    "pattern": "Semgrep_rules_lgpl_javascript_ssrf_rule-node-ssrf",
+    "message": "This application allows user-controlled URLs to be passed directly to HTTP client libraries.",
+    "code": "  const response=await fetch('/api/community/'+path,{credentials:'same-origin',...options,headers:{'content-type':'application/json',...options.headers}});"
+  },
+  {
+    "id": "9bff87c94b8fac74d65fad491781c187",
+    "file": "public/assets/market/exact-items.js",
+    "line": 1,
+    "pattern": "Semgrep_javascript.lang.correctness.no-replaceall.no-replaceall",
+    "message": "The string method replaceAll is not supported in all versions of javascript, and is not supported by older browser versions.",
+    "code": "const normalized=value=>String(value??'').trim().replace(/^minecraft:/i,'').replaceAll('_',' ').toLowerCase();"
+  },
+  {
+    "id": "d8e34cd269f1334ced6ec88f22b887c7",
+    "file": "public/assets/market/exact-view.js",
+    "line": 314,
+    "pattern": "Semgrep_javascript.lang.correctness.no-replaceall.no-replaceall",
+    "message": "The string method replaceAll is not supported in all versions of javascript, and is not supported by older browser versions.",
+    "code": "    var material = (item.key || item.name).replace(/^minecraft:/, \"\").replaceAll(\" \", \"_\").toUpperCase();"
+  },
+  {
+    "id": "22dafa440bdffa80e2feace523a3e4bc",
+    "file": "migrations/0031_appeal_discord_notifications.sql",
+    "line": 41,
+    "pattern": "Semgrep_codacy.generic.sql.rac-table-access",
+    "message": "All queries must target RAC_* tables.Query does not reference RAC_* table.",
+    "code": "    'appeal-discord-update:' || NEW.id,"
+  },
+  {
+    "id": "d459f45b52ce95fd56571e7b27d071ad",
+    "file": "public/preview/design-reference/preview/market-shim.js",
+    "line": 88,
+    "pattern": "Semgrep_javascript.lang.correctness.no-stringify-keys.no-stringify-keys",
+    "message": "JSON stringify does not produce a stable key ordering, and should not be relied on for producing object keys.",
+    "code": "          var stall = JSON.parse(JSON.stringify(withShops[Math.floor(rand() * withShops.length)]));"
+  },
+  {
+    "id": "674555adb71ad828ff802eb7b468e384",
+    "file": "public/assets/review-appeals.js",
+    "line": 86,
+    "pattern": "Semgrep_rules_lgpl_javascript_ssrf_rule-node-ssrf",
+    "message": "This application allows user-controlled URLs to be passed directly to HTTP client libraries.",
+    "code": "    const response = await fetch(endpoint, {"
+  },
+  {
+    "id": "881bf6a7de012b6550b5f4eb1dc04bf5",
+    "file": "public/preview/design-reference/preview/market-shim.js",
+    "line": 89,
+    "pattern": "Semgrep_javascript.lang.correctness.no-stringify-keys.no-stringify-keys",
+    "message": "JSON stringify does not produce a stable key ordering, and should not be relied on for producing object keys.",
+    "code": "          stall.shops[0].stockCount = Math.floor(rand() * 60);"
+  },
+  {
+    "id": "441cc59adddab1211a84d289f4fca2f2",
+    "file": "migrations/0034_appeal_email_identity.sql",
+    "line": 17,
+    "pattern": "Semgrep_codacy.generic.sql.rac-table-access",
+    "message": "All queries must target RAC_* tables.Query does not reference RAC_* table.",
+    "code": "INSERT INTO appeal_punishment_bindings_v2 ("
+  },
+  {
+    "id": "fc7d7550e27aaba568ccd192132553ac",
+    "file": "migrations/0031_appeal_discord_notifications.sql",
+    "line": 27,
+    "pattern": "Semgrep_codacy.generic.sql.rac-table-access",
+    "message": "All queries must target RAC_* tables.Query does not reference RAC_* table.",
+    "code": "-- the visible update and its notification atomic while player replies stay quiet."
+  },
+  {
+    "id": "30a2bfe2a59de415d8e66599f89847e",
+    "file": "public/assets/market/exact-insights.js",
+    "line": 9,
+    "pattern": "Semgrep_javascript.lang.correctness.no-replaceall.no-replaceall",
+    "message": "The string method replaceAll is not supported in all versions of javascript, and is not supported by older browser versions.",
+    "code": "function itemName(key){return key.replace(/^minecraft:/,'').replaceAll('_',' ').replace(/\\b\\w/g,c=>c.toUpperCase());}"
+  },
+  {
+    "id": "a87083f81fcc09ec7dcbac82ce870268",
+    "file": "public/preview/design-reference/mock/buildcomp.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 23 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "d0d533d2a494aea5155a459cfe8acfec",
+    "file": "functions/api/competitions/admin/[id]/standings.js",
+    "line": 103,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 24 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "228e1353ef83ac2cc36f1b5624881683",
+    "file": "functions/lib/competitions/discord-notifications.js",
+    "line": 259,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method sendDiscordDirectMessage has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "export async function sendDiscordDirectMessage(env, recipientValue, payload, fetchImpl = fetch) {"
+  },
+  {
+    "id": "ba31eee8a0dd0e8eb0199faf4e75a2ae",
+    "file": "public/assets/reviewer-appeals.js",
+    "line": 284,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method appealCard has a cyclomatic complexity of 19 (limit is 8)",
+    "code": "function appealCard(appeal) {"
+  },
+  {
+    "id": "dd129f88600e0bad9ce16023459a1001",
+    "file": "functions/lib/competitions/config.js",
+    "line": 110,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method sanitizeAccent has 286 lines of code (limit is 50)",
+    "code": "function sanitizeAccent(value) {"
+  },
+  {
+    "id": "fcfe3d83ed636f4e2d058070857301bd",
+    "file": "public/assets/market/insights.js",
+    "line": 28,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method deepLink has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "  function deepLink(){"
+  },
+  {
+    "id": "2bfcac66273b85a1af8974a9eb53cf37",
+    "file": "functions/api/appeals/attachments/[id].js",
+    "line": 12,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method resolve has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "async function resolve(context) {"
+  },
+  {
+    "id": "f9ed6a44d1dfff2205172ffb231eccd6",
+    "file": "functions/api/competitions/admin/[id]/judges.js",
+    "line": 75,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method onRequestPost has 86 lines of code (limit is 50)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "b08f654e22813eaaf42582720ea2343d",
+    "file": "public/assets/competitions-participant-v2.js",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File public/assets/competitions-participant-v2.js has 755 non-comment lines of code",
+    "code": "const API_ROOT = \"/api/competitions\";"
+  },
+  {
+    "id": "121e12d222d1263e66707d75e3ad7985",
+    "file": "public/assets/community.js",
+    "line": 9,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method detail has a cyclomatic complexity of 23 (limit is 8)",
+    "code": "function detail(item,container){"
+  },
+  {
+    "id": "58ba58aa7cfd53012de8fa9b22a70c99",
+    "file": "functions/api/competitions/admin/[id]/rewards.js",
+    "line": 108,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "4ee21bd51dcb0788d3b6fb264eb6a8e3",
+    "file": "functions/lib/competitions/contributors.js",
+    "line": 27,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method inviteSubmissionContributor has 102 lines of code (limit is 50)",
+    "code": "export async function inviteSubmissionContributor(db, invite) {"
+  },
+  {
+    "id": "a0a105bbcf52b3b964168d8ccf453adf",
+    "file": "public/assets/exact-controls/events.js",
+    "line": 6,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 22 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "dfc5ff180929ee31824d689da3040b0a",
+    "file": "functions/lib/competitions/discord-notifications.js",
+    "line": 308,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method drainCompetitionDiscordNotifications has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "export async function drainCompetitionDiscordNotifications(env, db, { limit = 25, fetchImpl = fetch } = {}) {"
+  },
+  {
+    "id": "b06aadab00f938b84e6af3d317ca0081",
+    "file": "functions/api/gallery/staff/media/[id].js",
+    "line": 5,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestGet has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function onRequestGet(context) {"
+  },
+  {
+    "id": "73b47ab1d811afe27367b64b8a67c42d",
+    "file": "public/assets/competitions-public-feedback.js",
+    "line": 69,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method init has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "async function init() {"
+  },
+  {
+    "id": "90ead43def4de0dfa8d28ee4d014c52a",
+    "file": "public/preview/design-reference/mock/appeal.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "15f9476a48f7ea6717df6b87bf491484",
+    "file": "functions/lib/community/service.js",
+    "line": 60,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method poll has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "async function poll(db,slug,request,actor){"
+  },
+  {
+    "id": "713726ba10b9f0519a80e8f4bf30e077",
+    "file": "functions/lib/community/service.js",
+    "line": 78,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method ingest has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "async function ingest(db,request,env){"
+  },
+  {
+    "id": "1be110652583a972703674b2f783f15c",
+    "file": "public/assets/exact-account.js",
+    "line": 1,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderExactAccount has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export function renderExactAccount(root,session,actions){"
+  },
+  {
+    "id": "e3ed6a0f98d0875750839a9e3aa4b794",
+    "file": "public/assets/market/exact-view.js",
+    "line": 231,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method draw has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "    async function draw() {"
+  },
+  {
+    "id": "986f8151426f312c08bd155b5f944589",
+    "file": "tests/competitions-reward-linked-judges.test.mjs",
+    "line": 6,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method reward has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "function reward(distributionMode, overrides = {}) {"
+  },
+  {
+    "id": "512300feab3b3dfbf97ebef08d7acafe",
+    "file": "public/assets/competitions-admin-workspace.js",
+    "line": 760,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method rewardPayloadEditor has a cyclomatic complexity of 34 (limit is 8)",
+    "code": "function rewardPayloadEditor(reward, container) {"
+  },
+  {
+    "id": "1629572db1ffab1f131b78f121405016",
+    "file": "public/assets/exact-controls/timeline.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "2187499cdc79e03bdeab43dbafea54c2",
+    "file": "public/assets/punishments.js",
+    "line": 83,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method load has a cyclomatic complexity of 17 (limit is 8)",
+    "code": "async function load({ append = false } = {}) {"
+  },
+  {
+    "id": "bdedfa04c879286e4374cf64229e7635",
+    "file": "tests/competitions-appearance-media.test.mjs",
+    "line": 137,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method (anonymous) has 52 lines of code (limit is 50)",
+    "code": "test(\"appearance media, config version, and audit persist atomically in D1\", async () => {"
+  },
+  {
+    "id": "87c225773800489ee5fa5af2cbc14d1f",
+    "file": "public/assets/competitions-public-media.js",
+    "line": 18,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method installStyles has 100 lines of code (limit is 50)",
+    "code": "function installStyles() {"
+  },
+  {
+    "id": "4924a6c69b93c271f12f37f45975ffc9",
+    "file": "public/assets/exact-store.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "382edf7b6c01c1e0bbbbb254dc73300",
+    "file": "public/assets/exact-controls/changelog.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "618ad08ef0f7b2b3758c2ff0b3e65995",
+    "file": "functions/lib/public-punishment.js",
+    "line": 35,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method sanitizePublicPunishment has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "export function sanitizePublicPunishment(value) {"
+  },
+  {
+    "id": "2d8ec012f397d186186baed9864a405b",
+    "file": "public/assets/competitions-admin-tools.js",
+    "line": 261,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "  button.addEventListener(\"click\", async () => {"
+  },
+  {
+    "id": "e244753ea5a11c120717756459afb16a",
+    "file": "public/assets/player-guide.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 16 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "aa5c912d5fa831c046f246756bc78c7b",
+    "file": "functions/lib/competitions/results.js",
+    "line": 147,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method publishProvisionalResults has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "export async function publishProvisionalResults(db, publication) {"
+  },
+  {
+    "id": "3938b3368563105488bff9b2c42d8e90",
+    "file": "public/preview/design-reference/mock/home-christmas.js",
+    "line": 18,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 19 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "f373036441c588dcf8656a42d88510fb",
+    "file": "functions/lib/competitions/result-draft-set.js",
+    "line": 38,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "  const normalized = results.map((result) => {"
+  },
+  {
+    "id": "46ccaf8176f762de8193ec9c25cab36d",
+    "file": "functions/lib/competitions/participant-auth.js",
+    "line": 14,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method normalizedLink has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "function normalizedLink(raw) {"
+  },
+  {
+    "id": "6c7a36acdc10905a7b5ea2ffea0557bd",
+    "file": "functions/api/appeals/attachments.js",
+    "line": 67,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method onRequestPost has 73 lines of code (limit is 50)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "1d53e439b32323818ca5b309e71cb48c",
+    "file": "public/assets/competitions.js",
+    "line": 803,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method loadDetail has a cyclomatic complexity of 26 (limit is 8)",
+    "code": "async function loadDetail() {"
+  },
+  {
+    "id": "febf5f6f12b2d563d048069e815cb37f",
+    "file": "functions/lib/community/service.js",
+    "line": 21,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method body has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "async function body(request){"
+  },
+  {
+    "id": "e0471e04dd21ad439b509c7c702db26f",
+    "file": "public/preview/design-reference/mock/creators.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "f627771cd02da66d7f34a53c1376a6c",
+    "file": "public/assets/competitions-admin.js",
+    "line": 579,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method fillEditor has 71 lines of code (limit is 50)",
+    "code": "function fillEditor(competition, readiness) {"
+  },
+  {
+    "id": "50239cd000e74f8c44a44acda913bba8",
+    "file": "public/preview/design-reference/mock/events.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "76897350cc76b519ba2013f1050d493d",
+    "file": "functions/api/competitions/admin/status.js",
+    "line": 38,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method buildStatusSnapshot has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "export function buildStatusSnapshot(env, schemaReady) {"
+  },
+  {
+    "id": "605a8faf67aa7f459f81c988e1a48e85",
+    "file": "functions/api/competitions/[slug]/submissions/[id]/images/order.js",
+    "line": 28,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method onRequestPost has 64 lines of code (limit is 50)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "e9fab64ad2e97c3c016f60711f1930ba",
+    "file": "functions/lib/competitions/media-policy.js",
+    "line": 93,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method inspectJpeg has a cyclomatic complexity of 35 (limit is 8)",
+    "code": "function inspectJpeg(data) {"
+  },
+  {
+    "id": "c9adda4c1b5631edd401b8cd5c3d23",
+    "file": "public/preview/design-reference/mock/guide.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 16 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "3710d82de7cb1821a689d1ad90f4e668",
+    "file": "public/assets/community.js",
+    "line": 52,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "    list=list.sort((a,b)=>['name','title'].includes(sort)?String(a[sort]??'').localeCompare(String(b[sort]??'')):sort==='date'?Date.parse(b.date??0)-Date.parse(a.date??0):(b[sort]??-1)-(a[sort]??-1));"
+  },
+  {
+    "id": "b7dcc0fdf6c516930c7334d538301db4",
+    "file": "functions/api/competitions/media/[id].js",
+    "line": 15,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestGet has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function onRequestGet(context) {"
+  },
+  {
+    "id": "d5073192698c396ca020d0b3d2e79c15",
+    "file": "public/assets/competitions-auth.js",
+    "line": 150,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method render has 56 lines of code (limit is 50)",
+    "code": "  async function render({ refresh = false } = {}) {"
+  },
+  {
+    "id": "78e716cdbb54bfbde991bb768d8607a",
+    "file": "public/preview/design-reference/mock/store.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "8852f4ea0776c85b8d9127d5c09c4f3",
+    "file": "public/assets/competitions-admin-workspace.js",
+    "line": 303,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "  button.addEventListener(\"click\", async () => {"
+  },
+  {
+    "id": "6b6b5cb55cc9f54300aaea68bd6c7aa3",
+    "file": "functions/lib/competitions/media-repository.js",
+    "line": 66,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method createCompetitionMediaRecord has 62 lines of code (limit is 50)",
+    "code": "export async function createCompetitionMediaRecord(db, record) {"
+  },
+  {
+    "id": "81f970bdff6976c29980029b13db78d5",
+    "file": "public/assets/exact-competition-catalog.js",
+    "line": 5,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderExactFeatured has a cyclomatic complexity of 15 (limit is 8)",
+    "code": "export function renderExactFeatured(root,competition){"
+  },
+  {
+    "id": "d80d933922812a4184647b8c187e7b3",
+    "file": "public/assets/account.js",
+    "line": 155,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method punishmentClaimError has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "function punishmentClaimError(error) {"
+  },
+  {
+    "id": "71175e12a89cd3f0a8de1e2b9d83e167",
+    "file": "tests/competitions-appearance-media.test.mjs",
+    "line": 192,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method (anonymous) has 51 lines of code (limit is 50)",
+    "code": "test(\"appearance media write rolls back when its config version is stale\", async () => {"
+  },
+  {
+    "id": "6edadb77e800bf9bda7264bfc37930b1",
+    "file": "public/assets/competitions-participant-dnd.js",
+    "line": 1,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method setWizardMessage has 102 lines of code (limit is 50)",
+    "code": "function setWizardMessage(row, text, kind = \"\") {"
+  },
+  {
+    "id": "5c06a3ce21ca0a80187a9170ad2eab09",
+    "file": "public/assets/competitions-admin-workspace.js",
+    "line": 631,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method loadResults has 64 lines of code (limit is 50)",
+    "code": "async function loadResults() {"
+  },
+  {
+    "id": "d65b94d5737bbcdf5dbcf337e4098e81",
+    "file": "functions/lib/competitions/drafts.js",
+    "line": 57,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method saveDraftCompetition has 109 lines of code (limit is 50)",
+    "code": "export async function saveDraftCompetition(db, change) {"
+  },
+  {
+    "id": "22ea302cdcee0735a46aa434ba779e10",
+    "file": "functions/lib/appeal-lifecycle.js",
+    "line": 62,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method projectAppealMutation has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "export function projectAppealMutation(payload, appealId) {"
+  },
+  {
+    "id": "4f3062a786718590cde0f264e7d29e75",
+    "file": "public/preview/design-reference/mock/mapartcomp.js",
+    "line": 3,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method renderVals has 63 lines of code (limit is 50)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "5c132751d9e44fc26fbac01e6400bac",
+    "file": "public/assets/competitions-admin.js",
+    "line": 794,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method transitionLifecycle has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "async function transitionLifecycle(targetState, button) {"
+  },
+  {
+    "id": "59d1a9a9aa6bd9ee6b889fa9e7fab8dc",
+    "file": "functions/lib/competitions/submissions.js",
+    "line": 36,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method countLinkedPlayerEntrySlots has 51 lines of code (limit is 50)",
+    "code": "export async function countLinkedPlayerEntrySlots(db, competitionId, playerUuids) {"
+  },
+  {
+    "id": "917a4a2600c7ce4b4dd71598dfb39123",
+    "file": "public/preview/design-reference/mock/market-insights.js",
+    "line": 132,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method sl has 64 lines of code (limit is 50)",
+    "code": "  function sl(name) { var m = sid(name).match(/\\d+/); return m ? \"Stall \" + m[0] : \"Stall\"; }"
+  },
+  {
+    "id": "379546f034d406cc09d25b0d7bc36acf",
+    "file": "public/assets/competitions-public-media.js",
+    "line": 251,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method enhanceResults has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "function enhanceResults(payload, viewer) {"
+  },
+  {
+    "id": "d28191bcb73c91cdb83653b7db019f73",
+    "file": "functions/lib/competitions/rewards.js",
+    "line": 64,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method validateRewardDefinition has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "export function validateRewardDefinition(definition) {"
+  },
+  {
+    "id": "dbd186c950dfd3d2fbb76c3dac4c20f7",
+    "file": "functions/api/competitions/admin/[id]/submissions/[submissionId]/gallery.js",
+    "line": 71,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 27 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "b1cd22f5e12fa3ac374f2ed281c6f7e6",
+    "file": "functions/lib/competitions/reward-config.js",
+    "line": 203,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method sanitizeCompetitionRewards has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "export function sanitizeCompetitionRewards(input) {"
+  },
+  {
+    "id": "208ca02914480acd7a4465362cd72586",
+    "file": "functions/lib/competitions/bridge.js",
+    "line": 15,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method base64Url has 144 lines of code (limit is 50)",
+    "code": "function base64Url(bytes) {"
+  },
+  {
+    "id": "291e589651192c28a8add7ccaa18d87b",
+    "file": "public/assets/competitions.js",
+    "line": 81,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method renderStagePanel has 55 lines of code (limit is 50)",
+    "code": "function renderStagePanel(competition, { includeSchedule = true } = {}) {"
+  },
+  {
+    "id": "d59f769401d77ce5be1b60d7a189cf2b",
+    "file": "functions/lib/appeal-content.js",
+    "line": 64,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method sanitizeAppealSubmission has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "export function sanitizeAppealSubmission(input) {"
+  },
+  {
+    "id": "367a235edffbfe72eb159cf5233e6e47",
+    "file": "public/assets/competitions-judge.js",
+    "line": 162,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 18 (limit is 8)",
+    "code": "  save.addEventListener(\"click\", async () => {"
+  },
+  {
+    "id": "8cfea54acddafb5fe0f5b924096ae5bc",
+    "file": "functions/lib/competitions/reward-plans.js",
+    "line": 154,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method planRewardForResult has a cyclomatic complexity of 19 (limit is 8)",
+    "code": "export function planRewardForResult(reward, context, { guildMemberUuids = null } = {}) {"
+  },
+  {
+    "id": "a888c628c9b86aa296c9e8cb2b44f4a4",
+    "file": "functions/lib/competitions/notifications.js",
+    "line": 6,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method enqueueCompetitionNotification has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function enqueueCompetitionNotification(db, notification) {"
+  },
+  {
+    "id": "5a0995e6f9c64b3cc1d90f024b5a735f",
+    "file": "public/assets/competitions-admin.js",
+    "line": 678,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method buildConfigFromEditor has 55 lines of code (limit is 50)",
+    "code": "function buildConfigFromEditor() {"
+  },
+  {
+    "id": "4a51ee01621a8d95a6be36a6ba40b96d",
+    "file": "public/assets/competitions-admin.js",
+    "line": 739,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method saveCurrentCompetition has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "async function saveCurrentCompetition() {"
+  },
+  {
+    "id": "30a9725749fc4f56d2515f1dc1fe616f",
+    "file": "functions/lib/appeal-email-auth.js",
+    "line": 53,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method normalizeAppealEmail has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "export function normalizeAppealEmail(value) {"
+  },
+  {
+    "id": "30c1a5b10d93528042f0f501e0e17ac6",
+    "file": "functions/lib/competitions/state.js",
+    "line": 37,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method transitionCompetitionState has 71 lines of code (limit is 50)",
+    "code": "export async function transitionCompetitionState(db, transition) {"
+  },
+  {
+    "id": "a35e0877e6dd24b1db8f1033acfe5a42",
+    "file": "public/assets/competitions.js",
+    "line": 81,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderStagePanel has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "function renderStagePanel(competition, { includeSchedule = true } = {}) {"
+  },
+  {
+    "id": "8c5ee6623d73415781741f7ffc1efc14",
+    "file": "public/preview/design-reference/mock/news.js",
+    "line": 21,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method mdInline has 64 lines of code (limit is 50)",
+    "code": "    var mdInline = function (s) {"
+  },
+  {
+    "id": "f330667429445f75ce8ab5d70d2d0094",
+    "file": "functions/lib/competitions/rewards.js",
+    "line": 108,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method selectRewardRecipients has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export function selectRewardRecipients({"
+  },
+  {
+    "id": "78513db9f0dda04ff1c04f363bf45b5a",
+    "file": "functions/api/competitions/[slug]/submissions/[id]/images/order.js",
+    "line": 28,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 29 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "347961cee7fa930792bc1cf4cebd709a",
+    "file": "public/assets/competitions-admin.js",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File public/assets/competitions-admin.js has 845 non-comment lines of code",
+    "code": "const API_ROOT = \"/api/competitions/admin\";"
+  },
+  {
+    "id": "9eb24cd2365cacd47233bc48069a53fd",
+    "file": "public/assets/exact-collections.js",
+    "line": 17,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method populate has a cyclomatic complexity of 36 (limit is 8)",
+    "code": "function populate(node,item){"
+  },
+  {
+    "id": "c8db0cdb00ec1a86d3fd8755ceb295e9",
+    "file": "public/preview/design-reference/mock/market-insights.js",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File public/preview/design-reference/mock/market-insights.js has 660 non-comment lines of code",
+    "code": "/* Market insights (Stall of the Week + Price Tracker). Stand-in data; the real page loads the same shapes from the market API."
+  },
+  {
+    "id": "6909da1ee8a69e4ca85df3f20b55a65a",
+    "file": "public/assets/community.js",
+    "line": 120,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method load has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "  function load(item){revision=item.revision??0;slug.value=item.slug??'';title.value=item.title??'';category.value=item.category??'';body.value=item.body??'';date.value=item.date?item.date.slice(0,16):'';image.value=item.image??'';target.value=item.target??'';tags.value=(item.tags??[]).join(', ');options.value=(item.options??[]).join('\\n');closing.value=item.closesAt?item.closesAt.slice(0,16):'';verification.value=item.verification??'unverified';feedback.textContent='Revision '+revision+' - '+(item.status??"
+  },
+  {
+    "id": "d44443b5ee0c2c0e874ef2209bdc97d6",
+    "file": "functions/api/punishments.js",
+    "line": 7,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method punishmentQuery has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "export function punishmentQuery(request) {"
+  },
+  {
+    "id": "ddb84c47a798e74a4891da1aef46b32",
+    "file": "functions/api/appeals/[id]/comments.js",
+    "line": 20,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 16 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "8312eefbf53693018deabd73774561aa",
+    "file": "public/assets/gallery.js",
+    "line": 172,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method reviewSubmission has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "  async function reviewSubmission(event) {"
+  },
+  {
+    "id": "b189e5eb1792088dd4a22640a7571130",
+    "file": "public/preview/design-reference/mock/punishments.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "6aba59e8758b6b7523022d62e71e9e85",
+    "file": "public/assets/skins/sculk.js",
+    "line": 11,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method (anonymous) has 66 lines of code (limit is 50)",
+    "code": "(function () {"
+  },
+  {
+    "id": "c5319e5436e07098056da2c032265daa",
+    "file": "public/assets/appeal-markup.js",
+    "line": 50,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method parseAppealBlock has a cyclomatic complexity of 20 (limit is 8)",
+    "code": "export function parseAppealBlock(value) {"
+  },
+  {
+    "id": "391e381da367e360d7b13030689f8a9d",
+    "file": "functions/lib/competitions/judges.js",
+    "line": 170,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method saveJudgeScore has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function saveJudgeScore(db, scoreInput) {"
+  },
+  {
+    "id": "acd0b9a0eb2c7064e0303d8440c241bb",
+    "file": "public/preview/design-reference/mock/home-warzone.js",
+    "line": 18,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 19 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "c1f771cae5606aeb3a96f8107d1f553e",
+    "file": "public/preview/design-reference/mock/home-warzone.js",
+    "line": 18,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method renderVals has 96 lines of code (limit is 50)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "e2405fb837693dd608ba52f88618aae5",
+    "file": "public/assets/competitions-participant.js",
+    "line": 363,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method setWizardMessage has 59 lines of code (limit is 50)",
+    "code": "function setWizardMessage(wizard, message, kind = \"\") {"
+  },
+  {
+    "id": "9d5ae9a31b7fbeed3603aa3abf6a1a6c",
+    "file": "functions/api/competitions/admin/[id].js",
+    "line": 73,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPatch has a cyclomatic complexity of 22 (limit is 8)",
+    "code": "export async function onRequestPatch(context) {"
+  },
+  {
+    "id": "a160a84da2517eba9d1a7e2cbf8180c",
+    "file": "functions/lib/appeal-repository.js",
+    "line": 324,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method recordAppealComment has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function recordAppealComment(db, record) {"
+  },
+  {
+    "id": "4690477a447515361447fbd328e28bb9",
+    "file": "functions/lib/auth.js",
+    "line": 138,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method linkedStaffPlayer has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "function linkedStaffPlayer(session) {"
+  },
+  {
+    "id": "cb345c522bdbd391ae8e9c6e00016fb8",
+    "file": "public/assets/script.js",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File public/assets/script.js has 1594 non-comment lines of code",
+    "code": "import(\"./site-navigation.js\").catch(() => {});"
+  },
+  {
+    "id": "3e77686aef381b2eb463475414727299",
+    "file": "public/assets/competitions-public-media.js",
+    "line": 9,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "  images.sort((left, right) => {"
+  },
+  {
+    "id": "caf20e96efde335d93c3e81239419b44",
+    "file": "functions/api/appeals/attachments/[id].js",
+    "line": 38,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestDelete has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function onRequestDelete(context) {"
+  },
+  {
+    "id": "1e2490ae2dae80e84a72b3f5a8414eef",
+    "file": "public/assets/competitions.js",
+    "line": 803,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method loadDetail has 75 lines of code (limit is 50)",
+    "code": "async function loadDetail() {"
+  },
+  {
+    "id": "6829c5286644fd5f9fdab405b6c0f05f",
+    "file": "public/preview/design-reference/mock/mapartcomp.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 23 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "5bb80fa76001683e49f3c4da18747e3c",
+    "file": "functions/api/reviewer/appeals/attachments/[id].js",
+    "line": 11,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestGet has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "export async function onRequestGet(context) {"
+  },
+  {
+    "id": "3c4b1adcd37f73425ee3f30bc5fe9032",
+    "file": "functions/api/gallery/submissions.js",
+    "line": 22,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 24 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "f76671827eb9141b81ce8017183b119d",
+    "file": "public/assets/competitions-admin-media.js",
+    "line": 222,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method uploadAppearance has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "async function uploadAppearance(control) {"
+  },
+  {
+    "id": "ae7cf8a96488d10e0235403b1ca3283c",
+    "file": "public/assets/community.js",
+    "line": 51,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "  function refresh(){let list=items.filter(item=>(item.name??item.title??'').toLowerCase().includes(q)&&(category==='All'||item.category===category||item.state===category||(category==='Recruiting'&&item.recruiting)||(category==='Peaceful'&&item.peaceful)||(category==='Hostile'&&item.peaceful===false)));"
+  },
+  {
+    "id": "754ab8c8c98759503f45e9fe3e1c4b46",
+    "file": "public/assets/competitions-participant.js",
+    "line": 299,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method currentDraftPayload has a cyclomatic complexity of 15 (limit is 8)",
+    "code": "function currentDraftPayload(wizard) {"
+  },
+  {
+    "id": "53e11873fd3a63d1fa513b736e8540f6",
+    "file": "public/assets/exact-detail.js",
+    "line": 18,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method exactDetailOverview has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export function exactDetailOverview(competition){"
+  },
+  {
+    "id": "40cabf7e3edb3d506cd123f704e87db",
+    "file": "functions/lib/competitions/reward-plans.js",
+    "line": 229,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method buildCompetitionRewardPlan has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function buildCompetitionRewardPlan(db, competitionId, { guildMembersByGuildId = {} } = {}) {"
+  },
+  {
+    "id": "5447f613a56903f0c4bf72b979c15b0a",
+    "file": "public/assets/competitions-admin.js",
+    "line": 579,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method fillEditor has a cyclomatic complexity of 19 (limit is 8)",
+    "code": "function fillEditor(competition, readiness) {"
+  },
+  {
+    "id": "c5e9135a9ef2a967ce8d034b94f9481b",
+    "file": "functions/lib/competitions/media-policy.js",
+    "line": 45,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method inspectPng has a cyclomatic complexity of 24 (limit is 8)",
+    "code": "function inspectPng(data) {"
+  },
+  {
+    "id": "c42a21c6255ddc96b22b0110699852b5",
+    "file": "public/assets/punishments.js",
+    "line": 31,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method punishmentCard has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "function punishmentCard(item) {"
+  },
+  {
+    "id": "983cbf926a5e1c5585f0cbd3067e4bf1",
+    "file": "public/assets/design-bindings.js",
+    "line": 50,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "      bound.forEach(function (item) {"
+  },
+  {
+    "id": "a64361884d02142b27baef349aa02111",
+    "file": "functions/lib/community/service.js",
+    "line": 105,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method insights has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "async function insights(db,url){"
+  },
+  {
+    "id": "d2c3d33d818739215327274c690af1bc",
+    "file": "functions/api/competitions/admin/[id].js",
+    "line": 73,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method onRequestPatch has 81 lines of code (limit is 50)",
+    "code": "export async function onRequestPatch(context) {"
+  },
+  {
+    "id": "9b741b222feedac9f774ed973df2263e",
+    "file": "functions/lib/competitions/identity.js",
+    "line": 30,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method base64Url has 101 lines of code (limit is 50)",
+    "code": "function base64Url(bytes) {"
+  },
+  {
+    "id": "9ba05c725b64884944682df0330de743",
+    "file": "public/assets/competitions-public-feedback.js",
+    "line": 42,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method enhanceResults has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "function enhanceResults(payload) {"
+  },
+  {
+    "id": "8eb0f6c4db3b18fc459f1650578936b6",
+    "file": "public/assets/competitions-judge.js",
+    "line": 91,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderScoreForm has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "function renderScoreForm(workspace, entry, root) {"
+  },
+  {
+    "id": "6ff4fe0dcce089370d1981179db70200",
+    "file": "public/assets/competitions.js",
+    "line": 313,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method renderOverview has 59 lines of code (limit is 50)",
+    "code": "function renderOverview(root, payload) {"
+  },
+  {
+    "id": "6266613d126366e1f5dea9df6faf8c8e",
+    "file": "functions/lib/competitions/submissions.js",
+    "line": 272,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method submitSubmissionForReview has 77 lines of code (limit is 50)",
+    "code": "export async function submitSubmissionForReview(db, submission) {"
+  },
+  {
+    "id": "d21d49458ce4bf9aa02cc3c5e4d3c4d2",
+    "file": "public/assets/competitions.js",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File public/assets/competitions.js has 825 non-comment lines of code",
+    "code": "import { exactDetailHead, exactDetailStage, exactDetailOverview } from './exact-detail.js';"
+  },
+  {
+    "id": "22c711cb39060c7235e6793beecf7c29",
+    "file": "functions/lib/competitions/bridge.js",
+    "line": 160,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method competitionGuildMembers has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "export async function competitionGuildMembers(env, guildId) {"
+  },
+  {
+    "id": "e16a47829424b152cdc45e47fdc51bb2",
+    "file": "public/assets/appeal-markup.js",
+    "line": 80,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method renderAppealMarkup has 59 lines of code (limit is 50)",
+    "code": "export function renderAppealMarkup(root, value) {"
+  },
+  {
+    "id": "9604d2ec734cbb1d3658077cd0e14ca6",
+    "file": "public/assets/exact-controls/creators.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "cf3ac46d13cbf604d5f208c291c1cae9",
+    "file": "public/assets/competitions-admin.js",
+    "line": 228,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method loadStatus has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "async function loadStatus() {"
+  },
+  {
+    "id": "479755723ef3399e70d809f9ebce0775",
+    "file": "public/assets/competitions-admin.js",
+    "line": 464,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method allowedLifecycleTargets has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "function allowedLifecycleTargets() {"
+  },
+  {
+    "id": "1242c7cc9f1c68d59568e92968aa3465",
+    "file": "public/preview/design-reference/mock/changelog.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "2b24957636c88372ffcb1a43c5fb0750",
+    "file": "public/assets/market/market-api-client.js",
+    "line": 24,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method isBuildingId has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "  function isBuildingId(value) {"
+  },
+  {
+    "id": "947781edbdea8d8bae34c7d09440df96",
+    "file": "functions/api/competitions/auth/link.js",
+    "line": 70,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method pollMinecraftLink has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "async function pollMinecraftLink(context, session, input) {"
+  },
+  {
+    "id": "982d6ed6f1d299c6fd9ab5948a21a71e",
+    "file": "public/assets/exact-directory.js",
+    "line": 8,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method clone has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "function clone(type,item){"
+  },
+  {
+    "id": "f421756a055e8007698c21acb6a5015b",
+    "file": "functions/api/competitions/admin/[id]/rewards.js",
+    "line": 57,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "    deliveries: plan.deliveries.map((delivery) => ({"
+  },
+  {
+    "id": "f8feafda451d3c4a671ab1bc9963b23f",
+    "file": "public/assets/appeal-markup.js",
+    "line": 80,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderAppealMarkup has a cyclomatic complexity of 25 (limit is 8)",
+    "code": "export function renderAppealMarkup(root, value) {"
+  },
+  {
+    "id": "16f69f6529d1eae996c6d5f8a3c13b9a",
+    "file": "public/assets/community-dom.js",
+    "line": 1,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method el has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "export function el(tag,attributes={},children=[]){"
+  },
+  {
+    "id": "c6da749d97a4c40a2ee7ac59b69897ee",
+    "file": "functions/api/competitions/submission-media/[id].js",
+    "line": 12,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestGet has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function onRequestGet(context) {"
+  },
+  {
+    "id": "a84d1e2c15ec6e3dbb69f7d6fb5e570",
+    "file": "public/assets/competitions.js",
+    "line": 313,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderOverview has a cyclomatic complexity of 20 (limit is 8)",
+    "code": "function renderOverview(root, payload) {"
+  },
+  {
+    "id": "531fe4243bdc92313d597e8d445da758",
+    "file": "public/assets/punishments.js",
+    "line": 83,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method load has 59 lines of code (limit is 50)",
+    "code": "async function load({ append = false } = {}) {"
+  },
+  {
+    "id": "292788fccb8f3775a05555a28e5f099",
+    "file": "functions/api/appeals/[id]/edit.js",
+    "line": 12,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 22 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "b1ce90a830bebfadb208247f19f5f30e",
+    "file": "public/assets/competitions-participant.js",
+    "line": 218,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderSubmissionList has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "function renderSubmissionList(state, root) {"
+  },
+  {
+    "id": "f915a7b395e9c278e7e2d7385e15fe8e",
+    "file": "public/assets/competitions.js",
+    "line": 43,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method stageSchedule has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "function stageSchedule(competition) {"
+  },
+  {
+    "id": "1904f4cca0889a374b595f15086465ac",
+    "file": "public/preview/design-reference/mock/buildcomp.js",
+    "line": 3,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method renderVals has 63 lines of code (limit is 50)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "aa0c88bcf96e9c5a4867ef786e55e464",
+    "file": "public/assets/exact-news.js",
+    "line": 35,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method editor has a cyclomatic complexity of 16 (limit is 8)",
+    "code": "async function editor(){"
+  },
+  {
+    "id": "3890c2c1ea4a871ce70a4b7bc7c6cb99",
+    "file": "functions/api/appeals/claim.js",
+    "line": 22,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "350c8f63c442417bbda5c9f97cf58758",
+    "file": "public/assets/exact-punishments.js",
+    "line": 1,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method exactPunishmentCard has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "export function exactPunishmentCard(item,date,duration){"
+  },
+  {
+    "id": "7eddf7e221b7f4e8dba0a1305dbd277e",
+    "file": "functions/api/appeals/revalidate.js",
+    "line": 36,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "b5a812dd28f02621d699b13a3553809e",
+    "file": "functions/api/reviewer/appeals/[id]/comments.js",
+    "line": 10,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 15 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "3d5f94ba4cc9fce0bee635694f3d6ebd",
+    "file": "public/assets/exact-home.js",
+    "line": 12,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "  api('warzone').then(data=>{"
+  },
+  {
+    "id": "f7d7816c59a42a77662bdd999a1ad6eb",
+    "file": "functions/lib/competitions/bridge.js",
+    "line": 15,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method base64Url has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "function base64Url(bytes) {"
+  },
+  {
+    "id": "28cc3840616baa1f04e653edc4b2fc76",
+    "file": "functions/api/competitions/[slug]/submissions/[id]/contributors.js",
+    "line": 27,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method resolveOwner has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "async function resolveOwner(context) {"
+  },
+  {
+    "id": "3f5ca5c95543268671ad58a3e98a0700",
+    "file": "functions/lib/community/contracts.js",
+    "line": 62,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "  const items=input.items.map(row=>{"
+  },
+  {
+    "id": "785b34a752498f1c21c59a19dac673e3",
+    "file": "functions/api/competitions/[slug]/submissions/[id]/contributors.js",
+    "line": 109,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method inviteContributor has a cyclomatic complexity of 18 (limit is 8)",
+    "code": "async function inviteContributor(context, resolved, input) {"
+  },
+  {
+    "id": "6deec687a787366228d529ce198ea311",
+    "file": "functions/api/competitions/[slug]/submissions/[id]/contributors.js",
+    "line": 109,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method inviteContributor has 73 lines of code (limit is 50)",
+    "code": "async function inviteContributor(context, resolved, input) {"
+  },
+  {
+    "id": "6ed660bd6c21afa26d59e2a1758343ab",
+    "file": "functions/api/competitions/admin/[id]/submissions/[submissionId]/gallery.js",
+    "line": 71,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method onRequestPost has 134 lines of code (limit is 50)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "f2890e92b478a362d98d7bd985edb2a3",
+    "file": "public/assets/site-navigation.js",
+    "line": 66,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method normalizeSiteNavigation has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "export function normalizeSiteNavigation() {"
+  },
+  {
+    "id": "75ced237c391767af0e8a1095d8218c4",
+    "file": "public/assets/market/exact-view.js",
+    "line": 38,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method dir has a cyclomatic complexity of 16 (limit is 8)",
+    "code": "  function dir(p) { return p > 0.05 ? \"up\" : p < -0.05 ? \"down\" : \"flat\"; }"
+  },
+  {
+    "id": "6ae41af2b5d51b5a4516c966797ff847",
+    "file": "public/assets/competitions-admin.js",
+    "line": 431,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method updatePreview has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "function updatePreview() {"
+  },
+  {
+    "id": "7e5ad1de34d0c8beaf0e558f9dfaee96",
+    "file": "functions/api/competitions/admin/[id]/submissions/[submissionId]/_middleware.js",
+    "line": 24,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequest has a cyclomatic complexity of 16 (limit is 8)",
+    "code": "export async function onRequest(context) {"
+  },
+  {
+    "id": "2df419bfafe80d3b754be0ad5d5d8f26",
+    "file": "functions/lib/competitions/staff-conflicts.js",
+    "line": 36,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method staffSubmissionConflict has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "export async function staffSubmissionConflict(db, env, submission, staffUuid) {"
+  },
+  {
+    "id": "38c5318d319fa188666528f04cb6cc8",
+    "file": "functions/api/reviewer/appeals/[id]/claim.js",
+    "line": 9,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 19 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "e5ebbb0db02d0f9ea4588e4751d185b0",
+    "file": "functions/api/competitions/admin/[id]/audit.js",
+    "line": 16,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestGet has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function onRequestGet(context) {"
+  },
+  {
+    "id": "2e9795ec37e5f540c5137329fa90e366",
+    "file": "public/assets/competitions-participant.js",
+    "line": 308,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method validateDraftPayload has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "function validateDraftPayload(wizard, requireLocation = true) {"
+  },
+  {
+    "id": "ee00384e57e10bdb6d14127847c5f3be",
+    "file": "public/assets/market/market-api-client.js",
+    "line": 68,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 12 (limit is 8)",
+    "code": "    return stall.shops.length <= 256 && stall.shops.every(shop => isObject(shop) && isPositive(shop.id) && isObject(shop.owner) && isBoundedString(shop.owner.name, 64) && [\"BUY\", \"SELL\", \"TRADE\"].includes(shop.direction) && validItem(shop.sellItem) && isPositive(shop.sellAmount) && validItem(shop.costItem) && isPositive(shop.costAmount) && validLocation(shop.interaction) && isInteger(shop.stockCount) && isInteger(shop.availableTrades));"
+  },
+  {
+    "id": "7f4cb00d69f8c5d311813bacdd60ce7f",
+    "file": "public/assets/exact-directory.js",
+    "line": 64,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method start has a cyclomatic complexity of 24 (limit is 8)",
+    "code": "async function start(){"
+  },
+  {
+    "id": "53f53a1764df37d6d93f76e20ff1820e",
+    "file": "functions/lib/competitions/discord-notifications.js",
+    "line": 20,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method staffWebhookConfiguration has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "function staffWebhookConfiguration(env) {"
+  },
+  {
+    "id": "d6415e14a1b887206aeb70411477f111",
+    "file": "public/assets/market/exact-view.js",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File public/assets/market/exact-view.js has 560 non-comment lines of code",
+    "code": "/* Market insights (Stall of the Week + Price Tracker). Stand-in data; the real page loads the same shapes from the market API."
+  },
+  {
+    "id": "d8f70d31e659773486247ae6b28bdef",
+    "file": "functions/lib/competitions/rate-limit.js",
+    "line": 81,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method rateLimitHeaders has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "export function rateLimitHeaders(result) {"
+  },
+  {
+    "id": "445c1e99650fc21fe7abc7f4c9263cf5",
+    "file": "public/assets/competitions-auth.js",
+    "line": 150,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method render has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "  async function render({ refresh = false } = {}) {"
+  },
+  {
+    "id": "e01728c8907179d4efc053c2c81c147c",
+    "file": "functions/lib/competitions/submission-media.js",
+    "line": 240,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method removeSubmissionImage has 119 lines of code (limit is 50)",
+    "code": "export async function removeSubmissionImage(db, removal) {"
+  },
+  {
+    "id": "7953c15322a7eb3b5331e1b38e8292ba",
+    "file": "public/assets/competitions-admin.js",
+    "line": 128,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method createLifecyclePanel has 74 lines of code (limit is 50)",
+    "code": "function createLifecyclePanel() {"
+  },
+  {
+    "id": "b2ed9aa3e72c7b29d78a58c98b65405d",
+    "file": "functions/api/competitions/admin/[id]/rewards.js",
+    "line": 74,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestGet has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function onRequestGet(context) {"
+  },
+  {
+    "id": "6e3d3059ec2625fb237af62a3b5066eb",
+    "file": "public/assets/exact-home.js",
+    "line": 19,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "  Promise.allSettled([fetch('/api/competitions').then(r=>{if(!r.ok)throw new Error();return r.json();}),api('news')]).then(([competition,news])=>{"
+  },
+  {
+    "id": "28d3e6421c76297bc193d9202a1616b5",
+    "file": "public/assets/appeal-markup.js",
+    "line": 1,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method appealPlainText has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "export function appealPlainText(value) {"
+  },
+  {
+    "id": "b75ef9bf266d195551a36304986b44fd",
+    "file": "public/preview/fixtures.js",
+    "line": 64,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method previewApi has a cyclomatic complexity of 19 (limit is 8)",
+    "code": "function previewApi(url) {"
+  },
+  {
+    "id": "b6b1e7d63befc811b60548e14dece0e1",
+    "file": "public/assets/market/exact-view.js",
+    "line": 38,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method dir has 65 lines of code (limit is 50)",
+    "code": "  function dir(p) { return p > 0.05 ? \"up\" : p < -0.05 ? \"down\" : \"flat\"; }"
+  },
+  {
+    "id": "1c82ca1136c0b974cf74d450f340130e",
+    "file": "public/assets/market/insights.js",
+    "line": 49,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method render has a cyclomatic complexity of 16 (limit is 8)",
+    "code": "async function render(){"
+  },
+  {
+    "id": "81177ad9478070c184fc2d8c5bb987a6",
+    "file": "public/assets/competitions-judge.js",
+    "line": 91,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method renderScoreForm has 69 lines of code (limit is 50)",
+    "code": "function renderScoreForm(workspace, entry, root) {"
+  },
+  {
+    "id": "b192a8cc93d4e9035f84652c88cd7dd9",
+    "file": "public/assets/competitions.js",
+    "line": 677,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderRewardsTab has a cyclomatic complexity of 24 (limit is 8)",
+    "code": "function renderRewardsTab(root, payload) {"
+  },
+  {
+    "id": "cac4c05a8b24035292ee4296cdb012e",
+    "file": "public/assets/competitions-appearance.js",
+    "line": 76,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method decorateFeatured has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "function decorateFeatured(root, competition) {"
+  },
+  {
+    "id": "d3b9beb44b0f33cfdfdcd1001a49d3a8",
+    "file": "functions/lib/community/service.js",
+    "line": 121,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method handleCommunity has 55 lines of code (limit is 50)",
+    "code": "export async function handleCommunity(context,dependencies={editor,identity}){"
+  },
+  {
+    "id": "9c883654d03c9375158ea52c790aec9b",
+    "file": "functions/lib/competitions/repository.js",
+    "line": 54,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method createDraftCompetition has 65 lines of code (limit is 50)",
+    "code": "export async function createDraftCompetition(db, draft) {"
+  },
+  {
+    "id": "6204ff830c7038da2644bae32477b0dc",
+    "file": "public/assets/exact-directory.js",
+    "line": 47,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "  let rows=items.filter(item=>item.name.toLowerCase().includes(q.toLowerCase())&&(filter==='all'||item.state===filter||(filter==='recruiting'&&item.recruiting)||(filter==='peaceful'&&item.peaceful===true)||(filter==='hostile'&&item.peaceful===false)));"
+  },
+  {
+    "id": "59b9b9880f39b62e040873f265b430f8",
+    "file": "public/assets/competitions-appearance.js",
+    "line": 55,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method decorateCatalogCard has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "function decorateCatalogCard(card, competition) {"
+  },
+  {
+    "id": "3e26f895c674f0e6868e088341d08de3",
+    "file": "tests/appeal-repository.test.mjs",
+    "line": 153,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method (anonymous) has 66 lines of code (limit is 50)",
+    "code": "test(\"players can read status and ordered appeal messages without seeing another account\", async () => {"
+  },
+  {
+    "id": "7e4fe48550cd2854385c5b9a76a8e821",
+    "file": "functions/lib/competitions/results.js",
+    "line": 35,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method resultPublicationReadiness has 73 lines of code (limit is 50)",
+    "code": "export async function resultPublicationReadiness(db, competitionId) {"
+  },
+  {
+    "id": "3a94bc30ca49b905017fdc9074c06c77",
+    "file": "public/preview/design-reference/mock/timeline.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "5a7427a57e22d38e30f46545ff61e7e0",
+    "file": "functions/api/competitions/admin/[id]/standings.js",
+    "line": 103,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method onRequestPost has 56 lines of code (limit is 50)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "560415b45dbec9eaae64f699a99381aa",
+    "file": "public/assets/competitions-participant-dnd.js",
+    "line": 1,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method setWizardMessage has a cyclomatic complexity of 24 (limit is 8)",
+    "code": "function setWizardMessage(row, text, kind = \"\") {"
+  },
+  {
+    "id": "8e02cdfedfd4b8052388acb00645fed3",
+    "file": "functions/api/competitions/admin/[id]/results/index.js",
+    "line": 75,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method onRequestPost has 83 lines of code (limit is 50)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "aebc58c549a4daa3e32897cb5dd4b949",
+    "file": "public/preview/design-reference/mock/newseditor.js",
+    "line": 21,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method mdInline has 102 lines of code (limit is 50)",
+    "code": "    var mdInline = function (s) {"
+  },
+  {
+    "id": "f6a7ec4261a2354c82f8376c3fe230ef",
+    "file": "public/assets/exact-directory.js",
+    "line": 50,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 23 (limit is 8)",
+    "code": "  replace(type,rows.map((item,index)=>{"
+  },
+  {
+    "id": "4d1e18c3ee280d960860f7070e799ad9",
+    "file": "public/assets/site-account.js",
+    "line": 154,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method renderAccount has 56 lines of code (limit is 50)",
+    "code": "async function renderAccount(root, session) {"
+  },
+  {
+    "id": "4b5572f1f70f7734cfd034b10d0692a4",
+    "file": "public/assets/competitions-participant.js",
+    "line": 288,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method getLocationFromForm has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "function getLocationFromForm(wizard) {"
+  },
+  {
+    "id": "ea2b33f80812e99116fbf563c380b7b",
+    "file": "public/assets/competitions-admin-media.js",
+    "line": 64,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method sanitizeImage has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "async function sanitizeImage(file) {"
+  },
+  {
+    "id": "7b4d6a4f171360a2852b505eb4a0086f",
+    "file": "public/assets/competitions-admin-workspace.js",
+    "line": 631,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method loadResults has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "async function loadResults() {"
+  },
+  {
+    "id": "416e6293a77fc6b68cec317a8b6c1210",
+    "file": "public/assets/competitions-judge.js",
+    "line": 162,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method (anonymous) has 51 lines of code (limit is 50)",
+    "code": "  save.addEventListener(\"click\", async () => {"
+  },
+  {
+    "id": "d86d3fe93e7d63739b031a9a77a76ef7",
+    "file": "public/preview/design-reference/mock/home-christmas.js",
+    "line": 18,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method renderVals has 96 lines of code (limit is 50)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "572e256491f5927642f5f46d60a4c53d",
+    "file": "functions/lib/competitions/judges.js",
+    "line": 79,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method assignCompetitionJudge has 51 lines of code (limit is 50)",
+    "code": "export async function assignCompetitionJudge(db, assignment) {"
+  },
+  {
+    "id": "bdbb942e3ec3b6033ba99fa9ceb38082",
+    "file": "public/assets/competitions-judge.js",
+    "line": 289,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method initJudgeWorkspace has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "async function initJudgeWorkspace() {"
+  },
+  {
+    "id": "7d7aa85837fa5aecf478d3a91ff40498",
+    "file": "functions/api/competitions/admin/[id]/results/index.js",
+    "line": 75,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 23 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "e7836a768b9625152c240393660cc78f",
+    "file": "functions/lib/appeal-notifications.js",
+    "line": 138,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method drainAppealDiscordNotifications has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "export async function drainAppealDiscordNotifications(env, db, { limit = 25, fetchImpl = fetch } = {}) {"
+  },
+  {
+    "id": "246e689bb7521be2d6b5f3b21e0ff8c2",
+    "file": "public/preview/design-reference/mock/market-insights.js",
+    "line": 132,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method sl has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "  function sl(name) { var m = sid(name).match(/\\d+/); return m ? \"Stall \" + m[0] : \"Stall\"; }"
+  },
+  {
+    "id": "878e001ab81b61f91b60b7db2717d650",
+    "file": "public/assets/competitions-participant.js",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File public/assets/competitions-participant.js has 1007 non-comment lines of code",
+    "code": "const API_ROOT = \"/api/competitions\";"
+  },
+  {
+    "id": "6ccb038cc11733566f5961316b426cf4",
+    "file": "public/assets/exact-controls/home-christmas.js",
+    "line": 18,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method renderVals has 96 lines of code (limit is 50)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "d6d2808908d976ae349b1070d6a97e18",
+    "file": "functions/lib/competitions/media-storage.js",
+    "line": 105,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method storePreparedCompetitionImage has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export async function storePreparedCompetitionImage(bucket, prepared) {"
+  },
+  {
+    "id": "673c132ab58c148eebd9b1ebda94b10b",
+    "file": "public/assets/exact-gallery.js",
+    "line": 2,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method start has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "async function start(){"
+  },
+  {
+    "id": "cb0234a3a14877daf369fea7d330a116",
+    "file": "functions/lib/community/service.js",
+    "line": 36,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method saveRecord has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "async function saveRecord(db,input,actor){"
+  },
+  {
+    "id": "fa3fe0c97e62219e95da3892abbb44b8",
+    "file": "functions/lib/competitions/discord-notifications.js",
+    "line": 44,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method discordBotConfiguration has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "function discordBotConfiguration(env) {"
+  },
+  {
+    "id": "5502e91183d695965e4cbd8755f81980",
+    "file": "functions/lib/community/service.js",
+    "line": 121,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method handleCommunity has a cyclomatic complexity of 53 (limit is 8)",
+    "code": "export async function handleCommunity(context,dependencies={editor,identity}){"
+  },
+  {
+    "id": "f300a1686151279706adf26eacc07c17",
+    "file": "public/preview/design-reference/mock/guilds.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 18 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "f1720536a19dd276ac14d18b941c5881",
+    "file": "functions/api/reviewer/appeals/[id]/reopen.js",
+    "line": 11,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 19 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "8b686c2a786894c780d7c00bca758521",
+    "file": "public/preview/design-reference/mock/bounties.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 13 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "7520c52a5cfb7dd6c798fab99e6c4b63",
+    "file": "public/assets/exact-collections.js",
+    "line": 45,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method start has a cyclomatic complexity of 41 (limit is 8)",
+    "code": "async function start(){"
+  },
+  {
+    "id": "baaa99a70d7faca854d126323e36df54",
+    "file": "functions/lib/competitions/results.js",
+    "line": 147,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method publishProvisionalResults has 79 lines of code (limit is 50)",
+    "code": "export async function publishProvisionalResults(db, publication) {"
+  },
+  {
+    "id": "2aa13e505e37d9dde6ba2090f3927ecc",
+    "file": "public/assets/competitions-admin-tools.js",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File public/assets/competitions-admin-tools.js has 507 non-comment lines of code",
+    "code": "const ROOT = \"/api/competitions/admin\";"
+  },
+  {
+    "id": "df4758a4031839c512944cb58a2e7ae9",
+    "file": "public/assets/reviewer-appeals-lifecycle.js",
+    "line": 136,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method decorateCard has a cyclomatic complexity of 17 (limit is 8)",
+    "code": "function decorateCard(card, appeal, canReopen) {"
+  },
+  {
+    "id": "9b36724bd42aed6b19f4e1fc63bc0c4",
+    "file": "functions/api/gallery/staff/submissions/[id].js",
+    "line": 7,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPatch has a cyclomatic complexity of 31 (limit is 8)",
+    "code": "export async function onRequestPatch(context) {"
+  },
+  {
+    "id": "a3064c8a5ead00d9d1b2cf8645649c24",
+    "file": "functions/lib/competitions/reward-plans.js",
+    "line": 154,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method planRewardForResult has 62 lines of code (limit is 50)",
+    "code": "export function planRewardForResult(reward, context, { guildMemberUuids = null } = {}) {"
+  },
+  {
+    "id": "533b80d188c3bf77fca291e600372273",
+    "file": "public/assets/exact-events.js",
+    "line": 4,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method start has a cyclomatic complexity of 18 (limit is 8)",
+    "code": "async function start(){"
+  },
+  {
+    "id": "6ad46d2cc4795ea62d382f9718a0129",
+    "file": "public/assets/exact-controls/museum.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "b67ba6e62afb2bfb0732ea81749c5c2a",
+    "file": "functions/lib/appeal-email-auth.js",
+    "line": 53,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method normalizeAppealEmail has 198 lines of code (limit is 50)",
+    "code": "export function normalizeAppealEmail(value) {"
+  },
+  {
+    "id": "614f5f2f00cf9ef6ab7ea69eeb34b788",
+    "file": "public/assets/exact-controls/guide.js",
+    "line": 3,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 16 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "1743344bf03c5ae1205395aae7a1033a",
+    "file": "public/preview/design-reference/preview/mock.js",
+    "line": 58,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method (anonymous) has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "      bound.forEach(function (item) {"
+  },
+  {
+    "id": "43e646426b4a34273b468d01b0adeb07",
+    "file": "functions/lib/competitions/config.js",
+    "line": 426,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method sanitizeCompetitionConfig has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "export function sanitizeCompetitionConfig(input) {"
+  },
+  {
+    "id": "36fd2fada067b05ad95669bda858f9ae",
+    "file": "public/assets/competitions-participant.js",
+    "line": 363,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method setWizardMessage has a cyclomatic complexity of 30 (limit is 8)",
+    "code": "function setWizardMessage(wizard, message, kind = \"\") {"
+  },
+  {
+    "id": "c9fedf27236202cb852305ae3145a7eb",
+    "file": "public/assets/appeals.js",
+    "line": 640,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method loadSession has 60 lines of code (limit is 50)",
+    "code": "async function loadSession() {"
+  },
+  {
+    "id": "e5121ac1f007a0ea22fe8c2580916992",
+    "file": "public/assets/exact-controls/home-christmas.js",
+    "line": 18,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderVals has a cyclomatic complexity of 19 (limit is 8)",
+    "code": "  renderVals() {"
+  },
+  {
+    "id": "6d49b7690436c99ce63b8d31defa567a",
+    "file": "public/assets/competitions-admin-workspace.js",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File public/assets/competitions-admin-workspace.js has 983 non-comment lines of code",
+    "code": "const ROOT = \"/api/competitions/admin\";"
+  },
+  {
+    "id": "e5a3bdef8e5cfea9e78014b26e12047",
+    "file": "functions/lib/appeal-bindings.js",
+    "line": 47,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method sanitizePunishmentBinding has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "export function sanitizePunishmentBinding(value) {"
+  },
+  {
+    "id": "d5c52c30f326f58548a5ed4942b11732",
+    "file": "functions/api/appeals/attachments.js",
+    "line": 67,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 17 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "94cc9a39ac614afce7a9a8ee43631da6",
+    "file": "functions/lib/competitions/discord-notifications.js",
+    "line": 96,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method webhookPayload has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "function webhookPayload(env, notification, config) {"
+  },
+  {
+    "id": "d586da9103f055dffe4daa80539f1638",
+    "file": "public/assets/competitions-judge.js",
+    "line": 217,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method renderJudgePanel has a cyclomatic complexity of 10 (limit is 8)",
+    "code": "function renderJudgePanel(workspace, panel) {"
+  },
+  {
+    "id": "8fd90a65c169622e07f11f59f8186808",
+    "file": "public/assets/exact-directory.js",
+    "line": 18,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method hydrateProfile has a cyclomatic complexity of 30 (limit is 8)",
+    "code": "function hydrateProfile(node,item){"
+  },
+  {
+    "id": "eb36f607cfc3f0fe973ad4fc2e1bff9",
+    "file": "public/assets/competitions-admin-workspace.js",
+    "line": 922,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method rewardSummary has a cyclomatic complexity of 11 (limit is 8)",
+    "code": "function rewardSummary(definition) {"
+  },
+  {
+    "id": "435a989fd93b9b7fa20e2deb556e5437",
+    "file": "public/assets/appeals.js",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File public/assets/appeals.js has 744 non-comment lines of code",
+    "code": "import { appealPlainText, renderAppealMarkup } from \"./appeal-markup.js\";"
+  },
+  {
+    "id": "130337845624b881114363f776f18ffe",
+    "file": "functions/lib/community/contracts.js",
+    "line": 31,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method validateRecord has a cyclomatic complexity of 14 (limit is 8)",
+    "code": "export function validateRecord(input) {"
+  },
+  {
+    "id": "7342501dd66a927c83647056eddff91d",
+    "file": "functions/lib/competitions/staff-submission-moderation.js",
+    "line": 163,
+    "pattern": "Lizard_nloc-medium",
+    "message": "Method moderateSubmission has 108 lines of code (limit is 50)",
+    "code": "export async function moderateSubmission(db, decision) {"
+  },
+  {
+    "id": "a4fc452642abd2046671cdfccfcff43f",
+    "file": "functions/api/competitions/admin/[id]/judges.js",
+    "line": 75,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method onRequestPost has a cyclomatic complexity of 30 (limit is 8)",
+    "code": "export async function onRequestPost(context) {"
+  },
+  {
+    "id": "da52fe5a753b6712042c873ff3215105",
+    "file": "public/assets/market/exact-insights.js",
+    "line": 10,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method start has a cyclomatic complexity of 9 (limit is 8)",
+    "code": "async function start(){"
+  },
+  {
+    "id": "faea53294425c603a1ccb8d1990a1390",
+    "file": "migrations/0031_appeal_discord_notifications.sql",
+    "line": 1,
+    "pattern": "SQLint_allIssues",
+    "message": "syntax error at or near \"PRAGMA\"",
+    "code": "PRAGMA foreign_keys = ON;"
+  },
+  {
+    "id": "23b7063ad0584748ca0f1c0e1a3876c3",
+    "file": "migrations/0034_appeal_email_identity.sql",
+    "line": 1,
+    "pattern": "SQLint_allIssues",
+    "message": "syntax error at or near \"PRAGMA\"",
+    "code": "PRAGMA foreign_keys = ON;"
+  },
+  {
+    "id": "e020529ac16e83f94345e77e5f09d643",
+    "file": "migrations/0033_appeal_claim_lifecycle.sql",
+    "line": 1,
+    "pattern": "SQLint_allIssues",
+    "message": "syntax error at or near \"PRAGMA\"",
+    "code": "PRAGMA foreign_keys = ON;"
+  },
+  {
+    "id": "bf730e4e99b14d6e695f4c5c98415321",
+    "file": "migrations/0034_appeal_email_identity.sql",
+    "line": 69,
+    "pattern": "SQLint_allIssues",
+    "message": "syntax error at or near \"PRAGMA\"",
+    "code": "PRAGMA optimize;"
+  },
+  {
+    "id": "fba330207043bd320fa99faae929abd",
+    "file": "migrations/0031_appeal_discord_notifications.sql",
+    "line": 53,
+    "pattern": "SQLint_allIssues",
+    "message": "syntax error at or near \"PRAGMA\"",
+    "code": "PRAGMA optimize;"
+  },
+  {
+    "id": "c93d2bada1ea786e7e86e4b27399458d",
+    "file": "migrations/0031_appeal_discord_notifications.sql",
+    "line": 30,
+    "pattern": "SQLint_allIssues",
+    "message": "syntax error at or near \"NEW\"",
+    "code": "WHEN NEW.author_type = 'STAFF'"
+  },
+  {
+    "id": "b377423776e6980b1bbb5a13b7f2cb3d",
+    "file": "migrations/0032_appeal_punishment_bindings.sql",
+    "line": 21,
+    "pattern": "SQLint_allIssues",
+    "message": "syntax error at or near \"PRAGMA\"",
+    "code": "PRAGMA optimize;"
+  },
+  {
+    "id": "4c149eb9ad7d9ac60ea6b0d02eb12616",
+    "file": "migrations/0032_appeal_punishment_bindings.sql",
+    "line": 1,
+    "pattern": "SQLint_allIssues",
+    "message": "syntax error at or near \"PRAGMA\"",
+    "code": "PRAGMA foreign_keys = ON;"
+  },
+  {
+    "id": "1b75cadc2dd6dede36bb017ef96d3e9e",
+    "file": "migrations/community/0001_community.sql",
+    "line": 13,
+    "pattern": "SQLint_allIssues",
+    "message": "syntax error at or near \"AUTOINCREMENT\"",
+    "code": " id INTEGER PRIMARY KEY AUTOINCREMENT, actor TEXT NOT NULL, action TEXT NOT NULL,"
+  },
+  {
+    "id": "e51c533b87d3ac5eeeabc10b9e1dee46",
+    "file": "migrations/0033_appeal_claim_lifecycle.sql",
+    "line": 7,
+    "pattern": "SQLint_allIssues",
+    "message": "syntax error at or near \";\"",
+    "code": "DROP TRIGGER IF EXISTS appeal_submission_payload_immutable;"
+  },
+  {
+    "id": "da9922607b53e56e63f2e3843799462e",
+    "file": "package-lock.json",
+    "line": 1,
+    "pattern": "Lizard_file-nloc-medium",
+    "message": "File package-lock.json has 1252 non-comment lines of code",
+    "code": "{"
+  }
+]

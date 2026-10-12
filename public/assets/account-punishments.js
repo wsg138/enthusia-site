@@ -33,7 +33,7 @@ async function api(path, options = {}) {
 function stateText(binding) {
   if (binding.eligibilityState === "CODE_ROTATED") return "Code changed — bind the latest punishment code again.";
   if (binding.eligible) return "Ready to appeal";
-  return String(binding.eligibilityState || "Not eligible").replaceAll("_", " ").toLowerCase();
+  return String(binding.eligibilityState || "Not eligible").replace(/_/g, " ").toLowerCase();
 }
 
 function errorText(error) {

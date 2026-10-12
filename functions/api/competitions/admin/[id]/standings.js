@@ -100,43 +100,25 @@ export async function onRequestGet(context) {
   }
 }
 
-export async function onRequestPost(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-  const id = competitionId(context);
-  if (!id) return json({ error: "competition_not_found" }, 404);
-  const authorized = await authorizeManager(context);
-  if (authorized.response) return authorized.response;
-
+async function standingsInput(request) {
   let input;
   try {
-    input = await context.request.json();
+    input = await request.json();
   } catch {
     input = null;
   }
   const operationId = String(input?.idempotencyKey ?? "").trim().toLowerCase();
-  if (!isCanonicalUuid(operationId)) return json({ error: "idempotency_key_required" }, 400);
+  if (!isCanonicalUuid(operationId)) return { response: json({ error: "idempotency_key_required" }, 400) };
   const tieOrder = input?.tieOrder ?? null;
   if (tieOrder !== null && (!tieOrder || typeof tieOrder !== "object" || Array.isArray(tieOrder))) {
-    return json({ error: "invalid_tiebreak_order" }, 400);
+    return { response: json({ error: "invalid_tiebreak_order" }, 400) };
   }
 
-  try {
-    const competition = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
-    if (!competition) return json({ error: "competition_not_found" }, 404);
-    if (competition.lifecycleState !== "RESULTS_READY") {
-      return json({ error: "results_not_ready_for_review", lifecycleState: competition.lifecycleState }, 409);
-    }
+  return { operationId, tieOrder };
+}
 
-    const computed = await compute(context, competition, tieOrder);
-    if (!computed.ready) {
-      return json({
-        error: "provisional_results_not_ready",
-        errors: computed.errors,
-        unresolvedTies: computed.unresolvedTies,
-        standings: computed.standings
-      }, 409);
-    }
-
+async function saveStandings(context, competition, authorized, operationId, computed) {
+    const id = competition.id;
     const now = new Date().toISOString();
     const replacement = await replaceProvisionalResultSet(context.env.COMPETITIONS_DB, {
       competitionId: id,
@@ -160,12 +142,44 @@ export async function onRequestPost(context) {
     if (replacement.status === "CONFLICT") return json({ error: "results_state_conflict" }, 409);
     const saved = await listProvisionalResults(context.env.COMPETITIONS_DB, id);
     return json({ status: replacement.status, computed, saved });
+}
+
+async function updateStandings(context, id, authorized, { operationId, tieOrder }) {
+  try {
+    const competition = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
+    if (!competition) return json({ error: "competition_not_found" }, 404);
+    if (competition.lifecycleState !== "RESULTS_READY") {
+      return json({ error: "results_not_ready_for_review", lifecycleState: competition.lifecycleState }, 409);
+    }
+
+    const computed = await compute(context, competition, tieOrder);
+    if (!computed.ready) {
+      return json({
+        error: "provisional_results_not_ready",
+        errors: computed.errors,
+        unresolvedTies: computed.unresolvedTies,
+        standings: computed.standings
+      }, 409);
+    }
+
+    return await saveStandings(context, competition, authorized, operationId, computed);
   } catch (error) {
     if (error instanceof TypeError || error instanceof RangeError) {
       return json({ error: "invalid_standings_configuration", detail: String(error.message) }, 400);
     }
     return json({ error: "competition_standings_update_failed", detail: String(error?.message ?? error) }, 503);
   }
+}
+
+export async function onRequestPost(context) {
+  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+  const id = competitionId(context);
+  if (!id) return json({ error: "competition_not_found" }, 404);
+  const authorized = await authorizeManager(context);
+  if (authorized.response) return authorized.response;
+  const input = await standingsInput(context.request);
+  if (input.response) return input.response;
+  return updateStandings(context, id, authorized, input);
 }
 
 export function onRequest() {

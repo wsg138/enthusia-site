@@ -24,16 +24,13 @@ def _trusted_https_url(value, expected, label):
         port = parsed.port
     except ValueError as exc:
         raise ValueError(f'{label} has an invalid port') from exc
-    if (
-        parsed.scheme != 'https'
-        or parsed.hostname != expected_parts.hostname
-        or port not in (None, 443)
-        or parsed.username
-        or parsed.password
-        or parsed.path != expected_parts.path
-        or parsed.query
-        or parsed.fragment
-    ):
+    authority = (parsed.scheme, parsed.hostname, port, parsed.username, parsed.password)
+    allowed_authorities = (
+        ('https', expected_parts.hostname, None, None, None),
+        ('https', expected_parts.hostname, 443, None, None),
+    )
+    resource = (parsed.path, parsed.query, parsed.fragment)
+    if authority not in allowed_authorities or resource != (expected_parts.path, '', ''):
         raise ValueError(f'{label} must be {expected}')
     return urlunsplit(('https', expected_parts.hostname, expected_parts.path, '', ''))
 
