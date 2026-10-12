@@ -64,7 +64,7 @@ export function projectSnapshot(kind,input) {
     const base={id,name:text(row.name,80,true),description:text(row.description,2000)};
     if(kind==='guilds')return {...base,level:number(row.level),members:number(row.members,20000),elo:number(row.elo),recruiting:typeof row.recruiting==='boolean'?row.recruiting:null,peaceful:typeof row.peaceful==='boolean'?row.peaceful:null,membersList:memberNames(row.membersList),banner:banner(row.banner),links:links(row.links)};
     if(kind==='players')return {...base,guild:text(row.guild,80),rank:text(row.rank,80),playtime:number(row.playtime),balance:number(row.balance),reputation:number(row.reputation),achievements:memberNames(row.achievements),links:links(row.links)};
-    if(kind==='warzone'){if(!['kit','leader','activity'].includes(row.type))throw new Error('invalid_warzone_type');return {...base,type:row.type,kills:number(row.kills,1e9),endsAt:timestamp(row.endsAt),target:publicUrl(row.target)};}
+    if(kind==='warzone'){if(!['kit','leader','activity'].includes(row.type))throw new Error('invalid_warzone_type');const wins=number(row.wins,1e9);if(wins!==null&&!Number.isInteger(wins))throw new Error('invalid_wins');return {...base,type:row.type,kills:number(row.kills,1e9),wins,endsAt:timestamp(row.endsAt),target:publicUrl(row.target)};}
     if(kind==='bounties')return {...base,gold:number(row.gold),state:['open','claimed','expired'].includes(row.state)?row.state:'open',hunter:text(row.hunter,80),expiresAt:timestamp(row.expiresAt)};
     return {...base,category:text(row.category,80),reward:text(row.reward,200),completed:number(row.completed,1e8)};
   });

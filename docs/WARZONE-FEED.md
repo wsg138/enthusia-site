@@ -1,0 +1,11 @@
+# Warzone feed integration
+
+Requirement: display the actual combat meta and rotation deadline, next meta, and the user's chosen leaderboard: counted WarzoneDuels match wins for a UTC Monday week. Do not label wins as kills, promise weekly kit changes, invent live events, or treat missing/stale data as current. Preserve the established cream/red/gold theme. No new PR is requested.
+
+SPEAR proof: production has no warzone community_snapshots row and GET /api/community/warzone returns 503. Canonical website main cdcd8aa contains a signed snapshot receiver but no server producer. The current source starts from the published Christmas removal/background work. No local EARS/state helpers exist; manual evidence is here. Implement additive wins contract, dedicated renderer and public-data projection tests. Preview states cover connected, no counted wins, stale and unavailable using explicit sample data.
+
+Server sources: wsg138/WarzoneRotator main d14cd015052b862649403380ca8ecdc821412af8 owns runtime metas/deadlines. wsg138/WarzoneDuels main 480a365188b38b130ae384ea8495293f7428d77f owns timestamped H2 match analytics. Companion source branches add the opt-in producer and read-only weekly winner bridge. Existing match semantics count KILL and DISCONNECT_TIMEOUT wins; draws have no winner and administrative/server cancellations are not counted.
+
+Activation requires both source changes merged and the network's plugin pins updated, a clean canonical build, verified runtime configuration, shared COMMUNITY_INGEST_SECRET in server environment and Cloudflare, website deployment and one verified signed ingest. Do not reuse Discord credentials. No production writes, activation or restart have been performed during implementation.
+
+Verification: 493 website tests pass; lint, 115-page reference validation, static build and Cloudflare Functions compilation pass. Companion checks: 22 Rotator Kotlin tests plus detekt/ktlint/coverage/shadowJar; 36 Duels tests plus Maven verify. Signed Java request matches the website verifier's independent HMAC vector; tampering is rejected. No live server/database mutation or Cloudflare publication has occurred.
