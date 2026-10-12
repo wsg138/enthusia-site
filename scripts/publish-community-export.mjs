@@ -9,11 +9,11 @@ const url=new URL('/api/community/ingest',site);
 if(url.protocol!=='https:'||url.username||url.password)throw new Error('An HTTPS site origin is required.');
 const secret=process.env.COMMUNITY_INGEST_SECRET;
 if(!secret||secret.length<32)throw new Error('Set COMMUNITY_INGEST_SECRET for this explicit publish invocation.');
-const input=JSON.parse(await readFile(file,'utf8'));
+let input=JSON.parse(await readFile(file,'utf8'));
 if(input.kind==='sales'){
   if(!Array.isArray(input.items)||input.items.length>250)throw new Error('Sales batches must contain at most 250 events.');
   input.items=input.items.map(item=>validateSale(item));
-}else input.items=projectSnapshot(input.kind,input).items;
+}else input={kind:input.kind,...projectSnapshot(input.kind,input)};
 const body=JSON.stringify(input);if(new TextEncoder().encode(body).length>150000)throw new Error('Export exceeds the request size limit.');
 const timestamp=String(Date.now()),nonce=randomBytes(16).toString('hex'),encoder=new TextEncoder();
 const key=await crypto.subtle.importKey('raw',encoder.encode(secret),{name:'HMAC',hash:'SHA-256'},false,['sign']);

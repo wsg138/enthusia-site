@@ -1,5 +1,6 @@
 export const CONTENT_KINDS = new Set(['news','changelog','roadmap','timeline','halloffame','creators','museum','achievements','polls']);
-export const SNAPSHOT_KINDS = new Set(['guilds','players','bounties','achievements','warzone']);
+import { projectGuildQuests } from '../../../public/assets/guild-quests-model.js';
+export const SNAPSHOT_KINDS = new Set(['guilds','players','bounties','achievements','warzone','guildquests']);
 export function text(value, max=200, required=false) {
   if (value === undefined || value === null) { if(required) throw new Error('missing_text'); return ''; }
   if(typeof value !== 'string' || value.length>max || (required&&!value.trim())) throw new Error('invalid_text');
@@ -57,6 +58,7 @@ function banner(input){
   return {baseColor:input.baseColor,patterns:input.patterns.map(p=>{if(!dyes.has(p.color)||typeof p.type!=='string'||!/^[A-Z_]{1,40}$/.test(p.type))throw new Error('invalid_banner');return {type:p.type,color:p.color};})};
 }
 export function projectSnapshot(kind,input) {
+  if(kind==='guildquests')return projectGuildQuests(input);
   if(!SNAPSHOT_KINDS.has(kind)||!Array.isArray(input?.items)||input.items.length>1000)throw new Error('invalid_snapshot');
   const ids=new Set();
   const items=input.items.map(row=>{

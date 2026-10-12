@@ -100,9 +100,10 @@ async function ingest(db,request,env){
     statements=await salesStatements(db,input);
   }else{
     const snapshot=projectSnapshot(input.kind,input);
-    statements=[db.prepare('INSERT INTO community_snapshots(kind,payload,updated_at) VALUES (?,?,?) ON CONFLICT(kind) DO UPDATE SET payload=excluded.payload,updated_at=excluded.updated_at').bind(input.kind,JSON.stringify(snapshot),now)];
+    statements=[db.prepare(`INSERT INTO community_snapshots(kind,payload,updated_at) VALUES (?,?,?) ON CONFLICT(kind) DO UPDATE SET payload=excluded.payload,updated_at=excluded.updated_at
+      WHERE excluded.kind<>'guildquests' OR json_extract(excluded.payload,'$.generatedAt')>json_extract(community_snapshots.payload,'$.generatedAt')`).bind(input.kind,JSON.stringify(snapshot),now)];
   }
-  try{await db.batch([first,...statements,cleanup]);}catch(error){if(String(error).includes('UNIQUE'))return json({error:'producer_replay'},409);throw error;}
+  try{const result=await db.batch([first,...statements,cleanup]);if(input.kind==='guildquests'&&!result[1].meta.changes)return json({error:'stale_quest_snapshot'},409);}catch(error){if(String(error).includes('UNIQUE'))return json({error:'producer_replay'},409);throw error;}
   return json({ok:true,received:input.items.length});
 }
 function weekRange(value){
@@ -203,7 +204,7 @@ async function alertsRoute(context, parts, dependencies) {
 async function snapshotRoute(db, kind) {
   const row = await db.prepare('SELECT payload,updated_at FROM community_snapshots WHERE kind=?').bind(kind).first();
   if (row) return json({...projectSnapshot(kind,JSON.parse(row.payload)),updatedAt:row.updated_at,
-    stale:Date.now()-Date.parse(row.updated_at)>900000});
+    stale:Date.now()-Date.parse(JSON.parse(row.payload).generatedAt??row.updated_at)>900000});
   if (kind!=='achievements') return unavailable();
   const response = await recordList(db,'achievements',false);
   return json({...await response.json(),curated:true});

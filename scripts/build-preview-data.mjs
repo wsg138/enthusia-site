@@ -1,3 +1,4 @@
+import {guildQuestPreview} from './guild-quests-preview-data.mjs';
 import { initialCompetitionConfig } from '../functions/lib/competitions/config.js';
 import { publicCompetitionConfig } from '../functions/lib/competitions/public.js';
 import { readFile, writeFile } from 'node:fs/promises';
@@ -22,4 +23,5 @@ communityPreview.news={items:exactNews.posts};
 communityPreview.editorDraft=exactNews.editor;
 const referenceCompetitions=[{...base,id:'reference-build',slug:'build',title:'Build Competition',lifecycleState:'UPCOMING',visualVariant:'reference'},{...base,id:'reference-mapart',slug:'mapart',title:'Mapart Competition',lifecycleState:'UPCOMING',visualVariant:'reference'}];
 communityPreview.polls={items:[{kind:'polls',slug:'reference-poll',title:'[Poll question]',body:'[A sentence or two about what is being decided and why your vote matters.]',closesAt:'2099-10-25T00:00:00Z',options:['[Option one]','[Option two]','[Option three]']}]};
+communityPreview.guildquests=guildQuestPreview();
 await writeFile('public/preview/data.json',JSON.stringify({competitions,referenceCompetitions,adminConfig:config,community:communityPreview},null,2)+'\n');
