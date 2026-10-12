@@ -16,6 +16,12 @@ function request(db,path,method='GET',payload,extra={}){
   return handleCommunity({request:new Request('https://site.example/api/community/'+path,{method,headers:{origin:'https://site.example',...extra.headers},...(payload===undefined?{}:{body:JSON.stringify(payload)})}),params:{path},env:{COMMUNITY_DB:db,...extra.env}},extra.dependencies??dependencies);
 }
 const news={kind:'news',slug:'hello',title:'Hello',body:'**Hi**',status:'draft'};
+test('fresh guild association does not conceal stale balance and playtime in a stored profile',async()=>{
+  const {db}=database();const sourceUpdatedAt=new Date(Date.now()-3600000).toISOString();
+  await signed(db,{kind:'players',generatedAt:new Date().toISOString(),sourceUpdatedAt,items:[{id:'player',name:'Player',balance:42,guildsKnown:true,guildMemberships:[{id:'guild',name:'Guild'}]}]},'profile-fresh-guild-12345');
+  const profile=await(await request(db,'players')).json();assert.equal(profile.stale,true);assert.equal(profile.sourceUpdatedAt,sourceUpdatedAt);
+  assert.equal(profile.items[0].guildMemberships[0].name,'Guild');
+});
 
 test('dated public snapshots cannot be replaced by an older or undated signed export',async()=>{
   const {db}=database();const generatedAt=new Date(Date.now()-60000).toISOString();

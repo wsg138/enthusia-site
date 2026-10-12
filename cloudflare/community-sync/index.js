@@ -6,11 +6,11 @@ import { salesStatements,snapshotStatement } from '../../functions/lib/community
 const kinds=['guilds','guildquests','players','bounties','achievements','warzone'];
 async function synchronizeSnapshot(kind,env,fetchImpl) {
   let data=await readCommunityUpstream(kind,env,fetchImpl);
-  if(!data&&kind==='players')data=await readPublicPlayerDirectory(env);
+  if(!data&&kind==='players')data=await readPublicPlayerDirectory(env,Date.now(),fetchImpl);
   if(!data)return {kind,status:'unavailable'};
   // Use source time and public fields only. Partial board profiles retain their
   // coverage label rather than becoming a complete signed snapshot.
-  const snapshot={...projectSnapshot(kind,data),generatedAt:data.updatedAt,
+  const snapshot={...projectSnapshot(kind,data),generatedAt:data.generatedAt??data.updatedAt,
     ...(data.limited?{limited:true}:{}),...(data.source?{source:data.source}:{})};
   const result=await env.COMMUNITY_DB.batch([snapshotStatement(env.COMMUNITY_DB,kind,snapshot)]);
   return {kind,status:result[0].meta.changes?'updated':'unchanged',records:snapshot.items.length};

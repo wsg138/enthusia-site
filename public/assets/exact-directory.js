@@ -36,7 +36,16 @@ function hydrateProfile(node,item){
   if(kind==='guilds'){guildProfile(node,item);return;}
   if(kind==='players')playerProfile(node,item);
 }
-function choose(item){selected=item;const panel=clone('profile',item);if(panel){hydrateProfile(panel,item);replace('profile',[panel]);}for(const row of document.querySelectorAll('[data-record-id]'))row.setAttribute('aria-pressed',String(row.dataset.recordId===item.id));history.replaceState(null,'','#'+encodeURIComponent(item.id));}
+function choose(item){document.querySelector('[data-guild-lookup-missing]')?.remove();selected=item;const panel=clone('profile',item);if(panel){hydrateProfile(panel,item);replace('profile',[panel]);}for(const row of document.querySelectorAll('[data-record-id]'))row.setAttribute('aria-pressed',String(row.dataset.recordId===item.id));history.replaceState(null,'','#'+encodeURIComponent(item.id));}
+function selectGuildLink(id){
+  if(!id)return;
+  const guild=items.find(item=>item.id===id);if(guild){choose(guild);return;}
+  replace('profile',[]);selected=null;
+  for(const row of document.querySelectorAll('[data-record-id]'))row.setAttribute('aria-pressed','false');
+  document.querySelector('[data-guild-lookup-missing]')?.remove();
+  target('profile')?.before(el('p',{class:'exact-status',role:'status','data-guild-lookup-missing':'',text:'This guild is not included in the available directory export. Browse the guilds below.'}));
+  history.replaceState(null,'','#'+encodeURIComponent(id));
+}
 function pressed(node){for(const sibling of node.parentElement.querySelectorAll('button'))sibling.setAttribute('aria-pressed',String(sibling===node));}
 function draw(){
   let rows=items.filter(item=>item.name.toLowerCase().includes(q.toLowerCase())&&(filter==='all'||item.state===filter||(filter==='recruiting'&&item.recruiting)||(filter==='peaceful'&&item.peaceful===true)||(filter==='hostile'&&item.peaceful===false)));
@@ -68,10 +77,12 @@ async function start(){
   one('[data-on-click="find"]')?.addEventListener('click',()=>{const item=items.find(v=>v.name.toLowerCase().startsWith(q.toLowerCase()));if(item){choose(item);one('[data-b-class*="missShow"]').hidden=true;}else{const miss=one('[data-b-class*="missShow"]');miss.textContent='No public profile by that name.';miss.hidden=false;}});
   try{const data=await api(kind);items=data.items;limited=data.limited===true;
     if(kind==='guilds'&&!preview){for(const [action,key] of [['pickFRec','recruiting'],['pickFHos','peaceful'],['pickFPea','peaceful'],['pickSElo','elo']]){const control=one('[data-on-click="'+action+'"]');if(control&&!items.some(item=>item[key]!==null&&item[key]!==undefined)){control.disabled=true;control.title='Server data for this filter is not available yet.';}}for(const live of document.querySelectorAll('main .live'))if(limited)live.parentElement.textContent='Limited server export';}
-    if(kind==='players'&&!preview){const picker=target('picker');picker?.setAttribute('aria-label','Public profiles');picker?.before(el('p',{text:'Search '+items.length+' public profiles. Up to 12 matching names are shown.'}));}
+    if(kind==='players'&&!preview){const picker=target('picker');picker?.setAttribute('aria-label','Public profiles');picker?.before(el('p',{text:'Search '+items.filter(item=>!item.previewExample).length+' public profiles. Up to 12 matching names are shown.'}));}
+    const requestedGuildId=kind==='guilds'?decodeURIComponent(location.hash.slice(1)):'';
     draw();if(kind==='players'&&items.length)choose(items.find(item=>item.id===decodeURIComponent(location.hash.slice(1)))??items[0]);
     if(kind==='bounties'){const open=items.filter(v=>v.state==='open');const values=[open.length,open.reduce((sum,item)=>sum+(item.gold??0),0).toLocaleString('en-US'),Math.max(0,...open.map(item=>item.gold??0)).toLocaleString('en-US'),preview?items.filter(v=>v.state==='claimed').length:'Unavailable'];document.querySelectorAll('main .stats .stat>b').forEach((node,i)=>node.textContent=values[i]??'Unavailable');}
     if(data.limited||data.stale){status.hidden=false;status.textContent=data.limited?(kind==='players'?'Public leaderboard profiles. Other player details are not available yet.':kind==='bounties'?'Public bounty export; coverage may be partial.':'Public guild export. Membership and recruitment details may be incomplete.')+(data.stale?' The export is stale.':''):'The last server export is stale.';}
+    if(kind==='guilds'){selectGuildLink(requestedGuildId);window.addEventListener('hashchange',()=>selectGuildLink(decodeURIComponent(location.hash.slice(1))));}
   }catch(error){status.hidden=false;status.textContent=error.message;for(const live of document.querySelectorAll('main .live'))live.parentElement.hidden=true;if(kind==='bounties')for(const node of document.querySelectorAll('main .stats .stat>b'))node.textContent='Unavailable';}
 }
 start().catch(error=>notice(error.message));

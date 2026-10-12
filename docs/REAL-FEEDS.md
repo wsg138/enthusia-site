@@ -141,3 +141,46 @@ unavailable controls and category selection were checked in the browser;
 fixture definitions/categories; no unsupported reward/daily commands or personal
 progress claims. The simulation is labeled and writes are blocked. This does
 not prove that the installed renderer exports a live catalogue.
+
+## Expanded profiles, local continuation
+
+Requirements: show authoritative UUID-based guild associations (multiple guilds
+supported), levels/banners and links. Never infer membership from delegated stall
+access or names. Distinguish a successful no-guild lookup from unavailable data.
+Add the positions actually published by the balance/playtime boards, not guessed
+global ranks. Public market cards match player ownership by UUID, exclude guild
+and delegated stalls, and show shop counts/types with stale-source disclosure.
+No online/last-seen data, roles/permissions, guild rosters, homes or private
+achievement progress is exported. Continue manual SPEAR; no local EARS helpers.
+
+LumaGuilds GET /api/community/player-guilds accepts 1-50 canonical UUIDs in the
+players query, requires a nonblank configured bearer, and exports only requested
+player-to-guild associations. Website settings COMMUNITY_PLAYER_GUILDS_API_URL
+and COMMUNITY_PLAYER_GUILDS_API_TOKEN configure a protected HTTPS endpoint.
+The token matches the existing LumaGuilds Web API bearer and stays server-side.
+The site batches public profile UUIDs; a failed lookup preserves base stats.
+This endpoint is prepared locally, not installed or activated on the server.
+
+The real profile preview uses captured public boards and a minimized captured
+market projection (IDs, ownership, shop directions and source dates only).
+A separate Guild layout example is explicitly simulated and never assigns an
+invented guild to StepSoy or another real player. Actual guilds remain unknown
+until the new exporter is available. Rebuild with scripts/build-real-player-preview.mjs
+and both private capture paths. All preview writes remain disabled.
+
+Verification: 541 website tests pass; lint, site checks, map validation, static
+build and Pages Functions compilation pass. Regression tests cover UUID joins,
+known-empty versus unavailable guilds, ownership exclusion, and independent
+source freshness. A newer guild capture can update an unchanged board without
+making old balance/playtime data appear fresh. Only the displayed 1000 public
+profiles are queried, in batches of 50.
+
+Browser proof: actual captured CheddarManPro profile shows published positions
+and one owned stall with 13 shops. The separately labeled simulated profile
+shows the banner/name/level guild layout. At a 390px viewport, document width
+is 375px without horizontal overflow. Known guild fragments select the matching
+profile; missing guild fragments show an unavailable notice, preserve the
+requested fragment and do not substitute an unrelated guild. Same-page guild
+fragment changes were checked. Screenshots are retained outside the repository.
+The localhost preview is computer-only; no mobile-accessible hosted link was
+published under the local-only instruction. No PR, push or deployment occurred.

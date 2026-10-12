@@ -1,7 +1,7 @@
 import { SNAPSHOT_KINDS, projectSnapshot,validateSale } from './contracts.js';
 const MAX_BYTES=150000;
 function configuration(kind,env) {
-  if(!SNAPSHOT_KINDS.has(kind)&&kind!=='sales')return null;
+  if(!SNAPSHOT_KINDS.has(kind)&&kind!=='sales'&&kind!=='player_guilds')return null;
   const prefix='COMMUNITY_'+kind.toUpperCase()+'_API';
   try {
     const url=new URL(env[prefix+'_URL']);
@@ -37,10 +37,23 @@ export async function readCommunityUpstream(kind,env,fetchImpl=fetch,now=Date.no
     const generated=Date.parse(input.generatedAt);
     if(!Number.isFinite(generated)||generated>now+60000)return null;
     const data=projectSnapshot(kind,input),updatedAt=new Date(generated).toISOString();
-    return {...data,updatedAt,stale:now-generated>900000,source:'configured_upstream',limited:input.complete!==true};
+    return {...data,updatedAt,stale:now-Date.parse(data.sourceUpdatedAt??updatedAt)>900000,source:'configured_upstream',limited:input.complete!==true};
   } catch { return null; }
 }
 
+export async function readPlayerGuildMemberships(ids,env,fetchImpl=fetch,now=Date.now()) {
+  const config=configuration('player_guilds',env);if(!config)return null;
+  try {
+    if(ids.length<1||ids.length>50)return null;
+    config.url.searchParams.set('players',ids.join(','));
+    const response=await fetchImpl(config.url,{headers:config.headers,redirect:'error',signal:globalThis.AbortSignal.timeout(5000)});
+    const input=await boundedJson(response),time=Date.parse(input?.generatedAt);
+    if(!Number.isFinite(time)||time>now+60000||!Array.isArray(input.items)||input.items.length>50)return null;
+    if(input.items.some(row=>!ids.includes(row.id)))return null;
+    const projected=projectSnapshot('players',{items:input.items.map(row=>({id:row.id,name:'Guild lookup',guildsKnown:true,guildMemberships:row.guildMemberships}))});
+    return {items:projected.items,generatedAt:new Date(time).toISOString()};
+  } catch { return null; }
+}
 export async function readCommunitySales(env,fetchImpl=fetch,now=Date.now(),cursor=null) {
   const config=configuration('sales',env);if(!config)return null;
   try {

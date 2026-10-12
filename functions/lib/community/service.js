@@ -204,10 +204,14 @@ async function alertsRoute(context, parts, dependencies) {
   return saveAlert(db,context.request,actor);
 }
 
+function storedSnapshot(row,kind){
+  const snapshot=projectSnapshot(kind,JSON.parse(row.payload));
+  return json({...snapshot,updatedAt:row.updated_at,
+    stale:Date.now()-Date.parse(snapshot.sourceUpdatedAt??snapshot.generatedAt??row.updated_at)>900000});
+}
 async function snapshotRoute(db, kind, env) {
   const row = await db.prepare('SELECT payload,updated_at FROM community_snapshots WHERE kind=?').bind(kind).first();
-  if (row) return json({...projectSnapshot(kind,JSON.parse(row.payload)),updatedAt:row.updated_at,
-    stale:Date.now()-Date.parse(JSON.parse(row.payload).generatedAt??row.updated_at)>900000});
+  if (row) return storedSnapshot(row,kind);
   const upstream=await readCommunityUpstream(kind,env);
   if(upstream)return json(upstream);
   if (kind==='players') {

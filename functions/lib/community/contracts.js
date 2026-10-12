@@ -57,6 +57,19 @@ function banner(input){
   if(!dyes.has(input.baseColor)||!Array.isArray(input.patterns)||input.patterns.length>20)throw new Error('invalid_banner');
   return {baseColor:input.baseColor,patterns:input.patterns.map(p=>{if(!dyes.has(p.color)||typeof p.type!=='string'||!/^[A-Z_]{1,40}$/.test(p.type))throw new Error('invalid_banner');return {type:p.type,color:p.color};})};
 }
+function playerGuilds(value) {
+  if(!Array.isArray(value)||value.length>20)throw new Error('invalid_player_guilds');
+  const seen=new Set();
+  return value.map(row=>{
+    const id=identifier(row.id);if(seen.has(id))throw new Error('duplicate_player_guild');seen.add(id);
+    return {id,name:text(row.name,80,true),level:number(row.level),banner:banner(row.banner)};
+  });
+}
+function leaderboardPosition(value){
+  const position=number(value,1e9);
+  if(position!==null&&(!Number.isInteger(position)||position<1))throw new Error('invalid_leaderboard_position');
+  return position;
+}
 export function projectSnapshot(kind,input) {
   if(kind==='guildquests')return projectGuildQuests(input);
   if(!SNAPSHOT_KINDS.has(kind)||!Array.isArray(input?.items)||input.items.length>1000)throw new Error('invalid_snapshot');
@@ -65,14 +78,18 @@ export function projectSnapshot(kind,input) {
     const id=identifier(row.id);if(ids.has(id))throw new Error('duplicate_id');ids.add(id);
     const base={id,name:text(row.name,80,true),description:text(row.description,2000)};
     if(kind==='guilds')return {...base,level:number(row.level),members:number(row.members,20000),elo:number(row.elo),prestige:number(row.prestige,1e6),foundedAt:timestamp(row.foundedAt),bankBalance:number(row.bankBalance),totalExperience:number(row.totalExperience),activityScore:number(row.activityScore),tag:text(row.tag,80),recruiting:typeof row.recruiting==='boolean'?row.recruiting:null,peaceful:typeof row.peaceful==='boolean'?row.peaceful:null,membersList:memberNames(row.membersList),banner:banner(row.banner),links:links(row.links)};
-    if(kind==='players')return {...base,guild:text(row.guild,80),rank:text(row.rank,80),playtime:number(row.playtime),balance:number(row.balance),reputation:number(row.reputation),achievements:memberNames(row.achievements),links:links(row.links)};
+    if(kind==='players')return {...base,guild:text(row.guild,80),rank:text(row.rank,80),playtime:number(row.playtime),balance:number(row.balance),reputation:number(row.reputation),achievements:memberNames(row.achievements),links:links(row.links),
+      ...(row.balanceRank!==undefined?{balanceRank:leaderboardPosition(row.balanceRank)}:{}),...(row.playtimeRank!==undefined?{playtimeRank:leaderboardPosition(row.playtimeRank)}:{}),
+      ...(row.guildsKnown===true?{guildsKnown:true,guildMemberships:playerGuilds(row.guildMemberships)}:{})};
     if(kind==='warzone'){if(!['kit','leader','activity'].includes(row.type))throw new Error('invalid_warzone_type');const wins=number(row.wins,1e9);if(wins!==null&&!Number.isInteger(wins))throw new Error('invalid_wins');return {...base,type:row.type,kills:number(row.kills,1e9),wins,endsAt:timestamp(row.endsAt),target:publicUrl(row.target),rules:Array.isArray(row.rules)?row.rules.slice(0,12).map(v=>text(v,200,true)):[],manualOverride:row.manualOverride===true};}
     if(kind==='bounties')return {...base,gold:number(row.gold),state:['open','claimed','expired'].includes(row.state)?row.state:'open',hunter:text(row.hunter,80),expiresAt:timestamp(row.expiresAt)};
     return {...base,category:text(row.category,80),reward:text(row.reward,200),completed:number(row.completed,1e8)};
   });
   const generatedAt=timestamp(input.generatedAt);
   if(generatedAt&&Date.parse(generatedAt)>Date.now()+60000)throw new Error('invalid_date');
-  return {schemaVersion:1,items,...(generatedAt?{generatedAt}:{}),...(input.limited===true?{limited:true}:{}),
+  const sourceUpdatedAt=kind==='players'?timestamp(input.sourceUpdatedAt):null;
+  if(sourceUpdatedAt&&generatedAt&&Date.parse(sourceUpdatedAt)>Date.parse(generatedAt))throw new Error('invalid_source_date');
+  return {schemaVersion:1,items,...(generatedAt?{generatedAt}:{}),...(sourceUpdatedAt?{sourceUpdatedAt}:{}),...(input.limited===true?{limited:true}:{}),
     ...(['public_leaderboards','configured_upstream','server_export'].includes(input.source)?{source:input.source}:{})};
 }
 export function pollOpen(record,now=Date.now()) {return record?.status==='published'&&Number.isFinite(Date.parse(record.closesAt))&&Date.parse(record.closesAt)>now;}
