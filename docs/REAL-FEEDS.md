@@ -125,3 +125,19 @@ and verify real feeds, network linking and Discord delivery. Player coverage is
 partial; provider rewards and individual achievement completion need their own
 public contracts. Local test JARs are unmerged and must not be installed as
 production artifacts.
+
+### Local source checkpoints
+
+- Website code: b3cdf38 on feature/site-completion, includes current main bcc9d25.
+- LumaGuilds producer: 2c10bc2 on local/website-guild-quest-export.
+- Market producer: 101827f on local/website-sales-feed.
+- Advancement pilot: c8c3128 on local/website-achievement-catalog.
+- MaceGuard publisher: 831be72 on local/website-warzone-export.
+
+The achievement contract preview is generated from actual page markup by
+scripts/build-achievement-contract-preview.mjs. Its local connected/empty/stale/
+unavailable controls and category selection were checked in the browser;
+390px viewport, 375px document width, no horizontal overflow. Counts show actual
+fixture definitions/categories; no unsupported reward/daily commands or personal
+progress claims. The simulation is labeled and writes are blocked. This does
+not prove that the installed renderer exports a live catalogue.
