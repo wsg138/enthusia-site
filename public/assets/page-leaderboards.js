@@ -60,6 +60,7 @@
       detail: members !== null ? formatNumber(members) + " members" : "",
       value: guildValue(level, experience, score),
       banner: entry.banner && typeof entry.banner === "object" ? entry.banner : null,
+      isGuild: true,
       headId: Array.isArray(uuids) ? text(uuids[0]) : "",
       rank: pickNumber(entry.rank) || index + 1
     };
@@ -97,7 +98,7 @@
       var banner = window.EnthusiaGuildBannerRenderer.create(entry.banner, entry.name + " banner", "guild-banner");
       if (banner) return banner;
     }
-    if (!entry.headId) return el("span", "guild-mark", entry.name.slice(0, 2).toUpperCase());
+    if (entry.isGuild || !entry.headId) return window.EnthusiaGuildBannerRenderer.createPlaceholder(entry.name);
     var head = el("img", "px lb-head");
     head.src = "https://minotar.net/helm/" + encodeURIComponent(entry.headId) + "/" + size;
     head.alt = "";

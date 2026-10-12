@@ -238,7 +238,7 @@
       sub.textContent = off === 0 ? (left <= 1 ? (model.preview?"Ends tonight at 11:59 PM ET.":"Ends tonight in UTC.") : left + (model.preview?" days left. Ends Sunday at 11:59 PM ET.":" days left. Ends Sunday in UTC.")) : (guild ? rows[0].name + " won this week." : rows[0].name + " won this week with stall " + rows[0].stall + ".");
       clear(list);
       rows.forEach(function (r, i) {
-        var who = guild ? h("span", { class: "slot", "aria-hidden": "true", style: "width:40px;height:40px", text: r.name.slice(0, 2).toUpperCase() }) : head(r.name, 40, "sm");
+        var who = guild ? guildSlot(r) : head(r.name, 40, "sm");
         var row = h("div", { class: "mi-rank" + (i === 0 ? " first" : "") }, [
           h("span", { class: "bar", style: "width:0" }),
           h("span", { class: "n", text: "#" + (i + 1) }), who,
@@ -317,6 +317,12 @@
     return h("span", { class: "slot mi-item-slot", "aria-hidden": "true" }, definition.layers.map(function (layer) {
       return h("img", { src: new URL(layer.src, itemAssetBase).href, alt: "", width: 32, height: 32 });
     }));
+  }
+  function guildSlot(guild) {
+    var design = guild.banner || model.guildBanners?.get(guild.name.toLowerCase());
+    var renderer = window.EnthusiaGuildBannerRenderer;
+    var banner = design ? renderer.create(design, guild.name + " banner", "mi-guild-banner") : renderer.createPlaceholder(guild.name, "mi-guild-banner");
+    return h("span", { class: "slot mi-guild-slot" }, [banner]);
   }
 
   function renderRows() {

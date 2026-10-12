@@ -79,5 +79,6 @@
   function create(design, label = "Guild banner", className = "guild-banner") {
     const element = canvas(); element.className = className; element.setAttribute("role", "img"); element.setAttribute("aria-label", label); draw(element, design).catch(() => element.remove()); return element;
   }
-  window.EnthusiaGuildBannerRenderer = Object.freeze({ create, draw, normalize: normalized, dyes: DYES, aliases: ALIASES, patterns: ASSETS });
+  const createPlaceholder = (name = "Guild", className = "guild-banner") => create({ baseColor: "GRAY", patterns: [] }, `${name}: banner unavailable`, className);
+  window.EnthusiaGuildBannerRenderer = Object.freeze({ create, createPlaceholder, draw, normalize: normalized, dyes: DYES, aliases: ALIASES, patterns: ASSETS });
 })();

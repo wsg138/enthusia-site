@@ -26,6 +26,9 @@ async function start(){
       for(const label of document.querySelectorAll('.mi-head .h7'))label.textContent='30d change';
     }
     window.EnthusiaMarketDesignModel=model;
+    // Standings may omit banners; join only public guild profiles, without blocking sales data.
+    const guilds=await api('guilds').catch(()=>({items:[]}));
+    model.guildBanners=new Map(guilds.items.filter(guild=>guild.banner).map(guild=>[guild.name.toLowerCase(),guild.banner]));
     const script=document.createElement('script');script.src=new URL('./exact-view.js',import.meta.url).href;document.body.append(script);
   }catch(error){for(const id of ['mi-strip','mi-winner','mi-week','mi-rows','mi-detail'])document.getElementById(id)?.replaceChildren(el('p',{class:'mi-empty',role:'status',text:error.message}));}
 }

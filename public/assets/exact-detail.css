@@ -7,3 +7,17 @@ body[data-competition-page=detail] .competition-detail-shell{border:0;background
 .exact-detail-inner .competition-detail-tabs button.is-active{background:#ffcf1f;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 #e08f00}
 .exact-detail-inner .competition-detail-content{padding:0;background:none}.exact-detail-inner .competition-tab-panel{padding:0}.exact-detail-inner [hidden]{display:none!important}
 @media(max-width:720px){.exact-detail-inner .competition-detail-tabs{justify-content:center}}
+
+/* Retained native competition rules use the same pixel panels as the exported frame. */
+.exact-detail-inner{--line:#4a0b08;--line-strong:#4a0b08;--cream:#3a0d0a;--muted:#6b3a2a;--gold:#ffcf1f;color:#3a0d0a}
+.exact-detail-inner .competition-detail-tabs button{border-radius:0;font-weight:400}
+.exact-detail-inner .competition-document-panel{width:100%;text-align:left}
+.exact-detail-inner .competition-document-panel>h2{color:#b3201a;text-shadow:2px 2px 0 #ffcf1f;font-weight:400}
+.exact-detail-inner .competition-document-panel>.competitions-kicker{color:#8a5a00;text-shadow:none}
+.exact-detail-inner .competition-document-panel>p{max-width:none;margin-inline:0;color:#6b3a2a}
+.exact-detail-inner .competition-rules-document,.exact-detail-inner .competition-rules-list section{background:#fff8e6;color:#3a0d0a;border:4px solid #4a0b08;border-radius:0;box-shadow:inset 4px 4px 0 #fff,inset -4px -4px 0 #ecc873;padding:24px}
+.exact-detail-inner .competition-rules-document strong,.exact-detail-inner .competition-rules-list h3{color:#b3201a;font-weight:400}
+.exact-detail-inner .competition-rules-document p,.exact-detail-inner .competition-rules-list p{color:#6b3a2a;font-weight:400}
+.exact-detail-inner .competition-rules-list{gap:24px}
+.exact-detail-inner .competition-rules-list>section>span{width:44px;height:44px;border:4px solid #4a0b08;border-radius:0;background:#ffcf1f;color:#3a0d0a;box-sizing:border-box;font-weight:400}
+@media(max-width:720px){.exact-detail-inner .competition-rules-list{grid-template-columns:minmax(0,1fr)}.exact-detail-inner .competition-rules-list section{padding:16px;gap:12px}}

@@ -963,23 +963,8 @@ function createRankElement(rank) {
   return rankEl;
 }
 
-function createGuildFallbackHead(uuid) {
-  const visual = document.createElement("img");
-  visual.src = `https://minotar.net/helm/${encodeURIComponent(uuid)}/64`;
-  visual.alt = "";
-  visual.width = 40;
-  visual.height = 40;
-  visual.loading = "lazy";
-  visual.decoding = "async";
-  visual.className = "guild-fallback-head";
-  return visual;
-}
-
 function createGuildMark(entry) {
-  const visual = document.createElement("span");
-  visual.className = "guild-mark";
-  visual.textContent = normalizeText(entry?.iconText || entry?.tag || entry?.name || "G").slice(0, 3).toUpperCase();
-  return visual;
+  return window.EnthusiaGuildBannerRenderer.createPlaceholder(normalizeText(entry?.name) || "Guild");
 }
 
 function createGuildLeaderboardVisual(entry) {
@@ -988,8 +973,7 @@ function createGuildLeaderboardVisual(entry) {
     return bannerVisual;
   }
 
-  const topMemberUuid = Array.isArray(entry?.topMemberUuids) ? normalizeText(entry.topMemberUuids[0]) : "";
-  return topMemberUuid ? createGuildFallbackHead(topMemberUuid) : createGuildMark(entry);
+  return createGuildMark(entry);
 }
 
 function createPlayerLeaderboardVisual(entry) {
