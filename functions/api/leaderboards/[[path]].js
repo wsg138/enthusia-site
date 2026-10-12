@@ -103,7 +103,7 @@ async function readR2Leaderboard(env, config) {
   });
 }
 
-function buildGuildRequest(env,limit=10) {
+function buildGuildRequest(env, limit = 10) {
   let url = false;
   try {
     url = new URL(env.GUILDS_API_URL || DEFAULT_GUILDS_API_URL);
@@ -131,8 +131,8 @@ function buildGuildRequest(env,limit=10) {
   return { url, headers };
 }
 
-async function readGuildLeaderboard(env,limit=10) {
-  const request = buildGuildRequest(env,limit);
+async function readGuildLeaderboard(env, limit = 10) {
+  const request = buildGuildRequest(env, limit);
   if (!request) {
     return json({
       ok: false,
@@ -168,6 +168,11 @@ async function readGuildLeaderboard(env,limit=10) {
   });
 }
 
+export function readGuildDirectory(env) {
+  // The installed API caps results at 50; the directory labels this as limited.
+  return readGuildLeaderboard(env, 50);
+}
+
 export function onRequestGet(context) {
   const board = getRequestedBoard(context.params);
   if (!board) {
@@ -188,10 +193,4 @@ export function onRequestGet(context) {
   }
 
   return readR2Leaderboard(context.env, config);
-}
-
-// The directory asks for the server's bounded public catalogue rather than the
-// podium's ten rows. The upstream still controls its own maximum export size.
-export function readGuildDirectory(env) {
-  return readGuildLeaderboard(env,1000);
 }

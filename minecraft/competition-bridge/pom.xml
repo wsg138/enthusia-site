@@ -50,6 +50,15 @@
     </dependency>
   </dependencies>
 
+  <profiles>
+    <profile>
+      <id>paper-26-2</id>
+      <properties>
+        <paper.version>26.2.build.123-stable</paper.version>
+      </properties>
+    </profile>
+  </profiles>
+
   <build>
     <plugins>
       <plugin>

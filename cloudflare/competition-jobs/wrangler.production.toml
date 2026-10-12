@@ -1,0 +1,17 @@
+name = "enthusia-competition-jobs-production"
+account_id = "83982f6d6277634f57d216e6a7f24125"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = false
+
+[vars]
+COMPETITION_JOBS_ENABLED = "false"
+COMPETITIONS_SITE_ORIGIN = "https://enthusia.info"
+
+[[d1_databases]]
+binding = "COMPETITIONS_DB"
+database_name = "enthusia-competitions"
+database_id = "2544fed6-7aa3-4e42-b768-5b39c39ce4a5"
+
+[triggers]
+crons = []

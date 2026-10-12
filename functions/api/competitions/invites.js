@@ -41,7 +41,7 @@ async function authorize(context) {
   if (!hasCompetitionDatabase(context.env)) return { response: json({ error: "competition_database_unavailable" }, 503) };
   let session;
   try {
-    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
+    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB, context.env);
   } catch {
     return { response: json({ error: "competition_identity_unavailable" }, 503) };
   }

@@ -28,6 +28,45 @@ The corresponding production credential pair is stored as encrypted
 
 ## Remaining service configuration
 
+Discord OAuth is now configured and its login callback was verified with a real
+website session. The application is branded Enthusia. Current Discord staff
+role IDs are tracked in `wrangler.toml`. A managed production Turnstile widget
+is configured for `enthusia.info`, with its secret encrypted in Pages. The
+dedicated Enthusia notification bot token is also encrypted in Pages.
+Discord API verification confirms that the bot is installed in the Enthusia
+guild. Public bot installation is disabled, and privileged gateway intents
+remain disabled. Login uses the Enthusia application; the privileged staff
+application retains its separate credentials and responsibilities.
+
+Automated moderation remains disabled by owner choice. Upload publication must
+continue to fail closed while moderation is unavailable; do not bypass that
+check to activate uploads or competition image submissions.
+
+The signed network account endpoints are prepared in EnthusiaStaff Velocity:
+`POST /v1/website/accounts` and `POST /v1/website/accounts/link`. They expose
+current Minecraft ownership to the authenticated website service and issue the
+existing five-minute `/link` challenge. The browser never supplies the Discord
+owner used by those upstream requests. Account projections refresh from the
+network on authenticated requests, preserve competition identity locks, and
+fail closed on unavailable or conflicting data. Unlinking continues in-game
+through `/unlink CONFIRM` to preserve network main-account selection and history.
+
+`NETWORK_ACCOUNT_LINKS=false` deliberately keeps this integration inactive until
+the owner selects a proxy restart time and the prepared Velocity runtime is
+installed and verified. No database migration is required. After the protected
+endpoints pass live verification, set the flag to `true`, redeploy Pages, and
+test recognition of an existing linked account and a new in-game challenge.
+Changing only the website flag before the server deployment would break
+authenticated workflows and must not be used as an activation shortcut.
+
+Production notification workers are provisioned separately from development:
+`enthusia-competition-jobs-production` and `enthusia-market-alerts-production`.
+Their production Wrangler configurations bind the correct D1 databases and
+their website bot token is encrypted. Both enable flags are false and both
+cron lists are empty. Keep them disabled until bridge connectivity, actual sale
+ingestion, opt-in delivery and opt-out behavior pass live acceptance. This setup
+does not send messages or activate lifecycle/reward processing.
+
 1. Configure encrypted `DISCORD_CLIENT_SECRET` for the application matching
    `DISCORD_CLIENT_ID`. Register exactly
    `https://enthusia.info/api/competitions/auth/discord/callback` in that
@@ -42,7 +81,8 @@ The corresponding production credential pair is stored as encrypted
    its loopback listener and protected HTTPS route. Configure its distinct
    bearer/HMAC and Access service credentials. Verify Minecraft linking and
    public player/guild context before enabling jobs or rewards.
-5. Configure encrypted `OPENAI_API_KEY` for submission moderation. Failed or
+5. Leave automated moderation disabled per the owner's decision. If moderation
+   is enabled later, configure encrypted `OPENAI_API_KEY` first. Failed or
    unavailable moderation must continue to block publication.
 6. Configure the dedicated website notification bot using encrypted
    `ENTHUSIA_SITE_DISCORD_BOT_TOKEN`. Verify opt-in delivery and opt-out with a
@@ -69,6 +109,12 @@ shared FAQ use that version. Before installing the Competition Bridge, verify
 its API/runtime compatibility with this server; its existing build targets
 Java 21 and Paper 1.21.8.
 
+The `paper-26-2` Maven profile compiles and tests against Paper
+`26.2.build.123-stable`, retaining the default profile for existing development
+builds. Building that profile requires JDK 25 or newer. CI checks both profiles;
+the live-profile artifact is the one prepared for production installation.
+Compilation does not establish live provider compatibility or reward delivery.
+
 The donor website snapshot was refreshed from the installed plugin's cached
 official Tebex aggregate totals. Only the existing public leaderboard fields
 were exported, with the aggregate's actual update timestamp. Raw payments,
@@ -79,10 +125,13 @@ maintained producer requires a separate validated change.
 
 ## Validation and rollback
 
-The launch connection changes pass 490 site tests, lint, page/asset checks,
-market layer checks, the static build and Pages Functions compilation. The
-bridge passes 14 Java tests. Live acceptance must additionally verify page
-rendering, the deployed commit, authenticated workflows, actual server exports
+The current integration passes 517 site tests, lint, page/asset checks,
+market layer checks, the static build and Pages Functions compilation.
+The bridge passes 14 Java tests
+against the live Paper API profile. The prepared network account runtime passes
+518 domain/Velocity tests, with one existing Windows symlink test skipped.
+The latest site CI completed successfully. Live acceptance must additionally
+verify page rendering, the deployed commit, authenticated workflows, actual server exports
 and protected staff actions; a successful build does not establish those.
 
 Retain a local Cloudflare project configuration backup before further changes.
@@ -96,3 +145,23 @@ Wiki publication is separate. Read-only hosted wiki parser validation currently
 receives HTTP 403 from Miraheze. No wiki publisher was dispatched during this
 site launch. Codacy's retained analyzer findings are described in
 `CODACY-BASELINE.md`; they are not a clean-analysis result.
+
+## Live feed acceptance still required
+
+The account page shows a pending server activation message and disables new
+link challenges while the network integration is staged. Its two panel rows
+were verified with matching heights on the deployed site.
+
+Guild rankings are live. The directory requests up to 50 existing leaderboard
+records and remains marked as limited; complete guild membership, quest and
+seasonal data need an authoritative directory exporter. Warzone, player,
+bounty and event snapshots still need their maintained server producers.
+Captured preview data must not be published as current live data.
+
+The installed market integration publishes stall inventory. Completed-sale
+history needs a separate transaction producer; stock changes must not be
+interpreted as purchases. Consequently market alert schedules remain disabled.
+Automatic donor updates also remain disconnected in the installed test build.
+Competition Bridge installation, protected connectivity, reward/provider
+acceptance, notification opt-in/opt-out and checkout fulfillment remain
+unverified. These gaps prevent treating the complete site as launch-ready.

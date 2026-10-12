@@ -1,4 +1,5 @@
 import { isCanonicalUuid } from "../validation.js";
+import { networkAccountsEnabled, refreshNetworkAccounts } from "./network-accounts.js";
 
 const SESSION_COOKIE = "__Host-enthusia_competition_session";
 const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60;
@@ -181,7 +182,7 @@ export async function listDiscordMinecraftLinks(db, discordUserId) {
   return Array.isArray(result?.results) ? result.results : [];
 }
 
-export async function getCompetitionIdentitySession(request, db, now = new Date()) {
+export async function getCompetitionIdentitySession(request, db, now = new Date(), env = {}) {
   const database = requireDatabase(db);
   const token = parseCookies(request).get(SESSION_COOKIE);
   if (!token) return null;
@@ -214,7 +215,9 @@ export async function getCompetitionIdentitySession(request, db, now = new Date(
     WHERE session_hash = ?
       AND last_seen_at < ?
   `).bind(nowIso, sessionHash, new Date(timestamp(now) - 15 * 60 * 1000).toISOString()).run().catch(() => {});
-  const links = await listDiscordMinecraftLinks(database, row.discordUserId);
+  const links = networkAccountsEnabled(env)
+    ? await refreshNetworkAccounts(database, env, row.discordUserId)
+    : await listDiscordMinecraftLinks(database, row.discordUserId);
   let discordGuildMember = false;
   let guildRoleIds = [];
   try {
@@ -238,6 +241,7 @@ export async function getCompetitionIdentitySession(request, db, now = new Date(
       avatarHash: row.avatarHash
     }),
     linkedMinecraftAccounts: Object.freeze(links.map((link) => Object.freeze({ ...link }))),
+    networkAccounts: networkAccountsEnabled(env),
     discordGuildMember,
     guildRoleIds: Object.freeze(Array.isArray(guildRoleIds) ? guildRoleIds.map(String) : []),
     discordRolesCheckedAt: row.discordRolesCheckedAt,

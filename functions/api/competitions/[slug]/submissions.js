@@ -114,7 +114,7 @@ function requestedLocation(input, requested) {
 
 async function participantSession(context) {
   try {
-    const session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
+    const session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB, context.env);
     return { session };
   } catch {
     return { response: json({ error: "competition_identity_unavailable" }, 503) };

@@ -1,0 +1,18 @@
+body[data-exact-account] .account-panel-grid > .panel > h3 {
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--head);
+}
+
+body[data-exact-account] .acct > span {
+  max-width: 220px;
+  font-size: 12px;
+  line-height: 20px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 520px) {
+  body[data-exact-account] .acct {
+    flex-wrap: wrap;
+  }
+}

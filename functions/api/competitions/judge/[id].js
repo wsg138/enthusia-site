@@ -50,7 +50,7 @@ async function authorizeJudge(context, id) {
 
   let session;
   try {
-    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
+    session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB, context.env);
   } catch {
     return { response: json({ error: "competition_identity_unavailable" }, 503) };
   }

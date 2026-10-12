@@ -3,6 +3,8 @@ const STAFF_API_ORIGIN = "https://staff-network-api.enthusia.info";
 const STAFF_API_PREVIEW_ORIGIN = "https://staff-api-dev.enthusia.info";
 const STAFF_API_TIMEOUT_MS = 7000;
 const STATIC_ROUTES = new Set([
+  "/v1/website/accounts",
+  "/v1/website/accounts/link",
   "/v1/website/punishment-codes/claim",
   "/v1/website/punishment-codes/revalidate",
   "/v1/website/appeals/eligible",

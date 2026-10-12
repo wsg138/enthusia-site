@@ -15,12 +15,13 @@ import { competitionRateLimit, rateLimitHeaders } from "../../../lib/competition
 import { json, methodNotAllowed, unauthorized } from "../../../lib/responses.js";
 import { requireSameOrigin } from "../../../lib/security.js";
 import { isCanonicalUuid } from "../../../lib/validation.js";
+import { networkAccountsEnabled, networkLinkRequest } from "../../../lib/competitions/network-accounts.js";
 
 async function authorize(context) {
   if (!competitionsEnabled(context.env)) return { response: json({ error: "not_found" }, 404) };
   if (!hasCompetitionDatabase(context.env)) return { response: json({ error: "competition_database_unavailable" }, 503) };
   try {
-    const session = await getCompetitionIdentitySession(context.request, context.env.COMPETITIONS_DB);
+    const session = await getCompetitionIdentitySession(context.request, context.env.COMPETITIONS_DB, undefined, context.env);
     return session ? { session } : { response: unauthorized() };
   } catch {
     return { response: json({ error: "competition_identity_unavailable" }, 503) };
@@ -118,6 +119,7 @@ async function unlinkMinecraft(context, session, input) {
 }
 
 function linkAction(context, session, input) {
+  if (networkAccountsEnabled(context.env)) return networkLinkAction(context, session, input);
   switch (input?.action) {
     case "START":
       return startMinecraftLink(context, session);
@@ -127,6 +129,26 @@ function linkAction(context, session, input) {
       return unlinkMinecraft(context, session, input);
     default:
       return json({ error: "invalid_link_action" }, 400);
+  }
+}
+
+async function networkLinkAction(context, session, input) {
+  if (input?.action === "UNLINK") {
+    return json({ error: "minecraft_unlink_confirmation_required", command: "/unlink CONFIRM" }, 409);
+  }
+  if (!["START", "POLL"].includes(input?.action)) return json({ error: "invalid_link_action" }, 400);
+  if (input.action === "POLL" && !/^[0-9a-f]{64}$/.test(String(input.requestId ?? ""))) {
+    return json({ error: "invalid_link_request" }, 400);
+  }
+  try {
+    if (input.action === "START") {
+      const limited = await linkStartRateLimit(context, session);
+      if (limited) return limited;
+    }
+    const payload = await networkLinkRequest(context.env, session.discord.id, input);
+    return json(payload, payload.status === "EXPIRED_OR_USED" ? 410 : 200);
+  } catch {
+    return json({ error: "network_account_linking_unavailable" }, 503);
   }
 }
 

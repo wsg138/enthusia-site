@@ -63,7 +63,7 @@ function accessAppealSession(session) {
 }
 
 export async function authenticateLinkedAppealRequest(request, env) {
-  const discordSession = await getCompetitionIdentitySession(request, env?.COMPETITIONS_DB);
+  const discordSession = await getCompetitionIdentitySession(request, env?.COMPETITIONS_DB, undefined, env);
   if (discordSession) return withWebsiteAccountId(discordSession);
   return withWebsiteAccountId(await getAppealEmailSession(request, env?.COMPETITIONS_DB));
 }

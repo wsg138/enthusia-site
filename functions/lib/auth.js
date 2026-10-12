@@ -166,7 +166,7 @@ export async function authenticateRequest(request, env, verifier = verifyAccessJ
   let discordError = null;
   if (env?.COMPETITIONS_DB && typeof env.COMPETITIONS_DB.prepare === "function") {
     try {
-      const identity = await getCompetitionIdentitySession(request, env.COMPETITIONS_DB);
+      const identity = await getCompetitionIdentitySession(request, env.COMPETITIONS_DB, undefined, env);
       if (identity) {
         try {
           return buildDiscordStaffSession(identity, env);
