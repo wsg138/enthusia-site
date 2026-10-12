@@ -10,6 +10,7 @@ export function renderWarzone(section,data) {
   const headings=['Current combat meta','Duel wins this week','Rotation schedule'];
   for(const [index,column] of [...columns].entries())column.replaceChildren(el('h3',{text:headings[index]}));
   const items=data?.items??[];
+  if(data?.weekStart){const week=section.querySelector('[data-b-text="wzWeek"]');if(week)week.textContent='DUEL WEEK BEGINNING '+data.weekStart+' · UTC';}
   const kit=items.find(row=>row.type==='kit');
   columns[0].append(el('p',{text:kit?.name??'Current combat meta is unavailable.'}));
   if(kit){columns[0].append(el('p',{text:kit.description}));if(kit.endsAt)columns[0].append(el('p',{class:'wz',text:'Next rotation: '+new Date(kit.endsAt).toLocaleString()}));}
@@ -21,6 +22,7 @@ export function renderWarzone(section,data) {
   for(const row of activities)columns[2].append(el('p',{class:'wz',text:row.name+' — '+row.description}));
   if(!activities.length)columns[2].append(el('p',{text:'Rotation schedule is unavailable.'}));
   const indicator=section.querySelector('[data-warzone-status]')??section.querySelector('.live')?.parentElement;
-  if(indicator){indicator.setAttribute('data-warzone-status','');indicator.textContent=data?(data.stale?'Last server export is stale':'Server snapshot · '+new Date(data.updatedAt).toLocaleString()):'Server feed unavailable';}
+  if(indicator){indicator.setAttribute('data-warzone-status','');indicator.textContent=data?(data.capturedSnapshot?'Captured server snapshot · '+new Date(data.updatedAt).toLocaleString():data.stale?'Last server export is stale':'Server snapshot · '+new Date(data.updatedAt).toLocaleString()):'Server feed unavailable';}
+  if(data?.capturedSnapshot)columns[0].append(el('p',{text:'Captured from saved server state. This preview does not refresh automatically.'}));
   if(data?.stale)columns[0].append(el('p',{text:'This snapshot is over 15 minutes old; the current meta may have changed.'}));
 }

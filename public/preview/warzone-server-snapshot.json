@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-12T17:32:13.902939Z",
+  "sources": [
+    "MaceGuard persisted Warzone state and configuration",
+    "WarzoneDuels saved match ledger"
+  ],
+  "currentWeek": "2026-10-12",
+  "previousWeek": "2026-10-05",
+  "weeks": {
+    "2026-10-12": {
+      "items": [
+        {
+          "id": "current-meta",
+          "type": "kit",
+          "name": "Elytra, No Rockets",
+          "description": "Elytra gliding is allowed, but actual firework boosting is blocked. Manual override until the next scheduled change.",
+          "endsAt": "2026-10-18T16:00:00Z"
+        },
+        {
+          "id": "next-meta",
+          "type": "activity",
+          "name": "Scheduled rotation",
+          "description": "Configured next kit: Vanilla. Next scheduled change: 2026-10-18T16:00:00Z."
+        },
+        {
+          "id": "duels-status",
+          "type": "activity",
+          "name": "Weekly duel wins",
+          "description": "No counted match wins in the captured server ledger for this week."
+        }
+      ],
+      "updatedAt": "2026-10-12T17:32:13.902939Z",
+      "stale": false,
+      "capturedSnapshot": true,
+      "weekStart": "2026-10-12"
+    },
+    "2026-10-05": {
+      "items": [
+        {
+          "id": "current-meta",
+          "type": "kit",
+          "name": "Elytra, No Rockets",
+          "description": "Elytra gliding is allowed, but actual firework boosting is blocked. Manual override until the next scheduled change.",
+          "endsAt": "2026-10-18T16:00:00Z"
+        },
+        {
+          "id": "next-meta",
+          "type": "activity",
+          "name": "Scheduled rotation",
+          "description": "Configured next kit: Vanilla. Next scheduled change: 2026-10-18T16:00:00Z."
+        },
+        {
+          "id": "duels-status",
+          "type": "activity",
+          "name": "Weekly duel wins",
+          "description": "Counted WarzoneDuels match wins for the UTC week beginning 2026-10-05."
+        },
+        {
+          "id": "duels-bfc8481a-9523-4f84-9768-4b1de02ab776",
+          "type": "leader",
+          "name": "FiireFlyy",
+          "wins": 7
+        },
+        {
+          "id": "duels-c7b256f8-df2e-4e0f-abc1-05fa0f437ac2",
+          "type": "leader",
+          "name": "_DarkSilver",
+          "wins": 7
+        },
+        {
+          "id": "duels-b00d1c8f-578c-47b0-97ff-78a44ec6a7d8",
+          "type": "leader",
+          "name": "Millistii",
+          "wins": 6
+        }
+      ],
+      "updatedAt": "2026-10-12T17:32:13.902939Z",
+      "stale": false,
+      "capturedSnapshot": true,
+      "weekStart": "2026-10-05"
+    }
+  }
+}
