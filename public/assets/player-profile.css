@@ -6,4 +6,8 @@
 .player-guild-row>*{min-width:0}.player-guild-name{font-size:22px;color:#491008;overflow-wrap:anywhere}
 .player-stall-link{display:block;padding:12px;background:#ffe9ae;color:#491008;overflow-wrap:anywhere}
 .player-profile-links{display:flex;flex-wrap:wrap;gap:12px}
+.player-picker-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px!important;flex-basis:100%;width:100%;min-width:0}
+.player-picker-grid .player-picker-card{display:flex;align-items:center;justify-content:flex-start;gap:16px;width:100%;min-width:0;min-height:72px;padding:16px;text-align:left}
+.player-picker-card img{display:block;flex:0 0 32px;width:32px;height:32px}
+.player-picker-card span{min-width:0;overflow-wrap:anywhere;line-height:1.4}
 @media(max-width:720px){.player-profile-sections{grid-template-columns:minmax(0,1fr)}.player-profile-section .btn{align-self:flex-start}}

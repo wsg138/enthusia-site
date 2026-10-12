@@ -51,6 +51,7 @@ function draw(){
   let rows=items.filter(item=>item.name.toLowerCase().includes(q.toLowerCase())&&(filter==='all'||item.state===filter||(filter==='recruiting'&&item.recruiting)||(filter==='peaceful'&&item.peaceful===true)||(filter==='hostile'&&item.peaceful===false)));
   rows=rows.sort((a,b)=>sort==='name'?a.name.localeCompare(b.name):(b[sort]??-1)-(a[sort]??-1));
   const type=kind==='players'?'picker':'row';
+  if(kind==='players'&&!preview)target(type)?.classList.add('player-picker-grid');
   const visible=kind==='players'&&!preview?rows.slice(0,12):rows;
   replace(type,visible.map((item,index)=>{
     const node=clone(type,item);if(!node)return null;node.dataset.recordId=item.id;
@@ -59,7 +60,7 @@ function draw(){
       if(!preview){one('.nm>span',node).textContent=item.name;one('.nm small',node).textContent='Level '+(item.level??'Not available')+' · '+(item.members??'Not available')+' members'+(item.elo===null||item.elo===undefined?' · ELO unavailable':' · '+item.elo+' ELO');for(const tag of node.querySelectorAll('.tag'))tag.remove();if(item.recruiting)node.append(el('span',{class:'tag tag-good',text:'Recruiting'}));for(const banner of node.querySelectorAll('.bn'))banner.replaceWith(guildBanner(item));}
     }else if(kind==='bounties'){
       node.classList.toggle('done',item.state==='claimed');if(!preview){one('h3',node).textContent=item.name;const fields=[...node.children].filter(child=>child.tagName==='SPAN');if(fields[1])fields[1].textContent=item.gold??'Unavailable';if(fields[3])fields[3].textContent=item.description??'';if(fields[4])fields[4].textContent=item.expiresAt?formattedDate(item.expiresAt):'';const img=one('img',node);if(img)img.src='https://minotar.net/helm/'+encodeURIComponent(item.name)+'/96';}
-    }else if(!preview)node.replaceChildren(playerHead(item,32),el('span',{text:item.name}));
+    }else if(!preview){node.classList.add('player-picker-card');node.replaceChildren(playerHead(item,32),el('span',{text:item.name}));}
     if(kind!=='bounties'){node.setAttribute('aria-pressed',String(selected?.id===item.id));node.addEventListener('click',()=>choose(item));}return node;
   }));
   const count=one('[data-b-text="countLine"]');if(count)count.textContent=kind==='guilds'?rows.length+' of '+items.length+(limited?' guilds in this leaderboard.':' guilds shown.'):rows.length+' '+(rows.length===1?'bounty':'bounties')+' shown.';

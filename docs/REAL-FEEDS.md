@@ -184,3 +184,13 @@ requested fragment and do not substitute an unrelated guild. Same-page guild
 fragment changes were checked. Screenshots are retained outside the repository.
 The localhost preview is computer-only; no mobile-accessible hosted link was
 published under the local-only instruction. No PR, push or deployment occurred.
+
+Profile picker refinement: keep heads and names vertically centered with at
+least 16px between them. Use consistent responsive card columns, allow long
+names to wrap and preserve the existing selected-state bevel. Visual browser
+proof replaces unnecessary unit tests for this reversible spacing-only change.
+Verified all 12 rendered cards have a 16px head/name gap and centered alignment.
+Desktop uses equal-width columns; 390px mobile uses one column with no horizontal
+overflow (375px document width). Selecting SleepingOnCheese updates the profile
+and selected state. JavaScript syntax check, diff check and static build pass.
+Local only; no PR, push, deployment or hosted mobile preview.
