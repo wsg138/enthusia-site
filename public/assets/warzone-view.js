@@ -8,6 +8,7 @@ export function weeklyDuelLeaders(items) {
 export function renderWarzone(section,data) {
   const columns=section?.querySelectorAll('.wz-col');if(!columns?.length)return;
   const headings=['Current combat meta','Duel wins this week','Rotation schedule'];
+  if(data?.weekStart)headings[1]='Duel wins · week of '+data.weekStart;
   for(const [index,column] of [...columns].entries())column.replaceChildren(el('h3',{text:headings[index]}));
   const items=data?.items??[];
   if(data?.weekStart){const week=section.querySelector('[data-b-text="wzWeek"]');if(week)week.textContent='DUEL WEEK BEGINNING '+data.weekStart+' · UTC';}
