@@ -33,6 +33,10 @@ website session. The application is branded Enthusia. Current Discord staff
 role IDs are tracked in `wrangler.toml`. A managed production Turnstile widget
 is configured for `enthusia.info`, with its secret encrypted in Pages. The
 dedicated Enthusia notification bot token is also encrypted in Pages.
+Discord API verification confirms that the bot is installed in the Enthusia
+guild. Public bot installation is disabled, and privileged gateway intents
+remain disabled. Login uses the Enthusia application; the privileged staff
+application retains its separate credentials and responsibilities.
 
 Automated moderation remains disabled by owner choice. Upload publication must
 continue to fail closed while moderation is unavailable; do not bypass that
@@ -77,7 +81,8 @@ does not send messages or activate lifecycle/reward processing.
    its loopback listener and protected HTTPS route. Configure its distinct
    bearer/HMAC and Access service credentials. Verify Minecraft linking and
    public player/guild context before enabling jobs or rewards.
-5. Configure encrypted `OPENAI_API_KEY` for submission moderation. Failed or
+5. Leave automated moderation disabled per the owner's decision. If moderation
+   is enabled later, configure encrypted `OPENAI_API_KEY` first. Failed or
    unavailable moderation must continue to block publication.
 6. Configure the dedicated website notification bot using encrypted
    `ENTHUSIA_SITE_DISCORD_BOT_TOKEN`. Verify opt-in delivery and opt-out with a
@@ -120,10 +125,13 @@ maintained producer requires a separate validated change.
 
 ## Validation and rollback
 
-The launch connection changes pass 490 site tests, lint, page/asset checks,
-market layer checks, the static build and Pages Functions compilation. The
-bridge passes 14 Java tests. Live acceptance must additionally verify page
-rendering, the deployed commit, authenticated workflows, actual server exports
+The current integration passes 517 site tests, lint, page/asset checks,
+market layer checks, the static build and Pages Functions compilation.
+The bridge passes 14 Java tests
+against the live Paper API profile. The prepared network account runtime passes
+518 domain/Velocity tests, with one existing Windows symlink test skipped.
+The latest site CI completed successfully. Live acceptance must additionally
+verify page rendering, the deployed commit, authenticated workflows, actual server exports
 and protected staff actions; a successful build does not establish those.
 
 Retain a local Cloudflare project configuration backup before further changes.
@@ -137,3 +145,23 @@ Wiki publication is separate. Read-only hosted wiki parser validation currently
 receives HTTP 403 from Miraheze. No wiki publisher was dispatched during this
 site launch. Codacy's retained analyzer findings are described in
 `CODACY-BASELINE.md`; they are not a clean-analysis result.
+
+## Live feed acceptance still required
+
+The account page shows a pending server activation message and disables new
+link challenges while the network integration is staged. Its two panel rows
+were verified with matching heights on the deployed site.
+
+Guild rankings are live. The directory requests up to 50 existing leaderboard
+records and remains marked as limited; complete guild membership, quest and
+seasonal data need an authoritative directory exporter. Warzone, player,
+bounty and event snapshots still need their maintained server producers.
+Captured preview data must not be published as current live data.
+
+The installed market integration publishes stall inventory. Completed-sale
+history needs a separate transaction producer; stock changes must not be
+interpreted as purchases. Consequently market alert schedules remain disabled.
+Automatic donor updates also remain disconnected in the installed test build.
+Competition Bridge installation, protected connectivity, reward/provider
+acceptance, notification opt-in/opt-out and checkout fulfillment remain
+unverified. These gaps prevent treating the complete site as launch-ready.
