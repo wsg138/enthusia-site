@@ -1,0 +1,47 @@
+/* Final native-workflow refinements using the exported site's pixel surfaces. */
+.en :where(button,input,select,textarea){font-family:inherit}
+.en .community-row{font-family:inherit}
+.en.workflow-page :where(.mod-list .card,#moderation-case){border-radius:0;border:4px solid #4a0b08}
+.en.workflow-page .mod-filter select{background:#fff;color:#3a0d0a;border:4px solid #b3201a;border-radius:0;min-height:48px;font:inherit}
+.en.workflow-page .competition-back-link{border-radius:0}
+.en input[type=file]::file-selector-button{font:inherit;background:#fff8e6;color:#3a0d0a;border:3px solid #4a0b08;border-radius:0;padding:6px 12px;cursor:pointer}
+.en .appeal-view-tabs{background:transparent;border:0;border-radius:0;box-shadow:none}
+.en .admin-service-panel,.en .competition-player-preview{border-radius:0}
+.en .admin-status-item{background:#fff8e6;color:#3a0d0a;border:4px solid #4a0b08;border-radius:0;box-shadow:inset 3px 3px 0 #fff,inset -3px -3px 0 #ecc873}
+.en .admin-status-item :where(strong,h3,p,small){color:#6b3a2a}
+.en.workflow-page :where(.gallery-entry.card,.gallery-guide.card,.mod-search.card,.moderation-main .card){border-radius:0}
+.en .gallery-tabs button{border:4px solid #4a0b08;border-radius:0;background:#fff8e6;color:#3a0d0a;min-height:48px;box-shadow:inset 3px 3px 0 #fff,inset -3px -3px 0 #ecc873}
+.en .gallery-tabs button.active{background:#ffcf1f;color:#3a0d0a;box-shadow:inset 3px 3px 0 #ffe9a8,inset -3px -3px 0 #e08f00}
+.en.workflow-page .mod-search :where(input,select){background:#fff;color:#3a0d0a;border:4px solid #b3201a;border-radius:0;min-height:48px}
+.market-page-root .layer-caption{font-family:"Minecraft","Courier New",monospace}
+.en :where(.gallery-dialog,.gallery-empty,.gallery-notice,.reviewer-appeal-card,.appeal-history-card){background:#fff8e6;color:#3a0d0a;border:4px solid #4a0b08;border-radius:0;box-shadow:inset 4px 4px 0 #fff,inset -4px -4px 0 #ecc873}
+.en .gallery-dialog :where(h2,h3,strong){color:#b3201a}
+.en .gallery-dialog :where(p,label,small){color:#6b3a2a}
+.en .gallery-dialog :where(input,select,textarea){font:inherit;color:#3a0d0a;background:#fff;border:4px solid #b3201a;border-radius:0;box-sizing:border-box;max-width:100%;min-height:48px}
+.en .gallery-dialog button{font:inherit;border:4px solid #4a0b08;border-radius:0;background:#ffcf1f;color:#3a0d0a;min-height:48px}
+
+/* Additional competition states beyond the exported overview. */
+.exact-detail-inner{--text:#3a0d0a;--muted:#6b3a2a;--line:#4a0b08;--line-strong:#4a0b08;--orange:#b3201a;--gold:#ffcf1f}
+.exact-detail-inner :where(.competition-empty,.competition-error,.competition-judge-card,.participant-card,.participant-vote-card,.submission-card,.competition-podium-card,.competition-result-row,.competition-reward-card,.competition-form-section,.participant-section,.participant-entry-card,.participant-draft-card,.participant-status-card){background:#fff8e6;color:#3a0d0a;border:4px solid #4a0b08;border-radius:0;box-shadow:inset 4px 4px 0 #fff,inset -4px -4px 0 #ecc873}
+.exact-detail-inner .competition-guide-topics>section{background:#fff8e6;color:#3a0d0a;border:4px solid #4a0b08;border-radius:0;box-shadow:inset 4px 4px 0 #fff,inset -4px -4px 0 #ecc873}
+.exact-detail-inner :where(.competition-judge-card,.participant-card,.participant-vote-card,.submission-card,.competition-podium-card,.competition-result-row,.competition-reward-card,.competition-guide-topics) :where(h2,h3,h4){color:#b3201a;font-weight:400}
+.exact-detail-inner :where(.competition-empty,.competition-error,.competition-judge-card,.participant-card,.participant-vote-card,.submission-card,.competition-podium-card,.competition-result-row,.competition-reward-card,.competition-guide-topics) :where(p,small,label,dt){color:#6b3a2a}
+.exact-detail-inner :where(.competition-guide-topic-number,.competition-badge,.competition-reward-placement,.competition-result-place){border:4px solid #4a0b08;border-radius:0;background:#ffcf1f;color:#3a0d0a;box-sizing:border-box}
+.exact-detail-inner :where(button,.competition-back-link,.competition-primary-action,.competition-card-link,.competition-guide-link){font-family:inherit;min-height:48px;border:4px solid #4a0b08;border-radius:0;background:#fff8e6;color:#3a0d0a;box-shadow:inset 3px 3px 0 #fff,inset -3px -3px 0 #ecc873}
+.exact-detail-inner :where(button[type=submit],.competition-primary-action){background:#ffcf1f;color:#3a0d0a;box-shadow:inset 3px 3px 0 #ffe9a8,inset -3px -3px 0 #e08f00}
+.exact-detail-inner :where(input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea){font:inherit;box-sizing:border-box;min-height:48px;background:#fff;color:#3a0d0a;border:4px solid #b3201a;border-radius:0;padding:8px 12px;max-width:100%}
+.exact-detail-inner :where(input[type=checkbox],input[type=radio]){accent-color:#b3201a}
+.exact-detail-inner .participant-vote-card:has(input:checked){background:#ffe7b0;border-color:#b3201a}
+.exact-detail-inner :where(.competition-error,.participant-error){border-color:#b3201a;background:#ffe1d3;color:#7d120e}
+.exact-detail-inner :where(.competition-podium-card,.competition-result-row,.submission-card).is-clickable:hover{background:#ffe7b0}
+.exact-detail-inner .competition-reward-icon{background:#7d120e;border:4px solid #4a0b08;border-radius:0}
+.exact-detail-inner :where(.participant-entry-row,.participant-invite-row,.participant-contributor-row,.participant-image-card,.participant-review-item,.judge-score-row,.judge-summary-card){background:#fff1cf;color:#3a0d0a;border:4px solid #4a0b08;border-radius:0}
+.exact-detail-inner :where(.participant-muted,.participant-character-count,.participant-field-label,.participant-vote-card span,.competition-reward-recipients span){color:#6b3a2a}
+.exact-detail-inner :where(.participant-moderation-notice,.participant-image-warning){background:#ffe7b0;color:#3a0d0a;border:4px solid #4a0b08;border-radius:0}
+.exact-detail-inner input[type=file]{font:inherit;background:#fff;color:#3a0d0a;border:4px solid #b3201a;border-radius:0;max-width:100%;box-sizing:border-box}
+.exact-detail-inner .participant-danger-button{background:#b3201a;color:#fff6e0}
+body[data-competition-page=detail] .competition-error{border:4px solid #b3201a;border-radius:0;background:#ffe1d3;color:#7d120e}
+body[data-competition-page=detail] .competition-reward-dialog{border:4px solid #4a0b08;border-radius:0;background:#fff8e6;color:#3a0d0a;font-family:inherit}
+body[data-competition-page=detail] .competition-reward-dialog :where(h2,h3){color:#b3201a}
+body[data-competition-page=detail] .competition-reward-dialog :where(p,small){color:#6b3a2a}
+@media(max-width:720px){.exact-detail-inner .competition-guide-topics{grid-template-columns:minmax(0,1fr)}}
