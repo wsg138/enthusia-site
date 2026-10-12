@@ -4,7 +4,7 @@ CREATE TRIGGER competition_results_guard_completion
 BEFORE UPDATE OF lifecycle_state ON competitions
 WHEN NEW.lifecycle_state = 'COMPLETED' AND OLD.lifecycle_state = 'RESULTS_READY'
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN (
             SELECT COUNT(*)
             FROM submissions s
@@ -13,9 +13,9 @@ BEGIN
               AND s.removed_at IS NULL
         ) < 1
         THEN RAISE(ABORT, 'competition_results_no_approved_entries')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN (
             SELECT COUNT(*)
             FROM competition_results r
@@ -33,9 +33,9 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_results_incomplete')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_results r
@@ -50,9 +50,9 @@ BEGIN
               )
         )
         THEN RAISE(ABORT, 'competition_results_include_ineligible_entry')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_results r
@@ -60,5 +60,5 @@ BEGIN
               AND r.config_version <> OLD.current_config_version
         )
         THEN RAISE(ABORT, 'competition_results_stale_config')
-    END;
+    END);
 END;

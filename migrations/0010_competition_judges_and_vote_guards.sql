@@ -11,7 +11,7 @@ CREATE TRIGGER competition_judge_assignment_entry_guard
 BEFORE INSERT ON competition_judges
 WHEN NEW.removed_at IS NULL
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submissions s
@@ -21,9 +21,9 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_judge_is_submission_owner')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submission_participants p
@@ -36,14 +36,14 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_judge_is_entry_participant')
-    END;
+    END);
 END;
 
 CREATE TRIGGER competition_judge_reactivation_entry_guard
 BEFORE UPDATE OF removed_at ON competition_judges
 WHEN NEW.removed_at IS NULL AND OLD.removed_at IS NOT NULL
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submissions s
@@ -53,9 +53,9 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_judge_is_submission_owner')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submission_participants p
@@ -68,7 +68,7 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_judge_is_entry_participant')
-    END;
+    END);
 END;
 
 -- Someone who has ever been selected as a judge for this competition cannot
@@ -76,34 +76,34 @@ END;
 CREATE TRIGGER submission_owner_judge_guard_insert
 BEFORE INSERT ON submissions
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1 FROM competition_judges j
             WHERE j.competition_id = NEW.competition_id
               AND j.judge_uuid = NEW.owner_uuid
         )
         THEN RAISE(ABORT, 'competition_judge_cannot_enter')
-    END;
+    END);
 END;
 
 CREATE TRIGGER submission_owner_judge_guard_update
 BEFORE UPDATE OF competition_id, owner_uuid ON submissions
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1 FROM competition_judges j
             WHERE j.competition_id = NEW.competition_id
               AND j.judge_uuid = NEW.owner_uuid
         )
         THEN RAISE(ABORT, 'competition_judge_cannot_enter')
-    END;
+    END);
 END;
 
 CREATE TRIGGER participant_judge_guard_insert
 BEFORE INSERT ON submission_participants
 WHEN NEW.invite_status = 'ACCEPTED' AND NEW.participant_role <> 'HELPER'
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submissions s
@@ -112,14 +112,14 @@ BEGIN
               AND j.judge_uuid = NEW.player_uuid
         )
         THEN RAISE(ABORT, 'competition_judge_cannot_enter')
-    END;
+    END);
 END;
 
 CREATE TRIGGER participant_judge_guard_update
 BEFORE UPDATE OF player_uuid, participant_role, invite_status ON submission_participants
 WHEN NEW.invite_status = 'ACCEPTED' AND NEW.participant_role <> 'HELPER'
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submissions s
@@ -128,13 +128,13 @@ BEGIN
               AND j.judge_uuid = NEW.player_uuid
         )
         THEN RAISE(ABORT, 'competition_judge_cannot_enter')
-    END;
+    END);
 END;
 
 CREATE TRIGGER judge_score_assignment_guard_insert
 BEFORE INSERT ON judge_scores
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN NOT EXISTS (
             SELECT 1
             FROM competition_judges j
@@ -151,13 +151,13 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_judge_score_not_allowed')
-    END;
+    END);
 END;
 
 CREATE TRIGGER judge_score_assignment_guard_update
 BEFORE UPDATE ON judge_scores
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN NOT EXISTS (
             SELECT 1
             FROM competition_judges j
@@ -174,7 +174,7 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_judge_score_not_allowed')
-    END;
+    END);
 END;
 
 -- Public voting uses voter_subject so all linked Minecraft accounts under the
@@ -182,7 +182,7 @@ END;
 CREATE TRIGGER competition_vote_fairness_guard
 BEFORE INSERT ON votes
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN NOT EXISTS (
             SELECT 1
             FROM competitions c
@@ -195,18 +195,18 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_vote_not_open_or_entry_ineligible')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1 FROM competition_judges j
             WHERE j.competition_id = NEW.competition_id
               AND j.judge_uuid = NEW.voter_uuid
         )
         THEN RAISE(ABORT, 'competition_judge_cannot_vote')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submissions s
@@ -214,9 +214,9 @@ BEGIN
               AND s.owner_uuid = NEW.voter_uuid
         )
         THEN RAISE(ABORT, 'competition_owner_cannot_vote_own_entry')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submission_participants p
@@ -226,9 +226,9 @@ BEGIN
               AND p.participant_role IN ('OWNER','MAIN','GUILD_WORKER')
         )
         THEN RAISE(ABORT, 'competition_participant_cannot_vote_own_entry')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN (
             SELECT COUNT(*)
             FROM votes v
@@ -243,5 +243,5 @@ BEGIN
             WHERE c.id = NEW.competition_id
         ), 0)
         THEN RAISE(ABORT, 'competition_vote_limit_reached')
-    END;
+    END);
 END;

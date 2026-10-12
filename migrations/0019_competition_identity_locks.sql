@@ -46,7 +46,7 @@ JOIN competition_minecraft_links l ON l.minecraft_uuid = j.judge_uuid;
 CREATE TRIGGER competition_minecraft_link_identity_lock_insert
 BEFORE INSERT ON competition_minecraft_links
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_identity_locks lock
@@ -54,13 +54,13 @@ BEGIN
               AND lock.discord_user_id <> NEW.discord_user_id
         )
         THEN RAISE(ABORT, 'minecraft_identity_locked_to_another_discord')
-    END;
+    END);
 END;
 
 CREATE TRIGGER competition_minecraft_link_identity_lock_update
 BEFORE UPDATE OF discord_user_id ON competition_minecraft_links
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_identity_locks lock
@@ -68,7 +68,7 @@ BEGIN
               AND lock.discord_user_id <> NEW.discord_user_id
         )
         THEN RAISE(ABORT, 'minecraft_identity_locked_to_another_discord')
-    END;
+    END);
 END;
 
 -- If a previously unlinked player already has participant/judge history, their
@@ -109,14 +109,14 @@ BEGIN
         discord_user_id = competition_minecraft_identity_locks.discord_user_id
     WHERE competition_minecraft_identity_locks.discord_user_id = excluded.discord_user_id;
 
-    SELECT CASE
+    SELECT (CASE
         WHEN NOT EXISTS (
             SELECT 1 FROM competition_minecraft_identity_locks lock
             WHERE lock.minecraft_uuid = NEW.owner_uuid
               AND lock.discord_user_id = substr(NEW.owner_subject, 9)
         )
         THEN RAISE(ABORT, 'minecraft_identity_locked_to_another_discord')
-    END;
+    END);
 END;
 
 CREATE TRIGGER competition_participant_identity_lock_insert

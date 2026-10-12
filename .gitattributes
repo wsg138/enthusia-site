@@ -1,1 +1,3 @@
 /public/assets/minecraft-occlusion-repair-v2.json -text
+migrations/**/*.sql text eol=lf
+migrations/*.sql text eol=lf

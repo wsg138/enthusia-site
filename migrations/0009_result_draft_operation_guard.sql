@@ -21,7 +21,7 @@ CREATE INDEX idx_result_draft_operations_competition
 CREATE TRIGGER competition_result_draft_operation_guard
 BEFORE INSERT ON competition_result_draft_operations
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN NOT EXISTS (
             SELECT 1
             FROM competitions c
@@ -30,7 +30,7 @@ BEGIN
               AND c.current_config_version = NEW.config_version
         )
         THEN RAISE(ABORT, 'competition_result_drafts_wrong_state_or_config')
-    END;
+    END);
 END;
 
 CREATE TRIGGER competition_result_drafts_reject_operation_replay
@@ -46,12 +46,12 @@ BEFORE UPDATE OF last_results_operation_id ON competitions
 WHEN NEW.last_results_operation_id IS NOT NULL
      AND NEW.last_results_operation_id IS NOT OLD.last_results_operation_id
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN NEW.lifecycle_state <> 'RESULTS_READY'
         THEN RAISE(ABORT, 'competition_result_drafts_wrong_state')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN NOT EXISTS (
             SELECT 1
             FROM competition_result_draft_operations o
@@ -60,9 +60,9 @@ BEGIN
               AND o.config_version = NEW.current_config_version
         )
         THEN RAISE(ABORT, 'competition_result_drafts_operation_missing')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN (
             SELECT COUNT(*)
             FROM submissions s
@@ -71,9 +71,9 @@ BEGIN
               AND s.removed_at IS NULL
         ) < 1
         THEN RAISE(ABORT, 'competition_result_drafts_no_approved_entries')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN (
             SELECT COUNT(*)
             FROM competition_result_drafts d
@@ -91,9 +91,9 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_result_drafts_incomplete')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_result_drafts d
@@ -108,9 +108,9 @@ BEGIN
               )
         )
         THEN RAISE(ABORT, 'competition_result_drafts_include_ineligible_entry')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_result_drafts d
@@ -118,5 +118,5 @@ BEGIN
               AND d.config_version <> NEW.current_config_version
         )
         THEN RAISE(ABORT, 'competition_result_drafts_stale_config')
-    END;
+    END);
 END;

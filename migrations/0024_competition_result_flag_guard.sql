@@ -6,7 +6,7 @@ PRAGMA foreign_keys = ON;
 CREATE TRIGGER competition_result_open_flag_guard
 BEFORE INSERT ON competition_results
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submission_moderation sm
@@ -18,5 +18,5 @@ BEGIN
               AND sm.flag_reason IS NOT NULL
         )
         THEN RAISE(ABORT, 'competition_results_open_flags')
-    END;
+    END);
 END;

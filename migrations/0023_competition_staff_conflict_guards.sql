@@ -7,7 +7,7 @@ CREATE TRIGGER competition_staff_moderation_conflict_insert
 BEFORE INSERT ON submission_moderation
 WHEN NEW.reviewed_by_uuid IS NOT NULL
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submissions s
@@ -15,9 +15,9 @@ BEGIN
               AND s.owner_uuid = NEW.reviewed_by_uuid
         )
         THEN RAISE(ABORT, 'competition_staff_self_moderation')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submission_participants p
@@ -26,9 +26,9 @@ BEGIN
               AND p.invite_status = 'ACCEPTED'
         )
         THEN RAISE(ABORT, 'competition_staff_self_moderation')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             WITH reviewer_discord AS (
                 SELECT discord_user_id FROM competition_minecraft_links WHERE minecraft_uuid = NEW.reviewed_by_uuid
@@ -54,14 +54,14 @@ BEGIN
               )
         )
         THEN RAISE(ABORT, 'competition_staff_linked_self_moderation')
-    END;
+    END);
 END;
 
 CREATE TRIGGER competition_staff_moderation_conflict_update
 BEFORE UPDATE OF reviewed_by_uuid ON submission_moderation
 WHEN NEW.reviewed_by_uuid IS NOT NULL
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submissions s
@@ -76,9 +76,9 @@ BEGIN
               AND p.invite_status = 'ACCEPTED'
         )
         THEN RAISE(ABORT, 'competition_staff_self_moderation')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             WITH reviewer_discord AS (
                 SELECT discord_user_id FROM competition_minecraft_links WHERE minecraft_uuid = NEW.reviewed_by_uuid
@@ -104,5 +104,5 @@ BEGIN
               )
         )
         THEN RAISE(ABORT, 'competition_staff_linked_self_moderation')
-    END;
+    END);
 END;

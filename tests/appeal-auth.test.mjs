@@ -322,7 +322,7 @@ test("private Staff API requests carry a valid replay-protected signature", asyn
       STAFF_API_HMAC_SECRET: "s".repeat(32)
     };
     await signedStaffRequest(env, "/v1/website/appeals/eligible", { accountId: PLAYER_ID });
-    assert.equal(captured.url, "https://staff-api.enthusia.info/v1/website/appeals/eligible");
+    assert.equal(captured.url, "https://staff-network-api.enthusia.info/v1/website/appeals/eligible");
     assert.equal(captured.options.method, "POST");
     assert.equal(captured.options.headers.authorization, `Bearer ${"b".repeat(32)}`);
     assert.match(captured.options.headers["x-enthusia-nonce"], /^[0-9a-f-]{36}$/);

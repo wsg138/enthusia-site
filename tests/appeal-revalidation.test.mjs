@@ -115,7 +115,7 @@ test("Staff revalidation uses server-owned account and generation values", async
   try {
     await revalidatePunishment(ENV, ACCOUNT_ID, BINDING);
     const body = JSON.parse(new TextDecoder().decode(captured.options.body));
-    assert.equal(captured.url, "https://staff-api.enthusia.info/v1/website/punishment-codes/revalidate");
+    assert.equal(captured.url, "https://staff-network-api.enthusia.info/v1/website/punishment-codes/revalidate");
     assert.deepEqual(body, { accountId: ACCOUNT_ID, punishmentId: PUNISHMENT_ID, codeGeneration: 4 });
     assert.equal("punishmentCode" in body, false);
   } finally {

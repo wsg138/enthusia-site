@@ -8,7 +8,7 @@ CREATE TRIGGER competition_vote_linked_identity_guard
 BEFORE INSERT ON votes
 WHEN NEW.voter_subject LIKE 'discord:%'
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN NOT EXISTS (
             SELECT 1
             FROM competition_minecraft_links l
@@ -16,9 +16,9 @@ BEGIN
               AND l.minecraft_uuid = NEW.voter_uuid
         )
         THEN RAISE(ABORT, 'competition_vote_identity_mismatch')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_links l
@@ -28,9 +28,9 @@ BEGIN
             WHERE l.discord_user_id = substr(NEW.voter_subject, 9)
         )
         THEN RAISE(ABORT, 'competition_linked_judge_cannot_vote')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_links l
@@ -40,9 +40,9 @@ BEGIN
             WHERE l.discord_user_id = substr(NEW.voter_subject, 9)
         )
         THEN RAISE(ABORT, 'competition_linked_owner_cannot_vote_own_entry')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_links l
@@ -54,14 +54,14 @@ BEGIN
               AND p.participant_role IN ('OWNER','MAIN','GUILD_WORKER')
         )
         THEN RAISE(ABORT, 'competition_linked_participant_cannot_vote_own_entry')
-    END;
+    END);
 END;
 
 CREATE TRIGGER competition_judge_linked_identity_guard
 BEFORE INSERT ON competition_judges
 WHEN NEW.removed_at IS NULL
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_links selected
@@ -75,9 +75,9 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_linked_judge_is_submission_owner')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_links selected
@@ -95,9 +95,9 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_linked_judge_is_entry_participant')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_links selected
@@ -107,14 +107,14 @@ BEGIN
             WHERE selected.minecraft_uuid = NEW.judge_uuid
         )
         THEN RAISE(ABORT, 'competition_linked_judge_has_voted')
-    END;
+    END);
 END;
 
 CREATE TRIGGER competition_judge_linked_identity_reactivation_guard
 BEFORE UPDATE OF removed_at ON competition_judges
 WHEN NEW.removed_at IS NULL AND OLD.removed_at IS NOT NULL
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_links selected
@@ -128,9 +128,9 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_linked_judge_is_submission_owner')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_links selected
@@ -148,9 +148,9 @@ BEGIN
               AND s.removed_at IS NULL
         )
         THEN RAISE(ABORT, 'competition_linked_judge_is_entry_participant')
-    END;
+    END);
 
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_links selected
@@ -160,13 +160,13 @@ BEGIN
             WHERE selected.minecraft_uuid = NEW.judge_uuid
         )
         THEN RAISE(ABORT, 'competition_linked_judge_has_voted')
-    END;
+    END);
 END;
 
 CREATE TRIGGER submission_owner_linked_judge_guard_insert
 BEFORE INSERT ON submissions
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_links entrant
@@ -178,13 +178,13 @@ BEGIN
             WHERE entrant.minecraft_uuid = NEW.owner_uuid
         )
         THEN RAISE(ABORT, 'competition_linked_judge_cannot_enter')
-    END;
+    END);
 END;
 
 CREATE TRIGGER submission_owner_linked_judge_guard_update
 BEFORE UPDATE OF competition_id, owner_uuid ON submissions
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM competition_minecraft_links entrant
@@ -196,14 +196,14 @@ BEGIN
             WHERE entrant.minecraft_uuid = NEW.owner_uuid
         )
         THEN RAISE(ABORT, 'competition_linked_judge_cannot_enter')
-    END;
+    END);
 END;
 
 CREATE TRIGGER participant_linked_judge_guard_insert
 BEFORE INSERT ON submission_participants
 WHEN NEW.invite_status = 'ACCEPTED' AND NEW.participant_role <> 'HELPER'
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submissions s
@@ -217,14 +217,14 @@ BEGIN
             WHERE s.id = NEW.submission_id
         )
         THEN RAISE(ABORT, 'competition_linked_judge_cannot_enter')
-    END;
+    END);
 END;
 
 CREATE TRIGGER participant_linked_judge_guard_update
 BEFORE UPDATE OF player_uuid, participant_role, invite_status ON submission_participants
 WHEN NEW.invite_status = 'ACCEPTED' AND NEW.participant_role <> 'HELPER'
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN EXISTS (
             SELECT 1
             FROM submissions s
@@ -238,5 +238,5 @@ BEGIN
             WHERE s.id = NEW.submission_id
         )
         THEN RAISE(ABORT, 'competition_linked_judge_cannot_enter')
-    END;
+    END);
 END;

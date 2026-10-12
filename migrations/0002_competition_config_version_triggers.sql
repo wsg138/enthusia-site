@@ -7,7 +7,7 @@ CREATE TRIGGER competition_config_versions_enforce_sequence
 BEFORE INSERT ON competition_config_versions
 WHEN NEW.version > 1
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN NOT EXISTS (
             SELECT 1
             FROM competitions
@@ -15,7 +15,7 @@ BEGIN
               AND current_config_version = NEW.version - 1
         )
         THEN RAISE(ABORT, 'stale_competition_config_version')
-    END;
+    END);
 END;
 
 -- Advancing the current pointer belongs to the same transaction as inserting

@@ -67,7 +67,7 @@ test("eligibility sends the claimed website account ID to EnthusiaStaff", async 
   try {
     const result = await requestEligiblePunishments(ENV, websiteAccountId);
     assert.deepEqual(result.punishments, []);
-    assert.equal(captured.url, "https://staff-api.enthusia.info/v1/website/appeals/eligible");
+    assert.equal(captured.url, "https://staff-network-api.enthusia.info/v1/website/appeals/eligible");
     assert.equal(JSON.parse(new TextDecoder().decode(captured.options.body)).accountId, websiteAccountId);
   } finally {
     globalThis.fetch = originalFetch;

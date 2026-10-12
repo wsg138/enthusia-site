@@ -36,7 +36,7 @@ Configure these values in the preview Pages environment:
 
 Discord OAuth must allow the callback above and the application must support the scopes currently requested by the site: `identify guilds.members.read`.
 
-`STAFF_API_TARGET` is required and accepts only `production` or `preview`. A missing, empty, or unrecognized value fails closed before any Staff request is sent. `production` resolves to the hardcoded `https://staff-api.enthusia.info`; `preview` resolves to the hardcoded `https://staff-api-dev.enthusia.info`. The browser cannot supply or alter this target.
+`STAFF_API_TARGET` is required and accepts only `production` or `preview`. A missing, empty, or unrecognized value fails closed before any Staff request is sent. `production` resolves to the hardcoded `https://staff-network-api.enthusia.info`; `preview` resolves to the hardcoded `https://staff-api-dev.enthusia.info`. The browser cannot supply or alter this target.
 
 ## Secrets
 

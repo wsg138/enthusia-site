@@ -1,5 +1,5 @@
 const encoder = new TextEncoder();
-const STAFF_API_ORIGIN = "https://staff-api.enthusia.info";
+const STAFF_API_ORIGIN = "https://staff-network-api.enthusia.info";
 const STAFF_API_PREVIEW_ORIGIN = "https://staff-api-dev.enthusia.info";
 const STAFF_API_TIMEOUT_MS = 7000;
 const STATIC_ROUTES = new Set([
@@ -84,10 +84,7 @@ export async function publicStaffRequest(env, path, query = new URLSearchParams(
   const parameters = query instanceof URLSearchParams ? query : new URLSearchParams(query);
   const url = new URL(requestTarget, staffApiOrigin(env));
   url.search = parameters.toString();
-  return boundedFetch(url, {
-    method: "GET",
-    headers: { accept: "application/json" }
-  });
+  return signedStaffGet(env, `${url.pathname}${url.search}`);
 }
 
 export async function signedStaffRequest(env, path, body) {

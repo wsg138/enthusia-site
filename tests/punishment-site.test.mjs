@@ -44,7 +44,7 @@ test("Staff API requests require an explicit fixed production or preview target"
   assert.throws(() => staffApiOrigin({ STAFF_API_TARGET: "" }), /target is invalid/);
   assert.equal(
     staffApiOrigin({ STAFF_API_TARGET: "production" }),
-    "https://staff-api.enthusia.info"
+    "https://staff-network-api.enthusia.info"
   );
   assert.equal(
     staffApiOrigin({ STAFF_API_TARGET: "preview" }),

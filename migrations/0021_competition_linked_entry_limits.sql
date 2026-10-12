@@ -9,7 +9,7 @@ BEFORE INSERT ON submissions
 WHEN NEW.entry_type IN ('SOLO','GROUP')
   AND NEW.owner_subject LIKE 'discord:%'
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN (
             WITH identity_uuids AS (
                 SELECT minecraft_uuid
@@ -52,7 +52,7 @@ BEGIN
             WHERE c.id = NEW.competition_id
         ), 1)
         THEN RAISE(ABORT, 'competition_linked_entry_limit_reached')
-    END;
+    END);
 END;
 
 CREATE TRIGGER competition_linked_entry_limit_main_insert
@@ -65,7 +65,7 @@ WHEN NEW.invite_status = 'ACCEPTED'
     SELECT 1 FROM competition_minecraft_identity_locks WHERE minecraft_uuid = NEW.player_uuid
   )
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN (
             WITH discord_identity AS (
                 SELECT discord_user_id
@@ -122,7 +122,7 @@ BEGIN
             WHERE target.id = NEW.submission_id
         ), 1)
         THEN RAISE(ABORT, 'competition_linked_entry_limit_reached')
-    END;
+    END);
 END;
 
 CREATE TRIGGER competition_linked_entry_limit_main_update
@@ -136,7 +136,7 @@ WHEN NEW.invite_status = 'ACCEPTED'
     SELECT 1 FROM competition_minecraft_identity_locks WHERE minecraft_uuid = NEW.player_uuid
   )
 BEGIN
-    SELECT CASE
+    SELECT (CASE
         WHEN (
             WITH discord_identity AS (
                 SELECT discord_user_id
@@ -193,5 +193,5 @@ BEGIN
             WHERE target.id = NEW.submission_id
         ), 1)
         THEN RAISE(ABORT, 'competition_linked_entry_limit_reached')
-    END;
+    END);
 END;
