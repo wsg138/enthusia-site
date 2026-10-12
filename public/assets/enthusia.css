@@ -166,13 +166,13 @@ a{color:#b3201a}a:hover{color:#7d120e}
 .vrow.done .done-tag{display:inline-block}
 .vrow.done{background:#ffe7b0}
 .hero-join{background-image:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(screenshots/slide-12.webp)}.hero-join{background-position:center,center 60%}
-.hero-rules{background-image:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(rules-council-hall-v1.webp)}.hero-rules{background-position:center,center 42%}
+.hero-rules{background-image:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(rules-council-hall-user.png)}.hero-rules{background-position:center,center 42%}
 .hero-about{background-image:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(screenshots/slide-01.webp)}.hero-about{background-position:center,center 50%}
 .hero-leaderboards{background-image:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(screenshots/slide-05.webp)}.hero-leaderboards{background-position:center,center 46%}
 .hero-gallery{background-image:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(screenshots/slide-22.webp)}.hero-gallery{background-position:center,center 50%}
 .hero-staff{background-image:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(screenshots/slide-01.webp)}.hero-staff{background-position:center,center 48%}
 .hero-vote{background-image:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(screenshots/slide-17.webp)}.hero-vote{background-position:center,center 50%}
-.hero-appeal{background-image:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(screenshots/slide-01.webp)}.hero-appeal{background-position:center,center 50%}
+.hero-appeal{background-image:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(rules-council-hall-user.png)}.hero-appeal{background-position:center,center 42%}
 .hero-notfound{background-image:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(screenshots/slide-01.webp)}.hero-notfound{background-position:center,center 50%}
 
 /* ------------------------------------------------------------------ page furniture */
