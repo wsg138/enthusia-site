@@ -37,6 +37,8 @@
 .mi-row[aria-pressed="true"]{background:var(--gold);box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo);transform:none}
 .mi-item{display:flex;align-items:center;gap:12px;min-width:0}
 .mi-item .slot{width:40px;height:40px;font-size:16px;line-height:24px}
+.mi-item-slot{position:relative;width:40px;height:40px}
+.mi-item-slot img{position:absolute;inset:0;margin:auto;width:32px;height:32px;object-fit:contain;image-rendering:pixelated;pointer-events:none}
 .mi-item span.t{overflow-wrap:anywhere}
 .mi-up{color:#1c7a32}.mi-down{color:#b3201a}.mi-flat{color:var(--muted)}
 .mi-row[aria-pressed="true"] .mi-up{color:#0d4f1e}

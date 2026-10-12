@@ -4,6 +4,7 @@
   "use strict";
 
   var NS = "http://www.w3.org/2000/svg";
+  var itemAssetBase = new URL("./", document.currentScript.src);
   var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   function h(tag, attrs, kids) {
@@ -309,9 +310,13 @@
     return list;
   }
 
-  function initials(name) {
-    var w = name.split(" ");
-    return (w.length > 1 ? w[0][0] + w[1][0] : name.slice(0, 2)).toUpperCase();
+  function itemSlot(item) {
+    var material = (item.key || item.name).replace(/^minecraft:/, "").replaceAll(" ", "_").toUpperCase();
+    var assets = window.ENTHUSIA_MINECRAFT_ASSETS;
+    var definition = assets.materials[material] || assets.fallback;
+    return h("span", { class: "slot mi-item-slot", "aria-hidden": "true" }, definition.layers.map(function (layer) {
+      return h("img", { src: new URL(layer.src, itemAssetBase).href, alt: "", width: 32, height: 32 });
+    }));
   }
 
   function renderRows() {
@@ -323,7 +328,7 @@
     }
     list.forEach(function (it) {
       var row = h("button", { class: "mi-row mi-grid", type: "button", "aria-pressed": it.name === state.sel ? "true" : "false" }, [
-        h("span", { class: "mi-item" }, [h("span", { class: "slot", "aria-hidden": "true", text: initials(it.name) }), h("span", { class: "t", text: it.name })]),
+        h("span", { class: "mi-item" }, [itemSlot(it), h("span", { class: "t", text: it.name })]),
         h("span", { text: gold(it.price) }),
         change(it.d1),
         change(it.d7, "h7"),
@@ -437,7 +442,7 @@
     var card = h("div", { class: "panel mi-card" }, [h("p", { class: "mi-kick", text: kick }), h("h3", { text: title })]);
     list.forEach(function (it) {
       var row = h("button", { class: "mi-row mi-grid mi-mv", type: "button" }, [
-        h("span", { class: "mi-item" }, [h("span", { class: "slot", "aria-hidden": "true", text: initials(it.name) }), h("span", { class: "t", text: it.name })]),
+        h("span", { class: "mi-item" }, [itemSlot(it), h("span", { class: "t", text: it.name })]),
         h("span", { text: gold(it.price) }),
         change(it.d7)
       ]);
@@ -461,7 +466,7 @@
     top.forEach(function (it, i) {
       var row = h("div", { class: "mi-rank" + (i === 0 ? " first" : "") }, [
         h("span", { class: "bar", style: "width:0" }), h("span", { class: "n", text: "#" + (i + 1) }),
-        h("span", { class: "slot", "aria-hidden": "true", style: "width:40px;height:40px", text: initials(it.name) }),
+        itemSlot(it),
         h("span", { text: it.name }), h("span", { class: "g", text: it.sales.toLocaleString("en-US") + " sold" })
       ]);
       list.appendChild(row);
