@@ -103,7 +103,7 @@ async function readR2Leaderboard(env, config) {
   });
 }
 
-function buildGuildRequest(env) {
+function buildGuildRequest(env, limit = 10) {
   let url = false;
   try {
     url = new URL(env.GUILDS_API_URL || DEFAULT_GUILDS_API_URL);
@@ -117,7 +117,7 @@ function buildGuildRequest(env) {
   }
 
   url.searchParams.set("period", "ALL_TIME");
-  url.searchParams.set("limit", "10");
+  url.searchParams.set("limit", String(limit));
 
   const headers = { Accept: "application/json" };
   if (env.GUILDS_API_BEARER) {
@@ -131,8 +131,8 @@ function buildGuildRequest(env) {
   return { url, headers };
 }
 
-async function readGuildLeaderboard(env) {
-  const request = buildGuildRequest(env);
+async function readGuildLeaderboard(env, limit = 10) {
+  const request = buildGuildRequest(env, limit);
   if (!request) {
     return json({
       ok: false,
@@ -166,6 +166,11 @@ async function readGuildLeaderboard(env) {
       "cache-control": "max-age=15, s-maxage=15"
     }
   });
+}
+
+export function readGuildDirectory(env) {
+  // The installed API caps results at 50; the directory labels this as limited.
+  return readGuildLeaderboard(env, 50);
 }
 
 export function onRequestGet(context) {

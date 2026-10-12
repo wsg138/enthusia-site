@@ -25,11 +25,13 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: '25'
           cache: maven
           cache-dependency-path: minecraft/competition-bridge/pom.xml
       - name: Verify competition bridge
         run: mvn -B -f minecraft/competition-bridge/pom.xml verify
+      - name: Verify live Paper 26.2 compatibility
+        run: mvn -B -f minecraft/competition-bridge/pom.xml -Ppaper-26-2 clean verify
       - name: Upload verified competition bridge JAR
         uses: actions/upload-artifact@v4
         with:

@@ -2,7 +2,7 @@ import { authenticateRequest } from '../auth.js';
 import { getCompetitionIdentitySession } from '../competitions/identity.js';
 import { requireSameOrigin } from '../security.js';
 import { json } from '../responses.js';
-import { onRequestGet as leaderboard } from '../../api/leaderboards/[[path]].js';
+import { readGuildDirectory } from '../../api/leaderboards/[[path]].js';
 import { projectGuildDirectory } from '../guild-directory-source.js';
 import { CONTENT_KINDS, SNAPSHOT_KINDS, identifier, validateRecord, decodeRow, publicRecord, projectSnapshot, validateSale, verifyProducer } from './contracts.js';
 
@@ -133,7 +133,7 @@ async function guildFallback(context, db) {
   catch { /* Guild rankings can operate without the community database. */ }
   if (snapshot) return null;
   try {
-    const response = await leaderboard({...context,params:{path:'guilds'}});
+    const response = await readGuildDirectory(context.env);
     if (!response.ok) return unavailable();
     const data = await response.json();
     if (!Array.isArray(data.entries)) return unavailable();

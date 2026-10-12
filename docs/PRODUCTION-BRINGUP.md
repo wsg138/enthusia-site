@@ -55,6 +55,14 @@ test recognition of an existing linked account and a new in-game challenge.
 Changing only the website flag before the server deployment would break
 authenticated workflows and must not be used as an activation shortcut.
 
+Production notification workers are provisioned separately from development:
+`enthusia-competition-jobs-production` and `enthusia-market-alerts-production`.
+Their production Wrangler configurations bind the correct D1 databases and
+their website bot token is encrypted. Both enable flags are false and both
+cron lists are empty. Keep them disabled until bridge connectivity, actual sale
+ingestion, opt-in delivery and opt-out behavior pass live acceptance. This setup
+does not send messages or activate lifecycle/reward processing.
+
 1. Configure encrypted `DISCORD_CLIENT_SECRET` for the application matching
    `DISCORD_CLIENT_ID`. Register exactly
    `https://enthusia.info/api/competitions/auth/discord/callback` in that
@@ -95,6 +103,12 @@ The live runtime log confirms Minecraft 26.2 on Paper 26.2. The homepage and
 shared FAQ use that version. Before installing the Competition Bridge, verify
 its API/runtime compatibility with this server; its existing build targets
 Java 21 and Paper 1.21.8.
+
+The `paper-26-2` Maven profile compiles and tests against Paper
+`26.2.build.123-stable`, retaining the default profile for existing development
+builds. Building that profile requires JDK 25 or newer. CI checks both profiles;
+the live-profile artifact is the one prepared for production installation.
+Compilation does not establish live provider compatibility or reward delivery.
 
 The donor website snapshot was refreshed from the installed plugin's cached
 official Tebex aggregate totals. Only the existing public leaderboard fields
