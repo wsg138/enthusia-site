@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview | Guilds</title>
+<meta name="description" content="Design preview of the Enthusia SMP site.">
+<link rel="preload" href="../../assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
+<link rel="stylesheet" href="../../assets/enthusia.css">
+<link rel="stylesheet" href="preview/preview.css">
+<style>
+
+body{margin:0;background:#8f1611}
+a{color:#b3201a}a:hover{color:#7d120e}
+.en{--edge:#4a0b08;--gold:#ffcf1f;--gold-hi:#ffe9a8;--gold-lo:#e08f00;font-family:"Minecraft","Courier New",monospace;font-size:16px;line-height:24px;-webkit-font-smoothing:none}
+.en h1,.en h2,.en h3,.en p,.en ol{margin:0;font-weight:400}
+.en ol{padding:0;list-style:none}
+.en img.px{image-rendering:pixelated;display:block}
+.hide{display:none !important}
+.s-red,.tip,.cap,.hero-vars{--ink:#fff6e0;--muted:#ffdcc8;--head:#ffdb2e;--head-sh:#6b0f0b;--kick:#ffe9a8;--accent:#ffe9a8;--hi:#ffe9a8;--good:#b6f7b6;--row:#a51b16;--row-top:#ffcf1f;--link:#ffdb2e;--link-hi:#ffffff;color:var(--ink)}
+.s-cream,.panel{--ink:#3a0d0a;--muted:#6b3a2a;--head:#b3201a;--head-sh:#ffcf1f;--kick:#8a5a00;--accent:#b3201a;--hi:#8a5a00;--good:#1c7a32;--row:#ffe7b0;--row-top:#ffcf1f;--link:#b3201a;--link-hi:#7d120e;color:var(--ink)}
+.s-red{background:#c0261d}
+.s-cream{background:#fff1cf}
+.hero-vars{--head-sh:#7d120e}
+.panel{background:#fff8e6;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873;box-sizing:border-box}
+.tip{--row:#8a1510;background:#a51b16;border:4px solid var(--edge);box-shadow:inset 0 0 0 4px var(--gold),inset 0 0 0 6px #5c0d09;box-sizing:border-box}
+.tip.fret-lg{background:url(../../assets/ui/fret-lg-tl.svg) left top/74px 74px no-repeat,url(../../assets/ui/fret-lg-tr.svg) right top/74px 74px no-repeat,url(../../assets/ui/fret-lg-bl.svg) left bottom/74px 74px no-repeat,url(../../assets/ui/fret-lg-br.svg) right bottom/74px 74px no-repeat,#a51b16}
+.tip.fret{background:url(../../assets/ui/fret-md-tl.svg) left top/54px 54px no-repeat,url(../../assets/ui/fret-md-tr.svg) right top/54px 54px no-repeat,url(../../assets/ui/fret-md-bl.svg) left bottom/54px 54px no-repeat,url(../../assets/ui/fret-md-br.svg) right bottom/54px 54px no-repeat,#a51b16}
+.tip.fret-sm{background:url(../../assets/ui/fret-sm-tl.svg) left top/22px 22px no-repeat,url(../../assets/ui/fret-sm-tr.svg) right top/22px 22px no-repeat,url(../../assets/ui/fret-sm-bl.svg) left bottom/22px 22px no-repeat,url(../../assets/ui/fret-sm-br.svg) right bottom/22px 22px no-repeat,#a51b16}
+.cap{background:rgba(125,18,14,.92)}
+.slot{--head:#ffdb2e;background:#7d120e;color:#ffdb2e;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #5a0c09,inset -4px -4px 0 #a8221b;box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.frame{border:4px solid var(--edge);box-shadow:8px 8px 0 rgba(58,13,10,.35);background:#7d120e;box-sizing:border-box}
+.en a{color:var(--link)}
+.en a:hover{color:var(--link-hi)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:8px 24px;border:4px solid var(--edge);box-sizing:border-box;font-family:inherit;font-size:16px;line-height:24px;text-decoration:none;cursor:pointer;transition:transform .08s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(4px)}
+.en .btn-gold{background:var(--gold);color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.en .btn-gold:hover{background:#ffdf52;color:#3a0d0a}
+.en .btn-red{background:#d12c22;color:#fff6e0;box-shadow:inset 4px 4px 0 #f0766b,inset -4px -4px 0 #8f1611;text-shadow:2px 2px 0 #6b0f0b}
+.en .btn-red:hover{background:#e0392e;color:#ffffff}
+.en .btn-dark{background:#fff8e6;color:#b3201a;box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873}
+.en .btn-dark:hover{background:#ffffff;color:#7d120e}
+.chip{min-height:48px;padding:8px 20px;border:4px solid var(--edge);box-sizing:border-box;background:#fff8e6;color:#3a0d0a;font-family:inherit;font-size:16px;line-height:24px;cursor:pointer;box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873;transition:transform .08s}
+.chip:hover{color:#b3201a;transform:translateY(-2px)}
+.chip[aria-pressed="true"]{background:var(--gold);color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.en .nav a,.navbtn{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;color:var(--ink);text-decoration:none;border:4px solid transparent;box-sizing:border-box;background:none;font-family:inherit;font-size:16px;line-height:24px;cursor:pointer}
+.en .nav a:hover,.navbtn:hover{color:var(--link-hi);border-color:currentColor}
+.en .nav a.on{background:var(--gold);color:#3a0d0a;border-color:var(--edge);box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.navbtn[aria-expanded="true"]{color:var(--head);border-color:currentColor}
+.tag{display:inline-block;padding:2px 8px;border:4px solid var(--edge);box-sizing:border-box;white-space:nowrap}
+.tag-gold{background:var(--gold);color:#3a0d0a}
+.tag-red{background:#c0261d;color:#fff6e0}
+.tag-dark{background:#7d120e;color:#ffdb2e}
+.tag-plain{background:#fff8e6;color:#6b3a2a}
+.field{background:#ffffff;border:4px solid #b3201a;padding:8px 12px;box-sizing:border-box;color:#3a0d0a}
+.live{width:16px;height:16px;background:#3ddc5a;border:4px solid var(--edge);animation:blink 1.4s infinite}
+.caret{animation:blink 1s infinite}
+@keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.2}}
+.crenel{height:24px;background-image:linear-gradient(90deg,transparent 0 25%,#fff1cf 25% 75%,transparent 75% 100%);background-size:96px 24px;background-repeat:round no-repeat;background-position:left top}
+.t-hero{font-size:96px;line-height:96px}
+.t-hero2{font-size:64px;line-height:72px}
+.en a:focus-visible,.en button:focus-visible,.en summary:focus-visible{outline:4px solid #1b6fd1;outline-offset:4px}
+.t-h2{font-size:48px;line-height:56px}
+.heroimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease-in-out}
+.heroimg.show{opacity:1}
+.dot{width:44px;height:44px;padding:0;border:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.dot span{width:16px;height:16px;background:#fff6e0;border:4px solid #4a0b08;display:block}
+.dot[aria-pressed="true"] span{background:#ffcf1f;width:24px;height:24px}
+.splash{animation:splash 1.1s ease-in-out infinite}
+@keyframes splash{0%,100%{transform:rotate(-14deg) scale(1)}50%{transform:rotate(-14deg) scale(1.1)}}
+.swap{animation:rise .14s ease-out both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tile{position:relative;overflow:hidden}
+.tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.tile:hover img{transform:scale(1.08)}
+.row{transition:transform .12s ease-out}
+.row:hover{transform:translateX(12px)}
+.top{--hi:#7d120e;color:#3a0d0a}
+.gimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s ease-in-out}
+.gimg.show{opacity:1}
+.thumb{padding:0;border:4px solid var(--edge);background:#7d120e;cursor:pointer;display:block;opacity:.7;transition:opacity .15s}
+.thumb img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+.thumb:hover{opacity:1}
+.thumb[aria-pressed="true"]{opacity:1;border-color:var(--gold)}
+.staff img{transition:transform .12s ease-out}
+.staff:hover img{transform:translateY(-8px)}
+.en summary{list-style:none;cursor:pointer}
+.en summary:hover{color:#7d120e}
+.en summary::-webkit-details-marker{display:none}
+@media (max-width:720px){.t-hero{font-size:48px;line-height:48px}.t-hero2{font-size:32px;line-height:40px}.t-h2{font-size:32px;line-height:40px}.splash{display:none}}
+@media (prefers-reduced-motion:reduce){.en *{animation:none !important;transition:none !important}}
+.navbtn.cur{color:var(--head);border-bottom-color:var(--gold)}
+.en .foot a{display:flex;align-items:center;min-height:40px;color:var(--ink);text-decoration:none}
+.en .foot a:hover{color:var(--head)}
+.hero{background:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(../../assets/screenshots/slide-08.webp) center 50%/cover no-repeat}
+.mob-btn{display:none}
+@media (max-width:860px){
+.mob-btn{display:flex;border-color:currentColor;min-height:48px}
+.en .nav{display:none !important}
+.en .nav.open{display:flex !important;flex-direction:column;align-items:stretch !important;width:100%;gap:0 !important}
+.en .nav.open .panel{position:static !important;margin:0 0 8px}
+.en .nav.open>a,.en .nav.open .navbtn{min-height:48px;width:100%}
+}
+@media (max-width:520px){.hdr-play{display:none !important}}
+.en textarea.field,.en input.field,.en select.field{width:100%;min-height:48px;font-family:inherit;font-size:16px;line-height:24px;display:block}
+.en textarea.field{min-height:144px;resize:vertical}
+.en label.f{display:flex;flex-direction:column;gap:8px}
+.tool{min-height:44px;padding:4px 12px}
+.tag-good{background:#1c7a32;color:#ffffff}
+.thread{display:flex;flex-direction:column;gap:8px}
+.msg{padding:12px 16px;background:var(--row);border-left:8px solid #b3201a;overflow-wrap:anywhere}
+.msg.you{border-left-color:var(--gold-lo)}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr));gap:12px;margin:0}
+.meta div{display:flex;flex-direction:column;min-width:0;overflow-wrap:anywhere}
+.meta dt{color:var(--muted)}
+.meta dd{margin:0}
+.acct{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:var(--row)}
+.acct>div{display:flex;flex-direction:column;min-width:0;overflow-wrap:anywhere}
+.linkbtn{min-height:44px;padding:0 8px;border:0;background:none;color:var(--link);font-family:inherit;font-size:16px;line-height:24px;text-decoration:underline;cursor:pointer}
+.linkbtn:hover{color:var(--link-hi)}
+.cmd{display:block;padding:12px 16px;background:#3a0d0a;color:#ffe9a8;overflow-wrap:anywhere}
+@media (max-width:720px){.tabs{justify-content:center !important}.tab-head{flex-direction:column !important;align-items:center !important;text-align:center}.tab-head>div{align-items:center !important}}
+.shop{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;padding:12px 16px;background:var(--row);overflow-wrap:anywhere}
+.tag-guild{background:#3a0d0a;color:#fff1cf}
+.note{padding:12px 16px;background:var(--row);border:4px dashed #b3201a;color:var(--muted)}
+.tip .note,.s-red .note{border-color:var(--gold)}
+.eq{align-items:stretch !important}
+.en ul.plain{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.who{display:flex;align-items:center;gap:12px;padding:6px 16px 6px 6px;background:var(--row);min-width:0;overflow-wrap:anywhere}
+.who>span{display:flex;flex-direction:column;min-width:0}
+.who small{font-size:16px;line-height:24px;color:var(--muted)}
+.stat{display:flex;flex-direction:column;gap:4px;padding:16px;background:var(--row);min-width:0;overflow-wrap:anywhere}
+.stat b{font-weight:400;font-size:32px;line-height:40px;color:var(--accent)}
+.stat span{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:12px}
+@media (max-width:520px){.stats{grid-template-columns:minmax(0,1fr)}.stat{flex-direction:row-reverse;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 16px}.stat b{font-size:24px;line-height:32px;white-space:nowrap}}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:24px;align-items:start}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:24px;align-items:start}
+.gl{display:flex;flex-direction:column;gap:8px}
+.grow{display:flex;align-items:center;gap:12px;width:100%;padding:8px 12px 8px 8px;border:4px solid var(--edge);background:#fff8e6;color:#3a0d0a;box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873;font-family:inherit;font-size:16px;line-height:24px;text-align:left;cursor:pointer;box-sizing:border-box;transition:transform .08s}
+.grow:hover{transform:translateX(4px)}
+.grow[aria-pressed="true"]{background:var(--gold);box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.grow .nm{flex:1 1 0;min-width:0;display:flex;flex-direction:column;overflow-wrap:anywhere}
+.grow .nm small{font-size:16px;line-height:24px;color:#6b3a2a}
+.grow .rk{width:40px;height:40px}
+.bn{width:36px;height:64px;flex-shrink:0;border:4px solid var(--edge);box-sizing:border-box;background-color:#b02e26;background-repeat:no-repeat}
+.bn.lg{width:104px;height:192px;box-shadow:8px 8px 0 rgba(58,13,10,.45)}
+.bn.md{width:64px;height:116px}
+.o0{order:0}.o1{order:1}.o2{order:2}.o3{order:3}.o4{order:4}.o5{order:5}.o6{order:6}.o7{order:7}.o8{order:8}.o9{order:9}.o10{order:10}.o11{order:11}
+.bn-vibe{background-color:#8932b8;background-image:linear-gradient(transparent 67%,#1d1d21 67%),radial-gradient(circle closest-side at 50% 50%,#fed83d 0 62%,transparent 64%)}
+.bn-beloved{background-color:#f38baa;background-image:radial-gradient(circle closest-side at 50% 50%,#b02e26 0 62%,transparent 64%),conic-gradient(from -45deg at 50% 100%,#f9fffe 0 90deg,transparent 90deg)}
+.bn-wot{background-color:#1d1d21;background-image:linear-gradient(transparent 0 40%,#f9fffe 40% 60%,transparent 60%),linear-gradient(90deg,transparent 0 36%,#f9fffe 36% 64%,transparent 64%)}
+.bn-boop{background-color:#80c71f;background-image:linear-gradient(to bottom right,#1d1d21 0 50%,transparent 50%)}
+.bn-doge{background-color:#fed83d;background-image:linear-gradient(#835432 0 33%,transparent 33%),linear-gradient(transparent 0 40%,#835432 40% 60%,transparent 60%)}
+.bn-asgard{background-color:#3c44aa;background-image:linear-gradient(transparent 0 40%,#fed83d 40% 60%,transparent 60%),conic-gradient(from 135deg at 50% 0,#f9fffe 0 90deg,transparent 90deg)}
+.bn-enth{background-color:#b02e26;background-image:linear-gradient(#1d1d21 0 33%,transparent 33%),linear-gradient(90deg,transparent 0 36%,#fed83d 36% 64%,transparent 64%)}
+.bn-ptc{background-color:#474f52;background-image:linear-gradient(#169c9c 0 33%,transparent 33%),repeating-linear-gradient(90deg,#9d9d97 0 25%,transparent 25% 50%)}
+.bn-ever{background-color:#f9fffe;background-image:radial-gradient(circle closest-side at 50% 50%,#fed83d 0 62%,transparent 64%),linear-gradient(#f9801d,transparent)}
+.bn-chill{background-color:#3ab3da;background-image:conic-gradient(from -45deg at 50% 100%,#f9fffe 0 90deg,transparent 90deg),linear-gradient(transparent 67%,#f9fffe 67%)}
+.bn-hop{background-color:#835432;background-image:linear-gradient(90deg,transparent 0 36%,#f9fffe 36% 64%,transparent 64%)}
+.bn-kirky{background-color:#5e7c16;background-image:linear-gradient(90deg,#80c71f 50%,transparent 50%)}
+.bn-past1{background-color:#f9fffe;background-image:linear-gradient(#3ab3da,transparent)}
+.bn-past2{background-color:#1d1d21;background-image:linear-gradient(#fed83d 0 33%,transparent 33%)}
+.bn-past3{background-color:#8932b8;background-image:linear-gradient(transparent 0 40%,#fed83d 40% 60%,transparent 60%),linear-gradient(90deg,transparent 0 36%,#fed83d 36% 64%,transparent 64%)}
+.chip-sm{min-height:44px;padding:4px 14px}
+@media (max-width:720px){.bn.lg{width:72px;height:132px}.gprof{order:-1}}
+
+</style>
+</head>
+<body data-mockup>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="en">
+
+<header class="site-head s-red">
+<div class="site-head-in">
+<a class="brand" href="index.html" aria-label="Enthusia SMP home">
+<img src="../../assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="about.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn cur" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="guilds.html" class="active" aria-current="page">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</div>
+</div>
+<a href="store.html">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="account.html">Account</a>
+</nav>
+<a class="btn btn-gold hdr-play" href="join.html">Play now!</a>
+</div>
+</header>
+
+<main id="main-content">
+<section class="hero hero-vars" aria-labelledby="guilds-title">
+<div style="max-width: 1240px; min-height: 240px; margin: 0 auto; padding: 48px 24px 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
+<p class="tag tag-gold" style="letter-spacing: 2px">COMMUNITY</p>
+<h1 id="guilds-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">GUILDS</h1>
+<p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">Every guild on the server: who leads it, who it fights, and what it has done.</p>
+</div>
+<div class="crenel"></div>
+</section>
+<section class="s-cream" aria-label="Guild directory" style="padding: 72px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+
+<div class="tab-head" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD DIRECTORY</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Find your banner</h2>
+</div>
+<p style="display: flex; align-items: center; gap: 12px; color: var(--good)"><span class="live"></span>Live from the server</p>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 32px">
+
+<div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<label class="f">Search guilds
+<input class="field" type="text" placeholder="Guild name" data-b-value="{{q}}" data-on-change="setQ">
+</label>
+<div role="group" aria-label="Filter guilds" style="display: flex; flex-wrap: wrap; gap: 8px">
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{fAll}}" data-on-click="pickFAll">All</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{fRec}}" data-on-click="pickFRec">Recruiting</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{fHos}}" data-on-click="pickFHos">Hostile</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{fPea}}" data-on-click="pickFPea">Peaceful</button>
+</div>
+<div role="group" aria-label="Sort guilds" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<span style="color: var(--muted)">Sort by</span>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{sLvl}}" data-on-click="pickSLvl">Level</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{sElo}}" data-on-click="pickSElo">ELO</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{sMem}}" data-on-click="pickSMem">Members</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{sName}}" data-on-click="pickSName">A to Z</button>
+</div>
+<p aria-live="polite" style="color: var(--muted)"><span data-b-text="countLine"></span></p>
+<div class="gl">
+<button class="grow" type="button" data-b-class="grow {{r0}}" data-b-aria-pressed="{{sel0}}" data-on-click="pick0">
+<span class="slot rk"><span data-b-text="rk0"></span></span>
+<span class="bn bn-vibe"></span>
+<span class="nm"><span>Vibe</span><small>Level 100 · 22 members · 1420 ELO</small></span>
+
+</button>
+<button class="grow" type="button" data-b-class="grow {{r1}}" data-b-aria-pressed="{{sel1}}" data-on-click="pick1">
+<span class="slot rk"><span data-b-text="rk1"></span></span>
+<span class="bn bn-beloved"></span>
+<span class="nm"><span>BelovedOnes</span><small>Level 96 · 14 members · 1310 ELO</small></span>
+
+</button>
+<button class="grow" type="button" data-b-class="grow {{r2}}" data-b-aria-pressed="{{sel2}}" data-on-click="pick2">
+<span class="slot rk"><span data-b-text="rk2"></span></span>
+<span class="bn bn-wot"></span>
+<span class="nm"><span>WOT</span><small>Level 81 · 19 members · 1265 ELO</small></span>
+<span class="tag tag-good">Recruiting</span>
+</button>
+<button class="grow" type="button" data-b-class="grow {{r3}}" data-b-aria-pressed="{{sel3}}" data-on-click="pick3">
+<span class="slot rk"><span data-b-text="rk3"></span></span>
+<span class="bn bn-boop"></span>
+<span class="nm"><span>BoopGang</span><small>Level 74 · 11 members · 1350 ELO</small></span>
+
+</button>
+<button class="grow" type="button" data-b-class="grow {{r4}}" data-b-aria-pressed="{{sel4}}" data-on-click="pick4">
+<span class="slot rk"><span data-b-text="rk4"></span></span>
+<span class="bn bn-doge"></span>
+<span class="nm"><span>Dogeclan</span><small>Level 66 · 9 members · 1205 ELO</small></span>
+<span class="tag tag-good">Recruiting</span>
+</button>
+<button class="grow" type="button" data-b-class="grow {{r5}}" data-b-aria-pressed="{{sel5}}" data-on-click="pick5">
+<span class="slot rk"><span data-b-text="rk5"></span></span>
+<span class="bn bn-asgard"></span>
+<span class="nm"><span>Asgard</span><small>Level 62 · 12 members · 1290 ELO</small></span>
+<span class="tag tag-good">Recruiting</span>
+</button>
+<button class="grow" type="button" data-b-class="grow {{r6}}" data-b-aria-pressed="{{sel6}}" data-on-click="pick6">
+<span class="slot rk"><span data-b-text="rk6"></span></span>
+<span class="bn bn-enth"></span>
+<span class="nm"><span>Enthusiast</span><small>Level 58 · 16 members · 1180 ELO</small></span>
+<span class="tag tag-good">Recruiting</span>
+</button>
+<button class="grow" type="button" data-b-class="grow {{r7}}" data-b-aria-pressed="{{sel7}}" data-on-click="pick7">
+<span class="slot rk"><span data-b-text="rk7"></span></span>
+<span class="bn bn-ptc"></span>
+<span class="nm"><span>PTC</span><small>Level 47 · 8 members · 1150 ELO</small></span>
+
+</button>
+<button class="grow" type="button" data-b-class="grow {{r8}}" data-b-aria-pressed="{{sel8}}" data-on-click="pick8">
+<span class="slot rk"><span data-b-text="rk8"></span></span>
+<span class="bn bn-ever"></span>
+<span class="nm"><span>Everlights</span><small>Level 44 · 10 members · 1040 ELO</small></span>
+
+</button>
+<button class="grow" type="button" data-b-class="grow {{r9}}" data-b-aria-pressed="{{sel9}}" data-on-click="pick9">
+<span class="slot rk"><span data-b-text="rk9"></span></span>
+<span class="bn bn-chill"></span>
+<span class="nm"><span>Chillage</span><small>Level 31 · 13 members · 1005 ELO</small></span>
+<span class="tag tag-good">Recruiting</span>
+</button>
+<button class="grow" type="button" data-b-class="grow {{r10}}" data-b-aria-pressed="{{sel10}}" data-on-click="pick10">
+<span class="slot rk"><span data-b-text="rk10"></span></span>
+<span class="bn bn-hop"></span>
+<span class="nm"><span>Hoplience</span><small>Level 22 · 7 members · 985 ELO</small></span>
+<span class="tag tag-good">Recruiting</span>
+</button>
+<button class="grow" type="button" data-b-class="grow {{r11}}" data-b-aria-pressed="{{sel11}}" data-on-click="pick11">
+<span class="slot rk"><span data-b-text="rk11"></span></span>
+<span class="bn bn-kirky"></span>
+<span class="nm"><span>Kirky</span><small>Level 18 · 5 members · 970 ELO</small></span>
+
+</button>
+</div>
+<p class="note" data-b-class="note {{emptyShow}}">No guild matches that search. Try a different name or filter.</p>
+</div>
+
+<div class="gprof" style="flex: 2 1 560px; min-width: 0">
+<article class="tip fret-lg swap" aria-label="Vibe guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf0}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-vibe" role="img" aria-label="Vibe banner"></span>
+<img class="px" src="../../assets/design/19f5859aba58.png" alt="" style="width: 72px; height: 144px; flex-shrink: 0">
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">Vibe</h3>
+<p>The first guild to reach level 100, and behind many of the raids of Chapter 1.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-red">Hostile</span><span class="tag tag-dark">Not recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>100</b><span>Level</span></div>
+<div class="stat"><b>1</b><span>Prestige</span></div>
+<div class="stat"><b>1,420</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>22</b><span>Members</span></div>
+<div class="stat"><b>May 2026</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>StepSoy<small>Leader</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>Currut<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>LatiJo<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>Ilms<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>KILLTEAM<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>woulves1<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>L1nk_bot<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>Jacco1OO<small>Member</small></span></li></ul>
+<p style="color: var(--muted)">and 14 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-gold">Dogeclan</span><span class="tag tag-gold">BoopGang</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-guild">WOT</span><span class="tag tag-guild">Asgard</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Wins the End Fight with Dogeclan and BoopGang. woulves1 takes the Dragon Egg.</span><span style="color: var(--muted); white-space: nowrap">9 May 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Begins a run of raids on WOT bases.</span><span style="color: var(--muted); white-space: nowrap">7 Jun 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">First guild to reach level 100.</span><span style="color: var(--muted); white-space: nowrap">28 Jun 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Leader StepSoy wins the Media Event.</span><span style="color: var(--muted); white-space: nowrap">1 Jul 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Raids PTC, Everlights and Enthusiast bases as Chapter 1 ends.</span><span style="color: var(--muted); white-space: nowrap">19 Sep 2026</span></li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p style="color: var(--muted)">Vibe is not taking new members right now.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-dark" href="players.html">View StepSoy</a></div>
+</div>
+</article>
+<article class="tip fret-lg swap" aria-label="BelovedOnes guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf1}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-beloved" role="img" aria-label="BelovedOnes banner"></span>
+<img class="px" src="../../assets/design/b78b7d6eaf9b.png" alt="" style="width: 72px; height: 144px; flex-shrink: 0">
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">BelovedOnes</h3>
+<p>Second on the server by guild level in June 2026, and home to its richest player.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-good">Peaceful</span><span class="tag tag-dark">Not recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>96</b><span>Level</span></div>
+<div class="stat"><b>0</b><span>Prestige</span></div>
+<div class="stat"><b>1,310</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>14</b><span>Members</span></div>
+<div class="stat"><b>[date]</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>LavKun<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/307326d1f575.png" alt="" style="width: 40px; height: 40px"><span>BaLIneA<small>Member</small></span></li></ul>
+<p style="color: var(--muted)">and 12 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-guild">Enthusiast</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Raids Vibe's gold farm in the first week of full release.</span><span style="color: var(--muted); white-space: nowrap">Early May 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Reaches level 88, second only to Vibe.</span><span style="color: var(--muted); white-space: nowrap">28 Jun 2026</span></li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p style="color: var(--muted)">BelovedOnes is not taking new members right now.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-dark" href="players.html">View LavKun</a></div>
+</div>
+</article>
+<article class="tip fret-lg swap" aria-label="WOT guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf2}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-wot" role="img" aria-label="WOT banner"></span>
+
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">WOT</h3>
+<p>Raided again and again through Chapter 1, and still standing at the end of it.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-red">Hostile</span><span class="tag tag-gold">Recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>81</b><span>Level</span></div>
+<div class="stat"><b>0</b><span>Prestige</span></div>
+<div class="stat"><b>1,265</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>19</b><span>Members</span></div>
+<div class="stat"><b>[date]</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>FlashStrength<small>Recruiter</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>WardenSteve<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/631033f6291e.png" alt="" style="width: 40px; height: 40px"><span>CheddarManPro<small>Member</small></span></li></ul>
+<p style="color: var(--muted)">and 16 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-guild">Vibe</span><span class="tag tag-guild">BoopGang</span><span class="tag tag-guild">Enthusiast</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Vibe starts raiding its bases. Four have fallen by mid-June.</span><span style="color: var(--muted); white-space: nowrap">7 Jun 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Raided by Vibe and BoopGang, and says it wrecked five Vibe farms in return.</span><span style="color: var(--muted); white-space: nowrap">22 Jul 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Fights off a BoopGang raid.</span><span style="color: var(--muted); white-space: nowrap">31 Jul 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Other guilds band together against it as the GDTO.</span><span style="color: var(--muted); white-space: nowrap">28 Aug 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Hits Vibe's surface base, skull farm and guild home with Asgard.</span><span style="color: var(--muted); white-space: nowrap">19 Sep 2026</span></li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p>WOT is recruiting. Message FlashStrength in-game, or open its post in the guild recruitment forum.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-gold" href="https://discord.gg/5ccgDCmNSc">Guild recruitment on Discord</a><a class="btn btn-dark" href="players.html">View FlashStrength</a></div>
+</div>
+</article>
+<article class="tip fret-lg swap" aria-label="BoopGang guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf3}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-boop" role="img" aria-label="BoopGang banner"></span>
+
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">BoopGang</h3>
+<p>Raiders who declared war on every guild on the server at once.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-red">Hostile</span><span class="tag tag-dark">Not recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>74</b><span>Level</span></div>
+<div class="stat"><b>0</b><span>Prestige</span></div>
+<div class="stat"><b>1,350</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>11</b><span>Members</span></div>
+<div class="stat"><b>[date]</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/95ac8a44ef12.png" alt="" style="width: 40px; height: 40px"><span>John_Raidfarms<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>SantoXD<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>TurtlePots<small>Member</small></span></li></ul>
+<p style="color: var(--muted)">and 8 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-gold">Vibe</span><span class="tag tag-gold">Dogeclan</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-guild">WOT</span><span class="tag tag-guild">Enthusiast</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Wins the End Fight alongside Vibe and Dogeclan.</span><span style="color: var(--muted); white-space: nowrap">9 May 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Declares war on every guild on the server.</span><span style="color: var(--muted); white-space: nowrap">13 Jul 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Raids WOT together with Vibe.</span><span style="color: var(--muted); white-space: nowrap">22 Jul 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Raids through the night. Enthusiast's base falls.</span><span style="color: var(--muted); white-space: nowrap">31 Jul 2026</span></li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p style="color: var(--muted)">BoopGang is not taking new members right now.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-dark" href="players.html">View John_Raidfarms</a></div>
+</div>
+</article>
+<article class="tip fret-lg swap" aria-label="Dogeclan guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf4}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-doge" role="img" aria-label="Dogeclan banner"></span>
+
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">Dogeclan</h3>
+<p>One of the three allied guilds that won the End Fight.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-red">Hostile</span><span class="tag tag-gold">Recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>66</b><span>Level</span></div>
+<div class="stat"><b>0</b><span>Prestige</span></div>
+<div class="stat"><b>1,205</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>9</b><span>Members</span></div>
+<div class="stat"><b>[date]</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>doge198<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>richardbrickball<small>Member</small></span></li><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>deepseekpython<small>Member</small></span></li></ul>
+<p style="color: var(--muted)">and 6 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-gold">Vibe</span><span class="tag tag-gold">BoopGang</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Wins the End Fight alongside Vibe and BoopGang.</span><span style="color: var(--muted); white-space: nowrap">9 May 2026</span></li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p>Dogeclan is recruiting. Message doge198 in-game, or open its post in the guild recruitment forum.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-gold" href="https://discord.gg/5ccgDCmNSc">Guild recruitment on Discord</a><a class="btn btn-dark" href="players.html">View doge198</a></div>
+</div>
+</article>
+<article class="tip fret-lg swap" aria-label="Asgard guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf5}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-asgard" role="img" aria-label="Asgard banner"></span>
+
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">Asgard</h3>
+<p>PvP focused. Behind what its raiders call the biggest base raid yet.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-red">Hostile</span><span class="tag tag-gold">Recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>62</b><span>Level</span></div>
+<div class="stat"><b>0</b><span>Prestige</span></div>
+<div class="stat"><b>1,290</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>12</b><span>Members</span></div>
+<div class="stat"><b>[date]</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>la1x<small>Recruiter</small></span></li></ul>
+<p style="color: var(--muted)">and 11 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-guild">Vibe</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Raids the base of EnthOpen.</span><span style="color: var(--muted); white-space: nowrap">10 Sep 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Hits Vibe's surface base, skull farm and guild home with WOT.</span><span style="color: var(--muted); white-space: nowrap">19 Sep 2026</span></li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p>Asgard is recruiting. Message la1x in-game, or open its post in the guild recruitment forum.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-gold" href="https://discord.gg/5ccgDCmNSc">Guild recruitment on Discord</a><a class="btn btn-dark" href="players.html">View la1x</a></div>
+</div>
+</article>
+<article class="tip fret-lg swap" aria-label="Enthusiast guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf6}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-enth" role="img" aria-label="Enthusiast banner"></span>
+<img class="px" src="../../assets/design/8297d30ade97.png" alt="" style="width: 72px; height: 144px; flex-shrink: 0">
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">Enthusiast</h3>
+<p>Founded by Fain. Winners of the beta End event with Blood Guard.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-red">Hostile</span><span class="tag tag-gold">Recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>58</b><span>Level</span></div>
+<div class="stat"><b>0</b><span>Prestige</span></div>
+<div class="stat"><b>1,180</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>16</b><span>Members</span></div>
+<div class="stat"><b>Dec 2025</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>FainNeito<small>Founder</small></span></li><li class="who"><img class="px" src="../../assets/design/82100a526a83.png" alt="" style="width: 40px; height: 40px"><span>Kostpits13<small>Member</small></span></li></ul>
+<p style="color: var(--muted)">and 14 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-gold">Blood Guard</span><span class="tag tag-gold">EnthOpen</span><span class="tag tag-gold">PTC</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-guild">WOT</span><span class="tag tag-guild">BelovedOnes</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Wins the beta End event with Blood Guard.</span><span style="color: var(--muted); white-space: nowrap">26 Dec 2025</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Declares war on ScarEye with Blood Guard.</span><span style="color: var(--muted); white-space: nowrap">5 Jan 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Raids a ScarEye base and carries off its loot.</span><span style="color: var(--muted); white-space: nowrap">6 Feb 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Votes 12 to 0 to ally with PTC.</span><span style="color: var(--muted); white-space: nowrap">18 Jun 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Loses its base in the BoopGang raid night.</span><span style="color: var(--muted); white-space: nowrap">31 Jul 2026</span></li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p>Enthusiast is recruiting. Message FainNeito in-game, or open its post in the guild recruitment forum.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-gold" href="https://discord.gg/5ccgDCmNSc">Guild recruitment on Discord</a><a class="btn btn-dark" href="players.html">View FainNeito</a></div>
+</div>
+</article>
+<article class="tip fret-lg swap" aria-label="PTC guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf7}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-ptc" role="img" aria-label="PTC banner"></span>
+
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">PTC</h3>
+<p>A guild for hire. PTC takes contracts.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-red">Hostile</span><span class="tag tag-dark">Not recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>47</b><span>Level</span></div>
+<div class="stat"><b>0</b><span>Prestige</span></div>
+<div class="stat"><b>1,150</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>8</b><span>Members</span></div>
+<div class="stat"><b>[date]</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>Imaginaryy_<small>Owner</small></span></li></ul>
+<p style="color: var(--muted)">and 7 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-gold">Enthusiast</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Allies with Enthusiast.</span><span style="color: var(--muted); white-space: nowrap">18 Jun 2026</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Raided by Vibe as Chapter 1 ends.</span><span style="color: var(--muted); white-space: nowrap">19 Sep 2026</span></li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p style="color: var(--muted)">PTC is not taking new members right now.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-dark" href="players.html">View Imaginaryy_</a></div>
+</div>
+</article>
+<article class="tip fret-lg swap" aria-label="Everlights guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf8}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-ever" role="img" aria-label="Everlights banner"></span>
+
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">Everlights</h3>
+<p>One of the oldest names on the server, here since the first day of the first beta.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-good">Peaceful</span><span class="tag tag-dark">Not recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>44</b><span>Level</span></div>
+<div class="stat"><b>0</b><span>Prestige</span></div>
+<div class="stat"><b>1,040</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>10</b><span>Members</span></div>
+<div class="stat"><b>Oct 2025</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>[Leader]<small>Leader</small></span></li></ul>
+<p style="color: var(--muted)">and 9 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Calls a truce with Kingsmould within hours of the first beta opening.</span><span style="color: var(--muted); white-space: nowrap">31 Oct 2025</span></li><li class="shop"><span style="flex: 1 1 280px; min-width: 0">Raided by Vibe as Chapter 1 ends.</span><span style="color: var(--muted); white-space: nowrap">19 Sep 2026</span></li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p style="color: var(--muted)">Everlights is not taking new members right now.</p>
+</div>
+</article>
+<article class="tip fret-lg swap" aria-label="Chillage guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf9}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-chill" role="img" aria-label="Chillage banner"></span>
+
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">Chillage</h3>
+<p>Open to new members.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-good">Peaceful</span><span class="tag tag-gold">Recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>31</b><span>Level</span></div>
+<div class="stat"><b>0</b><span>Prestige</span></div>
+<div class="stat"><b>1,005</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>13</b><span>Members</span></div>
+<div class="stat"><b>[date]</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>SonOfBlood<small>Recruiter</small></span></li></ul>
+<p style="color: var(--muted)">and 12 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop" style="color: var(--muted)">Nothing on the timeline yet. Guild events are added as they happen.</li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p>Chillage is recruiting. Message SonOfBlood in-game, or open its post in the guild recruitment forum.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-gold" href="https://discord.gg/5ccgDCmNSc">Guild recruitment on Discord</a><a class="btn btn-dark" href="players.html">View SonOfBlood</a></div>
+</div>
+</article>
+<article class="tip fret-lg swap" aria-label="Hoplience guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf10}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-hop" role="img" aria-label="Hoplience banner"></span>
+
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">Hoplience</h3>
+<p>Open to new members.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-good">Peaceful</span><span class="tag tag-gold">Recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>22</b><span>Level</span></div>
+<div class="stat"><b>0</b><span>Prestige</span></div>
+<div class="stat"><b>985</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>7</b><span>Members</span></div>
+<div class="stat"><b>[date]</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>serDesignationV<small>Recruiter</small></span></li></ul>
+<p style="color: var(--muted)">and 6 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop" style="color: var(--muted)">Nothing on the timeline yet. Guild events are added as they happen.</li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p>Hoplience is recruiting. Message serDesignationV in-game, or open its post in the guild recruitment forum.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-gold" href="https://discord.gg/5ccgDCmNSc">Guild recruitment on Discord</a><a class="btn btn-dark" href="players.html">View serDesignationV</a></div>
+</div>
+</article>
+<article class="tip fret-lg swap" aria-label="Kirky guild profile" style="padding: 36px; display: flex; flex-direction: column; gap: 24px" data-b-class="tip fret-lg swap {{pf11}}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+<span class="bn lg bn-kirky" role="img" aria-label="Kirky banner"></span>
+
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">GUILD PROFILE</p>
+<h3 style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">Kirky</h3>
+<p>[Guild description]</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-good">Peaceful</span><span class="tag tag-dark">Not recruiting</span></div>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><b>18</b><span>Level</span></div>
+<div class="stat"><b>0</b><span>Prestige</span></div>
+<div class="stat"><b>970</b><span>Seasonal ELO</span></div>
+<div class="stat"><b>5</b><span>Members</span></div>
+<div class="stat"><b>[date]</b><span>Founded</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 24px; align-items: start">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Members</h3>
+<ul class="plain"><li class="who"><img class="px" src="../../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span>[Leader]<small>Leader</small></span></li></ul>
+<p style="color: var(--muted)">and 4 more</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Diplomacy</h3>
+<p style="color: var(--muted)">Allies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Enemies</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span style="color: var(--muted)">None declared</span></div>
+<p style="color: var(--muted)">Guild stall</p>
+<a href="market.html">See its stall in the Market</a>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">History</h3>
+<a href="timeline.html">Full server timeline</a>
+</div>
+<ul class="plain"><li class="shop" style="color: var(--muted)">Nothing on the timeline yet. Guild events are added as they happen.</li></ul>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Join</h3>
+<p style="color: var(--muted)">Kirky is not taking new members right now.</p>
+</div>
+</article>
+</div>
+
+</div>
+</div>
+</section>
+<section class="s-red" aria-label="How guilds work" style="padding: 72px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">HOW GUILDS WORK</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">More than a tag</h2>
+</div>
+<div class="grid4 eq">
+<div class="tip fret-sm" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<span class="slot" style="width: 48px; height: 48px; font-size: 24px; line-height: 24px">1</span>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Levels</h3>
+<p>Guilds earn XP together and level up from 0 to 200, unlocking rewards along the way.</p>
+</div>
+<div class="tip fret-sm" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<span class="slot" style="width: 48px; height: 48px; font-size: 24px; line-height: 24px">2</span>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Prestige and Seasonal ELO</h3>
+<p>New in Chapter 2. Prestige marks long-term progress, and Seasonal ELO ranks guilds against each other each season.</p>
+</div>
+<div class="tip fret-sm" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<span class="slot" style="width: 48px; height: 48px; font-size: 24px; line-height: 24px">3</span>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">War and diplomacy</h3>
+<p>Set your guild to Peaceful or Hostile, name allies and enemies, and declare war.</p>
+</div>
+<div class="tip fret-sm" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<span class="slot" style="width: 48px; height: 48px; font-size: 24px; line-height: 24px">4</span>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Shared property</h3>
+<p>A guild vault, guild homes, ally homes and a guild stall in the Market.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="s-cream" aria-label="Past guilds" style="padding: 72px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">PAST GUILDS</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Gone, not forgotten</h2>
+</div>
+<p style="color: var(--muted); max-width: 760px">Guilds that shaped the server and are no longer active. Their stories stay on the timeline.</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px; align-items: start">
+<article class="panel" style="padding: 24px; display: flex; align-items: flex-start; gap: 16px">
+<img src="../../assets/screenshots/slide-11.webp" alt="ScarEye guild banner" style="width: 64px; height: 116px; object-fit: cover; flex-shrink: 0; border: 4px solid var(--edge); box-sizing: border-box">
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">ScarEye</h3>
+<span class="tag tag-plain" style="align-self: flex-start">Final Open Beta</span>
+<p>Led by RadiOwO_. Raised its banner near spawn and fought the ScarEye War against Enthusiast and Blood Guard. It did not return for full release.</p>
+</div>
+</article>
+<article class="panel" style="padding: 24px; display: flex; align-items: flex-start; gap: 16px">
+<span class="bn md bn-past1" role="img" aria-label="OverHeaven banner"></span>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">OverHeaven</h3>
+<span class="tag tag-plain" style="align-self: flex-start">Final Open Beta</span>
+<p>Formed for the End of the World on 11 April 2026 and reached the final fight against Blood Guard.</p>
+</div>
+</article>
+<article class="panel" style="padding: 24px; display: flex; align-items: flex-start; gap: 16px">
+<span class="bn md bn-past2" role="img" aria-label="Kingsmould banner"></span>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">Kingsmould</h3>
+<span class="tag tag-plain" style="align-self: flex-start">First Open Beta</span>
+<p>Called the first truce on the server, with Everlights, on 31 October 2025.</p>
+</div>
+</article>
+<article class="panel" style="padding: 24px; display: flex; align-items: flex-start; gap: 16px">
+<span class="bn md bn-past3" role="img" aria-label="The Imperials banner"></span>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">The Imperials</h3>
+<span class="tag tag-plain" style="align-self: flex-start">Chapter 1</span>
+<p>Led by XXJAKAXX. Raided again and again through mid-August 2026, and disbanded in early September.</p>
+</div>
+</article>
+</div>
+
+<div class="tip fret" style="padding: 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<p style="color: var(--kick); letter-spacing: 2px">YOUR TURN</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Start or join a guild</h3>
+<p>Create your own in-game, or open the guild menu to browse and manage guilds.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><span class="cmd">/g create [name]</span><span class="cmd">/g menu</span></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<a class="btn btn-gold" href="https://discord.gg/5ccgDCmNSc">Guild recruitment on Discord</a>
+<a class="btn btn-dark" href="leaderboards.html">Guild leaderboard</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="index.html">
+<img src="../../assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="join.html">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="about.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="News">
+<p class="foot-title">NEWS</p>
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="store.html">Store</a>
+<a href="account.html">Account</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="notfound.html">404 page</a>
+<a href="home-christmas.html">Christmas skin</a>
+</nav>
+<nav class="foot" aria-label="Staff tools">
+<p class="foot-title">STAFF TOOLS</p>
+<a href="compadmin.html">Competition admin</a>
+<a href="newseditor.html">News editor</a>
+<a href="reviewer.html">Reviewer</a>
+<a href="reviewerappeals.html">Appeal review</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
+
+
+</div>
+
+<script src="preview/preview-shim.js"></script>
+<script src="../../assets/site-config.js" defer></script>
+<script src="../../assets/enthusia.js" defer></script>
+<script src="preview/mock.js" defer></script>
+<script src="mock/guilds.js" defer></script>
+</body>
+</html>

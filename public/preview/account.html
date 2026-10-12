@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html data-preview-root="./" lang="en">
+<head>
+<script src="./fixtures.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your profile</title>
+<meta name="description" content="Explore Enthusia SMP, its community, server history and player features.">
+<link rel="preload" href="../assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
+<link rel="stylesheet" href="../assets/enthusia.css">
+
+<style>
+
+body{margin:0;background:#8f1611}
+a{color:#b3201a}a:hover{color:#7d120e}
+.en{--edge:#4a0b08;--gold:#ffcf1f;--gold-hi:#ffe9a8;--gold-lo:#e08f00;font-family:"Minecraft","Courier New",monospace;font-size:16px;line-height:24px;-webkit-font-smoothing:none}
+.en h1,.en h2,.en h3,.en p,.en ol{margin:0;font-weight:400}
+.en ol{padding:0;list-style:none}
+.en img.px{image-rendering:pixelated;display:block}
+.hide{display:none !important}
+.s-red,.tip,.cap,.hero-vars{--ink:#fff6e0;--muted:#ffdcc8;--head:#ffdb2e;--head-sh:#6b0f0b;--kick:#ffe9a8;--accent:#ffe9a8;--hi:#ffe9a8;--good:#b6f7b6;--row:#a51b16;--row-top:#ffcf1f;--link:#ffdb2e;--link-hi:#ffffff;color:var(--ink)}
+.s-cream,.panel{--ink:#3a0d0a;--muted:#6b3a2a;--head:#b3201a;--head-sh:#ffcf1f;--kick:#8a5a00;--accent:#b3201a;--hi:#8a5a00;--good:#1c7a32;--row:#ffe7b0;--row-top:#ffcf1f;--link:#b3201a;--link-hi:#7d120e;color:var(--ink)}
+.s-red{background:#c0261d}
+.s-cream{background:#fff1cf}
+.hero-vars{--head-sh:#7d120e}
+.panel{background:#fff8e6;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873;box-sizing:border-box}
+.tip{--row:#8a1510;background:#a51b16;border:4px solid var(--edge);box-shadow:inset 0 0 0 4px var(--gold),inset 0 0 0 6px #5c0d09;box-sizing:border-box}
+.tip.fret-lg{background:url(../assets/ui/fret-lg-tl.svg) left top/74px 74px no-repeat,url(../assets/ui/fret-lg-tr.svg) right top/74px 74px no-repeat,url(../assets/ui/fret-lg-bl.svg) left bottom/74px 74px no-repeat,url(../assets/ui/fret-lg-br.svg) right bottom/74px 74px no-repeat,#a51b16}
+.tip.fret{background:url(../assets/ui/fret-md-tl.svg) left top/54px 54px no-repeat,url(../assets/ui/fret-md-tr.svg) right top/54px 54px no-repeat,url(../assets/ui/fret-md-bl.svg) left bottom/54px 54px no-repeat,url(../assets/ui/fret-md-br.svg) right bottom/54px 54px no-repeat,#a51b16}
+.tip.fret-sm{background:url(../assets/ui/fret-sm-tl.svg) left top/22px 22px no-repeat,url(../assets/ui/fret-sm-tr.svg) right top/22px 22px no-repeat,url(../assets/ui/fret-sm-bl.svg) left bottom/22px 22px no-repeat,url(../assets/ui/fret-sm-br.svg) right bottom/22px 22px no-repeat,#a51b16}
+.cap{background:rgba(125,18,14,.92)}
+.slot{--head:#ffdb2e;background:#7d120e;color:#ffdb2e;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #5a0c09,inset -4px -4px 0 #a8221b;box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.frame{border:4px solid var(--edge);box-shadow:8px 8px 0 rgba(58,13,10,.35);background:#7d120e;box-sizing:border-box}
+.en a{color:var(--link)}
+.en a:hover{color:var(--link-hi)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:8px 24px;border:4px solid var(--edge);box-sizing:border-box;font-family:inherit;font-size:16px;line-height:24px;text-decoration:none;cursor:pointer;transition:transform .08s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(4px)}
+.en .btn-gold{background:var(--gold);color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.en .btn-gold:hover{background:#ffdf52;color:#3a0d0a}
+.en .btn-red{background:#d12c22;color:#fff6e0;box-shadow:inset 4px 4px 0 #f0766b,inset -4px -4px 0 #8f1611;text-shadow:2px 2px 0 #6b0f0b}
+.en .btn-red:hover{background:#e0392e;color:#ffffff}
+.en .btn-dark{background:#fff8e6;color:#b3201a;box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873}
+.en .btn-dark:hover{background:#ffffff;color:#7d120e}
+.chip{min-height:48px;padding:8px 20px;border:4px solid var(--edge);box-sizing:border-box;background:#fff8e6;color:#3a0d0a;font-family:inherit;font-size:16px;line-height:24px;cursor:pointer;box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873;transition:transform .08s}
+.chip:hover{color:#b3201a;transform:translateY(-2px)}
+.chip[aria-pressed="true"]{background:var(--gold);color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.en .nav a,.navbtn{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;color:var(--ink);text-decoration:none;border:4px solid transparent;box-sizing:border-box;background:none;font-family:inherit;font-size:16px;line-height:24px;cursor:pointer}
+.en .nav a:hover,.navbtn:hover{color:var(--link-hi);border-color:currentColor}
+.en .nav a.on{background:var(--gold);color:#3a0d0a;border-color:var(--edge);box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.navbtn[aria-expanded="true"]{color:var(--head);border-color:currentColor}
+.tag{display:inline-block;padding:2px 8px;border:4px solid var(--edge);box-sizing:border-box;white-space:nowrap}
+.tag-gold{background:var(--gold);color:#3a0d0a}
+.tag-red{background:#c0261d;color:#fff6e0}
+.tag-dark{background:#7d120e;color:#ffdb2e}
+.tag-plain{background:#fff8e6;color:#6b3a2a}
+.field{background:#ffffff;border:4px solid #b3201a;padding:8px 12px;box-sizing:border-box;color:#3a0d0a}
+.live{width:16px;height:16px;background:#3ddc5a;border:4px solid var(--edge);animation:blink 1.4s infinite}
+.caret{animation:blink 1s infinite}
+@keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.2}}
+.crenel{height:24px;background-image:linear-gradient(90deg,transparent 0 25%,#fff1cf 25% 75%,transparent 75% 100%);background-size:96px 24px;background-repeat:round no-repeat;background-position:left top}
+.t-hero{font-size:96px;line-height:96px}
+.t-hero2{font-size:64px;line-height:72px}
+.en a:focus-visible,.en button:focus-visible,.en summary:focus-visible{outline:4px solid #1b6fd1;outline-offset:4px}
+.t-h2{font-size:48px;line-height:56px}
+.heroimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease-in-out}
+.heroimg.show{opacity:1}
+.dot{width:44px;height:44px;padding:0;border:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.dot span{width:16px;height:16px;background:#fff6e0;border:4px solid #4a0b08;display:block}
+.dot[aria-pressed="true"] span{background:#ffcf1f;width:24px;height:24px}
+.splash{animation:splash 1.1s ease-in-out infinite}
+@keyframes splash{0%,100%{transform:rotate(-14deg) scale(1)}50%{transform:rotate(-14deg) scale(1.1)}}
+.swap{animation:rise .14s ease-out both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tile{position:relative;overflow:hidden}
+.tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.tile:hover img{transform:scale(1.08)}
+.row{transition:transform .12s ease-out}
+.row:hover{transform:translateX(12px)}
+.top{--hi:#7d120e;color:#3a0d0a}
+.gimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s ease-in-out}
+.gimg.show{opacity:1}
+.thumb{padding:0;border:4px solid var(--edge);background:#7d120e;cursor:pointer;display:block;opacity:.7;transition:opacity .15s}
+.thumb img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+.thumb:hover{opacity:1}
+.thumb[aria-pressed="true"]{opacity:1;border-color:var(--gold)}
+.staff img{transition:transform .12s ease-out}
+.staff:hover img{transform:translateY(-8px)}
+.en summary{list-style:none;cursor:pointer}
+.en summary:hover{color:#7d120e}
+.en summary::-webkit-details-marker{display:none}
+@media (max-width:720px){.t-hero{font-size:48px;line-height:48px}.t-hero2{font-size:32px;line-height:40px}.t-h2{font-size:32px;line-height:40px}.splash{display:none}}
+@media (prefers-reduced-motion:reduce){.en *{animation:none !important;transition:none !important}}
+.navbtn.cur{color:var(--head);border-bottom-color:var(--gold)}
+.en .foot a{display:flex;align-items:center;min-height:40px;color:var(--ink);text-decoration:none}
+.en .foot a:hover{color:var(--head)}
+.hero{background:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(../assets/screenshots/slide-01.webp) center 50%/cover no-repeat}
+.mob-btn{display:none}
+@media (max-width:860px){
+.mob-btn{display:flex;border-color:currentColor;min-height:48px}
+.en .nav{display:none !important}
+.en .nav.open{display:flex !important;flex-direction:column;align-items:stretch !important;width:100%;gap:0 !important}
+.en .nav.open .panel{position:static !important;margin:0 0 8px}
+.en .nav.open>a,.en .nav.open .navbtn{min-height:48px;width:100%}
+}
+@media (max-width:520px){.hdr-play{display:none !important}}
+.en textarea.field,.en input.field,.en select.field{width:100%;min-height:48px;font-family:inherit;font-size:16px;line-height:24px;display:block}
+.en textarea.field{min-height:144px;resize:vertical}
+.en label.f{display:flex;flex-direction:column;gap:8px}
+.tool{min-height:44px;padding:4px 12px}
+.tag-good{background:#1c7a32;color:#ffffff}
+.thread{display:flex;flex-direction:column;gap:8px}
+.msg{padding:12px 16px;background:var(--row);border-left:8px solid #b3201a;overflow-wrap:anywhere}
+.msg.you{border-left-color:var(--gold-lo)}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr));gap:12px;margin:0}
+.meta div{display:flex;flex-direction:column;min-width:0;overflow-wrap:anywhere}
+.meta dt{color:var(--muted)}
+.meta dd{margin:0}
+.acct{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:var(--row)}
+.acct>div{display:flex;flex-direction:column;min-width:0;overflow-wrap:anywhere}
+.linkbtn{min-height:44px;padding:0 8px;border:0;background:none;color:var(--link);font-family:inherit;font-size:16px;line-height:24px;text-decoration:underline;cursor:pointer}
+.linkbtn:hover{color:var(--link-hi)}
+.cmd{display:block;padding:12px 16px;background:#3a0d0a;color:#ffe9a8;overflow-wrap:anywhere}
+@media (max-width:720px){.tabs{justify-content:center !important}.tab-head{flex-direction:column !important;align-items:center !important;text-align:center}.tab-head>div{align-items:center !important}}
+
+</style>
+<link rel="stylesheet" href="../assets/exact-design.css"><meta name="robots" content="noindex,nofollow,noarchive"><link rel="stylesheet" href="../assets/site-refinements.css">
+<meta name="robots" content="noindex,nofollow,noarchive">
+</head>
+<body data-exact-account="" data-mockup>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="en">
+
+<header class="site-head s-red">
+<div class="site-head-in">
+<a class="brand" href="index.html" aria-label="Enthusia SMP home">
+<img src="../assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</div>
+</div>
+<a href="store.html">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="account.html" class="active" aria-current="page">Account</a>
+</nav>
+<a class="btn btn-gold hdr-play" href="join.html">Play now!</a>
+</div>
+</header>
+
+<main id="main-content" class="page-main">
+<section class="hero hero-vars" aria-labelledby="account-title">
+<div style="max-width: 1240px; min-height: 240px; margin: 0 auto; padding: 48px 24px 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
+<p class="tag tag-gold" style="letter-spacing: 2px">PROFILE</p>
+<h1 id="account-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">YOUR PROFILE</h1>
+<p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">View your Discord account and manage the Minecraft accounts linked to it.</p>
+</div>
+<div class="crenel"></div>
+</section>
+<section class="s-cream" aria-label="Your account" style="padding: 72px 0">
+<div style="max-width: 1040px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+
+<template id="exact-account-template"><div class="panel" style="padding: 32px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px" data-b-class="panel {{outShow}}">
+<p style="color: var(--kick); letter-spacing: 2px">YOUR ACCOUNT</p>
+<h2 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Sign in with Discord</h2>
+<p style="color: var(--muted)">Sign in to view or change your linked Minecraft accounts.</p>
+<button class="btn btn-gold" type="button">Sign in</button>
+</div>
+
+<div class="tip fret-lg" style="padding: 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px" data-b-class="tip fret-lg {{inShow}}">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<p style="color: var(--kick); letter-spacing: 2px">SIGNED IN WITH DISCORD</p>
+<h2 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere">YourName</h2>
+<p style="color: var(--muted)">@yourname</p>
+</div>
+<button class="btn btn-dark" type="button">Sign out</button>
+</div>
+
+<div class="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px; align-items: start" data-b-class="{{inShow}}">
+
+<div class="panel" style="padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Linked Minecraft accounts</h3>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px">
+<li class="acct"><div><span>YourName</span><span style="color: var(--muted)">[Minecraft UUID]</span></div><button class="linkbtn" type="button">Unlink</button></li>
+</ul>
+</div>
+
+<div class="panel" style="padding: 28px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Link another account</h3>
+<p style="color: var(--muted)">Generate a code when you are ready to finish the link in-game.</p>
+<button class="btn btn-gold" type="button" data-on-click="genCode">Generate link code</button>
+<div class="swap" style="align-self: stretch; display: flex; flex-direction: column; gap: 8px" data-b-class="swap {{codeShow}}">
+<p class="cmd">/competitionlink [LINK CODE]</p>
+<p style="color: var(--muted)">Run this command in-game. This page will update when the account is linked.</p>
+</div>
+</div>
+
+<div class="panel" style="padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Bind a punishment code</h3>
+<p style="color: var(--muted)">If a punishment message gave you an appeal code, bind it to this website account before submitting an appeal.</p>
+<label class="f">Minecraft account
+<select class="field"><option>YourName</option></select>
+</label>
+<label class="f">Punishment code
+<input class="field" type="text" placeholder="Enter the code from your punishment message">
+</label>
+<p style="padding: 16px; background: var(--row); border: 4px dashed #b3201a; color: var(--muted)">[Cloudflare verification check appears here]</p>
+<div style="display: flex"><button class="btn btn-gold" type="button" data-on-click="bind">Bind punishment</button></div>
+<p class="swap" data-b-class="swap {{boundShow}}">Punishment verified and bound. <a href="appeal.html">Open appeals</a></p>
+</div>
+
+<div class="panel" style="padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<h3 id="account-punishment-bindings" style="font-size: 24px; line-height: 32px; color: var(--head)">Bound punishments</h3>
+<p class="" style="color: var(--muted)" data-b-class="{{noBindShow}}">No punishments are bound to this website account yet.</p>
+<ul class="" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px" data-b-class="{{boundShow}}">
+<li class="acct"><div><span>YourName · Mute</span><span style="color: var(--muted)">Case [CASE ID]</span></div><div style="flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 12px"><span style="color: var(--good)">Ready to appeal</span><button class="linkbtn" type="button">Recheck</button></div></li>
+</ul>
+</div>
+
+</div></template><div id="account-session" aria-live="polite"></div>
+</div>
+</section>
+</main>
+
+<footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="index.html">
+<img src="../assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="join.html">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="News">
+<p class="foot-title">NEWS</p>
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="store.html">Store</a>
+<a href="account.html">Account</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="404.html">404 page</a>
+<a href="home-christmas.html">Christmas skin</a>
+</nav>
+<nav class="foot" aria-label="Staff tools">
+<p class="foot-title">STAFF TOOLS</p>
+<a href="competitions/admin/index.html">Competition admin</a>
+<a href="newseditor.html">News editor</a>
+<a href="reviewer/index.html">Reviewer</a>
+<a href="reviewer/appeals.html">Appeal review</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
+
+
+</div>
+
+
+
+
+
+
+<script src="../assets/site-config.js" defer></script><script src="../assets/enthusia.js" defer></script><script type="module" src="../assets/account.js"></script><script type="module" src="../assets/account-punishments.js"></script></body>
+</html>

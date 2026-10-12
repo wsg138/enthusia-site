@@ -1,0 +1,14 @@
+name = "enthusia-market-alerts"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+MARKET_ALERTS_ENABLED = "false"
+
+[triggers]
+crons = ["*/15 * * * *"]
+
+# Configure COMMUNITY_DB to the same database used by Pages, and set the
+# ENTHUSIA_SITE_DISCORD_BOT_TOKEN secret for the website notification bot.
+# COMPETITIONS_DISCORD_BOT_TOKEN and DISCORD_BOT_TOKEN remain legacy aliases.
+# Do not use the privileged moderation bot or commit IDs/secrets.

@@ -1,0 +1,80 @@
+.admin-tools-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-tools-card {
+  display: grid;
+  gap: .8rem;
+  padding: 1rem;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px;
+  background: rgba(255,255,255,.025);
+}
+
+.admin-tools-card > h4,
+.admin-tools-card > p {
+  margin: 0;
+}
+
+.admin-tools-field,
+.admin-tools-stack,
+.admin-tools-upload,
+.admin-tools-location,
+.admin-tools-promotions {
+  display: grid;
+  gap: .55rem;
+}
+
+.admin-tools-field input,
+.admin-tools-field textarea,
+.admin-tools-field select,
+.admin-tools-grid input,
+.admin-tools-grid select {
+  width: 100%;
+}
+
+.admin-tools-grid {
+  display: grid;
+  gap: .75rem;
+}
+
+.admin-tools-grid.two-column {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-tools-grid.four-column {
+  grid-template-columns: minmax(9rem, 1.5fr) repeat(3, minmax(5rem, .6fr));
+}
+
+.admin-tools-upload {
+  margin-top: .4rem;
+  padding: .8rem;
+  border: 1px dashed rgba(255,255,255,.15);
+  border-radius: 12px;
+}
+
+.admin-tools-gallery-detail {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-tools-promotions {
+  padding-top: .7rem;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.admin-tools-promotion-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .55rem 0;
+}
+
+@media (max-width: 760px) {
+  .admin-tools-grid.two-column,
+  .admin-tools-grid.four-column {
+    grid-template-columns: 1fr;
+  }
+}

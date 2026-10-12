@@ -1,0 +1,329 @@
+<!doctype html>
+<html data-preview-root="../" lang="en">
+<head>
+<script src="../fixtures.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="View an Enthusia competition, its rules, entries, voting, and results.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Competition | Enthusia</title>
+  <link rel="stylesheet" href="../../assets/enthusia.css?v=red1">
+<link rel="stylesheet" href="../../assets/platform-workflows.css?v=1">
+  <link rel="stylesheet" href="../../assets/competitions.css?v=29">
+  <link rel="stylesheet" href="../../assets/competitions-appearance.css?v=1">
+  <link rel="stylesheet" href="../../assets/competitions-auth.css?v=1">
+  <link rel="stylesheet" href="../../assets/competitions-participant.css?v=1">
+  <link rel="stylesheet" href="../../assets/competitions-judge.css?v=1">
+<script src="../../assets/site-config.js" defer></script>
+<link rel="stylesheet" href="../../assets/integration.css?v=1">
+<link rel="stylesheet" href="../../assets/community.css">
+<link rel="stylesheet" href="../../assets/exact-design.css">
+<style>
+
+body{margin:0;background:#8f1611}
+a{color:#b3201a}a:hover{color:#7d120e}
+.en{--edge:#4a0b08;--gold:#ffcf1f;--gold-hi:#ffe9a8;--gold-lo:#e08f00;font-family:"Minecraft","Courier New",monospace;font-size:16px;line-height:24px;-webkit-font-smoothing:none}
+.en h1,.en h2,.en h3,.en p,.en ol{margin:0;font-weight:400}
+.en ol{padding:0;list-style:none}
+.en img.px{image-rendering:pixelated;display:block}
+.hide{display:none !important}
+.s-red,.tip,.cap,.hero-vars{--ink:#fff6e0;--muted:#ffdcc8;--head:#ffdb2e;--head-sh:#6b0f0b;--kick:#ffe9a8;--accent:#ffe9a8;--hi:#ffe9a8;--good:#b6f7b6;--row:#a51b16;--row-top:#ffcf1f;--link:#ffdb2e;--link-hi:#ffffff;color:var(--ink)}
+.s-cream,.panel{--ink:#3a0d0a;--muted:#6b3a2a;--head:#b3201a;--head-sh:#ffcf1f;--kick:#8a5a00;--accent:#b3201a;--hi:#8a5a00;--good:#1c7a32;--row:#ffe7b0;--row-top:#ffcf1f;--link:#b3201a;--link-hi:#7d120e;color:var(--ink)}
+.s-red{background:#c0261d}
+.s-cream{background:#fff1cf}
+.hero-vars{--head-sh:#7d120e}
+.panel{background:#fff8e6;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873;box-sizing:border-box}
+.tip{--row:#8a1510;background:#a51b16;border:4px solid var(--edge);box-shadow:inset 0 0 0 4px var(--gold),inset 0 0 0 6px #5c0d09;box-sizing:border-box}
+.tip.fret-lg{background:url(../../assets/ui/fret-lg-tl.svg) left top/74px 74px no-repeat,url(../../assets/ui/fret-lg-tr.svg) right top/74px 74px no-repeat,url(../../assets/ui/fret-lg-bl.svg) left bottom/74px 74px no-repeat,url(../../assets/ui/fret-lg-br.svg) right bottom/74px 74px no-repeat,#a51b16}
+.tip.fret{background:url(../../assets/ui/fret-md-tl.svg) left top/54px 54px no-repeat,url(../../assets/ui/fret-md-tr.svg) right top/54px 54px no-repeat,url(../../assets/ui/fret-md-bl.svg) left bottom/54px 54px no-repeat,url(../../assets/ui/fret-md-br.svg) right bottom/54px 54px no-repeat,#a51b16}
+.tip.fret-sm{background:url(../../assets/ui/fret-sm-tl.svg) left top/22px 22px no-repeat,url(../../assets/ui/fret-sm-tr.svg) right top/22px 22px no-repeat,url(../../assets/ui/fret-sm-bl.svg) left bottom/22px 22px no-repeat,url(../../assets/ui/fret-sm-br.svg) right bottom/22px 22px no-repeat,#a51b16}
+.cap{background:rgba(125,18,14,.92)}
+.slot{--head:#ffdb2e;background:#7d120e;color:#ffdb2e;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #5a0c09,inset -4px -4px 0 #a8221b;box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.frame{border:4px solid var(--edge);box-shadow:8px 8px 0 rgba(58,13,10,.35);background:#7d120e;box-sizing:border-box}
+.en a{color:var(--link)}
+.en a:hover{color:var(--link-hi)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:8px 24px;border:4px solid var(--edge);box-sizing:border-box;font-family:inherit;font-size:16px;line-height:24px;text-decoration:none;cursor:pointer;transition:transform .08s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(4px)}
+.en .btn-gold{background:var(--gold);color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.en .btn-gold:hover{background:#ffdf52;color:#3a0d0a}
+.en .btn-red{background:#d12c22;color:#fff6e0;box-shadow:inset 4px 4px 0 #f0766b,inset -4px -4px 0 #8f1611;text-shadow:2px 2px 0 #6b0f0b}
+.en .btn-red:hover{background:#e0392e;color:#ffffff}
+.en .btn-dark{background:#fff8e6;color:#b3201a;box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873}
+.en .btn-dark:hover{background:#ffffff;color:#7d120e}
+.chip{min-height:48px;padding:8px 20px;border:4px solid var(--edge);box-sizing:border-box;background:#fff8e6;color:#3a0d0a;font-family:inherit;font-size:16px;line-height:24px;cursor:pointer;box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873;transition:transform .08s}
+.chip:hover{color:#b3201a;transform:translateY(-2px)}
+.chip[aria-pressed="true"]{background:var(--gold);color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.en .nav a,.navbtn{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;color:var(--ink);text-decoration:none;border:4px solid transparent;box-sizing:border-box;background:none;font-family:inherit;font-size:16px;line-height:24px;cursor:pointer}
+.en .nav a:hover,.navbtn:hover{color:var(--link-hi);border-color:currentColor}
+.en .nav a.on{background:var(--gold);color:#3a0d0a;border-color:var(--edge);box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.navbtn[aria-expanded="true"]{color:var(--head);border-color:currentColor}
+.tag{display:inline-block;padding:2px 8px;border:4px solid var(--edge);box-sizing:border-box;white-space:nowrap}
+.tag-gold{background:var(--gold);color:#3a0d0a}
+.tag-red{background:#c0261d;color:#fff6e0}
+.tag-dark{background:#7d120e;color:#ffdb2e}
+.tag-plain{background:#fff8e6;color:#6b3a2a}
+.field{background:#ffffff;border:4px solid #b3201a;padding:8px 12px;box-sizing:border-box;color:#3a0d0a}
+.live{width:16px;height:16px;background:#3ddc5a;border:4px solid var(--edge);animation:blink 1.4s infinite}
+.caret{animation:blink 1s infinite}
+@keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.2}}
+.crenel{height:24px;background-image:linear-gradient(90deg,transparent 0 25%,#fff1cf 25% 75%,transparent 75% 100%);background-size:96px 24px;background-repeat:round no-repeat;background-position:left top}
+.t-hero{font-size:96px;line-height:96px}
+.t-hero2{font-size:64px;line-height:72px}
+.en a:focus-visible,.en button:focus-visible,.en summary:focus-visible{outline:4px solid #1b6fd1;outline-offset:4px}
+.t-h2{font-size:48px;line-height:56px}
+.heroimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease-in-out}
+.heroimg.show{opacity:1}
+.dot{width:44px;height:44px;padding:0;border:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.dot span{width:16px;height:16px;background:#fff6e0;border:4px solid #4a0b08;display:block}
+.dot[aria-pressed="true"] span{background:#ffcf1f;width:24px;height:24px}
+.splash{animation:splash 1.1s ease-in-out infinite}
+@keyframes splash{0%,100%{transform:rotate(-14deg) scale(1)}50%{transform:rotate(-14deg) scale(1.1)}}
+.swap{animation:rise .14s ease-out both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tile{position:relative;overflow:hidden}
+.tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.tile:hover img{transform:scale(1.08)}
+.row{transition:transform .12s ease-out}
+.row:hover{transform:translateX(12px)}
+.top{--hi:#7d120e;color:#3a0d0a}
+.gimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s ease-in-out}
+.gimg.show{opacity:1}
+.thumb{padding:0;border:4px solid var(--edge);background:#7d120e;cursor:pointer;display:block;opacity:.7;transition:opacity .15s}
+.thumb img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+.thumb:hover{opacity:1}
+.thumb[aria-pressed="true"]{opacity:1;border-color:var(--gold)}
+.staff img{transition:transform .12s ease-out}
+.staff:hover img{transform:translateY(-8px)}
+.en summary{list-style:none;cursor:pointer}
+.en summary:hover{color:#7d120e}
+.en summary::-webkit-details-marker{display:none}
+@media (max-width:720px){.tabs{justify-content:center !important}.tab-head{flex-direction:column !important;align-items:center !important;text-align:center}.tab-head>div{align-items:center !important}.c-sm{align-items:center !important;text-align:center}.t-hero{font-size:48px;line-height:48px}.t-hero2{font-size:32px;line-height:40px}.t-h2{font-size:32px;line-height:40px}.splash{display:none}}
+@media (prefers-reduced-motion:reduce){.en *{animation:none !important;transition:none !important}}
+.navbtn.cur{color:var(--head);border-bottom-color:var(--gold)}
+.en .foot a{display:flex;align-items:center;min-height:40px;color:var(--ink);text-decoration:none}
+.en .foot a:hover{color:var(--head)}
+.hero{background:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(../../assets/screenshots/slide-06.webp) center 50%/cover no-repeat}
+.trk{padding:12px 16px;background:#fff8e6;border:4px solid var(--edge);box-sizing:border-box;color:#6b3a2a;display:flex;flex-direction:column;gap:2px}
+.trk strong{font-weight:400;color:#3a0d0a}
+.trk small{font-size:16px}
+.trk.done{background:#ffe7b0}
+.trk.now{background:var(--gold);color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.dash{padding:16px;background:var(--row);border:4px dashed #b3201a}
+.mapframe{aspect-ratio:1/1;border:12px solid #8a5a2b;box-sizing:border-box;background-color:#e9d9a8;background-image:linear-gradient(45deg,#d9c58c 25%,transparent 25%,transparent 75%,#d9c58c 75%),linear-gradient(45deg,#d9c58c 25%,transparent 25%,transparent 75%,#d9c58c 75%);background-size:32px 32px;background-position:0 0,16px 16px;box-shadow:inset 0 0 0 4px #4a2a10,8px 8px 0 rgba(58,13,10,.35);display:flex;align-items:center;justify-content:center;color:#4a2a10;text-align:center}
+.en textarea.field,.en input.field{width:100%;font-family:inherit;font-size:16px;line-height:24px;display:block}
+.en textarea.field{min-height:120px;resize:vertical}
+.en label{display:flex;flex-direction:column;gap:8px}
+.mob-btn{display:none}
+@media (max-width:860px){
+.mob-btn{display:flex;border-color:currentColor;min-height:48px}
+.en .nav{display:none !important}
+.en .nav.open{display:flex !important;flex-direction:column;align-items:stretch !important;width:100%;gap:0 !important}
+.en .nav.open .panel{position:static !important;margin:0 0 8px}
+.en .nav.open>a,.en .nav.open .navbtn{min-height:48px;width:100%}
+}
+@media (max-width:520px){.hdr-play{display:none !important}}
+
+</style><link rel="stylesheet" href="../../assets/exact-detail.css"><link rel="stylesheet" href="../../assets/site-refinements.css">
+<meta name="robots" content="noindex,nofollow,noarchive">
+</head>
+<body class="competitions-page en workflow-page s-cream" data-competition-page="detail">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-head s-red">
+<div class="site-head-in">
+<a class="brand" href="../index.html" aria-label="Enthusia SMP home">
+<img src="../../assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="../plugins.html">About</a>
+<a href="../join.html">Join guide</a>
+<a href="../guide.html">Player guide</a>
+<a href="../rules.html">Rules</a>
+<a href="../vote.html">Vote</a>
+<a href="../appeal.html">Appeals</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn cur" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="../market.html">Market</a>
+<a href="../gallery.html">Gallery</a>
+<a href="../museum.html">Mapart Museum</a>
+<a href="../competitions/index.html">Competitions</a>
+<a href="../events.html">Events</a>
+<a href="../bounties.html">Bounties</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="../guilds.html">Guilds</a>
+<a href="../players.html">Players</a>
+<a href="../leaderboards.html">Leaderboards</a>
+<a href="../halloffame.html">Hall of Fame</a>
+<a href="../achievements.html">Achievements</a>
+<a href="../creators.html">Creators</a>
+<a href="../staff.html">Staff</a>
+<a href="../punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="../news.html">News</a>
+<a href="../changelog.html">Changelog</a>
+<a href="../roadmap.html">Roadmap</a>
+<a href="../polls.html">Polls</a>
+<a href="../timeline.html">Timeline</a>
+</div>
+</div>
+<a href="../store.html">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="../account.html">Account</a>
+</nav>
+<a class="btn btn-gold hdr-play" href="../join.html">Play now!</a>
+</div>
+</header>
+
+  <main id="main-content" class="page-main container competitions-main">
+
+    <div id="competitionDetail" class="competition-loading">Loading competition…</div>
+  <template id="exact-detail-head"><section class="hero hero-vars" aria-labelledby="c-title">
+<div style="max-width: 1240px; min-height: 320px; margin: 0 auto; padding: 40px 24px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
+<a class="btn btn-dark competition-back-link" href="index.html" style="align-self: flex-start">&lt; All competitions</a>
+<p class="tag tag-gold" style="letter-spacing: 2px">THEME: HALLOWEEN</p>
+<h1 id="c-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">BUILD COMPETITION</h1>
+</div>
+<div class="crenel"></div>
+</section></template><template id="exact-detail-stage"><div class="tip fret" style="padding: 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">CURRENT STAGE</p>
+<h2 aria-live="polite" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)"><span data-b-text="stageTitle"></span></h2>
+<p><span data-b-text="stageDesc"></span></p>
+<p style="color: var(--muted)">Next: <span data-b-text="nextLine"></span></p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<a class="btn btn-gold" href="#entry-form" style="min-height: 64px; font-size: 24px; line-height: 32px" data-b-class="btn btn-gold {{ctaEnter}}">Start your entry</a>
+<button class="btn btn-gold" type="button" style="min-height: 64px; font-size: 24px; line-height: 32px" data-b-class="btn btn-gold {{ctaVote}}" data-on-click="pickT1">Vote now</button>
+<button class="btn btn-gold" type="button" style="min-height: 64px; font-size: 24px; line-height: 32px" data-b-class="btn btn-gold {{ctaRes}}" data-on-click="pickT1">See the results</button>
+<button class="btn btn-dark" type="button" style="min-height: 64px" data-b-class="btn btn-dark {{ctaWait}}" data-on-click="pickT3">Read the rules</button>
+</div>
+</div>
+
+<div aria-label="Competition stages" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); gap: 8px">
+<div class="trk" data-b-class="trk {{k0}}"><span>01</span><strong>Getting ready</strong><small>Now</small></div>
+<div class="trk" data-b-class="trk {{k1}}"><span>02</span><strong>Submissions</strong><small>Opening soon</small></div>
+<div class="trk" data-b-class="trk {{k2}}"><span>03</span><strong>Entry review</strong><small>After submissions close</small></div>
+<div class="trk" data-b-class="trk {{k3}}"><span>04</span><strong>Community voting</strong><small>Opens October 14</small></div>
+<div class="trk" data-b-class="trk {{k4}}"><span>05</span><strong>Final checks</strong><small>Before results</small></div>
+<div class="trk" data-b-class="trk {{k5}}"><span>06</span><strong>Results published</strong><small>October 21</small></div>
+</div>
+
+</template><template id="exact-detail-overview"><div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px">
+<div class="panel" style="flex: 3 1 480px; min-width: 0; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">About this competition</h3>
+<p class="dash">[COMPETITION BRIEF: what to build, where, and anything the judges or voters will look for]</p>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; padding: 10px 12px; background: var(--row)"><span style="color: var(--muted)">Theme</span><span>Halloween</span></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; padding: 10px 12px; background: var(--row)"><span style="color: var(--muted)">Entry types</span><span>Solo, group, or guild</span></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; padding: 10px 12px; background: var(--row)"><span style="color: var(--muted)">Screenshots</span><span>PNG or JPEG, up to 8 MB each</span></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; padding: 10px 12px; background: var(--row)"><span style="color: var(--muted)">To enter or vote</span><span>Sign in with Discord and link your Minecraft account</span></div>
+</div>
+<div class="tip fret" style="flex: 2 1 320px; min-width: 0; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Schedule</h3>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 12px; background: var(--row)"><span>Submissions</span><span style="color: var(--accent)">Opening soon</span></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 12px; background: var(--row)"><span>Voting opens</span><span style="color: var(--accent)">October 14</span></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 12px; background: var(--row)"><span>Results</span><span style="color: var(--accent)">October 21</span></div>
+</div>
+</div>
+
+</template><template id="exact-detail-guide-link"><a class="btn btn-dark competition-guide-link" href="guide.html">Competition guide</a></template></main><footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="../index.html">
+<img src="../../assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="../join.html">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="../plugins.html">About</a>
+<a href="../join.html">Join guide</a>
+<a href="../guide.html">Player guide</a>
+<a href="../rules.html">Rules</a>
+<a href="../vote.html">Vote</a>
+<a href="../appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="../market.html">Market</a>
+<a href="../gallery.html">Gallery</a>
+<a href="../museum.html">Mapart Museum</a>
+<a class="competition-back-link" href="index.html">Competitions</a>
+<a href="../events.html">Events</a>
+<a href="../bounties.html">Bounties</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="../guilds.html">Guilds</a>
+<a href="../players.html">Players</a>
+<a href="../leaderboards.html">Leaderboards</a>
+<a href="../halloffame.html">Hall of Fame</a>
+<a href="../achievements.html">Achievements</a>
+<a href="../creators.html">Creators</a>
+<a href="../staff.html">Staff</a>
+<a href="../punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="News">
+<p class="foot-title">NEWS</p>
+<a href="../news.html">News</a>
+<a href="../changelog.html">Changelog</a>
+<a href="../roadmap.html">Roadmap</a>
+<a href="../polls.html">Polls</a>
+<a href="../timeline.html">Timeline</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="../store.html">Store</a>
+<a href="../account.html">Account</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="../404.html">404 page</a>
+<a href="../home-christmas.html">Christmas skin</a>
+</nav>
+<nav class="foot" aria-label="Staff tools">
+<p class="foot-title">STAFF TOOLS</p>
+<a href="../competitions/admin/index.html">Competition admin</a>
+<a href="../newseditor.html">News editor</a>
+<a href="../reviewer/index.html">Reviewer</a>
+<a href="../reviewer/appeals.html">Appeal review</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
+
+  <script src="../../assets/competitions.js?v=25" type="module"></script>
+  <script src="../../assets/competitions-appearance.js?v=1" type="module"></script>
+  <script src="../../assets/competitions-identity-refresh.js?v=1"></script>
+  <script src="../../assets/competitions-auth.js?v=2"></script>
+  <script src="../../assets/enthusia.js?v=integration1" defer></script>
+  <script src="../../assets/competitions-participant-v2.js?v=3" type="module"></script>
+  <script src="../../assets/competitions-participant-dnd.js?v=1" type="module"></script>
+  <script src="../../assets/competitions-public-feedback.js?v=1" type="module"></script>
+  <script src="../../assets/competitions-judge.js?v=2" type="module"></script>
+<script src="../../assets/site-account.js?v=integration1" type="module"></script>
+</body>
+</html>

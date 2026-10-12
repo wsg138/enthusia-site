@@ -1,0 +1,199 @@
+{
+  "guilds": [
+    {
+      "id": "design-guild-0",
+      "name": "Vibe",
+      "level": 100,
+      "elo": 1420,
+      "members": 22,
+      "recruiting": false,
+      "peaceful": false,
+      "designIndex": 0
+    },
+    {
+      "id": "design-guild-1",
+      "name": "BelovedOnes",
+      "level": 96,
+      "elo": 1310,
+      "members": 14,
+      "recruiting": false,
+      "peaceful": true,
+      "designIndex": 1
+    },
+    {
+      "id": "design-guild-2",
+      "name": "WOT",
+      "level": 81,
+      "elo": 1265,
+      "members": 19,
+      "recruiting": true,
+      "peaceful": false,
+      "designIndex": 2
+    },
+    {
+      "id": "design-guild-3",
+      "name": "BoopGang",
+      "level": 74,
+      "elo": 1350,
+      "members": 11,
+      "recruiting": false,
+      "peaceful": false,
+      "designIndex": 3
+    },
+    {
+      "id": "design-guild-4",
+      "name": "Dogeclan",
+      "level": 66,
+      "elo": 1205,
+      "members": 9,
+      "recruiting": true,
+      "peaceful": false,
+      "designIndex": 4
+    },
+    {
+      "id": "design-guild-5",
+      "name": "Asgard",
+      "level": 62,
+      "elo": 1290,
+      "members": 12,
+      "recruiting": true,
+      "peaceful": false,
+      "designIndex": 5
+    },
+    {
+      "id": "design-guild-6",
+      "name": "Enthusiast",
+      "level": 58,
+      "elo": 1180,
+      "members": 16,
+      "recruiting": true,
+      "peaceful": false,
+      "designIndex": 6
+    },
+    {
+      "id": "design-guild-7",
+      "name": "PTC",
+      "level": 47,
+      "elo": 1150,
+      "members": 8,
+      "recruiting": false,
+      "peaceful": false,
+      "designIndex": 7
+    },
+    {
+      "id": "design-guild-8",
+      "name": "Everlights",
+      "level": 44,
+      "elo": 1040,
+      "members": 10,
+      "recruiting": false,
+      "peaceful": true,
+      "designIndex": 8
+    },
+    {
+      "id": "design-guild-9",
+      "name": "Chillage",
+      "level": 31,
+      "elo": 1005,
+      "members": 13,
+      "recruiting": true,
+      "peaceful": true,
+      "designIndex": 9
+    },
+    {
+      "id": "design-guild-10",
+      "name": "Hoplience",
+      "level": 22,
+      "elo": 985,
+      "members": 7,
+      "recruiting": true,
+      "peaceful": true,
+      "designIndex": 10
+    },
+    {
+      "id": "design-guild-11",
+      "name": "Kirky",
+      "level": 18,
+      "elo": 970,
+      "members": 5,
+      "recruiting": false,
+      "peaceful": true,
+      "designIndex": 11
+    }
+  ],
+  "players": [
+    {
+      "id": "design-player-0",
+      "name": "FainNeito",
+      "designIndex": 0
+    },
+    {
+      "id": "design-player-1",
+      "name": "StepSoy",
+      "designIndex": 1
+    },
+    {
+      "id": "design-player-2",
+      "name": "LavKun",
+      "designIndex": 2
+    }
+  ],
+  "bounties": [
+    {
+      "id": "design-bounty-0",
+      "name": "Steve",
+      "gold": 2400,
+      "state": "open",
+      "designIndex": 0
+    },
+    {
+      "id": "design-bounty-1",
+      "name": "Zuri",
+      "gold": 1850,
+      "state": "open",
+      "designIndex": 1
+    },
+    {
+      "id": "design-bounty-2",
+      "name": "Noor",
+      "gold": 1200,
+      "state": "open",
+      "designIndex": 2
+    },
+    {
+      "id": "design-bounty-3",
+      "name": "Makena",
+      "gold": 900,
+      "state": "open",
+      "designIndex": 3
+    },
+    {
+      "id": "design-bounty-4",
+      "name": "Ari",
+      "gold": 640,
+      "state": "open",
+      "designIndex": 4
+    },
+    {
+      "id": "design-bounty-5",
+      "name": "Sunny",
+      "gold": 320,
+      "state": "open",
+      "designIndex": 5
+    },
+    {
+      "id": "design-bounty-6",
+      "name": "Kai",
+      "gold": 1500,
+      "state": "claimed",
+      "designIndex": 6
+    },
+    {
+      "id": "design-bounty-7",
+      "name": "Alex",
+      "gold": 750,
+      "state": "claimed",
+      "designIndex": 7
+    }
+  ]
+}

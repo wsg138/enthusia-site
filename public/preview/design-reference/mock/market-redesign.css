@@ -1,0 +1,71 @@
+/* Preview only: the real market page (assets/market/market.css) dressed in the red and gold look. */
+.market-stage{padding:48px 0 72px}
+.market-page-root{--bg:#fff1cf;--panel:#fff8e6;--text:#3a0d0a;--muted:#6b3a2a;--soft:#8a5a00;--line:#4a0b08;--orange:#b3201a;--gold:#ffcf1f;--green:#1c7a32;--yellow:#8a5a00;--red:#b3201a;--shadow:none;font-family:"Minecraft","Courier New",monospace;font-size:16px;line-height:24px;color:#3a0d0a;-webkit-font-smoothing:none}
+.market-page-root *{font-family:inherit}
+.market-page-root .container{width:min(1240px,100%);margin:0 auto;padding:0 24px;box-sizing:border-box}
+.market-page-root .eyebrow{color:#8a5a00;letter-spacing:2px;font-size:14px}
+.market-page-root .market-intro{padding-block:0 24px}
+.market-page-root .intro-row{display:block}
+.market-page-root .item-search>label{font-size:16px;font-weight:400;margin-bottom:8px}
+.market-page-root .search-box{border:4px solid #b3201a;border-radius:0;background:#fff;grid-template-columns:1fr auto}
+.market-page-root .search-box input{background:#fff;color:#3a0d0a;border:0;font-size:16px;min-height:48px;padding:8px 12px}
+.market-page-root .search-box button,.market-page-root .filter-sheet-actions button,.market-page-root .map-controls button{border:4px solid #4a0b08;border-radius:0;background:#ffcf1f;color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 #e08f00;font-size:16px;min-height:44px;padding:4px 16px;cursor:pointer;transition:transform .12s ease-out}
+.market-page-root .search-box button:hover,.market-page-root .filter-sheet-actions button:hover,.market-page-root .map-controls button:hover{transform:translateY(-2px)}
+.market-page-root .suggestions{border:4px solid #4a0b08;border-radius:0;background:#fff8e6;color:#3a0d0a}
+.market-page-root .filter-shell{border:0;background:transparent;margin-bottom:24px}
+.market-page-root .filters{padding:0 24px}
+.market-page-root .filter-fields{padding:16px;background:#fff8e6;border:4px solid #4a0b08;box-shadow:inset 4px 4px 0 #fff,inset -4px -4px 0 #ecc873}
+.market-page-root .filter-fields label{color:#6b3a2a;font-size:14px;font-weight:400}
+.market-page-root .filter-fields select,.market-page-root .filter-fields input{border:4px solid #b3201a;border-radius:0;background:#fff;color:#3a0d0a;font-size:16px;min-height:44px}
+.market-page-root .filter-meta{color:#6b3a2a;font-size:14px}
+.market-page-root .chip{border:4px solid #4a0b08;border-radius:0;background:#fff8e6;color:#3a0d0a;font-size:14px}
+.market-page-root .market-workspace{padding-block:0}
+.market-page-root .map-card,.market-page-root .search-results{border:4px solid #4a0b08;border-radius:0;background:#a51b16;box-shadow:inset 0 0 0 4px #ffcf1f,inset 0 0 0 6px #5c0d09;color:#fff6e0}
+.market-page-root .map-card{--muted:#ffdcc8;--soft:#ffe9a8;--text:#fff6e0;overflow:hidden}
+.market-page-root .map-heading{padding:20px 24px 8px}
+.market-page-root .map-heading h2{color:#ffdb2e;text-shadow:3px 3px 0 #6b0f0b;font-size:24px;line-height:32px;font-weight:400}
+.market-page-root .map-heading .eyebrow{color:#ffe9a8}
+.market-page-root .map-viewport{margin:0 24px 0;width:auto;border:4px solid #4a0b08;background:#7d120e}
+.market-page-root .layer-bar{padding:0 24px 12px}
+.market-page-root .layer-caption{color:#ffe9a8;font:inherit;font-size:14px;letter-spacing:2px}
+.market-page-root .layer-button{border:4px solid #4a0b08;border-radius:0;background:#fff8e6;color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff,inset -4px -4px 0 #ecc873;font:inherit;font-size:14px;min-height:40px;transition:transform .12s ease-out}
+.market-page-root .layer-button:hover{transform:translateY(-2px);border-color:#4a0b08}
+.market-page-root .layer-button[aria-pressed="true"]{background:#ffcf1f;color:#3a0d0a;border-color:#4a0b08;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 #e08f00}
+.market-page-root .layer-legend{border-top:0;padding:12px 24px 16px;color:#ffdcc8;font:inherit;font-size:14px}
+.market-page-root .layer-key i{border:2px solid #fff6e0;border-radius:0}
+.market-page-root .coordinate-hud{border:4px solid #4a0b08;border-radius:0;background:#fff8e6;color:#3a0d0a;font:inherit;font-size:14px}
+.market-page-root .map-tooltip{border:4px solid #4a0b08;border-radius:0;background:#fff8e6;color:#3a0d0a;font-size:14px;line-height:20px}
+.market-page-root .map-tooltip-line{color:#6b3a2a;font-size:14px}
+.market-page-root .building-shape{stroke:#ffcf1f}
+.market-page-root .search-results{color:#fff6e0;--muted:#ffdcc8;--text:#fff6e0}
+.market-page-root .search-results h2{color:#ffdb2e;font-weight:400;font-size:24px;line-height:32px}
+.market-page-root .layer-label{font-family:inherit;font-weight:400;font-size:12px}
+.market-page-root .market-connection-status{font-size:14px}
+.market-page-root .market-drawer,.market-page-root .item-inspector{font-family:"Minecraft","Courier New",monospace}
+.market-page-root .market-drawer{background:#a51b16;border-left:4px solid #4a0b08;color:#fff6e0;--muted:#ffdcc8;--soft:#ffe9a8;--text:#fff6e0}
+.market-page-root .market-drawer>header{background:#8f1611;border-bottom:4px solid #4a0b08}
+.market-page-root .market-drawer header h2{color:#ffdb2e;font-weight:400;text-shadow:3px 3px 0 #6b0f0b}
+.market-page-root .market-drawer header button{border:4px solid #4a0b08;border-radius:0;background:#ffcf1f;color:#3a0d0a}
+.market-page-root .stall-card,.market-page-root .shop-card,.market-page-root .stall-hero,.market-page-root .detail-grid div,.market-page-root .member-list{border:4px solid #4a0b08;border-radius:0;background:#fff8e6;color:#3a0d0a;--muted:#6b3a2a;--soft:#6b3a2a}
+.market-page-root .stall-card:hover,.market-page-root .stall-card.selected{background:#ffe7b0;border-color:#4a0b08}
+.market-page-root .stall-group h3{color:#ffdb2e;border-bottom:4px solid #4a0b08}
+.market-page-root .coordinates{border:4px solid #4a0b08;border-radius:0;background:#ffe7b0;color:#3a0d0a}
+.market-page-root .copy-coordinates,.market-page-root .view-container{border:4px solid #4a0b08;border-radius:0;background:#ffcf1f;color:#3a0d0a}
+.market-page-root .rent-countdown.healthy{color:#1c7a32}.market-page-root .rent-countdown.warning{color:#8a5a00}.market-page-root .rent-countdown.urgent,.market-page-root .rent-countdown.expired{color:#b3201a}
+.market-page-root .shop-card .direction{color:#b3201a}
+.market-page-root .price-badge{border-radius:0;border-width:4px;font:inherit;font-size:14px;background:#fff}
+.market-page-root .price-badge.cheap{color:#fff;background:#1c7a32;border-color:#4a0b08}.market-page-root .price-badge.pricey{color:#fff;background:#c0261d;border-color:#4a0b08}.market-page-root .price-badge.fair{color:#6b3a2a;background:#fff8e6;border-color:#4a0b08}
+@media (max-width:700px){.market-page-root .container,.market-page-root .filters{padding:0 16px}.market-page-root .map-heading{padding:16px 16px 8px}.market-page-root .layer-bar,.market-page-root .layer-legend{padding-inline:16px}.market-page-root .map-viewport{margin:0 16px}}
+.market-page-root .filter-meta{flex-wrap:wrap}
+.market-page-root .market-connection-status{flex-wrap:wrap;white-space:normal;max-width:100%;margin-left:auto}
+.market-page-root .market-drawer>header #drawer-back[hidden]{display:block !important;visibility:hidden;pointer-events:none}
+.market-page-root .market-connection-status.live,.market-page-root .market-connection-status.connecting,.market-page-root .market-connection-status.reconnecting,.market-page-root .market-connection-status.offline,.market-page-root .market-connection-status.unavailable{width:auto;height:auto;background:transparent;border:0;animation:none;display:flex;align-items:center;gap:8px}
+.market-page-root .market-drawer .eyebrow,.market-page-root .market-drawer header p{color:#ffe9a8}
+.market-page-root .market-drawer header p#drawer-summary{color:#ffdcc8}
+.market-page-root .market-drawer,.market-page-root .item-inspector,.market-page-root .drawer-content{background:#a51b16 !important;color:#fff6e0}
+.market-page-root .market-drawer>header{background:#8f1611 !important}
+.market-page-root .mobile-sheet-handle{background:#8f1611 !important;color:#ffdb2e !important;border:0;border-bottom:4px solid #4a0b08;font:inherit}
+.market-page-root .sheet-grip{background:#ffdb2e !important}
+.market-page-root .search-results .mobile-sheet-handle{border-bottom:0}
+.market-page-root .shop-card .stock-badge{color:#b3201a}
+.market-page-root .mobile-filter-button{border:4px solid #4a0b08;border-radius:0;background:#ffcf1f;color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 #e08f00;font:inherit;font-size:16px;min-height:44px;padding:4px 20px}

@@ -1,0 +1,72 @@
+[
+  {
+    "issueId": "8bc584fe62ba352502f7d0a2e2b1c3fa",
+    "file": "public/assets/appeals.css",
+    "line": 1,
+    "pattern": "Stylelint_no-obsolete-attribute",
+    "message": "Unknown rule no-obsolete-attribute."
+  },
+  {
+    "issueId": "14bac347a3a07f4ce12875a5747ce184",
+    "file": "public/assets/appeals.css",
+    "line": 1,
+    "pattern": "Stylelint_scss_property-no-unknown",
+    "message": "Unknown rule scss_property-no-unknown. Did you mean property-no-unknown?"
+  },
+  {
+    "issueId": "60988ac148fa74ce218ed0dce933b2cc",
+    "file": "public/assets/appeals.css",
+    "line": 1,
+    "pattern": "Stylelint_scss_declaration-property-value-no-unknown",
+    "message": "Unknown rule scss_declaration-property-value-no-unknown. Did you mean declaration-property-value-no-unknown?"
+  },
+  {
+    "issueId": "d06de47eb0d003f7ff85dd16dc8e4750",
+    "file": "public/assets/appeals.css",
+    "line": 1,
+    "pattern": "Stylelint_scss_function-disallowed-list",
+    "message": "Unknown rule scss_function-disallowed-list. Did you mean function-disallowed-list?"
+  },
+  {
+    "issueId": "667b2c15a2d7f43f805c956ed7736268",
+    "file": "public/assets/appeals.css",
+    "line": 1,
+    "pattern": "Stylelint_scss_dimension-no-non-numeric-values",
+    "message": "Unknown rule scss_dimension-no-non-numeric-values."
+  },
+  {
+    "issueId": "defdaf3e4ce762d6f44aa3fc92be9b0d",
+    "file": "public/assets/appeals.css",
+    "line": 1,
+    "pattern": "Stylelint_scss_no-global-function-names",
+    "message": "Unknown rule scss_no-global-function-names."
+  },
+  {
+    "issueId": "fed9d9fde762474fd958e44c097f33f6",
+    "file": "public/assets/appeals.css",
+    "line": 1,
+    "pattern": "Stylelint_scss_at-rule-no-unknown",
+    "message": "Unknown rule scss_at-rule-no-unknown. Did you mean at-rule-no-unknown?"
+  },
+  {
+    "issueId": "e62c4a89704f9ab53cdbb03ee17172b9",
+    "file": "public/assets/appeals.css",
+    "line": 1,
+    "pattern": "Stylelint_scss_dollar-variable-no-missing-interpolation",
+    "message": "Unknown rule scss_dollar-variable-no-missing-interpolation."
+  },
+  {
+    "issueId": "29c7ad5be436dd3bd6a8051c7e32d6e0",
+    "file": "public/assets/appeals.css",
+    "line": 1,
+    "pattern": "Stylelint_scss_function-no-unknown",
+    "message": "Unknown rule scss_function-no-unknown. Did you mean function-no-unknown?"
+  },
+  {
+    "issueId": "674555adb71ad828ff802eb7b468e384",
+    "file": "public/assets/review-appeals.js",
+    "line": 86,
+    "pattern": "Semgrep_rules_lgpl_javascript_ssrf_rule-node-ssrf",
+    "message": "This application allows user-controlled URLs to be passed directly to HTTP client libraries."
+  }
+]

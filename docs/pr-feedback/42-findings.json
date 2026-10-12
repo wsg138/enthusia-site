@@ -1,0 +1,44 @@
+[
+  {
+    "issueId": "dc83dd923df6bd24faaa94f6c44bd256",
+    "file": "wiki-worker/mobile-corrections.js",
+    "line": 215,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method openNativeMenu has a cyclomatic complexity of 9 (limit is 8)"
+  },
+  {
+    "issueId": "745a95d6a4e636e5ec6d3f057318c00d",
+    "file": "wiki-worker/mobile-sidebar-close-controls.js",
+    "line": 33,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method ensureCloseControl has a cyclomatic complexity of 15 (limit is 8)"
+  },
+  {
+    "issueId": "a93de00ee25f4fb9a051af44ae5799be",
+    "file": "wiki-worker/publish-mobile-sidebar-safari-performance.py",
+    "line": 190,
+    "pattern": "PyLintPython3_W0718",
+    "message": "Catching too general exception Exception"
+  },
+  {
+    "issueId": "70e6d88092d98d7d9ac342477d5172d4",
+    "file": "wiki-worker/publish-mobile-sidebar-safari-performance.py",
+    "line": 126,
+    "pattern": "Lizard_ccn-medium",
+    "message": "Method validate_sources has a cyclomatic complexity of 15 (limit is 8)"
+  },
+  {
+    "issueId": "777212969363910f36a1a3ea988833e4",
+    "file": "wiki-worker/validate-live-mobile-sidebar-webkit.mjs",
+    "line": 76,
+    "pattern": "Semgrep_javascript_pathtraversal_rule-non-literal-fs-filename",
+    "message": "The application dynamically constructs file or path information."
+  },
+  {
+    "issueId": "eb5fa35c37f3b2d32a42f8f4c709ff79",
+    "file": "wiki-worker/validate-live-mobile-sidebar-webkit.mjs",
+    "line": 6,
+    "pattern": "Semgrep_javascript_pathtraversal_rule-non-literal-fs-filename",
+    "message": "The application dynamically constructs file or path information."
+  }
+]

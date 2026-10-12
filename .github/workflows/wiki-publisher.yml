@@ -49,6 +49,10 @@ jobs:
             test -s "$file"
           done
 
+      - name: Validate wiki worker safety boundaries
+        shell: bash
+        run: python3 -m unittest wiki-worker/test_safety.py
+
       - name: Capture complete live wiki before publication
         shell: bash
         run: |

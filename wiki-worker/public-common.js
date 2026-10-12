@@ -18,7 +18,9 @@
       if (!window.localStorage) return;
       if (value === null) localStorage.removeItem(key);
       else localStorage.setItem(key, value);
-    } catch (e) {}
+    } catch {
+      // Storage can be unavailable in private or restricted browser sessions.
+    }
   }
 
   function hasThemeClass(name) {
@@ -48,13 +50,22 @@
   }
 
   function nativeThemeInput(mode) {
-    const ids = {
-      light: '#skin-client-pref-skin-theme-value-day',
-      dark: '#skin-client-pref-skin-theme-value-night',
-      auto: '#skin-client-pref-skin-theme-value-os'
-    };
-    return document.querySelector(ids[mode]) ||
-      document.querySelector('input[name*="skin-theme"][value="' + (mode === 'light' ? 'day' : mode === 'dark' ? 'night' : 'os') + '"]');
+    let id;
+    let value;
+    if (mode === 'light') {
+      id = '#skin-client-pref-skin-theme-value-day';
+      value = 'day';
+    } else if (mode === 'dark') {
+      id = '#skin-client-pref-skin-theme-value-night';
+      value = 'night';
+    } else if (mode === 'auto') {
+      id = '#skin-client-pref-skin-theme-value-os';
+      value = 'os';
+    } else {
+      return null;
+    }
+    return document.querySelector(id) ||
+      document.querySelector('input[name*="skin-theme"][value="' + value + '"]');
   }
 
   function setTheme(mode) {
@@ -324,7 +335,7 @@
   }
 
   function start() {
-    try { window.sessionStorage.removeItem('enthusia-vector-layout-v2'); } catch (e) {}
+    try { window.sessionStorage.removeItem('enthusia-vector-layout-v2'); } catch { /* Session storage may be blocked. */ }
     enhance(document);
     buildMobileUx();
     if (window.mw && mw.hook) {

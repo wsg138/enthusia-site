@@ -1,93 +1,220 @@
 <!DOCTYPE html>
-<html lang="en" id="top">
+<html lang="en" class="no-js">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Enthusia SMP | Vote</title>
-  <meta name="description" content="Vote for Enthusia SMP on community server lists." />
-  <meta name="theme-color" content="#100d0a" />
-  <meta name="color-scheme" content="dark light" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/styles.css?v=vision64" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vote</title>
+<meta name="description" content="Vote for Enthusia SMP on community server lists.">
+<meta name="theme-color" content="#c0261d">
+<link rel="preload" href="assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
+<link rel="stylesheet" href="assets/enthusia.css">
+
+<link rel="stylesheet" href="assets/exact-design.css">
+<link rel="stylesheet" href="assets/site-refinements.css">
 </head>
 <body>
 <a class="skip-link" href="#main-content">Skip to main content</a>
-<div class="bg" aria-hidden="true"><div class="bg-grid"></div><div class="bg-vignette"></div><div class="bg-heat"></div></div>
-<header class="site-header"><div class="container header-inner"><a class="brand" href="index.html" aria-label="Enthusia SMP home"><img class="brand-logo" src="assets/enthusia-logo-v2.png" alt="" width="46" height="46" /><span class="brand-name">Enthusia SMP</span></a><nav class="nav" aria-label="Primary navigation"><a href="index.html">Home</a><a href="plugins.html">About</a><a href="rules.html">Rules</a><a href="market.html">Market</a><div class="nav-dropdown"><button class="nav-drop-trigger active" type="button" aria-current="page">Community</button><div class="nav-menu" aria-label="Community links"><a href="leaderboards.html">Leaderboards</a><a href="staff.html">Staff</a><a href="gallery.html">Gallery</a><a href="vote.html">Vote</a><a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Wiki</a></div></div><a href="https://enthusia-shop.tebex.io/" data-link-target="store" target="_blank" rel="noopener">Store</a><a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a></nav></div></header>
+<div class="en">
+
+<header class="site-head s-red">
+<div class="site-head-in">
+<a class="brand" href="index.html" aria-label="Enthusia SMP home">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn cur" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html" class="active" aria-current="page">Vote</a>
+<a href="appeal.html">Appeals</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</div>
+</div>
+<a href="store.html">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="account.html">Account</a>
+</nav>
+<a class="btn btn-gold hdr-play" href="join.html">Play now!</a>
+</div>
+</header>
 
 <main id="main-content" class="page-main">
-  <section class="subhero" aria-labelledby="vote-title">
-    <div class="container">
-      <p class="eyebrow">Community</p>
-      <h1 id="vote-title">Vote</h1>
-      <p class="page-lead">Support Enthusia SMP by voting on our community server listings.</p>
-    </div>
-  </section>
-  <section class="page-section compact">
-    <div class="container">
-      <article class="card content-panel vote-notice">
-        <p class="eyebrow">Vote for Enthusia</p>
-        <h2>Help the server grow</h2>
-        <p>Choose any listing below to cast a vote and help more players discover Enthusia SMP.</p>
-      </article>
-      <ul class="vote-grid vote-listings" aria-label="Official Enthusia voting sites">
-        <li class="card vote-card">
-          <span class="vote-listing-number">01</span>
-          <h3>Minecraft-Servers.gg</h3>
-          <a class="vote-link" href="https://minecraft-servers.gg/server/7920-play-enthusia-info/vote" target="_blank" rel="noopener" aria-label="Vote for Enthusia on Minecraft-Servers.gg">Open voting page <span aria-hidden="true">↗</span></a>
-        </li>
-        <li class="card vote-card">
-          <span class="vote-listing-number">02</span>
-          <h3>Minecraft.Buzz</h3>
-          <a class="vote-link" href="https://minecraft.buzz/vote/enthusia" target="_blank" rel="noopener" aria-label="Vote for Enthusia on Minecraft.Buzz">Open voting page <span aria-hidden="true">↗</span></a>
-        </li>
-        <li class="card vote-card">
-          <span class="vote-listing-number">03</span>
-          <h3>Minecraft-ServerList.com</h3>
-          <a class="vote-link" href="https://minecraft-serverlist.com/server/5770" target="_blank" rel="noopener" aria-label="Vote for Enthusia on Minecraft-ServerList.com">Open voting page <span aria-hidden="true">↗</span></a>
-        </li>
-        <li class="card vote-card">
-          <span class="vote-listing-number">04</span>
-          <h3>MinecraftServers.org</h3>
-          <a class="vote-link" href="https://minecraftservers.org/vote/690289" target="_blank" rel="noopener" aria-label="Vote for Enthusia on MinecraftServers.org">Open voting page <span aria-hidden="true">↗</span></a>
-        </li>
-        <li class="card vote-card">
-          <span class="vote-listing-number">05</span>
-          <h3>Minecraft-Server-List.com</h3>
-          <a class="vote-link" href="https://minecraft-server-list.com/server/521793/vote/" target="_blank" rel="noopener" aria-label="Vote for Enthusia on Minecraft-Server-List.com">Open voting page <span aria-hidden="true">↗</span></a>
-        </li>
-      </ul>
-    </div>
-  </section>
+<section class="hero hero-vars hero-vote" aria-labelledby="vote-page-title">
+<div style="max-width: 1240px; min-height: 320px; margin: 0 auto; padding: 56px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
+<p class="tag tag-gold" style="letter-spacing: 2px">PLAY</p>
+<h1 id="vote-page-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">VOTE</h1>
+<p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">Support Enthusia SMP by voting on our community server listings.</p>
+</div>
+<div class="crenel"></div>
+</section>
+<section class="s-cream" aria-labelledby="vote-title" style="padding: 72px 0">
+<div style="max-width: 960px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">VOTE FOR ENTHUSIA</p>
+<h2 id="vote-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Help the server grow</h2>
+</div>
+<p style="color: var(--muted)">Choose any listing below to cast a vote and help more players discover Enthusia SMP.</p>
+<div class="tip fret-sm" style="padding: 20px 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px"><span>Listings opened this visit</span><span aria-live="polite" style="color: var(--accent)" data-vote-count>0 / 5</span></div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px"><span class="seg" data-vote-seg></span><span class="seg" data-vote-seg></span><span class="seg" data-vote-seg></span><span class="seg" data-vote-seg></span><span class="seg" data-vote-seg></span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<article class="panel row vrow" data-vote style="padding: 16px 24px 16px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 20px">
+<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">01</div>
+<h3 style="flex: 1 1 240px; min-width: 0; font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">Minecraft-Servers.gg</h3>
+<span class="tag tag-gold done-tag">Opened</span>
+<a class="btn btn-gold" href="https://minecraft-servers.gg/server/7920-play-enthusia-info/vote" target="_blank" rel="noopener">Open voting page</a>
+</article>
+<article class="panel row vrow" data-vote style="padding: 16px 24px 16px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 20px">
+<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">02</div>
+<h3 style="flex: 1 1 240px; min-width: 0; font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">Minecraft.Buzz</h3>
+<span class="tag tag-gold done-tag">Opened</span>
+<a class="btn btn-gold" href="https://minecraft.buzz/vote/enthusia" target="_blank" rel="noopener">Open voting page</a>
+</article>
+<article class="panel row vrow" data-vote style="padding: 16px 24px 16px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 20px">
+<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">03</div>
+<h3 style="flex: 1 1 240px; min-width: 0; font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">Minecraft-ServerList.com</h3>
+<span class="tag tag-gold done-tag">Opened</span>
+<a class="btn btn-gold" href="https://minecraft-serverlist.com/server/5770" target="_blank" rel="noopener">Open voting page</a>
+</article>
+<article class="panel row vrow" data-vote style="padding: 16px 24px 16px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 20px">
+<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">04</div>
+<h3 style="flex: 1 1 240px; min-width: 0; font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">MinecraftServers.org</h3>
+<span class="tag tag-gold done-tag">Opened</span>
+<a class="btn btn-gold" href="https://minecraftservers.org/vote/690289" target="_blank" rel="noopener">Open voting page</a>
+</article>
+<article class="panel row vrow" data-vote style="padding: 16px 24px 16px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 20px">
+<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">05</div>
+<h3 style="flex: 1 1 240px; min-width: 0; font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">Minecraft-Server-List.com</h3>
+<span class="tag tag-gold done-tag">Opened</span>
+<a class="btn btn-gold" href="https://minecraft-server-list.com/server/521793/vote/" target="_blank" rel="noopener">Open voting page</a>
+</article>
+</div>
+</div>
+</section>
 </main>
 
-<footer class="site-footer"><div class="container footer-inner"><p>&copy; <span id="year"></span> Enthusia SMP</p><p><a href="market.html">Market</a> · Contact: <a href="mailto:glorytoenthusia@gmail.com" data-contact-email>glorytoenthusia@gmail.com</a></p></div></footer>
-<script src="assets/site-config.js?v=vision41" defer></script>
-<script src="assets/script.js?v=vision63" defer></script>
+<footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="index.html">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="join.html">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="News">
+<p class="foot-title">NEWS</p>
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="store.html">Store</a>
+<a href="account.html">Account</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="404.html">404 page</a>
+<a href="home-christmas.html">Christmas skin</a>
+</nav>
+<nav class="foot" aria-label="Staff tools">
+<p class="foot-title">STAFF TOOLS</p>
+<a href="competitions/admin/index.html">Competition admin</a>
+<a href="newseditor.html">News editor</a>
+<a href="reviewer/index.html">Reviewer</a>
+<a href="reviewer/appeals.html">Appeal review</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
+
+<div class="toast hide" role="status" data-toast>
+<img src="assets/ui/logo-256.png" alt="" width="48" height="48">
+<div><p class="toast-title" data-toast-title>Address copied!</p><p data-server-ip>enthusia.net</p></div>
+</div>
+</div>
+
+
+
+
+<script src="assets/site-config.js" defer></script><script src="assets/enthusia.js" defer></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

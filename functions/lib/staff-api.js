@@ -1,12 +1,24 @@
 const encoder = new TextEncoder();
 const STAFF_API_ORIGIN = "https://staff-api.enthusia.info";
+const STAFF_API_PREVIEW_ORIGIN = "https://staff-api-dev.enthusia.info";
 const STAFF_API_TIMEOUT_MS = 7000;
 const STATIC_ROUTES = new Set([
+  "/v1/website/punishment-codes/claim",
+  "/v1/website/punishment-codes/revalidate",
   "/v1/website/appeals/eligible",
+  "/v1/website/appeals/mine",
   "/v1/website/appeals/submit",
   "/v1/website/appeals/reviewer/list"
 ]);
 const DECISION_ROUTE = /^\/v1\/website\/appeals\/reviewer\/[0-9a-f-]{36}\/decision$/i;
+const EDIT_ROUTE = /^\/v1\/website\/appeals\/[0-9a-f-]{36}\/edit$/i;
+const CLAIM_ROUTE = /^\/v1\/website\/appeals\/reviewer\/[0-9a-f-]{36}\/claim$/i;
+const REOPEN_ROUTE = /^\/v1\/website\/appeals\/reviewer\/[0-9a-f-]{36}\/reopen$/i;
+const PUBLIC_ROUTES = new Set([
+  "/v1/public/punishments",
+  "/v1/public/search"
+]);
+const PUBLIC_CASE_ROUTE = /^\/v1\/public\/cases\/[0-9A-HJKMNP-TV-Z]{16}$/;
 
 function base64Url(bytes) {
   let binary = "";
@@ -29,6 +41,13 @@ async function hmacSha256(secret, value) {
   return new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(value)));
 }
 
+export function staffApiOrigin(env) {
+  const target = String(env?.STAFF_API_TARGET ?? "").trim().toLowerCase();
+  if (target === "production") return STAFF_API_ORIGIN;
+  if (target === "preview") return STAFF_API_PREVIEW_ORIGIN;
+  throw new Error("Staff API target is invalid");
+}
+
 function staffApiConfiguration(env) {
   const bearer = typeof env.STAFF_API_BEARER_TOKEN === "string" ? env.STAFF_API_BEARER_TOKEN : "";
   const secret = typeof env.STAFF_API_HMAC_SECRET === "string" ? env.STAFF_API_HMAC_SECRET : "";
@@ -37,7 +56,7 @@ function staffApiConfiguration(env) {
 }
 
 function staffRoute(path) {
-  if (!STATIC_ROUTES.has(path) && !DECISION_ROUTE.test(path)) {
+  if (!STATIC_ROUTES.has(path) && !DECISION_ROUTE.test(path) && !EDIT_ROUTE.test(path) && !CLAIM_ROUTE.test(path) && !REOPEN_ROUTE.test(path)) {
     throw new Error("Invalid Staff API route");
   }
   return path;
@@ -53,6 +72,24 @@ async function boundedFetch(url, options) {
   }
 }
 
+export function publicStaffRoute(path) {
+  if (!PUBLIC_ROUTES.has(path) && !PUBLIC_CASE_ROUTE.test(path)) {
+    throw new Error("Invalid public Staff API route");
+  }
+  return path;
+}
+
+export async function publicStaffRequest(env, path, query = new URLSearchParams()) {
+  const requestTarget = publicStaffRoute(path);
+  const parameters = query instanceof URLSearchParams ? query : new URLSearchParams(query);
+  const url = new URL(requestTarget, staffApiOrigin(env));
+  url.search = parameters.toString();
+  return boundedFetch(url, {
+    method: "GET",
+    headers: { accept: "application/json" }
+  });
+}
+
 export async function signedStaffRequest(env, path, body) {
   const configuration = staffApiConfiguration(env);
   const requestTarget = staffRoute(path);
@@ -64,7 +101,7 @@ export async function signedStaffRequest(env, path, body) {
   const canonical = `${method}\n${requestTarget}\n${timestamp}\n${nonce}\n${contentHash}`;
   const signature = base64Url(await hmacSha256(configuration.secret, canonical));
 
-  return boundedFetch(`${STAFF_API_ORIGIN}${requestTarget}`, {
+  return boundedFetch(`${staffApiOrigin(env)}${requestTarget}`, {
     method,
     headers: {
       authorization: `Bearer ${configuration.bearer}`,
@@ -75,6 +112,35 @@ export async function signedStaffRequest(env, path, body) {
       "x-enthusia-signature": signature
     },
     body: payload
+  });
+}
+
+function staffGetRoute(requestTarget) {
+  const path = requestTarget.split("?", 1)[0];
+  const publicCase = /^\/v1\/public\/cases\/[A-Za-z0-9_-]{1,64}$/;
+  if (!PUBLIC_ROUTES.has(path) && !publicCase.test(path)) throw new Error("Invalid Staff API GET route");
+  return requestTarget;
+}
+
+export async function signedStaffGet(env, requestTarget) {
+  const configuration = staffApiConfiguration(env);
+  const target = staffGetRoute(requestTarget);
+  const method = "GET";
+  const timestamp = String(Date.now());
+  const nonce = crypto.randomUUID();
+  const contentHash = base64Url(await sha256(new Uint8Array(0)));
+  const canonical = `${method}\n${target}\n${timestamp}\n${nonce}\n${contentHash}`;
+  const signature = base64Url(await hmacSha256(configuration.secret, canonical));
+
+  return boundedFetch(`${staffApiOrigin(env)}${target}`, {
+    method,
+    headers: {
+      authorization: `Bearer ${configuration.bearer}`,
+      "x-enthusia-timestamp": timestamp,
+      "x-enthusia-nonce": nonce,
+      "x-enthusia-content-sha256": contentHash,
+      "x-enthusia-signature": signature
+    }
   });
 }
 
@@ -97,4 +163,11 @@ export function staffApiResponse(upstream, cacheControl = "no-store") {
   });
 }
 
-export { STAFF_API_ORIGIN, STAFF_API_TIMEOUT_MS, base64Url, staffApiConfiguration, staffRoute };
+export {
+  STAFF_API_ORIGIN,
+  STAFF_API_PREVIEW_ORIGIN,
+  STAFF_API_TIMEOUT_MS,
+  base64Url,
+  staffApiConfiguration,
+  staffRoute
+};

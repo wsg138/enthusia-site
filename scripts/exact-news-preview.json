@@ -1,0 +1,41 @@
+{
+  "posts": [
+    {
+      "kind": "news",
+      "slug": "design-post-0",
+      "title": "Chapter 2 is live",
+      "category": "Announcement",
+      "date": "October 2, 2026",
+      "body": "# Chapter 2 is live\nChapter 2 launched on **October 2, 2026**. Here is what is happening first.\n\n## Competitions\n- **Build Competition** - the theme is *Halloween*. Entries open soon. The day will be announced on Discord.\n- Voting opens **October 14** and results are published **October 21**.\n- The **Mapart Competition** starts on **October 24**, with voting from **November 8**.\n\n> Raiding and open PvP are part of Enthusia. Read the rules before you log in.\n\n-# Posted by Fain",
+      "authorName": "Fain",
+      "authorRank": "Founder",
+      "revision": 1,
+      "status": "published"
+    },
+    {
+      "kind": "news",
+      "slug": "design-post-1",
+      "title": "Changelog - [version or date]",
+      "category": "Changelog",
+      "date": "[date]",
+      "body": "## Added\n- [new feature and where to find it]\n\n## Changed\n- `[plugin]` [what changed and why]\n- ~~[old behaviour]~~ is now __[new behaviour]__\n\n## Fixed\n- [bug that was fixed]\n\n-# [who posted]",
+      "authorName": "Fain",
+      "authorRank": "Founder",
+      "revision": 1,
+      "status": "published"
+    },
+    {
+      "kind": "news",
+      "slug": "design-post-2",
+      "title": "Build Competition: entries open soon",
+      "category": "Event",
+      "date": "October 2, 2026",
+      "body": "# Build Competition\nThe theme is **Halloween**.\n\n1. Submissions open **soon**: the day will be announced here and on Discord\n2. Voting opens **October 14**\n3. Results are published **October 21**\n\nYou need to sign in with Discord and have a Minecraft account linked before you can submit or vote.\n\n[Open the competition page](Competitions)",
+      "authorName": "Fain",
+      "authorRank": "Founder",
+      "revision": 1,
+      "status": "published"
+    }
+  ],
+  "editor": "# Chapter 2 is live\nChapter 2 launched on **October 2, 2026**. Here is what is happening first.\n\n## Competitions\n- **Build Competition** - the theme is *Halloween*. Entries open soon. The day will be announced on Discord.\n- Voting opens **October 14** and results are published **October 21**.\n- The **Mapart Competition** starts on **October 24**.\n\n> Raiding and open PvP are part of Enthusia. Read the rules before you log in.\n\n### Changelog\n- `[plugin]` [what changed]\n- ~~[something removed]~~\n- __[something important]__\n\nHidden until hovered: ||[spoiler text]||\n-# Posted from the website - no 2,000 character limit here."
+}

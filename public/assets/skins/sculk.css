@@ -1,0 +1,42 @@
+/*
+ * Enthusia SMP - sculk skin for the home page (Halloween, Chapter 2 spawn theme).
+ *
+ * The page keeps its red and gold. Sculk hangs under the header, fills the hero corners and creeps over
+ * parts of the page. Every growth picture carries its own see-through stain ring, so the surface under it
+ * darkens toward the sculk. Each picture has a matching "-glow" layer that pulses.
+ *
+ * Off by default. It is switched on by assets/skins/sculk.js (see that file).
+ */
+.sk{position:absolute;z-index:0;pointer-events:none;background-repeat:no-repeat;background-size:100% 100%;image-rendering:pixelated}
+.sk::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;background-repeat:inherit;background-size:inherit;background-position:inherit;image-rendering:pixelated;animation:skpulse 3.6s steps(6) infinite;animation-delay:var(--d,0s)}
+@keyframes skpulse{0%,100%{opacity:.1}50%{opacity:1}}
+.sk-corner{width:704px;height:448px;background-image:url(sculk/corner.png)}.sk-corner::after{background-image:url(sculk/corner-glow.png)}
+.sk-corner-b{width:576px;height:368px;background-image:url(sculk/corner-b.png)}.sk-corner-b::after{background-image:url(sculk/corner-b-glow.png)}
+.sk-corner-m{width:384px;height:256px;background-image:url(sculk/corner-m.png)}.sk-corner-m::after{background-image:url(sculk/corner-m-glow.png)}
+.sk-corner-s{width:224px;height:160px;background-image:url(sculk/corner-s.png)}.sk-corner-s::after{background-image:url(sculk/corner-s-glow.png)}
+.sk-creep{width:1360px;height:240px;background-image:url(sculk/creep.png)}.sk-creep::after{background-image:url(sculk/creep-glow.png)}
+.sk-drip{width:1360px;height:128px;background-image:url(sculk/drip.png)}.sk-drip::after{background-image:url(sculk/drip-glow.png)}
+.sk-creep,.sk-drip{left:0;right:0;width:auto;background-repeat:repeat-x;background-size:1360px 100%}
+.sk.fx{transform:scaleX(-1)}.sk.fy{transform:scaleY(-1)}.sk.fxy{transform:scale(-1,-1)}
+.sk-on{position:relative;isolation:isolate;overflow:hidden}
+.sk-on>*:not(.sk){position:relative;z-index:1}
+.tip.sculked{--ink:#dffaf6;--muted:#9ad8d1;--head:#5ff2e6;--head-sh:#04141b;--kick:#b9ece6;--accent:#5ff2e6;--hi:#5ff2e6;--row:rgba(4,20,27,.66);--link:#5ff2e6;--link-hi:#ffffff;border-color:#04141b;background:linear-gradient(rgba(4,20,27,.2),rgba(4,20,27,.2)),url(sculk/panel.png) 0 0/512px 512px;image-rendering:pixelated;box-shadow:inset 0 0 0 4px #135a66,inset 0 0 0 6px #04141b,0 0 0 4px rgba(6,24,32,.42),0 0 0 8px rgba(6,24,32,.2)}
+.tip.sculked::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;background:url(sculk/panel-glow.png) 0 0/512px 512px;image-rendering:pixelated;pointer-events:none;animation:skpulse 3.6s steps(6) infinite}
+.tip.sculked img{image-rendering:auto}.tip.sculked img.px{image-rendering:pixelated}
+.sculked .slot{--head:#5ff2e6;background:#04141b;color:#5ff2e6;border-color:#04141b;box-shadow:inset 4px 4px 0 #071e27,inset -4px -4px 0 #0f5560}
+.sk-txt{color:#5ff2e6;text-shadow:8px 8px 0 #04141b}
+.soul{position:absolute;z-index:1;width:8px;height:8px;background:#5ff2e6;opacity:0;pointer-events:none;animation:soul 7s linear infinite}
+@keyframes soul{0%{transform:translateY(0);opacity:0}12%{opacity:.95}70%{opacity:.6}100%{transform:translateY(-440px);opacity:0}}
+@media (max-width:720px){.sk-corner{width:352px;height:224px}.sk-corner-b{width:288px;height:184px}.sk-corner-m{width:192px;height:128px}.sk-corner-s{width:112px;height:80px}.sk-creep{height:120px;background-size:680px 100%}.sk-drip{height:64px;background-size:680px 100%}.sk-wide{display:none}.sk-txt{text-shadow:4px 4px 0 #04141b}}
+.skin-sculk .hero-vars>div{z-index:2}
+.skin-sculk .hero-vars>div:first-of-type{z-index:0;background:rgba(4,20,27,.5) !important}
+.skin-sculk .hero-vars>.crenel{z-index:0}
+.skin-sculk .hero-vars>.sk{z-index:1}
+.skin-sculk .splash{color:#5ff2e6 !important;text-shadow:3px 3px 0 #04141b !important}
+.sk-host{position:relative;overflow:hidden}
+.sk-strip{padding:16px 0 0}
+.sk-strip .tip{padding:16px 24px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.sk-strip-text{flex:1 1 320px;min-width:0;display:flex;flex-direction:column}
+.sk-strip-text p:first-child{color:var(--kick);letter-spacing:2px}
+.sk-icon{width:40px;height:40px;flex-shrink:0;border:4px solid #04141b;background:url(sculk/corner-s.png) left bottom/224px 160px;image-rendering:pixelated}
+@media (prefers-reduced-motion:reduce){.sk::after,.tip.sculked::before,.soul{animation:none !important}.soul{display:none}}

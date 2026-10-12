@@ -3,7 +3,8 @@ import { readFile } from "node:fs/promises";
 import vm from "node:vm";
 
 const source = await readFile(new URL("../public/assets/market/market.js", import.meta.url), "utf8");
-const start = source.indexOf("  const minotarHeadUrlPattern");
+await import(new URL("../public/assets/market/market-owner-url.js", import.meta.url));
+const start = source.indexOf("  function genericPlayer");
 const end = source.indexOf("  const ownerType", start);
 assert.ok(start >= 0 && end > start, "Market owner visual helpers were not found");
 
@@ -19,10 +20,11 @@ class TestImage {
 }
 const context = vm.createContext({
   assetBase: "assets/market/",
+  ownerHeadUrl: globalThis.EnthusiaMarketOwnerUrl.ownerHeadUrl,
   esc: value => String(value ?? "").replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[character]),
   window: {}, Image: TestImage, Promise, JSON, queueMicrotask,
 });
-vm.runInContext(`${source.slice(start, end)}; globalThis.ownerVisual = ownerVisual; globalThis.ownerHeadUrl = ownerHeadUrl; globalThis.hydrateOwnerVisuals = hydrateOwnerVisuals;`, context, {filename: "market.js"});
+vm.runInContext(`${source.slice(start, end)}; globalThis.ownerVisual = ownerVisual; globalThis.hydrateOwnerVisuals = hydrateOwnerVisuals;`, context, {filename: "market.js"});
 
 const player = (avatarUrl, source = "JAVA") => ({type: "PLAYER", name: "Test Player", avatarUrl, avatar: {kind: "MINECRAFT_HEAD", source, includesOuterLayer: true}});
 const capturedUrl = "https://market-api.enthusia.info/v1/player-heads/0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef.png";

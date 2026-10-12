@@ -1,0 +1,34 @@
+{
+ "players": [
+  {
+   "username": "Summars",
+   "displayName": "Summars",
+   "formattedValue": "$110.00",
+   "rank": 1
+  },
+  {
+   "username": "ToxikFlame11",
+   "displayName": "ToxikFlame11",
+   "formattedValue": "$96.00",
+   "rank": 2
+  },
+  {
+   "username": "ToxikFlame11",
+   "displayName": "ToxikFlame11",
+   "formattedValue": "$83.00",
+   "rank": 3
+  },
+  {
+   "username": "Pbe",
+   "displayName": "Pbe",
+   "formattedValue": "$75.00",
+   "rank": 4
+  },
+  {
+   "username": "qaysoz",
+   "displayName": "qaysoz",
+   "formattedValue": "$60.00",
+   "rank": 5
+  }
+ ]
+}

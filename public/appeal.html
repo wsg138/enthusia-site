@@ -1,5 +1,415 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Submit an authenticated appeal for an eligible Enthusia SMP punishment."><title>Appeal a punishment | Enthusia</title><link rel="stylesheet" href="assets/styles.css?v=vision63"></head>
-<body><header class="site-header"><div class="container header-inner"><a class="brand" href="index.html">Enthusia SMP</a><nav class="nav" aria-label="Primary navigation"><a href="index.html">Home</a><a href="rules.html">Rules</a><a href="market.html">Market</a></nav></div></header><main class="page-main container"><h1>Appeal a punishment</h1><p>Your linked Minecraft identity is supplied by your signed-in account and cannot be changed here.</p><form id="appeal-form"><label>Punishment <select name="punishmentId" id="punishment" required><option value="">Loading appealable punishments…</option></select></label><section id="sanction" aria-live="polite"></section><label>Why should this punishment be reviewed? <textarea name="reason" minlength="10" maxlength="1000" required></textarea></label><button type="submit">Submit appeal</button><p id="result" role="status"></p></form></main><script type="module">
-const form=document.querySelector('#appeal-form');const result=document.querySelector('#result');const select=document.querySelector('#punishment');const sanction=document.querySelector('#sanction');let sanctions=[];function render(){const item=sanctions.find(x=>String(x.id)===select.value);sanction.textContent=item?`${item.type??'Punishment'} · issued ${item.createdAt??'unknown date'} · ${item.reason??'No public reason provided'}`:'';}function loadError(){sanctions=[];select.innerHTML='<option value="">Unable to load punishments — retry later</option>';sanction.textContent='';}async function load(){select.innerHTML='<option value="">Loading appealable punishments…</option>';try{const response=await fetch('/api/appeals/eligible');if(!response.ok){loadError();return;}const payload=await response.json();sanctions=Array.isArray(payload)?payload:payload.punishments??[];select.replaceChildren(new Option(sanctions.length?'Select a punishment':'No appealable punishments',''));for(const item of sanctions)select.add(new Option(`${item.type??'Punishment'} — ${item.createdAt??item.id}`,item.id));render();}catch{loadError();}}select.addEventListener('change',render);form.addEventListener('submit',async(event)=>{event.preventDefault();result.textContent='Submitting…';const data=Object.fromEntries(new FormData(form));try{const response=await fetch('/api/appeals',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});const payload=await response.json().catch(()=>({}));result.textContent=response.ok?'Appeal submitted.':payload.error==='rate_limited'?`Too many attempts. Try again in ${payload.retryAfter} seconds.`:`Unable to submit appeal (${response.status}).`;if(response.ok){form.reset();await load();}}catch{result.textContent='Unable to reach the appeal service. Retry in a moment.';}});load();
-</script></body></html>
+<html lang="en" id="top">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Track an Enthusia punishment appeal or ask staff to review a current punishment.">
+  <meta name="theme-color" content="#100d0a">
+  <title>Appeals | Enthusia SMP</title>
+  <link rel="icon" href="assets/enthusia-logo-v2.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/enthusia.css?v=red1">
+<link rel="stylesheet" href="assets/platform-workflows.css?v=1">
+<link rel="stylesheet" href="assets/integration.css?v=1">
+<link rel="stylesheet" href="assets/community.css">
+<link rel="stylesheet" href="assets/exact-design.css">
+<style>
+
+body{margin:0;background:#8f1611}
+a{color:#b3201a}a:hover{color:#7d120e}
+.en{--edge:#4a0b08;--gold:#ffcf1f;--gold-hi:#ffe9a8;--gold-lo:#e08f00;font-family:"Minecraft","Courier New",monospace;font-size:16px;line-height:24px;-webkit-font-smoothing:none}
+.en h1,.en h2,.en h3,.en p,.en ol{margin:0;font-weight:400}
+.en ol{padding:0;list-style:none}
+.en img.px{image-rendering:pixelated;display:block}
+.hide{display:none !important}
+.s-red,.tip,.cap,.hero-vars{--ink:#fff6e0;--muted:#ffdcc8;--head:#ffdb2e;--head-sh:#6b0f0b;--kick:#ffe9a8;--accent:#ffe9a8;--hi:#ffe9a8;--good:#b6f7b6;--row:#a51b16;--row-top:#ffcf1f;--link:#ffdb2e;--link-hi:#ffffff;color:var(--ink)}
+.s-cream,.panel{--ink:#3a0d0a;--muted:#6b3a2a;--head:#b3201a;--head-sh:#ffcf1f;--kick:#8a5a00;--accent:#b3201a;--hi:#8a5a00;--good:#1c7a32;--row:#ffe7b0;--row-top:#ffcf1f;--link:#b3201a;--link-hi:#7d120e;color:var(--ink)}
+.s-red{background:#c0261d}
+.s-cream{background:#fff1cf}
+.hero-vars{--head-sh:#7d120e}
+.panel{background:#fff8e6;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873;box-sizing:border-box}
+.tip{--row:#8a1510;background:#a51b16;border:4px solid var(--edge);box-shadow:inset 0 0 0 4px var(--gold),inset 0 0 0 6px #5c0d09;box-sizing:border-box}
+.tip.fret-lg{background:url(assets/ui/fret-lg-tl.svg) left top/74px 74px no-repeat,url(assets/ui/fret-lg-tr.svg) right top/74px 74px no-repeat,url(assets/ui/fret-lg-bl.svg) left bottom/74px 74px no-repeat,url(assets/ui/fret-lg-br.svg) right bottom/74px 74px no-repeat,#a51b16}
+.tip.fret{background:url(assets/ui/fret-md-tl.svg) left top/54px 54px no-repeat,url(assets/ui/fret-md-tr.svg) right top/54px 54px no-repeat,url(assets/ui/fret-md-bl.svg) left bottom/54px 54px no-repeat,url(assets/ui/fret-md-br.svg) right bottom/54px 54px no-repeat,#a51b16}
+.tip.fret-sm{background:url(assets/ui/fret-sm-tl.svg) left top/22px 22px no-repeat,url(assets/ui/fret-sm-tr.svg) right top/22px 22px no-repeat,url(assets/ui/fret-sm-bl.svg) left bottom/22px 22px no-repeat,url(assets/ui/fret-sm-br.svg) right bottom/22px 22px no-repeat,#a51b16}
+.cap{background:rgba(125,18,14,.92)}
+.slot{--head:#ffdb2e;background:#7d120e;color:#ffdb2e;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #5a0c09,inset -4px -4px 0 #a8221b;box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.frame{border:4px solid var(--edge);box-shadow:8px 8px 0 rgba(58,13,10,.35);background:#7d120e;box-sizing:border-box}
+.en a{color:var(--link)}
+.en a:hover{color:var(--link-hi)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:8px 24px;border:4px solid var(--edge);box-sizing:border-box;font-family:inherit;font-size:16px;line-height:24px;text-decoration:none;cursor:pointer;transition:transform .08s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(4px)}
+.en .btn-gold{background:var(--gold);color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.en .btn-gold:hover{background:#ffdf52;color:#3a0d0a}
+.en .btn-red{background:#d12c22;color:#fff6e0;box-shadow:inset 4px 4px 0 #f0766b,inset -4px -4px 0 #8f1611;text-shadow:2px 2px 0 #6b0f0b}
+.en .btn-red:hover{background:#e0392e;color:#ffffff}
+.en .btn-dark{background:#fff8e6;color:#b3201a;box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873}
+.en .btn-dark:hover{background:#ffffff;color:#7d120e}
+.chip{min-height:48px;padding:8px 20px;border:4px solid var(--edge);box-sizing:border-box;background:#fff8e6;color:#3a0d0a;font-family:inherit;font-size:16px;line-height:24px;cursor:pointer;box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873;transition:transform .08s}
+.chip:hover{color:#b3201a;transform:translateY(-2px)}
+.chip[aria-pressed="true"]{background:var(--gold);color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.en .nav a,.navbtn{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;color:var(--ink);text-decoration:none;border:4px solid transparent;box-sizing:border-box;background:none;font-family:inherit;font-size:16px;line-height:24px;cursor:pointer}
+.en .nav a:hover,.navbtn:hover{color:var(--link-hi);border-color:currentColor}
+.en .nav a.on{background:var(--gold);color:#3a0d0a;border-color:var(--edge);box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
+.navbtn[aria-expanded="true"]{color:var(--head);border-color:currentColor}
+.tag{display:inline-block;padding:2px 8px;border:4px solid var(--edge);box-sizing:border-box;white-space:nowrap}
+.tag-gold{background:var(--gold);color:#3a0d0a}
+.tag-red{background:#c0261d;color:#fff6e0}
+.tag-dark{background:#7d120e;color:#ffdb2e}
+.tag-plain{background:#fff8e6;color:#6b3a2a}
+.field{background:#ffffff;border:4px solid #b3201a;padding:8px 12px;box-sizing:border-box;color:#3a0d0a}
+.live{width:16px;height:16px;background:#3ddc5a;border:4px solid var(--edge);animation:blink 1.4s infinite}
+.caret{animation:blink 1s infinite}
+@keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.2}}
+.crenel{height:24px;background-image:linear-gradient(90deg,transparent 0 25%,#fff1cf 25% 75%,transparent 75% 100%);background-size:96px 24px;background-repeat:round no-repeat;background-position:left top}
+.t-hero{font-size:96px;line-height:96px}
+.t-hero2{font-size:64px;line-height:72px}
+.en a:focus-visible,.en button:focus-visible,.en summary:focus-visible{outline:4px solid #1b6fd1;outline-offset:4px}
+.t-h2{font-size:48px;line-height:56px}
+.heroimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease-in-out}
+.heroimg.show{opacity:1}
+.dot{width:44px;height:44px;padding:0;border:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.dot span{width:16px;height:16px;background:#fff6e0;border:4px solid #4a0b08;display:block}
+.dot[aria-pressed="true"] span{background:#ffcf1f;width:24px;height:24px}
+.splash{animation:splash 1.1s ease-in-out infinite}
+@keyframes splash{0%,100%{transform:rotate(-14deg) scale(1)}50%{transform:rotate(-14deg) scale(1.1)}}
+.swap{animation:rise .14s ease-out both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tile{position:relative;overflow:hidden}
+.tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.tile:hover img{transform:scale(1.08)}
+.row{transition:transform .12s ease-out}
+.row:hover{transform:translateX(12px)}
+.top{--hi:#7d120e;color:#3a0d0a}
+.gimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s ease-in-out}
+.gimg.show{opacity:1}
+.thumb{padding:0;border:4px solid var(--edge);background:#7d120e;cursor:pointer;display:block;opacity:.7;transition:opacity .15s}
+.thumb img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
+.thumb:hover{opacity:1}
+.thumb[aria-pressed="true"]{opacity:1;border-color:var(--gold)}
+.staff img{transition:transform .12s ease-out}
+.staff:hover img{transform:translateY(-8px)}
+.en summary{list-style:none;cursor:pointer}
+.en summary:hover{color:#7d120e}
+.en summary::-webkit-details-marker{display:none}
+@media (max-width:720px){.t-hero{font-size:48px;line-height:48px}.t-hero2{font-size:32px;line-height:40px}.t-h2{font-size:32px;line-height:40px}.splash{display:none}}
+@media (prefers-reduced-motion:reduce){.en *{animation:none !important;transition:none !important}}
+.navbtn.cur{color:var(--head);border-bottom-color:var(--gold)}
+.en .foot a{display:flex;align-items:center;min-height:40px;color:var(--ink);text-decoration:none}
+.en .foot a:hover{color:var(--head)}
+.hero{background:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(assets/rules-council-hall-user.png) center 42%/cover no-repeat}
+.mob-btn{display:none}
+@media (max-width:860px){
+.mob-btn{display:flex;border-color:currentColor;min-height:48px}
+.en .nav{display:none !important}
+.en .nav.open{display:flex !important;flex-direction:column;align-items:stretch !important;width:100%;gap:0 !important}
+.en .nav.open .panel{position:static !important;margin:0 0 8px}
+.en .nav.open>a,.en .nav.open .navbtn{min-height:48px;width:100%}
+}
+@media (max-width:520px){.hdr-play{display:none !important}}
+.en textarea.field,.en input.field,.en select.field{width:100%;min-height:48px;font-family:inherit;font-size:16px;line-height:24px;display:block}
+.en textarea.field{min-height:144px;resize:vertical}
+.en label.f{display:flex;flex-direction:column;gap:8px}
+.tool{min-height:44px;padding:4px 12px}
+.tag-good{background:#1c7a32;color:#ffffff}
+.thread{display:flex;flex-direction:column;gap:8px}
+.msg{padding:12px 16px;background:var(--row);border-left:8px solid #b3201a;overflow-wrap:anywhere}
+.msg.you{border-left-color:var(--gold-lo)}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr));gap:12px;margin:0}
+.meta div{display:flex;flex-direction:column;min-width:0;overflow-wrap:anywhere}
+.meta dt{color:var(--muted)}
+.meta dd{margin:0}
+.acct{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:var(--row)}
+.acct>div{display:flex;flex-direction:column;min-width:0;overflow-wrap:anywhere}
+.linkbtn{min-height:44px;padding:0 8px;border:0;background:none;color:var(--link);font-family:inherit;font-size:16px;line-height:24px;text-decoration:underline;cursor:pointer}
+.linkbtn:hover{color:var(--link-hi)}
+.cmd{display:block;padding:12px 16px;background:#3a0d0a;color:#ffe9a8;overflow-wrap:anywhere}
+@media (max-width:720px){.tabs{justify-content:center !important}.tab-head{flex-direction:column !important;align-items:center !important;text-align:center}.tab-head>div{align-items:center !important}}
+
+</style><link rel="stylesheet" href="assets/exact-workflows.css"><link rel="stylesheet" href="assets/site-refinements.css">
+</head>
+<body data-exact-workflow="appeal" class="appeal-page moderation-page en workflow-page s-cream">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+
+<header class="site-head s-red">
+<div class="site-head-in">
+<a class="brand" href="index.html" aria-label="Enthusia SMP home">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn cur" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html" class="active" aria-current="page">Appeals</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</div>
+</div>
+<a href="store.html">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="account.html">Account</a>
+</nav>
+<a class="btn btn-gold hdr-play" href="join.html">Play now!</a>
+</div>
+</header>
+
+<main id="main-content" class="page-main moderation-main">
+  <section class="hero hero-vars" aria-labelledby="appeal-title">
+<div style="max-width: 1240px; min-height: 240px; margin: 0 auto; padding: 48px 24px 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
+<p class="tag tag-gold" style="letter-spacing: 2px">PUNISHMENT APPEALS</p>
+<h1 id="appeal-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">APPEALS</h1>
+<p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">Check an appeal, read staff replies, or ask for a new review.</p>
+</div>
+<div class="crenel"></div>
+</section><div class="exact-workflow-wrap">
+
+  <nav class="container appeal-view-tabs" aria-label="Appeal pages" role="tablist">
+    <button id="appeal-history-tab" type="button" role="tab" class="is-active" data-appeal-view="history" aria-controls="appeal-history-panel" aria-selected="true">Your appeals</button>
+    <button id="appeal-new-tab" type="button" role="tab" data-appeal-view="new" aria-controls="appeal-new-panel" aria-selected="false" tabindex="-1">New appeal</button>
+  </nav>
+
+  <section id="appeal-history-panel" class="container appeal-history-panel" role="tabpanel" aria-labelledby="appeal-history-tab">
+    <header class="appeal-section-heading">
+      <div><p class="card-kicker">Your appeals</p><h2 id="appeal-history-title">Appeal history</h2></div>
+    </header>
+    <section id="appeal-history-auth" class="appeal-auth-panel card" aria-live="polite">
+      <div><p class="card-kicker">Your account</p><h2>Checking your sign-in…</h2></div>
+    </section>
+    <div id="appeal-history" class="appeal-history" aria-live="polite" aria-busy="true"></div>
+  </section>
+
+  <section id="appeal-new-panel" class="appeal-new-panel" role="tabpanel" aria-labelledby="appeal-new-tab" hidden>
+    <header class="container appeal-section-heading appeal-new-heading">
+      <div><p class="card-kicker">New appeal</p><h2 id="appeal-new-title">Ask staff to review a punishment</h2></div>
+      <p>Read the rule first and gather anything that helps explain the case.</p>
+    </header>
+  <section class="container moderation-workspace" aria-label="Appeal form">
+    <ol class="appeal-progress" aria-label="Appeal steps">
+      <li data-appeal-step="account"><span>1</span><div><strong>Account</strong><small>Sign in and check your Minecraft link</small></div></li>
+      <li data-appeal-step="punishment"><span>2</span><div><strong>Punishment</strong><small>Select the case you want reviewed</small></div></li>
+      <li data-appeal-step="appeal"><span>3</span><div><strong>Appeal</strong><small>Answer the questions and add evidence</small></div></li>
+    </ol>
+
+    <section id="appeal-auth" class="appeal-auth-panel card" aria-live="polite">
+      <div><p class="card-kicker">Your account</p><h2>Checking your sign-in…</h2></div>
+    </section>
+
+    <form id="appeal-form" class="appeal-form card" novalidate hidden>
+      <fieldset id="appeal-fields">
+        <div class="appeal-form-heading">
+          <div><p class="card-kicker">Punishment</p><h2>What are you appealing?</h2></div>
+          <p>Only active punishments that can be appealed are shown.</p>
+        </div>
+
+        <div class="appeal-identity-grid">
+          <label class="appeal-field" for="appeal-account">Minecraft account
+            <select name="minecraftUuid" id="appeal-account" required></select>
+          </label>
+          <label class="appeal-field" for="appeal-punishment">Punishment
+            <select name="punishmentId" id="appeal-punishment" required disabled><option value="">Choose a Minecraft account first</option></select>
+          </label>
+        </div>
+        <p id="punishment-result" class="appeal-selection-status" role="status"></p>
+        <section id="selected-punishment" class="appeal-sanction" aria-live="polite" hidden></section>
+
+        <div id="appeal-questions" hidden>
+          <div class="appeal-form-heading appeal-answer-heading">
+            <div><p class="card-kicker">Your appeal</p><h2>Tell us what staff should review</h2></div>
+            <p>Short, copied, or incomplete appeals are denied.</p>
+          </div>
+
+          <div class="appeal-guidance" role="note"><strong>Write in your own words.</strong><span>Give enough detail for staff to check your account of what happened. Formatting does not count toward the minimum length.</span></div>
+
+          <div class="appeal-question-list">
+            <section class="appeal-question" data-answer-field="whatHappened">
+              <label for="appeal-what-happened"><span class="appeal-question-title">What happened?</span><span class="appeal-question-hint">Start before the incident and explain the events in order. Include names, dates, or messages when they matter.</span></label>
+              <div class="appeal-editor-toolbar" aria-label="Format the answer to What happened">
+                <button type="button" data-format="bold" title="Bold"><strong>B</strong></button><button type="button" data-format="italic" title="Italic"><em>I</em></button><button type="button" data-format="heading" title="Heading">Title</button><button type="button" data-format="list" title="Bulleted list">List</button><button type="button" data-format="quote" title="Quote">Quote</button><button type="button" class="appeal-preview-button" data-preview>Preview</button>
+              </div>
+              <textarea name="whatHappened" id="appeal-what-happened" minlength="150" maxlength="4000" rows="9" required placeholder="Explain what happened from your point of view."></textarea>
+              <div class="appeal-answer-preview" data-answer-preview hidden></div>
+              <small><span id="appeal-what-happened-count">0</span> / 4,000 · 150 minimum</small>
+            </section>
+
+            <section class="appeal-question" data-answer-field="whyReview">
+              <label for="appeal-why-review"><span class="appeal-question-title">What should staff reconsider?</span><span class="appeal-question-hint">Point to the part of the decision you believe is wrong, too severe, or missing important context.</span></label>
+              <div class="appeal-editor-toolbar" aria-label="Format the answer to What should staff reconsider">
+                <button type="button" data-format="bold" title="Bold"><strong>B</strong></button><button type="button" data-format="italic" title="Italic"><em>I</em></button><button type="button" data-format="heading" title="Heading">Title</button><button type="button" data-format="list" title="Bulleted list">List</button><button type="button" data-format="quote" title="Quote">Quote</button><button type="button" class="appeal-preview-button" data-preview>Preview</button>
+              </div>
+              <textarea name="whyReview" id="appeal-why-review" minlength="120" maxlength="3000" rows="8" required placeholder="Explain exactly what you want staff to review."></textarea>
+              <div class="appeal-answer-preview" data-answer-preview hidden></div>
+              <small><span id="appeal-why-review-count">0</span> / 3,000 · 120 minimum</small>
+            </section>
+
+            <section class="appeal-question" data-answer-field="ruleUnderstanding">
+              <label for="appeal-rule-understanding"><span class="appeal-question-title">What do you understand about the rule involved?</span><span class="appeal-question-hint">Explain the rule in your own words and how it applies to the situation.</span></label>
+              <div class="appeal-editor-toolbar" aria-label="Format the answer about the rule">
+                <button type="button" data-format="bold" title="Bold"><strong>B</strong></button><button type="button" data-format="italic" title="Italic"><em>I</em></button><button type="button" data-format="heading" title="Heading">Title</button><button type="button" data-format="list" title="Bulleted list">List</button><button type="button" data-format="quote" title="Quote">Quote</button><button type="button" class="appeal-preview-button" data-preview>Preview</button>
+              </div>
+              <textarea name="ruleUnderstanding" id="appeal-rule-understanding" minlength="100" maxlength="2500" rows="7" required placeholder="Explain what the rule requires and what you understand now."></textarea>
+              <div class="appeal-answer-preview" data-answer-preview hidden></div>
+              <small><span id="appeal-rule-understanding-count">0</span> / 2,500 · 100 minimum</small>
+            </section>
+
+            <section class="appeal-question" data-answer-field="futureSteps">
+              <label for="appeal-future-steps"><span class="appeal-question-title">What will you do differently?</span><span class="appeal-question-hint">List specific changes you will make if the punishment is shortened or removed.</span></label>
+              <div class="appeal-editor-toolbar" aria-label="Format the answer about future steps">
+                <button type="button" data-format="bold" title="Bold"><strong>B</strong></button><button type="button" data-format="italic" title="Italic"><em>I</em></button><button type="button" data-format="heading" title="Heading">Title</button><button type="button" data-format="list" title="Bulleted list">List</button><button type="button" data-format="quote" title="Quote">Quote</button><button type="button" class="appeal-preview-button" data-preview>Preview</button>
+              </div>
+              <textarea name="futureSteps" id="appeal-future-steps" minlength="100" maxlength="2500" rows="7" required placeholder="Describe the steps you will take to avoid the same problem."></textarea>
+              <div class="appeal-answer-preview" data-answer-preview hidden></div>
+              <small><span id="appeal-future-steps-count">0</span> / 2,500 · 100 minimum</small>
+            </section>
+
+            <section class="appeal-question appeal-question-wide" data-answer-field="additionalContext">
+              <label for="appeal-additional-context"><span class="appeal-question-title">Is there anything else staff should check? <em>Optional</em></span><span class="appeal-question-hint">Add relevant context that does not fit above. Do not repeat your other answers.</span></label>
+              <div class="appeal-editor-toolbar" aria-label="Format additional context">
+                <button type="button" data-format="bold" title="Bold"><strong>B</strong></button><button type="button" data-format="italic" title="Italic"><em>I</em></button><button type="button" data-format="heading" title="Heading">Title</button><button type="button" data-format="list" title="Bulleted list">List</button><button type="button" data-format="quote" title="Quote">Quote</button><button type="button" class="appeal-preview-button" data-preview>Preview</button>
+              </div>
+              <textarea name="additionalContext" id="appeal-additional-context" maxlength="3000" rows="6" placeholder="Add any other details staff should check."></textarea>
+              <div class="appeal-answer-preview" data-answer-preview hidden></div>
+              <small><span id="appeal-additional-context-count">0</span> / 3,000</small>
+            </section>
+          </div>
+
+          <section class="appeal-evidence" aria-labelledby="appeal-evidence-title">
+            <div><p class="card-kicker">Evidence</p><h3 id="appeal-evidence-title">Add screenshots or logs</h3><p>Attach up to five PNG, JPG, TXT, or LOG files. Images may be up to 8 MB; text files may be up to 1 MB.</p></div>
+            <label class="btn ghost appeal-file-button" for="appeal-files">Choose files</label>
+            <input id="appeal-files" type="file" accept="image/png,image/jpeg,text/plain,.txt,.log" multiple hidden>
+            <p id="attachment-status" class="appeal-attachment-status" role="status"></p>
+            <ul id="appeal-attachments" class="appeal-attachment-list"></ul>
+          </section>
+
+          <div class="appeal-submit-row">
+            <button class="btn" id="submit-appeal" type="submit" disabled>Send appeal</button>
+            <p id="appeal-result" role="status"></p>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </section>
+  </section>
+</div></main>
+
+<footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="index.html">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="join.html">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="News">
+<p class="foot-title">NEWS</p>
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="store.html">Store</a>
+<a href="account.html">Account</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="404.html">404 page</a>
+<a href="home-christmas.html">Christmas skin</a>
+</nav>
+<nav class="foot" aria-label="Staff tools">
+<p class="foot-title">STAFF TOOLS</p>
+<a href="competitions/admin/index.html">Competition admin</a>
+<a href="newseditor.html">News editor</a>
+<a href="reviewer/index.html">Reviewer</a>
+<a href="reviewer/appeals.html">Appeal review</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
+<script src="assets/site-config.js?v=vision43" defer></script>
+<script src="assets/enthusia.js?v=integration1" defer></script>
+<script type="module" src="assets/appeals.js?v=4"></script>
+<script type="module" src="assets/appeals-lifecycle.js?v=1"></script>
+<script src="assets/site-account.js?v=integration1" type="module"></script>
+</body>
+</html>
