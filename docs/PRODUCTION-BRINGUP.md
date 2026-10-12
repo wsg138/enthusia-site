@@ -48,17 +48,34 @@ The corresponding production credential pair is stored as encrypted
    `ENTHUSIA_SITE_DISCORD_BOT_TOKEN`. Verify opt-in delivery and opt-out with a
    specifically authorized recipient before activating scheduled delivery.
    The moderation bot must not substitute for this bot.
-7. Reconcile the installed guild API's bearer token with `GUILDS_API_BEARER`.
-   The existing production guild proxy currently receives upstream HTTP 401.
-   Preserve the existing URL until the installed producer is verified.
+7. Keep `GUILDS_API_BEARER` aligned with the installed LumaGuilds API. The live
+   API was verified with its current credential and the encrypted Pages setting
+   was updated. A new Pages deployment activates secret changes. The existing
+   API URL remains unchanged.
 8. Connect authoritative community snapshots, completed raw-gold sales and
    event exports. `COMMUNITY_INGEST_SECRET` is stored encrypted on Pages; retain
    its matching producer credential outside Git. Empty collections must not
    be replaced with preview fixtures or inferred transactions.
 
-The production databases start empty. No development identities, sample
-competitions, preview ballots or historical draft content were copied into
-them. Jobs, reward delivery and market alert schedules remain unactivated.
+The production databases were created separately from development. Published
+content is now present: 79 Timeline entries, 26 Creator records, 23 changelog
+entries, 23 Hall of Fame records, 14 roadmap entries and two news posts. Timeline
+records retain their source-verification status. No development identities,
+sample competitions or preview ballots were copied into production. Jobs,
+reward delivery and market alert schedules remain unactivated.
+
+The live runtime log confirms Minecraft 26.2 on Paper 26.2. The homepage and
+shared FAQ use that version. Before installing the Competition Bridge, verify
+its API/runtime compatibility with this server; its existing build targets
+Java 21 and Paper 1.21.8.
+
+The donor website snapshot was refreshed from the installed plugin's cached
+official Tebex aggregate totals. Only the existing public leaderboard fields
+were exported, with the aggregate's actual update timestamp. Raw payments,
+transaction identifiers and private payment details remain excluded. The
+installed donor test build intentionally disconnects its R2 writer, so this
+one-time repair does not establish automatic future updates. Reconnecting the
+maintained producer requires a separate validated change.
 
 ## Validation and rollback
 
