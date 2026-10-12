@@ -121,7 +121,7 @@
   }
 
   function podiumVisual(entry) {
-    if (entry.banner || !entry.headId) return entryVisual(entry, 64);
+    if (entry.isGuild || entry.banner || !entry.headId) return entryVisual(entry, 64);
     var body = el("img", "px");
     body.src = "https://mc-heads.net/player/" + encodeURIComponent(entry.headId) + "/72";
     body.alt = "";

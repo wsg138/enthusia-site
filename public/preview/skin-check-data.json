@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-12T14:22:34.407Z",
+  "capturedAt": "2026-10-12T14:28:50.171Z",
   "boards": {
     "/api/leaderboards/playtime-active-all": {
       "status": 200,
@@ -2340,7 +2340,7 @@
       "payload": {
         "type": "level",
         "period": "ALL_TIME",
-        "generatedAt": "2026-10-12T14:22:34.361855241Z",
+        "generatedAt": "2026-10-12T14:28:49.921963577Z",
         "count": 10,
         "entries": [
           {
@@ -2364,7 +2364,28 @@
               "09e10a28-a3c4-41d2-9b67-5a04b699d438"
             ],
             "createdAt": "2026-05-02T17:53:30Z",
-            "score": 119536419
+            "score": 119536419,
+            "banner": {
+              "baseColor": "BLACK",
+              "patterns": [
+                {
+                  "type": "STRIPE_LEFT",
+                  "color": "YELLOW"
+                },
+                {
+                  "type": "TRIANGLE_BOTTOM",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "STRIPE_DOWNLEFT",
+                  "color": "YELLOW"
+                },
+                {
+                  "type": "BORDER",
+                  "color": "BLACK"
+                }
+              ]
+            }
           },
           {
             "rank": 2,
@@ -2387,7 +2408,32 @@
               "3f7426c3-89f5-424a-baa8-8eef8ec1e034"
             ],
             "createdAt": "2026-05-02T17:02:06Z",
-            "score": 118081190
+            "score": 118081190,
+            "banner": {
+              "baseColor": "BLACK",
+              "patterns": [
+                {
+                  "type": "TRIANGLE_BOTTOM",
+                  "color": "BLUE"
+                },
+                {
+                  "type": "TRIANGLES_BOTTOM",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "STRIPE_LEFT",
+                  "color": "BLUE"
+                },
+                {
+                  "type": "STRIPE_RIGHT",
+                  "color": "BLUE"
+                },
+                {
+                  "type": "GRADIENT",
+                  "color": "BLACK"
+                }
+              ]
+            }
           },
           {
             "rank": 3,
@@ -2456,7 +2502,36 @@
               "d56c80b8-43e8-458a-aff6-18cbcd7c5338"
             ],
             "createdAt": "2026-06-11T04:59:07Z",
-            "score": 103257058
+            "score": 103257058,
+            "banner": {
+              "baseColor": "BLACK",
+              "patterns": [
+                {
+                  "type": "HALF_HORIZONTAL",
+                  "color": "WHITE"
+                },
+                {
+                  "type": "STRIPE_CENTER",
+                  "color": "WHITE"
+                },
+                {
+                  "type": "TRIANGLE_TOP",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "RHOMBUS",
+                  "color": "WHITE"
+                },
+                {
+                  "type": "TRIANGLES_BOTTOM",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "FLOWER",
+                  "color": "WHITE"
+                }
+              ]
+            }
           },
           {
             "rank": 6,
