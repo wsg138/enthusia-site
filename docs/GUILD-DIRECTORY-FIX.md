@@ -1,0 +1,11 @@
+# Guild directory data — manual SPEAR evidence
+
+Spec: preserve available guild data and clearly distinguish missing profile data from zero-valued statistics. Keep the supplied theme, usable guild selection/search/sorting and real banners. Unknown recruitment/stance/ELO fields must not make functioning filters appear to return authoritative empty results.
+
+Prove: production `/api/community/guilds` returns a limited ten-guild leaderboard projection. Its fields for ELO, recruitment, stance and banners are null. The upstream leaderboard provides createdAt, bankBalance, totalExperience and activityScore, but the projection discards them. The snapshot contract also discards Prestige and foundedAt even if a future full producer includes them. Profile hydration clears headings and controls, leaving empty subsections.
+
+Engine: retain founding time, public bank balance, XP, activity, Prestige and plain guild tag in the strict guild allowlist. Explicitly map upstream fields and never reinterpret the composite leaderboard score or activity as ELO. Replace cleared profile skeletons with named metrics and public member/recruitment availability states. Render real banners or neutral unavailable designs. Disable only filters whose underlying field is absent from every record. Label the limited leaderboard list clearly.
+
+Arch: server-derived rank/level/member data stays authoritative. No example Prestige/ELO, fake membership, inferred recruitment, private coordinates or identity fields are injected. Existing full signed snapshots remain supported; the live plugin still needs a full directory/profile export to supply unavailable fields. Canonical LumaGuilds source exposes leaderboard categories level/balance/activity/members/age, not an ELO/profile endpoint. No plugin/database changes or credentials are introduced.
+
+Refine: tests prove metric/date retention, unknown values staying null, zero Prestige preservation, private-field projection and malformed field rejection. A captured-real-data interactive guild directory preview exercises the actual production renderer. Local tests/build and browser acceptance are separate from live activation; canonical repository write access remains unavailable. No PR is created. No local EARS/state helper exists, so this is the manual record.

@@ -68,12 +68,14 @@
 
   function normalizePlayer(entry, index) {
     var username = pickText(entry.username, entry.player, entry.uuid);
+    var uuid = pickText(entry.uuid, entry.playerUuid, entry.player_uuid);
+    var skinId = /^(?:[a-f0-9]{32}|[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})$/i.test(uuid) ? uuid.toLowerCase() : username;
     return {
       name: pickText(entry.displayName, entry.username, entry.name),
       detail: pickText(entry.subtext, entry.subtitle, entry.description),
       value: pickText(entry.formattedValue, entry.formatted, entry.stat, entry.score, entry.amount, entry.hours, entry.balance, entry.experience, entry.level),
       banner: null,
-      headId: username || pickText(entry.displayName, entry.name),
+      headId: skinId || pickText(entry.displayName, entry.name),
       rank: pickNumber(entry.rank) || index + 1
     };
   }
@@ -119,7 +121,7 @@
   }
 
   function podiumVisual(entry) {
-    if (entry.banner || !entry.headId) return entryVisual(entry, 64);
+    if (entry.isGuild || entry.banner || !entry.headId) return entryVisual(entry, 64);
     var body = el("img", "px");
     body.src = "https://mc-heads.net/player/" + encodeURIComponent(entry.headId) + "/72";
     body.alt = "";

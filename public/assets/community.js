@@ -138,7 +138,7 @@ function store(){
 }
 async function start(){
   if(!host)return;
-  if(kind==='newseditor')return publishingEditor();if(kind==='store')return store();
+  if(kind==='newseditor'){await publishingEditor();return;}if(kind==='store'){store();return;}
   host.replaceChildren();
   try{const data=await api(kind);status(host,data.limited?'Guild leaderboard data. Full roster, recruitment and ELO have not been exported.':data.stale?'Last server export is stale. Values may have changed.':data.updatedAt?'Updated '+new Date(data.updatedAt).toLocaleString():'Published community records');if(snapshots.has(kind)&&!data.curated)directory(data.items);else if(kind==='polls')await polls(data.items);else collection(data.items);}catch(error){status(host,error.message);host.append(button('Retry',start));}
 }

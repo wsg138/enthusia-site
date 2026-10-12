@@ -72,57 +72,48 @@ export async function onRequestGet(context) {
   }
 }
 
-export async function onRequestPost(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-  const id = competitionId(context);
-  if (!id) return json({ error: "competition_not_found" }, 404);
-  const authorized = await authorizeManager(context);
-  if (authorized.response) return authorized.response;
-
-  let input;
-  try {
-    input = await context.request.json();
-  } catch {
-    input = null;
-  }
-
-  const action = input?.action;
-  if (!new Set(["ASSIGN", "REMOVE"]).has(action)) {
-    return json({ error: "invalid_judge_request" }, 400);
-  }
-
+async function mutableJudgeCompetition(context, id) {
   let competition;
   try {
     competition = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
   } catch {
-    return json({ error: "competition_database_unavailable" }, 503);
+    return { response: json({ error: "competition_database_unavailable" }, 503) };
   }
-  if (!competition) return json({ error: "competition_not_found" }, 404);
+  if (!competition) return { response: json({ error: "competition_not_found" }, 404) };
   if (!MUTABLE_JUDGE_STATES.has(competition.lifecycleState)) {
-    return json({ error: "judge_roster_locked", lifecycleState: competition.lifecycleState }, 409);
+    return { response: json({ error: "judge_roster_locked", lifecycleState: competition.lifecycleState }, 409) };
   }
+  return { competition };
+}
 
+async function judgeIdentity(context, input) {
+  const action = input.action;
   let judgeUuid = typeof input?.judgeUuid === "string" ? input.judgeUuid.trim().toLowerCase() : "";
   let judgeName = typeof input?.judgeName === "string" ? input.judgeName.trim() : "";
 
   if (action === "ASSIGN" && !isCanonicalUuid(judgeUuid)) {
     const minecraftName = typeof input?.minecraftName === "string" ? input.minecraftName.trim() : judgeName;
-    if (!/^[A-Za-z0-9_]{1,16}$/.test(minecraftName)) return json({ error: "invalid_judge_name" }, 400);
+    if (!/^[A-Za-z0-9_]{1,16}$/.test(minecraftName)) return { response: json({ error: "invalid_judge_name" }, 400) };
     try {
       const target = await competitionPlayerLookup(context.env, minecraftName);
-      if (!target) return json({ error: "minecraft_player_not_found" }, 404);
+      if (!target) return { response: json({ error: "minecraft_player_not_found" }, 404) };
       judgeUuid = target.uuid;
       judgeName = target.name;
     } catch (error) {
       if (String(error?.message ?? error).includes("Competition bridge")) {
-        return json({ error: "competition_bridge_unavailable" }, 503);
+        return { response: json({ error: "competition_bridge_unavailable" }, 503) };
       }
-      return json({ error: "judge_player_lookup_failed" }, 503);
+      return { response: json({ error: "judge_player_lookup_failed" }, 503) };
     }
   }
 
-  if (!isCanonicalUuid(judgeUuid)) return json({ error: "invalid_judge_request" }, 400);
+  if (!isCanonicalUuid(judgeUuid)) return { response: json({ error: "invalid_judge_request" }, 400) };
+  return { judgeUuid, judgeName };
+}
 
+async function updateJudgeRoster(context, competition, authorized, input, target) {
+  const id = competition.id, action = input.action;
+  const { judgeUuid, judgeName } = target;
   const now = new Date().toISOString();
   try {
     if (action === "ASSIGN") {
@@ -165,6 +156,21 @@ export async function onRequestPost(context) {
     }
     return json({ error: "competition_judge_update_failed" }, 503);
   }
+}
+
+export async function onRequestPost(context) {
+  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+  const id = competitionId(context);
+  if (!id) return json({ error: "competition_not_found" }, 404);
+  const authorized = await authorizeManager(context);
+  if (authorized.response) return authorized.response;
+  const input = await context.request.json().catch(() => null);
+  if (!new Set(["ASSIGN", "REMOVE"]).has(input?.action)) return json({ error: "invalid_judge_request" }, 400);
+  const mutable = await mutableJudgeCompetition(context, id);
+  if (mutable.response) return mutable.response;
+  const target = await judgeIdentity(context, input);
+  if (target.response) return target.response;
+  return updateJudgeRoster(context, mutable.competition, authorized, input, target);
 }
 
 export function onRequest() {

@@ -1,5 +1,6 @@
 export const CONTENT_KINDS = new Set(['news','changelog','roadmap','timeline','halloffame','creators','museum','achievements','polls']);
-export const SNAPSHOT_KINDS = new Set(['guilds','players','bounties','achievements','warzone']);
+import { projectGuildQuests } from '../../../public/assets/guild-quests-model.js';
+export const SNAPSHOT_KINDS = new Set(['guilds','players','bounties','achievements','warzone','guildquests']);
 export function text(value, max=200, required=false) {
   if (value === undefined || value === null) { if(required) throw new Error('missing_text'); return ''; }
   if(typeof value !== 'string' || value.length>max || (required&&!value.trim())) throw new Error('invalid_text');
@@ -57,14 +58,15 @@ function banner(input){
   return {baseColor:input.baseColor,patterns:input.patterns.map(p=>{if(!dyes.has(p.color)||typeof p.type!=='string'||!/^[A-Z_]{1,40}$/.test(p.type))throw new Error('invalid_banner');return {type:p.type,color:p.color};})};
 }
 export function projectSnapshot(kind,input) {
+  if(kind==='guildquests')return projectGuildQuests(input);
   if(!SNAPSHOT_KINDS.has(kind)||!Array.isArray(input?.items)||input.items.length>1000)throw new Error('invalid_snapshot');
   const ids=new Set();
   const items=input.items.map(row=>{
     const id=identifier(row.id);if(ids.has(id))throw new Error('duplicate_id');ids.add(id);
     const base={id,name:text(row.name,80,true),description:text(row.description,2000)};
-    if(kind==='guilds')return {...base,level:number(row.level),members:number(row.members,20000),elo:number(row.elo),recruiting:typeof row.recruiting==='boolean'?row.recruiting:null,peaceful:typeof row.peaceful==='boolean'?row.peaceful:null,membersList:memberNames(row.membersList),banner:banner(row.banner),links:links(row.links)};
+    if(kind==='guilds')return {...base,level:number(row.level),members:number(row.members,20000),elo:number(row.elo),prestige:number(row.prestige,1e6),foundedAt:timestamp(row.foundedAt),bankBalance:number(row.bankBalance),totalExperience:number(row.totalExperience),activityScore:number(row.activityScore),tag:text(row.tag,80),recruiting:typeof row.recruiting==='boolean'?row.recruiting:null,peaceful:typeof row.peaceful==='boolean'?row.peaceful:null,membersList:memberNames(row.membersList),banner:banner(row.banner),links:links(row.links)};
     if(kind==='players')return {...base,guild:text(row.guild,80),rank:text(row.rank,80),playtime:number(row.playtime),balance:number(row.balance),reputation:number(row.reputation),achievements:memberNames(row.achievements),links:links(row.links)};
-    if(kind==='warzone'){if(!['kit','leader','activity'].includes(row.type))throw new Error('invalid_warzone_type');return {...base,type:row.type,kills:number(row.kills,1e9),endsAt:timestamp(row.endsAt),target:publicUrl(row.target)};}
+    if(kind==='warzone'){if(!['kit','leader','activity'].includes(row.type))throw new Error('invalid_warzone_type');const wins=number(row.wins,1e9);if(wins!==null&&!Number.isInteger(wins))throw new Error('invalid_wins');return {...base,type:row.type,kills:number(row.kills,1e9),wins,endsAt:timestamp(row.endsAt),target:publicUrl(row.target)};}
     if(kind==='bounties')return {...base,gold:number(row.gold),state:['open','claimed','expired'].includes(row.state)?row.state:'open',hunter:text(row.hunter,80),expiresAt:timestamp(row.expiresAt)};
     return {...base,category:text(row.category,80),reward:text(row.reward,200),completed:number(row.completed,1e8)};
   });

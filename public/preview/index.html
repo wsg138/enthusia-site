@@ -11,6 +11,7 @@
 <title>Enthusia SMP | Survival Server</title>
 <link rel="preload" href="../assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="../assets/enthusia.css">
+<link rel="stylesheet" href="../assets/warzone-view.css">
 
 
 <style>
@@ -61,6 +62,7 @@
 <button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="guilds.html">Guilds</a>
+<a href="guildquests.html">Guild quests</a>
 <a href="players.html">Players</a>
 <a href="leaderboards.html">Leaderboards</a>
 <a href="halloffame.html">Hall of Fame</a>
@@ -319,39 +321,15 @@
 <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px">
 <div style="display: flex; flex-direction: column; gap: 8px">
 <p style="color: var(--kick); letter-spacing: 2px"><span data-b-text="wzWeek"></span></p>
-<h2 id="warzone-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">This week in the Warzone</h2>
+<h2 id="warzone-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Warzone</h2>
 </div>
 <p style="display: flex; align-items: center; gap: 12px; color: var(--good)"><span class="live"></span>Live from the server</p>
 </div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 24px; align-items: start">
+<div class="wz-grid">
 
-<div class="wz-col">
-<p style="color: var(--muted)">This week's kit</p>
-<h3 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Current kit</h3>
-<p>[What is different in the Warzone this week]</p>
-<p style="color: var(--muted)">The Warzone kit rotates every week. Everywhere else, combat stays vanilla.</p>
-<p class="wz"><span>Next rotation</span><span style="color: var(--accent)">[Day and time]</span></p>
-</div>
-
-<div class="wz-col">
-<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px"><p style="color: var(--muted)">Top fighters this week</p><span class="tag tag-plain">Sample</span></div>
-<ol style="display: flex; flex-direction: column; gap: 8px">
-<li class="wz" style="justify-content: flex-start; gap: 12px; padding: 6px 16px 6px 6px"><span class="slot" style="width: 44px; height: 44px">1</span><img class="px" src="../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span style="flex: 1 1 0; min-width: 0">Steve</span><span style="color: var(--accent); white-space: nowrap">41 kills</span></li>
-<li class="wz" style="justify-content: flex-start; gap: 12px; padding: 6px 16px 6px 6px"><span class="slot" style="width: 44px; height: 44px">2</span><img class="px" src="../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span style="flex: 1 1 0; min-width: 0">Alex</span><span style="color: var(--accent); white-space: nowrap">33 kills</span></li>
-<li class="wz" style="justify-content: flex-start; gap: 12px; padding: 6px 16px 6px 6px"><span class="slot" style="width: 44px; height: 44px">3</span><img class="px" src="../assets/design/56e374cdacb7.png" alt="" style="width: 40px; height: 40px"><span style="flex: 1 1 0; min-width: 0">Zuri</span><span style="color: var(--accent); white-space: nowrap">27 kills</span></li>
-</ol>
-<a href="leaderboards.html" style="display: flex; align-items: center; min-height: 44px">All leaderboards</a>
-</div>
-
-<div class="wz-col">
-<p style="color: var(--muted)">Also this week</p>
-<a class="wz" href="events.html"><span style="flex: 1 1 160px; min-width: 0"><span data-b-text="wzNext"></span></span><span style="color: var(--accent); white-space: nowrap"><span data-b-text="wzNextIn"></span></span></a>
-<a class="wz" href="bounties.html"><span style="flex: 1 1 160px; min-width: 0">Highest bounty</span><span style="color: var(--accent); white-space: nowrap">[Amount] Raw Gold</span></a>
-<a class="wz" href="guilds.html"><span style="flex: 1 1 160px; min-width: 0">Guild wars</span><span style="color: var(--accent); white-space: nowrap">[Number] active</span></a>
-<a class="wz" href="events.html"><span style="flex: 1 1 160px; min-width: 0">Death Duels in the spawn arena</span><span style="color: var(--accent); white-space: nowrap">Always on</span></a>
-<a class="wz" href="halloffame.html"><span style="flex: 1 1 160px; min-width: 0">PvP Tournament champion</span><span style="color: var(--accent); white-space: nowrap">OinkerMC</span></a>
-</div>
-
+<div class="wz-col"><h3>Active rules</h3><p>Unavailable</p></div>
+<div class="wz-col"><h3>Next rotation</h3><p>Unavailable</p></div>
+<div class="wz-col"><h3>Weekly duel wins</h3><p>Unavailable</p></div>
 </div>
 </div>
 </div>
@@ -536,6 +514,7 @@
 <nav class="foot" aria-label="Community">
 <p class="foot-title">COMMUNITY</p>
 <a href="guilds.html">Guilds</a>
+<a href="guildquests.html">Guild quests</a>
 <a href="players.html">Players</a>
 <a href="leaderboards.html">Leaderboards</a>
 <a href="halloffame.html">Hall of Fame</a>
@@ -589,7 +568,7 @@
 
 
 
-<script src="../assets/site-config.js" defer></script><script src="../assets/enthusia.js" defer></script><script src="../assets/video-rotation.js" defer></script><script src="../assets/video-of-the-week.js" defer></script><script src="../assets/guild-banner-renderer.js" defer></script><script src="../assets/page-leaderboards.js" defer></script><script type="module" src="../assets/exact-home.js?v=2"></script><script type="module" src="../assets/market/exact-insights.js"></script>
+<script src="../assets/site-config.js" defer></script><script src="../assets/enthusia.js" defer></script><script src="../assets/video-rotation.js" defer></script><script src="../assets/video-of-the-week.js" defer></script><script src="../assets/guild-banner-renderer.js" defer></script><script src="../assets/page-leaderboards.js?v=guild-banners-20261012" defer></script><script type="module" src="../assets/exact-home.js?v=2"></script><script type="module" src="../assets/market/exact-insights.js"></script>
 </body>
 </html>
 

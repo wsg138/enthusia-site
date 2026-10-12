@@ -311,7 +311,7 @@
   }
 
   function itemSlot(item) {
-    var material = (item.key || item.name).replace(/^minecraft:/, "").replaceAll(" ", "_").toUpperCase();
+    var material = (item.key || item.name).replace(/^minecraft:/, "").replace(/ /g, "_").toUpperCase();
     var assets = window.ENTHUSIA_MINECRAFT_ASSETS;
     var definition = assets.materials[material] || assets.fallback;
     return h("span", { class: "slot mi-item-slot", "aria-hidden": "true" }, definition.layers.map(function (layer) {

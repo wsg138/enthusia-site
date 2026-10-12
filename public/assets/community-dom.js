@@ -1,3 +1,5 @@
+import { communityApiPath } from './community-route.js';
+
 export function el(tag,attributes={},children=[]){
   const node=document.createElement(tag);
   for(const [key,value] of Object.entries(attributes)){
@@ -15,7 +17,7 @@ export function link(url,label,className='btn btn-gold'){
 }
 export function button(label,action,className='btn btn-gold'){return el('button',{type:'button',class:className,text:label,onclick:action});}
 export async function api(path,options={}){
-  const response=await fetch('/api/community/'+path,{credentials:'same-origin',...options,headers:{'content-type':'application/json',...options.headers}});
+  const response=await fetch(communityApiPath(path),{...options,credentials:'same-origin',redirect:'error',headers:{'content-type':'application/json',...options.headers}});
   let payload;try{payload=await response.json();}catch{throw new Error('Service returned an invalid response.');}
   if(!response.ok)throw new Error(new Map([['community_service_unavailable','Data is unavailable. Try again later.'],['revision_conflict','This record changed. Reload it before saving.'],['linked_account_required','Sign in with Discord and link your Minecraft account first.'],['poll_closed_or_changed','This poll has closed or changed. Reload to see its results.'],['preview_actions_are_not_saved','Preview only: this action is not saved.']]).get(payload.error)??'The request could not be completed.');
   return payload;

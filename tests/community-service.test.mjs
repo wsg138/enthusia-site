@@ -4,6 +4,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { readFileSync } from 'node:fs';
 import { handleCommunity } from '../functions/lib/community/service.js';
 import { dispatchAlerts } from '../cloudflare/market-alerts/worker.js';
+import { guildQuestPreview } from '../scripts/guild-quests-preview-data.mjs';
 
 function database(){
   const sql=new DatabaseSync(':memory:');sql.exec(readFileSync(new URL('../migrations/community/0001_community.sql',import.meta.url),'utf8'));
@@ -15,6 +16,17 @@ function request(db,path,method='GET',payload,extra={}){
   return handleCommunity({request:new Request('https://site.example/api/community/'+path,{method,headers:{origin:'https://site.example',...extra.headers},...(payload===undefined?{}:{body:JSON.stringify(payload)})}),params:{path},env:{COMMUNITY_DB:db,...extra.env}},extra.dependencies??dependencies);
 }
 const news={kind:'news',slug:'hello',title:'Hello',body:'**Hi**',status:'draft'};
+test('quest feed fails closed until signed data exists, projects privacy, and uses source freshness',async()=>{
+  const {db}=database();assert.equal((await request(db,'guildquests')).status,503);
+  const input=guildQuestPreview();input.generatedAt=new Date(Date.now()-3600000).toISOString();input.items[0].quests[0].standings[0].claimActorId='private';
+  assert.equal((await request(db,'ingest','POST',input)).status,401);
+  assert.equal((await signed(db,input)).status,200);
+  const response=await request(db,'guildquests');assert.equal(response.status,200);const data=await response.json();assert.equal(data.stale,true);assert.equal(JSON.stringify(data).includes('private'),false);
+  assert.equal((await signed(db,input)).status,409);assert.equal((await request(db,'guildquests','POST',{})).status,404);
+  const newer={...input,generatedAt:new Date().toISOString()};assert.equal((await signed(db,newer,'quest-newer-12345')).status,200);
+  assert.equal((await signed(db,input,'quest-older-12345')).status,409);
+  assert.equal((await (await request(db,'guildquests')).json()).generatedAt,newer.generatedAt);
+});
 test('draft isolation, publishing, revision conflict and audit are persisted',async()=>{
   const {db,sql}=database();
   assert.equal((await request(db,'admin/news','POST',news)).status,200);

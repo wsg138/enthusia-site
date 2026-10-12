@@ -105,21 +105,7 @@ export async function onRequestGet(context) {
   }
 }
 
-export async function onRequestPost(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-  const id = competitionId(context);
-  if (!id) return json({ error: "competition_not_found" }, 404);
-  const authorized = await authorizeManager(context);
-  if (authorized.response) return authorized.response;
-
-  let input;
-  try {
-    input = await context.request.json();
-  } catch {
-    input = null;
-  }
-  if (input?.action !== "CONFIRM_PLAN") return json({ error: "invalid_reward_action" }, 400);
-
+async function confirmRewardPlan(context, id) {
   try {
     const competition = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
     if (!competition) return json({ error: "competition_not_found" }, 404);
@@ -143,6 +129,17 @@ export async function onRequestPost(context) {
   } catch (error) {
     return json({ error: "reward_plan_confirmation_failed", detail: String(error?.message ?? error) }, 503);
   }
+}
+
+export async function onRequestPost(context) {
+  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+  const id = competitionId(context);
+  if (!id) return json({ error: "competition_not_found" }, 404);
+  const authorized = await authorizeManager(context);
+  if (authorized.response) return authorized.response;
+  const input = await context.request.json().catch(() => null);
+  if (input?.action !== "CONFIRM_PLAN") return json({ error: "invalid_reward_action" }, 400);
+  return confirmRewardPlan(context, id);
 }
 
 export function onRequest() {

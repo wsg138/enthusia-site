@@ -5731,6 +5731,518 @@
         "8 November 2026"
       ]
     ],
-    "editorDraft": "# Chapter 2 is live\nChapter 2 launched on **October 2, 2026**. Here is what is happening first.\n\n## Competitions\n- **Build Competition** - the theme is *Halloween*. Entries open soon. The day will be announced on Discord.\n- Voting opens **October 14** and results are published **October 21**.\n- The **Mapart Competition** starts on **October 24**.\n\n> Raiding and open PvP are part of Enthusia. Read the rules before you log in.\n\n### Changelog\n- `[plugin]` [what changed]\n- ~~[something removed]~~\n- __[something important]__\n\nHidden until hovered: ||[spoiler text]||\n-# Posted from the website - no 2,000 character limit here."
+    "editorDraft": "# Chapter 2 is live\nChapter 2 launched on **October 2, 2026**. Here is what is happening first.\n\n## Competitions\n- **Build Competition** - the theme is *Halloween*. Entries open soon. The day will be announced on Discord.\n- Voting opens **October 14** and results are published **October 21**.\n- The **Mapart Competition** starts on **October 24**.\n\n> Raiding and open PvP are part of Enthusia. Read the rules before you log in.\n\n### Changelog\n- `[plugin]` [what changed]\n- ~~[something removed]~~\n- __[something important]__\n\nHidden until hovered: ||[spoiler text]||\n-# Posted from the website - no 2,000 character limit here.",
+    "guildquests": {
+      "kind": "guildquests",
+      "schemaVersion": 1,
+      "generatedAt": "2026-10-12T05:48:39.373Z",
+      "currentWeekId": "sample-current",
+      "items": [
+        {
+          "id": "sample-current",
+          "startsAt": "2026-10-12T00:00:00.000Z",
+          "endsAt": "2026-10-19T00:00:00.000Z",
+          "fullSetBonusExperience": 1500,
+          "guilds": [
+            {
+              "id": "asgard",
+              "name": "Asgard",
+              "banner": {
+                "baseColor": "BLUE",
+                "patterns": []
+              }
+            },
+            {
+              "id": "boop",
+              "name": "BoopGang",
+              "banner": {
+                "baseColor": "RED",
+                "patterns": []
+              }
+            },
+            {
+              "id": "everlights",
+              "name": "Everlights",
+              "banner": {
+                "baseColor": "YELLOW",
+                "patterns": []
+              }
+            },
+            {
+              "id": "vibe",
+              "name": "Vibe",
+              "banner": {
+                "baseColor": "PURPLE",
+                "patterns": []
+              }
+            }
+          ],
+          "quests": [
+            {
+              "id": "miner",
+              "name": "Mine Stone",
+              "description": "Mine 2,000 naturally generated Stone.",
+              "action": "MINE_BLOCKS",
+              "tier": "COMMON",
+              "icon": "stone",
+              "targetCount": "2000",
+              "experienceReward": 300,
+              "leaderboard": false,
+              "conditions": [],
+              "provenance": "NATURAL_ONLY",
+              "itemRewards": [],
+              "payouts": [],
+              "standings": [
+                {
+                  "guildId": "asgard",
+                  "rank": 1,
+                  "count": "2800",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "boop",
+                  "rank": 2,
+                  "count": "2099",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "everlights",
+                  "rank": 3,
+                  "count": "1400",
+                  "claimed": false,
+                  "rewardDelivered": false
+                },
+                {
+                  "guildId": "vibe",
+                  "rank": 4,
+                  "count": "700",
+                  "claimed": false,
+                  "rewardDelivered": false
+                }
+              ]
+            },
+            {
+              "id": "harvest",
+              "name": "Harvest Wheat",
+              "description": "Harvest 1,200 Wheat together.",
+              "action": "HARVEST_CROPS",
+              "tier": "COMMON",
+              "icon": "wheat",
+              "targetCount": "1200",
+              "experienceReward": 300,
+              "leaderboard": false,
+              "conditions": [],
+              "provenance": "ANY",
+              "itemRewards": [],
+              "payouts": [],
+              "standings": [
+                {
+                  "guildId": "asgard",
+                  "rank": 1,
+                  "count": "1680",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "boop",
+                  "rank": 2,
+                  "count": "1259",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "everlights",
+                  "rank": 3,
+                  "count": "840",
+                  "claimed": false,
+                  "rewardDelivered": false
+                },
+                {
+                  "guildId": "vibe",
+                  "rank": 4,
+                  "count": "420",
+                  "claimed": false,
+                  "rewardDelivered": false
+                }
+              ]
+            },
+            {
+              "id": "angler",
+              "name": "Catch Any Fish",
+              "description": "Catch 500 fish with your guild.",
+              "action": "FISH",
+              "tier": "CHALLENGING",
+              "icon": "fishing_rod",
+              "targetCount": "500",
+              "experienceReward": 600,
+              "leaderboard": false,
+              "conditions": [],
+              "provenance": "ANY",
+              "itemRewards": [],
+              "payouts": [],
+              "standings": [
+                {
+                  "guildId": "asgard",
+                  "rank": 1,
+                  "count": "700",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "boop",
+                  "rank": 2,
+                  "count": "524",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "everlights",
+                  "rank": 3,
+                  "count": "350",
+                  "claimed": false,
+                  "rewardDelivered": false
+                },
+                {
+                  "guildId": "vibe",
+                  "rank": 4,
+                  "count": "175",
+                  "claimed": false,
+                  "rewardDelivered": false
+                }
+              ]
+            },
+            {
+              "id": "smith",
+              "name": "Craft Iron Ingots",
+              "description": "Craft 800 Iron Ingots.",
+              "action": "CRAFT_ITEMS",
+              "tier": "CHALLENGING",
+              "icon": "iron_ingot",
+              "targetCount": "800",
+              "experienceReward": 600,
+              "leaderboard": false,
+              "conditions": [],
+              "provenance": "ANY",
+              "itemRewards": [],
+              "payouts": [],
+              "standings": [
+                {
+                  "guildId": "asgard",
+                  "rank": 1,
+                  "count": "1120",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "boop",
+                  "rank": 2,
+                  "count": "839",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "everlights",
+                  "rank": 3,
+                  "count": "560",
+                  "claimed": false,
+                  "rewardDelivered": false
+                },
+                {
+                  "guildId": "vibe",
+                  "rank": 4,
+                  "count": "280",
+                  "claimed": false,
+                  "rewardDelivered": false
+                }
+              ]
+            },
+            {
+              "id": "deep",
+              "name": "Mine Ancient Debris",
+              "description": "Mine 40 Ancient Debris in the Nether.",
+              "action": "MINE_BLOCKS",
+              "tier": "CONDITIONED",
+              "icon": "ancient_debris",
+              "targetCount": "40",
+              "experienceReward": 900,
+              "leaderboard": false,
+              "conditions": [
+                "In the Nether"
+              ],
+              "provenance": "NATURAL_ONLY",
+              "itemRewards": [],
+              "payouts": [],
+              "standings": [
+                {
+                  "guildId": "asgard",
+                  "rank": 1,
+                  "count": "56",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "boop",
+                  "rank": 2,
+                  "count": "41",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "everlights",
+                  "rank": 3,
+                  "count": "28",
+                  "claimed": false,
+                  "rewardDelivered": false
+                },
+                {
+                  "guildId": "vibe",
+                  "rank": 4,
+                  "count": "14",
+                  "claimed": false,
+                  "rewardDelivered": false
+                }
+              ]
+            },
+            {
+              "id": "featured",
+              "name": "Deposit Gold Ore",
+              "description": "Deposit 5,000 Gold Ore to the Guild Bank. Keep contributing after the target to climb the standings.",
+              "action": "DEPOSIT_BANK",
+              "tier": "HEADLINE",
+              "icon": "gold_ore",
+              "targetCount": "5000",
+              "experienceReward": 1200,
+              "leaderboard": true,
+              "conditions": [],
+              "provenance": "ANY",
+              "itemRewards": [],
+              "payouts": [
+                {
+                  "rank": 1,
+                  "experience": 600
+                },
+                {
+                  "rank": 2,
+                  "experience": 300
+                },
+                {
+                  "rank": 3,
+                  "experience": 150
+                }
+              ],
+              "standings": [
+                {
+                  "guildId": "asgard",
+                  "rank": 1,
+                  "count": "7000",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "boop",
+                  "rank": 2,
+                  "count": "5249",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "everlights",
+                  "rank": 3,
+                  "count": "3500",
+                  "claimed": false,
+                  "rewardDelivered": false
+                },
+                {
+                  "guildId": "vibe",
+                  "rank": 4,
+                  "count": "1750",
+                  "claimed": false,
+                  "rewardDelivered": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sample-previous",
+          "startsAt": "2026-10-05T00:00:00.000Z",
+          "endsAt": "2026-10-12T00:00:00.000Z",
+          "fullSetBonusExperience": 1500,
+          "guilds": [
+            {
+              "id": "asgard",
+              "name": "Asgard",
+              "banner": {
+                "baseColor": "BLUE",
+                "patterns": []
+              }
+            },
+            {
+              "id": "boop",
+              "name": "BoopGang",
+              "banner": {
+                "baseColor": "RED",
+                "patterns": []
+              }
+            },
+            {
+              "id": "everlights",
+              "name": "Everlights",
+              "banner": {
+                "baseColor": "YELLOW",
+                "patterns": []
+              }
+            },
+            {
+              "id": "vibe",
+              "name": "Vibe",
+              "banner": {
+                "baseColor": "PURPLE",
+                "patterns": []
+              }
+            }
+          ],
+          "quests": [
+            {
+              "id": "miner",
+              "name": "Mine Stone",
+              "description": "Mine 2,000 naturally generated Stone.",
+              "action": "MINE_BLOCKS",
+              "tier": "COMMON",
+              "icon": "stone",
+              "targetCount": "2000",
+              "experienceReward": 300,
+              "leaderboard": false,
+              "conditions": [],
+              "provenance": "NATURAL_ONLY",
+              "itemRewards": [],
+              "payouts": [],
+              "standings": [
+                {
+                  "guildId": "asgard",
+                  "rank": 1,
+                  "count": "2800",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "boop",
+                  "rank": 2,
+                  "count": "2099",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "everlights",
+                  "rank": 3,
+                  "count": "1400",
+                  "claimed": false,
+                  "rewardDelivered": false
+                },
+                {
+                  "guildId": "vibe",
+                  "rank": 4,
+                  "count": "700",
+                  "claimed": false,
+                  "rewardDelivered": false
+                }
+              ]
+            },
+            {
+              "id": "harvest",
+              "name": "Harvest Wheat",
+              "description": "Harvest 1,200 Wheat together.",
+              "action": "HARVEST_CROPS",
+              "tier": "COMMON",
+              "icon": "wheat",
+              "targetCount": "1200",
+              "experienceReward": 300,
+              "leaderboard": false,
+              "conditions": [],
+              "provenance": "ANY",
+              "itemRewards": [],
+              "payouts": [],
+              "standings": [
+                {
+                  "guildId": "asgard",
+                  "rank": 1,
+                  "count": "1680",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "boop",
+                  "rank": 2,
+                  "count": "1259",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "everlights",
+                  "rank": 3,
+                  "count": "840",
+                  "claimed": false,
+                  "rewardDelivered": false
+                },
+                {
+                  "guildId": "vibe",
+                  "rank": 4,
+                  "count": "420",
+                  "claimed": false,
+                  "rewardDelivered": false
+                }
+              ]
+            },
+            {
+              "id": "angler",
+              "name": "Catch Any Fish",
+              "description": "Catch 500 fish with your guild.",
+              "action": "FISH",
+              "tier": "CHALLENGING",
+              "icon": "fishing_rod",
+              "targetCount": "500",
+              "experienceReward": 600,
+              "leaderboard": false,
+              "conditions": [],
+              "provenance": "ANY",
+              "itemRewards": [],
+              "payouts": [],
+              "standings": [
+                {
+                  "guildId": "asgard",
+                  "rank": 1,
+                  "count": "700",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "boop",
+                  "rank": 2,
+                  "count": "524",
+                  "claimed": true,
+                  "rewardDelivered": true
+                },
+                {
+                  "guildId": "everlights",
+                  "rank": 3,
+                  "count": "350",
+                  "claimed": false,
+                  "rewardDelivered": false
+                },
+                {
+                  "guildId": "vibe",
+                  "rank": 4,
+                  "count": "175",
+                  "claimed": false,
+                  "rewardDelivered": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   }
 }

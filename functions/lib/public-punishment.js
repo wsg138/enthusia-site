@@ -32,8 +32,7 @@ function validCursor(value) {
   return value === null || (typeof value === "string" && value.length <= 128 && /^[A-Za-z0-9_-]+$/.test(value));
 }
 
-export function sanitizePublicPunishment(value) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+function publicPunishmentFields(value) {
   const player = boundedText(value.player, 16);
   const punishmentType = boundedText(value.punishmentType, 64)?.toUpperCase();
   const broadReason = boundedText(value.broadReason, 500);
@@ -44,13 +43,7 @@ export function sanitizePublicPunishment(value) {
   const caseId = canonicalCaseId(value.caseId);
   const remainingSeconds = value.remainingSeconds;
 
-  const fields = { player, punishmentType, broadReason, publicReason, issuedAt, state, caseId };
-  if (!Object.values(fields).every(Boolean)) return null;
-  if (!validPublicTokens(fields)) return null;
-  if (expiresAt === undefined || typeof value.appealAvailable !== "boolean") return null;
-  if (!validRemainingSeconds(remainingSeconds)) return null;
-
-  return Object.freeze({
+  return {
     player,
     punishmentType,
     broadReason,
@@ -61,7 +54,20 @@ export function sanitizePublicPunishment(value) {
     state,
     caseId,
     appealAvailable: value.appealAvailable
-  });
+  };
+}
+
+function validPublicPunishment(fields) {
+  const required = ['player', 'punishmentType', 'broadReason', 'publicReason', 'issuedAt', 'state', 'caseId'];
+  return required.every(key => Boolean(fields[key])) && validPublicTokens(fields)
+    && fields.expiresAt !== undefined && typeof fields.appealAvailable === 'boolean'
+    && validRemainingSeconds(fields.remainingSeconds);
+}
+
+export function sanitizePublicPunishment(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const fields = publicPunishmentFields(value);
+  return validPublicPunishment(fields) ? Object.freeze(fields) : null;
 }
 
 export function sanitizePublicPunishmentCollection(value, includeCursor = false) {

@@ -15,7 +15,7 @@ test('record validation bounds bodies, links, timestamps and poll options', () =
 });
 test('public server snapshots discard private fields and reject invented/invalid values', () => {
   const out = projectSnapshot('guilds',{items:[{id:'g1',name:'Guild',level:3,members:5,elo:1200,recruiting:true,home:{x:1},ip:'secret',balance:99}]});
-  assert.deepEqual(out.items[0],{id:'g1',name:'Guild',description:'',level:3,members:5,elo:1200,recruiting:true,peaceful:null,membersList:[],banner:null,links:[]});
+  assert.deepEqual(out.items[0],{id:'g1',name:'Guild',description:'',level:3,members:5,elo:1200,prestige:null,foundedAt:null,bankBalance:null,totalExperience:null,activityScore:null,tag:'',recruiting:true,peaceful:null,membersList:[],banner:null,links:[]});
   assert.throws(()=>projectSnapshot('guilds',{items:[{id:'g',name:'G',level:-1}]}));
 });
 test('ballot acceptance uses server close time and publication state', () => {

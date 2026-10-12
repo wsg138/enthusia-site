@@ -64,6 +64,16 @@ const groups = [
 function previewApi(url) {
   if(url.pathname.startsWith('/api/community/')){
     const parts=url.pathname.slice('/api/community/'.length).split('/');
+    if(parts[0]==='warzone'){
+      const state=new URL(location.href).searchParams.get('warzone-state')??'captured';
+      if(state==='captured'||state==='last-week')return nativeFetch(new URL('warzone-server-snapshot.json',root)).then(response=>{if(!response.ok)throw new Error('Captured snapshot unavailable');return response.json();}).then(snapshot=>json({...snapshot.weeks[state==='last-week'?snapshot.previousWeek:snapshot.currentWeek],availableWeeks:[snapshot.currentWeek,snapshot.previousWeek]}));
+      if(state==='unavailable')return json({error:'community_service_unavailable'},503);
+      const monday=new Date();monday.setUTCHours(0,0,0,0);monday.setUTCDate(monday.getUTCDate()-((monday.getUTCDay()+6)%7));
+      const endsAt=new Date(Date.now()+3600000).toISOString();
+      const items=[{id:'current-meta',type:'kit',name:'Sample · Grounded',description:'Wind charges and spears are disabled. Temporary cobwebs: not allowed.',endsAt},{id:'next-meta',type:'activity',name:'Next meta',description:'Sample · Cobweb Combat begins at '+endsAt},{id:'duels-status',type:'activity',name:'Weekly duel wins',description:state==='empty'?'No counted WarzoneDuels match wins recorded this week.':'Counted WarzoneDuels match wins since '+monday.toISOString()+' (UTC Monday week).'}];
+      if(state!=='empty')items.push(...['PreviewPlayer','BuilderTwo','Mapartist'].map((name,i)=>({id:'duels-'+i,type:'leader',name,wins:12-i*4})));
+      return json({items,updatedAt:new Date(Date.now()-(state==='stale'?1800000:0)).toISOString(),stale:state==='stale'});
+    }
     if(parts[0]==='admin'){
       if(!staff)return json({error:'editor_role_required'},403);
       if(parts[1]==='session')return json({editor:true,name:'Fain',rank:'Founder'});
@@ -96,6 +106,7 @@ const banner=document.createElement('aside');banner.className='preview-banner';b
 const label=document.createElement('strong');label.textContent='Combined preview';const note=document.createElement('span');note.textContent='Sample data · actions are not saved';
 const select=document.createElement('select');select.setAttribute('aria-label','Preview persona');for(const role of ['visitor','player','staff']){const opt=new Option(role.charAt(0).toUpperCase()+role.slice(1),role);opt.selected=role===persona;select.append(opt);}select.addEventListener('change',()=>{sessionStorage.setItem('enthusia-preview-persona',select.value);location.reload();});
 banner.append(label,note,select);if(document.body)document.body.prepend(banner);else document.addEventListener("DOMContentLoaded",()=>document.body.prepend(banner),{once:true});
+document.addEventListener('DOMContentLoaded',()=>{if(!document.getElementById('warzone'))return;const selector=document.createElement('select');selector.setAttribute('aria-label','Warzone preview state');const current=new URL(location.href).searchParams.get('warzone-state')??'captured';if(['captured','last-week'].includes(current))note.textContent='Warzone: captured real server data · Other sections: sample data · Actions are not saved';for(const [value,label]of [['captured','Server snapshot: current week'],['last-week','Server snapshot: last week'],['ready','Sample: connected'],['empty','Sample: no wins'],['stale','Sample: stale'],['unavailable','Sample: unavailable']]){const option=new Option(label,value);option.selected=value===current;selector.append(option);}selector.addEventListener('change',()=>{const url=new URL(location.href);url.searchParams.set('warzone-state',selector.value);url.hash='warzone';location.href=url.href;});banner.append(selector);},{once:true});
 document.addEventListener('click',event=>{
   const a=event.target.closest?.('a[href]');if(!a)return;
   const url=new URL(a.href);

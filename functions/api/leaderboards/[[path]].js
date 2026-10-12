@@ -1,3 +1,4 @@
+import {publicMarketBanners} from '../../lib/guild-banner-source.js';
 const DEFAULT_GUILDS_API_URL = "https://api.enthusia.info/api/leaderboards/guilds";
 
 const R2_BOARDS = {
@@ -147,7 +148,7 @@ async function readGuildLeaderboard(env) {
       cacheEverything: false
     }
   });
-  const text = await response.text();
+  let text = await response.text();
 
   if (!response.ok) {
     return json({
@@ -157,6 +158,7 @@ async function readGuildLeaderboard(env) {
     }, response.status);
   }
 
+  try { text = JSON.stringify(await publicMarketBanners(JSON.parse(text))); } catch { /* Keep guild rankings available if optional banner data is unavailable. */ }
   return new Response(text, {
     status: 200,
     headers: {

@@ -1,0 +1,3023 @@
+{
+  "capturedAt": "2026-10-12T14:28:50.171Z",
+  "boards": {
+    "/api/leaderboards/playtime-active-all": {
+      "status": 200,
+      "payload": {
+        "schemaVersion": 1,
+        "generatedAt": "2026-10-12T14:21:30.091128105Z",
+        "board": "playtime-active-all",
+        "sourceBoard": "playtime",
+        "label": "Playtime Active Time - All Time",
+        "statLabel": "Active Time",
+        "metric": "active",
+        "range": "all",
+        "unit": "minutes",
+        "order": "desc",
+        "players": [
+          {
+            "rank": 1,
+            "uuid": "02f2a966-6e38-4583-9d57-a04f8984af35",
+            "username": "TheEnd3rDrag0n",
+            "displayName": null,
+            "value": 43478,
+            "formattedValue": "724h 38m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 43478
+            },
+            "firstSeenAt": "2026-05-11T22:04:31Z",
+            "lastSeenAt": "2026-10-12T08:11:28Z",
+            "updatedAt": "2026-10-12T08:11:28Z"
+          },
+          {
+            "rank": 2,
+            "uuid": "9ea84cce-9fea-4a22-bdcf-301509b8de10",
+            "username": "ToxikFlame11",
+            "displayName": "Toxik",
+            "value": 41479,
+            "formattedValue": "691h 19m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 41479
+            },
+            "firstSeenAt": "2026-05-02T17:15:23Z",
+            "lastSeenAt": "2026-10-12T11:51:28Z",
+            "updatedAt": "2026-10-12T11:51:28Z"
+          },
+          {
+            "rank": 3,
+            "uuid": "d02bf06f-425a-40b2-916c-0d6cf9d089c3",
+            "username": "averality",
+            "displayName": null,
+            "value": 36765,
+            "formattedValue": "612h 45m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 36765
+            },
+            "firstSeenAt": "2026-05-02T17:50:48Z",
+            "lastSeenAt": "2026-10-12T02:18:55Z",
+            "updatedAt": "2026-10-12T02:18:55Z"
+          },
+          {
+            "rank": 4,
+            "uuid": "44f0d972-a7aa-4145-8bc0-bdd267effed6",
+            "username": "GodOfSharks",
+            "displayName": null,
+            "value": 29767,
+            "formattedValue": "496h 7m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 29767
+            },
+            "firstSeenAt": "2026-05-25T15:51:54Z",
+            "lastSeenAt": "2026-10-12T14:21:28Z",
+            "updatedAt": "2026-10-12T14:21:29Z"
+          },
+          {
+            "rank": 5,
+            "uuid": "f53b9522-15e1-405c-bb2e-8170b55b20ca",
+            "username": "Kostpits13_",
+            "displayName": null,
+            "value": 28142,
+            "formattedValue": "469h 2m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 28142
+            },
+            "firstSeenAt": "2026-05-02T17:16:06Z",
+            "lastSeenAt": "2026-10-12T08:41:28Z",
+            "updatedAt": "2026-10-12T08:41:28Z"
+          },
+          {
+            "rank": 6,
+            "uuid": "51dd6d58-af99-41ac-8985-e55f11561cc6",
+            "username": "SleepingOnCheese",
+            "displayName": null,
+            "value": 27873,
+            "formattedValue": "464h 33m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 27873
+            },
+            "firstSeenAt": "2026-05-02T17:40:29Z",
+            "lastSeenAt": "2026-10-11T21:36:41Z",
+            "updatedAt": "2026-10-11T21:36:41Z"
+          },
+          {
+            "rank": 7,
+            "uuid": "28613580-10cc-4066-86be-3bdb95660560",
+            "username": "ItzOkPookie",
+            "displayName": null,
+            "value": 25526,
+            "formattedValue": "425h 26m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 25526
+            },
+            "firstSeenAt": "2026-05-03T15:46:21Z",
+            "lastSeenAt": "2026-10-03T13:28:15Z",
+            "updatedAt": "2026-10-03T13:28:15Z"
+          },
+          {
+            "rank": 8,
+            "uuid": "5f8b99ed-c305-41bd-bbe3-829dac0a90f9",
+            "username": "Kavebo",
+            "displayName": null,
+            "value": 25195,
+            "formattedValue": "419h 55m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 25195
+            },
+            "firstSeenAt": "2026-05-11T07:52:07Z",
+            "lastSeenAt": "2026-10-11T20:56:41Z",
+            "updatedAt": "2026-10-11T20:56:41Z"
+          },
+          {
+            "rank": 9,
+            "uuid": "da904938-19a0-4cc5-a4bb-deaa58e5eac2",
+            "username": "CheddarManPro",
+            "displayName": null,
+            "value": 24685,
+            "formattedValue": "411h 25m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 24685
+            },
+            "firstSeenAt": "2026-05-02T17:15:21Z",
+            "lastSeenAt": "2026-10-12T01:28:55Z",
+            "updatedAt": "2026-10-12T01:28:55Z"
+          },
+          {
+            "rank": 10,
+            "uuid": "7ccc3217-21bb-4e61-a055-e756e29e2cc3",
+            "username": "Aquariom",
+            "displayName": null,
+            "value": 24367,
+            "formattedValue": "406h 7m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 24367
+            },
+            "firstSeenAt": "2026-05-02T17:15:33Z",
+            "lastSeenAt": "2026-10-12T02:13:54Z",
+            "updatedAt": "2026-10-12T02:13:54Z"
+          },
+          {
+            "rank": 11,
+            "uuid": "ea04ab7f-3378-4660-81de-6747e5a70008",
+            "username": "BaLIneA",
+            "displayName": null,
+            "value": 24116,
+            "formattedValue": "401h 56m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 24116
+            },
+            "firstSeenAt": "2026-05-02T17:15:29Z",
+            "lastSeenAt": "2026-10-12T00:23:54Z",
+            "updatedAt": "2026-10-12T00:23:54Z"
+          },
+          {
+            "rank": 12,
+            "uuid": "a7a332bc-c45f-42da-8ef7-da43a4dc0cf9",
+            "username": "la1x",
+            "displayName": null,
+            "value": 23303,
+            "formattedValue": "388h 23m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 23303
+            },
+            "firstSeenAt": "2026-05-02T17:15:33Z",
+            "lastSeenAt": "2026-10-12T13:46:28Z",
+            "updatedAt": "2026-10-12T13:46:28Z"
+          },
+          {
+            "rank": 13,
+            "uuid": "4eb9e6e1-92e2-4a29-9d33-423f2c871f7d",
+            "username": "WardenSteve",
+            "displayName": null,
+            "value": 22855,
+            "formattedValue": "380h 55m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 22855
+            },
+            "firstSeenAt": "2026-05-02T17:15:22Z",
+            "lastSeenAt": "2026-10-12T14:21:28Z",
+            "updatedAt": "2026-10-12T14:21:28Z"
+          },
+          {
+            "rank": 14,
+            "uuid": "d995c705-e8c8-40c4-991e-87755102874c",
+            "username": "imdahcat",
+            "displayName": null,
+            "value": 21622,
+            "formattedValue": "360h 22m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 21622
+            },
+            "firstSeenAt": "2026-05-02T17:35:34Z",
+            "lastSeenAt": "2026-10-11T16:21:40Z",
+            "updatedAt": "2026-10-11T16:21:40Z"
+          },
+          {
+            "rank": 15,
+            "uuid": "f138c5f3-cd18-426a-a615-db0f4e4e7c97",
+            "username": "FlashStrength",
+            "displayName": null,
+            "value": 21613,
+            "formattedValue": "360h 13m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 21613
+            },
+            "firstSeenAt": "2026-05-02T17:18:26Z",
+            "lastSeenAt": "2026-10-12T03:58:55Z",
+            "updatedAt": "2026-10-12T03:58:55Z"
+          },
+          {
+            "rank": 16,
+            "uuid": "7402cfa7-ee57-41ba-8d65-f6d931547f11",
+            "username": "StepSoy",
+            "displayName": null,
+            "value": 20876,
+            "formattedValue": "347h 56m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 20876
+            },
+            "firstSeenAt": "2026-05-02T17:51:19Z",
+            "lastSeenAt": "2026-10-11T21:31:41Z",
+            "updatedAt": "2026-10-11T21:31:41Z"
+          },
+          {
+            "rank": 17,
+            "uuid": "bfc8481a-9523-4f84-9768-4b1de02ab776",
+            "username": "FiireFlyy",
+            "displayName": null,
+            "value": 20497,
+            "formattedValue": "341h 37m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 20497
+            },
+            "firstSeenAt": "2026-05-26T10:33:21Z",
+            "lastSeenAt": "2026-10-12T14:21:28Z",
+            "updatedAt": "2026-10-12T14:21:28Z"
+          },
+          {
+            "rank": 18,
+            "uuid": "114583e7-f384-42c7-9352-4d34373c3df0",
+            "username": "Qaysoz",
+            "displayName": null,
+            "value": 20088,
+            "formattedValue": "334h 48m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 20088
+            },
+            "firstSeenAt": "2026-05-04T21:36:30Z",
+            "lastSeenAt": "2026-10-12T05:16:27Z",
+            "updatedAt": "2026-10-12T05:16:27Z"
+          },
+          {
+            "rank": 19,
+            "uuid": "03a878e6-1208-4a30-88d8-5205026b275f",
+            "username": "x21le",
+            "displayName": null,
+            "value": 20055,
+            "formattedValue": "334h 15m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 20055
+            },
+            "firstSeenAt": "2026-05-18T03:52:15Z",
+            "lastSeenAt": "2026-08-02T09:01:53Z",
+            "updatedAt": "2026-08-02T09:01:53Z"
+          },
+          {
+            "rank": 20,
+            "uuid": "869b9050-f938-459c-be4f-c3bd0f8ac21f",
+            "username": "Fr0stDraws",
+            "displayName": null,
+            "value": 19151,
+            "formattedValue": "319h 11m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 19151
+            },
+            "firstSeenAt": "2026-07-20T20:43:22Z",
+            "lastSeenAt": "2026-10-12T05:06:27Z",
+            "updatedAt": "2026-10-12T05:06:27Z"
+          },
+          {
+            "rank": 21,
+            "uuid": "487f3f9d-7cc0-46bd-b55a-1083191c8d38",
+            "username": "DUSTPYNT0",
+            "displayName": null,
+            "value": 18880,
+            "formattedValue": "314h 40m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 18880
+            },
+            "firstSeenAt": "2026-05-13T17:26:13Z",
+            "lastSeenAt": "2026-10-12T14:21:28Z",
+            "updatedAt": "2026-10-12T14:21:28Z"
+          },
+          {
+            "rank": 22,
+            "uuid": "30574201-76af-4a1b-b6b1-322ab72b9787",
+            "username": "snickered",
+            "displayName": null,
+            "value": 16897,
+            "formattedValue": "281h 37m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 16897
+            },
+            "firstSeenAt": "2026-05-02T17:16:34Z",
+            "lastSeenAt": "2026-10-03T15:36:33Z",
+            "updatedAt": "2026-10-03T15:36:33Z"
+          },
+          {
+            "rank": 23,
+            "uuid": "4c8181df-6058-4e19-9ed5-98b14618bd6b",
+            "username": "Ilms_",
+            "displayName": null,
+            "value": 16611,
+            "formattedValue": "276h 51m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 16611
+            },
+            "firstSeenAt": "2026-05-02T20:13:16Z",
+            "lastSeenAt": "2026-10-12T12:37:14Z",
+            "updatedAt": "2026-10-12T12:37:14Z"
+          },
+          {
+            "rank": 24,
+            "uuid": "d92f1d96-b57c-47e2-9448-294f15e701b9",
+            "username": "GavinGamerMC",
+            "displayName": null,
+            "value": 16553,
+            "formattedValue": "275h 53m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 16553
+            },
+            "firstSeenAt": "2026-05-10T18:12:12Z",
+            "lastSeenAt": "2026-10-12T03:18:55Z",
+            "updatedAt": "2026-10-12T03:18:55Z"
+          },
+          {
+            "rank": 25,
+            "uuid": "0a51c4ef-89b4-4560-ac2f-1f554ae28add",
+            "username": "LavKun",
+            "displayName": null,
+            "value": 16357,
+            "formattedValue": "272h 37m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 16357
+            },
+            "firstSeenAt": "2026-05-02T17:15:24Z",
+            "lastSeenAt": "2026-10-11T22:51:16Z",
+            "updatedAt": "2026-10-11T22:51:16Z"
+          },
+          {
+            "rank": 26,
+            "uuid": "052985e3-07f2-4f19-8953-21742c34900c",
+            "username": "LulzEnjoyer",
+            "displayName": null,
+            "value": 16220,
+            "formattedValue": "270h 20m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 16220
+            },
+            "firstSeenAt": "2026-05-02T23:11:53Z",
+            "lastSeenAt": "2026-10-12T05:41:27Z",
+            "updatedAt": "2026-10-12T05:41:28Z"
+          },
+          {
+            "rank": 27,
+            "uuid": "4e0be828-7fa2-4903-94b2-1e150b7cced6",
+            "username": "Tangent_Snap",
+            "displayName": null,
+            "value": 15847,
+            "formattedValue": "264h 7m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 15847
+            },
+            "firstSeenAt": "2026-05-02T17:24:46Z",
+            "lastSeenAt": "2026-09-10T22:46:42Z",
+            "updatedAt": "2026-09-10T22:46:42Z"
+          },
+          {
+            "rank": 28,
+            "uuid": "b7777b2b-62d1-443e-b7dc-89c4f11f3628",
+            "username": "OinkerMC",
+            "displayName": null,
+            "value": 15833,
+            "formattedValue": "263h 53m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 15833
+            },
+            "firstSeenAt": "2026-05-02T17:15:41Z",
+            "lastSeenAt": "2026-10-11T21:11:40Z",
+            "updatedAt": "2026-10-11T21:11:41Z"
+          },
+          {
+            "rank": 29,
+            "uuid": "a368d767-e196-4a3b-9726-8edf7948b61f",
+            "username": "FainNeito",
+            "displayName": null,
+            "value": 15818,
+            "formattedValue": "263h 38m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 15818
+            },
+            "firstSeenAt": "2026-05-02T17:16:23Z",
+            "lastSeenAt": "2026-10-12T14:21:28Z",
+            "updatedAt": "2026-10-12T14:21:28Z"
+          },
+          {
+            "rank": 30,
+            "uuid": "a4bdb259-4997-4530-90ba-d6d7660a2f80",
+            "username": "Currut",
+            "displayName": null,
+            "value": 15721,
+            "formattedValue": "262h 1m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 15721
+            },
+            "firstSeenAt": "2026-05-03T15:21:39Z",
+            "lastSeenAt": "2026-10-10T20:26:26Z",
+            "updatedAt": "2026-10-10T20:26:26Z"
+          },
+          {
+            "rank": 31,
+            "uuid": "ed1d4c5e-b924-41e3-873a-72aad4a93312",
+            "username": "Shoo",
+            "displayName": null,
+            "value": 15566,
+            "formattedValue": "259h 26m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 15566
+            },
+            "firstSeenAt": "2026-05-05T02:32:28Z",
+            "lastSeenAt": "2026-10-12T06:36:28Z",
+            "updatedAt": "2026-10-12T06:36:28Z"
+          },
+          {
+            "rank": 32,
+            "uuid": "536b137e-72aa-439e-8c76-07a7b72cdc2a",
+            "username": "C4rdboard_MC",
+            "displayName": null,
+            "value": 14302,
+            "formattedValue": "238h 22m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 14302
+            },
+            "firstSeenAt": "2026-05-11T20:25:36Z",
+            "lastSeenAt": "2026-10-12T02:08:54Z",
+            "updatedAt": "2026-10-12T02:08:54Z"
+          },
+          {
+            "rank": 33,
+            "uuid": "07821182-506c-40a7-9755-f7364d48eed4",
+            "username": "Timbob82",
+            "displayName": null,
+            "value": 14210,
+            "formattedValue": "236h 50m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 14210
+            },
+            "firstSeenAt": "2026-05-18T03:52:44Z",
+            "lastSeenAt": "2026-10-12T02:03:54Z",
+            "updatedAt": "2026-10-12T02:03:54Z"
+          },
+          {
+            "rank": 34,
+            "uuid": "217606e9-7047-4e8d-883e-1723e7fc93fa",
+            "username": "H3DGE5",
+            "displayName": null,
+            "value": 13389,
+            "formattedValue": "223h 9m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 13389
+            },
+            "firstSeenAt": "2026-06-18T03:52:58Z",
+            "lastSeenAt": "2026-10-12T13:41:47Z",
+            "updatedAt": "2026-10-12T13:41:47Z"
+          },
+          {
+            "rank": 35,
+            "uuid": "37219811-0932-4b5b-b446-19ce0af4ab2d",
+            "username": "Lavgoon",
+            "displayName": null,
+            "value": 12704,
+            "formattedValue": "211h 44m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 12704
+            },
+            "firstSeenAt": "2026-05-03T02:55:23Z",
+            "lastSeenAt": "2026-10-12T09:11:28Z",
+            "updatedAt": "2026-10-12T09:11:28Z"
+          },
+          {
+            "rank": 36,
+            "uuid": "22e816d0-c749-4dcf-b797-3f26507488bd",
+            "username": "Rafffff3282",
+            "displayName": null,
+            "value": 12425,
+            "formattedValue": "207h 5m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 12425
+            },
+            "firstSeenAt": "2026-05-02T17:15:27Z",
+            "lastSeenAt": "2026-10-05T20:35:52Z",
+            "updatedAt": "2026-10-05T20:35:52Z"
+          },
+          {
+            "rank": 37,
+            "uuid": "394402f0-6358-4f41-ba9c-7f7238280083",
+            "username": "RealReloadCoded",
+            "displayName": null,
+            "value": 12229,
+            "formattedValue": "203h 49m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 12229
+            },
+            "firstSeenAt": "2026-05-02T23:32:08Z",
+            "lastSeenAt": "2026-09-27T01:46:47Z",
+            "updatedAt": "2026-09-27T01:46:48Z"
+          },
+          {
+            "rank": 38,
+            "uuid": "ddc60bec-18a6-43c1-889b-d8931df8d977",
+            "username": "pengu_bro",
+            "displayName": null,
+            "value": 11919,
+            "formattedValue": "198h 39m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 11919
+            },
+            "firstSeenAt": "2026-07-10T02:29:49Z",
+            "lastSeenAt": "2026-08-24T04:26:38Z",
+            "updatedAt": "2026-08-24T04:26:38Z"
+          },
+          {
+            "rank": 39,
+            "uuid": "b00d1c8f-578c-47b0-97ff-78a44ec6a7d8",
+            "username": "Millistii",
+            "displayName": null,
+            "value": 11752,
+            "formattedValue": "195h 52m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 11752
+            },
+            "firstSeenAt": "2026-08-22T15:30:15Z",
+            "lastSeenAt": "2026-10-12T07:31:28Z",
+            "updatedAt": "2026-10-12T07:31:28Z"
+          },
+          {
+            "rank": 40,
+            "uuid": "8c502778-f789-4367-a3eb-03ebca043d31",
+            "username": "mikugoated_",
+            "displayName": null,
+            "value": 11352,
+            "formattedValue": "189h 12m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 11352
+            },
+            "firstSeenAt": "2026-05-02T17:31:08Z",
+            "lastSeenAt": "2026-10-03T05:11:31Z",
+            "updatedAt": "2026-10-03T05:11:31Z"
+          },
+          {
+            "rank": 41,
+            "uuid": "aa82005d-cd30-4089-a6b2-3fc097a0515c",
+            "username": "xenokuri",
+            "displayName": null,
+            "value": 11310,
+            "formattedValue": "188h 30m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 11310
+            },
+            "firstSeenAt": "2026-05-02T17:15:28Z",
+            "lastSeenAt": "2026-10-11T21:06:40Z",
+            "updatedAt": "2026-10-11T21:06:40Z"
+          },
+          {
+            "rank": 42,
+            "uuid": "13e8830c-79f5-4b07-8be2-262e5d60b58b",
+            "username": "DarkHabits",
+            "displayName": null,
+            "value": 11293,
+            "formattedValue": "188h 13m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 11293
+            },
+            "firstSeenAt": "2026-05-02T20:46:27Z",
+            "lastSeenAt": "2026-10-12T00:53:54Z",
+            "updatedAt": "2026-10-12T00:53:55Z"
+          },
+          {
+            "rank": 43,
+            "uuid": "7d246895-ccd7-48c4-92c2-724c2b06f73c",
+            "username": "Lanceam",
+            "displayName": null,
+            "value": 11259,
+            "formattedValue": "187h 39m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 11259
+            },
+            "firstSeenAt": "2026-05-02T19:02:08Z",
+            "lastSeenAt": "2026-10-12T14:21:29Z",
+            "updatedAt": "2026-10-12T14:21:29Z"
+          },
+          {
+            "rank": 44,
+            "uuid": "89901d6b-a095-4fec-8401-d099722899de",
+            "username": "YariQ2010",
+            "displayName": null,
+            "value": 11113,
+            "formattedValue": "185h 13m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 11113
+            },
+            "firstSeenAt": "2026-05-02T20:35:43Z",
+            "lastSeenAt": "2026-09-25T18:32:51Z",
+            "updatedAt": "2026-09-25T18:32:51Z"
+          },
+          {
+            "rank": 45,
+            "uuid": "b190aa51-8a91-43d3-93c5-4430a39e5a3f",
+            "username": "Ammilyn",
+            "displayName": null,
+            "value": 10577,
+            "formattedValue": "176h 17m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 10577
+            },
+            "firstSeenAt": "2026-05-05T16:48:17Z",
+            "lastSeenAt": "2026-10-10T02:57:06Z",
+            "updatedAt": "2026-10-10T02:57:06Z"
+          },
+          {
+            "rank": 46,
+            "uuid": "bf15f0ff-5c20-4476-918a-a525e28f4270",
+            "username": "Blismuth",
+            "displayName": null,
+            "value": 10516,
+            "formattedValue": "175h 16m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 10516
+            },
+            "firstSeenAt": "2026-05-02T17:15:23Z",
+            "lastSeenAt": "2026-09-14T04:56:45Z",
+            "updatedAt": "2026-09-14T04:56:45Z"
+          },
+          {
+            "rank": 47,
+            "uuid": "ff76a06d-104d-414a-8e9a-77d8ca7fefc6",
+            "username": "QIQOProut",
+            "displayName": null,
+            "value": 10407,
+            "formattedValue": "173h 27m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 10407
+            },
+            "firstSeenAt": "2026-05-05T19:39:40Z",
+            "lastSeenAt": "2026-10-11T14:01:39Z",
+            "updatedAt": "2026-10-11T14:01:39Z"
+          },
+          {
+            "rank": 48,
+            "uuid": "6d89d319-6a74-4f54-b973-2d83388600d0",
+            "username": "SoultheHopper",
+            "displayName": null,
+            "value": 10397,
+            "formattedValue": "173h 17m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 10397
+            },
+            "firstSeenAt": "2026-05-03T00:48:58Z",
+            "lastSeenAt": "2026-10-12T08:20:49Z",
+            "updatedAt": "2026-10-12T08:20:49Z"
+          },
+          {
+            "rank": 49,
+            "uuid": "31afbdfd-803f-441e-82df-10521f27ec35",
+            "username": "Soy64",
+            "displayName": null,
+            "value": 10342,
+            "formattedValue": "172h 22m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 10342
+            },
+            "firstSeenAt": "2026-05-03T10:32:20Z",
+            "lastSeenAt": "2026-10-12T06:16:28Z",
+            "updatedAt": "2026-10-12T06:16:28Z"
+          },
+          {
+            "rank": 50,
+            "uuid": "85edef10-68ba-465a-8943-bef5a40e4c4e",
+            "username": "Summars",
+            "displayName": null,
+            "value": 10218,
+            "formattedValue": "170h 18m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 10218
+            },
+            "firstSeenAt": "2026-05-02T21:55:34Z",
+            "lastSeenAt": "2026-09-19T02:00:03Z",
+            "updatedAt": "2026-09-19T02:00:03Z"
+          },
+          {
+            "rank": 51,
+            "uuid": "3e3d7159-95bf-4215-aa30-8cda0ed7fc16",
+            "username": "John_Raidfarms",
+            "displayName": null,
+            "value": 10204,
+            "formattedValue": "170h 4m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 10204
+            },
+            "firstSeenAt": "2026-05-03T03:57:13Z",
+            "lastSeenAt": "2026-10-10T22:46:27Z",
+            "updatedAt": "2026-10-10T22:46:27Z"
+          },
+          {
+            "rank": 52,
+            "uuid": "a93d1d76-e588-40ee-8839-53f3955baa1b",
+            "username": "DracoKagomen",
+            "displayName": null,
+            "value": 9799,
+            "formattedValue": "163h 19m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 9799
+            },
+            "firstSeenAt": "2026-05-10T12:45:12Z",
+            "lastSeenAt": "2026-10-09T20:31:25Z",
+            "updatedAt": "2026-10-09T20:31:25Z"
+          },
+          {
+            "rank": 53,
+            "uuid": "8fd77e35-7702-47c5-884c-c215eeb4511b",
+            "username": "BobSuit",
+            "displayName": "Bob",
+            "value": 9606,
+            "formattedValue": "160h 6m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 9606
+            },
+            "firstSeenAt": "2026-05-02T23:37:14Z",
+            "lastSeenAt": "2026-10-11T19:46:40Z",
+            "updatedAt": "2026-10-11T19:46:40Z"
+          },
+          {
+            "rank": 54,
+            "uuid": "e8288eb9-6bd0-4376-ad54-27d079caad7a",
+            "username": "SilverAshesWorld",
+            "displayName": null,
+            "value": 9592,
+            "formattedValue": "159h 52m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 9592
+            },
+            "firstSeenAt": "2026-07-03T17:23:27Z",
+            "lastSeenAt": "2026-09-27T15:13:03Z",
+            "updatedAt": "2026-09-27T15:13:03Z"
+          },
+          {
+            "rank": 55,
+            "uuid": "c8d03832-42f4-4878-a1e1-ae6dc39f554c",
+            "username": "Nicusormeow",
+            "displayName": null,
+            "value": 9488,
+            "formattedValue": "158h 8m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 9488
+            },
+            "firstSeenAt": "2026-05-02T17:15:22Z",
+            "lastSeenAt": "2026-10-10T21:06:26Z",
+            "updatedAt": "2026-10-10T21:06:26Z"
+          },
+          {
+            "rank": 56,
+            "uuid": "adaf62c8-347b-407a-a8b3-4455d2db25b4",
+            "username": "WotPvPer",
+            "displayName": null,
+            "value": 9444,
+            "formattedValue": "157h 24m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 9444
+            },
+            "firstSeenAt": "2026-06-07T04:19:13Z",
+            "lastSeenAt": "2026-10-12T10:11:28Z",
+            "updatedAt": "2026-10-12T10:11:28Z"
+          },
+          {
+            "rank": 57,
+            "uuid": "71f14fe1-af78-461e-97cf-8b6f1708c9e8",
+            "username": "GussyBacka",
+            "displayName": null,
+            "value": 9367,
+            "formattedValue": "156h 7m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 9367
+            },
+            "firstSeenAt": "2026-05-02T20:37:04Z",
+            "lastSeenAt": "2026-09-06T01:11:59Z",
+            "updatedAt": "2026-09-06T01:11:59Z"
+          },
+          {
+            "rank": 58,
+            "uuid": "a25b31dd-9319-42b5-a9e8-84654ee31993",
+            "username": "SantoXD",
+            "displayName": null,
+            "value": 9188,
+            "formattedValue": "153h 8m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 9188
+            },
+            "firstSeenAt": "2026-05-02T20:31:03Z",
+            "lastSeenAt": "2026-10-11T18:06:40Z",
+            "updatedAt": "2026-10-11T18:06:40Z"
+          },
+          {
+            "rank": 59,
+            "uuid": "68aacf87-855e-4e83-8cc7-d134cd7cbc1b",
+            "username": "Za_Reaper",
+            "displayName": null,
+            "value": 8889,
+            "formattedValue": "148h 9m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 8889
+            },
+            "firstSeenAt": "2026-05-02T17:15:29Z",
+            "lastSeenAt": "2026-10-03T14:56:33Z",
+            "updatedAt": "2026-10-03T14:56:33Z"
+          },
+          {
+            "rank": 60,
+            "uuid": "bf4a25d6-9aa9-46c2-8f93-5eae0edc0fdb",
+            "username": "Pengu_br0",
+            "displayName": null,
+            "value": 8799,
+            "formattedValue": "146h 39m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 8799
+            },
+            "firstSeenAt": "2026-08-25T01:17:24Z",
+            "lastSeenAt": "2026-10-12T05:11:27Z",
+            "updatedAt": "2026-10-12T05:11:27Z"
+          },
+          {
+            "rank": 61,
+            "uuid": "07ff2374-dab0-43ec-8f11-8f168df0ad83",
+            "username": "SonOfBlood",
+            "displayName": null,
+            "value": 8762,
+            "formattedValue": "146h 2m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 8762
+            },
+            "firstSeenAt": "2026-06-23T16:36:24Z",
+            "lastSeenAt": "2026-10-11T14:33:24Z",
+            "updatedAt": "2026-10-11T14:33:24Z"
+          },
+          {
+            "rank": 62,
+            "uuid": "dbffe3af-dae7-4ec0-ba1c-45eba311f790",
+            "username": "KeyStroax",
+            "displayName": null,
+            "value": 8708,
+            "formattedValue": "145h 8m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 8708
+            },
+            "firstSeenAt": "2026-05-02T20:46:27Z",
+            "lastSeenAt": "2026-06-04T21:13:04Z",
+            "updatedAt": "2026-06-04T21:13:04Z"
+          },
+          {
+            "rank": 63,
+            "uuid": "37ff3edf-939d-45bf-8d6a-a4e53e1d33c5",
+            "username": "woulves1",
+            "displayName": null,
+            "value": 8573,
+            "formattedValue": "142h 53m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 8573
+            },
+            "firstSeenAt": "2026-05-02T17:53:02Z",
+            "lastSeenAt": "2026-10-12T11:06:28Z",
+            "updatedAt": "2026-10-12T11:06:28Z"
+          },
+          {
+            "rank": 64,
+            "uuid": "fac5a41a-05b6-44e1-8acf-8f918016400e",
+            "username": "serDesignationV",
+            "displayName": null,
+            "value": 8397,
+            "formattedValue": "139h 57m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 8397
+            },
+            "firstSeenAt": "2026-06-11T01:05:51Z",
+            "lastSeenAt": "2026-10-11T21:07:28Z",
+            "updatedAt": "2026-10-11T21:07:28Z"
+          },
+          {
+            "rank": 65,
+            "uuid": "7cf5b62b-f299-42b9-a835-edea51688654",
+            "username": "IdotMaster",
+            "displayName": null,
+            "value": 8140,
+            "formattedValue": "135h 40m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 8140
+            },
+            "firstSeenAt": "2026-05-02T22:24:51Z",
+            "lastSeenAt": "2026-08-28T02:26:41Z",
+            "updatedAt": "2026-08-28T02:26:41Z"
+          },
+          {
+            "rank": 66,
+            "uuid": "50e34daa-5905-45d0-bb28-71505bb50d9b",
+            "username": "esoterisk",
+            "displayName": null,
+            "value": 8052,
+            "formattedValue": "134h 12m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 8052
+            },
+            "firstSeenAt": "2026-05-03T14:24:18Z",
+            "lastSeenAt": "2026-10-12T13:41:28Z",
+            "updatedAt": "2026-10-12T13:41:28Z"
+          },
+          {
+            "rank": 67,
+            "uuid": "25981853-bc12-4cc2-b364-24d00bbd37be",
+            "username": "0uzen",
+            "displayName": null,
+            "value": 7934,
+            "formattedValue": "132h 14m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 7934
+            },
+            "firstSeenAt": "2026-05-02T18:05:38Z",
+            "lastSeenAt": "2026-10-11T14:06:39Z",
+            "updatedAt": "2026-10-11T14:06:39Z"
+          },
+          {
+            "rank": 68,
+            "uuid": "c8bf93ed-0a81-4ea4-a28d-ca3485956930",
+            "username": "Quinnbodine",
+            "displayName": null,
+            "value": 7769,
+            "formattedValue": "129h 29m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 7769
+            },
+            "firstSeenAt": "2026-05-02T19:23:50Z",
+            "lastSeenAt": "2026-10-12T03:28:55Z",
+            "updatedAt": "2026-10-12T03:28:55Z"
+          },
+          {
+            "rank": 69,
+            "uuid": "cabdb4e5-4f1d-42e7-9f88-b8914ffecbe7",
+            "username": "FainNoir",
+            "displayName": null,
+            "value": 7648,
+            "formattedValue": "127h 28m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 7648
+            },
+            "firstSeenAt": "2026-05-02T17:47:36Z",
+            "lastSeenAt": "2026-10-12T01:28:54Z",
+            "updatedAt": "2026-10-12T01:28:54Z"
+          },
+          {
+            "rank": 70,
+            "uuid": "ac2d6287-b558-496a-a222-440c1d67db6a",
+            "username": "AbsoluteRJB",
+            "displayName": null,
+            "value": 7619,
+            "formattedValue": "126h 59m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 7619
+            },
+            "firstSeenAt": "2026-05-07T08:44:12Z",
+            "lastSeenAt": "2026-08-08T02:25:03Z",
+            "updatedAt": "2026-08-08T02:25:04Z"
+          },
+          {
+            "rank": 71,
+            "uuid": "9f387a49-c23f-4740-8796-1bca8e5be2f4",
+            "username": "mrive2116",
+            "displayName": null,
+            "value": 7511,
+            "formattedValue": "125h 11m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 7511
+            },
+            "firstSeenAt": "2026-05-03T15:17:43Z",
+            "lastSeenAt": "2026-07-09T02:21:55Z",
+            "updatedAt": "2026-07-09T02:21:55Z"
+          },
+          {
+            "rank": 72,
+            "uuid": "3adf20fe-5127-47d4-bce4-b94d37815150",
+            "username": "SarahNovaSpring",
+            "displayName": null,
+            "value": 7394,
+            "formattedValue": "123h 14m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 7394
+            },
+            "firstSeenAt": "2026-05-02T17:15:18Z",
+            "lastSeenAt": "2026-09-12T01:33:13Z",
+            "updatedAt": "2026-09-12T01:33:13Z"
+          },
+          {
+            "rank": 73,
+            "uuid": "00000000-0000-0000-0009-01fd840803e9",
+            "username": "*Fainneedstoe",
+            "displayName": null,
+            "value": 7322,
+            "formattedValue": "122h 2m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 7322
+            },
+            "firstSeenAt": "2026-05-24T07:02:44Z",
+            "lastSeenAt": "2026-08-21T06:21:57Z",
+            "updatedAt": "2026-08-21T06:21:57Z"
+          },
+          {
+            "rank": 74,
+            "uuid": "e6a94ee5-cb9e-47b1-b32c-06b16d6781d5",
+            "username": "p2wn",
+            "displayName": null,
+            "value": 7270,
+            "formattedValue": "121h 10m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 7270
+            },
+            "firstSeenAt": "2026-05-02T17:15:12Z",
+            "lastSeenAt": "2026-10-12T04:51:27Z",
+            "updatedAt": "2026-10-12T04:51:27Z"
+          },
+          {
+            "rank": 75,
+            "uuid": "54515870-fb3b-4aa5-937c-c5d57919c0c9",
+            "username": "williamcool2552",
+            "displayName": null,
+            "value": 7181,
+            "formattedValue": "119h 41m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 7181
+            },
+            "firstSeenAt": "2026-07-25T10:04:09Z",
+            "lastSeenAt": "2026-10-12T06:06:28Z",
+            "updatedAt": "2026-10-12T06:06:28Z"
+          },
+          {
+            "rank": 76,
+            "uuid": "ecf0217b-60aa-468b-95da-39aaf3b34e8c",
+            "username": "TurnOffReach",
+            "displayName": null,
+            "value": 7113,
+            "formattedValue": "118h 33m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 7113
+            },
+            "firstSeenAt": "2026-05-02T19:01:16Z",
+            "lastSeenAt": "2026-10-09T07:01:22Z",
+            "updatedAt": "2026-10-09T07:01:22Z"
+          },
+          {
+            "rank": 77,
+            "uuid": "718b7b06-6609-4d04-8dc2-9ac7d51d0ea5",
+            "username": "thuleve",
+            "displayName": null,
+            "value": 6995,
+            "formattedValue": "116h 35m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 6995
+            },
+            "firstSeenAt": "2026-05-02T17:15:39Z",
+            "lastSeenAt": "2026-10-12T12:46:28Z",
+            "updatedAt": "2026-10-12T12:46:28Z"
+          },
+          {
+            "rank": 78,
+            "uuid": "9b1df9ac-2e09-427d-9b62-ad2db200a39e",
+            "username": "OverShot1",
+            "displayName": null,
+            "value": 6917,
+            "formattedValue": "115h 17m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 6917
+            },
+            "firstSeenAt": "2026-05-05T22:41:53Z",
+            "lastSeenAt": "2026-10-12T03:03:55Z",
+            "updatedAt": "2026-10-12T03:03:55Z"
+          },
+          {
+            "rank": 79,
+            "uuid": "b782c035-f5b9-4d92-a4da-2abe4ddf7905",
+            "username": "T4Is",
+            "displayName": null,
+            "value": 6761,
+            "formattedValue": "112h 41m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 6761
+            },
+            "firstSeenAt": "2026-05-02T18:38:23Z",
+            "lastSeenAt": "2026-06-18T23:58:42Z",
+            "updatedAt": "2026-06-18T23:58:42Z"
+          },
+          {
+            "rank": 80,
+            "uuid": "daceaf37-b314-4d51-9a56-963c1ffb0014",
+            "username": "GU4VA",
+            "displayName": null,
+            "value": 6640,
+            "formattedValue": "110h 40m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 6640
+            },
+            "firstSeenAt": "2026-08-12T15:27:29Z",
+            "lastSeenAt": "2026-10-11T19:26:40Z",
+            "updatedAt": "2026-10-11T19:26:40Z"
+          },
+          {
+            "rank": 81,
+            "uuid": "8fd1f06f-ae0a-4b3d-9383-6f0b0dcb14ff",
+            "username": "IsraeliSolider",
+            "displayName": null,
+            "value": 6552,
+            "formattedValue": "109h 12m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 6552
+            },
+            "firstSeenAt": "2026-06-04T03:35:45Z",
+            "lastSeenAt": "2026-09-14T05:56:45Z",
+            "updatedAt": "2026-09-14T05:56:46Z"
+          },
+          {
+            "rank": 82,
+            "uuid": "a5d4acc7-7bc4-4f60-945f-d0e3bbc7faee",
+            "username": "Cube1ber",
+            "displayName": null,
+            "value": 6353,
+            "formattedValue": "105h 53m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 6353
+            },
+            "firstSeenAt": "2026-07-17T11:24:40Z",
+            "lastSeenAt": "2026-09-01T09:06:41Z",
+            "updatedAt": "2026-09-01T09:06:42Z"
+          },
+          {
+            "rank": 83,
+            "uuid": "36c5cd13-61f4-44f1-9987-0390f20c9ea2",
+            "username": "Arsi_20",
+            "displayName": null,
+            "value": 6087,
+            "formattedValue": "101h 27m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 6087
+            },
+            "firstSeenAt": "2026-05-23T08:48:38Z",
+            "lastSeenAt": "2026-10-06T14:26:21Z",
+            "updatedAt": "2026-10-06T14:26:21Z"
+          },
+          {
+            "rank": 84,
+            "uuid": "1aa50ca2-a806-4d5c-ae8e-a553fd1a8b7d",
+            "username": "tokenCryptid",
+            "displayName": null,
+            "value": 6044,
+            "formattedValue": "100h 44m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 6044
+            },
+            "firstSeenAt": "2026-09-05T06:06:24Z",
+            "lastSeenAt": "2026-10-12T05:16:27Z",
+            "updatedAt": "2026-10-12T05:16:27Z"
+          },
+          {
+            "rank": 85,
+            "uuid": "66b75a73-ed90-4c5f-936b-07a769960dfd",
+            "username": "Jacco1OO",
+            "displayName": null,
+            "value": 5990,
+            "formattedValue": "99h 50m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5990
+            },
+            "firstSeenAt": "2026-05-02T17:38:35Z",
+            "lastSeenAt": "2026-10-10T18:47:18Z",
+            "updatedAt": "2026-10-10T18:47:18Z"
+          },
+          {
+            "rank": 86,
+            "uuid": "ebb2b10b-ef1d-4f11-a82e-c7b4623e6534",
+            "username": "Everlights",
+            "displayName": null,
+            "value": 5940,
+            "formattedValue": "99h 0m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5940
+            },
+            "firstSeenAt": "2026-06-12T13:10:15Z",
+            "lastSeenAt": "2026-10-10T14:16:25Z",
+            "updatedAt": "2026-10-10T14:16:25Z"
+          },
+          {
+            "rank": 87,
+            "uuid": "fdef7122-e216-40e8-8276-a31b7c00362a",
+            "username": "DeathByLance",
+            "displayName": null,
+            "value": 5907,
+            "formattedValue": "98h 27m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5907
+            },
+            "firstSeenAt": "2026-05-28T16:49:54Z",
+            "lastSeenAt": "2026-10-12T13:21:28Z",
+            "updatedAt": "2026-10-12T13:21:28Z"
+          },
+          {
+            "rank": 88,
+            "uuid": "3ad1d37d-e794-4d43-8fbe-caaed8eedbd0",
+            "username": "_minecrafter",
+            "displayName": null,
+            "value": 5831,
+            "formattedValue": "97h 11m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5831
+            },
+            "firstSeenAt": "2026-05-02T21:33:42Z",
+            "lastSeenAt": "2026-10-12T02:23:32Z",
+            "updatedAt": "2026-10-12T02:23:32Z"
+          },
+          {
+            "rank": 89,
+            "uuid": "a297d568-4c7f-44c9-9d54-c75d7e356e38",
+            "username": "wouter222",
+            "displayName": null,
+            "value": 5810,
+            "formattedValue": "96h 50m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5810
+            },
+            "firstSeenAt": "2026-05-05T12:16:44Z",
+            "lastSeenAt": "2026-09-24T22:26:40Z",
+            "updatedAt": "2026-09-24T22:26:40Z"
+          },
+          {
+            "rank": 90,
+            "uuid": "7e3870d2-6b16-427f-a98b-d528f6114aa8",
+            "username": "BlatantlyToggled",
+            "displayName": null,
+            "value": 5801,
+            "formattedValue": "96h 41m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5801
+            },
+            "firstSeenAt": "2026-05-02T19:08:21Z",
+            "lastSeenAt": "2026-09-27T20:23:05Z",
+            "updatedAt": "2026-09-27T20:23:05Z"
+          },
+          {
+            "rank": 91,
+            "uuid": "f1a12e8d-9f3c-408e-8b02-a28c097b7d29",
+            "username": "ChrisD34",
+            "displayName": null,
+            "value": 5760,
+            "formattedValue": "96h 0m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5760
+            },
+            "firstSeenAt": "2026-07-20T02:05:52Z",
+            "lastSeenAt": "2026-10-12T05:46:27Z",
+            "updatedAt": "2026-10-12T05:46:27Z"
+          },
+          {
+            "rank": 92,
+            "uuid": "5a14d26d-864a-43d0-9443-d85eb16abea6",
+            "username": "BadgersMC",
+            "displayName": "ʙᴀᴅɢᴇʀ",
+            "value": 5726,
+            "formattedValue": "95h 26m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5726
+            },
+            "firstSeenAt": "2026-05-02T22:30:30Z",
+            "lastSeenAt": "2026-10-10T02:32:06Z",
+            "updatedAt": "2026-10-10T02:32:06Z"
+          },
+          {
+            "rank": 93,
+            "uuid": "00000000-0000-0000-0009-01f7baba4e81",
+            "username": "*ShadowRealm6861",
+            "displayName": null,
+            "value": 5545,
+            "formattedValue": "92h 25m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5545
+            },
+            "firstSeenAt": "2026-05-03T13:56:23Z",
+            "lastSeenAt": "2026-09-02T21:21:40Z",
+            "updatedAt": "2026-09-02T21:21:40Z"
+          },
+          {
+            "rank": 94,
+            "uuid": "328e57cd-42ef-4fed-ab35-c46d688007f7",
+            "username": "MBelloc",
+            "displayName": null,
+            "value": 5489,
+            "formattedValue": "91h 29m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5489
+            },
+            "firstSeenAt": "2026-05-10T20:27:44Z",
+            "lastSeenAt": "2026-07-16T12:26:32Z",
+            "updatedAt": "2026-07-16T12:26:33Z"
+          },
+          {
+            "rank": 95,
+            "uuid": "af5647cd-a518-4ac0-932a-839b8e3d3df4",
+            "username": "kyynzzz",
+            "displayName": null,
+            "value": 5416,
+            "formattedValue": "90h 16m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5416
+            },
+            "firstSeenAt": "2026-08-14T16:28:01Z",
+            "lastSeenAt": "2026-10-11T20:16:40Z",
+            "updatedAt": "2026-10-11T20:16:40Z"
+          },
+          {
+            "rank": 96,
+            "uuid": "a8893729-6c73-4d0d-bd92-0e338150dead",
+            "username": "winners800",
+            "displayName": null,
+            "value": 5399,
+            "formattedValue": "89h 59m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5399
+            },
+            "firstSeenAt": "2026-05-02T17:35:48Z",
+            "lastSeenAt": "2026-08-22T12:26:45Z",
+            "updatedAt": "2026-08-22T12:26:45Z"
+          },
+          {
+            "rank": 97,
+            "uuid": "12d162fa-2df8-49a2-97ee-1dbcbf624809",
+            "username": "Zatherah",
+            "displayName": null,
+            "value": 5363,
+            "formattedValue": "89h 23m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5363
+            },
+            "firstSeenAt": "2026-05-02T20:46:35Z",
+            "lastSeenAt": "2026-07-10T00:56:10Z",
+            "updatedAt": "2026-07-10T00:56:10Z"
+          },
+          {
+            "rank": 98,
+            "uuid": "1684c9cd-fc0d-494f-92a5-7efb180cd0bb",
+            "username": "SeriousScrooge",
+            "displayName": null,
+            "value": 5347,
+            "formattedValue": "89h 7m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5347
+            },
+            "firstSeenAt": "2026-05-06T21:09:06Z",
+            "lastSeenAt": "2026-07-27T00:19:52Z",
+            "updatedAt": "2026-07-27T00:19:52Z"
+          },
+          {
+            "rank": 99,
+            "uuid": "3f7426c3-89f5-424a-baa8-8eef8ec1e034",
+            "username": "Mifftyy",
+            "displayName": null,
+            "value": 5327,
+            "formattedValue": "88h 47m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5327
+            },
+            "firstSeenAt": "2026-05-02T17:15:33Z",
+            "lastSeenAt": "2026-10-11T01:16:27Z",
+            "updatedAt": "2026-10-11T01:16:27Z"
+          },
+          {
+            "rank": 100,
+            "uuid": "c4e7c406-0a0e-4124-8643-30557cd21162",
+            "username": "Ricky0915",
+            "displayName": null,
+            "value": 5300,
+            "formattedValue": "88h 20m",
+            "subtext": "Active playtime",
+            "stats": {
+              "activeMinutes": 5300
+            },
+            "firstSeenAt": "2026-05-02T17:15:27Z",
+            "lastSeenAt": "2026-10-04T22:24:13Z",
+            "updatedAt": "2026-10-04T22:24:13Z"
+          }
+        ]
+      }
+    },
+    "/api/leaderboards/balance-active-all": {
+      "status": 200,
+      "payload": {
+        "board": "balance-active-all",
+        "label": "Balance",
+        "statLabel": "Dollars",
+        "generatedAt": "2026-10-12T14:22:30.091755531Z",
+        "source": "EnthusiaCurrency",
+        "season": "all_time",
+        "order": "desc",
+        "players": [
+          {
+            "rank": 1,
+            "uuid": "0a51c4ef-89b4-4560-ac2f-1f554ae28add",
+            "username": "LavKun",
+            "value": 237552,
+            "formattedValue": "237,552",
+            "subtext": "237,552 Dollars"
+          },
+          {
+            "rank": 2,
+            "uuid": "ed1d4c5e-b924-41e3-873a-72aad4a93312",
+            "username": "Shoo",
+            "value": 159344,
+            "formattedValue": "159,344",
+            "subtext": "159,344 Dollars"
+          },
+          {
+            "rank": 3,
+            "uuid": "7402cfa7-ee57-41ba-8d65-f6d931547f11",
+            "username": "StepSoy",
+            "value": 91710,
+            "formattedValue": "91,710",
+            "subtext": "91,710 Dollars"
+          },
+          {
+            "rank": 4,
+            "uuid": "71f14fe1-af78-461e-97cf-8b6f1708c9e8",
+            "username": "GussyBacka",
+            "value": 70181,
+            "formattedValue": "70,181",
+            "subtext": "70,181 Dollars"
+          },
+          {
+            "rank": 5,
+            "uuid": "44f0d972-a7aa-4145-8bc0-bdd267effed6",
+            "username": "GodOfSharks",
+            "value": 51340,
+            "formattedValue": "51,340",
+            "subtext": "51,340 Dollars"
+          },
+          {
+            "rank": 6,
+            "uuid": "3e3d7159-95bf-4215-aa30-8cda0ed7fc16",
+            "username": "John_Raidfarms",
+            "value": 46725,
+            "formattedValue": "46,725",
+            "subtext": "46,725 Dollars"
+          },
+          {
+            "rank": 7,
+            "uuid": "9ea84cce-9fea-4a22-bdcf-301509b8de10",
+            "username": "ToxikFlame11",
+            "displayName": "Toxik",
+            "value": 44349,
+            "formattedValue": "44,349",
+            "subtext": "44,349 Dollars"
+          },
+          {
+            "rank": 8,
+            "uuid": "13e8830c-79f5-4b07-8be2-262e5d60b58b",
+            "username": "DarkHabits",
+            "value": 43621,
+            "formattedValue": "43,621",
+            "subtext": "43,621 Dollars"
+          },
+          {
+            "rank": 9,
+            "uuid": "a7a332bc-c45f-42da-8ef7-da43a4dc0cf9",
+            "username": "la1x",
+            "value": 43140,
+            "formattedValue": "43,140",
+            "subtext": "43,140 Dollars"
+          },
+          {
+            "rank": 10,
+            "uuid": "30574201-76af-4a1b-b6b1-322ab72b9787",
+            "username": "snickered",
+            "value": 41285,
+            "formattedValue": "41,285",
+            "subtext": "41,285 Dollars"
+          },
+          {
+            "rank": 11,
+            "uuid": "07821182-506c-40a7-9755-f7364d48eed4",
+            "username": "Timbob82",
+            "value": 33733,
+            "formattedValue": "33,733",
+            "subtext": "33,733 Dollars"
+          },
+          {
+            "rank": 12,
+            "uuid": "f6627014-6c29-46a1-b8bc-57f4c5638737",
+            "username": "MrKetaminezz",
+            "value": 33035,
+            "formattedValue": "33,035",
+            "subtext": "33,035 Dollars"
+          },
+          {
+            "rank": 13,
+            "uuid": "07ff2374-dab0-43ec-8f11-8f168df0ad83",
+            "username": "SonOfBlood",
+            "value": 29316,
+            "formattedValue": "29,316",
+            "subtext": "29,316 Dollars"
+          },
+          {
+            "rank": 14,
+            "uuid": "718b7b06-6609-4d04-8dc2-9ac7d51d0ea5",
+            "username": "thuleve",
+            "value": 22737,
+            "formattedValue": "22,737",
+            "subtext": "22,737 Dollars"
+          },
+          {
+            "rank": 15,
+            "uuid": "487f3f9d-7cc0-46bd-b55a-1083191c8d38",
+            "username": "DUSTPYNT0",
+            "value": 22396,
+            "formattedValue": "22,396",
+            "subtext": "22,396 Dollars"
+          },
+          {
+            "rank": 16,
+            "uuid": "a4bdb259-4997-4530-90ba-d6d7660a2f80",
+            "username": "Currut",
+            "value": 22226,
+            "formattedValue": "22,226",
+            "subtext": "22,226 Dollars"
+          },
+          {
+            "rank": 17,
+            "uuid": "869b9050-f938-459c-be4f-c3bd0f8ac21f",
+            "username": "Fr0stDraws",
+            "value": 21809,
+            "formattedValue": "21,809",
+            "subtext": "21,809 Dollars"
+          },
+          {
+            "rank": 18,
+            "uuid": "f53b9522-15e1-405c-bb2e-8170b55b20ca",
+            "username": "Kostpits13_",
+            "value": 20973,
+            "formattedValue": "20,973",
+            "subtext": "20,973 Dollars"
+          },
+          {
+            "rank": 19,
+            "uuid": "aa82005d-cd30-4089-a6b2-3fc097a0515c",
+            "username": "xenokuri",
+            "value": 20500,
+            "formattedValue": "20,500",
+            "subtext": "20,500 Dollars"
+          },
+          {
+            "rank": 20,
+            "uuid": "ea04ab7f-3378-4660-81de-6747e5a70008",
+            "username": "BaLIneA",
+            "value": 20358,
+            "formattedValue": "20,358",
+            "subtext": "20,358 Dollars"
+          },
+          {
+            "rank": 21,
+            "uuid": "bf4a25d6-9aa9-46c2-8f93-5eae0edc0fdb",
+            "username": "Pengu_br0",
+            "value": 15320,
+            "formattedValue": "15,320",
+            "subtext": "15,320 Dollars"
+          },
+          {
+            "rank": 22,
+            "uuid": "f138c5f3-cd18-426a-a615-db0f4e4e7c97",
+            "username": "FlashStrength",
+            "value": 15087,
+            "formattedValue": "15,087",
+            "subtext": "15,087 Dollars"
+          },
+          {
+            "rank": 23,
+            "uuid": "5f8b99ed-c305-41bd-bbe3-829dac0a90f9",
+            "username": "Kavebo",
+            "value": 13709,
+            "formattedValue": "13,709",
+            "subtext": "13,709 Dollars"
+          },
+          {
+            "rank": 24,
+            "uuid": "bfc8481a-9523-4f84-9768-4b1de02ab776",
+            "username": "FiireFlyy",
+            "value": 13298,
+            "formattedValue": "13,298",
+            "subtext": "13,298 Dollars"
+          },
+          {
+            "rank": 25,
+            "uuid": "4eb9e6e1-92e2-4a29-9d33-423f2c871f7d",
+            "username": "WardenSteve",
+            "value": 12415,
+            "formattedValue": "12,415",
+            "subtext": "12,415 Dollars"
+          },
+          {
+            "rank": 26,
+            "uuid": "dfc644bb-576a-4f09-b752-853aa9f95cb1",
+            "username": "percy_mc",
+            "value": 11616,
+            "formattedValue": "11,616",
+            "subtext": "11,616 Dollars"
+          },
+          {
+            "rank": 27,
+            "uuid": "1d391da5-b67b-4a0e-a19a-d9bf851c4a3d",
+            "username": "Comrade873",
+            "value": 9880,
+            "formattedValue": "9,880",
+            "subtext": "9,880 Dollars"
+          },
+          {
+            "rank": 28,
+            "uuid": "da904938-19a0-4cc5-a4bb-deaa58e5eac2",
+            "username": "CheddarManPro",
+            "value": 9857,
+            "formattedValue": "9,857",
+            "subtext": "9,857 Dollars"
+          },
+          {
+            "rank": 29,
+            "uuid": "36c5cd13-61f4-44f1-9987-0390f20c9ea2",
+            "username": "Arsi_20",
+            "value": 9854,
+            "formattedValue": "9,854",
+            "subtext": "9,854 Dollars"
+          },
+          {
+            "rank": 30,
+            "uuid": "217606e9-7047-4e8d-883e-1723e7fc93fa",
+            "username": "H3DGE5",
+            "value": 8542,
+            "formattedValue": "8,542",
+            "subtext": "8,542 Dollars"
+          },
+          {
+            "rank": 31,
+            "uuid": "50977764-a1f9-4c62-824e-7cdcbc630f0d",
+            "username": "oriboros",
+            "value": 8428,
+            "formattedValue": "8,428",
+            "subtext": "8,428 Dollars"
+          },
+          {
+            "rank": 32,
+            "uuid": "d995c705-e8c8-40c4-991e-87755102874c",
+            "username": "imdahcat",
+            "value": 7910,
+            "formattedValue": "7,910",
+            "subtext": "7,910 Dollars"
+          },
+          {
+            "rank": 33,
+            "uuid": "b00d1c8f-578c-47b0-97ff-78a44ec6a7d8",
+            "username": "Millistii",
+            "value": 7548,
+            "formattedValue": "7,548",
+            "subtext": "7,548 Dollars"
+          },
+          {
+            "rank": 34,
+            "uuid": "ac2d6287-b558-496a-a222-440c1d67db6a",
+            "username": "AbsoluteRJB",
+            "value": 7438,
+            "formattedValue": "7,438",
+            "subtext": "7,438 Dollars"
+          },
+          {
+            "rank": 35,
+            "uuid": "114583e7-f384-42c7-9352-4d34373c3df0",
+            "username": "Qaysoz",
+            "value": 7408,
+            "formattedValue": "7,408",
+            "subtext": "7,408 Dollars"
+          },
+          {
+            "rank": 36,
+            "uuid": "daceaf37-b314-4d51-9a56-963c1ffb0014",
+            "username": "GU4VA",
+            "value": 7228,
+            "formattedValue": "7,228",
+            "subtext": "7,228 Dollars"
+          },
+          {
+            "rank": 37,
+            "uuid": "db21d07c-b785-429f-b135-fc109151b458",
+            "username": "TafetaWolf",
+            "value": 7090,
+            "formattedValue": "7,090",
+            "subtext": "7,090 Dollars"
+          },
+          {
+            "rank": 38,
+            "uuid": "536b137e-72aa-439e-8c76-07a7b72cdc2a",
+            "username": "C4rdboard_MC",
+            "value": 7043,
+            "formattedValue": "7,043",
+            "subtext": "7,043 Dollars"
+          },
+          {
+            "rank": 39,
+            "uuid": "258523e9-d0bf-46e0-a8f2-fcac6ffcd8cd",
+            "username": "bakerya",
+            "value": 6921,
+            "formattedValue": "6,921",
+            "subtext": "6,921 Dollars"
+          },
+          {
+            "rank": 40,
+            "uuid": "22e816d0-c749-4dcf-b797-3f26507488bd",
+            "username": "Rafffff3282",
+            "value": 6805,
+            "formattedValue": "6,805",
+            "subtext": "6,805 Dollars"
+          },
+          {
+            "rank": 41,
+            "uuid": "c8d03832-42f4-4878-a1e1-ae6dc39f554c",
+            "username": "Nicusormeow",
+            "value": 6736,
+            "formattedValue": "6,736",
+            "subtext": "6,736 Dollars"
+          },
+          {
+            "rank": 42,
+            "uuid": "66b75a73-ed90-4c5f-936b-07a769960dfd",
+            "username": "Jacco1OO",
+            "value": 6149,
+            "formattedValue": "6,149",
+            "subtext": "6,149 Dollars"
+          },
+          {
+            "rank": 43,
+            "uuid": "03a878e6-1208-4a30-88d8-5205026b275f",
+            "username": "x21le",
+            "value": 5908,
+            "formattedValue": "5,908",
+            "subtext": "5,908 Dollars"
+          },
+          {
+            "rank": 44,
+            "uuid": "a8893729-6c73-4d0d-bd92-0e338150dead",
+            "username": "winners800",
+            "value": 5589,
+            "formattedValue": "5,589",
+            "subtext": "5,589 Dollars"
+          },
+          {
+            "rank": 45,
+            "uuid": "bd32460c-6bb6-488e-937e-43d31bc8a5b9",
+            "username": "spantz83",
+            "value": 5468,
+            "formattedValue": "5,468",
+            "subtext": "5,468 Dollars"
+          },
+          {
+            "rank": 46,
+            "uuid": "e6a94ee5-cb9e-47b1-b32c-06b16d6781d5",
+            "username": "p2wn",
+            "value": 5019,
+            "formattedValue": "5,019",
+            "subtext": "5,019 Dollars"
+          },
+          {
+            "rank": 47,
+            "uuid": "1684c9cd-fc0d-494f-92a5-7efb180cd0bb",
+            "username": "SeriousScrooge",
+            "value": 4514,
+            "formattedValue": "4,514",
+            "subtext": "4,514 Dollars"
+          },
+          {
+            "rank": 48,
+            "uuid": "2cfd8361-0f95-4d11-ba25-28d2b0f89ca4",
+            "username": "guardian10_",
+            "value": 4505,
+            "formattedValue": "4,505",
+            "subtext": "4,505 Dollars"
+          },
+          {
+            "rank": 49,
+            "uuid": "02f2a966-6e38-4583-9d57-a04f8984af35",
+            "username": "TheEnd3rDrag0n",
+            "value": 4420,
+            "formattedValue": "4,420",
+            "subtext": "4,420 Dollars"
+          },
+          {
+            "rank": 50,
+            "uuid": "a297d568-4c7f-44c9-9d54-c75d7e356e38",
+            "username": "wouter222",
+            "value": 4229,
+            "formattedValue": "4,229",
+            "subtext": "4,229 Dollars"
+          },
+          {
+            "rank": 51,
+            "uuid": "2d3c32c7-2594-4f10-bb32-442090323c87",
+            "username": "LatiJo",
+            "value": 4110,
+            "formattedValue": "4,110",
+            "subtext": "4,110 Dollars"
+          },
+          {
+            "rank": 52,
+            "uuid": "3a0ac629-7fed-4e23-b42c-9dd9564816ed",
+            "username": "RedovicDraconis",
+            "value": 3662,
+            "formattedValue": "3,662",
+            "subtext": "3,662 Dollars"
+          },
+          {
+            "rank": 53,
+            "uuid": "55306c12-a187-4160-b9da-91798c84492c",
+            "username": "OrbitzX",
+            "displayName": "Orb",
+            "value": 3656,
+            "formattedValue": "3,656",
+            "subtext": "3,656 Dollars"
+          },
+          {
+            "rank": 54,
+            "uuid": "2815b1b1-9b18-4e7a-b2dd-b8c5a0f52a5b",
+            "username": "Frost_MC64",
+            "value": 3627,
+            "formattedValue": "3,627",
+            "subtext": "3,627 Dollars"
+          },
+          {
+            "rank": 55,
+            "uuid": "4b637d66-d800-45f7-9185-d3d46cc2ca92",
+            "username": "_sleepyy1",
+            "value": 3557,
+            "formattedValue": "3,557",
+            "subtext": "3,557 Dollars"
+          },
+          {
+            "rank": 56,
+            "uuid": "00000000-0000-0000-0009-01f8773c1f69",
+            "username": "*Plushie_Elysian",
+            "value": 3539,
+            "formattedValue": "3,539",
+            "subtext": "3,539 Dollars"
+          },
+          {
+            "rank": 57,
+            "uuid": "d3545e65-b05d-4ba4-a2cf-da3c2b2d5829",
+            "username": "Wurstz",
+            "value": 3508,
+            "formattedValue": "3,508",
+            "subtext": "3,508 Dollars"
+          },
+          {
+            "rank": 58,
+            "uuid": "09c9bc1b-82d5-45f4-b2e4-07b4da5895ee",
+            "username": "Toetim",
+            "value": 3489,
+            "formattedValue": "3,489",
+            "subtext": "3,489 Dollars"
+          },
+          {
+            "rank": 59,
+            "uuid": "7ccc3217-21bb-4e61-a055-e756e29e2cc3",
+            "username": "Aquariom",
+            "value": 3374,
+            "formattedValue": "3,374",
+            "subtext": "3,374 Dollars"
+          },
+          {
+            "rank": 60,
+            "uuid": "44a9c404-c9cf-4aa9-8194-8d86d224ca94",
+            "username": "Only_A_Demon",
+            "value": 3330,
+            "formattedValue": "3,330",
+            "subtext": "3,330 Dollars"
+          },
+          {
+            "rank": 61,
+            "uuid": "4f745312-904e-4ecb-8d59-b42991fa73ae",
+            "username": "Pig2Creeper",
+            "value": 3293,
+            "formattedValue": "3,293",
+            "subtext": "3,293 Dollars"
+          },
+          {
+            "rank": 62,
+            "uuid": "28613580-10cc-4066-86be-3bdb95660560",
+            "username": "ItzOkPookie",
+            "value": 3205,
+            "formattedValue": "3,205",
+            "subtext": "3,205 Dollars"
+          },
+          {
+            "rank": 63,
+            "uuid": "328e57cd-42ef-4fed-ab35-c46d688007f7",
+            "username": "MBelloc",
+            "value": 3193,
+            "formattedValue": "3,193",
+            "subtext": "3,193 Dollars"
+          },
+          {
+            "rank": 64,
+            "uuid": "a368d767-e196-4a3b-9726-8edf7948b61f",
+            "username": "FainNeito",
+            "value": 3147,
+            "formattedValue": "3,147",
+            "subtext": "3,147 Dollars"
+          },
+          {
+            "rank": 65,
+            "uuid": "9b1df9ac-2e09-427d-9b62-ad2db200a39e",
+            "username": "OverShot1",
+            "value": 3079,
+            "formattedValue": "3,079",
+            "subtext": "3,079 Dollars"
+          },
+          {
+            "rank": 66,
+            "uuid": "ff76a06d-104d-414a-8e9a-77d8ca7fefc6",
+            "username": "QIQOProut",
+            "value": 3051,
+            "formattedValue": "3,051",
+            "subtext": "3,051 Dollars"
+          },
+          {
+            "rank": 67,
+            "uuid": "bb726e03-4c0a-4575-91f0-a5cfb14d36e6",
+            "username": "Peeslol",
+            "value": 2982,
+            "formattedValue": "2,982",
+            "subtext": "2,982 Dollars"
+          },
+          {
+            "rank": 68,
+            "uuid": "b7777b2b-62d1-443e-b7dc-89c4f11f3628",
+            "username": "OinkerMC",
+            "value": 2918,
+            "formattedValue": "2,918",
+            "subtext": "2,918 Dollars"
+          },
+          {
+            "rank": 69,
+            "uuid": "6d810bf9-2aba-4709-b1fc-5159773061c1",
+            "username": "Waimo1",
+            "value": 2894,
+            "formattedValue": "2,894",
+            "subtext": "2,894 Dollars"
+          },
+          {
+            "rank": 70,
+            "uuid": "a5626e30-c4d0-4ac3-8b9f-4c32fd9ac4ce",
+            "username": "TrialWret",
+            "value": 2890,
+            "formattedValue": "2,890",
+            "subtext": "2,890 Dollars"
+          },
+          {
+            "rank": 71,
+            "uuid": "a5d4acc7-7bc4-4f60-945f-d0e3bbc7faee",
+            "username": "Cube1ber",
+            "value": 2871,
+            "formattedValue": "2,871",
+            "subtext": "2,871 Dollars"
+          },
+          {
+            "rank": 72,
+            "uuid": "9f387a49-c23f-4740-8796-1bca8e5be2f4",
+            "username": "mrive2116",
+            "value": 2837,
+            "formattedValue": "2,837",
+            "subtext": "2,837 Dollars"
+          },
+          {
+            "rank": 73,
+            "uuid": "a949c0d0-f21e-4aef-a23b-6eb1bc3a01cf",
+            "username": "Ekalor",
+            "value": 2699,
+            "formattedValue": "2,699",
+            "subtext": "2,699 Dollars"
+          },
+          {
+            "rank": 74,
+            "uuid": "68aacf87-855e-4e83-8cc7-d134cd7cbc1b",
+            "username": "Za_Reaper",
+            "value": 2665,
+            "formattedValue": "2,665",
+            "subtext": "2,665 Dollars"
+          },
+          {
+            "rank": 75,
+            "uuid": "cb8ca7fa-973a-428c-8bc5-a84ee8d63cfa",
+            "username": "Enezcikk",
+            "value": 2645,
+            "formattedValue": "2,645",
+            "subtext": "2,645 Dollars"
+          },
+          {
+            "rank": 76,
+            "uuid": "3b20b501-1f33-4f24-8ab8-3c56d0c08d0f",
+            "username": "_Nutsie",
+            "value": 2625,
+            "formattedValue": "2,625",
+            "subtext": "2,625 Dollars"
+          },
+          {
+            "rank": 77,
+            "uuid": "bc443ce2-44e8-48fe-aadc-4c5c6638c600",
+            "username": "pengu_sis",
+            "value": 2436,
+            "formattedValue": "2,436",
+            "subtext": "2,436 Dollars"
+          },
+          {
+            "rank": 78,
+            "uuid": "801b8f12-7822-4b2d-8a85-2e0a09df910a",
+            "username": "Jammie298",
+            "value": 2375,
+            "formattedValue": "2,375",
+            "subtext": "2,375 Dollars"
+          },
+          {
+            "rank": 79,
+            "uuid": "af5647cd-a518-4ac0-932a-839b8e3d3df4",
+            "username": "kyynzzz",
+            "value": 2360,
+            "formattedValue": "2,360",
+            "subtext": "2,360 Dollars"
+          },
+          {
+            "rank": 80,
+            "uuid": "8ee68ce2-b557-4a44-9c58-61e32f91d101",
+            "username": "Solan231",
+            "value": 2347,
+            "formattedValue": "2,347",
+            "subtext": "2,347 Dollars"
+          },
+          {
+            "rank": 81,
+            "uuid": "d679973f-9a61-4650-9851-2433ca3314d9",
+            "username": "Zom_B_Kitty_26",
+            "value": 2315,
+            "formattedValue": "2,315",
+            "subtext": "2,315 Dollars"
+          },
+          {
+            "rank": 82,
+            "uuid": "7415bbb9-272a-45f5-819a-ad30479d309a",
+            "username": "HudsonAsWell",
+            "value": 2314,
+            "formattedValue": "2,314",
+            "subtext": "2,314 Dollars"
+          },
+          {
+            "rank": 83,
+            "uuid": "d9e9fc72-fe5b-41f1-9cc9-d024dcd3175d",
+            "username": "__v8",
+            "value": 2261,
+            "formattedValue": "2,261",
+            "subtext": "2,261 Dollars"
+          },
+          {
+            "rank": 84,
+            "uuid": "d1ca8560-da3d-4715-af7c-621c50efe218",
+            "username": "salemanderrock21",
+            "value": 2242,
+            "formattedValue": "2,242",
+            "subtext": "2,242 Dollars"
+          },
+          {
+            "rank": 85,
+            "uuid": "b664078f-ae02-4375-8895-5882a2605bd7",
+            "username": "chicke6nugget9",
+            "value": 2220,
+            "formattedValue": "2,220",
+            "subtext": "2,220 Dollars"
+          },
+          {
+            "rank": 86,
+            "uuid": "5a14d26d-864a-43d0-9443-d85eb16abea6",
+            "username": "BadgersMC",
+            "displayName": "ʙᴀᴅɢᴇʀ",
+            "value": 2203,
+            "formattedValue": "2,203",
+            "subtext": "2,203 Dollars"
+          },
+          {
+            "rank": 87,
+            "uuid": "28a66977-c4be-45e2-810d-8a837219915a",
+            "username": "ShieldSpammer",
+            "value": 2199,
+            "formattedValue": "2,199",
+            "subtext": "2,199 Dollars"
+          },
+          {
+            "rank": 88,
+            "uuid": "89901d6b-a095-4fec-8401-d099722899de",
+            "username": "YariQ2010",
+            "value": 2073,
+            "formattedValue": "2,073",
+            "subtext": "2,073 Dollars"
+          },
+          {
+            "rank": 89,
+            "uuid": "4c8181df-6058-4e19-9ed5-98b14618bd6b",
+            "username": "Ilms_",
+            "value": 2070,
+            "formattedValue": "2,070",
+            "subtext": "2,070 Dollars"
+          },
+          {
+            "rank": 90,
+            "uuid": "d1e6b106-5384-41f8-a8d5-7b28d038211c",
+            "username": "SnowyStormy",
+            "value": 2043,
+            "formattedValue": "2,043",
+            "subtext": "2,043 Dollars"
+          },
+          {
+            "rank": 91,
+            "uuid": "a25b31dd-9319-42b5-a9e8-84654ee31993",
+            "username": "SantoXD",
+            "value": 1938,
+            "formattedValue": "1,938",
+            "subtext": "1,938 Dollars"
+          },
+          {
+            "rank": 92,
+            "uuid": "1b25b5aa-cb34-453f-b57f-81b1e5333657",
+            "username": "snurkar",
+            "value": 1937,
+            "formattedValue": "1,937",
+            "subtext": "1,937 Dollars"
+          },
+          {
+            "rank": 93,
+            "uuid": "ba19894e-40e0-44c6-b473-8a7612510236",
+            "username": "DigiverseDragon",
+            "value": 1796,
+            "formattedValue": "1,796",
+            "subtext": "1,796 Dollars"
+          },
+          {
+            "rank": 94,
+            "uuid": "3d984965-ecca-4309-8d13-c712df270d11",
+            "username": "Toxic10",
+            "value": 1784,
+            "formattedValue": "1,784",
+            "subtext": "1,784 Dollars"
+          },
+          {
+            "rank": 95,
+            "uuid": "20cb4b57-e9a1-46ed-9f0f-a87a9177a9f0",
+            "username": "HappyPcfulChamp",
+            "value": 1763,
+            "formattedValue": "1,763",
+            "subtext": "1,763 Dollars"
+          },
+          {
+            "rank": 96,
+            "uuid": "de994fc0-3ad7-49cf-a1c6-0c3652843779",
+            "username": "MaddPandda92",
+            "value": 1742,
+            "formattedValue": "1,742",
+            "subtext": "1,742 Dollars"
+          },
+          {
+            "rank": 97,
+            "uuid": "bf97677f-197d-4839-8177-e2c6669b0b4e",
+            "username": "Account_Redacted",
+            "value": 1696,
+            "formattedValue": "1,696",
+            "subtext": "1,696 Dollars"
+          },
+          {
+            "rank": 98,
+            "uuid": "3adf20fe-5127-47d4-bce4-b94d37815150",
+            "username": "SarahNovaSpring",
+            "value": 1688,
+            "formattedValue": "1,688",
+            "subtext": "1,688 Dollars"
+          },
+          {
+            "rank": 99,
+            "uuid": "20170bdc-2025-44cd-8240-e8466e679e5f",
+            "username": "iSnortRedstone",
+            "value": 1636,
+            "formattedValue": "1,636",
+            "subtext": "1,636 Dollars"
+          },
+          {
+            "rank": 100,
+            "uuid": "34a56ca2-fa1d-4732-a552-a767c50b7bdb",
+            "username": "BelobLV",
+            "value": 1627,
+            "formattedValue": "1,627",
+            "subtext": "1,627 Dollars"
+          }
+        ]
+      }
+    },
+    "/api/leaderboards/guilds": {
+      "status": 200,
+      "payload": {
+        "type": "level",
+        "period": "ALL_TIME",
+        "generatedAt": "2026-10-12T14:28:49.921963577Z",
+        "count": 10,
+        "entries": [
+          {
+            "rank": 1,
+            "id": "23d9b7de-38cb-4ae1-9d3f-1bf124b0a34f",
+            "name": "Vibe",
+            "tag": "<color:#5F5F5F> | </color><b><gradient:#efc97e:#d19059>Vibe</gradient></b> <color:#5F5F5F>|</color>",
+            "tagPlain": " | Vibe |",
+            "level": 100,
+            "totalExperience": 19536419,
+            "experienceThisLevel": 0,
+            "experienceForNextLevel": 0,
+            "memberCount": 22,
+            "bankBalance": 1011,
+            "activityScore": 0,
+            "topMemberUuids": [
+              "37ff3edf-939d-45bf-8d6a-a4e53e1d33c5",
+              "7402cfa7-ee57-41ba-8d65-f6d931547f11",
+              "2d3c32c7-2594-4f10-bb32-442090323c87",
+              "4c8181df-6058-4e19-9ed5-98b14618bd6b",
+              "09e10a28-a3c4-41d2-9b67-5a04b699d438"
+            ],
+            "createdAt": "2026-05-02T17:53:30Z",
+            "score": 119536419,
+            "banner": {
+              "baseColor": "BLACK",
+              "patterns": [
+                {
+                  "type": "STRIPE_LEFT",
+                  "color": "YELLOW"
+                },
+                {
+                  "type": "TRIANGLE_BOTTOM",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "STRIPE_DOWNLEFT",
+                  "color": "YELLOW"
+                },
+                {
+                  "type": "BORDER",
+                  "color": "BLACK"
+                }
+              ]
+            }
+          },
+          {
+            "rank": 2,
+            "id": "83b21e82-6c27-4bfe-88fa-da090dcb6ef4",
+            "name": "WeOnTop",
+            "tag": "<#1500DE>W<#0050E0>O<#0D0D0D>T",
+            "tagPlain": "WOT",
+            "level": 100,
+            "totalExperience": 18081190,
+            "experienceThisLevel": 0,
+            "experienceForNextLevel": 0,
+            "memberCount": 39,
+            "bankBalance": 444,
+            "activityScore": 0,
+            "topMemberUuids": [
+              "7ccc3217-21bb-4e61-a055-e756e29e2cc3",
+              "da904938-19a0-4cc5-a4bb-deaa58e5eac2",
+              "e8925c97-a5d7-4426-9b07-00b03ff2ad2d",
+              "d32234d6-de77-4e35-b7a7-95b30fcdba93",
+              "3f7426c3-89f5-424a-baa8-8eef8ec1e034"
+            ],
+            "createdAt": "2026-05-02T17:02:06Z",
+            "score": 118081190,
+            "banner": {
+              "baseColor": "BLACK",
+              "patterns": [
+                {
+                  "type": "TRIANGLE_BOTTOM",
+                  "color": "BLUE"
+                },
+                {
+                  "type": "TRIANGLES_BOTTOM",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "STRIPE_LEFT",
+                  "color": "BLUE"
+                },
+                {
+                  "type": "STRIPE_RIGHT",
+                  "color": "BLUE"
+                },
+                {
+                  "type": "GRADIENT",
+                  "color": "BLACK"
+                }
+              ]
+            }
+          },
+          {
+            "rank": 3,
+            "id": "de063b44-fec7-4aeb-b9da-f14ff10ebbff",
+            "name": "Everlights",
+            "tag": "<b><gradient:#FFFFFF:#82bae6:#012745><shadow:#001628:1>Everlights⟡</shadow></gradient></b>",
+            "tagPlain": "Everlights⟡",
+            "level": 100,
+            "totalExperience": 17876936,
+            "experienceThisLevel": 0,
+            "experienceForNextLevel": 0,
+            "memberCount": 18,
+            "bankBalance": 660,
+            "activityScore": 5,
+            "topMemberUuids": [
+              "a7e041ad-b0fd-4479-b607-15d73e907cad",
+              "ebb2b10b-ef1d-4f11-a82e-c7b4623e6534",
+              "6ab572cd-05db-4601-9f6e-9b6e08d2761d",
+              "9ea84cce-9fea-4a22-bdcf-301509b8de10",
+              "5f8b99ed-c305-41bd-bbe3-829dac0a90f9"
+            ],
+            "createdAt": "2026-05-02T17:01:55Z",
+            "score": 117876936
+          },
+          {
+            "rank": 4,
+            "id": "5abfc07e-f3dd-4397-b1cf-4e213ec0f464",
+            "name": "BelovedOnes",
+            "tag": "<i><b><gradient:#C8428B:#FFFDFF>BelovedOnes</gradient></b></i>",
+            "tagPlain": "BelovedOnes",
+            "level": 100,
+            "totalExperience": 17609997,
+            "experienceThisLevel": 0,
+            "experienceForNextLevel": 0,
+            "memberCount": 6,
+            "bankBalance": 2256,
+            "activityScore": 0,
+            "topMemberUuids": [
+              "0a51c4ef-89b4-4560-ac2f-1f554ae28add",
+              "68aacf87-855e-4e83-8cc7-d134cd7cbc1b",
+              "ea04ab7f-3378-4660-81de-6747e5a70008",
+              "22e816d0-c749-4dcf-b797-3f26507488bd",
+              "37fc3a07-74fc-406b-9af8-0bb07cc6da63"
+            ],
+            "createdAt": "2026-05-02T17:03:43Z",
+            "score": 117609997
+          },
+          {
+            "rank": 5,
+            "id": "724e5531-f6e4-4423-9c38-d4a7bec10973",
+            "name": "Asgard",
+            "tag": "<gradient:#FFFFFF:#000000>Asgard</gradient>",
+            "tagPlain": "Asgard",
+            "level": 98,
+            "totalExperience": 5257058,
+            "experienceThisLevel": 38394,
+            "experienceForNextLevel": 113466,
+            "memberCount": 11,
+            "bankBalance": 0,
+            "activityScore": 45,
+            "topMemberUuids": [
+              "8fd1f06f-ae0a-4b3d-9383-6f0b0dcb14ff",
+              "28ccd780-76f7-4f68-95f6-195b41eaae10",
+              "bf15f0ff-5c20-4476-918a-a525e28f4270",
+              "264b6f87-073e-4ebc-8f1a-56f8489ef907",
+              "d56c80b8-43e8-458a-aff6-18cbcd7c5338"
+            ],
+            "createdAt": "2026-06-11T04:59:07Z",
+            "score": 103257058,
+            "banner": {
+              "baseColor": "BLACK",
+              "patterns": [
+                {
+                  "type": "HALF_HORIZONTAL",
+                  "color": "WHITE"
+                },
+                {
+                  "type": "STRIPE_CENTER",
+                  "color": "WHITE"
+                },
+                {
+                  "type": "TRIANGLE_TOP",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "RHOMBUS",
+                  "color": "WHITE"
+                },
+                {
+                  "type": "TRIANGLES_BOTTOM",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "FLOWER",
+                  "color": "WHITE"
+                }
+              ]
+            }
+          },
+          {
+            "rank": 6,
+            "id": "75df6794-9d62-41c0-a047-887e5b8b99fe",
+            "name": "ghost",
+            "tag": "👻",
+            "tagPlain": "👻",
+            "level": 94,
+            "totalExperience": 4784586,
+            "experienceThisLevel": 6858,
+            "experienceForNextLevel": 108298,
+            "memberCount": 1,
+            "bankBalance": 456,
+            "activityScore": 5,
+            "topMemberUuids": [
+              "31afbdfd-803f-441e-82df-10521f27ec35"
+            ],
+            "createdAt": "2026-05-30T08:38:22Z",
+            "score": 98784586
+          },
+          {
+            "rank": 7,
+            "id": "b3d81fe8-c405-4a74-b888-83c43773d1b4",
+            "name": "Enthusiast",
+            "tag": "<color:#C20000>Enthu</color><color:#FF8000>siast</color>",
+            "tagPlain": "Enthusiast",
+            "level": 92,
+            "totalExperience": 4626847,
+            "experienceThisLevel": 61854,
+            "experienceForNextLevel": 105725,
+            "memberCount": 37,
+            "bankBalance": 955,
+            "activityScore": 0,
+            "topMemberUuids": [
+              "a368d767-e196-4a3b-9726-8edf7948b61f",
+              "cabdb4e5-4f1d-42e7-9f88-b8914ffecbe7",
+              "28a66977-c4be-45e2-810d-8a837219915a",
+              "d49ebd46-08ea-49af-a1b4-bb69c1f2e77d",
+              "99c6ace1-d855-489d-8c4f-ded7fe0916cb"
+            ],
+            "createdAt": "2026-05-02T15:10:23Z",
+            "score": 96626847
+          },
+          {
+            "rank": 8,
+            "id": "bff78a2d-4d76-433d-a459-195501059129",
+            "name": "GuthardGang",
+            "tag": "<gradient:#FFFFFF:#FCD05C>GuthardGang</gradient>",
+            "tagPlain": "GuthardGang",
+            "level": 81,
+            "totalExperience": 3561348,
+            "experienceThisLevel": 75003,
+            "experienceForNextLevel": 91706,
+            "memberCount": 4,
+            "bankBalance": 126,
+            "activityScore": 0,
+            "topMemberUuids": [
+              "7f7022da-68f6-4f1e-9eb9-c356105431b1",
+              "6ee1bb0c-ebb4-4a0e-b312-60a27f20b71d",
+              "952ab8fa-39bb-46bd-ad0c-efe96ba9c0a8",
+              "57e02047-0cb4-4c9c-b7dc-93829fbc7751"
+            ],
+            "createdAt": "2026-05-14T01:39:56Z",
+            "score": 84561348
+          },
+          {
+            "rank": 9,
+            "id": "6bb21953-eace-4d48-8014-ab05d6c45743",
+            "name": "Architects",
+            "tag": "<green>Architects",
+            "tagPlain": "Architects",
+            "level": 80,
+            "totalExperience": 3451722,
+            "experienceThisLevel": 55820,
+            "experienceForNextLevel": 90443,
+            "memberCount": 18,
+            "bankBalance": 0,
+            "activityScore": 0,
+            "topMemberUuids": [
+              "fa1170ee-d7e3-42a5-a8c8-73f0a10e6222",
+              "30574201-76af-4a1b-b6b1-322ab72b9787",
+              "78a9e800-c14c-4612-8145-faaaa2327142",
+              "ad7c309a-918b-4b2f-915e-f79cb33a204a",
+              "d679973f-9a61-4650-9851-2433ca3314d9"
+            ],
+            "createdAt": "2026-05-02T17:15:31Z",
+            "score": 83451722
+          },
+          {
+            "rank": 10,
+            "id": "67fd6790-250c-4e3f-acbf-5dc6a97dc4bc",
+            "name": "FollowGod",
+            "tag": "<b><gradient:#0A0607:#3C0D13>✝ </gradient>",
+            "tagPlain": "✝ ",
+            "level": 79,
+            "totalExperience": 3361363,
+            "experienceThisLevel": 54644,
+            "experienceForNextLevel": 89183,
+            "memberCount": 2,
+            "bankBalance": 0,
+            "activityScore": 0,
+            "topMemberUuids": [
+              "37219811-0932-4b5b-b446-19ce0af4ab2d",
+              "00000000-0000-0000-0009-01f078d5a2f9"
+            ],
+            "createdAt": "2026-06-14T20:59:24Z",
+            "score": 82361363
+          }
+        ]
+      }
+    },
+    "/api/leaderboards/donators-all-time": {
+      "status": 200,
+      "payload": {
+        "board": "donators-all-time",
+        "label": "Top Donators",
+        "statLabel": "Support",
+        "generatedAt": "2026-10-12T12:41:30.462000Z",
+        "source": "EnthusiaDonors",
+        "order": "desc",
+        "players": [
+          {
+            "rank": 1,
+            "uuid": "52720e9b-aa87-a7df-224b-4d85dab11429",
+            "username": "ToxikFlame11",
+            "displayName": "ToxikFlame11",
+            "value": 191,
+            "formattedValue": "$191.00",
+            "subtext": "All-time official Tebex support"
+          },
+          {
+            "rank": 2,
+            "uuid": "254a50aa-96c4-6a0c-a583-397176ce2706",
+            "username": "Summars",
+            "displayName": "Summars",
+            "value": 165,
+            "formattedValue": "$165.00",
+            "subtext": "All-time official Tebex support"
+          },
+          {
+            "rank": 3,
+            "uuid": "53a23547-ea96-7eac-d505-b38d85af4f85",
+            "username": "Pbe",
+            "displayName": "Pbe",
+            "value": 105,
+            "formattedValue": "$105.00",
+            "subtext": "All-time official Tebex support"
+          },
+          {
+            "rank": 4,
+            "uuid": "629d4d86-7ba5-6cf7-c1fe-2217a02e2ed6",
+            "username": "qaysoz",
+            "displayName": "qaysoz",
+            "value": 75,
+            "formattedValue": "$75.00",
+            "subtext": "All-time official Tebex support"
+          },
+          {
+            "rank": 5,
+            "uuid": "8b27c209-4f89-0ee4-baf2-a488dc85c786",
+            "username": "DarkHabits",
+            "displayName": "DarkHabits",
+            "value": 72,
+            "formattedValue": "$72.00",
+            "subtext": "All-time official Tebex support"
+          },
+          {
+            "rank": 6,
+            "uuid": "16823a58-2e14-706e-0f55-ad9518fc6b80",
+            "username": "auhfuls",
+            "displayName": "auhfuls",
+            "value": 70.2,
+            "formattedValue": "$70.20",
+            "subtext": "All-time official Tebex support"
+          },
+          {
+            "rank": 7,
+            "uuid": "6b50e22e-4059-a02c-f489-8cd0c0d046d0",
+            "username": "LanceamSMASHbros",
+            "displayName": "LanceamSMASHbros",
+            "value": 60,
+            "formattedValue": "$60.00",
+            "subtext": "All-time official Tebex support"
+          },
+          {
+            "rank": 8,
+            "uuid": "b53e711d-75b7-00d7-a9b4-3693b1f766d1",
+            "username": "IdotMaster",
+            "displayName": "IdotMaster",
+            "value": 25,
+            "formattedValue": "$25.00",
+            "subtext": "All-time official Tebex support"
+          },
+          {
+            "rank": 9,
+            "uuid": "d3997b5f-5da2-6634-40b2-b668c58978af",
+            "username": "Mifftyy",
+            "displayName": "Mifftyy",
+            "value": 22,
+            "formattedValue": "$22.00",
+            "subtext": "All-time official Tebex support"
+          },
+          {
+            "rank": 10,
+            "uuid": "e6aae32d-3a2a-69af-92e7-dc93fa843bc2",
+            "username": "LavKun",
+            "displayName": "LavKun",
+            "value": 18.15,
+            "formattedValue": "$18.15",
+            "subtext": "All-time official Tebex support"
+          }
+        ]
+      }
+    },
+    "/api/community/guilds": {
+      "status": 200,
+      "payload": {
+        "schemaVersion": 1,
+        "items": [
+          {
+            "id": "23d9b7de-38cb-4ae1-9d3f-1bf124b0a34f",
+            "name": "Vibe",
+            "description": "",
+            "level": 100,
+            "members": 22,
+            "elo": null,
+            "prestige": null,
+            "foundedAt": "2026-05-02T17:53:30.000Z",
+            "bankBalance": 1011,
+            "totalExperience": 19536419,
+            "activityScore": 0,
+            "tag": "| Vibe |",
+            "recruiting": null,
+            "peaceful": null,
+            "membersList": [],
+            "banner": {
+              "baseColor": "BLACK",
+              "patterns": [
+                {
+                  "type": "STRIPE_LEFT",
+                  "color": "YELLOW"
+                },
+                {
+                  "type": "TRIANGLE_BOTTOM",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "STRIPE_DOWNLEFT",
+                  "color": "YELLOW"
+                },
+                {
+                  "type": "BORDER",
+                  "color": "BLACK"
+                }
+              ]
+            },
+            "links": []
+          },
+          {
+            "id": "83b21e82-6c27-4bfe-88fa-da090dcb6ef4",
+            "name": "WeOnTop",
+            "description": "",
+            "level": 100,
+            "members": 39,
+            "elo": null,
+            "prestige": null,
+            "foundedAt": "2026-05-02T17:02:06.000Z",
+            "bankBalance": 444,
+            "totalExperience": 18081190,
+            "activityScore": 0,
+            "tag": "WOT",
+            "recruiting": null,
+            "peaceful": null,
+            "membersList": [],
+            "banner": {
+              "baseColor": "BLACK",
+              "patterns": [
+                {
+                  "type": "TRIANGLE_BOTTOM",
+                  "color": "BLUE"
+                },
+                {
+                  "type": "TRIANGLES_BOTTOM",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "STRIPE_LEFT",
+                  "color": "BLUE"
+                },
+                {
+                  "type": "STRIPE_RIGHT",
+                  "color": "BLUE"
+                },
+                {
+                  "type": "GRADIENT",
+                  "color": "BLACK"
+                }
+              ]
+            },
+            "links": []
+          },
+          {
+            "id": "de063b44-fec7-4aeb-b9da-f14ff10ebbff",
+            "name": "Everlights",
+            "description": "",
+            "level": 100,
+            "members": 18,
+            "elo": null,
+            "prestige": null,
+            "foundedAt": "2026-05-02T17:01:55.000Z",
+            "bankBalance": 660,
+            "totalExperience": 17876936,
+            "activityScore": 5,
+            "tag": "Everlights⟡",
+            "recruiting": null,
+            "peaceful": null,
+            "membersList": [],
+            "banner": null,
+            "links": []
+          },
+          {
+            "id": "5abfc07e-f3dd-4397-b1cf-4e213ec0f464",
+            "name": "BelovedOnes",
+            "description": "",
+            "level": 100,
+            "members": 6,
+            "elo": null,
+            "prestige": null,
+            "foundedAt": "2026-05-02T17:03:43.000Z",
+            "bankBalance": 2256,
+            "totalExperience": 17609997,
+            "activityScore": 0,
+            "tag": "BelovedOnes",
+            "recruiting": null,
+            "peaceful": null,
+            "membersList": [],
+            "banner": null,
+            "links": []
+          },
+          {
+            "id": "724e5531-f6e4-4423-9c38-d4a7bec10973",
+            "name": "Asgard",
+            "description": "",
+            "level": 98,
+            "members": 11,
+            "elo": null,
+            "prestige": null,
+            "foundedAt": "2026-06-11T04:59:07.000Z",
+            "bankBalance": 0,
+            "totalExperience": 5257058,
+            "activityScore": 45,
+            "tag": "Asgard",
+            "recruiting": null,
+            "peaceful": null,
+            "membersList": [],
+            "banner": {
+              "baseColor": "BLACK",
+              "patterns": [
+                {
+                  "type": "HALF_HORIZONTAL",
+                  "color": "WHITE"
+                },
+                {
+                  "type": "STRIPE_CENTER",
+                  "color": "WHITE"
+                },
+                {
+                  "type": "TRIANGLE_TOP",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "RHOMBUS",
+                  "color": "WHITE"
+                },
+                {
+                  "type": "TRIANGLES_BOTTOM",
+                  "color": "BLACK"
+                },
+                {
+                  "type": "FLOWER",
+                  "color": "WHITE"
+                }
+              ]
+            },
+            "links": []
+          },
+          {
+            "id": "75df6794-9d62-41c0-a047-887e5b8b99fe",
+            "name": "ghost",
+            "description": "",
+            "level": 94,
+            "members": 1,
+            "elo": null,
+            "prestige": null,
+            "foundedAt": "2026-05-30T08:38:22.000Z",
+            "bankBalance": 456,
+            "totalExperience": 4784586,
+            "activityScore": 5,
+            "tag": "👻",
+            "recruiting": null,
+            "peaceful": null,
+            "membersList": [],
+            "banner": null,
+            "links": []
+          },
+          {
+            "id": "b3d81fe8-c405-4a74-b888-83c43773d1b4",
+            "name": "Enthusiast",
+            "description": "",
+            "level": 92,
+            "members": 37,
+            "elo": null,
+            "prestige": null,
+            "foundedAt": "2026-05-02T15:10:23.000Z",
+            "bankBalance": 955,
+            "totalExperience": 4626847,
+            "activityScore": 0,
+            "tag": "Enthusiast",
+            "recruiting": null,
+            "peaceful": null,
+            "membersList": [],
+            "banner": null,
+            "links": []
+          },
+          {
+            "id": "bff78a2d-4d76-433d-a459-195501059129",
+            "name": "GuthardGang",
+            "description": "",
+            "level": 81,
+            "members": 4,
+            "elo": null,
+            "prestige": null,
+            "foundedAt": "2026-05-14T01:39:56.000Z",
+            "bankBalance": 126,
+            "totalExperience": 3561348,
+            "activityScore": 0,
+            "tag": "GuthardGang",
+            "recruiting": null,
+            "peaceful": null,
+            "membersList": [],
+            "banner": null,
+            "links": []
+          },
+          {
+            "id": "6bb21953-eace-4d48-8014-ab05d6c45743",
+            "name": "Architects",
+            "description": "",
+            "level": 80,
+            "members": 18,
+            "elo": null,
+            "prestige": null,
+            "foundedAt": "2026-05-02T17:15:31.000Z",
+            "bankBalance": 0,
+            "totalExperience": 3451722,
+            "activityScore": 0,
+            "tag": "Architects",
+            "recruiting": null,
+            "peaceful": null,
+            "membersList": [],
+            "banner": null,
+            "links": []
+          },
+          {
+            "id": "67fd6790-250c-4e3f-acbf-5dc6a97dc4bc",
+            "name": "FollowGod",
+            "description": "",
+            "level": 79,
+            "members": 2,
+            "elo": null,
+            "prestige": null,
+            "foundedAt": "2026-06-14T20:59:24.000Z",
+            "bankBalance": 0,
+            "totalExperience": 3361363,
+            "activityScore": 0,
+            "tag": "✝",
+            "recruiting": null,
+            "peaceful": null,
+            "membersList": [],
+            "banner": null,
+            "links": []
+          }
+        ],
+        "updatedAt": "2026-10-12T14:39:26.778330828Z",
+        "limited": true,
+        "stale": false
+      }
+    }
+  }
+}
