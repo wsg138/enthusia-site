@@ -34,7 +34,10 @@
   .market-drawer header h2,.item-inspector h2{color:#ffdb2e;text-shadow:2px 2px 0 #6b0f0b;overflow-wrap:anywhere}
   .market-drawer header p,.item-inspector header p{color:#ffdcc8}
   .market-drawer header .eyebrow,.item-inspector header .eyebrow{color:#ffe9a8}
-  .stall-card,.stall-hero,.shop-card,.result-card,.detail-grid>div,.coordinates,.shulker-frame,.suggestions{background:#fff8e6;color:var(--text);border:3px solid var(--line);border-radius:0;box-shadow:inset 3px 3px 0 #fff,inset -3px -3px 0 #ecc873}
+  .stall-card,.stall-hero,.shop-card,.result-card,.detail-grid>div,.coordinates,.shulker-frame,.suggestions,.member-list{background:#fff8e6;color:var(--text);border:3px solid var(--line);border-radius:0;box-shadow:inset 3px 3px 0 #fff,inset -3px -3px 0 #ecc873}
+  .member-list{padding:16px;overflow-wrap:anywhere}
+  .member-list h3{color:#b3201a;font-size:20px;line-height:1.4;margin-bottom:8px;text-shadow:none}
+  .member-list p{color:var(--text);line-height:1.6}
   .stall-card:hover,.stall-card.selected,.result-card:hover,.shop-card.highlight,.suggestions button:hover,.suggestions button.active{background:#ffe7b0;border-color:#b3201a}
   .stall-card-copy small,.stock-line,.result-card small,.detail-grid small,.shop-card small{color:var(--muted)}
   .stall-group h3{border-bottom:3px solid var(--line);font-size:16px}
