@@ -8,7 +8,8 @@ set('wzNext','Next event to be announced');set('wzNextIn','Soon');
 if(preview){set('wzNext','Build Competition voting opens');set('wzNextIn','In '+Math.ceil((Date.UTC(2026,9,14,4)-Date.now())/86400000)+' days');}
 else {
   const warzone=document.querySelector('#warzone-title')?.closest('section');
-  for(const column of warzone?.querySelectorAll('.wz-col')??[]){const heading=column.querySelector('h3');column.replaceChildren(heading);const note=document.createElement('p');note.textContent='Current server data is unavailable.';column.append(note);}
+  const labels=['Current kit','Top fighters this week','Also this week'];
+  for(const [index,column] of [...(warzone?.querySelectorAll('.wz-col')??[])].entries()){const heading=column.querySelector('h3')??document.createElement('h3');heading.textContent=labels[index]??'Warzone';column.replaceChildren(heading);const note=document.createElement('p');note.textContent='Current server data is unavailable.';column.append(note);}
   api('warzone').then(data=>{
     const columns=warzone?.querySelectorAll('.wz-col');if(!columns)return;
     const kit=data.items.find(item=>item.type==='kit');if(kit){const heading=columns[0].querySelector('h3');columns[0].replaceChildren(heading);const title=document.createElement('p'),body=document.createElement('p');title.textContent=kit.name;body.textContent=kit.description;columns[0].append(title,body);if(kit.endsAt){const next=document.createElement('p');next.className='wz';next.textContent='Next rotation: '+new Date(kit.endsAt).toLocaleString();columns[0].append(next);}}
