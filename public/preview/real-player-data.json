@@ -27,7 +27,17 @@
       "achievements": [],
       "links": [],
       "balanceRank": 7,
-      "playtimeRank": 2
+      "playtimeRank": 2,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "de063b44-fec7-4aeb-b9da-f14ff10ebbff",
+          "name": "Everlights",
+          "level": 100,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "d02bf06f-425a-40b2-916c-0d6cf9d089c3",
@@ -109,7 +119,17 @@
       "achievements": [],
       "links": [],
       "balanceRank": 23,
-      "playtimeRank": 8
+      "playtimeRank": 8,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "de063b44-fec7-4aeb-b9da-f14ff10ebbff",
+          "name": "Everlights",
+          "level": 100,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "da904938-19a0-4cc5-a4bb-deaa58e5eac2",
@@ -123,7 +143,41 @@
       "achievements": [],
       "links": [],
       "balanceRank": 29,
-      "playtimeRank": 9
+      "playtimeRank": 9,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "83b21e82-6c27-4bfe-88fa-da090dcb6ef4",
+          "name": "WeOnTop",
+          "level": 100,
+          "banner": {
+            "baseColor": "BLACK",
+            "patterns": [
+              {
+                "type": "TRIANGLE_BOTTOM",
+                "color": "BLUE"
+              },
+              {
+                "type": "TRIANGLES_BOTTOM",
+                "color": "BLACK"
+              },
+              {
+                "type": "STRIPE_LEFT",
+                "color": "BLUE"
+              },
+              {
+                "type": "STRIPE_RIGHT",
+                "color": "BLUE"
+              },
+              {
+                "type": "GRADIENT",
+                "color": "BLACK"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "7ccc3217-21bb-4e61-a055-e756e29e2cc3",
@@ -137,7 +191,41 @@
       "achievements": [],
       "links": [],
       "balanceRank": 53,
-      "playtimeRank": 10
+      "playtimeRank": 10,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "83b21e82-6c27-4bfe-88fa-da090dcb6ef4",
+          "name": "WeOnTop",
+          "level": 100,
+          "banner": {
+            "baseColor": "BLACK",
+            "patterns": [
+              {
+                "type": "TRIANGLE_BOTTOM",
+                "color": "BLUE"
+              },
+              {
+                "type": "TRIANGLES_BOTTOM",
+                "color": "BLACK"
+              },
+              {
+                "type": "STRIPE_LEFT",
+                "color": "BLUE"
+              },
+              {
+                "type": "STRIPE_RIGHT",
+                "color": "BLUE"
+              },
+              {
+                "type": "GRADIENT",
+                "color": "BLACK"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "ea04ab7f-3378-4660-81de-6747e5a70008",
@@ -151,7 +239,17 @@
       "achievements": [],
       "links": [],
       "balanceRank": 20,
-      "playtimeRank": 11
+      "playtimeRank": 11,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "5abfc07e-f3dd-4397-b1cf-4e213ec0f464",
+          "name": "BelovedOnes",
+          "level": 100,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "a7a332bc-c45f-42da-8ef7-da43a4dc0cf9",
@@ -221,7 +319,37 @@
       "achievements": [],
       "links": [],
       "balanceRank": 3,
-      "playtimeRank": 16
+      "playtimeRank": 16,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "23d9b7de-38cb-4ae1-9d3f-1bf124b0a34f",
+          "name": "Vibe",
+          "level": 100,
+          "banner": {
+            "baseColor": "BLACK",
+            "patterns": [
+              {
+                "type": "STRIPE_LEFT",
+                "color": "YELLOW"
+              },
+              {
+                "type": "TRIANGLE_BOTTOM",
+                "color": "BLACK"
+              },
+              {
+                "type": "STRIPE_DOWNLEFT",
+                "color": "YELLOW"
+              },
+              {
+                "type": "BORDER",
+                "color": "BLACK"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "bfc8481a-9523-4f84-9768-4b1de02ab776",
@@ -305,7 +433,17 @@
       "achievements": [],
       "links": [],
       "balanceRank": 10,
-      "playtimeRank": 22
+      "playtimeRank": 22,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "6bb21953-eace-4d48-8014-ab05d6c45743",
+          "name": "Architects",
+          "level": 80,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "4c8181df-6058-4e19-9ed5-98b14618bd6b",
@@ -319,7 +457,37 @@
       "achievements": [],
       "links": [],
       "balanceRank": 89,
-      "playtimeRank": 23
+      "playtimeRank": 23,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "23d9b7de-38cb-4ae1-9d3f-1bf124b0a34f",
+          "name": "Vibe",
+          "level": 100,
+          "banner": {
+            "baseColor": "BLACK",
+            "patterns": [
+              {
+                "type": "STRIPE_LEFT",
+                "color": "YELLOW"
+              },
+              {
+                "type": "TRIANGLE_BOTTOM",
+                "color": "BLACK"
+              },
+              {
+                "type": "STRIPE_DOWNLEFT",
+                "color": "YELLOW"
+              },
+              {
+                "type": "BORDER",
+                "color": "BLACK"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "d92f1d96-b57c-47e2-9448-294f15e701b9",
@@ -346,7 +514,17 @@
       "achievements": [],
       "links": [],
       "balanceRank": 1,
-      "playtimeRank": 25
+      "playtimeRank": 25,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "5abfc07e-f3dd-4397-b1cf-4e213ec0f464",
+          "name": "BelovedOnes",
+          "level": 100,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "052985e3-07f2-4f19-8953-21742c34900c",
@@ -373,7 +551,17 @@
       "achievements": [],
       "links": [],
       "balanceRank": 65,
-      "playtimeRank": 27
+      "playtimeRank": 27,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "b3d81fe8-c405-4a74-b888-83c43773d1b4",
+          "name": "Enthusiast",
+          "level": 92,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "4e0be828-7fa2-4903-94b2-1e150b7cced6",
@@ -483,7 +671,17 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 35
+      "playtimeRank": 35,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "67fd6790-250c-4e3f-acbf-5dc6a97dc4bc",
+          "name": "FollowGod",
+          "level": 79,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "22e816d0-c749-4dcf-b797-3f26507488bd",
@@ -497,7 +695,17 @@
       "achievements": [],
       "links": [],
       "balanceRank": 40,
-      "playtimeRank": 36
+      "playtimeRank": 36,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "5abfc07e-f3dd-4397-b1cf-4e213ec0f464",
+          "name": "BelovedOnes",
+          "level": 100,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "394402f0-6358-4f41-ba9c-7f7238280083",
@@ -631,7 +839,45 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 46
+      "playtimeRank": 46,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "724e5531-f6e4-4423-9c38-d4a7bec10973",
+          "name": "Asgard",
+          "level": 98,
+          "banner": {
+            "baseColor": "BLACK",
+            "patterns": [
+              {
+                "type": "HALF_HORIZONTAL",
+                "color": "WHITE"
+              },
+              {
+                "type": "STRIPE_CENTER",
+                "color": "WHITE"
+              },
+              {
+                "type": "TRIANGLE_TOP",
+                "color": "BLACK"
+              },
+              {
+                "type": "RHOMBUS",
+                "color": "WHITE"
+              },
+              {
+                "type": "TRIANGLES_BOTTOM",
+                "color": "BLACK"
+              },
+              {
+                "type": "FLOWER",
+                "color": "WHITE"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "ff76a06d-104d-414a-8e9a-77d8ca7fefc6",
@@ -671,7 +917,17 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 49
+      "playtimeRank": 49,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "75df6794-9d62-41c0-a047-887e5b8b99fe",
+          "name": "ghost",
+          "level": 94,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "85edef10-68ba-465a-8943-bef5a40e4c4e",
@@ -806,7 +1062,17 @@
       "achievements": [],
       "links": [],
       "balanceRank": 76,
-      "playtimeRank": 59
+      "playtimeRank": 59,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "5abfc07e-f3dd-4397-b1cf-4e213ec0f464",
+          "name": "BelovedOnes",
+          "level": 100,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "bf4a25d6-9aa9-46c2-8f93-5eae0edc0fdb",
@@ -860,7 +1126,37 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 63
+      "playtimeRank": 63,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "23d9b7de-38cb-4ae1-9d3f-1bf124b0a34f",
+          "name": "Vibe",
+          "level": 100,
+          "banner": {
+            "baseColor": "BLACK",
+            "patterns": [
+              {
+                "type": "STRIPE_LEFT",
+                "color": "YELLOW"
+              },
+              {
+                "type": "TRIANGLE_BOTTOM",
+                "color": "BLACK"
+              },
+              {
+                "type": "STRIPE_DOWNLEFT",
+                "color": "YELLOW"
+              },
+              {
+                "type": "BORDER",
+                "color": "BLACK"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "fac5a41a-05b6-44e1-8acf-8f918016400e",
@@ -938,7 +1234,17 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 69
+      "playtimeRank": 69,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "b3d81fe8-c405-4a74-b888-83c43773d1b4",
+          "name": "Enthusiast",
+          "level": 92,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "ac2d6287-b558-496a-a222-440c1d67db6a",
@@ -1089,7 +1395,45 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 81
+      "playtimeRank": 81,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "724e5531-f6e4-4423-9c38-d4a7bec10973",
+          "name": "Asgard",
+          "level": 98,
+          "banner": {
+            "baseColor": "BLACK",
+            "patterns": [
+              {
+                "type": "HALF_HORIZONTAL",
+                "color": "WHITE"
+              },
+              {
+                "type": "STRIPE_CENTER",
+                "color": "WHITE"
+              },
+              {
+                "type": "TRIANGLE_TOP",
+                "color": "BLACK"
+              },
+              {
+                "type": "RHOMBUS",
+                "color": "WHITE"
+              },
+              {
+                "type": "TRIANGLES_BOTTOM",
+                "color": "BLACK"
+              },
+              {
+                "type": "FLOWER",
+                "color": "WHITE"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "a5d4acc7-7bc4-4f60-945f-d0e3bbc7faee",
@@ -1171,7 +1515,17 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 87
+      "playtimeRank": 87,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "de063b44-fec7-4aeb-b9da-f14ff10ebbff",
+          "name": "Everlights",
+          "level": 100,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "3ad1d37d-e794-4d43-8fbe-caaed8eedbd0",
@@ -1320,7 +1674,41 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 99
+      "playtimeRank": 99,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "83b21e82-6c27-4bfe-88fa-da090dcb6ef4",
+          "name": "WeOnTop",
+          "level": 100,
+          "banner": {
+            "baseColor": "BLACK",
+            "patterns": [
+              {
+                "type": "TRIANGLE_BOTTOM",
+                "color": "BLUE"
+              },
+              {
+                "type": "TRIANGLES_BOTTOM",
+                "color": "BLACK"
+              },
+              {
+                "type": "STRIPE_LEFT",
+                "color": "BLUE"
+              },
+              {
+                "type": "STRIPE_RIGHT",
+                "color": "BLUE"
+              },
+              {
+                "type": "GRADIENT",
+                "color": "BLACK"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "c4e7c406-0a0e-4124-8643-30557cd21162",
@@ -1450,7 +1838,37 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 52
+      "balanceRank": 52,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "23d9b7de-38cb-4ae1-9d3f-1bf124b0a34f",
+          "name": "Vibe",
+          "level": 100,
+          "banner": {
+            "baseColor": "BLACK",
+            "patterns": [
+              {
+                "type": "STRIPE_LEFT",
+                "color": "YELLOW"
+              },
+              {
+                "type": "TRIANGLE_BOTTOM",
+                "color": "BLACK"
+              },
+              {
+                "type": "STRIPE_DOWNLEFT",
+                "color": "YELLOW"
+              },
+              {
+                "type": "BORDER",
+                "color": "BLACK"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": "3a0ac629-7fed-4e23-b42c-9dd9564816ed",
@@ -1671,7 +2089,17 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 81
+      "balanceRank": 81,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "6bb21953-eace-4d48-8014-ab05d6c45743",
+          "name": "Architects",
+          "level": 80,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "7415bbb9-272a-45f5-819a-ad30479d309a",
@@ -1736,7 +2164,17 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 87
+      "balanceRank": 87,
+      "guildsKnown": true,
+      "guildsPartial": true,
+      "guildMemberships": [
+        {
+          "id": "b3d81fe8-c405-4a74-b888-83c43773d1b4",
+          "name": "Enthusiast",
+          "level": 92,
+          "banner": null
+        }
+      ]
     },
     {
       "id": "d1e6b106-5384-41f8-a8d5-7b28d038211c",

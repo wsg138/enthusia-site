@@ -11,6 +11,8 @@ function guildSection(item){
     row.append(el('div',{},[link('guilds.html#'+encodeURIComponent(guild.id),guild.name,'player-guild-name'),
       guild.level!==null&&guild.level!==undefined?el('p',{text:'Level '+guild.level}):null]));host.append(row);
   }
+  if(item.guildsPartial)host.append(el('small',{text:'Confirmed by the public guild leaderboard. Other memberships may not be included.'}));
+  if(guilds.some(guild=>!guild.banner))host.append(el('small',{text:'Some guild banner designs are not published in the available feeds.'}));
   if(!guilds.length)host.append(el('p',{text:item.guild?item.guild:item.guildsKnown?'No guild memberships in the latest export.':'Guild membership is not available in this export.'}));
   host.append(link('guilds.html','Browse guilds','btn btn-dark'));
   return host;

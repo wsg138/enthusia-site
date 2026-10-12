@@ -194,3 +194,31 @@ Desktop uses equal-width columns; 390px mobile uses one column with no horizonta
 overflow (375px document width). Selecting SleepingOnCheese updates the profile
 and selected state. JavaScript syntax check, diff check and static build pass.
 Local only; no PR, push, deployment or hosted mobile preview.
+
+## Real guilds in the local player preview
+
+Read-only capture of the live public guild leaderboard provides topMemberUuids,
+not a complete roster. UUID-positive joins confirm 23 of 137 captured profiles.
+The live market publishes banner designs for Vibe, WeOnTop and Asgard; only
+stable guild UUID joins supply these designs. Nonmatching players remain unknown,
+never no-guild; matches have guildsPartial:true and explicit incomplete-coverage
+text. Complete authenticated memberships remain authoritative over this partial
+fallback. Missing banners are labeled, never invented. No market access-member
+lists are used as guild membership evidence.
+
+The local builder's fourth argument is the privately captured guild board.
+It projects only public guild metadata and profiles and generates a real guild
+directory for profile links; credentials and raw server data stay outside the
+repo. The native authenticated exporter remains the route to complete coverage,
+and is not activated here. Live server inventory was read-only; the active
+SQLite database was not copied or queried while the server was running.
+
+Verification: 544 website tests and the normal static build pass. Focused tests
+prove UUID-positive joins, duplicate suppression, absence remains unknown,
+market access exclusion, banner identity and complete-lookup precedence.
+Browser proof shows CheddarManPro / WeOnTop / level 100 and its published banner;
+the real guild link selects WeOnTop in the captured directory. A 390px viewport
+has 375px document width and no horizontal overflow. Screenshot retained in
+the private evidence directory. Localhost only; no mobile-hosted link, PR,
+push, installation or deployment. Complete rosters and seven unpublished
+banner designs remain unavailable in the currently exposed public feeds.
