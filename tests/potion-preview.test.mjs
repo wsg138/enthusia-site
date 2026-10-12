@@ -1,8 +1,31 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFile } from "node:fs/promises";
+import { runInNewContext } from "node:vm";
 
 await import("../public/assets/market/potion-preview-fix.js");
 const { colorIndex, potionId, visitItem } = globalThis.EnthusiaPotionPreview;
+
+test("nested hosted previews fetch potion colors alongside their loaded script", async () => {
+  const requests = [];
+  const potion = { material: "POTION", metadata: { potion: { basePotion: "strong_strength" } } };
+  class MarketApiClient {
+    async fetchSnapshot() { return { stalls: [{ shops: [{ sellItem: potion }] }] }; }
+  }
+  const context = {
+    URL,
+    document: { currentScript: { src: "https://raw.githack.com/owner/site/commit/public/assets/market/potion-preview-fix.js" } },
+    EnthusiaMarketApi: { MarketApiClient },
+    fetch: async url => {
+      requests.push(url);
+      return { ok: true, json: async () => ({ items: [{ potionId: "minecraft:strong_strength", form: "POTION", exactTintColor: "#932423" }] }) };
+    }
+  };
+  runInNewContext(await readFile(new URL("../public/assets/market/potion-preview-fix.js", import.meta.url), "utf8"), context);
+  await new MarketApiClient().fetchSnapshot();
+  assert.deepEqual(requests, ["https://raw.githack.com/owner/site/commit/public/assets/market/minecraft/potion-variant-manifest.json"]);
+  assert.equal(potion.metadata.potion.color, "#932423");
+});
 
 test("normalizes unnamespaced potion IDs", () => {
   assert.equal(potionId("strong_strength"), "minecraft:strong_strength");

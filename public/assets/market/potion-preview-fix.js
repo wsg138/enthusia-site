@@ -7,7 +7,8 @@
     LINGERING_POTION: "LINGERING",
     TIPPED_ARROW: "TIPPED_ARROW"
   });
-  const manifestUrl = "assets/market/minecraft/potion-variant-manifest.json";
+  const scriptUrl = root.document?.currentScript?.src;
+  const manifestUrl = scriptUrl ? new URL("minecraft/potion-variant-manifest.json", scriptUrl).href : "assets/market/minecraft/potion-variant-manifest.json";
   let colorsPromise;
 
   function potionId(value) {

@@ -58,3 +58,13 @@ Local evidence:
 SPEAR remains a manual requirement/task/evidence record: no project-local EARS validator or state helper was available. Java bridge sources were not changed; prior Java results are not presented as fresh proof. Live D1/OAuth/producer/bot/Tebex integration and player acceptance remain separate from local website proof. The signed Warzone feed is a website contract; no plugin or production producer was enabled.
 
 Hosted review: inspect the checks for the delivered commit. The previous head's Codacy report includes complexity findings and dialect/tool warnings (PostgreSQL/T-SQL rules applied to SQLite/D1, and PMD numeric-literal reports). They are not silently waived or treated as passing. The design event dispatcher now explicitly registers only controller-owned actions, with a regression test. Fork Actions require maintainer approval; CodeRabbit skips draft PRs. No merge or deployment was performed.
+
+## Market theme and missing-icon correction
+
+Spec: the interactive map, building/stall drawers and inspector must use the site's Minecraft font, red/gold/cream surfaces and square borders. Player and unowned-stall placeholders must load from production and nested, commit-pinned preview pages. Native item tooltip/container art and map interaction semantics remain intact.
+
+Prove: the supplied screenshots show brown rounded panels, a serif drawer, clipped building titles and missing placeholders. Inspection traced document-relative asset URLs to nonexistent `preview/assets/market/` paths; relocated overlays also lacked an explicit font. A browser pass additionally reproduced a 404 for the potion manifest.
+
+Engine/architecture: one scoped market theme styles both the page and existing overlay portal without changing other pages or backend contracts. Drawers reserve the title column correctly when Back is hidden. Runtime icon, raster, font and potion-manifest URLs resolve beside their loaded scripts, so nested previews and production share the same assets.
+
+Refine/evidence: browser checks at 390px touch and 1440px cover all seven map layers, opening Stalls 49–54, player/unowned SVG natural widths, stall selection and item inspection. Both overlay fonts are Minecraft; no horizontal overflow, 404 assets or uncaught errors occurred. The nested hosted potion-color regression checks both the requested URL and applied exact tint. The full local test/build results and public preview verification are recorded with this delivery. SPEAR remains manual because no local EARS/state tooling is available. No production activation or merge is part of this correction.

@@ -21,8 +21,9 @@
     { key: "stock", label: "Stock", selector: "#stock-filter" },
     { key: "rent", label: "Rent", selector: "#rent-filter" }
   ]);
-  const assetBase = document.querySelector("[data-market-asset-base]")?.dataset.marketAssetBase || selectOne("#site-logo").getAttribute("src").replace(/[^/]+$/, "");
-  const cssAssetBase = document.querySelector("[data-market-css-asset-base]")?.dataset.marketCssAssetBase ?? assetBase;
+  // Assets travel with this script, including when the page lives in a nested preview.
+  const assetBase = new URL("./", document.currentScript.src).href;
+  const cssAssetBase = assetBase;
   const el = {
     viewport: selectOne("#market-map"), scene: selectOne("#map-scene"), svg: selectOne("#map-svg"), buildings: selectOne("#building-layer"),
     stalls: selectOne("#stall-layer"), tooltip: selectOne("#map-tooltip"), hud: selectOne("#coordinate-hud"), hudValue: selectOne("#coordinate-value"), clearCoordinate: selectOne("#clear-coordinate"), marker: selectOne("#pinned-coordinate-marker"), results: selectOne("#search-results"), resultsContent: selectOne(".search-results-content"),
