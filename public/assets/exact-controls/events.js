@@ -1,5 +1,8 @@
 /* Preview only: logic of the "Events" mockup, run by preview/mock.js. */
 class Component extends window.DesignController {
+  componentDidMount() {
+    window.setInterval(() => this.__render(), 60000);
+  }
   renderVals() {
     var self = this;
     var st = Object.assign({ menu: '' }, this.state || {});
@@ -22,7 +25,7 @@ class Component extends window.DesignController {
     var now = Date.now();
     var nx = null;
     for (i = 0; i < NEXT.length; i++) {
-      var t = Date.UTC(NEXT[i][0][0], NEXT[i][0][1], NEXT[i][0][2], NEXT[i][0][3]);
+      var t = Date.UTC(NEXT[i][0][0], NEXT[i][0][1], NEXT[i][0][2], NEXT[i][0][3], NEXT[i][0][4] || 0, NEXT[i][0][5] || 0);
       if (t > now) { nx = NEXT[i]; nx.left = t - now; break; }
     }
     v.nextTitle = nx ? nx[1] : 'To be announced';

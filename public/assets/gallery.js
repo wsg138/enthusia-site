@@ -14,6 +14,7 @@
     MAPART: "Mapart"
   };
   let session = { authenticated: false, staff: {} };
+  let galleryGeneration = 0;
 
   function element(tagName, className, text) {
     const node = document.createElement(tagName);
@@ -23,8 +24,15 @@
   }
 
   async function requestJson(path, options) {
-    const response = await fetch(path, { credentials: "same-origin", ...options });
-    return { response, body: await response.json().catch(() => ({})) };
+    try {
+      const response = await fetch(path, { credentials: "same-origin", ...options });
+      let body;
+      try { body = await response.json(); } catch { return { response: { ok: false }, body: { error: "The service returned an invalid response. Try again." } }; }
+      if (!body || typeof body !== "object") return { response: { ok: false }, body: { error: "The service returned an invalid response. Try again." } };
+      return { response, body };
+    } catch {
+      return { response: { ok: false }, body: { error: "Connection failed. Check your connection and try again." } };
+    }
   }
 
   function emptyPanel(message, heading) {
@@ -97,9 +105,15 @@
   }
 
   async function load(category) {
+    const generation = ++galleryGeneration;
     grid.replaceChildren(emptyPanel("Loading gallery…"));
     const { response, body } = await requestJson(`/api/gallery/submissions?category=${encodeURIComponent(category)}`);
-    if (!response.ok || !body.submissions?.length) {
+    if (generation !== galleryGeneration) return;
+    if (!response.ok) {
+      grid.replaceChildren(emptyPanel(body.error || "Gallery data is unavailable. Try again.", "Gallery unavailable"));
+      return;
+    }
+    if (!body.submissions?.length) {
       showEmpty(category);
       return;
     }
@@ -107,13 +121,15 @@
   }
 
   async function loadSession() {
-    ({ body: session } = await requestJson("/api/gallery/session"));
+    const result = await requestJson("/api/gallery/session");
+    if (!result.response.ok) { account.textContent = "Account access is unavailable. Refresh to try again."; return; }
+    session = result.body;
     if (session.authenticated) {
       const name = session.discord?.globalName || session.discord?.username || "Discord user";
       account.replaceChildren("Signed in as ", element("strong", null, name), ".");
     } else {
       const link = element("a", null, "sign in with Discord");
-      link.href = "/api/competitions/auth/discord/start?returnTo=%2Fgallery.html";
+      link.href = "/api/competitions/auth/discord/start?returnTo=%2Fgallery%2Fsubmit.html";
       account.replaceChildren("You need to ", link, " before submitting.");
     }
     if (session.staff?.review) void loadReview();
@@ -121,8 +137,8 @@
 
   async function loadReview() {
     const { response, body } = await requestJson("/api/gallery/staff/submissions");
-    if (!response.ok) return;
     document.querySelector("#staffReview").hidden = false;
+    if (!response.ok) { reviewGrid.replaceChildren(emptyPanel(body.error || "Review data is unavailable. Try again.")); return; }
     if (!body.submissions?.length) {
       reviewGrid.replaceChildren(emptyPanel("There are no submissions waiting for review."));
       return;
@@ -136,11 +152,15 @@
       status.textContent = "Sign in with Discord first.";
       return;
     }
+    const submit = form.querySelector('button[type="submit"]');
+    if (submit.disabled) return;
+    submit.disabled = true;
     status.textContent = "Uploading and checking your image…";
     const { response, body } = await requestJson("/api/gallery/submissions", {
       method: "POST",
       body: new FormData(form)
     });
+    submit.disabled = false;
     if (response.ok) {
       form.reset();
       status.textContent = "Submitted. Staff will review it before it appears in the gallery.";
@@ -151,7 +171,7 @@
 
   async function reviewSubmission(event) {
     const button = event.target.closest("[data-review]");
-    if (!button) return;
+    if (!button || button.disabled) return;
     const action = button.dataset.review;
     const payload = { action };
     if (action === "DENY" || action === "REMOVE") {
@@ -165,13 +185,16 @@
       payload.description = description;
     }
     button.disabled = true;
-    const { response } = await requestJson(`/api/gallery/staff/submissions/${encodeURIComponent(button.dataset.id)}`, {
+    const { response, body } = await requestJson(`/api/gallery/staff/submissions/${encodeURIComponent(button.dataset.id)}`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(payload)
     });
     if (!response.ok) {
       button.disabled = false;
+      let feedback = button.closest(".review-actions").querySelector('[role="status"]');
+      if (!feedback) { feedback = element("p"); feedback.setAttribute("role", "status"); button.parentElement.append(feedback); }
+      feedback.textContent = body.error || "The review could not be saved. Try again.";
       return;
     }
     await loadReview();

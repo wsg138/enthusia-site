@@ -107,14 +107,15 @@ async function publishingEditor(){
   body.addEventListener('input',()=>preview.replaceChildren(el('h2',{text:title.value}),markdown(body.value)));
   const feedback=status(form,'');
   host.append(button('Import historical design drafts',async event=>{
-    event.currentTarget.disabled=true;
+    const importButton=event.currentTarget;
+    importButton.disabled=true;
     try{
       const response=await fetch(new URL('./design-drafts.json',import.meta.url));if(!response.ok)throw new Error('Design drafts are unavailable.');
       const data=await response.json();let saved=0;
       const current=await api('admin/timeline'),existing=new Set(current.items.map(v=>v.slug));
       for(const item of data.items){if(existing.has(item.slug))continue;await api('admin/timeline',{method:'POST',body:JSON.stringify({...item,status:'draft',verification:'unverified',revision:0})});saved++;}
       message.textContent=saved+' historical drafts imported. Review each source and date before publishing.';type.value='timeline';await reload();
-    }catch(error){message.textContent=error.message;}finally{event.currentTarget.disabled=false;}
+    }catch(error){message.textContent=error.message;}finally{importButton.disabled=false;}
   }));
   function load(item){revision=item.revision??0;slug.value=item.slug??'';title.value=item.title??'';category.value=item.category??'';body.value=item.body??'';date.value=item.date?item.date.slice(0,16):'';image.value=item.image??'';target.value=item.target??'';tags.value=(item.tags??[]).join(', ');options.value=(item.options??[]).join('\n');closing.value=item.closesAt?item.closesAt.slice(0,16):'';verification.value=item.verification??'unverified';feedback.textContent='Revision '+revision+' - '+(item.status??'new');body.dispatchEvent(new Event('input'));}
   async function reload(){const data=await api('admin/'+type.value);list.replaceChildren(button('New record',()=>load({})),...data.items.map(item=>button(item.title+' ['+item.status+']',()=>load(item),'community-row')));}

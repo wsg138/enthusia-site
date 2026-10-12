@@ -64,6 +64,14 @@ function signOut(button) {
     .then(() => window.location.reload())
     .catch(() => {
       button.disabled = false;
+      let feedback = root.querySelector('#account-signout-status');
+      if (!feedback) {
+        feedback = element('p', 'account-error');
+        feedback.id = 'account-signout-status';
+        feedback.setAttribute('role', 'status');
+        root.append(feedback);
+      }
+      feedback.textContent = 'Sign out failed. Try again.';
     });
 }
 

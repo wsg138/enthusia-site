@@ -429,11 +429,11 @@
   function alertBox(it) {
     var box=h('div',{class:'mi-alert'},[h('p',{class:'mi-kick',text:'PRICE ALERT'}),h('h3',{text:'Tell me when the price moves'})]);
     var when=h('select',{class:'field','aria-label':'Alert when the price'},[h('option',{value:'below',text:'drops to or below'})]);
-    var price=h('input',{class:'field',type:'number',min:'0',step:'any',inputmode:'decimal','aria-label':'Price in raw gold',value:String(it.price*.9)});
+    var price=h('input',{class:'field',type:'number',min:'0',max:'1000000000000',required:'',step:'any',inputmode:'decimal','aria-label':'Price in raw gold',value:String(it.price*.9)});
     var add=h('button',{class:'btn btn-gold',type:'button',text:'Alert me on Discord'}),status=h('p',{class:'mi-sub',role:'status'}),list=h('div',{class:'mi-top'});
     box.appendChild(h('div',{class:'mi-alert-row'},[h('span',{text:it.name}),when,price,h('span',{text:'raw gold'}),add]));box.appendChild(status);box.appendChild(list);
     async function draw(){try{var data=await window.EnthusiaMarketDesignApi('alerts');clear(list);for(const alert of data.items){var remove=h('button',{class:'linkbtn',type:'button',text:'Remove'});remove.addEventListener('click',async()=>{try{await window.EnthusiaMarketDesignApi('alerts',{method:'POST',body:JSON.stringify({item:alert.item,remove:true})});await draw();}catch(error){status.textContent=error.message;}});list.appendChild(h('div',{class:'shop'},[h('span',{text:alert.item+' at or below '+gold(alert.threshold)}),remove]));}}catch(error){if(!document.documentElement.hasAttribute('data-preview-root'))status.textContent=error.message;}}
-    add.addEventListener('click',async()=>{add.disabled=true;try{await window.EnthusiaMarketDesignApi('alerts',{method:'POST',body:JSON.stringify({item:it.key??it.name,threshold:Number(price.value)})});status.textContent='Saved. Discord delivery requires the alert worker to be enabled.';await draw();}catch(error){status.textContent=error.message;}finally{add.disabled=false;}});
+    add.addEventListener('click',async()=>{price.setCustomValidity('');if(!(Number(price.value)>0))price.setCustomValidity('Enter a price greater than zero.');if(!price.reportValidity())return;add.disabled=true;try{await window.EnthusiaMarketDesignApi('alerts',{method:'POST',body:JSON.stringify({item:it.key??it.name,threshold:Number(price.value)})});status.textContent='Saved. Discord delivery requires the alert worker to be enabled.';await draw();}catch(error){status.textContent=error.message;}finally{add.disabled=false;}});
     draw();box.appendChild(h('p',{class:'mi-note',text:'Requires your linked Discord account. Delivery is enabled by the server operator.'}));return box;
   }
   /* ---------- movers + most traded ---------- */

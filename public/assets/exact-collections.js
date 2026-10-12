@@ -45,7 +45,7 @@ function renderAchievementDefinitions(section,items){
 async function start(){
   const sections=[...document.querySelectorAll('main>section')];
   // Literal reference-only summaries must never be mistaken for current server facts.
-  if(!preview){for(const section of sections.slice(1))section.hidden=true;}
+  if(!preview){for(const section of sections.slice(1))section.hidden=!(kind==='creators'&&section.getAttribute('aria-label')==='For creators');}
   const template=templates.values().next().value;
   try{
     const data=await api(kind),items=data.items;
