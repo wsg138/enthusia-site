@@ -8,7 +8,13 @@
 #warzone .wz-next-time,#warzone .wz-week-label{color:var(--muted)}
 #warzone .wz-next-name{padding-top:8px;color:var(--head)}
 #warzone .wz-week-picker{font:inherit;font-size:14px;line-height:22px;background:#fff8e6;color:#4a0b08;border:3px solid #4a0b08;border-radius:0;padding:6px 8px;min-height:44px;width:100%;margin-bottom:4px}
-#warzone .wz-leader{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;background:#8a1510;padding:10px 12px;font-size:14px;line-height:22px}
+#warzone .wz-leader{display:grid;grid-template-columns:18px 32px minmax(0,1fr) auto;gap:8px;align-items:center;background:#8a1510;padding:10px 12px;font-size:14px;line-height:22px}
+#warzone .wz-head{display:block;position:relative;width:32px;height:32px;image-rendering:pixelated;background-color:#4a0b08}
+#warzone .wz-skin-head,#warzone .wz-head-overlay{background-size:256px auto;background-repeat:no-repeat;image-rendering:pixelated}
+#warzone .wz-skin-head{background-position:-32px -32px}
+#warzone .wz-head-overlay{position:absolute;inset:0;background-position:-160px -32px}
+#warzone .wz-head img{display:block;image-rendering:pixelated}
+#warzone .wz-fallback-overlay{position:absolute;inset:0}
 #warzone .wz-rank,#warzone .wz-score{color:#ffcf1f;font-weight:400}
 #warzone .wz-player{min-width:0;overflow-wrap:anywhere}
 #warzone .wz-score{white-space:nowrap}

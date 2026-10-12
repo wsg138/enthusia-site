@@ -70,19 +70,22 @@
           "id": "duels-bfc8481a-9523-4f84-9768-4b1de02ab776",
           "type": "leader",
           "name": "FiireFlyy",
-          "wins": 7
+          "wins": 7,
+          "skinTexture": "/assets/warzone/player-skins/bfc8481a-9523-4f84-9768-4b1de02ab776.png"
         },
         {
           "id": "duels-c7b256f8-df2e-4e0f-abc1-05fa0f437ac2",
           "type": "leader",
           "name": "_DarkSilver",
-          "wins": 7
+          "wins": 7,
+          "skinTexture": "/assets/warzone/player-skins/c7b256f8-df2e-4e0f-abc1-05fa0f437ac2.png"
         },
         {
           "id": "duels-b00d1c8f-578c-47b0-97ff-78a44ec6a7d8",
           "type": "leader",
           "name": "Millistii",
-          "wins": 6
+          "wins": 6,
+          "skinTexture": "/assets/warzone/player-skins/b00d1c8f-578c-47b0-97ff-78a44ec6a7d8.png"
         }
       ],
       "updatedAt": "2026-10-12T17:32:13.902939Z",

@@ -29,6 +29,23 @@ function weekPicker(data) {
   return select;
 }
 
+function playerHead(row) {
+  if(/^\/assets\/warzone\/player-skins\/[a-f0-9-]+\.png$/.test(row.skinTexture??'')){
+    const source=new URL('./'+row.skinTexture.slice(8),import.meta.url).href;
+    const head=el('span',{class:'wz-head wz-skin-head',role:'img','aria-label':row.name+' Minecraft head'},[el('span',{class:'wz-head-overlay','aria-hidden':'true'})]);
+    head.style.backgroundImage=`url("${source}")`;
+    head.firstElementChild.style.backgroundImage=`url("${source}")`;
+    return head;
+  }
+  const identity=/^duels-[a-f0-9-]{36}$/.test(row.id)?row.id.slice(6):row.name;
+  const head=el('img',{class:'wz-head',src:'https://mc-heads.net/avatar/'+encodeURIComponent(identity)+'/32',alt:row.name+' Minecraft head',width:32,height:32,loading:'lazy',decoding:'async'});
+  head.addEventListener('error',()=>head.replaceWith(el('span',{class:'wz-head',role:'img','aria-label':row.name+' head unavailable'},[
+    el('img',{src:new URL('./market/player-head-base.svg',import.meta.url).href,alt:'',width:32,height:32}),
+    el('img',{class:'wz-fallback-overlay',src:new URL('./market/player-head-overlay.svg',import.meta.url).href,alt:'',width:32,height:32})
+  ])),{once:true});
+  return head;
+}
+
 export function renderWarzone(section,data) {
   const columns=section?.querySelectorAll('.wz-col');if(!columns?.length)return;
   for(const [index,column]of [...columns].entries())column.replaceChildren(el('h3',{text:['Active rules','Next rotation','Weekly duel wins'][index]}));
@@ -48,7 +65,7 @@ export function renderWarzone(section,data) {
   else if(data?.weekStart)columns[2].append(el('p',{class:'wz-week-label',text:weekLabel(data.weekStart)}));
   const leaders=weeklyDuelLeaders(items);
   for(const [index,row]of leaders.entries())columns[2].append(el('div',{class:'wz-leader'},[
-    el('span',{class:'wz-rank',text:index+1}),el('span',{class:'wz-player',text:row.name}),el('strong',{class:'wz-score',text:row.wins+' '+(row.wins===1?'win':'wins')})
+    el('span',{class:'wz-rank',text:index+1}),playerHead(row),el('span',{class:'wz-player',text:row.name}),el('strong',{class:'wz-score',text:row.wins+' '+(row.wins===1?'win':'wins')})
   ]));
   if(!leaders.length){const summary=items.find(row=>row.id==='duels-status');columns[2].append(el('p',{text:summary?.description?.startsWith('No counted')?'No wins recorded.':'Unavailable'}));}
 
