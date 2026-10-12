@@ -33,14 +33,17 @@ function populate(node,item){
     if(item.verification!=='verified')node.querySelector('.ev-card')?.append(el('span',{class:'tag tag-plain',text:'Awaiting source verification'}));
   }
 }
-function renderAchievementDefinitions(section,items){
+function renderAchievementDefinitions(section,items,data){
   section.hidden=false;const prototype=section.querySelector('li.who'),list=prototype?.parentElement;
   if(!prototype||!list){section.replaceChildren(el('div',{class:'panel exact-empty',text:'No exported achievement definitions.'}));return;}
-  const rows=items.map(item=>{const row=prototype.cloneNode(true);row.removeAttribute('data-b-class');const fields=row.querySelectorAll(':scope>span');fields[0].replaceChildren(document.createTextNode(item.name),el('small',{text:item.description}));fields[1].textContent=item.reward??'No reward exported';row.dataset.category=item.category??'Other';return row;});list.replaceChildren(...rows);
+  const rows=items.map(item=>{const row=prototype.cloneNode(true);row.removeAttribute('data-b-class');const fields=row.querySelectorAll(':scope>span');fields[0].replaceChildren(document.createTextNode(item.name),el('small',{text:item.description}));fields[1].textContent=item.reward?.trim()||'Not exported';row.dataset.category=item.category??'Other';return row;});list.replaceChildren(...rows);
   const tabs=section.querySelector('[data-on-click]')?.parentElement;
   if(tabs){tabs.replaceChildren(...['All',...new Set(items.map(item=>item.category??'Other'))].map(category=>{const button=el('button',{class:'chip',type:'button','aria-pressed':String(category==='All'),text:category});button.addEventListener('click',()=>{for(const peer of tabs.children)peer.setAttribute('aria-pressed',String(peer===button));for(const row of rows)row.hidden=category!=='All'&&row.dataset.category!==category;});return button;}));}
-  for(const count of section.querySelectorAll('.slot b,.stat b'))count.textContent=items.length;
-  const lead=section.querySelector('h2')?.parentElement.querySelector('p:last-child');if(lead)lead.textContent=items.length+' public achievement definitions. Complete achievements in game and claim rewards with /rewards.';
+  const stats=section.querySelector('.stats');
+  if(stats)stats.replaceChildren(...[['Registered achievements',items.length],['Categories',new Set(items.map(item=>item.category)).size]]
+    .map(([label,value])=>el('div',{class:'stat'},[el('b',{text:value}),el('span',{text:label})])));
+  const account=stats?.nextElementSibling;if(account)account.replaceChildren(el('p',{text:'Complete challenges in game. Personal progress is not exported.'}));
+  const note=section.querySelector('.note');if(note)note.textContent=data.stale?'The last server export is stale.':'Public server catalogue; reward details and completion totals may be unavailable.';
 }
 function renderCreatorCredits(section,items){
   if(!section)return;
@@ -67,7 +70,7 @@ async function start(){
       items=items.filter(item=>item.category!=='Media rank holders');
       renderCreatorCredits(sections.find(section=>section.getAttribute('aria-label')==='The Media rank'),credits);
     }
-    if(kind==='achievements'&&!preview&&data.curated!==true){renderAchievementDefinitions(sections[1],items);return;}
+    if(kind==='achievements'&&!preview&&data.curated!==true){renderAchievementDefinitions(sections[1],items,data);return;}
     if(!items.length){const section=sections[1];if(section){section.hidden=false;section.replaceChildren(el('div',{class:'panel exact-empty'},[el('p',{text:'No published records yet.'})]));}return;}
     for(const [index,item]of items.entries()){
       const group=kind==='timeline'?tag(item,['dev','beta1','beta2','ch1','ch2'],'ch2'):kind==='roadmap'?tag(item,['live','next','later'],'later'):kind==='halloffame'?tag(item,['ch2','ch1','beta'],'ch2'):null;

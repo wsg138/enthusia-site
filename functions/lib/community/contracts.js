@@ -80,7 +80,9 @@ export function validateSale(input,now=Date.now()) {
   const occurredAt=timestamp(input.occurredAt);
   const quantity=number(input.quantity,1e9),gold=number(input.gold,1e12);
   if(!occurredAt||Date.parse(occurredAt)>now+60000||!quantity||!gold)throw new Error('invalid_sale');
-  return {id:identifier(input.id),stall:text(input.stall,80,true),guild:text(input.guild,80),item:identifier(input.item),quantity,gold,occurredAt};
+  // Legacy ledgers lack historical stall/guild attribution. Empty attribution is
+  // excluded from rankings, while the completed transaction still informs prices.
+  return {id:identifier(input.id),stall:text(input.stall,80),guild:text(input.guild,80),item:identifier(input.item),quantity,gold,occurredAt};
 }
 export async function verifyProducer(request,env,body,now=Date.now()) {
   if(typeof env.COMMUNITY_INGEST_SECRET!=='string'||env.COMMUNITY_INGEST_SECRET.length<32)return false;

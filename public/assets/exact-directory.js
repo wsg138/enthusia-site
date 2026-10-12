@@ -42,7 +42,8 @@ function draw(){
   let rows=items.filter(item=>item.name.toLowerCase().includes(q.toLowerCase())&&(filter==='all'||item.state===filter||(filter==='recruiting'&&item.recruiting)||(filter==='peaceful'&&item.peaceful===true)||(filter==='hostile'&&item.peaceful===false)));
   rows=rows.sort((a,b)=>sort==='name'?a.name.localeCompare(b.name):(b[sort]??-1)-(a[sort]??-1));
   const type=kind==='players'?'picker':'row';
-  replace(type,rows.map((item,index)=>{
+  const visible=kind==='players'&&!preview?rows.slice(0,12):rows;
+  replace(type,visible.map((item,index)=>{
     const node=clone(type,item);if(!node)return null;node.dataset.recordId=item.id;
     if(kind==='guilds'){
       const rank=one('.rk span',node);if(rank)rank.textContent=index+1;
@@ -59,7 +60,7 @@ function draw(){
 async function start(){
   for(const empty of document.querySelectorAll('[data-b-class*="missShow"],[data-b-class*="emptyShow"]')){empty.hidden=true;if(!preview)empty.textContent="No public records match this search.";}
   if(kind==='bounties')for(const value of document.querySelectorAll('main .stats .stat>b'))value.textContent='...';
-  const input=one('[data-on-change="setQ"]');input?.addEventListener('input',()=>{q=input.value;if(kind!=='players')draw();});
+  const input=one('[data-on-change="setQ"]');input?.addEventListener('input',()=>{q=input.value;draw();});
   const filters=new Map([['pickFAll','all'],['pickFRec','recruiting'],['pickFHos','hostile'],['pickFPea','peaceful'],['pickOpen','open'],['pickClaimed','claimed'],['pickAll','all']]);
   const sorts=new Map([['pickSLvl','level'],['pickSElo','elo'],['pickSMem','members'],['pickSName','name'],['pickHigh','gold'],['pickNew','date']]);
   for(const node of document.querySelectorAll('[data-on-click]')){const action=node.dataset.onClick;if(filters.has(action))node.addEventListener('click',()=>{filter=filters.get(action);pressed(node);draw();});if(sorts.has(action))node.addEventListener('click',()=>{sort=sorts.get(action);pressed(node);draw();});}
@@ -67,9 +68,10 @@ async function start(){
   one('[data-on-click="find"]')?.addEventListener('click',()=>{const item=items.find(v=>v.name.toLowerCase().startsWith(q.toLowerCase()));if(item){choose(item);one('[data-b-class*="missShow"]').hidden=true;}else{const miss=one('[data-b-class*="missShow"]');miss.textContent='No public profile by that name.';miss.hidden=false;}});
   try{const data=await api(kind);items=data.items;limited=data.limited===true;
     if(kind==='guilds'&&!preview){for(const [action,key] of [['pickFRec','recruiting'],['pickFHos','peaceful'],['pickFPea','peaceful'],['pickSElo','elo']]){const control=one('[data-on-click="'+action+'"]');if(control&&!items.some(item=>item[key]!==null&&item[key]!==undefined)){control.disabled=true;control.title='Server data for this filter is not available yet.';}}for(const live of document.querySelectorAll('main .live'))if(limited)live.parentElement.textContent='Limited server export';}
+    if(kind==='players'&&!preview){const picker=target('picker');picker?.setAttribute('aria-label','Public profiles');picker?.before(el('p',{text:'Search '+items.length+' public profiles. Up to 12 matching names are shown.'}));}
     draw();if(kind==='players'&&items.length)choose(items.find(item=>item.id===decodeURIComponent(location.hash.slice(1)))??items[0]);
     if(kind==='bounties'){const open=items.filter(v=>v.state==='open');const values=[open.length,open.reduce((sum,item)=>sum+(item.gold??0),0).toLocaleString('en-US'),Math.max(0,...open.map(item=>item.gold??0)).toLocaleString('en-US'),preview?items.filter(v=>v.state==='claimed').length:'Unavailable'];document.querySelectorAll('main .stats .stat>b').forEach((node,i)=>node.textContent=values[i]??'Unavailable');}
-    if(data.limited||data.stale){status.hidden=false;status.textContent=data.limited?(kind==='players'?'Public leaderboard profiles. Other player details are not available yet.':'Public guild export. Membership and recruitment details may be incomplete.')+(data.stale?' The export is stale.':''):'The last server export is stale.';}
+    if(data.limited||data.stale){status.hidden=false;status.textContent=data.limited?(kind==='players'?'Public leaderboard profiles. Other player details are not available yet.':kind==='bounties'?'Public bounty export; coverage may be partial.':'Public guild export. Membership and recruitment details may be incomplete.')+(data.stale?' The export is stale.':''):'The last server export is stale.';}
   }catch(error){status.hidden=false;status.textContent=error.message;for(const live of document.querySelectorAll('main .live'))live.parentElement.hidden=true;if(kind==='bounties')for(const node of document.querySelectorAll('main .stats .stat>b'))node.textContent='Unavailable';}
 }
 start().catch(error=>notice(error.message));

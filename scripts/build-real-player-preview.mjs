@@ -8,8 +8,9 @@ const data=await readPublicPlayerDirectory({PLAYTIME_LEADERBOARDS:bucket(boards.
 if(!data)throw new Error('No valid public player records were captured.');
 await writeFile('public/preview/real-player-data.json',JSON.stringify(data,null,2)+'\n');
 let html=await readFile('public/players.html','utf8');
-html=html.replaceAll('href="assets/','href="../assets/').replaceAll('src="assets/','src="../assets/');
+html=html.replaceAll('href="assets/','href="../assets/').replaceAll('src="assets/','src="../assets/')
+  .replaceAll('url(assets/','url(../assets/');
 html=html.replace('<head>','<head>\n<meta name="robots" content="noindex,nofollow">\n<script src="./real-player-check.js"></script>');
-html=html.replace('<body>','<body>\n<aside style="padding:16px;background:#fff1ce;color:#491008;border-bottom:4px solid #491008">Captured real public leaderboard profiles · Local preview · Writes disabled</aside>');
+html=html.replace(/<body([^>]*)>/,'<body$1>\n<aside style="padding:16px;background:#fff1ce;color:#491008;border-bottom:4px solid #491008">Captured real public leaderboard profiles · Local preview · Writes disabled</aside>');
 await writeFile('public/preview/real-player-check.html',html);
 console.log('Built real player preview: '+data.items.length+' partial public profiles.');

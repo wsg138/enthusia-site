@@ -281,17 +281,28 @@ function conversation(appeal) {
   return section;
 }
 
-function appealCard(appeal) {
-  const article = element("article", "card reviewer-appeal-card");
-  const status = text(appeal.status, "UNKNOWN").toUpperCase();
-  const header = element("header", "reviewer-card-header");
-  const heading = document.createElement("div");
-  heading.append(element("p", "card-kicker", `Case ${text(appeal.caseId, shortId(appeal.id))}`), element("h2", "", text(appeal.player ?? appeal.username, "Unknown player")));
+function appendAppealStatus(header,heading,appeal,status) {
   const lastComment = appeal.comments?.at(-1);
   const displayedStatus = status === "INFORMATION_REQUESTED" && lastComment?.authorType === "PLAYER"
     ? "Player replied"
     : statusNames[status] ?? status;
   header.append(heading, element("span", `reviewer-state reviewer-state-${status.toLowerCase().replaceAll("_", "-")}`, displayedStatus));
+
+}
+
+function appendPriorNote(appeal,content) {
+  const noteInConversation = appeal.comments?.some((comment) => comment.authorType === "STAFF" && comment.body === appeal.decisionNote);
+  if (appeal.decisionNote && !noteInConversation) {
+    const prior = element("section", "reviewer-prior-note");
+    prior.append(element("strong", "", "Latest staff note"), element("p", "", appeal.decisionNote));
+    content.append(prior);
+  }
+}
+
+function appealHeaderAndMeta(appeal,status,header) {
+  const heading = document.createElement("div");
+  heading.append(element("p", "card-kicker", `Case ${text(appeal.caseId, shortId(appeal.id))}`), element("h2", "", text(appeal.player ?? appeal.username, "Unknown player")));
+  appendAppealStatus(header,heading,appeal,status);
 
   const meta = element("dl", "reviewer-meta");
   meta.append(
@@ -300,6 +311,15 @@ function appealCard(appeal) {
     metadata("Submitted", dateTime(appeal.createdAt ?? appeal.submittedAt)),
     metadata("Version", String(appeal.version ?? 0))
   );
+
+  return meta;
+}
+
+function appealCard(appeal) {
+  const article = element("article", "card reviewer-appeal-card");
+  const status = text(appeal.status, "UNKNOWN").toUpperCase();
+  const header = element("header", "reviewer-card-header");
+  const meta = appealHeaderAndMeta(appeal,status,header);
 
   const response = appeal.structuredAnswers ? structuredResponse(appeal.structuredAnswers) : legacyResponse(appeal);
   const disclosure = element("details", "reviewer-card-disclosure");
@@ -318,12 +338,7 @@ function appealCard(appeal) {
 
   if (appeal.detailsState === "COMPLETE") content.append(conversation(appeal));
 
-  const noteInConversation = appeal.comments?.some((comment) => comment.authorType === "STAFF" && comment.body === appeal.decisionNote);
-  if (appeal.decisionNote && !noteInConversation) {
-    const prior = element("section", "reviewer-prior-note");
-    prior.append(element("strong", "", "Latest staff note"), element("p", "", appeal.decisionNote));
-    content.append(prior);
-  }
+  appendPriorNote(appeal,content);
   if (["OPEN", "INFORMATION_REQUESTED"].includes(status) && appeal.detailsState !== "UNAVAILABLE") {
     content.append(decisionActions(appeal));
   }

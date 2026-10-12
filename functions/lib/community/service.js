@@ -104,7 +104,7 @@ async function ingest(db,request,env){
     const snapshot=projectSnapshot(input.kind,input);
     statements=[snapshotStatement(db,input.kind,snapshot,now)];
   }
-  try{const result=await db.batch([first,...statements,cleanup]);if(input.kind==='guildquests'&&!result[1].meta.changes)return json({error:'stale_quest_snapshot'},409);}catch(error){if(String(error).includes('UNIQUE'))return json({error:'producer_replay'},409);throw error;}
+  try{const result=await db.batch([first,...statements,cleanup]);if(input.kind!=='sales'&&!result[1].meta.changes)return json({error:input.kind==='guildquests'?'stale_quest_snapshot':'stale_snapshot'},409);}catch(error){if(String(error).includes('UNIQUE'))return json({error:'producer_replay'},409);throw error;}
   return json({ok:true,received:input.items.length});
 }
 function weekRange(value){

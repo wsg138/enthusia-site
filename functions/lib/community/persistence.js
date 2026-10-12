@@ -14,8 +14,7 @@ export async function salesStatements(db,input) {
 export function snapshotStatement(db,kind,snapshot,now=new Date().toISOString()) {
   return db.prepare(`INSERT INTO community_snapshots(kind,payload,updated_at) VALUES (?,?,?)
     ON CONFLICT(kind) DO UPDATE SET payload=excluded.payload,updated_at=excluded.updated_at
-    WHERE json_extract(excluded.payload,'$.generatedAt') IS NULL
-      OR json_extract(community_snapshots.payload,'$.generatedAt') IS NULL
+    WHERE json_extract(community_snapshots.payload,'$.generatedAt') IS NULL
       OR json_extract(excluded.payload,'$.generatedAt')>json_extract(community_snapshots.payload,'$.generatedAt')`)
     .bind(kind,JSON.stringify(snapshot),snapshot.generatedAt??now);
 }

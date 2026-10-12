@@ -737,15 +737,15 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method appealCard has a cyclomatic complexity of 19 (limit is 8)",
     "code": "function appealCard(appeal) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "appealCard",
-      "start": 284,
-      "end": 333,
-      "ccn": 15,
-      "sourceLines": 50
+      "start": 318,
+      "end": 348,
+      "ccn": 7,
+      "sourceLines": 31
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "dd129f88600e0bad9ce16023459a1001",
@@ -771,15 +771,15 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method deepLink has a cyclomatic complexity of 9 (limit is 8)",
     "code": "  function deepLink(){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "deepLink",
-      "start": 28,
+      "start": 29,
       "end": 34,
-      "ccn": 9,
-      "sourceLines": 7
+      "ccn": 6,
+      "sourceLines": 6
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "2bfcac66273b85a1af8974a9eb53cf37",
@@ -832,15 +832,15 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method detail has a cyclomatic complexity of 23 (limit is 8)",
     "code": "function detail(item,container){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "detail",
-      "start": 9,
-      "end": 38,
-      "ccn": 21,
-      "sourceLines": 30
+      "start": 38,
+      "end": 47,
+      "ccn": 8,
+      "sourceLines": 10
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "58ba58aa7cfd53012de8fa9b22a70c99",
@@ -990,7 +990,7 @@
       "name": "ingest",
       "start": 94,
       "end": 109,
-      "ccn": 7,
+      "ccn": 8,
       "sourceLines": 16
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
@@ -1002,15 +1002,15 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method renderExactAccount has a cyclomatic complexity of 9 (limit is 8)",
     "code": "export function renderExactAccount(root,session,actions){",
-    "disposition": "below-threshold-local",
+    "disposition": "maintainability-open",
     "current": {
       "name": "renderExactAccount",
       "start": 1,
-      "end": 20,
-      "ccn": 7,
-      "sourceLines": 20
+      "end": 22,
+      "ccn": 12,
+      "sourceLines": 22
     },
-    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
+    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
     "id": "e3ed6a0f98d0875750839a9e3aa4b794",
@@ -2048,8 +2048,8 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "load",
-      "start": 120,
-      "end": 120,
+      "start": 129,
+      "end": 129,
       "ccn": 14,
       "sourceLines": 1
     },
@@ -2561,8 +2561,8 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "base64Url",
-      "start": 30,
-      "end": 34,
+      "start": 31,
+      "end": 35,
       "ccn": 2,
       "sourceLines": 5
     },
@@ -2775,8 +2775,8 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "pollMinecraftLink",
-      "start": 70,
-      "end": 103,
+      "start": 71,
+      "end": 104,
       "ccn": 12,
       "sourceLines": 34
     },
@@ -3312,10 +3312,10 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "start",
-      "start": 59,
-      "end": 74,
-      "ccn": 31,
-      "sourceLines": 16
+      "start": 60,
+      "end": 76,
+      "ccn": 34,
+      "sourceLines": 17
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -4101,8 +4101,8 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "start",
-      "start": 58,
-      "end": 93,
+      "start": 61,
+      "end": 96,
       "ccn": 40,
       "sourceLines": 36
     },

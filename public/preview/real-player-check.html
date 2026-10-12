@@ -25,9 +25,9 @@ a{color:#b3201a}a:hover{color:#7d120e}
 .hero-vars{--head-sh:#7d120e}
 .panel{background:#fff8e6;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873;box-sizing:border-box}
 .tip{--row:#8a1510;background:#a51b16;border:4px solid var(--edge);box-shadow:inset 0 0 0 4px var(--gold),inset 0 0 0 6px #5c0d09;box-sizing:border-box}
-.tip.fret-lg{background:url(assets/ui/fret-lg-tl.svg) left top/74px 74px no-repeat,url(assets/ui/fret-lg-tr.svg) right top/74px 74px no-repeat,url(assets/ui/fret-lg-bl.svg) left bottom/74px 74px no-repeat,url(assets/ui/fret-lg-br.svg) right bottom/74px 74px no-repeat,#a51b16}
-.tip.fret{background:url(assets/ui/fret-md-tl.svg) left top/54px 54px no-repeat,url(assets/ui/fret-md-tr.svg) right top/54px 54px no-repeat,url(assets/ui/fret-md-bl.svg) left bottom/54px 54px no-repeat,url(assets/ui/fret-md-br.svg) right bottom/54px 54px no-repeat,#a51b16}
-.tip.fret-sm{background:url(assets/ui/fret-sm-tl.svg) left top/22px 22px no-repeat,url(assets/ui/fret-sm-tr.svg) right top/22px 22px no-repeat,url(assets/ui/fret-sm-bl.svg) left bottom/22px 22px no-repeat,url(assets/ui/fret-sm-br.svg) right bottom/22px 22px no-repeat,#a51b16}
+.tip.fret-lg{background:url(../assets/ui/fret-lg-tl.svg) left top/74px 74px no-repeat,url(../assets/ui/fret-lg-tr.svg) right top/74px 74px no-repeat,url(../assets/ui/fret-lg-bl.svg) left bottom/74px 74px no-repeat,url(../assets/ui/fret-lg-br.svg) right bottom/74px 74px no-repeat,#a51b16}
+.tip.fret{background:url(../assets/ui/fret-md-tl.svg) left top/54px 54px no-repeat,url(../assets/ui/fret-md-tr.svg) right top/54px 54px no-repeat,url(../assets/ui/fret-md-bl.svg) left bottom/54px 54px no-repeat,url(../assets/ui/fret-md-br.svg) right bottom/54px 54px no-repeat,#a51b16}
+.tip.fret-sm{background:url(../assets/ui/fret-sm-tl.svg) left top/22px 22px no-repeat,url(../assets/ui/fret-sm-tr.svg) right top/22px 22px no-repeat,url(../assets/ui/fret-sm-bl.svg) left bottom/22px 22px no-repeat,url(../assets/ui/fret-sm-br.svg) right bottom/22px 22px no-repeat,#a51b16}
 .cap{background:rgba(125,18,14,.92)}
 .slot{--head:#ffdb2e;background:#7d120e;color:#ffdb2e;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #5a0c09,inset -4px -4px 0 #a8221b;box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .frame{border:4px solid var(--edge);box-shadow:8px 8px 0 rgba(58,13,10,.35);background:#7d120e;box-sizing:border-box}
@@ -94,7 +94,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 .navbtn.cur{color:var(--head);border-bottom-color:var(--gold)}
 .en .foot a{display:flex;align-items:center;min-height:40px;color:var(--ink);text-decoration:none}
 .en .foot a:hover{color:var(--head)}
-.hero{background:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(assets/screenshots/slide-01.webp) center 50%/cover no-repeat}
+.hero{background:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(../assets/screenshots/slide-01.webp) center 50%/cover no-repeat}
 .mob-btn{display:none}
 @media (max-width:860px){
 .mob-btn{display:flex;border-color:currentColor;min-height:48px}
@@ -139,10 +139,12 @@ a{color:#b3201a}a:hover{color:#7d120e}
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:24px;align-items:start}
 .grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:24px;align-items:start}
 
+@media(max-width:720px){.player-search>div{flex-basis:auto !important;width:100%;gap:12px !important;align-items:stretch !important}.player-search label{flex-basis:100% !important}.player-search .chip{display:flex;align-items:center;gap:8px;min-height:44px}}
 </style>
 <link rel="stylesheet" href="../assets/exact-design.css"><link rel="stylesheet" href="../assets/site-refinements.css">
 </head>
 <body data-exact-directory="players">
+<aside style="padding:16px;background:#fff1ce;color:#491008;border-bottom:4px solid #491008">Captured real public leaderboard profiles · Local preview · Writes disabled</aside>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="en">
 
@@ -214,21 +216,21 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <div style="max-width: 1240px; min-height: 240px; margin: 0 auto; padding: 48px 24px 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
 <p class="tag tag-gold" style="letter-spacing: 2px">COMMUNITY</p>
 <h1 id="players-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">PLAYERS</h1>
-<p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">Look up any player: their guild, their stats, their honours and their part in the story.</p>
+<p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">Find public player stats from the server leaderboards.</p>
 </div>
 <div class="crenel"></div>
 </section>
 <section class="s-cream" aria-label="Player lookup" style="padding: 72px 0">
 <div style="max-width: 1040px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px"><p class="exact-status" role="status" data-directory-status="" hidden=""></p>
 
-<div class="tab-head" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px">
+<div class="tab-head player-search" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px">
 <div style="flex: 1 1 360px; min-width: 0; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
 <label class="f" style="flex: 1 1 240px; min-width: 0; text-align: left">Find a player
 <input class="field" type="text" placeholder="Minecraft username" data-b-value="{{q}}" data-on-change="setQ">
 </label>
 <button class="btn btn-gold" type="button" data-on-click="find">Search</button>
 </div>
-<div class="tabs" role="group" aria-label="Example profiles" style="display: flex; flex-wrap: wrap; gap: 12px">
+<div class="tabs" role="group" aria-label="Public profiles" style="display: flex; flex-wrap: wrap; gap: 12px">
 <template data-design-template="picker" data-variant="0"><button class="chip" type="button" data-b-aria-pressed="{{ps0}}" data-on-click="pk0">FainNeito</button></template>
 <template data-design-template="picker" data-variant="1"><button class="chip" type="button" data-b-aria-pressed="{{ps1}}" data-on-click="pk1">StepSoy</button></template>
 <template data-design-template="picker" data-variant="2"><button class="chip" type="button" data-b-aria-pressed="{{ps2}}" data-on-click="pk2">LavKun</button></template>
@@ -442,11 +444,11 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 <div class="tip fret" style="padding: 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
 <div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
-<p style="color: var(--kick); letter-spacing: 2px">YOUR PROFILE, YOUR CALL</p>
-<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Players choose what is public</h3>
-<p>A profile only shows what the server already shows in-game. From the Account page a player could hide their balance or their whole profile.</p>
+<p style="color: var(--kick); letter-spacing: 2px">PUBLIC PLAYER DATA</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">About these profiles</h3>
+<p>Profiles use public server exports. Missing details are omitted; leaderboard coverage may be partial.</p>
 </div>
-<a class="btn btn-gold" href="account.html">Your profile settings</a>
+<a class="btn btn-gold" href="account.html">Your account</a>
 </div>
 </div>
 </section>

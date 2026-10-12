@@ -33,6 +33,11 @@ test('producer authorization fails closed without key, signature, or recent time
   assert.equal(await verifyProducer(new Request('https://example.com/api/community/ingest',{method:'POST'}),{},'{}'),false);
 });
 
+test('legacy completed sales can inform prices without fabricating historical ownership',()=>{
+  const sale=validateSale({id:'market-8',item:'diamond',quantity:3,gold:42,occurredAt:'2026-10-12T00:00:00Z'});
+  assert.equal(sale.stall,'');assert.equal(sale.guild,'');assert.equal(sale.gold,42);
+});
+
 test('Warzone exports expose only public kit, leaderboard and activity fields',()=>{
  const value=projectSnapshot('warzone',{items:[{id:'kit',name:'Current kit',description:'Public rules',type:'kit',endsAt:'2026-10-12T12:00:00Z',secretCoordinates:'private',internalId:'secret'}]});
  assert.equal(value.items[0].type,'kit');assert.equal(value.items[0].endsAt,'2026-10-12T12:00:00.000Z');assert.equal(value.items[0].secretCoordinates,undefined);assert.equal(value.items[0].internalId,undefined);

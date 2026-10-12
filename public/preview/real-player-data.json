@@ -1647,7 +1647,7 @@
     }
   ],
   "updatedAt": "2026-10-12T21:08:01.165Z",
-  "stale": false,
+  "stale": true,
   "limited": true,
   "source": "public_leaderboards",
   "coverage": {

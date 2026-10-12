@@ -11,6 +11,8 @@ softdepend:
   - EnthusiaLoreItems
   - LuckPerms
   - Tebex
+  - NotBounties
+  - EnthusiaAdvancements
 commands:
   competitionbridge:
     description: Manage the Enthusia competition server bridge.

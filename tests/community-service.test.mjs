@@ -16,6 +16,26 @@ function request(db,path,method='GET',payload,extra={}){
   return handleCommunity({request:new Request('https://site.example/api/community/'+path,{method,headers:{origin:'https://site.example',...extra.headers},...(payload===undefined?{}:{body:JSON.stringify(payload)})}),params:{path},env:{COMMUNITY_DB:db,...extra.env}},extra.dependencies??dependencies);
 }
 const news={kind:'news',slug:'hello',title:'Hello',body:'**Hi**',status:'draft'};
+
+test('dated public snapshots cannot be replaced by an older or undated signed export',async()=>{
+  const {db}=database();const generatedAt=new Date(Date.now()-60000).toISOString();
+  const payload={kind:'bounties',generatedAt,items:[{id:'player',name:'Player',gold:12}]};
+  assert.equal((await signed(db,payload,'fresh-bounty-12345')).status,200);
+  assert.equal((await signed(db,{...payload,generatedAt:new Date(Date.now()-120000).toISOString()},'older-bounty-12345')).status,409);
+  const undated={...payload};delete undated.generatedAt;
+  assert.equal((await signed(db,{...undated,items:[{id:'player',name:'Player',gold:99}]},'undated-bounty-12345')).status,409);
+  const result=await (await request(db,'bounties')).json();
+  assert.equal(result.generatedAt,generatedAt);assert.equal(result.items[0].gold,12);
+});
+
+test('unattributed ledger sales contribute to prices without creating stall or guild leaders',async()=>{
+  const {db}=database();const sale={id:'ledger-8',item:'diamond',quantity:3,gold:42,occurredAt:new Date().toISOString()};
+  assert.equal((await signed(db,{kind:'sales',items:[sale]},'ledger-sale-12345')).status,200);
+  for(const mode of ['stall','guild']){
+    const response=await handleCommunity({request:new Request('https://site.example/api/community/insights?mode='+mode+'&item=diamond'),params:{path:'insights'},env:{COMMUNITY_DB:db}},dependencies);
+    const data=await response.json();assert.equal(data.prices[0].price,14);assert.equal(data.history[0].quantity,3);assert.deepEqual(data.leaders,[]);
+  }
+});
 test('quest feed fails closed until signed data exists, projects privacy, and uses source freshness',async()=>{
   const {db}=database();assert.equal((await request(db,'guildquests')).status,503);
   const input=guildQuestPreview();input.generatedAt=new Date(Date.now()-3600000).toISOString();input.items[0].quests[0].standings[0].claimActorId='private';
