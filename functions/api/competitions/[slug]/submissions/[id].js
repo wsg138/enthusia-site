@@ -98,7 +98,7 @@ async function resolveParticipantSession(context) {
     return { response: json({ error: "competition_database_unavailable" }, 503) };
   }
   try {
-    const session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB);
+    const session = await getCompetitionParticipantSession(context.request, context.env.COMPETITIONS_DB, context.env);
     return session ? { session } : { response: unauthorized() };
   } catch {
     return { response: json({ error: "competition_identity_unavailable" }, 503) };

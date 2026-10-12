@@ -39,8 +39,8 @@ function requestedLinkUuid(value) {
   return isCanonicalUuid(uuid) ? uuid : null;
 }
 
-export async function getCompetitionParticipantSession(request, db) {
-  const session = await getCompetitionIdentitySession(request, db);
+export async function getCompetitionParticipantSession(request, db, env = {}) {
+  const session = await getCompetitionIdentitySession(request, db, undefined, env);
   if (!session) return null;
   const links = normalizedLinks(session);
   return Object.freeze({

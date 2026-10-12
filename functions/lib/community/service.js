@@ -8,7 +8,7 @@ import { CONTENT_KINDS, SNAPSHOT_KINDS, identifier, validateRecord, decodeRow, p
 const unavailable=()=>json({error:'community_service_unavailable'},503);
 async function identity(request,env){
   if(!env.COMPETITIONS_DB)return null;
-  const s=await getCompetitionIdentitySession(request,env.COMPETITIONS_DB);
+  const s=await getCompetitionIdentitySession(request,env.COMPETITIONS_DB,undefined,env);
   if(!s?.discordGuildMember||!s.linkedMinecraftAccounts?.length)return null;
   return {id:s.discord.id};
 }

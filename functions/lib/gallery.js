@@ -21,7 +21,7 @@ export function galleryStaffAccess(session, env) {
 
 export async function gallerySession(context) {
   if (!context.env?.COMPETITIONS_DB) return null;
-  return getCompetitionIdentitySession(context.request, context.env.COMPETITIONS_DB);
+  return getCompetitionIdentitySession(context.request, context.env.COMPETITIONS_DB, undefined, context.env);
 }
 
 export function cleanGalleryText(value, max) {

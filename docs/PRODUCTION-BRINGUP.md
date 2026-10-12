@@ -28,6 +28,33 @@ The corresponding production credential pair is stored as encrypted
 
 ## Remaining service configuration
 
+Discord OAuth is now configured and its login callback was verified with a real
+website session. The application is branded Enthusia. Current Discord staff
+role IDs are tracked in `wrangler.toml`. A managed production Turnstile widget
+is configured for `enthusia.info`, with its secret encrypted in Pages. The
+dedicated Enthusia notification bot token is also encrypted in Pages.
+
+Automated moderation remains disabled by owner choice. Upload publication must
+continue to fail closed while moderation is unavailable; do not bypass that
+check to activate uploads or competition image submissions.
+
+The signed network account endpoints are prepared in EnthusiaStaff Velocity:
+`POST /v1/website/accounts` and `POST /v1/website/accounts/link`. They expose
+current Minecraft ownership to the authenticated website service and issue the
+existing five-minute `/link` challenge. The browser never supplies the Discord
+owner used by those upstream requests. Account projections refresh from the
+network on authenticated requests, preserve competition identity locks, and
+fail closed on unavailable or conflicting data. Unlinking continues in-game
+through `/unlink CONFIRM` to preserve network main-account selection and history.
+
+`NETWORK_ACCOUNT_LINKS=false` deliberately keeps this integration inactive until
+the owner selects a proxy restart time and the prepared Velocity runtime is
+installed and verified. No database migration is required. After the protected
+endpoints pass live verification, set the flag to `true`, redeploy Pages, and
+test recognition of an existing linked account and a new in-game challenge.
+Changing only the website flag before the server deployment would break
+authenticated workflows and must not be used as an activation shortcut.
+
 1. Configure encrypted `DISCORD_CLIENT_SECRET` for the application matching
    `DISCORD_CLIENT_ID`. Register exactly
    `https://enthusia.info/api/competitions/auth/discord/callback` in that

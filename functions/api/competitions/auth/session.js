@@ -6,7 +6,7 @@ export async function onRequestGet(context) {
   if (!competitionsEnabled(context.env)) return json({ error: "not_found" }, 404);
   if (!hasCompetitionDatabase(context.env)) return json({ error: "competition_database_unavailable" }, 503);
   try {
-    const session = await getCompetitionIdentitySession(context.request, context.env.COMPETITIONS_DB);
+    const session = await getCompetitionIdentitySession(context.request, context.env.COMPETITIONS_DB, undefined, context.env);
     if (!session) return json({ authenticated: false });
     return json({
       authenticated: true,
@@ -14,6 +14,7 @@ export async function onRequestGet(context) {
       discord: session.discord,
       discordGuildMember: session.discordGuildMember,
       linkedMinecraftAccounts: session.linkedMinecraftAccounts,
+      networkAccounts: session.networkAccounts,
       expiresAt: session.expiresAt
     });
   } catch {

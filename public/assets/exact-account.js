@@ -8,7 +8,8 @@ export function renderExactAccount(root,session,actions){
     head.querySelector('div>p:last-child').textContent='@'+session.discord.username;
     const logout=head.querySelector('button');logout.addEventListener('click',()=>actions.signOut(logout));
     const panels=grid.children,list=panels[0].querySelector('ul'),prototype=list.firstElementChild;list.replaceChildren();
-    for(const account of session.linkedMinecraftAccounts??[]){const row=prototype.cloneNode(true);row.querySelector('span').textContent=account.name;row.querySelector('span:last-child').textContent=account.uuid;const button=row.querySelector('button');button.addEventListener('click',()=>actions.unlink(account,button));list.append(row);}
+    if(!(session.linkedMinecraftAccounts??[]).length){const empty=document.createElement('li');empty.className='account-link-empty';empty.textContent='No Minecraft accounts are linked yet.';list.append(empty);}
+    for(const account of session.linkedMinecraftAccounts??[]){const row=prototype.cloneNode(true);row.querySelector('span').textContent=account.name;row.querySelector('span:last-child').textContent=account.uuid;const button=row.querySelector('button');if(session.networkAccounts){const instruction=document.createElement('span');instruction.textContent='To unlink, run /unlink CONFIRM while playing this account.';button.replaceWith(instruction);}else{button.addEventListener('click',()=>actions.unlink(account,button));}list.append(row);}
     const link=panels[1],button=link.querySelector('button'),code=link.querySelector('.swap'),command=code.querySelector('.cmd'),status=code.querySelector('p:last-child');code.hidden=true;
     button.addEventListener('click',()=>{code.hidden=false;actions.startLink(button,command,status);});
     const claim=panels[2],liveClaim=actions.punishmentClaimSection(session);claim.replaceChildren(...liveClaim.children);
