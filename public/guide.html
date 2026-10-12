@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preview | Player guide</title>
-<meta name="description" content="Design preview of the Enthusia SMP site.">
+<title>Player guide</title>
+<meta name="description" content="Explore Enthusia SMP, its community, server history and player features.">
 <link rel="preload" href="assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="assets/enthusia.css">
 
@@ -145,15 +145,75 @@ a{color:#b3201a}a:hover{color:#7d120e}
 .cmds{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(520px,100%),1fr));gap:8px 24px;margin:0;padding:0;list-style:none}
 
 </style>
-<link rel="stylesheet" href="assets/community.css">
+<link rel="stylesheet" href="assets/exact-design.css">
 </head>
-<body>
+<body data-mockup>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="en">
 
-<header class="site-head site-header s-red"><div class="site-head-in"><a class="brand" href="index.html"><img id="site-logo" class="brand-logo" src="assets/ui/logo-256.png" alt="" width="44" height="44"><span>ENTHUSIA SMP</span></a><button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button><nav class="nav" id="site-nav" aria-label="Primary navigation"><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>Play +</button><div class="panel nav-menu"><a href="plugins.html">About</a><a href="join.html">Join guide</a><a href="guide.html">Player guide</a><a href="rules.html">Rules</a><a href="vote.html">Vote</a><a href="appeal.html">Appeals</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>World +</button><div class="panel nav-menu"><a href="market.html">Market</a><a href="gallery.html">Gallery</a><a href="museum.html">Mapart Museum</a><a href="competitions/index.html">Competitions</a><a href="events.html">Events</a><a href="bounties.html">Bounties</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>Community +</button><div class="panel nav-menu"><a href="guilds.html">Guilds</a><a href="players.html">Players</a><a href="leaderboards.html">Leaderboards</a><a href="halloffame.html">Hall of Fame</a><a href="achievements.html">Achievements</a><a href="creators.html">Creators</a><a href="staff.html">Staff</a><a href="moderation.html">Moderation</a><a href="punishments.html">Punishments</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>News +</button><div class="panel nav-menu"><a href="news.html">News</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="polls.html">Polls</a><a href="timeline.html">Timeline</a></div></div><a class="navbtn" href="store.html">Store</a><a class="navbtn" href="account.html">Account</a><a class="navbtn" href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a><a class="btn btn-gold" href="join.html">Play now!</a></nav></div></header>
+<header class="site-head s-red">
+<div class="site-head-in">
+<a class="brand" href="index.html" aria-label="Enthusia SMP home">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn cur" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html" class="active" aria-current="page">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</div>
+</div>
+<a href="store.html">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="account.html">Account</a>
+</nav>
+<a class="btn btn-gold hdr-play" href="join.html">Play now!</a>
+</div>
+</header>
 
-<main id="main-content">
+<main id="main-content" class="page-main">
 <section class="hero hero-vars" aria-labelledby="guide-title">
 <div style="max-width: 1240px; min-height: 240px; margin: 0 auto; padding: 48px 24px 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
 <p class="tag tag-gold" style="letter-spacing: 2px">PLAY</p>
@@ -215,7 +275,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <a href="achievements.html" style="white-space: nowrap">Achievements</a>
 </li>
 </ol>
-<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-gold" href="join.html">How to connect</a><a class="btn btn-dark" href="about.html">About the server</a></div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-gold" href="join.html">How to connect</a><a class="btn btn-dark" href="plugins.html">About the server</a></div>
 </div>
 </section>
 <section class="s-red" aria-label="How the server works" style="padding: 72px 0">
@@ -383,7 +443,77 @@ a{color:#b3201a}a:hover{color:#7d120e}
 </section>
 </main>
 
-<footer class="site-foot s-red"><div class="site-foot-in"><div class="foot-cols"><nav class="foot" aria-label="Play"><p class="foot-title">PLAY</p><a href="plugins.html">About</a><a href="join.html">Join guide</a><a href="guide.html">Player guide</a><a href="rules.html">Rules</a><a href="vote.html">Vote</a><a href="appeal.html">Appeals</a></nav><nav class="foot" aria-label="World"><p class="foot-title">WORLD</p><a href="market.html">Market</a><a href="gallery.html">Gallery</a><a href="museum.html">Mapart Museum</a><a href="competitions/index.html">Competitions</a><a href="events.html">Events</a><a href="bounties.html">Bounties</a></nav><nav class="foot" aria-label="Community"><p class="foot-title">COMMUNITY</p><a href="guilds.html">Guilds</a><a href="players.html">Players</a><a href="leaderboards.html">Leaderboards</a><a href="halloffame.html">Hall of Fame</a><a href="achievements.html">Achievements</a><a href="creators.html">Creators</a><a href="staff.html">Staff</a><a href="punishments.html">Punishments</a></nav><nav class="foot" aria-label="News"><p class="foot-title">NEWS</p><a href="news.html">News</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="polls.html">Polls</a><a href="timeline.html">Timeline</a></nav><nav class="foot" aria-label="Staff tools"><p class="foot-title">STAFF TOOLS</p><a href="newseditor.html">Publishing editor</a><a href="competitions/admin/index.html">Competition admin</a><a href="reviewer/index.html">Reviewer</a></nav></div><p>2026 Enthusia SMP - glorytoenthusia@gmail.com</p><p>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p></div></footer>
+<footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="index.html">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="join.html">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="News">
+<p class="foot-title">NEWS</p>
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="store.html">Store</a>
+<a href="account.html">Account</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="404.html">404 page</a>
+<a href="home-christmas.html">Christmas skin</a>
+</nav>
+<nav class="foot" aria-label="Staff tools">
+<p class="foot-title">STAFF TOOLS</p>
+<a href="competitions/admin/index.html">Competition admin</a>
+<a href="newseditor.html">News editor</a>
+<a href="reviewer/index.html">Reviewer</a>
+<a href="reviewer/appeals.html">Appeal review</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
 
 
 </div>
@@ -393,5 +523,6 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script src="assets/site-config.js" defer></script><script src="assets/enthusia.js" defer></script><script src="assets/design-bindings.js" defer></script><script src="assets/player-guide.js" defer></script></body>
+<script src="assets/site-config.js" defer></script><script src="assets/enthusia.js" defer></script><script src="assets/design-bindings.js" defer></script><script src="assets/player-guide.js" defer></script>
+<script src="assets/design-bindings.js" defer></script><script src="assets/exact-controls/guide.js" defer></script></body>
 </html>

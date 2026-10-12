@@ -19,6 +19,12 @@ for(const p of await pages('public')) {
     if(target.startsWith('assets/')||['manifest.webmanifest'].includes(target))return attr+'="'+path.posix.relative(previewDir,target)+value.slice(pathname.length)+'"';
     return tag;
   });
+  html=html.replace(/url\((['"]?)([^)'"\s]+)\1\)/g,(tag,quote,value)=>{
+    if(/^(https?:|data:|\/\/)/.test(value))return tag;
+    const target=path.posix.normalize(path.posix.join(path.posix.dirname(p),value));
+    if(target.startsWith('assets/'))return 'url('+quote+path.posix.relative(previewDir,target)+quote+')';
+    return tag;
+  });
   const prefix=path.posix.relative(path.posix.dirname(p),'.');const root=prefix?prefix+'/':'./';
   html=html.replace('<html ', '<html data-preview-root="'+root+'" ');
   html=html.replace('</head>','<meta name="robots" content="noindex,nofollow,noarchive">\n</head>');

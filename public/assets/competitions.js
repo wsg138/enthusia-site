@@ -1,3 +1,5 @@
+import { exactDetailHead, exactDetailStage, exactDetailOverview } from './exact-detail.js';
+import { renderExactFeatured, renderExactGrid } from './exact-competition-catalog.js';
 const API_ROOT = "/api/competitions";
 
 function text(value, fallback = "") {
@@ -272,6 +274,13 @@ async function loadCatalog() {
     if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
     const competitions = Array.isArray(payload.competitions) ? payload.competitions : [];
     const primary = primaryCompetition(competitions);
+    const exact = document.body.hasAttribute("data-exact-catalog");
+    if (exact) {
+      renderExactFeatured(featured, primary);
+      renderExactGrid(upcoming, competitions.filter(c => c.lifecycleState === "UPCOMING" && c.id !== primary?.id));
+      renderExactGrid(history, competitions.filter(c => ["COMPLETED", "ARCHIVED"].includes(c.lifecycleState)), true);
+      return;
+    }
     renderFeatured(featured, primary);
     renderGrid(
       upcoming,
@@ -309,6 +318,7 @@ function renderOverview(root, payload) {
   section.className = "competition-tab-panel";
   section.dataset.tabPanel = "overview";
 
+  if(document.querySelector("#exact-detail-overview")){section.append(exactDetailOverview(competition));root.append(section);return;}
   section.append(renderStagePanel(competition));
 
   if (["COMPLETED", "ARCHIVED"].includes(competition.lifecycleState) && payload.results?.length) {
@@ -858,6 +868,7 @@ async function loadDetail() {
     content.className = "competition-detail-content";
     renderOverview(content, payload);
     renderRulesTab(content, competition);
+    const guide=document.querySelector("#exact-detail-guide-link");if(guide)content.querySelector('[data-tab-panel="rules"]').append(guide.content.cloneNode(true));
     renderRewardsTab(content, payload);
     if (!completed) renderGuideTab(content);
     if (payload.entriesVisible && !completed) renderEntries(content, payload);
@@ -865,7 +876,9 @@ async function loadDetail() {
     if (competition.config?.judging?.enabled) renderJudges(content, payload);
     if (completed && payload.results?.length) renderResults(content, payload);
 
-    shell.append(hero, tabs, content);
+    if(document.querySelector('#exact-detail-head')){
+      const body=document.createElement('section');body.className='s-cream exact-detail-body';const inner=document.createElement('div');inner.className='exact-detail-inner';inner.append(exactDetailStage(competition,tabs),tabs,content);body.append(inner);shell.append(exactDetailHead(competition),body);
+    }else shell.append(hero, tabs, content);
     root.classList.remove("competition-loading");
     root.replaceChildren(shell);
     setupTabs(buttons, [...content.querySelectorAll("[data-tab-panel]")]);

@@ -1,3 +1,4 @@
+import { renderExactAccount } from './exact-account.js';
 const API = "/api/competitions/auth";
 const root = document.querySelector("#account-session");
 let pollTimer = null;
@@ -333,7 +334,8 @@ async function render() {
   if (pollTimer) clearTimeout(pollTimer);
   try {
     const session = await request(`${API}/session`);
-    if (session.authenticated) signedIn(session);
+    if(document.body.hasAttribute("data-exact-account")) renderExactAccount(root,session,{signInHref,signOut,unlink,startLink,punishmentClaimSection});
+    else if (session.authenticated) signedIn(session);
     else signedOut();
   } catch (error) {
     showAccountLoadError();

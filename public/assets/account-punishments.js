@@ -1,4 +1,4 @@
-const root = document.querySelector("#account-punishment-bindings");
+let root = document.querySelector("#account-punishment-bindings");
 
 function element(tag, className, text) {
   const node = document.createElement(tag);
@@ -105,4 +105,5 @@ async function loadBindings() {
   }
 }
 
+window.addEventListener("enthusia:account-rendered",()=>{root=document.querySelector("#account-punishment-bindings");void loadBindings();});
 void loadBindings();

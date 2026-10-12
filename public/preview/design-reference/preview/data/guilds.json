@@ -1,0 +1,54 @@
+{
+ "guilds": [
+  {
+   "name": "Vibe",
+   "level": 100,
+   "memberCount": 34,
+   "banner": {
+    "baseColor": "PURPLE",
+    "patterns": [
+     {
+      "type": "CIRCLE",
+      "color": "YELLOW"
+     },
+     {
+      "type": "STRIPE_BOTTOM",
+      "color": "BLACK"
+     }
+    ]
+   }
+  },
+  {
+   "name": "BelovedOnes",
+   "level": 96,
+   "memberCount": 29,
+   "banner": {
+    "baseColor": "PINK",
+    "patterns": [
+     {
+      "type": "CIRCLE",
+      "color": "RED"
+     },
+     {
+      "type": "TRIANGLE_BOTTOM",
+      "color": "WHITE"
+     }
+    ]
+   }
+  },
+  {
+   "name": "WOT",
+   "level": 81,
+   "memberCount": 24,
+   "banner": {
+    "baseColor": "BLACK",
+    "patterns": [
+     {
+      "type": "STRAIGHT_CROSS",
+      "color": "WHITE"
+     }
+    ]
+   }
+  }
+ ]
+}

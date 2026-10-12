@@ -70,7 +70,7 @@ test("profile menu links to appeal history and dismisses when it is no longer in
     readFile(new URL("../public/assets/site-account.js", import.meta.url), "utf8")
   ]);
   assert.match(html, /id="account-session"/);
-  assert.match(html, /<h1>Your profile<\/h1>/);
+  assert.match(html, /<h1[^>]*>YOUR PROFILE<\/h1>/);
   assert.match(menu, /menuLink\("Profile", "\/account\.html"/);
   assert.match(menu, /menuLink\("Appeals", "\/appeal\.html#history"/);
   assert.match(menu, /appeal\?\.status !== "INFORMATION_REQUESTED"/);

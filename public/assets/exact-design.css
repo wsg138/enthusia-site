@@ -1,0 +1,16 @@
+/* Restore the supplied frame; do not restyle reference components into generic cards. */
+.site-head-in{max-width:1240px!important;padding:14px 24px!important;gap:12px!important}.site-head .brand::before{content:none!important}.site-head .brand img{width:44px!important;height:44px!important}.site-head .brand,.site-head .nav,.site-head .navbtn,.site-head .hdr-play,.site-foot{font-family:"Minecraft","Courier New",monospace!important}.site-head .navbtn,.site-head .nav a{font-size:16px!important;line-height:24px!important;padding:0 14px!important}.site-head .nav{gap:4px!important}.site-head .brand{font-weight:400!important}.site-foot a{font-weight:400!important}.exact-status{padding:16px;border:4px solid #4a0b08;background:#fff8e6;color:#6b3a2a}.exact-status:empty{display:none}.exact-notice{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);max-width:calc(100% - 32px);padding:16px;background:#fff8e6;color:#4a0b08;border:4px solid #4a0b08;z-index:1000;font-family:"Minecraft","Courier New",monospace}.md-sp[aria-expanded=true]{background:transparent;color:inherit}.md-sp:focus-visible{outline:3px solid #ffcf1f}.exact-locked input,.exact-locked textarea,.exact-locked button{pointer-events:none;opacity:.6}body[data-exact-page] [hidden]{display:none!important}.exact-author:empty{display:none}
+@media(max-width:720px){.site-head .nav.open .navbtn,.site-head .nav.open>a{min-height:48px}.site-head .hdr-play{display:none!important}}
+.mock-blocks{display:contents}
+
+body[data-exact-directory] [hidden]{display:none!important}
+
+body[data-exact-collection] [hidden]{display:none!important}.exact-empty{margin:72px auto;padding:32px;max-width:1192px}.exact-empty p{font-family:"Minecraft","Courier New",monospace}
+
+body[data-exact-polls] [hidden]{display:none!important}#featuredCompetition{display:flex;flex-direction:column;gap:32px}
+
+body[data-exact-account] [hidden]{display:none!important}#account-session{display:flex;flex-direction:column;gap:24px}body[data-exact-account] .account-punishment-claim{display:flex;flex-direction:column;gap:16px}body[data-exact-account] .account-link-list{margin:0;padding:0;list-style:none}
+
+body[data-exact-punishments] [hidden]{display:none!important}
+
+body[data-exact-dashboard] [hidden]{display:none!important}

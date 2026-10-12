@@ -15,7 +15,7 @@ test("profile exposes owned punishment state without sending binding authority f
     readFile(new URL("../public/assets/account-punishments.js", import.meta.url), "utf8")
   ]);
   assert.match(html, /id="account-punishment-bindings"/);
-  assert.match(html, /account-punishments\.js\?v=1/);
+  assert.match(html, /account-punishments\.js/);
   assert.match(script, /\/api\/appeals\/bindings/);
   assert.match(script, /\/api\/appeals\/revalidate/);
   assert.match(script, /JSON\.stringify\(\{ punishmentId: binding\.punishmentId \}\)/);

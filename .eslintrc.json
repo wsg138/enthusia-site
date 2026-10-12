@@ -12,6 +12,7 @@
   ],
   "ignorePatterns": [
     "dist/**",
+    "public/preview/design-reference/**",
     "wiki-worker-output/**",
     "background-backups/**",
     ".wrangler/**"

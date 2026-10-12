@@ -1,3 +1,4 @@
+import { exactPunishmentCard } from './exact-punishments.js';
 const resultsRoot = document.querySelector("#punishment-results");
 const summary = document.querySelector("#punishment-summary");
 const form = document.querySelector("#punishment-search");
@@ -28,6 +29,7 @@ function duration(seconds) {
 }
 
 function punishmentCard(item) {
+  if(document.body.hasAttribute("data-exact-punishments"))return exactPunishmentCard(item,date,duration);
   const article = document.createElement("article");
   article.className = "punishment-card card";
   const top = document.createElement("div");

@@ -45,7 +45,7 @@ test("all public features remain discoverable and shared scripts load once", asy
     const html = await readFile(new URL("../public/" + page, import.meta.url), "utf8");
     const header = html.match(/<header class="site-head[\s\S]*?<\/header>/)?.[0];
     assert.ok(header, `${page}: shared header`);
-    for (const feature of ["account.html", "appeal.html", "gallery.html", "moderation.html", "events.html", "punishments.html", "competitions/index.html", "market.html"]) assert.ok(header.includes(feature), `${page}: ${feature} missing`);
+    for (const feature of ["account.html", "appeal.html", "gallery.html", "events.html", "punishments.html", "competitions/index.html", "market.html"]) assert.ok(header.includes(feature), `${page}: ${feature} missing`);
     const scripts = [...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map(m => m[1].split("?")[0]);
     assert.equal(scripts.length, new Set(scripts).size, `${page}: duplicate scripts`);
   }

@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!doctype html>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preview | Polls</title>
-<meta name="description" content="Design preview of the Enthusia SMP site.">
-<link rel="preload" href="assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
+<title>Polls</title>
+<meta name="description" content="Explore Enthusia SMP, its community, server history and player features.">
+<link rel="preload" href="assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin="">
 <link rel="stylesheet" href="assets/enthusia.css">
 
 <style>
@@ -144,24 +143,253 @@ a{color:#b3201a}a:hover{color:#7d120e}
 .opt[aria-pressed="true"]{background:var(--gold);box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo)}
 
 </style>
-<link rel="stylesheet" href="assets/community.css">
-</head>
-<body>
+<link rel="stylesheet" href="assets/exact-design.css"></head>
+<body data-exact-polls="">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="en">
 
-<header class="site-head site-header s-red"><div class="site-head-in"><a class="brand" href="index.html"><img id="site-logo" class="brand-logo" src="assets/ui/logo-256.png" alt="" width="44" height="44"><span>ENTHUSIA SMP</span></a><button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button><nav class="nav" id="site-nav" aria-label="Primary navigation"><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>Play +</button><div class="panel nav-menu"><a href="plugins.html">About</a><a href="join.html">Join guide</a><a href="guide.html">Player guide</a><a href="rules.html">Rules</a><a href="vote.html">Vote</a><a href="appeal.html">Appeals</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>World +</button><div class="panel nav-menu"><a href="market.html">Market</a><a href="gallery.html">Gallery</a><a href="museum.html">Mapart Museum</a><a href="competitions/index.html">Competitions</a><a href="events.html">Events</a><a href="bounties.html">Bounties</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>Community +</button><div class="panel nav-menu"><a href="guilds.html">Guilds</a><a href="players.html">Players</a><a href="leaderboards.html">Leaderboards</a><a href="halloffame.html">Hall of Fame</a><a href="achievements.html">Achievements</a><a href="creators.html">Creators</a><a href="staff.html">Staff</a><a href="moderation.html">Moderation</a><a href="punishments.html">Punishments</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>News +</button><div class="panel nav-menu"><a href="news.html">News</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="polls.html">Polls</a><a href="timeline.html">Timeline</a></div></div><a class="navbtn" href="store.html">Store</a><a class="navbtn" href="account.html">Account</a><a class="navbtn" href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a><a class="btn btn-gold" href="join.html">Play now!</a></nav></div></header>
+<header class="site-head s-red">
+<div class="site-head-in">
+<a class="brand" href="index.html" aria-label="Enthusia SMP home">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle="">Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu="">Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu="">World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu="">Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn cur" type="button" aria-expanded="false" data-menu="">News <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html" class="active" aria-current="page">Polls</a>
+<a href="timeline.html">Timeline</a>
+</div>
+</div>
+<a href="store.html">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="account.html">Account</a>
+</nav>
+<a class="btn btn-gold hdr-play" href="join.html">Play now!</a>
+</div>
+</header>
 
-<main id="main-content" class="page-main"><section class="hero hero-vars" aria-labelledby="polls-title">
+<main id="main-content" class="page-main">
+<section class="hero hero-vars" aria-labelledby="polls-title">
 <div style="max-width: 1240px; min-height: 240px; margin: 0 auto; padding: 48px 24px 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
 <p class="tag tag-gold" style="letter-spacing: 2px">NEWS</p>
 <h1 id="polls-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">POLLS</h1>
 <p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">The community votes on what gets built. Every question and every result is here.</p>
 </div>
 <div class="crenel"></div>
-</section><section class="s-cream community-section"><div class="container" data-community-app="polls"><p role="status">Loading polls...</p></div></section></main>
+</section>
+<section class="s-cream" aria-label="Open poll" style="padding: 72px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
 
-<footer class="site-foot s-red"><div class="site-foot-in"><div class="foot-cols"><nav class="foot" aria-label="Play"><p class="foot-title">PLAY</p><a href="plugins.html">About</a><a href="join.html">Join guide</a><a href="guide.html">Player guide</a><a href="rules.html">Rules</a><a href="vote.html">Vote</a><a href="appeal.html">Appeals</a></nav><nav class="foot" aria-label="World"><p class="foot-title">WORLD</p><a href="market.html">Market</a><a href="gallery.html">Gallery</a><a href="museum.html">Mapart Museum</a><a href="competitions/index.html">Competitions</a><a href="events.html">Events</a><a href="bounties.html">Bounties</a></nav><nav class="foot" aria-label="Community"><p class="foot-title">COMMUNITY</p><a href="guilds.html">Guilds</a><a href="players.html">Players</a><a href="leaderboards.html">Leaderboards</a><a href="halloffame.html">Hall of Fame</a><a href="achievements.html">Achievements</a><a href="creators.html">Creators</a><a href="staff.html">Staff</a><a href="punishments.html">Punishments</a></nav><nav class="foot" aria-label="News"><p class="foot-title">NEWS</p><a href="news.html">News</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="polls.html">Polls</a><a href="timeline.html">Timeline</a></nav><nav class="foot" aria-label="Staff tools"><p class="foot-title">STAFF TOOLS</p><a href="newseditor.html">Publishing editor</a><a href="competitions/admin/index.html">Competition admin</a><a href="reviewer/index.html">Reviewer</a></nav></div><p>2026 Enthusia SMP - glorytoenthusia@gmail.com</p><p>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p></div></footer>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">OPEN NOW</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Have your say</h2>
+</div>
+<template id="exact-poll-template"><div class="tip fret-lg" style="padding: 40px; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 32px" data-b-class="tip fret-lg {{openShow}}">
+<div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-gold">Open</span><span class="tag tag-dark">Closes [date]</span></div>
+<h3 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">[Poll question]</h3>
+<p>[One or two lines on what is being decided, and what happens if it passes]</p>
+<p style="color: var(--muted)">Sign in with Discord to vote. One vote per linked account.</p>
+</div>
+<div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<button class="opt" type="button" data-b-aria-pressed="{{v0}}" data-on-click="vote0"><span>[Option one]</span><span><span data-b-text="m0"></span></span></button>
+<button class="opt" type="button" data-b-aria-pressed="{{v1}}" data-on-click="vote1"><span>[Option two]</span><span><span data-b-text="m1"></span></span></button>
+<button class="opt" type="button" data-b-aria-pressed="{{v2}}" data-on-click="vote2"><span>[Option three]</span><span><span data-b-text="m2"></span></span></button>
+<p aria-live="polite" style="color: var(--muted)"><span data-b-text="voteLine"></span></p>
+</div>
+</div></template><div id="exact-active-polls"></div>
+<div class="panel" style="padding: 40px 28px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center" data-b-class="panel {{closedShow}}">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">No poll is open right now</h3>
+<p style="color: var(--muted)">New polls are announced on Discord. The results of every past poll are below.</p>
+<a class="btn btn-gold" href="https://discord.gg/5ccgDCmNSc">Join the Discord</a>
+</div>
+</div>
+</section>
+<section class="s-red" aria-label="Past polls" style="padding: 72px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">RESULTS</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">What you decided</h2>
+</div>
+<p style="max-width: 760px">Where the announcement gave a percentage it is shown. The rest passed without a published count.</p>
+<div class="eq" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px"><template id="exact-poll-history"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px"><span style="color: var(--muted)">May 2026</span><span class="tag tag-good">Passed</span></div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Should the Warzone get weekly rotating kits?</h3>
+<p style="color: var(--muted)">[Vote count]</p>
+<p class="shop" style="justify-content: flex-start">Warzone Rotators arrived in August 2026.</p>
+</article><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px"><span style="color: var(--muted)">12 Jan 2026</span><span class="tag tag-good">Passed</span></div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Should we add Death Duels?</h3>
+<div style="display: flex; align-items: center; gap: 12px">
+<div class="bar" role="img" aria-label="78 percent yes"><span style="width: 78%"></span></div>
+<span style="font-size: 24px; line-height: 32px; color: var(--head); white-space: nowrap">78% yes</span>
+</div>
+<p class="shop" style="justify-content: flex-start">Death Duels arrived on 16 May 2026.</p>
+</article><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px"><span style="color: var(--muted)">12 Jan 2026</span><span class="tag tag-good">Passed</span></div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Should we add package mail?</h3>
+<div style="display: flex; align-items: center; gap: 12px">
+<div class="bar" role="img" aria-label="66 percent yes"><span style="width: 66%"></span></div>
+<span style="font-size: 24px; line-height: 32px; color: var(--head); white-space: nowrap">66% yes</span>
+</div>
+<p class="shop" style="justify-content: flex-start">EnthusiaExpress mail arrived with Chapter 2 on 2 October 2026.</p>
+</article><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px"><span style="color: var(--muted)">Dec 2025</span><span class="tag tag-good">Moved to 26 December</span></div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">When should the End open?</h3>
+<p style="color: var(--muted)">[Vote count]</p>
+<p class="shop" style="justify-content: flex-start">The End event was voted back from Christmas Eve, and opened on 26 December 2025.</p>
+</article><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px"><span style="color: var(--muted)">Sep to Oct 2025</span><span class="tag tag-good">Passed</span></div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Should the server have KOTH?</h3>
+<div style="display: flex; align-items: center; gap: 12px">
+<div class="bar" role="img" aria-label="91 percent yes"><span style="width: 91%"></span></div>
+<span style="font-size: 24px; line-height: 32px; color: var(--head); white-space: nowrap">91% yes</span>
+</div>
+<p class="shop" style="justify-content: flex-start">KOTH opened at Haunted Hill with the first beta, and returns later in Chapter 2.</p>
+</article><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px"><span style="color: var(--muted)">Sep to Oct 2025</span><span class="tag tag-good">Passed</span></div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Should there be a virtual bank?</h3>
+<p style="color: var(--muted)">[Vote count]</p>
+<p class="shop" style="justify-content: flex-start">The bank arrived on 23 January 2026.</p>
+</article><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px"><span style="color: var(--muted)">Sep to Oct 2025</span><span class="tag tag-good">Passed</span></div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Should players build their own market stalls?</h3>
+<p style="color: var(--muted)">[Vote count]</p>
+<p class="shop" style="justify-content: flex-start">Stalls are fully customisable by the players who rent them.</p>
+</article><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px"><span style="color: var(--muted)">Sep to Oct 2025</span><span class="tag tag-good">A 50-plot market</span></div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">How big should the Market be?</h3>
+<p style="color: var(--muted)">[Vote count]</p>
+<p class="shop" style="justify-content: flex-start">The Market opened with 44 stalls in the Final Open Beta.</p>
+</article></template></div>
+</div>
+</section>
+<section class="s-cream" aria-label="How polls work" style="padding: 72px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+
+<div class="grid3 eq">
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Big features go to a vote</h3><p>KOTH, the bank, Death Duels, mail and the Warzone rotation all started as polls.</p></div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Passed is not the same as shipped</h3><p>A feature that passes joins the roadmap. Each result here says what happened next.</p><a href="roadmap.html" style="display: flex; align-items: center; min-height: 44px; margin-top: auto">Roadmap</a></div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Suggest the next one</h3><p>Ideas start in the suggestions channel on Discord. The best ones become polls.</p><a href="https://discord.gg/5ccgDCmNSc" style="display: flex; align-items: center; min-height: 44px; margin-top: auto">Suggest it on Discord</a></div>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="index.html">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="join.html">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="News">
+<p class="foot-title">NEWS</p>
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="store.html">Store</a>
+<a href="account.html">Account</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="404.html">404 page</a>
+<a href="home-christmas.html">Christmas skin</a>
+</nav>
+<nav class="foot" aria-label="Staff tools">
+<p class="foot-title">STAFF TOOLS</p>
+<a href="competitions/admin/index.html">Competition admin</a>
+<a href="newseditor.html">News editor</a>
+<a href="reviewer/index.html">Reviewer</a>
+<a href="reviewer/appeals.html">Appeal review</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p><span data-year="">2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
 
 
 </div>
@@ -171,5 +399,6 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script type="module" src="assets/community.js"></script><script src="assets/site-config.js" defer></script><script src="assets/enthusia.js" defer></script></body>
-</html>
+
+
+<script src="assets/site-config.js" defer=""></script><script src="assets/enthusia.js" defer=""></script><script type="module" src="assets/exact-polls.js"></script></body></html>

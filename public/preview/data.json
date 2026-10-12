@@ -285,6 +285,152 @@
       "lifecycleState": "COMPLETED"
     }
   ],
+  "referenceCompetitions": [
+    {
+      "id": "reference-build",
+      "slug": "build",
+      "title": "Build Competition",
+      "category": "BUILD",
+      "visibility": "PUBLIC",
+      "configVersion": 1,
+      "publishedAt": "2026-10-01T12:00:00Z",
+      "config": {
+        "public": {
+          "summary": "A sample competition for exploring the combined site.",
+          "description": "Build a welcoming town square and share screenshots of your entry. This is preview content.",
+          "rules": "Use your own build. Include screenshots. Follow the server rules."
+        },
+        "appearance": {
+          "bannerImageId": null,
+          "iconImageId": null,
+          "categoryImageId": null,
+          "accent": null
+        },
+        "schedule": {
+          "submissionsOpenAt": "2026-10-01T12:00:00Z",
+          "submissionsCloseAt": "2026-10-15T12:00:00Z",
+          "reviewCloseAt": null,
+          "votingOpenAt": "2026-10-16T12:00:00Z",
+          "votingCloseAt": "2026-10-20T12:00:00Z",
+          "judgingOpenAt": "2026-10-20T12:00:00Z",
+          "judgingCloseAt": "2026-10-25T12:00:00Z"
+        },
+        "entries": {
+          "allowedTypes": [
+            "SOLO",
+            "GROUP",
+            "GUILD"
+          ],
+          "maxEntriesPerPlayer": 3,
+          "maxEntriesPerGuild": 1,
+          "minImages": 1,
+          "maxDescriptionChars": 2500,
+          "coordinatesRequested": false,
+          "judgesCanViewCoordinates": false,
+          "maxMainMembers": null,
+          "maxHelpers": null
+        },
+        "voting": {
+          "enabled": true,
+          "votesPerVoter": 3,
+          "minimumActiveMinutes": 120,
+          "allowChangesUntilClose": true
+        },
+        "judging": {
+          "enabled": true,
+          "criteria": [
+            {
+              "id": "build",
+              "label": "Build quality",
+              "maxScore": 10,
+              "weight": 1
+            }
+          ],
+          "communityWeight": null,
+          "judgeWeight": null,
+          "tiebreakRule": null,
+          "publicFeedbackOptional": true
+        },
+        "rewards": {
+          "definitions": []
+        }
+      },
+      "lifecycleState": "UPCOMING",
+      "visualVariant": "reference"
+    },
+    {
+      "id": "reference-mapart",
+      "slug": "mapart",
+      "title": "Mapart Competition",
+      "category": "BUILD",
+      "visibility": "PUBLIC",
+      "configVersion": 1,
+      "publishedAt": "2026-10-01T12:00:00Z",
+      "config": {
+        "public": {
+          "summary": "A sample competition for exploring the combined site.",
+          "description": "Build a welcoming town square and share screenshots of your entry. This is preview content.",
+          "rules": "Use your own build. Include screenshots. Follow the server rules."
+        },
+        "appearance": {
+          "bannerImageId": null,
+          "iconImageId": null,
+          "categoryImageId": null,
+          "accent": null
+        },
+        "schedule": {
+          "submissionsOpenAt": "2026-10-01T12:00:00Z",
+          "submissionsCloseAt": "2026-10-15T12:00:00Z",
+          "reviewCloseAt": null,
+          "votingOpenAt": "2026-10-16T12:00:00Z",
+          "votingCloseAt": "2026-10-20T12:00:00Z",
+          "judgingOpenAt": "2026-10-20T12:00:00Z",
+          "judgingCloseAt": "2026-10-25T12:00:00Z"
+        },
+        "entries": {
+          "allowedTypes": [
+            "SOLO",
+            "GROUP",
+            "GUILD"
+          ],
+          "maxEntriesPerPlayer": 3,
+          "maxEntriesPerGuild": 1,
+          "minImages": 1,
+          "maxDescriptionChars": 2500,
+          "coordinatesRequested": false,
+          "judgesCanViewCoordinates": false,
+          "maxMainMembers": null,
+          "maxHelpers": null
+        },
+        "voting": {
+          "enabled": true,
+          "votesPerVoter": 3,
+          "minimumActiveMinutes": 120,
+          "allowChangesUntilClose": true
+        },
+        "judging": {
+          "enabled": true,
+          "criteria": [
+            {
+              "id": "build",
+              "label": "Build quality",
+              "maxScore": 10,
+              "weight": 1
+            }
+          ],
+          "communityWeight": null,
+          "judgeWeight": null,
+          "tiebreakRule": null,
+          "publicFeedbackOptional": true
+        },
+        "rewards": {
+          "definitions": []
+        }
+      },
+      "lifecycleState": "UPCOMING",
+      "visualVariant": "reference"
+    }
+  ],
   "adminConfig": {
     "schemaVersion": 1,
     "public": {
@@ -363,77 +509,310 @@
   },
   "community": {
     "guilds": {
-      "updatedAt": "2026-10-11T12:00:00Z",
       "items": [
         {
-          "id": "preview-guild",
-          "name": "Preview Guild",
-          "description": "Sample recruiting guild",
+          "id": "design-guild-0",
+          "name": "Vibe",
           "level": 100,
-          "members": 12,
-          "elo": 1200,
-          "recruiting": true,
+          "elo": 1420,
+          "members": 22,
+          "recruiting": false,
           "peaceful": false,
-          "membersList": [
-            "PreviewPlayer",
-            "BuilderTwo"
-          ],
-          "links": []
+          "designIndex": 0
         },
         {
-          "id": "builders",
-          "name": "Builders",
-          "description": "A sample peaceful guild",
-          "level": 40,
-          "members": 5,
-          "elo": 1000,
+          "id": "design-guild-1",
+          "name": "BelovedOnes",
+          "level": 96,
+          "elo": 1310,
+          "members": 14,
           "recruiting": false,
           "peaceful": true,
-          "membersList": [],
-          "links": []
+          "designIndex": 1
+        },
+        {
+          "id": "design-guild-2",
+          "name": "WOT",
+          "level": 81,
+          "elo": 1265,
+          "members": 19,
+          "recruiting": true,
+          "peaceful": false,
+          "designIndex": 2
+        },
+        {
+          "id": "design-guild-3",
+          "name": "BoopGang",
+          "level": 74,
+          "elo": 1350,
+          "members": 11,
+          "recruiting": false,
+          "peaceful": false,
+          "designIndex": 3
+        },
+        {
+          "id": "design-guild-4",
+          "name": "Dogeclan",
+          "level": 66,
+          "elo": 1205,
+          "members": 9,
+          "recruiting": true,
+          "peaceful": false,
+          "designIndex": 4
+        },
+        {
+          "id": "design-guild-5",
+          "name": "Asgard",
+          "level": 62,
+          "elo": 1290,
+          "members": 12,
+          "recruiting": true,
+          "peaceful": false,
+          "designIndex": 5
+        },
+        {
+          "id": "design-guild-6",
+          "name": "Enthusiast",
+          "level": 58,
+          "elo": 1180,
+          "members": 16,
+          "recruiting": true,
+          "peaceful": false,
+          "designIndex": 6
+        },
+        {
+          "id": "design-guild-7",
+          "name": "PTC",
+          "level": 47,
+          "elo": 1150,
+          "members": 8,
+          "recruiting": false,
+          "peaceful": false,
+          "designIndex": 7
+        },
+        {
+          "id": "design-guild-8",
+          "name": "Everlights",
+          "level": 44,
+          "elo": 1040,
+          "members": 10,
+          "recruiting": false,
+          "peaceful": true,
+          "designIndex": 8
+        },
+        {
+          "id": "design-guild-9",
+          "name": "Chillage",
+          "level": 31,
+          "elo": 1005,
+          "members": 13,
+          "recruiting": true,
+          "peaceful": true,
+          "designIndex": 9
+        },
+        {
+          "id": "design-guild-10",
+          "name": "Hoplience",
+          "level": 22,
+          "elo": 985,
+          "members": 7,
+          "recruiting": true,
+          "peaceful": true,
+          "designIndex": 10
+        },
+        {
+          "id": "design-guild-11",
+          "name": "Kirky",
+          "level": 18,
+          "elo": 970,
+          "members": 5,
+          "recruiting": false,
+          "peaceful": true,
+          "designIndex": 11
         }
       ]
     },
     "players": {
       "items": [
         {
-          "id": "preview-player",
-          "name": "PreviewPlayer",
-          "description": "Sample player profile",
-          "rank": "Avid",
-          "guild": "Preview Guild",
-          "balance": 500,
-          "playtime": 120,
-          "reputation": 3,
-          "achievements": [
-            "Explorer"
-          ],
-          "links": []
+          "id": "design-player-0",
+          "name": "FainNeito",
+          "designIndex": 0
+        },
+        {
+          "id": "design-player-1",
+          "name": "StepSoy",
+          "designIndex": 1
+        },
+        {
+          "id": "design-player-2",
+          "name": "LavKun",
+          "designIndex": 2
         }
       ]
     },
     "achievements": {
       "items": [
         {
-          "id": "explorer",
-          "name": "Explorer",
-          "description": "Sample progression milestone",
-          "category": "Exploration",
-          "reward": "Sample reward",
-          "completed": 5
+          "id": "design-achievements-0",
+          "slug": "design-achievements-0",
+          "title": "achievements",
+          "body": "A rank for players whose videos win or place in the Media Event.",
+          "designIndex": 0,
+          "kind": "achievements"
+        },
+        {
+          "id": "design-achievements-1",
+          "slug": "design-achievements-1",
+          "title": "achievements",
+          "body": "For the winners of the Mapart Competition.",
+          "designIndex": 1,
+          "kind": "achievements"
+        },
+        {
+          "id": "design-achievements-2",
+          "slug": "design-achievements-2",
+          "title": "achievements",
+          "body": "For the winners of the Build Competition.",
+          "designIndex": 2,
+          "kind": "achievements"
+        },
+        {
+          "id": "design-achievements-3",
+          "slug": "design-achievements-3",
+          "title": "achievements",
+          "body": "Chat prefixes that come with the two store ranks.",
+          "designIndex": 3,
+          "kind": "achievements"
+        },
+        {
+          "id": "design-achievements-4",
+          "slug": "design-achievements-4",
+          "title": "achievements",
+          "body": "A Discord role for players who keep the wiki and the server history.",
+          "designIndex": 4,
+          "kind": "achievements"
+        },
+        {
+          "id": "design-achievements-5",
+          "slug": "design-achievements-5",
+          "title": "achievements",
+          "body": "Goes to the top donor of the month, and stays with them for good.",
+          "designIndex": 5,
+          "kind": "achievements"
+        },
+        {
+          "id": "design-achievements-6",
+          "slug": "design-achievements-6",
+          "title": "achievements",
+          "body": "For players with 4 or more hours in the first betas.",
+          "designIndex": 6,
+          "kind": "achievements"
+        },
+        {
+          "id": "design-achievements-7",
+          "slug": "design-achievements-7",
+          "title": "achievements",
+          "body": "For the top bug reporters of the first betas.",
+          "designIndex": 7,
+          "kind": "achievements"
+        },
+        {
+          "id": "design-achievements-8",
+          "slug": "design-achievements-8",
+          "title": "achievements",
+          "body": "Came with the Founder ranks, which left the store on 2 June 2026.",
+          "designIndex": 8,
+          "kind": "achievements"
+        },
+        {
+          "id": "design-achievements-9",
+          "slug": "design-achievements-9",
+          "title": "achievements",
+          "body": "For a photo of the outdoors on Go Touch Grass Day, August 2026.",
+          "designIndex": 9,
+          "kind": "achievements"
+        },
+        {
+          "id": "design-achievements-10",
+          "slug": "design-achievements-10",
+          "title": "achievements",
+          "body": "For the hidden challenges on the temporary server before Chapter 2.",
+          "designIndex": 10,
+          "kind": "achievements"
         }
+      ],
+      "model": [
+        "earn",
+        "earn",
+        "earn",
+        "earn",
+        "earn",
+        "earn",
+        "retired",
+        "retired",
+        "retired",
+        "retired",
+        "retired"
       ]
     },
     "bounties": {
       "items": [
         {
-          "id": "sample-bounty",
-          "name": "PreviewPlayer",
-          "description": "Sample bounty",
-          "gold": 50,
+          "id": "design-bounty-0",
+          "name": "Steve",
+          "gold": 2400,
           "state": "open",
-          "hunter": "",
-          "expiresAt": null
+          "designIndex": 0
+        },
+        {
+          "id": "design-bounty-1",
+          "name": "Zuri",
+          "gold": 1850,
+          "state": "open",
+          "designIndex": 1
+        },
+        {
+          "id": "design-bounty-2",
+          "name": "Noor",
+          "gold": 1200,
+          "state": "open",
+          "designIndex": 2
+        },
+        {
+          "id": "design-bounty-3",
+          "name": "Makena",
+          "gold": 900,
+          "state": "open",
+          "designIndex": 3
+        },
+        {
+          "id": "design-bounty-4",
+          "name": "Ari",
+          "gold": 640,
+          "state": "open",
+          "designIndex": 4
+        },
+        {
+          "id": "design-bounty-5",
+          "name": "Sunny",
+          "gold": 320,
+          "state": "open",
+          "designIndex": 5
+        },
+        {
+          "id": "design-bounty-6",
+          "name": "Kai",
+          "gold": 1500,
+          "state": "claimed",
+          "designIndex": 6
+        },
+        {
+          "id": "design-bounty-7",
+          "name": "Alex",
+          "gold": 750,
+          "state": "claimed",
+          "designIndex": 7
         }
       ]
     },
@@ -441,127 +820,1998 @@
       "items": [
         {
           "kind": "news",
-          "slug": "news-sample",
-          "title": "Community announcement",
-          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
-          "category": "Community",
-          "status": "published",
+          "slug": "design-post-0",
+          "title": "Chapter 2 is live",
+          "category": "Announcement",
+          "date": "October 2, 2026",
+          "body": "# Chapter 2 is live\nChapter 2 launched on **October 2, 2026**. Here is what is happening first.\n\n## Competitions\n- **Build Competition** - the theme is *Halloween*. Entries open soon. The day will be announced on Discord.\n- Voting opens **October 14** and results are published **October 21**.\n- The **Mapart Competition** starts on **October 24**, with voting from **November 8**.\n\n> Raiding and open PvP are part of Enthusia. Read the rules before you log in.\n\n-# Posted by Fain",
+          "authorName": "Fain",
+          "authorRank": "Founder",
           "revision": 1,
-          "verification": "unverified",
-          "date": "2026-10-02T12:00:00Z"
+          "status": "published"
+        },
+        {
+          "kind": "news",
+          "slug": "design-post-1",
+          "title": "Changelog - [version or date]",
+          "category": "Changelog",
+          "date": "[date]",
+          "body": "## Added\n- [new feature and where to find it]\n\n## Changed\n- `[plugin]` [what changed and why]\n- ~~[old behaviour]~~ is now __[new behaviour]__\n\n## Fixed\n- [bug that was fixed]\n\n-# [who posted]",
+          "authorName": "Fain",
+          "authorRank": "Founder",
+          "revision": 1,
+          "status": "published"
+        },
+        {
+          "kind": "news",
+          "slug": "design-post-2",
+          "title": "Build Competition: entries open soon",
+          "category": "Event",
+          "date": "October 2, 2026",
+          "body": "# Build Competition\nThe theme is **Halloween**.\n\n1. Submissions open **soon**: the day will be announced here and on Discord\n2. Voting opens **October 14**\n3. Results are published **October 21**\n\nYou need to sign in with Discord and have a Minecraft account linked before you can submit or vote.\n\n[Open the competition page](Competitions)",
+          "authorName": "Fain",
+          "authorRank": "Founder",
+          "revision": 1,
+          "status": "published"
         }
       ]
     },
     "changelog": {
       "items": [
         {
-          "kind": "changelog",
-          "slug": "changelog-sample",
-          "title": "Sample update",
-          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
-          "category": "Community",
-          "status": "published",
-          "revision": 1,
-          "verification": "unverified",
-          "date": "2026-10-02T12:00:00Z"
+          "id": "design-changelog-0",
+          "slug": "design-changelog-0",
+          "title": "2 Oct",
+          "body": "",
+          "designIndex": 0,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-1",
+          "slug": "design-changelog-1",
+          "title": "Aug",
+          "body": "",
+          "designIndex": 1,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-2",
+          "slug": "design-changelog-2",
+          "title": "4 Aug",
+          "body": "",
+          "designIndex": 2,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-3",
+          "slug": "design-changelog-3",
+          "title": "19 Jul",
+          "body": "",
+          "designIndex": 3,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-4",
+          "slug": "design-changelog-4",
+          "title": "15 Jul",
+          "body": "",
+          "designIndex": 4,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-5",
+          "slug": "design-changelog-5",
+          "title": "9 Jul",
+          "body": "",
+          "designIndex": 5,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-6",
+          "slug": "design-changelog-6",
+          "title": "3 Jul",
+          "body": "",
+          "designIndex": 6,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-7",
+          "slug": "design-changelog-7",
+          "title": "28 Jun",
+          "body": "",
+          "designIndex": 7,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-8",
+          "slug": "design-changelog-8",
+          "title": "27 Jun",
+          "body": "",
+          "designIndex": 8,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-9",
+          "slug": "design-changelog-9",
+          "title": "1 Jun",
+          "body": "",
+          "designIndex": 9,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-10",
+          "slug": "design-changelog-10",
+          "title": "16 May",
+          "body": "",
+          "designIndex": 10,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-11",
+          "slug": "design-changelog-11",
+          "title": "11 May",
+          "body": "",
+          "designIndex": 11,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-12",
+          "slug": "design-changelog-12",
+          "title": "2 May",
+          "body": "",
+          "designIndex": 12,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-13",
+          "slug": "design-changelog-13",
+          "title": "4 Apr",
+          "body": "",
+          "designIndex": 13,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-14",
+          "slug": "design-changelog-14",
+          "title": "21 Mar",
+          "body": "",
+          "designIndex": 14,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-15",
+          "slug": "design-changelog-15",
+          "title": "25 Jan",
+          "body": "",
+          "designIndex": 15,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-16",
+          "slug": "design-changelog-16",
+          "title": "23 Jan",
+          "body": "",
+          "designIndex": 16,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-17",
+          "slug": "design-changelog-17",
+          "title": "2 Jan",
+          "body": "",
+          "designIndex": 17,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-18",
+          "slug": "design-changelog-18",
+          "title": "20 Dec",
+          "body": "",
+          "designIndex": 18,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-19",
+          "slug": "design-changelog-19",
+          "title": "19 Dec",
+          "body": "",
+          "designIndex": 19,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-20",
+          "slug": "design-changelog-20",
+          "title": "11 Nov",
+          "body": "",
+          "designIndex": 20,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-21",
+          "slug": "design-changelog-21",
+          "title": "1 Nov",
+          "body": "",
+          "designIndex": 21,
+          "kind": "changelog"
+        },
+        {
+          "id": "design-changelog-22",
+          "slug": "design-changelog-22",
+          "title": "31 Oct",
+          "body": "",
+          "designIndex": 22,
+          "kind": "changelog"
         }
+      ],
+      "model": [
+        [
+          "2026",
+          [
+            "world",
+            "guilds",
+            "economy",
+            "combat"
+          ],
+          "chapter 2 the server moves to minecraft 26.2, and the overworld border grows by 5,000 blocks halloween spawn and warzone guild update: prestige, seasonal elo, more level rewards and refreshed menus enthusiaexpress: letters and packages for offline players, paid in raw gold new advancements across duels, reputation, mail and diaries, claimed with /rewards warzone combat: a boss bar for your combat timer, and restrictions that stay if you leave mid-fight donor perks: donor profiles, gift announcements, mapart shields for devotee and item signatures for avid"
+        ],
+        [
+          "2026",
+          [
+            "combat"
+          ],
+          "warzone rotators the warzone kit now rotates every week voted in by the community in may"
+        ],
+        [
+          "2026",
+          [
+            "world",
+            "economy"
+          ],
+          "august update java 25 a network tab list /daily rewards 100 achievements"
+        ],
+        [
+          "2026",
+          [
+            "site"
+          ],
+          "website overhaul a new look for the website an interactive market page showing every stall, its owner and its stock"
+        ],
+        [
+          "2026",
+          [
+            "combat"
+          ],
+          "emergency maintenance fixed a homes exploit fixed a duel-spectating exploit"
+        ],
+        [
+          "2026",
+          [
+            "economy"
+          ],
+          "market relaunch the market reopens with a stall auction a re-bid on 10 july after server trouble"
+        ],
+        [
+          "2026",
+          [
+            "economy"
+          ],
+          "the market the market releases, then pauses within hours over auction problems every bid refunded"
+        ],
+        [
+          "2026",
+          [
+            "combat"
+          ],
+          "autoclicker mod an official enthusia autoclicker mod by p2wn is published on modrinth a rework of guild progression is announced"
+        ],
+        [
+          "2026",
+          [
+            "world"
+          ],
+          "26.2 clients players on minecraft 26.2 can join"
+        ],
+        [
+          "2026",
+          [
+            "combat"
+          ],
+          "piecloak common base blocks and entities are hidden at a distance, so pie-chart base hunting is less reliable"
+        ],
+        [
+          "2026",
+          [
+            "combat"
+          ],
+          "death duels 1v1 duels to the death in the spawn arena custom rules and wagers a loot vault for the winner"
+        ],
+        [
+          "2026",
+          [
+            "world"
+          ],
+          "nether roof players can build and travel on the nether roof"
+        ],
+        [
+          "2026",
+          [
+            "world",
+            "economy",
+            "guilds",
+            "combat"
+          ],
+          "full release a 100k overworld border the raw gold economy guilds, reputation and bounties proximity voice chat"
+        ],
+        [
+          "2026",
+          [
+            "world"
+          ],
+          "host upgrade the server moves to a host that can carry a 100k world border"
+        ],
+        [
+          "2026",
+          [
+            "world",
+            "guilds"
+          ],
+          "1.21.11 the beta updates to 1.21.11, with spears guild history lookups a first survival games playtest"
+        ],
+        [
+          "2026",
+          [
+            "site"
+          ],
+          "wiki and a new address the enthusia wiki opens to community editing enthusia.net becomes the main address"
+        ],
+        [
+          "2026",
+          [
+            "economy"
+          ],
+          "bank and reputation raw gold can be banked with /deposit and taken out with /withdrawl /baltop becomes a menu with player heads gold in shulker boxes counts towards your balance homes, beds and teleports rebuilt in-house commendations get their first effects"
+        ],
+        [
+          "2026",
+          [
+            "world",
+            "economy",
+            "guilds"
+          ],
+          "the prologue borders grow to 20k in the overworld, 10k in the nether and 25k in the end balances and bounties reset after a major dupe guild stalls open for testing minecraft to discord linking with /link"
+        ],
+        [
+          "2025",
+          [
+            "economy",
+            "world"
+          ],
+          "final open beta commendations, the reputation system a rebuilt playtime system a 44-stall market"
+        ],
+        [
+          "2025",
+          [
+            "site"
+          ],
+          "store the store opens with avid and devotee, and no pay-to-win perks the founder's badge for early supporters"
+        ],
+        [
+          "2025",
+          [
+            "combat",
+            "guilds"
+          ],
+          "guild koth and combat logging guilds can enter koth as teams logging out in combat leaves an npc behind new players get 30 minutes of protection"
+        ],
+        [
+          "2025",
+          [
+            "economy"
+          ],
+          "raw gold the currency changes from diamonds to raw gold first pvp arena test"
+        ],
+        [
+          "2025",
+          [
+            "world",
+            "guilds",
+            "economy"
+          ],
+          "first open beta the diary, given to every player on first join market stalls, bounties and koth at haunted hill guilds open to all players"
+        ]
       ]
     },
     "roadmap": {
       "items": [
         {
-          "kind": "roadmap",
-          "slug": "roadmap-sample",
-          "title": "A future milestone",
-          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
-          "category": "Planned",
-          "status": "published",
-          "revision": 1,
-          "verification": "unverified",
-          "date": "2026-10-02T12:00:00Z"
+          "id": "design-roadmap-0",
+          "slug": "design-roadmap-0",
+          "title": "Minecraft 26.2",
+          "body": "",
+          "designIndex": 0,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-1",
+          "slug": "design-roadmap-1",
+          "title": "Halloween spawn and Warzone",
+          "body": "",
+          "designIndex": 1,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-2",
+          "slug": "design-roadmap-2",
+          "title": "Guild Prestige and Seasonal ELO",
+          "body": "",
+          "designIndex": 2,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-3",
+          "slug": "design-roadmap-3",
+          "title": "EnthusiaExpress mail",
+          "body": "",
+          "designIndex": 3,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-4",
+          "slug": "design-roadmap-4",
+          "title": "New donor perks",
+          "body": "",
+          "designIndex": 4,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-5",
+          "slug": "design-roadmap-5",
+          "title": "Advancements and rewards",
+          "body": "",
+          "designIndex": 5,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-6",
+          "slug": "design-roadmap-6",
+          "title": "Warzone combat updates",
+          "body": "",
+          "designIndex": 6,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-7",
+          "slug": "design-roadmap-7",
+          "title": "Halloween Build Competition",
+          "body": "",
+          "designIndex": 7,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-8",
+          "slug": "design-roadmap-8",
+          "title": "Mapart Competition",
+          "body": "",
+          "designIndex": 8,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-9",
+          "slug": "design-roadmap-9",
+          "title": "Mapart Museum",
+          "body": "",
+          "designIndex": 9,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-10",
+          "slug": "design-roadmap-10",
+          "title": "Events and the Events Hub",
+          "body": "",
+          "designIndex": 10,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-11",
+          "slug": "design-roadmap-11",
+          "title": "King of the Hill",
+          "body": "",
+          "designIndex": 11,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-12",
+          "slug": "design-roadmap-12",
+          "title": "2v2 and 3v3 duels",
+          "body": "",
+          "designIndex": 12,
+          "kind": "roadmap"
+        },
+        {
+          "id": "design-roadmap-13",
+          "slug": "design-roadmap-13",
+          "title": "Christmas spawn and Warzone",
+          "body": "",
+          "designIndex": 13,
+          "kind": "roadmap"
         }
+      ],
+      "model": [
+        [
+          "live",
+          "world"
+        ],
+        [
+          "live",
+          "world"
+        ],
+        [
+          "live",
+          "guilds"
+        ],
+        [
+          "live",
+          "economy"
+        ],
+        [
+          "live",
+          "economy"
+        ],
+        [
+          "live",
+          "pvp"
+        ],
+        [
+          "live",
+          "pvp"
+        ],
+        [
+          "next",
+          "building"
+        ],
+        [
+          "next",
+          "building"
+        ],
+        [
+          "next",
+          "building"
+        ],
+        [
+          "later",
+          "pvp"
+        ],
+        [
+          "later",
+          "pvp"
+        ],
+        [
+          "later",
+          "pvp"
+        ],
+        [
+          "later",
+          "world"
+        ]
       ]
     },
     "timeline": {
       "items": [
         {
-          "kind": "timeline",
-          "slug": "timeline-sample",
-          "title": "Chapter 2 launch",
-          "body": "Chapter 2 launched on 2 October 2026.",
-          "category": "Community",
-          "status": "published",
-          "revision": 1,
-          "verification": "verified",
-          "date": "2026-10-02T12:00:00Z"
+          "id": "design-timeline-0",
+          "slug": "design-timeline-0",
+          "title": "27 Aug",
+          "body": "The Discord server for the new SMP is set up.",
+          "designIndex": 0,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-1",
+          "slug": "design-timeline-1",
+          "title": "4 Sep",
+          "body": "Fain introduces the server, built with sharpmatt, p2wn and Borlyn. The goals: community driven, no resets and no pay-to-win.",
+          "designIndex": 1,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-2",
+          "slug": "design-timeline-2",
+          "title": "10 Sep",
+          "body": "The plan sets out the Diary, an item economy, market stalls, guilds by AngryBadger, bounties, custom advancements and donor ranks. Diamonds are the planned currency. Work starts on the website.",
+          "designIndex": 2,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-3",
+          "slug": "design-timeline-3",
+          "title": "Sep to Oct",
+          "body": "The community votes for KOTH (91%), a virtual bank, build-your-own market stalls and a 50-plot market.",
+          "designIndex": 3,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-4",
+          "slug": "design-timeline-4",
+          "title": "28 Sep",
+          "body": "A cash prize for whoever invites the most members to the Discord before the end of October.",
+          "designIndex": 4,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-5",
+          "slug": "design-timeline-5",
+          "title": "3 Oct",
+          "body": "A whitelisted test for redstoners and farm builders, in creative, to push server performance. It is also the first test of the guild plugin. Extended to 13 October.",
+          "designIndex": 5,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-6",
+          "slug": "design-timeline-6",
+          "title": "30 Oct",
+          "body": "Marvus, Zom_B_Kitty_26 and Toxik are introduced as the builders of the first spawn.",
+          "designIndex": 6,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-7",
+          "slug": "design-timeline-7",
+          "title": "31 Oct",
+          "body": "The whitelist comes off at 5pm ET with the End open from the start. Players get the Diary, market stalls, bounties and KOTH at Haunted Hill.",
+          "designIndex": 7,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-8",
+          "slug": "design-timeline-8",
+          "title": "31 Oct",
+          "body": "The guild plugin by AngryBadger opens to all players with custom ranks, guild wars, a guild vault and guild levels.",
+          "designIndex": 8,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-9",
+          "slug": "design-timeline-9",
+          "title": "31 Oct",
+          "body": "Guild rivalries start on day one: Kingsmould and Everlights call a truce within hours of the beta opening.",
+          "designIndex": 9,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-10",
+          "slug": "design-timeline-10",
+          "title": "1 Nov",
+          "body": "The currency changes to Raw Gold on the first full day, alongside the first PvP arena test.",
+          "designIndex": 10,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-11",
+          "slug": "design-timeline-11",
+          "title": "11 Nov",
+          "body": "Guilds can enter KOTH as teams, logging out in combat leaves an NPC behind, and new players get 30 minutes of protection.",
+          "designIndex": 11,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-12",
+          "slug": "design-timeline-12",
+          "title": "15 Nov",
+          "body": "A server-wide King of the Hill fight recorded for the promo video. p2wn, Borlyn and Doge198_ capture the hill.",
+          "designIndex": 12,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-13",
+          "slug": "design-timeline-13",
+          "title": "15 Nov",
+          "body": "FlashStrength and p2wn both win for inviting the most members to the Discord.",
+          "designIndex": 13,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-14",
+          "slug": "design-timeline-14",
+          "title": "17 Nov",
+          "body": "Across the two betas: 239 first-time players, 28 guilds formed, 463 PvP kills and 72 verified bugs.",
+          "designIndex": 14,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-15",
+          "slug": "design-timeline-15",
+          "title": "18 Nov",
+          "body": "Tags for testers with 4 or more hours and a lore item for 13 or more. RedstoneIsGreat tops the bug hunters with 49 verified reports.",
+          "designIndex": 15,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-16",
+          "slug": "design-timeline-16",
+          "title": "9 Dec",
+          "body": "A whitelisted test of the End main-island rules ahead of the next beta.",
+          "designIndex": 16,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-17",
+          "slug": "design-timeline-17",
+          "title": "19 Dec",
+          "body": "The store goes live with the Founder's Badge, Avid and Devotee, and no pay-to-win perks.",
+          "designIndex": 17,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-18",
+          "slug": "design-timeline-18",
+          "title": "19 Dec",
+          "body": "Work begins on the server resource pack with artist sucrash, and the Christmas logo is revealed.",
+          "designIndex": 18,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-19",
+          "slug": "design-timeline-19",
+          "title": "20 Dec",
+          "body": "The server reopens at noon ET with commendations, a rebuilt playtime system and a 44-stall market.",
+          "designIndex": 19,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-20",
+          "slug": "design-timeline-20",
+          "title": "Late Dec",
+          "body": "Guilds form and gear up ahead of the End event, among them Enthusiast, Blood Guard and ScarEye, whose banner goes up near spawn.",
+          "designIndex": 20,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-21",
+          "slug": "design-timeline-21",
+          "title": "26 Dec",
+          "body": "Voted back from Christmas Eve, the End opens at 1pm ET. Enthusiast and Blood Guard win the fight for the Dragon Egg.",
+          "designIndex": 21,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-22",
+          "slug": "design-timeline-22",
+          "title": "1 Jan",
+          "body": "The Open Beta carries on past 5 January, with full release projected for March 2026.",
+          "designIndex": 22,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-23",
+          "slug": "design-timeline-23",
+          "title": "2 Jan",
+          "body": "The extended beta is named the Prologue. Borders grow to 20k in the Overworld and 25k in the End, and balances and bounties are reset after a major dupe.",
+          "designIndex": 23,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-24",
+          "slug": "design-timeline-24",
+          "title": "2 Jan",
+          "body": "Guild stalls open for testing, Minecraft to Discord linking goes live and moderator applications open.",
+          "designIndex": 24,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-25",
+          "slug": "design-timeline-25",
+          "title": "2 Jan",
+          "body": "Enthusiast sets up a dedicated branch for the server and starts recruiting on it.",
+          "designIndex": 25,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-26",
+          "slug": "design-timeline-26",
+          "title": "5 Jan",
+          "body": "Enthusiast and Blood Guard declare war on ScarEye, led by RadiOwO_. The two sides fight on and off through January and February.",
+          "designIndex": 26,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-27",
+          "slug": "design-timeline-27",
+          "title": "12 Jan",
+          "body": "Polls approve Death Duels (78%) and package mail (66%).",
+          "designIndex": 27,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-28",
+          "slug": "design-timeline-28",
+          "title": "23 Jan",
+          "body": "Raw Gold can be banked with /deposit, teleports are rebuilt in-house and the commendation system gets its first effects.",
+          "designIndex": 28,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-29",
+          "slug": "design-timeline-29",
+          "title": "25 Jan",
+          "body": "The Enthusia wiki opens to community editing, builder and developer applications open, and Enthusia.net becomes the main address.",
+          "designIndex": 29,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-30",
+          "slug": "design-timeline-30",
+          "title": "4 Feb",
+          "body": "An Enthusiast member brings two ScarEye players into the guild base. Both are killed, but Enthusiast has to move its main base.",
+          "designIndex": 30,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-31",
+          "slug": "design-timeline-31",
+          "title": "6 Feb",
+          "body": "Enthusiast and Blood Guard raid a ScarEye base and carry off its loot.",
+          "designIndex": 31,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-32",
+          "slug": "design-timeline-32",
+          "title": "25 Feb",
+          "body": "Launch is pushed back to April. The Historian role is created for the wiki, and new builders and moderators join the team.",
+          "designIndex": 32,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-33",
+          "slug": "design-timeline-33",
+          "title": "21 Mar",
+          "body": "The beta updates to 1.21.11 with spears, guild history lookups and a first Survival Games playtest, after a Minecraft Live watch party.",
+          "designIndex": 33,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-34",
+          "slug": "design-timeline-34",
+          "title": "4 Apr",
+          "body": "The server moves to a host that can carry a 100k world border.",
+          "designIndex": 34,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-35",
+          "slug": "design-timeline-35",
+          "title": "11 Apr",
+          "body": "The border shrinks to the Warzone for a one-life final fight, ending with Blood Guard against the newly formed OverHeaven. Flomish is the last player standing and Prologue Champion.",
+          "designIndex": 35,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-36",
+          "slug": "design-timeline-36",
+          "title": "12 Apr",
+          "body": "After EOTW most of the active Enthusiast roster on the server moves on, and the guild regroups for full release.",
+          "designIndex": 36,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-37",
+          "slug": "design-timeline-37",
+          "title": "24 Apr",
+          "body": "Full release is set for 2 May. The final beta counted 837 first-time players, 62 guilds and 5,765 PvP kills.",
+          "designIndex": 37,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-38",
+          "slug": "design-timeline-38",
+          "title": "2 May",
+          "body": "Enthusia SMP launches at 1pm ET with a 100k Overworld border, the Raw Gold economy, guilds, reputation, bounties and proximity voice chat.",
+          "designIndex": 38,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-39",
+          "slug": "design-timeline-39",
+          "title": "6 May",
+          "body": "The hunt for the stronghold begins.",
+          "designIndex": 39,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-40",
+          "slug": "design-timeline-40",
+          "title": "9 May",
+          "body": "The End opens at 3pm ET. The allied guilds Vibe, Dogeclan and BoopGang win, woulves1 takes the Dragon Egg, and the server hits a record 96 players online.",
+          "designIndex": 40,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-41",
+          "slug": "design-timeline-41",
+          "title": "Early May",
+          "body": "BelovedOnes raid Vibe's gold farm in the first week. Vibe's leader later calls it the reason the guild turned to raiding.",
+          "designIndex": 41,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-42",
+          "slug": "design-timeline-42",
+          "title": "11 May",
+          "body": "Players can build and travel on the Nether roof.",
+          "designIndex": 42,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-43",
+          "slug": "design-timeline-43",
+          "title": "16 May",
+          "body": "1v1 duels to the death arrive in the spawn arena, with custom rules, wagers and a loot vault for the winner.",
+          "designIndex": 43,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-44",
+          "slug": "design-timeline-44",
+          "title": "16 May",
+          "body": "A video contest with cash prizes and the Media rank. The deadline later moves from 16 June to 30 June.",
+          "designIndex": 44,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-45",
+          "slug": "design-timeline-45",
+          "title": "19 May",
+          "body": "The wiki gets working infoboxes, fixed by Michael Lubker.",
+          "designIndex": 45,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-46",
+          "slug": "design-timeline-46",
+          "title": "29 May",
+          "body": "Celebrated with a rank giveaway. Enthusia is also listed on Modrinth and gets a Discord server tag.",
+          "designIndex": 46,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-47",
+          "slug": "design-timeline-47",
+          "title": "29 May",
+          "body": "Planned for 30 May, the Market moves to 6 June. On 6 June it is held back with no date until it is ready.",
+          "designIndex": 47,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-48",
+          "slug": "design-timeline-48",
+          "title": "1 Jun",
+          "body": "p2wn's PieCloak makes pie-chart base hunting less reliable by hiding common base blocks and entities at a distance.",
+          "designIndex": 48,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-49",
+          "slug": "design-timeline-49",
+          "title": "2 Jun",
+          "body": "The Founder ranks and the Founder Star leave the store for good.",
+          "designIndex": 49,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-50",
+          "slug": "design-timeline-50",
+          "title": "7 Jun",
+          "body": "Vibe begins a run of raids on WOT bases and declares war on guild after guild. Four WOT bases have fallen by mid-June.",
+          "designIndex": 50,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-51",
+          "slug": "design-timeline-51",
+          "title": "18 Jun",
+          "body": "Enthusiast votes 12 to 0 to ally with PTC, a guild that takes contracts.",
+          "designIndex": 51,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-52",
+          "slug": "design-timeline-52",
+          "title": "19 Jun",
+          "body": "After a clash between their members, Enthusiast names WOT and BelovedOnes as enemies.",
+          "designIndex": 52,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-53",
+          "slug": "design-timeline-53",
+          "title": "21 Jun",
+          "body": "Hosted by auhfuls in the Duels Arena: sword PvP with totems and cobwebs, no maces. OinkerMC wins, with Currut second and Nicusormeow third.",
+          "designIndex": 53,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-54",
+          "slug": "design-timeline-54",
+          "title": "27 Jun",
+          "body": "Players on Minecraft 26.2 can join.",
+          "designIndex": 54,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-55",
+          "slug": "design-timeline-55",
+          "title": "28 Jun",
+          "body": "Vibe becomes the first guild to reach level 100, with BelovedOnes close behind at 88. A rework of guild progression is announced.",
+          "designIndex": 55,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-56",
+          "slug": "design-timeline-56",
+          "title": "28 Jun",
+          "body": "An official Enthusia autoclicker mod by p2wn is published on Modrinth.",
+          "designIndex": 56,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-57",
+          "slug": "design-timeline-57",
+          "title": "Summer",
+          "body": "About 15 donors test every event in p2wn's new Events plugin.",
+          "designIndex": 57,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-58",
+          "slug": "design-timeline-58",
+          "title": "1 Jul",
+          "body": "StepSoy wins the video contest. KILLTEAM and Jacco1OO also earn the Media rank. Real-world politics are barred from chat, guild names and items.",
+          "designIndex": 58,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-59",
+          "slug": "design-timeline-59",
+          "title": "3 Jul",
+          "body": "The Market releases at 2pm ET alongside a new advertisement, but auction problems put it on hold within hours. Everyone is refunded.",
+          "designIndex": 59,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-60",
+          "slug": "design-timeline-60",
+          "title": "9 Jul",
+          "body": "The Market relaunches with a stall auction. Server trouble forces a re-bid on 10 July, and the auction closes that evening.",
+          "designIndex": 60,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-61",
+          "slug": "design-timeline-61",
+          "title": "15 Jul",
+          "body": "The SMP goes down for most of a day to fix a homes exploit and a duel-spectating exploit.",
+          "designIndex": 61,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-62",
+          "slug": "design-timeline-62",
+          "title": "19 Jul",
+          "body": "The website gets a new look and an interactive Market showing every stall, its owner and its stock.",
+          "designIndex": 62,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-63",
+          "slug": "design-timeline-63",
+          "title": "13 Jul",
+          "body": "BoopGang declares war on every guild on the server.",
+          "designIndex": 63,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-64",
+          "slug": "design-timeline-64",
+          "title": "22 Jul",
+          "body": "Vibe and BoopGang raid WOT together. WOT says it wrecked five Vibe farms in return.",
+          "designIndex": 64,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-65",
+          "slug": "design-timeline-65",
+          "title": "31 Jul",
+          "body": "BoopGang raids through the night. Enthusiast's base falls, while WOT fights its raid off.",
+          "designIndex": 65,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-66",
+          "slug": "design-timeline-66",
+          "title": "2 Aug",
+          "body": "The server shuts for a full day of maintenance while players earn the Grass Toucher tag for photos of the outdoors. It returns on 4 August.",
+          "designIndex": 66,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-67",
+          "slug": "design-timeline-67",
+          "title": "4 Aug",
+          "body": "Java 25, a network tab list, /daily rewards and 100 achievements. New builder and helpers join the team.",
+          "designIndex": 67,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-68",
+          "slug": "design-timeline-68",
+          "title": "Aug",
+          "body": "Weekly rotating Warzone kits arrive, voted in during May.",
+          "designIndex": 68,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-69",
+          "slug": "design-timeline-69",
+          "title": "Mid-Aug",
+          "body": "The Imperials are raided again and again through mid-August. The guild disbands in early September.",
+          "designIndex": 69,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-70",
+          "slug": "design-timeline-70",
+          "title": "28 Aug",
+          "body": "Guilds band together as the GDTO against WOT. Vibe turns on the alliance and raids across the server, and Enthusiast answers with a declaration of war.",
+          "designIndex": 70,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-71",
+          "slug": "design-timeline-71",
+          "title": "4 Sep",
+          "body": "Fain looks back on the first year and previews the Chapter 2 guild rework.",
+          "designIndex": 71,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-72",
+          "slug": "design-timeline-72",
+          "title": "10 Sep",
+          "body": "Asgard raids the base of EnthOpen, Enthusiast's open guild, in what its raiders call the biggest base raid yet.",
+          "designIndex": 72,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-73",
+          "slug": "design-timeline-73",
+          "title": "19 Sep",
+          "body": "With the chapter ending, Vibe raids PTC, Everlights and Enthusiast bases, while Asgard and WOT hit Vibe's surface base, skull farm and guild home.",
+          "designIndex": 73,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-74",
+          "slug": "design-timeline-74",
+          "title": "24 Sep",
+          "body": "Chapter 2 is announced for 1 October, with a temporary server during maintenance.",
+          "designIndex": 74,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-75",
+          "slug": "design-timeline-75",
+          "title": "28 Sep",
+          "body": "The main SMP goes offline and a temporary fresh server opens that evening, with small borders, the End open from the start and hidden challenges whose tags carry over.",
+          "designIndex": 75,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-76",
+          "slug": "design-timeline-76",
+          "title": "30 Sep",
+          "body": "The temporary world border jumps to 300k and players are challenged to beat the dragon again.",
+          "designIndex": 76,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-77",
+          "slug": "design-timeline-77",
+          "title": "2 Oct",
+          "body": "A day later than planned, the server reopens on Minecraft 26.2 with a Halloween spawn and Warzone, a bigger border, guild Prestige and Seasonal ELO, EnthusiaExpress mail and new donor perks.",
+          "designIndex": 77,
+          "kind": "timeline"
+        },
+        {
+          "id": "design-timeline-78",
+          "slug": "design-timeline-78",
+          "title": "3 Oct",
+          "body": "The server advertisement goes live at 9am ET and a wave of new players is welcomed in.",
+          "designIndex": 78,
+          "kind": "timeline"
         }
+      ],
+      "model": [
+        [
+          "dev",
+          "milestone"
+        ],
+        [
+          "dev",
+          "milestone"
+        ],
+        [
+          "dev",
+          "update"
+        ],
+        [
+          "dev",
+          "community"
+        ],
+        [
+          "dev",
+          "community"
+        ],
+        [
+          "dev",
+          "milestone"
+        ],
+        [
+          "dev",
+          "update"
+        ],
+        [
+          "beta1",
+          "milestone"
+        ],
+        [
+          "beta1",
+          "guild"
+        ],
+        [
+          "beta1",
+          "guild"
+        ],
+        [
+          "beta1",
+          "update"
+        ],
+        [
+          "beta1",
+          "update"
+        ],
+        [
+          "beta1",
+          "event"
+        ],
+        [
+          "beta1",
+          "community"
+        ],
+        [
+          "beta1",
+          "milestone"
+        ],
+        [
+          "beta1",
+          "community"
+        ],
+        [
+          "beta2",
+          "event"
+        ],
+        [
+          "beta2",
+          "milestone"
+        ],
+        [
+          "beta2",
+          "update"
+        ],
+        [
+          "beta2",
+          "milestone"
+        ],
+        [
+          "beta2",
+          "guild"
+        ],
+        [
+          "beta2",
+          "event"
+        ],
+        [
+          "beta2",
+          "milestone"
+        ],
+        [
+          "beta2",
+          "milestone"
+        ],
+        [
+          "beta2",
+          "update"
+        ],
+        [
+          "beta2",
+          "guild"
+        ],
+        [
+          "beta2",
+          "guild"
+        ],
+        [
+          "beta2",
+          "community"
+        ],
+        [
+          "beta2",
+          "update"
+        ],
+        [
+          "beta2",
+          "update"
+        ],
+        [
+          "beta2",
+          "guild"
+        ],
+        [
+          "beta2",
+          "guild"
+        ],
+        [
+          "beta2",
+          "milestone"
+        ],
+        [
+          "beta2",
+          "update"
+        ],
+        [
+          "beta2",
+          "update"
+        ],
+        [
+          "beta2",
+          "event"
+        ],
+        [
+          "beta2",
+          "guild"
+        ],
+        [
+          "beta2",
+          "milestone"
+        ],
+        [
+          "ch1",
+          "milestone"
+        ],
+        [
+          "ch1",
+          "event"
+        ],
+        [
+          "ch1",
+          "event"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "event"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "community"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "event"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "event"
+        ],
+        [
+          "ch1",
+          "community"
+        ],
+        [
+          "ch1",
+          "milestone"
+        ],
+        [
+          "ch1",
+          "event"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "event"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "update"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "community"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "guild"
+        ],
+        [
+          "ch1",
+          "milestone"
+        ],
+        [
+          "ch2",
+          "milestone"
+        ],
+        [
+          "ch2",
+          "event"
+        ],
+        [
+          "ch2",
+          "milestone"
+        ],
+        [
+          "ch2",
+          "community"
+        ]
       ]
     },
     "halloffame": {
       "items": [
         {
-          "kind": "halloffame",
-          "slug": "halloffame-sample",
-          "title": "Sample competition winner",
-          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
-          "category": "Community",
-          "status": "published",
-          "revision": 1,
-          "verification": "unverified",
-          "date": "2026-10-02T12:00:00Z"
+          "id": "design-halloffame-0",
+          "slug": "design-halloffame-0",
+          "title": "To be decided",
+          "body": "Halloween Build Competition",
+          "designIndex": 0,
+          "kind": "halloffame"
+        },
+        {
+          "id": "design-halloffame-1",
+          "slug": "design-halloffame-1",
+          "title": "To be decided",
+          "body": "Mapart Competition",
+          "designIndex": 1,
+          "kind": "halloffame"
+        },
+        {
+          "id": "design-halloffame-2",
+          "slug": "design-halloffame-2",
+          "title": "StepSoy",
+          "body": "Media Event",
+          "designIndex": 2,
+          "kind": "halloffame"
+        },
+        {
+          "id": "design-halloffame-3",
+          "slug": "design-halloffame-3",
+          "title": "Vibe",
+          "body": "First guild to level 100",
+          "designIndex": 3,
+          "kind": "halloffame"
+        },
+        {
+          "id": "design-halloffame-4",
+          "slug": "design-halloffame-4",
+          "title": "OinkerMC",
+          "body": "First PvP Tournament",
+          "designIndex": 4,
+          "kind": "halloffame"
+        },
+        {
+          "id": "design-halloffame-5",
+          "slug": "design-halloffame-5",
+          "title": "Vibe, Dogeclan and BoopGang",
+          "body": "The End Fight",
+          "designIndex": 5,
+          "kind": "halloffame"
+        },
+        {
+          "id": "design-halloffame-6",
+          "slug": "design-halloffame-6",
+          "title": "Flomish, Prologue Champion",
+          "body": "End of the World",
+          "designIndex": 6,
+          "kind": "halloffame"
+        },
+        {
+          "id": "design-halloffame-7",
+          "slug": "design-halloffame-7",
+          "title": "Enthusiast and Blood Guard",
+          "body": "The beta End event",
+          "designIndex": 7,
+          "kind": "halloffame"
+        },
+        {
+          "id": "design-halloffame-8",
+          "slug": "design-halloffame-8",
+          "title": "RedstoneIsGreat",
+          "body": "Top Bug Hunter",
+          "designIndex": 8,
+          "kind": "halloffame"
+        },
+        {
+          "id": "design-halloffame-9",
+          "slug": "design-halloffame-9",
+          "title": "p2wn, Borlyn and Doge198_",
+          "body": "KOTH at Haunted Hill",
+          "designIndex": 9,
+          "kind": "halloffame"
+        },
+        {
+          "id": "design-halloffame-10",
+          "slug": "design-halloffame-10",
+          "title": "FlashStrength and p2wn",
+          "body": "$100 advertisement event",
+          "designIndex": 10,
+          "kind": "halloffame"
         }
+      ],
+      "model": [
+        "ch2",
+        "ch2",
+        "ch1",
+        "ch1",
+        "ch1",
+        "ch1",
+        "beta",
+        "beta",
+        "beta",
+        "beta",
+        "beta"
       ]
     },
     "creators": {
       "items": [
         {
-          "kind": "creators",
-          "slug": "creators-sample",
-          "title": "Sample creator",
-          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
-          "category": "Community",
-          "status": "published",
-          "revision": 1,
-          "verification": "unverified",
-          "date": "2026-10-02T12:00:00Z",
-          "image": "/assets/screenshots/slide-01.webp"
+          "id": "design-creators-0",
+          "slug": "design-creators-0",
+          "title": "creators",
+          "body": "",
+          "designIndex": 0,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-1",
+          "slug": "design-creators-1",
+          "title": "creators",
+          "body": "",
+          "designIndex": 1,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-2",
+          "slug": "design-creators-2",
+          "title": "creators",
+          "body": "",
+          "designIndex": 2,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-3",
+          "slug": "design-creators-3",
+          "title": "creators",
+          "body": "",
+          "designIndex": 3,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-4",
+          "slug": "design-creators-4",
+          "title": "creators",
+          "body": "",
+          "designIndex": 4,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-5",
+          "slug": "design-creators-5",
+          "title": "creators",
+          "body": "",
+          "designIndex": 5,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-6",
+          "slug": "design-creators-6",
+          "title": "creators",
+          "body": "",
+          "designIndex": 6,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-7",
+          "slug": "design-creators-7",
+          "title": "creators",
+          "body": "",
+          "designIndex": 7,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-8",
+          "slug": "design-creators-8",
+          "title": "creators",
+          "body": "",
+          "designIndex": 8,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-9",
+          "slug": "design-creators-9",
+          "title": "creators",
+          "body": "",
+          "designIndex": 9,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-10",
+          "slug": "design-creators-10",
+          "title": "creators",
+          "body": "",
+          "designIndex": 10,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-11",
+          "slug": "design-creators-11",
+          "title": "creators",
+          "body": "",
+          "designIndex": 11,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-12",
+          "slug": "design-creators-12",
+          "title": "creators",
+          "body": "",
+          "designIndex": 12,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-13",
+          "slug": "design-creators-13",
+          "title": "creators",
+          "body": "",
+          "designIndex": 13,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-14",
+          "slug": "design-creators-14",
+          "title": "creators",
+          "body": "",
+          "designIndex": 14,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-15",
+          "slug": "design-creators-15",
+          "title": "creators",
+          "body": "",
+          "designIndex": 15,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-16",
+          "slug": "design-creators-16",
+          "title": "creators",
+          "body": "",
+          "designIndex": 16,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-17",
+          "slug": "design-creators-17",
+          "title": "creators",
+          "body": "",
+          "designIndex": 17,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-18",
+          "slug": "design-creators-18",
+          "title": "creators",
+          "body": "",
+          "designIndex": 18,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-19",
+          "slug": "design-creators-19",
+          "title": "creators",
+          "body": "",
+          "designIndex": 19,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-20",
+          "slug": "design-creators-20",
+          "title": "creators",
+          "body": "",
+          "designIndex": 20,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-21",
+          "slug": "design-creators-21",
+          "title": "creators",
+          "body": "",
+          "designIndex": 21,
+          "kind": "creators"
+        },
+        {
+          "id": "design-creators-22",
+          "slug": "design-creators-22",
+          "title": "creators",
+          "body": "",
+          "designIndex": 22,
+          "kind": "creators"
         }
+      ],
+      "model": [
+        "m0",
+        "m2",
+        "m4",
+        "m1",
+        "other",
+        "m0",
+        "other",
+        "m3",
+        "other",
+        "m2",
+        "m0",
+        "m0",
+        "m2",
+        "other",
+        "m0",
+        "m3",
+        "m4",
+        "m1",
+        "m1",
+        "m1",
+        "m1",
+        "m1",
+        "other"
       ]
     },
     "museum": {
       "items": [
         {
-          "kind": "museum",
-          "slug": "museum-sample",
-          "title": "Sample mapart exhibit",
-          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
-          "category": "Community",
-          "status": "published",
-          "revision": 1,
-          "verification": "unverified",
-          "date": "2026-10-02T12:00:00Z",
-          "image": "/assets/screenshots/slide-02.webp"
+          "id": "design-museum-0",
+          "slug": "design-museum-0",
+          "title": "museum",
+          "body": "",
+          "designIndex": 0,
+          "kind": "museum"
+        },
+        {
+          "id": "design-museum-1",
+          "slug": "design-museum-1",
+          "title": "museum",
+          "body": "",
+          "designIndex": 1,
+          "kind": "museum"
+        },
+        {
+          "id": "design-museum-2",
+          "slug": "design-museum-2",
+          "title": "museum",
+          "body": "",
+          "designIndex": 2,
+          "kind": "museum"
+        },
+        {
+          "id": "design-museum-3",
+          "slug": "design-museum-3",
+          "title": "museum",
+          "body": "",
+          "designIndex": 3,
+          "kind": "museum"
+        },
+        {
+          "id": "design-museum-4",
+          "slug": "design-museum-4",
+          "title": "museum",
+          "body": "",
+          "designIndex": 4,
+          "kind": "museum"
+        },
+        {
+          "id": "design-museum-5",
+          "slug": "design-museum-5",
+          "title": "museum",
+          "body": "",
+          "designIndex": 5,
+          "kind": "museum"
+        },
+        {
+          "id": "design-museum-6",
+          "slug": "design-museum-6",
+          "title": "museum",
+          "body": "",
+          "designIndex": 6,
+          "kind": "museum"
+        },
+        {
+          "id": "design-museum-7",
+          "slug": "design-museum-7",
+          "title": "museum",
+          "body": "",
+          "designIndex": 7,
+          "kind": "museum"
+        },
+        {
+          "id": "design-museum-8",
+          "slug": "design-museum-8",
+          "title": "museum",
+          "body": "",
+          "designIndex": 8,
+          "kind": "museum"
         }
+      ],
+      "model": [
+        [
+          "comp",
+          "Competition 2026",
+          "2 x 2 maps",
+          "Great Hall, north wall"
+        ],
+        [
+          "comp",
+          "Competition 2026",
+          "3 x 2 maps",
+          "Great Hall, north wall"
+        ],
+        [
+          "comp",
+          "Competition 2026",
+          "1 x 1 maps",
+          "Great Hall, east wall"
+        ],
+        [
+          "community",
+          "Community",
+          "2 x 1 maps",
+          "Long Gallery"
+        ],
+        [
+          "community",
+          "Community",
+          "1 x 1 maps",
+          "Long Gallery"
+        ],
+        [
+          "community",
+          "Community",
+          "2 x 2 maps",
+          "Long Gallery"
+        ],
+        [
+          "community",
+          "Community",
+          "1 x 2 maps",
+          "Long Gallery"
+        ],
+        [
+          "staff",
+          "Staff picks",
+          "2 x 2 maps",
+          "Founders Room"
+        ],
+        [
+          "staff",
+          "Staff picks",
+          "1 x 1 maps",
+          "Founders Room"
+        ]
       ]
     },
     "polls": {
       "items": [
         {
           "kind": "polls",
-          "slug": "polls-sample",
-          "title": "Choose a sample event",
-          "body": "Preview sample content. **Minecraft menus**, __gold trim__, and ||spoilers||.\n\n> This is sample data, not a published server announcement.",
-          "category": "Community",
-          "status": "published",
-          "revision": 1,
-          "verification": "unverified",
-          "date": "2026-10-02T12:00:00Z",
+          "slug": "reference-poll",
+          "title": "[Poll question]",
+          "body": "[A sentence or two about what is being decided and why your vote matters.]",
+          "closesAt": "2099-10-25T00:00:00Z",
           "options": [
-            "Build",
-            "Mapart",
-            "PvP"
-          ],
-          "closesAt": "2099-01-01T00:00:00Z"
+            "[Option one]",
+            "[Option two]",
+            "[Option three]"
+          ]
         }
       ]
     },
@@ -643,6 +2893,2844 @@
           }
         }
       ]
-    }
+    },
+    "marketDesign": {
+      "winners": [
+        {
+          "name": "Kostpits13_",
+          "stall": "B2",
+          "gold": 18420,
+          "sales": 612,
+          "buyers": 143,
+          "best": [
+            [
+              "Diamond",
+              340,
+              4830
+            ],
+            [
+              "Elytra",
+              3,
+              3750
+            ],
+            [
+              "Netherite Ingot",
+              9,
+              3690
+            ]
+          ]
+        },
+        {
+          "name": "SleepingOnCheese",
+          "stall": "A3",
+          "gold": 15980
+        },
+        {
+          "name": "CheddarManPro",
+          "stall": "C1",
+          "gold": 14310
+        },
+        {
+          "name": "GodOfSharks",
+          "stall": "B4",
+          "gold": 13775
+        },
+        {
+          "name": "ItzOkPookie",
+          "stall": "A1",
+          "gold": 12940
+        },
+        {
+          "name": "BaLIneA",
+          "stall": "C3",
+          "gold": 11206
+        }
+      ],
+      "live": [
+        {
+          "name": "Kavebo",
+          "stall": "A2",
+          "gold": 9860,
+          "streak": 6
+        },
+        {
+          "name": "Kostpits13_",
+          "stall": "B2",
+          "gold": 8415,
+          "streak": 4
+        },
+        {
+          "name": "CheddarManPro",
+          "stall": "C1",
+          "gold": 7330,
+          "streak": 1
+        },
+        {
+          "name": "SleepingOnCheese",
+          "stall": "A3",
+          "gold": 6102,
+          "streak": 1
+        },
+        {
+          "name": "GodOfSharks",
+          "stall": "B4",
+          "gold": 4985,
+          "streak": 2
+        }
+      ],
+      "items": [
+        {
+          "name": "Diamond",
+          "price": 14.2,
+          "days": [
+            {
+              "avg": 12.917317713630935,
+              "lo": 12.254112196966316,
+              "hi": 13.580523230295551
+            },
+            {
+              "avg": 12.974866965520501,
+              "lo": 12.448180207985539,
+              "hi": 13.501553723055464
+            },
+            {
+              "avg": 13.074883302784588,
+              "lo": 12.051772722735306,
+              "hi": 14.09799388283387
+            },
+            {
+              "avg": 13.106645150382821,
+              "lo": 11.910377507846068,
+              "hi": 14.302912792919573
+            },
+            {
+              "avg": 13.336198789662722,
+              "lo": 12.618364201136098,
+              "hi": 14.054033378189345
+            },
+            {
+              "avg": 13.15865727318477,
+              "lo": 12.559157577361953,
+              "hi": 13.758156969007588
+            },
+            {
+              "avg": 12.877994123177157,
+              "lo": 11.868419527148399,
+              "hi": 13.887568719205914
+            },
+            {
+              "avg": 13.242348568463006,
+              "lo": 12.492874339985315,
+              "hi": 13.991822796940697
+            },
+            {
+              "avg": 13.341696736252862,
+              "lo": 12.435268165118352,
+              "hi": 14.248125307387372
+            },
+            {
+              "avg": 13.274448540713857,
+              "lo": 12.35563168340949,
+              "hi": 14.193265398018225
+            },
+            {
+              "avg": 13.340062128565249,
+              "lo": 12.219459636491123,
+              "hi": 14.460664620639374
+            },
+            {
+              "avg": 13.64264575866769,
+              "lo": 13.023583285476308,
+              "hi": 14.261708231859073
+            },
+            {
+              "avg": 13.386442971188993,
+              "lo": 12.258850790114673,
+              "hi": 14.514035152263313
+            },
+            {
+              "avg": 13.608621682978875,
+              "lo": 12.484334692918253,
+              "hi": 14.732908673039496
+            },
+            {
+              "avg": 13.661173698114162,
+              "lo": 12.859823382133952,
+              "hi": 14.46252401409437
+            },
+            {
+              "avg": 13.335980529047236,
+              "lo": 12.817238796152797,
+              "hi": 13.854722261941674
+            },
+            {
+              "avg": 13.393061961432828,
+              "lo": 12.834308540710943,
+              "hi": 13.951815382154713
+            },
+            {
+              "avg": 13.50686623785658,
+              "lo": 12.375367627689924,
+              "hi": 14.638364848023235
+            },
+            {
+              "avg": 13.636446313682365,
+              "lo": 12.752133121050276,
+              "hi": 14.520759506314452
+            },
+            {
+              "avg": 13.667502861251231,
+              "lo": 12.759487654140528,
+              "hi": 14.575518068361932
+            },
+            {
+              "avg": 13.857954489003266,
+              "lo": 13.132162231570488,
+              "hi": 14.583746746436043
+            },
+            {
+              "avg": 13.579398974918382,
+              "lo": 12.69523793526278,
+              "hi": 14.463560014573986
+            },
+            {
+              "avg": 13.957329444818974,
+              "lo": 12.870302565346547,
+              "hi": 15.044356324291401
+            },
+            {
+              "avg": 13.987257873311238,
+              "lo": 13.39434469772031,
+              "hi": 14.580171048902166
+            },
+            {
+              "avg": 13.919505626832887,
+              "lo": 12.904419816784237,
+              "hi": 14.934591436881538
+            },
+            {
+              "avg": 14.266361337890892,
+              "lo": 13.695983644127015,
+              "hi": 14.836739031654767
+            },
+            {
+              "avg": 14.283280897227847,
+              "lo": 13.39843721276514,
+              "hi": 15.168124581690554
+            },
+            {
+              "avg": 14.301822990013772,
+              "lo": 13.266176585059329,
+              "hi": 15.337469394968215
+            },
+            {
+              "avg": 14.025989605247752,
+              "lo": 12.740640509988003,
+              "hi": 15.3113387005075
+            },
+            {
+              "avg": 14.2,
+              "lo": 13.333082827625562,
+              "hi": 15.066917172374437
+            }
+          ],
+          "sales": 4120,
+          "d1": 1.2406282882680975,
+          "d7": 1.7386603657987498,
+          "lo": 11.868419527148399,
+          "hi": 15.337469394968215,
+          "mean": 13.56209208486078
+        },
+        {
+          "name": "Netherite Ingot",
+          "price": 410,
+          "days": [
+            {
+              "avg": 451.05954710446747,
+              "lo": 430.13504403760857,
+              "hi": 471.9840501713264
+            },
+            {
+              "avg": 445.52844280078733,
+              "lo": 419.3184773330259,
+              "hi": 471.7384082685487
+            },
+            {
+              "avg": 455.66701133589197,
+              "lo": 433.45984328603043,
+              "hi": 477.87417938575356
+            },
+            {
+              "avg": 445.93574698293725,
+              "lo": 420.3552422575124,
+              "hi": 471.5162517083621
+            },
+            {
+              "avg": 440.1544852473715,
+              "lo": 413.60681429361375,
+              "hi": 466.70215620112924
+            },
+            {
+              "avg": 447.4514683822413,
+              "lo": 428.3564456695658,
+              "hi": 466.54649109491675
+            },
+            {
+              "avg": 441.5351425610094,
+              "lo": 413.3272594520309,
+              "hi": 469.74302566998796
+            },
+            {
+              "avg": 439.6754992445843,
+              "lo": 419.99461521973507,
+              "hi": 459.3563832694334
+            },
+            {
+              "avg": 436.27947812436406,
+              "lo": 418.3756425014612,
+              "hi": 454.183313747267
+            },
+            {
+              "avg": 430.58893735097257,
+              "lo": 408.34576127834845,
+              "hi": 452.8321134235967
+            },
+            {
+              "avg": 429.31972846275875,
+              "lo": 409.2535273322291,
+              "hi": 449.3859295932884
+            },
+            {
+              "avg": 429.0384379414092,
+              "lo": 397.8773733300316,
+              "hi": 460.19950255278684
+            },
+            {
+              "avg": 433.35072840401136,
+              "lo": 408.86294964778637,
+              "hi": 457.83850716023636
+            },
+            {
+              "avg": 433.3528307957426,
+              "lo": 420.20157212890246,
+              "hi": 446.5040894625828
+            },
+            {
+              "avg": 438.86073868788435,
+              "lo": 408.26589230548564,
+              "hi": 469.45558507028306
+            },
+            {
+              "avg": 436.261719675221,
+              "lo": 407.6072519974073,
+              "hi": 464.91618735303473
+            },
+            {
+              "avg": 429.3656762903377,
+              "lo": 406.9474347322517,
+              "hi": 451.78391784842376
+            },
+            {
+              "avg": 424.1423453826579,
+              "lo": 398.2903088953294,
+              "hi": 449.99438186998634
+            },
+            {
+              "avg": 427.12783089573054,
+              "lo": 413.140821451894,
+              "hi": 441.1148403395671
+            },
+            {
+              "avg": 416.40819593339927,
+              "lo": 393.9666242433057,
+              "hi": 438.8497676234928
+            },
+            {
+              "avg": 425.00848792736394,
+              "lo": 403.45229551859046,
+              "hi": 446.5646803361374
+            },
+            {
+              "avg": 423.6389790828731,
+              "lo": 397.8607244719402,
+              "hi": 449.417233693806
+            },
+            {
+              "avg": 425.19902241078603,
+              "lo": 402.1659308405955,
+              "hi": 448.2321139809766
+            },
+            {
+              "avg": 413.2552905319319,
+              "lo": 387.380137133279,
+              "hi": 439.13044393058476
+            },
+            {
+              "avg": 413.48926473179716,
+              "lo": 397.76363626725805,
+              "hi": 429.2148931963362
+            },
+            {
+              "avg": 415.79504311342816,
+              "lo": 389.59105074221844,
+              "hi": 441.99903548463794
+            },
+            {
+              "avg": 420.1810934985087,
+              "lo": 402.48571373899625,
+              "hi": 437.8764732580212
+            },
+            {
+              "avg": 404.99187983193946,
+              "lo": 387.15571809046264,
+              "hi": 422.8280415734163
+            },
+            {
+              "avg": 415.5744416699444,
+              "lo": 385.8555542007118,
+              "hi": 445.293329139177
+            },
+            {
+              "avg": 410,
+              "lo": 379.75313484481535,
+              "hi": 440.2468651551846
+            }
+          ],
+          "sales": 188,
+          "d1": -1.3413822196437497,
+          "d7": -3.5745666404901066,
+          "lo": 379.75313484481535,
+          "hi": 477.87417938575356,
+          "mean": 429.9412498134117
+        },
+        {
+          "name": "Elytra",
+          "price": 1250,
+          "days": [
+            {
+              "avg": 1099.1957465178286,
+              "lo": 1028.24647590108,
+              "hi": 1170.1450171345773
+            },
+            {
+              "avg": 1069.8102159693663,
+              "lo": 1031.733890096123,
+              "hi": 1107.8865418426094
+            },
+            {
+              "avg": 1098.5827193325085,
+              "lo": 1054.8838388630068,
+              "hi": 1142.2815998020103
+            },
+            {
+              "avg": 1115.5713853490577,
+              "lo": 1043.3856284789836,
+              "hi": 1187.7571422191315
+            },
+            {
+              "avg": 1105.2975147732911,
+              "lo": 1043.2450204740683,
+              "hi": 1167.3500090725138
+            },
+            {
+              "avg": 1104.6100326592818,
+              "lo": 1067.1717494114052,
+              "hi": 1142.0483159071584
+            },
+            {
+              "avg": 1091.8876916900867,
+              "lo": 1020.1803165596656,
+              "hi": 1163.595066820508
+            },
+            {
+              "avg": 1125.0362254522272,
+              "lo": 1058.7506342683373,
+              "hi": 1191.321816636117
+            },
+            {
+              "avg": 1136.1291832479983,
+              "lo": 1083.0074409434078,
+              "hi": 1189.2509255525886
+            },
+            {
+              "avg": 1144.6288101154123,
+              "lo": 1104.5006026583571,
+              "hi": 1184.7570175724675
+            },
+            {
+              "avg": 1154.123751062163,
+              "lo": 1106.1855762775956,
+              "hi": 1202.06192584673
+            },
+            {
+              "avg": 1150.7998179475733,
+              "lo": 1102.7348892401214,
+              "hi": 1198.864746655025
+            },
+            {
+              "avg": 1162.0719641741193,
+              "lo": 1128.3469819678853,
+              "hi": 1195.7969463803533
+            },
+            {
+              "avg": 1165.602453622285,
+              "lo": 1130.1133165392018,
+              "hi": 1201.0915907053684
+            },
+            {
+              "avg": 1164.0389406911138,
+              "lo": 1107.3506924619824,
+              "hi": 1220.7271889202455
+            },
+            {
+              "avg": 1169.997111044955,
+              "lo": 1093.7133748833153,
+              "hi": 1246.280847206595
+            },
+            {
+              "avg": 1173.292303193898,
+              "lo": 1120.761866581068,
+              "hi": 1225.8227398067284
+            },
+            {
+              "avg": 1158.4546615858687,
+              "lo": 1086.0126014873401,
+              "hi": 1230.8967216843973
+            },
+            {
+              "avg": 1165.8182490090371,
+              "lo": 1112.7851908908024,
+              "hi": 1218.8513071272719
+            },
+            {
+              "avg": 1209.4983035390137,
+              "lo": 1147.709193259863,
+              "hi": 1271.2874138181642
+            },
+            {
+              "avg": 1205.7902907606424,
+              "lo": 1132.7293131303763,
+              "hi": 1278.8512683909084
+            },
+            {
+              "avg": 1182.3343439365356,
+              "lo": 1119.8276243978978,
+              "hi": 1244.8410634751733
+            },
+            {
+              "avg": 1219.5370091320437,
+              "lo": 1173.6712594639112,
+              "hi": 1265.4027588001766
+            },
+            {
+              "avg": 1220.4911581048573,
+              "lo": 1170.242526617438,
+              "hi": 1270.7397895922766
+            },
+            {
+              "avg": 1242.5905107628257,
+              "lo": 1178.5204578554021,
+              "hi": 1306.6605636702493
+            },
+            {
+              "avg": 1237.6861516793765,
+              "lo": 1181.991686886655,
+              "hi": 1293.380616472098
+            },
+            {
+              "avg": 1215.750285102698,
+              "lo": 1147.0623259560446,
+              "hi": 1284.4382442493513
+            },
+            {
+              "avg": 1217.6436824636787,
+              "lo": 1159.8167177907437,
+              "hi": 1275.4706471366137
+            },
+            {
+              "avg": 1265.1467946116475,
+              "lo": 1197.872743781655,
+              "hi": 1332.42084544164
+            },
+            {
+              "avg": 1250,
+              "lo": 1212.3857567063533,
+              "hi": 1287.6142432936465
+            }
+          ],
+          "sales": 41,
+          "d1": -1.1972361370363283,
+          "d7": 2.497914424887937,
+          "lo": 1020.1803165596656,
+          "hi": 1332.42084544164,
+          "mean": 1167.380576917713
+        },
+        {
+          "name": "Shulker Shell",
+          "price": 36.5,
+          "days": [
+            {
+              "avg": 34.976948756304424,
+              "lo": 33.144024389768646,
+              "hi": 36.8098731228402
+            },
+            {
+              "avg": 34.835430313136335,
+              "lo": 32.34739921001736,
+              "hi": 37.32346141625531
+            },
+            {
+              "avg": 34.33566578485534,
+              "lo": 30.542701759847116,
+              "hi": 38.12862980986356
+            },
+            {
+              "avg": 34.67117632018683,
+              "lo": 32.720959787444265,
+              "hi": 36.62139285292939
+            },
+            {
+              "avg": 36.28220548021009,
+              "lo": 34.32810216068369,
+              "hi": 38.23630879973649
+            },
+            {
+              "avg": 36.177573648019816,
+              "lo": 33.94737674367803,
+              "hi": 38.4077705523616
+            },
+            {
+              "avg": 35.25681446624425,
+              "lo": 31.95595743895994,
+              "hi": 38.55767149352857
+            },
+            {
+              "avg": 35.76164688531332,
+              "lo": 33.88270409863459,
+              "hi": 37.640589671992046
+            },
+            {
+              "avg": 35.317319938441095,
+              "lo": 32.523454007624565,
+              "hi": 38.111185869257625
+            },
+            {
+              "avg": 34.472388391707895,
+              "lo": 31.126711957673344,
+              "hi": 37.818064825742454
+            },
+            {
+              "avg": 35.73689209831358,
+              "lo": 33.32409764953222,
+              "hi": 38.14968654709494
+            },
+            {
+              "avg": 36.08444146329069,
+              "lo": 34.07904202943246,
+              "hi": 38.08984089714892
+            },
+            {
+              "avg": 35.56579170378673,
+              "lo": 31.977325842245257,
+              "hi": 39.1542575653282
+            },
+            {
+              "avg": 34.852307988261884,
+              "lo": 32.305647173769046,
+              "hi": 37.39896880275472
+            },
+            {
+              "avg": 35.217533065021634,
+              "lo": 32.60832781900295,
+              "hi": 37.826738311040316
+            },
+            {
+              "avg": 34.85136748136227,
+              "lo": 31.697280812246465,
+              "hi": 38.00545415047807
+            },
+            {
+              "avg": 35.20042378636101,
+              "lo": 33.576459092440494,
+              "hi": 36.82438848028152
+            },
+            {
+              "avg": 35.55423127568403,
+              "lo": 32.32968361135295,
+              "hi": 38.778778940015115
+            },
+            {
+              "avg": 34.94771381396695,
+              "lo": 32.38008301449841,
+              "hi": 37.51534461343549
+            },
+            {
+              "avg": 35.764847907318675,
+              "lo": 32.573709751383845,
+              "hi": 38.9559860632535
+            },
+            {
+              "avg": 36.16092169409617,
+              "lo": 32.77008322029126,
+              "hi": 39.551760167901065
+            },
+            {
+              "avg": 37.18500402492521,
+              "lo": 33.789318084614266,
+              "hi": 40.58068996523616
+            },
+            {
+              "avg": 35.29942198793041,
+              "lo": 32.35510570686613,
+              "hi": 38.24373826899468
+            },
+            {
+              "avg": 35.55857985632415,
+              "lo": 32.25890329306401,
+              "hi": 38.85825641958429
+            },
+            {
+              "avg": 36.1980631240315,
+              "lo": 33.86974599137555,
+              "hi": 38.52638025668744
+            },
+            {
+              "avg": 36.74732445474274,
+              "lo": 34.00358120755041,
+              "hi": 39.49106770193507
+            },
+            {
+              "avg": 35.512453043317265,
+              "lo": 33.035560836579954,
+              "hi": 37.989345250054576
+            },
+            {
+              "avg": 37.04418494858908,
+              "lo": 34.480604690622364,
+              "hi": 39.60776520655578
+            },
+            {
+              "avg": 36.49738675535139,
+              "lo": 34.62761798842317,
+              "hi": 38.36715552227962
+            },
+            {
+              "avg": 36.5,
+              "lo": 34.07207376937033,
+              "hi": 38.92792623062967
+            }
+          ],
+          "sales": 960,
+          "d1": 0.007160087011492955,
+          "d7": 3.401126546718225,
+          "lo": 30.542701759847116,
+          "hi": 40.58068996523616,
+          "mean": 35.61886868190315
+        },
+        {
+          "name": "Enchanted Golden Apple",
+          "price": 640,
+          "days": [
+            {
+              "avg": 677.4767874876659,
+              "lo": 648.3669019550804,
+              "hi": 706.5866730202514
+            },
+            {
+              "avg": 651.6505206292388,
+              "lo": 611.175916422609,
+              "hi": 692.1251248358686
+            },
+            {
+              "avg": 680.5555142418578,
+              "lo": 644.964262801521,
+              "hi": 716.1467656821947
+            },
+            {
+              "avg": 676.5575142350348,
+              "lo": 623.0064474446493,
+              "hi": 730.1085810254202
+            },
+            {
+              "avg": 663.779614273416,
+              "lo": 632.055277338105,
+              "hi": 695.5039512087269
+            },
+            {
+              "avg": 672.7491555365509,
+              "lo": 634.7312126278582,
+              "hi": 710.7670984452436
+            },
+            {
+              "avg": 650.5897933958078,
+              "lo": 597.3639473078931,
+              "hi": 703.8156394837225
+            },
+            {
+              "avg": 660.6908165970068,
+              "lo": 618.9303910477664,
+              "hi": 702.4512421462472
+            },
+            {
+              "avg": 672.5540141288577,
+              "lo": 635.3351608380098,
+              "hi": 709.7728674197057
+            },
+            {
+              "avg": 653.5887712180272,
+              "lo": 609.2460969915137,
+              "hi": 697.9314454445406
+            },
+            {
+              "avg": 645.0315358842585,
+              "lo": 613.347172286614,
+              "hi": 676.715899481903
+            },
+            {
+              "avg": 646.994277598529,
+              "lo": 618.3362105166823,
+              "hi": 675.6523446803758
+            },
+            {
+              "avg": 651.0870150761016,
+              "lo": 623.4839284033811,
+              "hi": 678.690101748822
+            },
+            {
+              "avg": 643.1287854787433,
+              "lo": 587.3365440322707,
+              "hi": 698.921026925216
+            },
+            {
+              "avg": 644.8447919331235,
+              "lo": 611.0847295398871,
+              "hi": 678.6048543263598
+            },
+            {
+              "avg": 653.4448948684095,
+              "lo": 622.2003306790663,
+              "hi": 684.6894590577529
+            },
+            {
+              "avg": 658.3648743404226,
+              "lo": 615.3905769283934,
+              "hi": 701.3391717524518
+            },
+            {
+              "avg": 661.9020031878147,
+              "lo": 607.5010373000098,
+              "hi": 716.3029690756196
+            },
+            {
+              "avg": 638.3150849421135,
+              "lo": 601.6081144722343,
+              "hi": 675.0220554119926
+            },
+            {
+              "avg": 654.6434728622265,
+              "lo": 618.3610270323891,
+              "hi": 690.9259186920639
+            },
+            {
+              "avg": 635.290040054455,
+              "lo": 577.2928867820946,
+              "hi": 693.2871933268153
+            },
+            {
+              "avg": 656.3638335814935,
+              "lo": 616.6730332205916,
+              "hi": 696.0546339423955
+            },
+            {
+              "avg": 652.3792491645992,
+              "lo": 620.0180085788526,
+              "hi": 684.7404897503458
+            },
+            {
+              "avg": 630.7627442759173,
+              "lo": 606.5564482412592,
+              "hi": 654.9690403105753
+            },
+            {
+              "avg": 655.2606096289967,
+              "lo": 609.0959705093813,
+              "hi": 701.425248748612
+            },
+            {
+              "avg": 656.5902091029218,
+              "lo": 630.6128182829151,
+              "hi": 682.5675999229285
+            },
+            {
+              "avg": 641.2492761267671,
+              "lo": 601.5914179799242,
+              "hi": 680.90713427361
+            },
+            {
+              "avg": 644.8474285671081,
+              "lo": 603.0373399254416,
+              "hi": 686.6575172087745
+            },
+            {
+              "avg": 635.8467789997144,
+              "lo": 580.4752241960285,
+              "hi": 691.2183338034001
+            },
+            {
+              "avg": 640,
+              "lo": 599.8735613569618,
+              "hi": 680.1264386430382
+            }
+          ],
+          "sales": 77,
+          "d1": 0.6531795296375043,
+          "d7": -1.8975540960953885,
+          "lo": 577.2928867820946,
+          "hi": 730.1085810254202,
+          "mean": 653.5513135805726
+        },
+        {
+          "name": "Totem of Undying",
+          "price": 92,
+          "days": [
+            {
+              "avg": 88.53187050052405,
+              "lo": 82.92538061945737,
+              "hi": 94.13836038159073
+            },
+            {
+              "avg": 83.54798019313303,
+              "lo": 79.77009506100356,
+              "hi": 87.32586532526248
+            },
+            {
+              "avg": 84.38946557815801,
+              "lo": 75.13622581336269,
+              "hi": 93.64270534295333
+            },
+            {
+              "avg": 84.72554235242553,
+              "lo": 77.14110513065005,
+              "hi": 92.30997957420102
+            },
+            {
+              "avg": 88.32287166374614,
+              "lo": 80.47769619708207,
+              "hi": 96.16804713041023
+            },
+            {
+              "avg": 88.91090020101028,
+              "lo": 83.65203121228434,
+              "hi": 94.16976918973621
+            },
+            {
+              "avg": 87.95580158328713,
+              "lo": 78.29325470811366,
+              "hi": 97.61834845846059
+            },
+            {
+              "avg": 88.20396887098146,
+              "lo": 80.55232028418213,
+              "hi": 95.85561745778078
+            },
+            {
+              "avg": 90.02226861623386,
+              "lo": 84.64747686813143,
+              "hi": 95.39706036433628
+            },
+            {
+              "avg": 88.24034677173844,
+              "lo": 82.58339813632598,
+              "hi": 93.89729540715089
+            },
+            {
+              "avg": 90.1817669109488,
+              "lo": 81.89600338758447,
+              "hi": 98.46753043431313
+            },
+            {
+              "avg": 89.35246300938638,
+              "lo": 83.79775103641556,
+              "hi": 94.90717498235719
+            },
+            {
+              "avg": 90.4343809401217,
+              "lo": 83.20457101820642,
+              "hi": 97.66419086203699
+            },
+            {
+              "avg": 86.0653152122378,
+              "lo": 79.3567362651316,
+              "hi": 92.77389415934401
+            },
+            {
+              "avg": 91.43669343217204,
+              "lo": 84.17892645638,
+              "hi": 98.69446040796406
+            },
+            {
+              "avg": 87.67860688499665,
+              "lo": 79.96558866457656,
+              "hi": 95.39162510541675
+            },
+            {
+              "avg": 92.06185437964398,
+              "lo": 83.7821823894948,
+              "hi": 100.34152636979314
+            },
+            {
+              "avg": 92.06305116328167,
+              "lo": 82.01440506146129,
+              "hi": 102.11169726510205
+            },
+            {
+              "avg": 88.5653083479902,
+              "lo": 83.80354989943406,
+              "hi": 93.32706679654633
+            },
+            {
+              "avg": 91.42847448527765,
+              "lo": 83.60888060603548,
+              "hi": 99.24806836451981
+            },
+            {
+              "avg": 92.54288699618124,
+              "lo": 82.88521204289594,
+              "hi": 102.20056194946653
+            },
+            {
+              "avg": 88.4525912282165,
+              "lo": 83.00251981852716,
+              "hi": 93.90266263790585
+            },
+            {
+              "avg": 88.14021707867983,
+              "lo": 79.9570058416014,
+              "hi": 96.32342831575826
+            },
+            {
+              "avg": 88.92987841340124,
+              "lo": 80.54298349543653,
+              "hi": 97.31677333136595
+            },
+            {
+              "avg": 91.83410356667801,
+              "lo": 85.43057967704709,
+              "hi": 98.23762745630891
+            },
+            {
+              "avg": 89.63218571912105,
+              "lo": 81.84453846160815,
+              "hi": 97.41983297663396
+            },
+            {
+              "avg": 93.03826609650798,
+              "lo": 86.39323897041474,
+              "hi": 99.68329322260124
+            },
+            {
+              "avg": 88.84940776618933,
+              "lo": 81.05060524671245,
+              "hi": 96.64821028566621
+            },
+            {
+              "avg": 89.22112302939776,
+              "lo": 81.87337143718774,
+              "hi": 96.56887462160778
+            },
+            {
+              "avg": 92,
+              "lo": 82.28089304452017,
+              "hi": 101.71910695547983
+            }
+          ],
+          "sales": 310,
+          "d1": 3.1145953741095855,
+          "d7": 4.379139340982885,
+          "lo": 75.13622581336269,
+          "hi": 102.20056194946653,
+          "mean": 89.1586530330556
+        },
+        {
+          "name": "Ancient Debris",
+          "price": 58,
+          "days": [
+            {
+              "avg": 65.72130273005095,
+              "lo": 60.11192995570108,
+              "hi": 71.33067550440083
+            },
+            {
+              "avg": 65.05354333127697,
+              "lo": 60.78647188481154,
+              "hi": 69.32061477774239
+            },
+            {
+              "avg": 66.3393870906044,
+              "lo": 59.941694985305546,
+              "hi": 72.73707919590326
+            },
+            {
+              "avg": 64.75926089703191,
+              "lo": 58.53859330263644,
+              "hi": 70.97992849142737
+            },
+            {
+              "avg": 65.79204278461837,
+              "lo": 61.393534044728305,
+              "hi": 70.19055152450845
+            },
+            {
+              "avg": 64.5651742519191,
+              "lo": 59.178704025316804,
+              "hi": 69.9516444785214
+            },
+            {
+              "avg": 63.79522556028582,
+              "lo": 58.27553423479869,
+              "hi": 69.31491688577294
+            },
+            {
+              "avg": 65.29889325911552,
+              "lo": 61.95677685158086,
+              "hi": 68.64100966665016
+            },
+            {
+              "avg": 62.57791643733836,
+              "lo": 59.23441337021435,
+              "hi": 65.92141950446238
+            },
+            {
+              "avg": 62.989569625838236,
+              "lo": 56.50900575505624,
+              "hi": 69.47013349662024
+            },
+            {
+              "avg": 61.87946218425205,
+              "lo": 57.57795476269744,
+              "hi": 66.18096960580665
+            },
+            {
+              "avg": 63.22472241240469,
+              "lo": 57.883290101818226,
+              "hi": 68.56615472299114
+            },
+            {
+              "avg": 62.63723605505038,
+              "lo": 59.43422468823868,
+              "hi": 65.84024742186209
+            },
+            {
+              "avg": 63.235307758919554,
+              "lo": 57.249554098499274,
+              "hi": 69.22106141933983
+            },
+            {
+              "avg": 62.87385491603884,
+              "lo": 59.09196934364753,
+              "hi": 66.65574048843015
+            },
+            {
+              "avg": 63.20881198306212,
+              "lo": 60.25338445985279,
+              "hi": 66.16423950627144
+            },
+            {
+              "avg": 62.529012346421794,
+              "lo": 56.1195641320499,
+              "hi": 68.9384605607937
+            },
+            {
+              "avg": 61.73804121740603,
+              "lo": 57.88704603832253,
+              "hi": 65.58903639648953
+            },
+            {
+              "avg": 59.61631130485609,
+              "lo": 54.33462223291662,
+              "hi": 64.89800037679557
+            },
+            {
+              "avg": 60.53214065012268,
+              "lo": 54.73258474308874,
+              "hi": 66.33169655715662
+            },
+            {
+              "avg": 60.891143455273046,
+              "lo": 57.848856350294696,
+              "hi": 63.933430560251395
+            },
+            {
+              "avg": 59.68582221579721,
+              "lo": 54.26238141497159,
+              "hi": 65.10926301662282
+            },
+            {
+              "avg": 60.757649881427255,
+              "lo": 56.71908913888282,
+              "hi": 64.79621062397169
+            },
+            {
+              "avg": 59.61707424893636,
+              "lo": 54.162803050784596,
+              "hi": 65.07134544708813
+            },
+            {
+              "avg": 58.83364143745567,
+              "lo": 56.18375545056767,
+              "hi": 61.48352742434366
+            },
+            {
+              "avg": 59.32750182791325,
+              "lo": 53.364018328192245,
+              "hi": 65.29098532763426
+            },
+            {
+              "avg": 59.443109921990136,
+              "lo": 55.694058027289756,
+              "hi": 63.19216181669051
+            },
+            {
+              "avg": 59.51071232472123,
+              "lo": 53.53670404182137,
+              "hi": 65.48472060762109
+            },
+            {
+              "avg": 57.63889991162785,
+              "lo": 54.00598041773187,
+              "hi": 61.27181940552384
+            },
+            {
+              "avg": 58,
+              "lo": 53.10688644769676,
+              "hi": 62.89311355230324
+            }
+          ],
+          "sales": 520,
+          "d1": 0.6264867805003016,
+          "d7": -4.53876982867013,
+          "lo": 53.10688644769676,
+          "hi": 72.73707919590326,
+          "mean": 62.06909240072521
+        },
+        {
+          "name": "Emerald",
+          "price": 2.4,
+          "days": [
+            {
+              "avg": 2.4472975116337046,
+              "lo": 2.2920492792197082,
+              "hi": 2.602545744047701
+            },
+            {
+              "avg": 2.274507468698565,
+              "lo": 2.1343884814639242,
+              "hi": 2.414626455933206
+            },
+            {
+              "avg": 2.2633023869989493,
+              "lo": 1.966958592317234,
+              "hi": 2.5596461816806646
+            },
+            {
+              "avg": 2.361130459354809,
+              "lo": 2.1497229779599145,
+              "hi": 2.5725379407497035
+            },
+            {
+              "avg": 2.414837603765889,
+              "lo": 2.2286612631979072,
+              "hi": 2.6010139443338716
+            },
+            {
+              "avg": 2.269635732029714,
+              "lo": 2.097201681676287,
+              "hi": 2.44206978238314
+            },
+            {
+              "avg": 2.4479396782582117,
+              "lo": 2.238994687757863,
+              "hi": 2.6568846687585608
+            },
+            {
+              "avg": 2.4110564019463308,
+              "lo": 2.26232056504437,
+              "hi": 2.559792238848292
+            },
+            {
+              "avg": 2.3551871970989886,
+              "lo": 2.2089684671955188,
+              "hi": 2.501405927002459
+            },
+            {
+              "avg": 2.339425470229518,
+              "lo": 2.1435017269520498,
+              "hi": 2.5353492135069864
+            },
+            {
+              "avg": 2.363248320175414,
+              "lo": 2.131527983388308,
+              "hi": 2.5949686569625205
+            },
+            {
+              "avg": 2.362789405450104,
+              "lo": 2.133099659488138,
+              "hi": 2.5924791514120695
+            },
+            {
+              "avg": 2.3217359357044614,
+              "lo": 2.1255616971532185,
+              "hi": 2.5179101742557037
+            },
+            {
+              "avg": 2.451429702672586,
+              "lo": 2.2371190741252183,
+              "hi": 2.6657403312199537
+            },
+            {
+              "avg": 2.4514903816778446,
+              "lo": 2.232088237622537,
+              "hi": 2.6708925257331524
+            },
+            {
+              "avg": 2.3822040253495893,
+              "lo": 2.073213710267796,
+              "hi": 2.6911943404313825
+            },
+            {
+              "avg": 2.4722716916881455,
+              "lo": 2.189812569569961,
+              "hi": 2.7547308138063302
+            },
+            {
+              "avg": 2.4038302775123905,
+              "lo": 2.0851492969136403,
+              "hi": 2.722511258111141
+            },
+            {
+              "avg": 2.2897470655705456,
+              "lo": 2.0411214422671033,
+              "hi": 2.538372688873988
+            },
+            {
+              "avg": 2.4501511199755126,
+              "lo": 2.1535122530339277,
+              "hi": 2.7467899869170975
+            },
+            {
+              "avg": 2.301147648930489,
+              "lo": 2.1564251330354596,
+              "hi": 2.4458701648255188
+            },
+            {
+              "avg": 2.462372309179716,
+              "lo": 2.2710581907872176,
+              "hi": 2.6536864275722145
+            },
+            {
+              "avg": 2.4279488113853196,
+              "lo": 2.264951862140214,
+              "hi": 2.5909457606304254
+            },
+            {
+              "avg": 2.30257560985283,
+              "lo": 1.990218438416762,
+              "hi": 2.6149327812888976
+            },
+            {
+              "avg": 2.442151951125893,
+              "lo": 2.2883554867199987,
+              "hi": 2.5959484155317876
+            },
+            {
+              "avg": 2.342753402464893,
+              "lo": 2.1141706754313954,
+              "hi": 2.5713361294983907
+            },
+            {
+              "avg": 2.3017987803468896,
+              "lo": 2.1358662012219938,
+              "hi": 2.4677313594717853
+            },
+            {
+              "avg": 2.384818731140746,
+              "lo": 2.043751439609297,
+              "hi": 2.725886022672195
+            },
+            {
+              "avg": 2.3890967250747743,
+              "lo": 2.243781154503397,
+              "hi": 2.5344122956461512
+            },
+            {
+              "avg": 2.4,
+              "lo": 2.135428094038367,
+              "hi": 2.664571905961633
+            }
+          ],
+          "sales": 8800,
+          "d1": 0.4563764543641158,
+          "d7": -1.1511285268560822,
+          "lo": 1.966958592317234,
+          "hi": 2.7547308138063302,
+          "mean": 2.3762627268430943
+        },
+        {
+          "name": "Gold Ingot",
+          "price": 3.1,
+          "days": [
+            {
+              "avg": 3.2704825305881324,
+              "lo": 2.8921425686687985,
+              "hi": 3.6488224925074664
+            },
+            {
+              "avg": 3.0895993919258933,
+              "lo": 2.8310614817773554,
+              "hi": 3.348137302074431
+            },
+            {
+              "avg": 3.23188108898421,
+              "lo": 2.871076758752302,
+              "hi": 3.5926854192161173
+            },
+            {
+              "avg": 3.1117572349551827,
+              "lo": 2.731824083654025,
+              "hi": 3.4916903862563404
+            },
+            {
+              "avg": 3.1341823654176544,
+              "lo": 2.9006146839829636,
+              "hi": 3.367750046852345
+            },
+            {
+              "avg": 3.253233562584407,
+              "lo": 3.0465937209553515,
+              "hi": 3.4598734042134627
+            },
+            {
+              "avg": 3.1097105208757445,
+              "lo": 2.933453905524339,
+              "hi": 3.28596713622715
+            },
+            {
+              "avg": 3.1791383960243076,
+              "lo": 2.910999828072959,
+              "hi": 3.4472769639756558
+            },
+            {
+              "avg": 3.240307436106063,
+              "lo": 2.853359632575721,
+              "hi": 3.627255239636405
+            },
+            {
+              "avg": 3.1826624726336448,
+              "lo": 2.960458588703624,
+              "hi": 3.4048663565636654
+            },
+            {
+              "avg": 3.1624444438363075,
+              "lo": 2.8746393651997795,
+              "hi": 3.450249522472836
+            },
+            {
+              "avg": 3.23921905018033,
+              "lo": 2.8806585379011036,
+              "hi": 3.5977795624595563
+            },
+            {
+              "avg": 3.0716838242680646,
+              "lo": 2.8207655265782656,
+              "hi": 3.322602121957864
+            },
+            {
+              "avg": 3.157450597526133,
+              "lo": 2.8990119354166275,
+              "hi": 3.4158892596356387
+            },
+            {
+              "avg": 3.125477185987227,
+              "lo": 2.82670302684841,
+              "hi": 3.424251345126044
+            },
+            {
+              "avg": 3.1193145509537072,
+              "lo": 2.911791000905401,
+              "hi": 3.3268381010020134
+            },
+            {
+              "avg": 3.118740529133461,
+              "lo": 2.8838410335609166,
+              "hi": 3.3536400247060056
+            },
+            {
+              "avg": 3.225668866796605,
+              "lo": 2.9511461436819473,
+              "hi": 3.5001915899112626
+            },
+            {
+              "avg": 3.2168544902654013,
+              "lo": 2.883627241539233,
+              "hi": 3.5500817389915693
+            },
+            {
+              "avg": 3.153701164276921,
+              "lo": 2.757256560452156,
+              "hi": 3.550145768101685
+            },
+            {
+              "avg": 3.1975548997105445,
+              "lo": 2.9447654993678603,
+              "hi": 3.450344300053229
+            },
+            {
+              "avg": 3.189918505912693,
+              "lo": 3.005578809915974,
+              "hi": 3.374258201909412
+            },
+            {
+              "avg": 3.0546836467359797,
+              "lo": 2.6837579764883666,
+              "hi": 3.4256093169835924
+            },
+            {
+              "avg": 3.110516685707937,
+              "lo": 2.75713363403201,
+              "hi": 3.4638997373838643
+            },
+            {
+              "avg": 3.135746202339593,
+              "lo": 2.8653832450427377,
+              "hi": 3.406109159636448
+            },
+            {
+              "avg": 3.1800567122056616,
+              "lo": 2.822615136962236,
+              "hi": 3.537498287449087
+            },
+            {
+              "avg": 3.0691511258572457,
+              "lo": 2.7357497758875637,
+              "hi": 3.402552475826927
+            },
+            {
+              "avg": 3.0283323056470373,
+              "lo": 2.8115422367667007,
+              "hi": 3.245122374527374
+            },
+            {
+              "avg": 3.144951439541101,
+              "lo": 2.8026862566268513,
+              "hi": 3.487216622455351
+            },
+            {
+              "avg": 3.1,
+              "lo": 2.840773880775622,
+              "hi": 3.3592261192243775
+            }
+          ],
+          "sales": 6400,
+          "d1": -1.4293206240303724,
+          "d7": 1.4835039730691113,
+          "lo": 2.6837579764883666,
+          "hi": 3.6488224925074664,
+          "mean": 3.153480707565906
+        },
+        {
+          "name": "Obsidian",
+          "price": 1.8,
+          "days": [
+            {
+              "avg": 1.8339719197880477,
+              "lo": 1.743244000413105,
+              "hi": 1.9246998391629904
+            },
+            {
+              "avg": 1.8300783445229754,
+              "lo": 1.698206192676446,
+              "hi": 1.9619504963695047
+            },
+            {
+              "avg": 1.762204567557201,
+              "lo": 1.6815887444426139,
+              "hi": 1.842820390671788
+            },
+            {
+              "avg": 1.7646578614572064,
+              "lo": 1.6642941728555238,
+              "hi": 1.865021550058889
+            },
+            {
+              "avg": 1.7685559119293466,
+              "lo": 1.5930409474207705,
+              "hi": 1.9440708764379226
+            },
+            {
+              "avg": 1.8312558212885635,
+              "lo": 1.7193726157949116,
+              "hi": 1.9431390267822153
+            },
+            {
+              "avg": 1.8506577884964646,
+              "lo": 1.6750966768830484,
+              "hi": 2.026218900109881
+            },
+            {
+              "avg": 1.8267923721279948,
+              "lo": 1.6547189122691113,
+              "hi": 1.9988658319868784
+            },
+            {
+              "avg": 1.7524710749136285,
+              "lo": 1.6182341238936333,
+              "hi": 1.886708025933624
+            },
+            {
+              "avg": 1.8250917778769509,
+              "lo": 1.7074322813577372,
+              "hi": 1.9427512743961646
+            },
+            {
+              "avg": 1.7916420219736173,
+              "lo": 1.6727374347991533,
+              "hi": 1.9105466091480814
+            },
+            {
+              "avg": 1.7809957563187928,
+              "lo": 1.6539469292803388,
+              "hi": 1.908044583357247
+            },
+            {
+              "avg": 1.7716966308122502,
+              "lo": 1.659690596859543,
+              "hi": 1.8837026647649573
+            },
+            {
+              "avg": 1.7595722082434222,
+              "lo": 1.6262723253195297,
+              "hi": 1.892872091167315
+            },
+            {
+              "avg": 1.7576074742814527,
+              "lo": 1.636691067509561,
+              "hi": 1.8785238810533444
+            },
+            {
+              "avg": 1.7817945409873501,
+              "lo": 1.593263886414087,
+              "hi": 1.9703251955606134
+            },
+            {
+              "avg": 1.7902422045562416,
+              "lo": 1.6962033413961988,
+              "hi": 1.8842810677162845
+            },
+            {
+              "avg": 1.840378866302781,
+              "lo": 1.7375655825583227,
+              "hi": 1.943192150047239
+            },
+            {
+              "avg": 1.8335929239559918,
+              "lo": 1.748662343958801,
+              "hi": 1.9185235039531827
+            },
+            {
+              "avg": 1.798767145089805,
+              "lo": 1.6772925244176162,
+              "hi": 1.920241765761994
+            },
+            {
+              "avg": 1.8529603669848294,
+              "lo": 1.6754277138965965,
+              "hi": 2.030493020073062
+            },
+            {
+              "avg": 1.7781513150734827,
+              "lo": 1.6742133906937424,
+              "hi": 1.882089239453223
+            },
+            {
+              "avg": 1.848357322499156,
+              "lo": 1.7537699502090658,
+              "hi": 1.9429446947892464
+            },
+            {
+              "avg": 1.767863607647829,
+              "lo": 1.6550344628420668,
+              "hi": 1.8806927524535912
+            },
+            {
+              "avg": 1.8162057993197813,
+              "lo": 1.6163267593635053,
+              "hi": 2.0160848392760573
+            },
+            {
+              "avg": 1.8353222243478522,
+              "lo": 1.699083486657907,
+              "hi": 1.9715609620377974
+            },
+            {
+              "avg": 1.839809892749414,
+              "lo": 1.7488802856531456,
+              "hi": 1.9307394998456824
+            },
+            {
+              "avg": 1.7842880721464753,
+              "lo": 1.6814427189691872,
+              "hi": 1.8871334253237635
+            },
+            {
+              "avg": 1.8147883806852625,
+              "lo": 1.6986827357470693,
+              "hi": 1.9308940256234557
+            },
+            {
+              "avg": 1.8,
+              "lo": 1.6802760217814707,
+              "hi": 1.9197239782185296
+            }
+          ],
+          "sales": 12400,
+          "d1": -0.8148818254874679,
+          "d7": -2.616232365383353,
+          "lo": 1.5930409474207705,
+          "hi": 2.030493020073062,
+          "mean": 1.8029924731311386
+        },
+        {
+          "name": "Beacon",
+          "price": 780,
+          "days": [
+            {
+              "avg": 699.6704309303124,
+              "lo": 674.8705387210198,
+              "hi": 724.470323139605
+            },
+            {
+              "avg": 697.6750360449834,
+              "lo": 673.9045382788902,
+              "hi": 721.4455338110765
+            },
+            {
+              "avg": 698.0639299844231,
+              "lo": 678.5292787512167,
+              "hi": 717.5985812176295
+            },
+            {
+              "avg": 712.5003465030895,
+              "lo": 677.4243591846962,
+              "hi": 747.5763338214829
+            },
+            {
+              "avg": 722.9269457549191,
+              "lo": 695.3885221355932,
+              "hi": 750.4653693742448
+            },
+            {
+              "avg": 714.6935267886263,
+              "lo": 686.4147754077699,
+              "hi": 742.9722781694828
+            },
+            {
+              "avg": 716.166022024666,
+              "lo": 684.7914560870475,
+              "hi": 747.5405879622843
+            },
+            {
+              "avg": 718.0428958760253,
+              "lo": 695.7242875790973,
+              "hi": 740.3615041729533
+            },
+            {
+              "avg": 733.2800126688481,
+              "lo": 711.292879604404,
+              "hi": 755.2671457332923
+            },
+            {
+              "avg": 718.7245504618797,
+              "lo": 698.9596492720282,
+              "hi": 738.4894516517313
+            },
+            {
+              "avg": 731.5915451865599,
+              "lo": 695.033962765126,
+              "hi": 768.1491276079937
+            },
+            {
+              "avg": 724.218132096689,
+              "lo": 693.5437118837133,
+              "hi": 754.8925523096648
+            },
+            {
+              "avg": 724.5968837233245,
+              "lo": 691.6123816745945,
+              "hi": 757.5813857720544
+            },
+            {
+              "avg": 748.4142421080497,
+              "lo": 715.1281311010497,
+              "hi": 781.7003531150499
+            },
+            {
+              "avg": 731.3140864997652,
+              "lo": 713.9070406441265,
+              "hi": 748.7211323554037
+            },
+            {
+              "avg": 750.9489497266505,
+              "lo": 722.8963683792216,
+              "hi": 779.0015310740795
+            },
+            {
+              "avg": 734.6240337891547,
+              "lo": 698.0907685904081,
+              "hi": 771.1572989879014
+            },
+            {
+              "avg": 757.1393603967329,
+              "lo": 727.6801129751427,
+              "hi": 786.598607818323
+            },
+            {
+              "avg": 756.8426010625509,
+              "lo": 739.149892912982,
+              "hi": 774.5353092121197
+            },
+            {
+              "avg": 754.1127355989854,
+              "lo": 735.6516809828565,
+              "hi": 772.5737902151143
+            },
+            {
+              "avg": 756.2119696298715,
+              "lo": 735.9753452778185,
+              "hi": 776.4485939819245
+            },
+            {
+              "avg": 747.0287584723789,
+              "lo": 712.4750420558031,
+              "hi": 781.5824748889546
+            },
+            {
+              "avg": 763.1171686587055,
+              "lo": 727.1280372060626,
+              "hi": 799.1063001113484
+            },
+            {
+              "avg": 764.597781152316,
+              "lo": 741.9170227552745,
+              "hi": 787.2785395493574
+            },
+            {
+              "avg": 760.8674742504649,
+              "lo": 719.3309550732137,
+              "hi": 802.403993427716
+            },
+            {
+              "avg": 779.355531596666,
+              "lo": 743.1390972751115,
+              "hi": 815.5719659182204
+            },
+            {
+              "avg": 769.5896616305414,
+              "lo": 730.0902134190666,
+              "hi": 809.0891098420162
+            },
+            {
+              "avg": 769.104956625399,
+              "lo": 729.9934643466945,
+              "hi": 808.2164489041037
+            },
+            {
+              "avg": 788.5586974226621,
+              "lo": 760.344178028532,
+              "hi": 816.7732168167922
+            },
+            {
+              "avg": 780,
+              "lo": 741.6036645621713,
+              "hi": 818.3963354378286
+            }
+          ],
+          "sales": 36,
+          "d1": -1.0853595871347932,
+          "d7": 2.212351134881252,
+          "lo": 673.9045382788902,
+          "hi": 818.3963354378286,
+          "mean": 740.7992755555081
+        },
+        {
+          "name": "Nether Star",
+          "price": 520,
+          "days": [
+            {
+              "avg": 560.4526190725254,
+              "lo": 520.4517438079088,
+              "hi": 600.453494337142
+            },
+            {
+              "avg": 562.3674871583019,
+              "lo": 535.9318909997907,
+              "hi": 588.8030833168131
+            },
+            {
+              "avg": 552.4267883170328,
+              "lo": 513.9590967256543,
+              "hi": 590.8944799084113
+            },
+            {
+              "avg": 550.395042671574,
+              "lo": 516.7375561267418,
+              "hi": 584.0525292164061
+            },
+            {
+              "avg": 544.2838679491307,
+              "lo": 508.4446062966682,
+              "hi": 580.1231296015932
+            },
+            {
+              "avg": 538.939974471755,
+              "lo": 512.9514052137672,
+              "hi": 564.9285437297428
+            },
+            {
+              "avg": 537.8097474312007,
+              "lo": 518.7235599771411,
+              "hi": 556.8959348852601
+            },
+            {
+              "avg": 541.115075095834,
+              "lo": 521.9565254365433,
+              "hi": 560.2736247551246
+            },
+            {
+              "avg": 541.130824848673,
+              "lo": 509.2964849743125,
+              "hi": 572.9651647230336
+            },
+            {
+              "avg": 537.05896097457,
+              "lo": 506.3860871036093,
+              "hi": 567.7318348455307
+            },
+            {
+              "avg": 537.8385470449186,
+              "lo": 507.4342157813516,
+              "hi": 568.2428783084856
+            },
+            {
+              "avg": 533.463822108751,
+              "lo": 499.6892967971131,
+              "hi": 567.2383474203888
+            },
+            {
+              "avg": 536.9713813060921,
+              "lo": 498.416960408668,
+              "hi": 575.5258022035162
+            },
+            {
+              "avg": 532.1822405280022,
+              "lo": 498.4846766819014,
+              "hi": 565.8798043741031
+            },
+            {
+              "avg": 527.2033570778415,
+              "lo": 506.924689802232,
+              "hi": 547.4820243534509
+            },
+            {
+              "avg": 531.3874086499455,
+              "lo": 514.2742013893263,
+              "hi": 548.5006159105648
+            },
+            {
+              "avg": 543.5366466145654,
+              "lo": 525.8894447475133,
+              "hi": 561.1838484816174
+            },
+            {
+              "avg": 533.7289134952313,
+              "lo": 498.1798386591083,
+              "hi": 569.2779883313542
+            },
+            {
+              "avg": 539.6986946808629,
+              "lo": 503.8830918475294,
+              "hi": 575.5142975141965
+            },
+            {
+              "avg": 523.7331978754977,
+              "lo": 499.83502579179,
+              "hi": 547.6313699592055
+            },
+            {
+              "avg": 528.3408641849933,
+              "lo": 503.45760648894765,
+              "hi": 553.2241218810389
+            },
+            {
+              "avg": 536.74349973879,
+              "lo": 508.1830907484247,
+              "hi": 565.3039087291552
+            },
+            {
+              "avg": 533.1831256777168,
+              "lo": 509.99458989836006,
+              "hi": 556.3716614570735
+            },
+            {
+              "avg": 535.3678498364557,
+              "lo": 515.1304766020958,
+              "hi": 555.6052230708156
+            },
+            {
+              "avg": 536.0322116545354,
+              "lo": 510.1254080411814,
+              "hi": 561.9390152678895
+            },
+            {
+              "avg": 526.3077933928332,
+              "lo": 502.5148859936669,
+              "hi": 550.1007007919995
+            },
+            {
+              "avg": 529.7042045878032,
+              "lo": 494.5201272321138,
+              "hi": 564.8882819434926
+            },
+            {
+              "avg": 527.5967596885915,
+              "lo": 491.79965235866393,
+              "hi": 563.3938670185191
+            },
+            {
+              "avg": 523.1074044935955,
+              "lo": 485.3058402492094,
+              "hi": 560.9089687379815
+            },
+            {
+              "avg": 520,
+              "lo": 486.67997810095545,
+              "hi": 553.3200218990445
+            }
+          ],
+          "sales": 52,
+          "d1": -0.5940280078053362,
+          "d7": -2.4725324270080895,
+          "lo": 485.3058402492094,
+          "hi": 600.453494337142,
+          "mean": 536.7369436875873
+        },
+        {
+          "name": "Trident",
+          "price": 310,
+          "days": [
+            {
+              "avg": 303.90203691282426,
+              "lo": 284.5194675702869,
+              "hi": 323.2846062553616
+            },
+            {
+              "avg": 304.1248813439981,
+              "lo": 283.13431807854073,
+              "hi": 325.11544460945544
+            },
+            {
+              "avg": 305.8324284283304,
+              "lo": 287.3142115383131,
+              "hi": 324.3506453183477
+            },
+            {
+              "avg": 302.3668673438782,
+              "lo": 284.93906926262207,
+              "hi": 319.7946654251343
+            },
+            {
+              "avg": 300.6294795928324,
+              "lo": 279.59979666912596,
+              "hi": 321.65916251653886
+            },
+            {
+              "avg": 296.6723644311312,
+              "lo": 275.6175221622648,
+              "hi": 317.7272066999976
+            },
+            {
+              "avg": 307.2736851382743,
+              "lo": 289.7243080313243,
+              "hi": 324.8230622452243
+            },
+            {
+              "avg": 307.3753845214557,
+              "lo": 291.7683083432277,
+              "hi": 322.9824606996837
+            },
+            {
+              "avg": 301.8610840781276,
+              "lo": 289.0307670441028,
+              "hi": 314.6914011121524
+            },
+            {
+              "avg": 297.8509477438991,
+              "lo": 281.03561091010965,
+              "hi": 314.66628457768854
+            },
+            {
+              "avg": 305.87560002362335,
+              "lo": 295.2731354689649,
+              "hi": 316.47806457828176
+            },
+            {
+              "avg": 309.46983939125823,
+              "lo": 293.00696859786837,
+              "hi": 325.9327101846481
+            },
+            {
+              "avg": 300.06619835277417,
+              "lo": 281.89928669924024,
+              "hi": 318.2331100063081
+            },
+            {
+              "avg": 310.0181807419754,
+              "lo": 299.4035488069235,
+              "hi": 320.63281267702735
+            },
+            {
+              "avg": 299.2024085668355,
+              "lo": 283.9355856332671,
+              "hi": 314.4692315004039
+            },
+            {
+              "avg": 305.50534075325737,
+              "lo": 288.5183035264488,
+              "hi": 322.49237798006595
+            },
+            {
+              "avg": 309.96540262758816,
+              "lo": 290.7727610989618,
+              "hi": 329.1580441562146
+            },
+            {
+              "avg": 306.3833379789607,
+              "lo": 287.5390474630916,
+              "hi": 325.22762849482973
+            },
+            {
+              "avg": 301.21739082153385,
+              "lo": 283.33544125983667,
+              "hi": 319.09934038323104
+            },
+            {
+              "avg": 304.2127478756304,
+              "lo": 285.5003282655901,
+              "hi": 322.92516748567067
+            },
+            {
+              "avg": 310.9704722997065,
+              "lo": 289.76068840896926,
+              "hi": 332.18025619044374
+            },
+            {
+              "avg": 305.0918202140603,
+              "lo": 284.8086806925402,
+              "hi": 325.3749597355804
+            },
+            {
+              "avg": 307.2735740823876,
+              "lo": 296.832711897446,
+              "hi": 317.7144362673292
+            },
+            {
+              "avg": 313.1012547472668,
+              "lo": 293.02027021462584,
+              "hi": 333.1822392799078
+            },
+            {
+              "avg": 303.84625683949866,
+              "lo": 290.94217178031556,
+              "hi": 316.7503418986817
+            },
+            {
+              "avg": 309.662967165385,
+              "lo": 297.46275110182677,
+              "hi": 321.86318322894317
+            },
+            {
+              "avg": 308.2714721606201,
+              "lo": 295.0303422211407,
+              "hi": 321.51260210009946
+            },
+            {
+              "avg": 307.72072688816706,
+              "lo": 295.5665002820432,
+              "hi": 319.87495349429093
+            },
+            {
+              "avg": 312.83614944108126,
+              "lo": 296.2065219610582,
+              "hi": 329.4657769211044
+            },
+            {
+              "avg": 310,
+              "lo": 298.63378068302757,
+              "hi": 321.36621931697243
+            }
+          ],
+          "sales": 64,
+          "d1": -0.9065926192188378,
+          "d7": 0.8872959302648642,
+          "lo": 275.6175221622648,
+          "hi": 333.1822392799078,
+          "mean": 305.6193433502121
+        },
+        {
+          "name": "Heart of the Sea",
+          "price": 270,
+          "days": [
+            {
+              "avg": 265.99225103314967,
+              "lo": 253.99059310651452,
+              "hi": 277.99390895978485
+            },
+            {
+              "avg": 274.2779426481575,
+              "lo": 255.47202258141667,
+              "hi": 293.0838627148983
+            },
+            {
+              "avg": 271.2536981133744,
+              "lo": 259.5786503577157,
+              "hi": 282.92874586903315
+            },
+            {
+              "avg": 273.1048575430177,
+              "lo": 263.77808246372115,
+              "hi": 282.4316326223143
+            },
+            {
+              "avg": 269.8951995022595,
+              "lo": 260.4270133378478,
+              "hi": 279.3633856666712
+            },
+            {
+              "avg": 266.6200151170604,
+              "lo": 256.94843603093227,
+              "hi": 276.29159420318854
+            },
+            {
+              "avg": 265.8259847377427,
+              "lo": 256.3510200228997,
+              "hi": 275.3009494525857
+            },
+            {
+              "avg": 269.6600411192514,
+              "lo": 258.57395124530433,
+              "hi": 280.74613099319845
+            },
+            {
+              "avg": 268.99507304280996,
+              "lo": 253.1701036618293,
+              "hi": 284.8200424237906
+            },
+            {
+              "avg": 267.0405691324733,
+              "lo": 258.5314301350142,
+              "hi": 275.5497081299324
+            },
+            {
+              "avg": 274.4295191519894,
+              "lo": 257.5350315493427,
+              "hi": 291.324006754636
+            },
+            {
+              "avg": 270.05578892994674,
+              "lo": 251.22339089928954,
+              "hi": 288.88818696060395
+            },
+            {
+              "avg": 275.2392710890621,
+              "lo": 256.6699670723613,
+              "hi": 293.80857510576277
+            },
+            {
+              "avg": 273.1347197704017,
+              "lo": 262.6560566736911,
+              "hi": 283.6133828671123
+            },
+            {
+              "avg": 267.3057974363677,
+              "lo": 258.82915057493943,
+              "hi": 275.78244429779596
+            },
+            {
+              "avg": 275.329446208477,
+              "lo": 258.69425082108665,
+              "hi": 291.96464159586736
+            },
+            {
+              "avg": 275.0518008450978,
+              "lo": 265.31221941643093,
+              "hi": 284.7913822737646
+            },
+            {
+              "avg": 268.2454964884557,
+              "lo": 255.33603576323583,
+              "hi": 281.1549572136755
+            },
+            {
+              "avg": 273.67825379921123,
+              "lo": 260.13549165052524,
+              "hi": 287.22101594789723
+            },
+            {
+              "avg": 268.7933603293262,
+              "lo": 251.62935518375295,
+              "hi": 285.9573654748995
+            },
+            {
+              "avg": 268.1950657219626,
+              "lo": 255.79053186205383,
+              "hi": 280.5995995818713
+            },
+            {
+              "avg": 271.37347223991526,
+              "lo": 255.55646269946595,
+              "hi": 287.19048178036456
+            },
+            {
+              "avg": 269.17665089517834,
+              "lo": 251.5817703073692,
+              "hi": 286.7715314829875
+            },
+            {
+              "avg": 266.6325810215436,
+              "lo": 258.2935258184701,
+              "hi": 274.9716362246171
+            },
+            {
+              "avg": 273.8010404219851,
+              "lo": 255.75938955248694,
+              "hi": 291.84269129148316
+            },
+            {
+              "avg": 265.8389634140767,
+              "lo": 252.17049451607878,
+              "hi": 279.5074323120747
+            },
+            {
+              "avg": 268.221210337244,
+              "lo": 248.77503737204938,
+              "hi": 287.6673833024386
+            },
+            {
+              "avg": 273.6035122965462,
+              "lo": 254.19650427295613,
+              "hi": 293.0105203201363
+            },
+            {
+              "avg": 269.5200944633223,
+              "lo": 257.4414960921408,
+              "hi": 281.5986928345038
+            },
+            {
+              "avg": 270,
+              "lo": 259.06577635617924,
+              "hi": 280.9342236438207
+            }
+          ],
+          "sales": 29,
+          "d1": 0.1780592788946933,
+          "d7": 0.30587686639369505,
+          "lo": 248.77503737204938,
+          "hi": 293.80857510576277,
+          "mean": 270.3430558949802
+        }
+      ],
+      "boards": {
+        "0": [
+          {
+            "name": "Kavebo",
+            "stall": "A2",
+            "gold": 9860,
+            "streak": 6
+          },
+          {
+            "name": "Kostpits13_",
+            "stall": "B2",
+            "gold": 8415,
+            "streak": 4
+          },
+          {
+            "name": "CheddarManPro",
+            "stall": "C1",
+            "gold": 7330,
+            "streak": 1
+          },
+          {
+            "name": "SleepingOnCheese",
+            "stall": "A3",
+            "gold": 6102,
+            "streak": 1
+          },
+          {
+            "name": "GodOfSharks",
+            "stall": "B4",
+            "gold": 4985,
+            "streak": 2
+          }
+        ],
+        "-1": [
+          {
+            "name": "Kostpits13_",
+            "stall": "B2",
+            "gold": 18420,
+            "sales": 612,
+            "buyers": 143,
+            "best": [
+              [
+                "Diamond",
+                340,
+                4830
+              ],
+              [
+                "Elytra",
+                3,
+                3750
+              ],
+              [
+                "Netherite Ingot",
+                9,
+                3690
+              ]
+            ],
+            "streak": 3
+          },
+          {
+            "name": "Summars",
+            "stall": "B1",
+            "gold": 16488,
+            "streak": 2
+          },
+          {
+            "name": "Kavebo",
+            "stall": "A2",
+            "gold": 14898,
+            "streak": 5
+          },
+          {
+            "name": "DarkHabits",
+            "stall": "C4",
+            "gold": 12564,
+            "streak": 1
+          },
+          {
+            "name": "GodOfSharks",
+            "stall": "B4",
+            "gold": 10462,
+            "streak": 1
+          }
+        ],
+        "-2": [
+          {
+            "name": "SleepingOnCheese",
+            "stall": "A3",
+            "gold": 15980,
+            "streak": 2
+          },
+          {
+            "name": "Summars",
+            "stall": "B1",
+            "gold": 14518,
+            "streak": 1
+          },
+          {
+            "name": "CheddarManPro",
+            "stall": "C1",
+            "gold": 12293,
+            "streak": 2
+          },
+          {
+            "name": "Kavebo",
+            "stall": "A2",
+            "gold": 10526,
+            "streak": 4
+          },
+          {
+            "name": "Kostpits13_",
+            "stall": "B2",
+            "gold": 8895,
+            "streak": 2
+          }
+        ],
+        "-3": [
+          {
+            "name": "CheddarManPro",
+            "stall": "C1",
+            "gold": 14310,
+            "streak": 1
+          },
+          {
+            "name": "SleepingOnCheese",
+            "stall": "A3",
+            "gold": 13062,
+            "streak": 1
+          },
+          {
+            "name": "Kostpits13_",
+            "stall": "B2",
+            "gold": 11380,
+            "streak": 1
+          },
+          {
+            "name": "GodOfSharks",
+            "stall": "B4",
+            "gold": 10325,
+            "streak": 2
+          },
+          {
+            "name": "Kavebo",
+            "stall": "A2",
+            "gold": 8634,
+            "streak": 3
+          }
+        ],
+        "-4": [
+          {
+            "name": "GodOfSharks",
+            "stall": "B4",
+            "gold": 13775,
+            "streak": 1
+          },
+          {
+            "name": "Kavebo",
+            "stall": "A2",
+            "gold": 11914,
+            "streak": 2
+          },
+          {
+            "name": "DarkHabits",
+            "stall": "C4",
+            "gold": 10870,
+            "streak": 1
+          },
+          {
+            "name": "ItzOkPookie",
+            "stall": "A1",
+            "gold": 9071,
+            "streak": 3
+          },
+          {
+            "name": "Summars",
+            "stall": "B1",
+            "gold": 7519,
+            "streak": 2
+          }
+        ],
+        "-5": [
+          {
+            "name": "ItzOkPookie",
+            "stall": "A1",
+            "gold": 12940,
+            "streak": 2
+          },
+          {
+            "name": "Kavebo",
+            "stall": "A2",
+            "gold": 10915,
+            "streak": 1
+          },
+          {
+            "name": "SleepingOnCheese",
+            "stall": "A3",
+            "gold": 9485,
+            "streak": 2
+          },
+          {
+            "name": "Summars",
+            "stall": "B1",
+            "gold": 8391,
+            "streak": 1
+          },
+          {
+            "name": "Kostpits13_",
+            "stall": "B2",
+            "gold": 7623,
+            "streak": 2
+          }
+        ],
+        "-6": [
+          {
+            "name": "BaLIneA",
+            "stall": "C3",
+            "gold": 11206,
+            "streak": 1
+          },
+          {
+            "name": "ItzOkPookie",
+            "stall": "A1",
+            "gold": 10251,
+            "streak": 1
+          },
+          {
+            "name": "Kostpits13_",
+            "stall": "B2",
+            "gold": 8459,
+            "streak": 1
+          },
+          {
+            "name": "DarkHabits",
+            "stall": "C4",
+            "gold": 7401,
+            "streak": 1
+          },
+          {
+            "name": "SleepingOnCheese",
+            "stall": "A3",
+            "gold": 6486,
+            "streak": 1
+          }
+        ]
+      },
+      "guildBoards": {
+        "0": [
+          {
+            "name": "Blackspire",
+            "stalls": 3,
+            "gold": 12288
+          },
+          {
+            "name": "Emberhold",
+            "stalls": 2,
+            "gold": 8812
+          },
+          {
+            "name": "Dragonwatch",
+            "stalls": 4,
+            "gold": 8287
+          },
+          {
+            "name": "Ironvale",
+            "stalls": 3,
+            "gold": 6532
+          },
+          {
+            "name": "Skyforge",
+            "stalls": 2,
+            "gold": 5650
+          }
+        ],
+        "-1": [
+          {
+            "name": "Blackspire",
+            "stalls": 3,
+            "gold": 19888
+          },
+          {
+            "name": "Dragonwatch",
+            "stalls": 4,
+            "gold": 18434
+          },
+          {
+            "name": "Emberhold",
+            "stalls": 2,
+            "gold": 16706
+          },
+          {
+            "name": "Skyforge",
+            "stalls": 2,
+            "gold": 12984
+          },
+          {
+            "name": "Ironvale",
+            "stalls": 3,
+            "gold": 9984
+          }
+        ],
+        "-2": [
+          {
+            "name": "Skyforge",
+            "stalls": 2,
+            "gold": 21845
+          },
+          {
+            "name": "Ironvale",
+            "stalls": 3,
+            "gold": 17976
+          },
+          {
+            "name": "Emberhold",
+            "stalls": 2,
+            "gold": 16168
+          },
+          {
+            "name": "Blackspire",
+            "stalls": 3,
+            "gold": 14222
+          },
+          {
+            "name": "Dragonwatch",
+            "stalls": 4,
+            "gold": 9759
+          }
+        ],
+        "-3": [
+          {
+            "name": "Ironvale",
+            "stalls": 3,
+            "gold": 20101
+          },
+          {
+            "name": "Blackspire",
+            "stalls": 3,
+            "gold": 17098
+          },
+          {
+            "name": "Dragonwatch",
+            "stalls": 4,
+            "gold": 15384
+          },
+          {
+            "name": "Skyforge",
+            "stalls": 2,
+            "gold": 11990
+          },
+          {
+            "name": "Emberhold",
+            "stalls": 2,
+            "gold": 9322
+          }
+        ],
+        "-4": [
+          {
+            "name": "Ironvale",
+            "stalls": 3,
+            "gold": 22068
+          },
+          {
+            "name": "Blackspire",
+            "stalls": 3,
+            "gold": 18048
+          },
+          {
+            "name": "Emberhold",
+            "stalls": 2,
+            "gold": 14132
+          },
+          {
+            "name": "Skyforge",
+            "stalls": 2,
+            "gold": 13696
+          },
+          {
+            "name": "Dragonwatch",
+            "stalls": 4,
+            "gold": 9921
+          }
+        ],
+        "-5": [
+          {
+            "name": "Blackspire",
+            "stalls": 3,
+            "gold": 21584
+          },
+          {
+            "name": "Skyforge",
+            "stalls": 2,
+            "gold": 17105
+          },
+          {
+            "name": "Dragonwatch",
+            "stalls": 4,
+            "gold": 16278
+          },
+          {
+            "name": "Emberhold",
+            "stalls": 2,
+            "gold": 13918
+          },
+          {
+            "name": "Ironvale",
+            "stalls": 3,
+            "gold": 10233
+          }
+        ],
+        "-6": [
+          {
+            "name": "Skyforge",
+            "stalls": 2,
+            "gold": 19765
+          },
+          {
+            "name": "Emberhold",
+            "stalls": 2,
+            "gold": 17405
+          },
+          {
+            "name": "Ironvale",
+            "stalls": 3,
+            "gold": 15354
+          },
+          {
+            "name": "Blackspire",
+            "stalls": 3,
+            "gold": 12560
+          },
+          {
+            "name": "Dragonwatch",
+            "stalls": 4,
+            "gold": 9739
+          }
+        ]
+      }
+    },
+    "eventDesign": [
+      [
+        [
+          2026,
+          9,
+          14,
+          4
+        ],
+        "Build Competition voting opens",
+        "Entries close and the community votes on the Halloween builds.",
+        "14 October 2026"
+      ],
+      [
+        [
+          2026,
+          9,
+          21,
+          4
+        ],
+        "Build Competition results",
+        "The winning Halloween build is announced.",
+        "21 October 2026"
+      ],
+      [
+        [
+          2026,
+          9,
+          24,
+          4
+        ],
+        "Mapart Competition opens",
+        "Start building. Accepted entries go into the Mapart Museum.",
+        "24 October 2026"
+      ],
+      [
+        [
+          2026,
+          10,
+          8,
+          5
+        ],
+        "Mapart Competition voting opens",
+        "Entries close and the community votes on the maparts.",
+        "8 November 2026"
+      ]
+    ],
+    "editorDraft": "# Chapter 2 is live\nChapter 2 launched on **October 2, 2026**. Here is what is happening first.\n\n## Competitions\n- **Build Competition** - the theme is *Halloween*. Entries open soon. The day will be announced on Discord.\n- Voting opens **October 14** and results are published **October 21**.\n- The **Mapart Competition** starts on **October 24**.\n\n> Raiding and open PvP are part of Enthusia. Read the rules before you log in.\n\n### Changelog\n- `[plugin]` [what changed]\n- ~~[something removed]~~\n- __[something important]__\n\nHidden until hovered: ||[spoiler text]||\n-# Posted from the website - no 2,000 character limit here."
   }
 }

@@ -22,7 +22,9 @@ test("competition appearance browser modules remain valid JavaScript", () => {
 });
 
 test("catalog and detail load the appearance enhancer and stylesheet", () => {
-  for (const html of [catalogHtml, detailHtml]) {
+  assert.match(catalogHtml, /data-exact-catalog/);
+  assert.match(catalogHtml, /exact-card-template/);
+  for (const html of [detailHtml]) {
     assert.match(html, /competitions-appearance\.css/);
     assert.match(html, /competitions-appearance\.js/);
   }

@@ -1,0 +1,9 @@
+body[data-competition-page=detail]{font-family:Minecraft,"Courier New",monospace}
+body[data-competition-page=detail] .competitions-main{max-width:none;width:auto;padding:0;margin:0}
+body[data-competition-page=detail] .competition-detail-shell{border:0;background:transparent;box-shadow:none;overflow:visible}
+.exact-detail-body{padding:56px 0 72px}.exact-detail-inner{max-width:1240px;margin:auto;padding:0 24px;box-sizing:border-box;display:flex;flex-direction:column;gap:32px}
+.exact-detail-inner .competition-detail-tabs{padding:0;margin:0;border:0;background:none;display:flex;flex-wrap:wrap;gap:12px}
+.exact-detail-inner .competition-detail-tabs button{font:inherit;min-height:48px;padding:8px 20px;border:4px solid #4a0b08;background:#fff8e6;color:#3a0d0a;box-shadow:inset 4px 4px 0 #fff,inset -4px -4px 0 #ecc873}
+.exact-detail-inner .competition-detail-tabs button.is-active{background:#ffcf1f;box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 #e08f00}
+.exact-detail-inner .competition-detail-content{padding:0;background:none}.exact-detail-inner .competition-tab-panel{padding:0}.exact-detail-inner [hidden]{display:none!important}
+@media(max-width:720px){.exact-detail-inner .competition-detail-tabs{justify-content:center}}

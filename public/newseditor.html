@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preview | Enthusia SMP news editor</title>
-<meta name="description" content="Design preview of the Enthusia SMP site.">
+<title>Enthusia SMP news editor</title>
+<meta name="description" content="Explore Enthusia SMP, its community, server history and player features.">
 <link rel="preload" href="assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="assets/enthusia.css">
 
@@ -130,24 +130,234 @@ a{color:#b3201a}a:hover{color:#7d120e}
 @media (max-width:520px){.hdr-play{display:none !important}}
 
 </style>
-<link rel="stylesheet" href="assets/community.css">
-</head>
-<body>
+<link rel="stylesheet" href="assets/exact-design.css"></head>
+<body data-exact-page="newseditor">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="en">
 
-<header class="site-head site-header s-red"><div class="site-head-in"><a class="brand" href="index.html"><img id="site-logo" class="brand-logo" src="assets/ui/logo-256.png" alt="" width="44" height="44"><span>ENTHUSIA SMP</span></a><button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button><nav class="nav" id="site-nav" aria-label="Primary navigation"><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>Play +</button><div class="panel nav-menu"><a href="plugins.html">About</a><a href="join.html">Join guide</a><a href="guide.html">Player guide</a><a href="rules.html">Rules</a><a href="vote.html">Vote</a><a href="appeal.html">Appeals</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>World +</button><div class="panel nav-menu"><a href="market.html">Market</a><a href="gallery.html">Gallery</a><a href="museum.html">Mapart Museum</a><a href="competitions/index.html">Competitions</a><a href="events.html">Events</a><a href="bounties.html">Bounties</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>Community +</button><div class="panel nav-menu"><a href="guilds.html">Guilds</a><a href="players.html">Players</a><a href="leaderboards.html">Leaderboards</a><a href="halloffame.html">Hall of Fame</a><a href="achievements.html">Achievements</a><a href="creators.html">Creators</a><a href="staff.html">Staff</a><a href="moderation.html">Moderation</a><a href="punishments.html">Punishments</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>News +</button><div class="panel nav-menu"><a href="news.html">News</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="polls.html">Polls</a><a href="timeline.html">Timeline</a></div></div><a class="navbtn" href="store.html">Store</a><a class="navbtn" href="account.html">Account</a><a class="navbtn" href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a><a class="btn btn-gold" href="join.html">Play now!</a></nav></div></header>
+<header class="site-head s-red">
+<div class="site-head-in">
+<a class="brand" href="index.html" aria-label="Enthusia SMP home">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</div>
+</div>
+<a href="store.html">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="account.html">Account</a>
+</nav>
+<a class="btn btn-gold hdr-play" href="join.html">Play now!</a>
+</div>
+</header>
 
-<main id="main-content" class="page-main"><section class="hero hero-vars" aria-labelledby="editor-title">
+<main id="main-content">
+<section class="hero hero-vars" aria-labelledby="editor-title">
 <div style="max-width: 1240px; min-height: 320px; margin: 0 auto; padding: 56px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
 <p class="tag tag-gold" style="letter-spacing: 2px">NEWS - STAFF ONLY</p>
 <h1 id="editor-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">WRITE A POST</h1>
 <p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">Write it the way you would in Discord. The preview shows exactly what players will see.</p>
 </div>
 <div class="crenel"></div>
-</section><section class="s-cream community-section"><div class="container" data-community-app="newseditor"><p role="status">Loading newseditor...</p></div></section></main>
+</section>
+<section class="s-cream" aria-label="Post editor" style="padding: 72px 0; flex-grow: 1;">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px">
 
-<footer class="site-foot s-red"><div class="site-foot-in"><div class="foot-cols"><nav class="foot" aria-label="Play"><p class="foot-title">PLAY</p><a href="plugins.html">About</a><a href="join.html">Join guide</a><a href="guide.html">Player guide</a><a href="rules.html">Rules</a><a href="vote.html">Vote</a><a href="appeal.html">Appeals</a></nav><nav class="foot" aria-label="World"><p class="foot-title">WORLD</p><a href="market.html">Market</a><a href="gallery.html">Gallery</a><a href="museum.html">Mapart Museum</a><a href="competitions/index.html">Competitions</a><a href="events.html">Events</a><a href="bounties.html">Bounties</a></nav><nav class="foot" aria-label="Community"><p class="foot-title">COMMUNITY</p><a href="guilds.html">Guilds</a><a href="players.html">Players</a><a href="leaderboards.html">Leaderboards</a><a href="halloffame.html">Hall of Fame</a><a href="achievements.html">Achievements</a><a href="creators.html">Creators</a><a href="staff.html">Staff</a><a href="punishments.html">Punishments</a></nav><nav class="foot" aria-label="News"><p class="foot-title">NEWS</p><a href="news.html">News</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="polls.html">Polls</a><a href="timeline.html">Timeline</a></nav><nav class="foot" aria-label="Staff tools"><p class="foot-title">STAFF TOOLS</p><a href="newseditor.html">Publishing editor</a><a href="competitions/admin/index.html">Competition admin</a><a href="reviewer/index.html">Reviewer</a></nav></div><p>2026 Enthusia SMP - glorytoenthusia@gmail.com</p><p>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p></div></footer>
+<div class="panel" style="flex: 1 1 480px; min-width: 0; padding: 28px; display: flex; flex-direction: column; gap: 20px">
+<label>Title<input class="field" type="text" data-b-value="{{title}}" data-on-change="setTitle"></label>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span>Category</span>
+<div role="group" aria-label="Category" style="display: flex; flex-wrap: wrap; gap: 12px">
+<button class="chip" type="button" data-b-aria-pressed="{{cAnnouncement}}" data-on-click="pickCAnnouncement">Announcement</button>
+<button class="chip" type="button" data-b-aria-pressed="{{cChangelog}}" data-on-click="pickCChangelog">Changelog</button>
+<button class="chip" type="button" data-b-aria-pressed="{{cEvent}}" data-on-click="pickCEvent">Event</button>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span>Post</span>
+<div role="group" aria-label="Formatting" style="display: flex; flex-wrap: wrap; gap: 8px">
+<button class="chip tool" type="button" aria-label="Bold" data-on-click="wrapB">B</button>
+<button class="chip tool" type="button" aria-label="Italic" data-on-click="wrapI">I</button>
+<button class="chip tool" type="button" aria-label="Underline" data-on-click="wrapU">U</button>
+<button class="chip tool" type="button" aria-label="Strikethrough" data-on-click="wrapS">S</button>
+<button class="chip tool" type="button" aria-label="Inline code" data-on-click="wrapC">Code</button>
+<button class="chip tool" type="button" aria-label="Spoiler" data-on-click="wrapSp">Spoiler</button>
+<button class="chip tool" type="button" aria-label="Heading" data-on-click="lineH"># Heading</button>
+<button class="chip tool" type="button" aria-label="Bullet list" data-on-click="lineL">- List</button>
+<button class="chip tool" type="button" aria-label="Quote" data-on-click="lineQ">&gt; Quote</button>
+<button class="chip tool" type="button" aria-label="Small text" data-on-click="lineSub">-# Small</button>
+</div>
+<textarea class="field" aria-label="Post text, Discord formatting" data-b-value="{{draft}}" data-on-change="setDraft" data-on-select="trackSel" data-on-keyup="trackSel" data-on-click="trackSel"></textarea>
+<p style="color: var(--muted)"><span data-b-text="charCount"></span></p>
+</div>
+<label class="check"><input type="checkbox" data-b-checked="{{pin}}" data-on-change="togPin">Pin to the top of News</label>
+<label class="check"><input type="checkbox" data-b-checked="{{ping}}" data-on-change="togPing">Also announce in Discord with a link to the post</label>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<button class="btn btn-gold" type="button" data-on-click="publish">Publish post</button>
+<button class="btn btn-dark" type="button">Save draft</button>
+</div>
+<p class="swap" role="status" style="padding: 12px 16px; background: var(--row); border: 4px solid #4a0b08" data-b-class="swap {{sentShow}}">Published to News. <span data-b-text="sentNote"></span></p>
+</div>
+
+<article class="panel" style="flex: 1 1 480px; min-width: 0; padding: 28px; display: flex; flex-direction: column; gap: 20px">
+<p style="color: var(--kick); letter-spacing: 2px">LIVE PREVIEW</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<span class="tag" data-b-class="tag {{postTag}}"><span data-b-text="cat"></span></span>
+<span class="tag tag-gold" data-b-class="tag tag-gold {{pinShow}}">Pinned</span>
+</div>
+<h2 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere"><span data-b-text="title"></span></h2>
+<div style="display: flex; align-items: center; gap: 12px">
+<img class="px" src="assets/design/78d35b41d088.png" alt="" style="width: 40px; height: 40px">
+<span data-author-name></span><span class="tag tag-gold" data-author-rank></span>
+</div>
+<div style="border-top: 4px solid #ecc873; padding-top: 20px">
+<div class="md">
+<div class="mock-blocks" data-b-blocks="blocks"></div>
+</div>
+</div>
+</article>
+
+</div>
+<div class="tip fret" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<p style="color: var(--kick); letter-spacing: 2px">FORMATTING THAT WORKS HERE</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<span class="tag tag-plain">**bold**</span>
+<span class="tag tag-plain">*italic*</span>
+<span class="tag tag-plain">__underline__</span>
+<span class="tag tag-plain">~~strike~~</span>
+<span class="tag tag-plain">`code`</span>
+<span class="tag tag-plain">||spoiler||</span>
+<span class="tag tag-plain"># Heading</span>
+<span class="tag tag-plain">## Smaller heading</span>
+<span class="tag tag-plain">- list item</span>
+<span class="tag tag-plain">&gt; quote</span>
+<span class="tag tag-plain">-# small text</span>
+<span class="tag tag-plain">[link text](address)</span>
+<span class="tag tag-plain">```code block```</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="index.html">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="join.html">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="News">
+<p class="foot-title">NEWS</p>
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="store.html">Store</a>
+<a href="account.html">Account</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="404.html">404 page</a>
+<a href="home-christmas.html">Christmas skin</a>
+</nav>
+<nav class="foot" aria-label="Staff tools">
+<p class="foot-title">STAFF TOOLS</p>
+<a href="competitions/admin/index.html">Competition admin</a>
+<a href="newseditor.html">News editor</a>
+<a href="reviewer/index.html">Reviewer</a>
+<a href="reviewer/appeals.html">Appeal review</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
 
 
 </div>
@@ -157,5 +367,5 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script type="module" src="assets/community.js"></script><script src="assets/site-config.js" defer></script><script src="assets/enthusia.js" defer></script></body>
+<script src="assets/site-config.js" defer></script><script src="assets/enthusia.js" defer></script><script type="module" src="assets/exact-news.js"></script></body>
 </html>

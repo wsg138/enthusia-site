@@ -18,7 +18,7 @@ const punishment = {player:'PreviewPlayer',punishmentType:'MUTE',broadReason:'CH
 const eligible = {id:'123e4567-e89b-42d3-a456-426614174099',...punishment,type:'MUTE',reason:'Sample moderation record',eligible:true};
 const submissions = ['Town Hall','Garden Plaza','Market Courtyard'].map((title,i)=>({id:'123e4567-e89b-42d3-a456-42661417420'+i,title,description:'A sample community build with gathering spaces and paths.',ownerName:'PreviewPlayer',ownerUuid:playerId,entryType:'SOLO',status:'APPROVED',participants:[{playerName:'PreviewPlayer',playerUuid:playerId,role:'OWNER'}],images:[],coverImageUrl:new URL('screenshots/slide-0'+(i+1)+'.webp',assets).href}));
 const details = slug => {
-  const competition=dataset.competitions.find(c=>c.slug===slug)||dataset.competitions[0];
+  const competition=dataset.competitions.find(c=>c.slug===slug)||dataset.referenceCompetitions.find(c=>c.slug===slug)||dataset.competitions[0];
   const completed=competition.lifecycleState==='COMPLETED';
   return {competition,entriesVisible:['VOTING','COMPLETED'].includes(competition.lifecycleState),submissions,judges:[{name:'PreviewJudge',playerName:'PreviewJudge'}],results:completed?submissions.map((s,i)=>({submissionId:s.id,title:s.title,placement:i+1,finalScore:10-i,communityComponent:9-i,judgeComponent:10-i,judgeScoreCount:1})):[],competitionResults:[]};
 };
@@ -32,7 +32,7 @@ const routes = new Map([
   ['/api/events/schedule', () => json({physicalEvents:{nextVoteAt:'2026-10-18T16:00:00Z',nextEventAt:'2026-10-18T17:00:00Z'},chatEvents:{nextChatEventAt:'2026-10-12T17:00:00Z'}})],
   ['/api/events/stats', () => json({topWins:[{player:'PreviewPlayer',wins:4}],recentEvents:[]})],
   ['/api/gallery/session', () => json({...session,staff:{review:staff,manage:staff}})],
-  ['/api/competitions', () => json({competitions:dataset.competitions})],
+  ['/api/competitions', () => json({competitions:document.body.hasAttribute?.('data-exact-catalog')?dataset.referenceCompetitions:dataset.competitions})],
   ['/api/competitions/invites', () => json({invites:[]})],
   ['/api/competitions/admin/status', () => json({ok:true,environment:'preview',database:{bound:true,schemaReady:true},media:{bound:true},moderation:{configured:true},identity:{discordOAuthConfigured:true},bridge:{configured:true},notifications:{discordStaffConfigured:true},siteOrigin:{configured:true},features:{enabled:true,publicCatalog:true}})],
   ['/api/competitions/admin', () => staff ? json({competitions:dataset.competitions}) : json({error:'forbidden'},403)]
@@ -66,13 +66,16 @@ function previewApi(url) {
     const parts=url.pathname.slice('/api/community/'.length).split('/');
     if(parts[0]==='admin'){
       if(!staff)return json({error:'editor_role_required'},403);
-      if(parts[1]==='session')return json({editor:true});
-      return json(dataset.community[parts[1]]??{items:[]});
+      if(parts[1]==='session')return json({editor:true,name:'Fain',rank:'Founder'});
+      return json(parts[1]==='news'?{items:dataset.community.news.items,editorDraft:dataset.community.editorDraft}:dataset.community[parts[1]]??{items:[]});
     }
     if(parts[0]==='polls'&&parts[1])return json({poll:dataset.community.polls.items[0],choice:null,totals:null});
+    if(parts[0]==='market-design')return json(dataset.community.marketDesign);
+    if(parts[0]==='alerts')return json({items:[]});
     if(parts[0]==='insights')return json({...dataset.community.insights,week:(url.searchParams.get('week')||'2026-10-05')+'T00:00:00Z',mode:url.searchParams.get('mode')||'stall'});
     return json(dataset.community[parts[0]]??{items:[]});
   }
+  if(url.pathname==='/api/punishments'&&document.body.hasAttribute?.('data-exact-punishments')){const values=['BAN','MUTE','WARN','BAN'].map((type,index)=>({...punishment,punishmentType:type,designIndex:index}));return json({items:values.filter(row=>!url.searchParams.get('type')||url.searchParams.get('type')==='ALL'||row.punishmentType===url.searchParams.get('type')),nextCursor:null});}
   const route=routes.get(url.pathname);
   if(route)return route(url);
   for(const [matches,render] of groups)if(matches(url.pathname))return render(url.pathname);

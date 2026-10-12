@@ -4,8 +4,8 @@
 <script src="./fixtures.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preview | Enthusia SMP store</title>
-<meta name="description" content="Design preview of the Enthusia SMP site.">
+<title>Enthusia SMP store</title>
+<meta name="description" content="Explore Enthusia SMP, its community, server history and player features.">
 <link rel="preload" href="../assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="../assets/enthusia.css">
 
@@ -25,9 +25,9 @@ a{color:#b3201a}a:hover{color:#7d120e}
 .hero-vars{--head-sh:#7d120e}
 .panel{background:#fff8e6;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #ffffff,inset -4px -4px 0 #ecc873;box-sizing:border-box}
 .tip{--row:#8a1510;background:#a51b16;border:4px solid var(--edge);box-shadow:inset 0 0 0 4px var(--gold),inset 0 0 0 6px #5c0d09;box-sizing:border-box}
-.tip.fret-lg{background:url(assets/ui/fret-lg-tl.svg) left top/74px 74px no-repeat,url(assets/ui/fret-lg-tr.svg) right top/74px 74px no-repeat,url(assets/ui/fret-lg-bl.svg) left bottom/74px 74px no-repeat,url(assets/ui/fret-lg-br.svg) right bottom/74px 74px no-repeat,#a51b16}
-.tip.fret{background:url(assets/ui/fret-md-tl.svg) left top/54px 54px no-repeat,url(assets/ui/fret-md-tr.svg) right top/54px 54px no-repeat,url(assets/ui/fret-md-bl.svg) left bottom/54px 54px no-repeat,url(assets/ui/fret-md-br.svg) right bottom/54px 54px no-repeat,#a51b16}
-.tip.fret-sm{background:url(assets/ui/fret-sm-tl.svg) left top/22px 22px no-repeat,url(assets/ui/fret-sm-tr.svg) right top/22px 22px no-repeat,url(assets/ui/fret-sm-bl.svg) left bottom/22px 22px no-repeat,url(assets/ui/fret-sm-br.svg) right bottom/22px 22px no-repeat,#a51b16}
+.tip.fret-lg{background:url(../assets/ui/fret-lg-tl.svg) left top/74px 74px no-repeat,url(../assets/ui/fret-lg-tr.svg) right top/74px 74px no-repeat,url(../assets/ui/fret-lg-bl.svg) left bottom/74px 74px no-repeat,url(../assets/ui/fret-lg-br.svg) right bottom/74px 74px no-repeat,#a51b16}
+.tip.fret{background:url(../assets/ui/fret-md-tl.svg) left top/54px 54px no-repeat,url(../assets/ui/fret-md-tr.svg) right top/54px 54px no-repeat,url(../assets/ui/fret-md-bl.svg) left bottom/54px 54px no-repeat,url(../assets/ui/fret-md-br.svg) right bottom/54px 54px no-repeat,#a51b16}
+.tip.fret-sm{background:url(../assets/ui/fret-sm-tl.svg) left top/22px 22px no-repeat,url(../assets/ui/fret-sm-tr.svg) right top/22px 22px no-repeat,url(../assets/ui/fret-sm-bl.svg) left bottom/22px 22px no-repeat,url(../assets/ui/fret-sm-br.svg) right bottom/22px 22px no-repeat,#a51b16}
 .cap{background:rgba(125,18,14,.92)}
 .slot{--head:#ffdb2e;background:#7d120e;color:#ffdb2e;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #5a0c09,inset -4px -4px 0 #a8221b;box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .frame{border:4px solid var(--edge);box-shadow:8px 8px 0 rgba(58,13,10,.35);background:#7d120e;box-sizing:border-box}
@@ -102,7 +102,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 .navbtn.cur{color:var(--head);border-bottom-color:var(--gold)}
 .en .foot a{display:flex;align-items:center;min-height:40px;color:var(--ink);text-decoration:none}
 .en .foot a:hover{color:var(--head)}
-.hero{background:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(assets/screenshots/slide-13.webp) center 50%/cover no-repeat}
+.hero{background:linear-gradient(rgba(60,8,5,.3),rgba(60,8,5,.3)),url(../assets/screenshots/slide-13.webp) center 50%/cover no-repeat}
 .en label{display:flex;flex-direction:column;gap:8px}
 .en input.field{width:100%;font-family:inherit;font-size:16px;line-height:24px;display:block}
 .rank{transition:transform .12s ease-out}
@@ -130,25 +130,378 @@ a{color:#b3201a}a:hover{color:#7d120e}
 @media (max-width:520px){.hdr-play{display:none !important}}
 
 </style>
-<link rel="stylesheet" href="../assets/community.css">
+<link rel="stylesheet" href="../assets/exact-design.css">
 <meta name="robots" content="noindex,nofollow,noarchive">
 </head>
-<body>
+<body data-exact-store="" data-mockup>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="en">
 
-<header class="site-head site-header s-red"><div class="site-head-in"><a class="brand" href="index.html"><img id="site-logo" class="brand-logo" src="../assets/ui/logo-256.png" alt="" width="44" height="44"><span>ENTHUSIA SMP</span></a><button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button><nav class="nav" id="site-nav" aria-label="Primary navigation"><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>Play +</button><div class="panel nav-menu"><a href="plugins.html">About</a><a href="join.html">Join guide</a><a href="guide.html">Player guide</a><a href="rules.html">Rules</a><a href="vote.html">Vote</a><a href="appeal.html">Appeals</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>World +</button><div class="panel nav-menu"><a href="market.html">Market</a><a href="gallery.html">Gallery</a><a href="museum.html">Mapart Museum</a><a href="competitions/index.html">Competitions</a><a href="events.html">Events</a><a href="bounties.html">Bounties</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>Community +</button><div class="panel nav-menu"><a href="guilds.html">Guilds</a><a href="players.html">Players</a><a href="leaderboards.html">Leaderboards</a><a href="halloffame.html">Hall of Fame</a><a href="achievements.html">Achievements</a><a href="creators.html">Creators</a><a href="staff.html">Staff</a><a href="moderation.html">Moderation</a><a href="punishments.html">Punishments</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>News +</button><div class="panel nav-menu"><a href="news.html">News</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="polls.html">Polls</a><a href="timeline.html">Timeline</a></div></div><a class="navbtn" href="store.html">Store</a><a class="navbtn" href="account.html">Account</a><a class="navbtn" href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a><a class="btn btn-gold" href="join.html">Play now!</a></nav></div></header>
+<header class="site-head s-red">
+<div class="site-head-in">
+<a class="brand" href="index.html" aria-label="Enthusia SMP home">
+<img src="../assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</div>
+</div>
+<a href="store.html" class="active" aria-current="page">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="account.html">Account</a>
+</nav>
+<a class="btn btn-gold hdr-play" href="join.html">Play now!</a>
+</div>
+</header>
 
-<main id="main-content" class="page-main"><section class="hero hero-vars" aria-labelledby="store-title">
+<main id="main-content" class="page-main">
+<section class="hero hero-vars" aria-labelledby="store-title">
 <div style="max-width: 1240px; min-height: 320px; margin: 0 auto; padding: 56px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
 <p class="tag tag-gold" style="letter-spacing: 2px">STORE</p>
 <h1 id="store-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">ENTHUSIA STORE</h1>
 <p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">Purchases from this store directly support Enthusia's hosting, development, events, and future improvements.</p>
 </div>
 <div class="crenel"></div>
-</section><section class="s-cream community-section"><div class="container" data-community-app="store"><p role="status">Loading store...</p></div></section></main>
+</section>
+<section class="s-cream" aria-label="Shop" style="padding: 56px 0 72px">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
 
-<footer class="site-foot s-red"><div class="site-foot-in"><div class="foot-cols"><nav class="foot" aria-label="Play"><p class="foot-title">PLAY</p><a href="plugins.html">About</a><a href="join.html">Join guide</a><a href="guide.html">Player guide</a><a href="rules.html">Rules</a><a href="vote.html">Vote</a><a href="appeal.html">Appeals</a></nav><nav class="foot" aria-label="World"><p class="foot-title">WORLD</p><a href="market.html">Market</a><a href="gallery.html">Gallery</a><a href="museum.html">Mapart Museum</a><a href="competitions/index.html">Competitions</a><a href="events.html">Events</a><a href="bounties.html">Bounties</a></nav><nav class="foot" aria-label="Community"><p class="foot-title">COMMUNITY</p><a href="guilds.html">Guilds</a><a href="players.html">Players</a><a href="leaderboards.html">Leaderboards</a><a href="halloffame.html">Hall of Fame</a><a href="achievements.html">Achievements</a><a href="creators.html">Creators</a><a href="staff.html">Staff</a><a href="punishments.html">Punishments</a></nav><nav class="foot" aria-label="News"><p class="foot-title">NEWS</p><a href="news.html">News</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="polls.html">Polls</a><a href="timeline.html">Timeline</a></nav><nav class="foot" aria-label="Staff tools"><p class="foot-title">STAFF TOOLS</p><a href="newseditor.html">Publishing editor</a><a href="competitions/admin/index.html">Competition admin</a><a href="reviewer/index.html">Reviewer</a></nav></div><p>2026 Enthusia SMP - glorytoenthusia@gmail.com</p><p>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p></div></footer>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px">
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div class="swap" style="display: flex; flex-direction: column; gap: 12px" data-b-class="swap {{loginShow}}">
+<label>Please enter your username to continue. Usernames can not contain spaces.
+<input class="field" type="text" placeholder="Your Minecraft username" data-b-value="{{name}}" data-on-change="setName"></label>
+<div style="display: flex"><button class="btn btn-gold" type="button" data-on-click="confirm">Continue</button></div>
+</div>
+<div class="swap" style="display: flex; align-items: center; gap: 16px" data-b-class="swap {{signedShow}}">
+<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 32px; line-height: 32px"><span data-b-text="initial"></span></div>
+<div style="flex-grow: 1; min-width: 0"><p style="color: var(--muted)">Shopping as</p><p style="font-size: 24px; line-height: 32px; overflow-wrap: anywhere"><span data-b-text="who"></span></p></div>
+<button class="btn btn-dark" type="button" data-on-click="logout">Change</button>
+</div>
+</div>
+<div class="tip fret" aria-label="Your cart" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; gap: 12px"><h2 style="font-size: 24px; line-height: 32px; color: var(--head)">Your cart</h2><span aria-live="polite" style="font-size: 24px; line-height: 32px; color: var(--accent)"><span data-b-text="total"></span></span></div>
+<p class="" style="color: var(--muted)" data-b-class="{{emptyShow}}">Keep adding items to cart and check back here to complete your purchase!</p>
+<div class="swap" style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; background: var(--row)" data-b-class="swap {{lineAvid}}"><span>Avid - one-time</span><span>$5.00</span></div>
+<div class="swap" style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; background: var(--row)" data-b-class="swap {{lineDev}}"><span>Devotee - monthly</span><span>$10.00</span></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 4px">
+<a class="btn btn-gold" data-tebex-checkout="" href="https://enthusia-shop.tebex.io/category/3081497">Checkout with Tebex</a>
+<span style="color: var(--muted)"><span data-b-text="hint"></span></span>
+</div>
+</div>
+</div>
+
+<div class="tip fret-sm" style="padding: 20px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px">
+<span class="tag tag-gold">Fair ranks</span>
+<p style="flex: 1 1 420px">Our ranks focus on useful quality-of-life and community features without selling combat gear, currency, or unfair progression advantages.</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">TWO OPTIONS</p>
+<h2 id="ranks-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Choose your rank</h2>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px">
+<article class="panel rank" style="padding: 0; display: flex; flex-direction: column">
+<div style="height: 12px; background: #29b6e8; border-bottom: 4px solid #4a0b08"></div>
+<div style="padding: 28px; display: flex; flex-direction: column; gap: 16px; flex-grow: 1">
+<img class="px" src="../assets/design/aaae50c048fc.png" alt="Avid" style="height: 56px; width: auto; max-width: 100%; align-self: flex-start; object-fit: contain">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px">
+<span style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">$5.00</span>
+<span style="color: var(--muted)">USD - one-time, permanent</span>
+</div>
+<p class="chat"><span style="color: #55e0ff">[Avid]</span> <span data-b-text="chatName"></span>: hello!</p>
+<div style="padding: 16px; background: var(--row); border: 4px dashed #b3201a; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px"><h4 style="font-size: 24px; line-height: 32px; color: var(--head)">Signed items</h4><span class="tag tag-gold">New</span></div>
+<p>Put your name on your gear. /sign adds a permanent creator signature to the item in your hand, with your name in colour and your own message. You see a preview and confirm it before it becomes permanent.</p>
+<p>/track adds a counter to an item for player kills, mob kills or blocks mined. It keeps counting when the item changes hands.</p>
+<p style="color: var(--muted)">One signature and one tracker per item. Neither can be removed.</p>
+</div>
+<h4>SMP</h4>
+<ul class="perks">
+<li>Custom prefix in chat [Avid]</li>
+<li>Ability to use /sit and /lay</li>
+<li>Sign your items with /sign and add stat trackers with /track</li>
+<li>Ability to use colors in chat and format [Bold, italic or underlined]</li>
+<li>Ability to showcase items in chat with [item]</li>
+<li>Ability to use /seen command [used to see when a player was last logged in]</li>
+</ul>
+<h4>Discord</h4>
+<ul class="perks" style="flex-grow: 1">
+<li>Access to Donor Chat</li>
+<li>View in-game-chat channel</li>
+</ul>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<button class="btn btn-gold" type="button" style="min-height: 56px; font-size: 24px; line-height: 32px" data-b-class="btn btn-gold {{avidOut}}" data-on-click="togAvid">Add to cart</button>
+<button class="btn btn-dark" type="button" style="min-height: 56px" data-b-class="btn btn-dark {{avidIn}}" data-on-click="togAvid">In your cart - remove</button>
+</div>
+</div>
+</article>
+<article class="panel rank" style="padding: 0; display: flex; flex-direction: column">
+<div style="height: 12px; background: #2a2fd6; border-bottom: 4px solid #4a0b08"></div>
+<div style="padding: 28px; display: flex; flex-direction: column; gap: 16px; flex-grow: 1">
+<img class="px" src="../assets/design/1d2d4862106b.png" alt="Devotee" style="height: 56px; width: auto; max-width: 100%; align-self: flex-start; object-fit: contain">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px">
+<span style="font-size: 48px; line-height: 56px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">$10.00</span>
+<span style="color: var(--muted)">USD per month - subscription</span>
+</div>
+<p class="chat"><span style="color: #8f9bff">[Devotee]</span> <span data-b-text="chatName"></span>: hello!</p>
+<div style="padding: 16px; background: var(--row); border: 4px dashed #b3201a; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px"><h4 style="font-size: 24px; line-height: 32px; color: var(--head)">Mapart shields</h4><span class="tag tag-gold">New</span></div>
+<p>Carry your mapart into battle. Hold a filled map and run /mapshield create with a name. Once staff approve the design, /mapshield apply puts it on the shield in your hand.</p>
+<p>The shield keeps its durability, enchantments and name, and blocks like any other. /mapshield remove takes the art off again.</p>
+<p style="color: var(--muted)">Needs the server resource pack. Java Edition only: the art is not shown to Bedrock players.</p>
+</div>
+<h4>SMP</h4>
+<ul class="perks">
+<li>Custom prefix in chat [Devotee]</li>
+<li>Ability to use /spin</li>
+<li>Put your mapart on shields with /mapshield</li>
+<li>Ability to use colors in chat and format [Bold, italic or underlined]</li>
+<li>Ability to showcase your inventory and enderchest in chat with [inv] and [ender]</li>
+<li>Ability to use /seen command [used to see when a player was last logged in]</li>
+<li>Ability to start any event by doing /events <span class="tag tag-plain">With Events</span></li>
+<li>Ability to start any KOTH by doing /start koth <span class="tag tag-plain">With KOTH</span></li>
+</ul>
+<h4>Discord</h4>
+<ul class="perks" style="flex-grow: 1">
+<li>Access to Donor Chat on Discord</li>
+<li>View in-game-chat channel</li>
+<li>Ability to send messages through the in-game-chat channel</li>
+<li>Avatar head emoji</li>
+</ul>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<button class="btn btn-gold" type="button" style="min-height: 56px; font-size: 24px; line-height: 32px" data-b-class="btn btn-gold {{devOut}}" data-on-click="togDev">Subscribe</button>
+<button class="btn btn-dark" type="button" style="min-height: 56px" data-b-class="btn btn-dark {{devIn}}" data-on-click="togDev">In your cart - remove</button>
+</div>
+</div>
+</article>
+</div>
+
+<div class="panel" style="padding: 28px; display: flex; flex-direction: column; gap: 4px">
+<h3 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); padding-bottom: 12px">Compare the ranks</h3>
+<div class="cmp cmp-top"><span></span><span>Avid</span><span>Devotee</span></div>
+<div class="cmp cmp-h"><span>In game</span></div>
+<div class="cmp"><span>Custom chat prefix</span><span class="cmp-v" data-col="Avid"><b>[Avid]</b></span><span class="cmp-v" data-col="Devotee"><b>[Devotee]</b></span></div>
+<div class="cmp"><span>Colors and formatting in chat</span><span class="cmp-v" data-col="Avid"><b style="color: var(--good)">Yes</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
+<div class="cmp"><span>/seen command</span><span class="cmp-v" data-col="Avid"><b style="color: var(--good)">Yes</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
+<div class="cmp"><span>/sit and /lay</span><span class="cmp-v" data-col="Avid"><b style="color: var(--good)">Yes</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--muted)">-</b></span></div>
+<div class="cmp"><span>/spin</span><span class="cmp-v" data-col="Avid"><b style="color: var(--muted)">-</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
+<div class="cmp"><span>Signed items with /sign and /track</span><span class="cmp-v" data-col="Avid"><b style="color: var(--good)">Yes</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--muted)">-</b></span></div>
+<div class="cmp"><span>Mapart on shields with /mapshield</span><span class="cmp-v" data-col="Avid"><b style="color: var(--muted)">-</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
+<div class="cmp"><span>Show items in chat</span><span class="cmp-v" data-col="Avid"><b>[item]</b></span><span class="cmp-v" data-col="Devotee"><b>[inv] and [ender]</b></span></div>
+<div class="cmp"><span>Start any event with /events (arrives with Events)</span><span class="cmp-v" data-col="Avid"><b style="color: var(--muted)">-</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
+<div class="cmp"><span>Start any KOTH with /start koth (arrives with KOTH)</span><span class="cmp-v" data-col="Avid"><b style="color: var(--muted)">-</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
+<div class="cmp cmp-h"><span>Discord</span></div>
+<div class="cmp"><span>Donor Chat</span><span class="cmp-v" data-col="Avid"><b style="color: var(--good)">Yes</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
+<div class="cmp"><span>View the in-game-chat channel</span><span class="cmp-v" data-col="Avid"><b style="color: var(--good)">Yes</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
+<div class="cmp"><span>Send messages through in-game-chat</span><span class="cmp-v" data-col="Avid"><b style="color: var(--muted)">-</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
+<div class="cmp"><span>Avatar head emoji</span><span class="cmp-v" data-col="Avid"><b style="color: var(--muted)">-</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
+</div>
+
+</div>
+</section>
+
+<section data-tebex-summary="" class="s-red" aria-labelledby="goal-title" style="padding: 72px 0; border-top: 4px solid #4a0b08; border-bottom: 4px solid #4a0b08">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">COMMUNITY</p>
+<h2 id="goal-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Keeping the server running</h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 24px">
+<div class="panel" style="padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; gap: 12px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Monthly goal</h3><span style="font-size: 24px; line-height: 32px; color: var(--accent)">0%</span></div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px"><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span></div>
+<p style="color: var(--muted)">Purchases go toward hosting, development, events, and future improvements.</p>
+</div>
+<div class="tip fret" style="padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); text-align: center">Recent supporters</h3>
+<div class="row" style="display: flex; align-items: center; gap: 12px; padding: 6px 16px 6px 6px; background: var(--row)"><img class="px" src="../assets/design/b6e2c7d2d993.png" alt="" style="width: 40px; height: 40px"><span>Fr0stDraws</span></div>
+<div class="row" style="display: flex; align-items: center; gap: 12px; padding: 6px 16px 6px 6px; background: var(--row)"><img class="px" src="../assets/design/e06b692805b8.png" alt="" style="width: 40px; height: 40px"><span>Millistii</span></div>
+<div class="row" style="display: flex; align-items: center; gap: 12px; padding: 6px 16px 6px 6px; background: var(--row)"><img class="px" src="../assets/design/10a7c046422c.png" alt="" style="width: 40px; height: 40px"><span>Oceanium</span></div>
+<div class="row" style="display: flex; align-items: center; gap: 12px; padding: 6px 16px 6px 6px; background: var(--row)"><img class="px" src="../assets/design/6a8f6d7223f0.png" alt="" style="width: 40px; height: 40px"><span>ToxikFlame11</span></div>
+<div class="row" style="display: flex; align-items: center; gap: 12px; padding: 6px 16px 6px 6px; background: var(--row)"><img class="px" src="../assets/design/04255a8b9fd3.png" alt="" style="width: 40px; height: 40px"><span>qaysoz</span></div>
+</div>
+<div class="panel" style="padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Top supporter this month</h3>
+<div class="slot" style="width: 96px; height: 96px; color: var(--head); font-size: 48px; line-height: 48px">?</div>
+<p style="color: var(--muted)">No recent top spenders.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="s-cream" aria-labelledby="before-title" style="padding: 72px 0; flex-grow: 1;">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">HOW IT WORKS</p>
+<h2 id="before-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Before you buy</h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 16px">
+<article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">01</div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Enter your exact username</h3>
+<p style="color: var(--muted)">Enter your exact Minecraft username when requested.</p>
+</article>
+<article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">02</div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Read the package</h3>
+<p style="color: var(--muted)">Read the complete package description before purchasing.</p>
+</article>
+<article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">03</div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Check out with Tebex</h3>
+<p style="color: var(--muted)">Complete checkout securely through Tebex.</p>
+</article>
+<article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">04</div>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Something missing?</h3>
+<p style="color: var(--muted)">Open a support ticket in the Enthusia Discord if delivery issues occur.</p>
+</article>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px">
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Pay in your currency</h3>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<span class="tag tag-gold">USD</span>
+<span class="tag tag-plain">AUD</span>
+<span class="tag tag-plain">BRL</span>
+<span class="tag tag-plain">CAD</span>
+<span class="tag tag-plain">DKK</span>
+<span class="tag tag-plain">EUR</span>
+<span class="tag tag-plain">NOK</span>
+<span class="tag tag-plain">NZD</span>
+<span class="tag tag-plain">PLN</span>
+<span class="tag tag-plain">GBP</span>
+<span class="tag tag-plain">SEK</span>
+</div>
+</div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Java and Bedrock</h3>
+<p style="color: var(--muted)">Enthusia supports both Java and Bedrock players. Need help with a purchase? Open a ticket in Discord.</p>
+<div style="display: flex"><a class="btn btn-red" href="https://discord.gg/5ccgDCmNSc">Join the Discord</a></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="index.html">
+<img src="../assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="join.html">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="News">
+<p class="foot-title">NEWS</p>
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="store.html">Store</a>
+<a href="account.html">Account</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="404.html">404 page</a>
+<a href="home-christmas.html">Christmas skin</a>
+</nav>
+<nav class="foot" aria-label="Staff tools">
+<p class="foot-title">STAFF TOOLS</p>
+<a href="competitions/admin/index.html">Competition admin</a>
+<a href="newseditor.html">News editor</a>
+<a href="reviewer/index.html">Reviewer</a>
+<a href="reviewer/appeals.html">Appeal review</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
 
 
 </div>
@@ -158,5 +511,6 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script type="module" src="../assets/community.js"></script><script src="../assets/site-config.js" defer></script><script src="../assets/enthusia.js" defer></script></body>
+<script src="../assets/site-config.js" defer></script><script src="../assets/enthusia.js" defer></script><script src="../assets/design-bindings.js" defer></script><script src="../assets/exact-store.js" defer></script>
+</body>
 </html>

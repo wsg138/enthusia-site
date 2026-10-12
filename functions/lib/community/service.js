@@ -16,7 +16,7 @@ async function editor(request,env){
   const s=await authenticateRequest(request,env);
   const roles=new Set(String(env.COMMUNITY_EDITOR_ROLES??'founder,admin').split(',').map(v=>v.trim()));
   if(!s.roles.some(role=>roles.has(role)))return null;
-  return {id:s.player.uuid};
+  return {id:s.player.uuid,name:s.player.name,rank:s.roles.includes('founder')?'Founder':s.roles.includes('admin')?'Admin':'Staff'};
 }
 async function body(request){
   if(Number(request.headers.get('content-length')??0)>150000)throw new Error('body_too_large');
@@ -29,10 +29,12 @@ async function body(request){
 }
 async function recordList(db,kind,staff){
   const rows=await db.prepare(`SELECT payload,revision,updated_at FROM community_records WHERE kind=? ${staff?'':"AND status='published'"} ORDER BY updated_at DESC LIMIT 200`).bind(kind).all();
-  return json({items:rows.results.map(decodeRow).map(v=>staff?v:publicRecord(v)).filter(Boolean)});
+  const items=rows.results.map(decodeRow).map(v=>staff?v:publicRecord(v)).filter(Boolean);
+  if(kind==='news')items.sort((a,b)=>Number(Boolean(b.pinned))-Number(Boolean(a.pinned)));
+  return json({items});
 }
 async function saveRecord(db,input,actor){
-  const record=validateRecord(input),revision=input.revision??0;
+  const record={...validateRecord(input),authorName:actor.name??'Staff',authorRank:actor.rank??'Staff'},revision=input.revision??0;
   if(!Number.isInteger(revision)||revision<0)throw new Error('invalid_revision');
   const existing=decodeRow(await db.prepare('SELECT payload,revision,updated_at FROM community_records WHERE kind=? AND slug=?').bind(record.kind,record.slug).first());
   if(existing&&record.kind==='polls'&&JSON.stringify(existing.options)!==JSON.stringify(record.options)){
@@ -103,7 +105,7 @@ function weekRange(value){
 async function insights(db,url){
   const [start,end]=weekRange(url.searchParams.get('week'));
   const mode=url.searchParams.get('mode')==='guild'?'guild':'stall';
-  const leaders=await db.prepare(`SELECT ${mode} AS name,SUM(gold) AS gold,SUM(quantity) AS quantity FROM market_sales WHERE occurred_at>=? AND occurred_at<? AND ${mode}<>'' GROUP BY ${mode} ORDER BY gold DESC,${mode} ASC LIMIT 50`).bind(start,end).all();
+  const leaders=await db.prepare(`SELECT ${mode} AS name,SUM(gold) AS gold,SUM(quantity) AS quantity,COUNT(DISTINCT stall) AS stalls FROM market_sales WHERE occurred_at>=? AND occurred_at<? AND ${mode}<>'' GROUP BY ${mode} ORDER BY gold DESC,${mode} ASC LIMIT 50`).bind(start,end).all();
   const prices=await db.prepare(`SELECT item,SUM(gold)/SUM(quantity) AS price,SUM(quantity) AS quantity,COUNT(*) AS trades,MAX(occurred_at) AS lastSale FROM market_sales WHERE occurred_at>=? GROUP BY item ORDER BY trades DESC LIMIT 500`).bind(new Date(Date.now()-30*86400000).toISOString()).all();
   const previous=await db.prepare(`SELECT item,SUM(gold)/SUM(quantity) AS price FROM market_sales WHERE occurred_at>=? AND occurred_at<? GROUP BY item`).bind(new Date(Date.now()-60*86400000).toISOString(),new Date(Date.now()-30*86400000).toISOString()).all();
   const older=new Map(previous.results.map(v=>[v.item,v.price]));
@@ -141,7 +143,7 @@ export async function handleCommunity(context,dependencies={editor,identity}){
     if(parts[0]==='admin'){
       let actor;try{actor=await dependencies.editor(request,env);}catch{return json({error:'authentication_required'},401);}
       if(!actor)return json({error:'editor_role_required'},403);
-      if(parts[1]==='session'&&method==='GET')return json({editor:true});
+      if(parts[1]==='session'&&method==='GET')return json({editor:true,name:actor.name??'Staff',rank:actor.rank??'Staff'});
       if(CONTENT_KINDS.has(parts[1])&&parts.length===2){
         if(method==='GET')return await recordList(db,parts[1],true);
         const input=JSON.parse(await body(request));if(input.kind!==parts[1])return json({error:'invalid_kind'},400);

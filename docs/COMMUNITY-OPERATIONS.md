@@ -12,7 +12,7 @@ Historical design entries are preserved in `assets/design-drafts.json`. The edit
 
 ## Public server export contract
 
-POST `/api/community/ingest`, JSON `{ "kind": "guilds|players|bounties|achievements|sales", "items": [...] }`.
+POST `/api/community/ingest`, JSON `{ "kind": "guilds|players|bounties|achievements|warzone|sales", "items": [...] }`.
 
 Only the server producer uses `COMMUNITY_INGEST_SECRET` (at least 32 characters). Headers:
 
@@ -32,6 +32,7 @@ Every snapshot item has `id`, `name`, optional public `description`. Additional 
 | players | guild, rank, playtime (hours), balance (raw gold), reputation, achievements (public labels), links |
 | bounties | gold (raw gold), state (`open`, `claimed`, `expired`), hunter (public name), expiresAt |
 | achievements | category, reward (description), completed (count) |
+| warzone | type (`kit`, `leader`, `activity`), kills (public weekly count), endsAt (rotation timestamp), target (public HTTPS link) |
 | sales | id (stable transaction ID), stall (canonical map stall ID), guild (public guild name or empty), item (canonical material key), quantity, gold (raw gold actually paid), occurredAt (ISO timestamp) |
 
 Full snapshots replace the previous collection, including an empty collection. Missing fields stay unknown; missing recruitment/peaceful fields do not classify guilds. After 15 minutes the UI identifies stale exports. Sales IDs are idempotent; changing a stored ID's content is rejected. Only completed positive raw-gold transactions belong in the ledger. Do not export barter as gold or infer sales from stock movement. Corrections/reversals require a reviewed ledger correction process; this endpoint does not support refunds.
@@ -58,3 +59,5 @@ No public bounty producer endpoint or complete player profile feed was supplied 
 The Store page links to current Tebex checkout and does not invent prices or payment processing. `/events`, `/start koth` and Glorious holders are retained; chat tags are not offered. A custom hosted Tebex theme is a separate platform deliverable; no Tebex-compatible theme package was exported or installed.
 
 `home-christmas.html` is an explicitly labeled, noindex seasonal reference. Sculk assets load only with `?skin=sculk`; default Home remains unchanged. Real service, OAuth, guild data, D1 migrations, production deployment and mobile/client acceptance are separate from local preview proof.
+
+The home Warzone tile consumes the signed `warzone` snapshot. Export the current kit and next rotation, weekly public kill leaders and public activity descriptions. Missing fields stay unavailable; the website does not derive combat statistics from online players or invent rotation schedules. A server producer is still required.

@@ -80,3 +80,11 @@ test('alert worker is disabled by default and sends only opt-in threshold matche
   assert.equal((await dispatchAlerts(env,send)).sent,1);assert.equal(calls,2);
   assert.equal((await dispatchAlerts(env,send)).sent,0);assert.equal(calls,2);
 });
+
+test('news pins order published records and author identity is set by the authenticated editor',async()=>{
+ const {db}=database();const trusted={...dependencies,editor:async()=>({id:'editor',name:'RealEditor',rank:'Admin'})};
+ await request(db,'admin/news','POST',{...news,slug:'pinned',status:'published',pinned:true,authorName:'Forged',authorRank:'Founder'},{dependencies:trusted});
+ await request(db,'admin/news','POST',{...news,slug:'newer',status:'published'},{dependencies:trusted});
+ const publicItems=(await (await request(db,'news')).json()).items;
+ assert.equal(publicItems[0].slug,'pinned');assert.equal(publicItems[0].pinned,true);assert.equal(publicItems[0].authorName,'RealEditor');assert.equal(publicItems[0].authorRank,'Admin');
+});

@@ -1,0 +1,2050 @@
+{
+  "timeline": {
+    "items": [
+      {
+        "id": "design-timeline-0",
+        "slug": "design-timeline-0",
+        "title": "27 Aug",
+        "body": "The Discord server for the new SMP is set up.",
+        "designIndex": 0,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-1",
+        "slug": "design-timeline-1",
+        "title": "4 Sep",
+        "body": "Fain introduces the server, built with sharpmatt, p2wn and Borlyn. The goals: community driven, no resets and no pay-to-win.",
+        "designIndex": 1,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-2",
+        "slug": "design-timeline-2",
+        "title": "10 Sep",
+        "body": "The plan sets out the Diary, an item economy, market stalls, guilds by AngryBadger, bounties, custom advancements and donor ranks. Diamonds are the planned currency. Work starts on the website.",
+        "designIndex": 2,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-3",
+        "slug": "design-timeline-3",
+        "title": "Sep to Oct",
+        "body": "The community votes for KOTH (91%), a virtual bank, build-your-own market stalls and a 50-plot market.",
+        "designIndex": 3,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-4",
+        "slug": "design-timeline-4",
+        "title": "28 Sep",
+        "body": "A cash prize for whoever invites the most members to the Discord before the end of October.",
+        "designIndex": 4,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-5",
+        "slug": "design-timeline-5",
+        "title": "3 Oct",
+        "body": "A whitelisted test for redstoners and farm builders, in creative, to push server performance. It is also the first test of the guild plugin. Extended to 13 October.",
+        "designIndex": 5,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-6",
+        "slug": "design-timeline-6",
+        "title": "30 Oct",
+        "body": "Marvus, Zom_B_Kitty_26 and Toxik are introduced as the builders of the first spawn.",
+        "designIndex": 6,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-7",
+        "slug": "design-timeline-7",
+        "title": "31 Oct",
+        "body": "The whitelist comes off at 5pm ET with the End open from the start. Players get the Diary, market stalls, bounties and KOTH at Haunted Hill.",
+        "designIndex": 7,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-8",
+        "slug": "design-timeline-8",
+        "title": "31 Oct",
+        "body": "The guild plugin by AngryBadger opens to all players with custom ranks, guild wars, a guild vault and guild levels.",
+        "designIndex": 8,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-9",
+        "slug": "design-timeline-9",
+        "title": "31 Oct",
+        "body": "Guild rivalries start on day one: Kingsmould and Everlights call a truce within hours of the beta opening.",
+        "designIndex": 9,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-10",
+        "slug": "design-timeline-10",
+        "title": "1 Nov",
+        "body": "The currency changes to Raw Gold on the first full day, alongside the first PvP arena test.",
+        "designIndex": 10,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-11",
+        "slug": "design-timeline-11",
+        "title": "11 Nov",
+        "body": "Guilds can enter KOTH as teams, logging out in combat leaves an NPC behind, and new players get 30 minutes of protection.",
+        "designIndex": 11,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-12",
+        "slug": "design-timeline-12",
+        "title": "15 Nov",
+        "body": "A server-wide King of the Hill fight recorded for the promo video. p2wn, Borlyn and Doge198_ capture the hill.",
+        "designIndex": 12,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-13",
+        "slug": "design-timeline-13",
+        "title": "15 Nov",
+        "body": "FlashStrength and p2wn both win for inviting the most members to the Discord.",
+        "designIndex": 13,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-14",
+        "slug": "design-timeline-14",
+        "title": "17 Nov",
+        "body": "Across the two betas: 239 first-time players, 28 guilds formed, 463 PvP kills and 72 verified bugs.",
+        "designIndex": 14,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-15",
+        "slug": "design-timeline-15",
+        "title": "18 Nov",
+        "body": "Tags for testers with 4 or more hours and a lore item for 13 or more. RedstoneIsGreat tops the bug hunters with 49 verified reports.",
+        "designIndex": 15,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-16",
+        "slug": "design-timeline-16",
+        "title": "9 Dec",
+        "body": "A whitelisted test of the End main-island rules ahead of the next beta.",
+        "designIndex": 16,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-17",
+        "slug": "design-timeline-17",
+        "title": "19 Dec",
+        "body": "The store goes live with the Founder's Badge, Avid and Devotee, and no pay-to-win perks.",
+        "designIndex": 17,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-18",
+        "slug": "design-timeline-18",
+        "title": "19 Dec",
+        "body": "Work begins on the server resource pack with artist sucrash, and the Christmas logo is revealed.",
+        "designIndex": 18,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-19",
+        "slug": "design-timeline-19",
+        "title": "20 Dec",
+        "body": "The server reopens at noon ET with commendations, a rebuilt playtime system and a 44-stall market.",
+        "designIndex": 19,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-20",
+        "slug": "design-timeline-20",
+        "title": "Late Dec",
+        "body": "Guilds form and gear up ahead of the End event, among them Enthusiast, Blood Guard and ScarEye, whose banner goes up near spawn.",
+        "designIndex": 20,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-21",
+        "slug": "design-timeline-21",
+        "title": "26 Dec",
+        "body": "Voted back from Christmas Eve, the End opens at 1pm ET. Enthusiast and Blood Guard win the fight for the Dragon Egg.",
+        "designIndex": 21,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-22",
+        "slug": "design-timeline-22",
+        "title": "1 Jan",
+        "body": "The Open Beta carries on past 5 January, with full release projected for March 2026.",
+        "designIndex": 22,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-23",
+        "slug": "design-timeline-23",
+        "title": "2 Jan",
+        "body": "The extended beta is named the Prologue. Borders grow to 20k in the Overworld and 25k in the End, and balances and bounties are reset after a major dupe.",
+        "designIndex": 23,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-24",
+        "slug": "design-timeline-24",
+        "title": "2 Jan",
+        "body": "Guild stalls open for testing, Minecraft to Discord linking goes live and moderator applications open.",
+        "designIndex": 24,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-25",
+        "slug": "design-timeline-25",
+        "title": "2 Jan",
+        "body": "Enthusiast sets up a dedicated branch for the server and starts recruiting on it.",
+        "designIndex": 25,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-26",
+        "slug": "design-timeline-26",
+        "title": "5 Jan",
+        "body": "Enthusiast and Blood Guard declare war on ScarEye, led by RadiOwO_. The two sides fight on and off through January and February.",
+        "designIndex": 26,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-27",
+        "slug": "design-timeline-27",
+        "title": "12 Jan",
+        "body": "Polls approve Death Duels (78%) and package mail (66%).",
+        "designIndex": 27,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-28",
+        "slug": "design-timeline-28",
+        "title": "23 Jan",
+        "body": "Raw Gold can be banked with /deposit, teleports are rebuilt in-house and the commendation system gets its first effects.",
+        "designIndex": 28,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-29",
+        "slug": "design-timeline-29",
+        "title": "25 Jan",
+        "body": "The Enthusia wiki opens to community editing, builder and developer applications open, and Enthusia.net becomes the main address.",
+        "designIndex": 29,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-30",
+        "slug": "design-timeline-30",
+        "title": "4 Feb",
+        "body": "An Enthusiast member brings two ScarEye players into the guild base. Both are killed, but Enthusiast has to move its main base.",
+        "designIndex": 30,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-31",
+        "slug": "design-timeline-31",
+        "title": "6 Feb",
+        "body": "Enthusiast and Blood Guard raid a ScarEye base and carry off its loot.",
+        "designIndex": 31,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-32",
+        "slug": "design-timeline-32",
+        "title": "25 Feb",
+        "body": "Launch is pushed back to April. The Historian role is created for the wiki, and new builders and moderators join the team.",
+        "designIndex": 32,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-33",
+        "slug": "design-timeline-33",
+        "title": "21 Mar",
+        "body": "The beta updates to 1.21.11 with spears, guild history lookups and a first Survival Games playtest, after a Minecraft Live watch party.",
+        "designIndex": 33,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-34",
+        "slug": "design-timeline-34",
+        "title": "4 Apr",
+        "body": "The server moves to a host that can carry a 100k world border.",
+        "designIndex": 34,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-35",
+        "slug": "design-timeline-35",
+        "title": "11 Apr",
+        "body": "The border shrinks to the Warzone for a one-life final fight, ending with Blood Guard against the newly formed OverHeaven. Flomish is the last player standing and Prologue Champion.",
+        "designIndex": 35,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-36",
+        "slug": "design-timeline-36",
+        "title": "12 Apr",
+        "body": "After EOTW most of the active Enthusiast roster on the server moves on, and the guild regroups for full release.",
+        "designIndex": 36,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-37",
+        "slug": "design-timeline-37",
+        "title": "24 Apr",
+        "body": "Full release is set for 2 May. The final beta counted 837 first-time players, 62 guilds and 5,765 PvP kills.",
+        "designIndex": 37,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-38",
+        "slug": "design-timeline-38",
+        "title": "2 May",
+        "body": "Enthusia SMP launches at 1pm ET with a 100k Overworld border, the Raw Gold economy, guilds, reputation, bounties and proximity voice chat.",
+        "designIndex": 38,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-39",
+        "slug": "design-timeline-39",
+        "title": "6 May",
+        "body": "The hunt for the stronghold begins.",
+        "designIndex": 39,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-40",
+        "slug": "design-timeline-40",
+        "title": "9 May",
+        "body": "The End opens at 3pm ET. The allied guilds Vibe, Dogeclan and BoopGang win, woulves1 takes the Dragon Egg, and the server hits a record 96 players online.",
+        "designIndex": 40,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-41",
+        "slug": "design-timeline-41",
+        "title": "Early May",
+        "body": "BelovedOnes raid Vibe's gold farm in the first week. Vibe's leader later calls it the reason the guild turned to raiding.",
+        "designIndex": 41,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-42",
+        "slug": "design-timeline-42",
+        "title": "11 May",
+        "body": "Players can build and travel on the Nether roof.",
+        "designIndex": 42,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-43",
+        "slug": "design-timeline-43",
+        "title": "16 May",
+        "body": "1v1 duels to the death arrive in the spawn arena, with custom rules, wagers and a loot vault for the winner.",
+        "designIndex": 43,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-44",
+        "slug": "design-timeline-44",
+        "title": "16 May",
+        "body": "A video contest with cash prizes and the Media rank. The deadline later moves from 16 June to 30 June.",
+        "designIndex": 44,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-45",
+        "slug": "design-timeline-45",
+        "title": "19 May",
+        "body": "The wiki gets working infoboxes, fixed by Michael Lubker.",
+        "designIndex": 45,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-46",
+        "slug": "design-timeline-46",
+        "title": "29 May",
+        "body": "Celebrated with a rank giveaway. Enthusia is also listed on Modrinth and gets a Discord server tag.",
+        "designIndex": 46,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-47",
+        "slug": "design-timeline-47",
+        "title": "29 May",
+        "body": "Planned for 30 May, the Market moves to 6 June. On 6 June it is held back with no date until it is ready.",
+        "designIndex": 47,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-48",
+        "slug": "design-timeline-48",
+        "title": "1 Jun",
+        "body": "p2wn's PieCloak makes pie-chart base hunting less reliable by hiding common base blocks and entities at a distance.",
+        "designIndex": 48,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-49",
+        "slug": "design-timeline-49",
+        "title": "2 Jun",
+        "body": "The Founder ranks and the Founder Star leave the store for good.",
+        "designIndex": 49,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-50",
+        "slug": "design-timeline-50",
+        "title": "7 Jun",
+        "body": "Vibe begins a run of raids on WOT bases and declares war on guild after guild. Four WOT bases have fallen by mid-June.",
+        "designIndex": 50,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-51",
+        "slug": "design-timeline-51",
+        "title": "18 Jun",
+        "body": "Enthusiast votes 12 to 0 to ally with PTC, a guild that takes contracts.",
+        "designIndex": 51,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-52",
+        "slug": "design-timeline-52",
+        "title": "19 Jun",
+        "body": "After a clash between their members, Enthusiast names WOT and BelovedOnes as enemies.",
+        "designIndex": 52,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-53",
+        "slug": "design-timeline-53",
+        "title": "21 Jun",
+        "body": "Hosted by auhfuls in the Duels Arena: sword PvP with totems and cobwebs, no maces. OinkerMC wins, with Currut second and Nicusormeow third.",
+        "designIndex": 53,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-54",
+        "slug": "design-timeline-54",
+        "title": "27 Jun",
+        "body": "Players on Minecraft 26.2 can join.",
+        "designIndex": 54,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-55",
+        "slug": "design-timeline-55",
+        "title": "28 Jun",
+        "body": "Vibe becomes the first guild to reach level 100, with BelovedOnes close behind at 88. A rework of guild progression is announced.",
+        "designIndex": 55,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-56",
+        "slug": "design-timeline-56",
+        "title": "28 Jun",
+        "body": "An official Enthusia autoclicker mod by p2wn is published on Modrinth.",
+        "designIndex": 56,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-57",
+        "slug": "design-timeline-57",
+        "title": "Summer",
+        "body": "About 15 donors test every event in p2wn's new Events plugin.",
+        "designIndex": 57,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-58",
+        "slug": "design-timeline-58",
+        "title": "1 Jul",
+        "body": "StepSoy wins the video contest. KILLTEAM and Jacco1OO also earn the Media rank. Real-world politics are barred from chat, guild names and items.",
+        "designIndex": 58,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-59",
+        "slug": "design-timeline-59",
+        "title": "3 Jul",
+        "body": "The Market releases at 2pm ET alongside a new advertisement, but auction problems put it on hold within hours. Everyone is refunded.",
+        "designIndex": 59,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-60",
+        "slug": "design-timeline-60",
+        "title": "9 Jul",
+        "body": "The Market relaunches with a stall auction. Server trouble forces a re-bid on 10 July, and the auction closes that evening.",
+        "designIndex": 60,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-61",
+        "slug": "design-timeline-61",
+        "title": "15 Jul",
+        "body": "The SMP goes down for most of a day to fix a homes exploit and a duel-spectating exploit.",
+        "designIndex": 61,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-62",
+        "slug": "design-timeline-62",
+        "title": "19 Jul",
+        "body": "The website gets a new look and an interactive Market showing every stall, its owner and its stock.",
+        "designIndex": 62,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-63",
+        "slug": "design-timeline-63",
+        "title": "13 Jul",
+        "body": "BoopGang declares war on every guild on the server.",
+        "designIndex": 63,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-64",
+        "slug": "design-timeline-64",
+        "title": "22 Jul",
+        "body": "Vibe and BoopGang raid WOT together. WOT says it wrecked five Vibe farms in return.",
+        "designIndex": 64,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-65",
+        "slug": "design-timeline-65",
+        "title": "31 Jul",
+        "body": "BoopGang raids through the night. Enthusiast's base falls, while WOT fights its raid off.",
+        "designIndex": 65,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-66",
+        "slug": "design-timeline-66",
+        "title": "2 Aug",
+        "body": "The server shuts for a full day of maintenance while players earn the Grass Toucher tag for photos of the outdoors. It returns on 4 August.",
+        "designIndex": 66,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-67",
+        "slug": "design-timeline-67",
+        "title": "4 Aug",
+        "body": "Java 25, a network tab list, /daily rewards and 100 achievements. New builder and helpers join the team.",
+        "designIndex": 67,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-68",
+        "slug": "design-timeline-68",
+        "title": "Aug",
+        "body": "Weekly rotating Warzone kits arrive, voted in during May.",
+        "designIndex": 68,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-69",
+        "slug": "design-timeline-69",
+        "title": "Mid-Aug",
+        "body": "The Imperials are raided again and again through mid-August. The guild disbands in early September.",
+        "designIndex": 69,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-70",
+        "slug": "design-timeline-70",
+        "title": "28 Aug",
+        "body": "Guilds band together as the GDTO against WOT. Vibe turns on the alliance and raids across the server, and Enthusiast answers with a declaration of war.",
+        "designIndex": 70,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-71",
+        "slug": "design-timeline-71",
+        "title": "4 Sep",
+        "body": "Fain looks back on the first year and previews the Chapter 2 guild rework.",
+        "designIndex": 71,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-72",
+        "slug": "design-timeline-72",
+        "title": "10 Sep",
+        "body": "Asgard raids the base of EnthOpen, Enthusiast's open guild, in what its raiders call the biggest base raid yet.",
+        "designIndex": 72,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-73",
+        "slug": "design-timeline-73",
+        "title": "19 Sep",
+        "body": "With the chapter ending, Vibe raids PTC, Everlights and Enthusiast bases, while Asgard and WOT hit Vibe's surface base, skull farm and guild home.",
+        "designIndex": 73,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-74",
+        "slug": "design-timeline-74",
+        "title": "24 Sep",
+        "body": "Chapter 2 is announced for 1 October, with a temporary server during maintenance.",
+        "designIndex": 74,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-75",
+        "slug": "design-timeline-75",
+        "title": "28 Sep",
+        "body": "The main SMP goes offline and a temporary fresh server opens that evening, with small borders, the End open from the start and hidden challenges whose tags carry over.",
+        "designIndex": 75,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-76",
+        "slug": "design-timeline-76",
+        "title": "30 Sep",
+        "body": "The temporary world border jumps to 300k and players are challenged to beat the dragon again.",
+        "designIndex": 76,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-77",
+        "slug": "design-timeline-77",
+        "title": "2 Oct",
+        "body": "A day later than planned, the server reopens on Minecraft 26.2 with a Halloween spawn and Warzone, a bigger border, guild Prestige and Seasonal ELO, EnthusiaExpress mail and new donor perks.",
+        "designIndex": 77,
+        "kind": "timeline"
+      },
+      {
+        "id": "design-timeline-78",
+        "slug": "design-timeline-78",
+        "title": "3 Oct",
+        "body": "The server advertisement goes live at 9am ET and a wave of new players is welcomed in.",
+        "designIndex": 78,
+        "kind": "timeline"
+      }
+    ],
+    "model": [
+      [
+        "dev",
+        "milestone"
+      ],
+      [
+        "dev",
+        "milestone"
+      ],
+      [
+        "dev",
+        "update"
+      ],
+      [
+        "dev",
+        "community"
+      ],
+      [
+        "dev",
+        "community"
+      ],
+      [
+        "dev",
+        "milestone"
+      ],
+      [
+        "dev",
+        "update"
+      ],
+      [
+        "beta1",
+        "milestone"
+      ],
+      [
+        "beta1",
+        "guild"
+      ],
+      [
+        "beta1",
+        "guild"
+      ],
+      [
+        "beta1",
+        "update"
+      ],
+      [
+        "beta1",
+        "update"
+      ],
+      [
+        "beta1",
+        "event"
+      ],
+      [
+        "beta1",
+        "community"
+      ],
+      [
+        "beta1",
+        "milestone"
+      ],
+      [
+        "beta1",
+        "community"
+      ],
+      [
+        "beta2",
+        "event"
+      ],
+      [
+        "beta2",
+        "milestone"
+      ],
+      [
+        "beta2",
+        "update"
+      ],
+      [
+        "beta2",
+        "milestone"
+      ],
+      [
+        "beta2",
+        "guild"
+      ],
+      [
+        "beta2",
+        "event"
+      ],
+      [
+        "beta2",
+        "milestone"
+      ],
+      [
+        "beta2",
+        "milestone"
+      ],
+      [
+        "beta2",
+        "update"
+      ],
+      [
+        "beta2",
+        "guild"
+      ],
+      [
+        "beta2",
+        "guild"
+      ],
+      [
+        "beta2",
+        "community"
+      ],
+      [
+        "beta2",
+        "update"
+      ],
+      [
+        "beta2",
+        "update"
+      ],
+      [
+        "beta2",
+        "guild"
+      ],
+      [
+        "beta2",
+        "guild"
+      ],
+      [
+        "beta2",
+        "milestone"
+      ],
+      [
+        "beta2",
+        "update"
+      ],
+      [
+        "beta2",
+        "update"
+      ],
+      [
+        "beta2",
+        "event"
+      ],
+      [
+        "beta2",
+        "guild"
+      ],
+      [
+        "beta2",
+        "milestone"
+      ],
+      [
+        "ch1",
+        "milestone"
+      ],
+      [
+        "ch1",
+        "event"
+      ],
+      [
+        "ch1",
+        "event"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "event"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "community"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "event"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "event"
+      ],
+      [
+        "ch1",
+        "community"
+      ],
+      [
+        "ch1",
+        "milestone"
+      ],
+      [
+        "ch1",
+        "event"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "event"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "update"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "community"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "guild"
+      ],
+      [
+        "ch1",
+        "milestone"
+      ],
+      [
+        "ch2",
+        "milestone"
+      ],
+      [
+        "ch2",
+        "event"
+      ],
+      [
+        "ch2",
+        "milestone"
+      ],
+      [
+        "ch2",
+        "community"
+      ]
+    ]
+  },
+  "changelog": {
+    "items": [
+      {
+        "id": "design-changelog-0",
+        "slug": "design-changelog-0",
+        "title": "2 Oct",
+        "body": "",
+        "designIndex": 0,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-1",
+        "slug": "design-changelog-1",
+        "title": "Aug",
+        "body": "",
+        "designIndex": 1,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-2",
+        "slug": "design-changelog-2",
+        "title": "4 Aug",
+        "body": "",
+        "designIndex": 2,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-3",
+        "slug": "design-changelog-3",
+        "title": "19 Jul",
+        "body": "",
+        "designIndex": 3,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-4",
+        "slug": "design-changelog-4",
+        "title": "15 Jul",
+        "body": "",
+        "designIndex": 4,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-5",
+        "slug": "design-changelog-5",
+        "title": "9 Jul",
+        "body": "",
+        "designIndex": 5,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-6",
+        "slug": "design-changelog-6",
+        "title": "3 Jul",
+        "body": "",
+        "designIndex": 6,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-7",
+        "slug": "design-changelog-7",
+        "title": "28 Jun",
+        "body": "",
+        "designIndex": 7,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-8",
+        "slug": "design-changelog-8",
+        "title": "27 Jun",
+        "body": "",
+        "designIndex": 8,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-9",
+        "slug": "design-changelog-9",
+        "title": "1 Jun",
+        "body": "",
+        "designIndex": 9,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-10",
+        "slug": "design-changelog-10",
+        "title": "16 May",
+        "body": "",
+        "designIndex": 10,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-11",
+        "slug": "design-changelog-11",
+        "title": "11 May",
+        "body": "",
+        "designIndex": 11,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-12",
+        "slug": "design-changelog-12",
+        "title": "2 May",
+        "body": "",
+        "designIndex": 12,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-13",
+        "slug": "design-changelog-13",
+        "title": "4 Apr",
+        "body": "",
+        "designIndex": 13,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-14",
+        "slug": "design-changelog-14",
+        "title": "21 Mar",
+        "body": "",
+        "designIndex": 14,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-15",
+        "slug": "design-changelog-15",
+        "title": "25 Jan",
+        "body": "",
+        "designIndex": 15,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-16",
+        "slug": "design-changelog-16",
+        "title": "23 Jan",
+        "body": "",
+        "designIndex": 16,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-17",
+        "slug": "design-changelog-17",
+        "title": "2 Jan",
+        "body": "",
+        "designIndex": 17,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-18",
+        "slug": "design-changelog-18",
+        "title": "20 Dec",
+        "body": "",
+        "designIndex": 18,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-19",
+        "slug": "design-changelog-19",
+        "title": "19 Dec",
+        "body": "",
+        "designIndex": 19,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-20",
+        "slug": "design-changelog-20",
+        "title": "11 Nov",
+        "body": "",
+        "designIndex": 20,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-21",
+        "slug": "design-changelog-21",
+        "title": "1 Nov",
+        "body": "",
+        "designIndex": 21,
+        "kind": "changelog"
+      },
+      {
+        "id": "design-changelog-22",
+        "slug": "design-changelog-22",
+        "title": "31 Oct",
+        "body": "",
+        "designIndex": 22,
+        "kind": "changelog"
+      }
+    ],
+    "model": [
+      [
+        "2026",
+        [
+          "world",
+          "guilds",
+          "economy",
+          "combat"
+        ],
+        "chapter 2 the server moves to minecraft 26.2, and the overworld border grows by 5,000 blocks halloween spawn and warzone guild update: prestige, seasonal elo, more level rewards and refreshed menus enthusiaexpress: letters and packages for offline players, paid in raw gold new advancements across duels, reputation, mail and diaries, claimed with /rewards warzone combat: a boss bar for your combat timer, and restrictions that stay if you leave mid-fight donor perks: donor profiles, gift announcements, mapart shields for devotee and item signatures for avid"
+      ],
+      [
+        "2026",
+        [
+          "combat"
+        ],
+        "warzone rotators the warzone kit now rotates every week voted in by the community in may"
+      ],
+      [
+        "2026",
+        [
+          "world",
+          "economy"
+        ],
+        "august update java 25 a network tab list /daily rewards 100 achievements"
+      ],
+      [
+        "2026",
+        [
+          "site"
+        ],
+        "website overhaul a new look for the website an interactive market page showing every stall, its owner and its stock"
+      ],
+      [
+        "2026",
+        [
+          "combat"
+        ],
+        "emergency maintenance fixed a homes exploit fixed a duel-spectating exploit"
+      ],
+      [
+        "2026",
+        [
+          "economy"
+        ],
+        "market relaunch the market reopens with a stall auction a re-bid on 10 july after server trouble"
+      ],
+      [
+        "2026",
+        [
+          "economy"
+        ],
+        "the market the market releases, then pauses within hours over auction problems every bid refunded"
+      ],
+      [
+        "2026",
+        [
+          "combat"
+        ],
+        "autoclicker mod an official enthusia autoclicker mod by p2wn is published on modrinth a rework of guild progression is announced"
+      ],
+      [
+        "2026",
+        [
+          "world"
+        ],
+        "26.2 clients players on minecraft 26.2 can join"
+      ],
+      [
+        "2026",
+        [
+          "combat"
+        ],
+        "piecloak common base blocks and entities are hidden at a distance, so pie-chart base hunting is less reliable"
+      ],
+      [
+        "2026",
+        [
+          "combat"
+        ],
+        "death duels 1v1 duels to the death in the spawn arena custom rules and wagers a loot vault for the winner"
+      ],
+      [
+        "2026",
+        [
+          "world"
+        ],
+        "nether roof players can build and travel on the nether roof"
+      ],
+      [
+        "2026",
+        [
+          "world",
+          "economy",
+          "guilds",
+          "combat"
+        ],
+        "full release a 100k overworld border the raw gold economy guilds, reputation and bounties proximity voice chat"
+      ],
+      [
+        "2026",
+        [
+          "world"
+        ],
+        "host upgrade the server moves to a host that can carry a 100k world border"
+      ],
+      [
+        "2026",
+        [
+          "world",
+          "guilds"
+        ],
+        "1.21.11 the beta updates to 1.21.11, with spears guild history lookups a first survival games playtest"
+      ],
+      [
+        "2026",
+        [
+          "site"
+        ],
+        "wiki and a new address the enthusia wiki opens to community editing enthusia.net becomes the main address"
+      ],
+      [
+        "2026",
+        [
+          "economy"
+        ],
+        "bank and reputation raw gold can be banked with /deposit and taken out with /withdrawl /baltop becomes a menu with player heads gold in shulker boxes counts towards your balance homes, beds and teleports rebuilt in-house commendations get their first effects"
+      ],
+      [
+        "2026",
+        [
+          "world",
+          "economy",
+          "guilds"
+        ],
+        "the prologue borders grow to 20k in the overworld, 10k in the nether and 25k in the end balances and bounties reset after a major dupe guild stalls open for testing minecraft to discord linking with /link"
+      ],
+      [
+        "2025",
+        [
+          "economy",
+          "world"
+        ],
+        "final open beta commendations, the reputation system a rebuilt playtime system a 44-stall market"
+      ],
+      [
+        "2025",
+        [
+          "site"
+        ],
+        "store the store opens with avid and devotee, and no pay-to-win perks the founder's badge for early supporters"
+      ],
+      [
+        "2025",
+        [
+          "combat",
+          "guilds"
+        ],
+        "guild koth and combat logging guilds can enter koth as teams logging out in combat leaves an npc behind new players get 30 minutes of protection"
+      ],
+      [
+        "2025",
+        [
+          "economy"
+        ],
+        "raw gold the currency changes from diamonds to raw gold first pvp arena test"
+      ],
+      [
+        "2025",
+        [
+          "world",
+          "guilds",
+          "economy"
+        ],
+        "first open beta the diary, given to every player on first join market stalls, bounties and koth at haunted hill guilds open to all players"
+      ]
+    ]
+  },
+  "roadmap": {
+    "items": [
+      {
+        "id": "design-roadmap-0",
+        "slug": "design-roadmap-0",
+        "title": "Minecraft 26.2",
+        "body": "",
+        "designIndex": 0,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-1",
+        "slug": "design-roadmap-1",
+        "title": "Halloween spawn and Warzone",
+        "body": "",
+        "designIndex": 1,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-2",
+        "slug": "design-roadmap-2",
+        "title": "Guild Prestige and Seasonal ELO",
+        "body": "",
+        "designIndex": 2,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-3",
+        "slug": "design-roadmap-3",
+        "title": "EnthusiaExpress mail",
+        "body": "",
+        "designIndex": 3,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-4",
+        "slug": "design-roadmap-4",
+        "title": "New donor perks",
+        "body": "",
+        "designIndex": 4,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-5",
+        "slug": "design-roadmap-5",
+        "title": "Advancements and rewards",
+        "body": "",
+        "designIndex": 5,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-6",
+        "slug": "design-roadmap-6",
+        "title": "Warzone combat updates",
+        "body": "",
+        "designIndex": 6,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-7",
+        "slug": "design-roadmap-7",
+        "title": "Halloween Build Competition",
+        "body": "",
+        "designIndex": 7,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-8",
+        "slug": "design-roadmap-8",
+        "title": "Mapart Competition",
+        "body": "",
+        "designIndex": 8,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-9",
+        "slug": "design-roadmap-9",
+        "title": "Mapart Museum",
+        "body": "",
+        "designIndex": 9,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-10",
+        "slug": "design-roadmap-10",
+        "title": "Events and the Events Hub",
+        "body": "",
+        "designIndex": 10,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-11",
+        "slug": "design-roadmap-11",
+        "title": "King of the Hill",
+        "body": "",
+        "designIndex": 11,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-12",
+        "slug": "design-roadmap-12",
+        "title": "2v2 and 3v3 duels",
+        "body": "",
+        "designIndex": 12,
+        "kind": "roadmap"
+      },
+      {
+        "id": "design-roadmap-13",
+        "slug": "design-roadmap-13",
+        "title": "Christmas spawn and Warzone",
+        "body": "",
+        "designIndex": 13,
+        "kind": "roadmap"
+      }
+    ],
+    "model": [
+      [
+        "live",
+        "world"
+      ],
+      [
+        "live",
+        "world"
+      ],
+      [
+        "live",
+        "guilds"
+      ],
+      [
+        "live",
+        "economy"
+      ],
+      [
+        "live",
+        "economy"
+      ],
+      [
+        "live",
+        "pvp"
+      ],
+      [
+        "live",
+        "pvp"
+      ],
+      [
+        "next",
+        "building"
+      ],
+      [
+        "next",
+        "building"
+      ],
+      [
+        "next",
+        "building"
+      ],
+      [
+        "later",
+        "pvp"
+      ],
+      [
+        "later",
+        "pvp"
+      ],
+      [
+        "later",
+        "pvp"
+      ],
+      [
+        "later",
+        "world"
+      ]
+    ]
+  },
+  "halloffame": {
+    "items": [
+      {
+        "id": "design-halloffame-0",
+        "slug": "design-halloffame-0",
+        "title": "To be decided",
+        "body": "Halloween Build Competition",
+        "designIndex": 0,
+        "kind": "halloffame"
+      },
+      {
+        "id": "design-halloffame-1",
+        "slug": "design-halloffame-1",
+        "title": "To be decided",
+        "body": "Mapart Competition",
+        "designIndex": 1,
+        "kind": "halloffame"
+      },
+      {
+        "id": "design-halloffame-2",
+        "slug": "design-halloffame-2",
+        "title": "StepSoy",
+        "body": "Media Event",
+        "designIndex": 2,
+        "kind": "halloffame"
+      },
+      {
+        "id": "design-halloffame-3",
+        "slug": "design-halloffame-3",
+        "title": "Vibe",
+        "body": "First guild to level 100",
+        "designIndex": 3,
+        "kind": "halloffame"
+      },
+      {
+        "id": "design-halloffame-4",
+        "slug": "design-halloffame-4",
+        "title": "OinkerMC",
+        "body": "First PvP Tournament",
+        "designIndex": 4,
+        "kind": "halloffame"
+      },
+      {
+        "id": "design-halloffame-5",
+        "slug": "design-halloffame-5",
+        "title": "Vibe, Dogeclan and BoopGang",
+        "body": "The End Fight",
+        "designIndex": 5,
+        "kind": "halloffame"
+      },
+      {
+        "id": "design-halloffame-6",
+        "slug": "design-halloffame-6",
+        "title": "Flomish, Prologue Champion",
+        "body": "End of the World",
+        "designIndex": 6,
+        "kind": "halloffame"
+      },
+      {
+        "id": "design-halloffame-7",
+        "slug": "design-halloffame-7",
+        "title": "Enthusiast and Blood Guard",
+        "body": "The beta End event",
+        "designIndex": 7,
+        "kind": "halloffame"
+      },
+      {
+        "id": "design-halloffame-8",
+        "slug": "design-halloffame-8",
+        "title": "RedstoneIsGreat",
+        "body": "Top Bug Hunter",
+        "designIndex": 8,
+        "kind": "halloffame"
+      },
+      {
+        "id": "design-halloffame-9",
+        "slug": "design-halloffame-9",
+        "title": "p2wn, Borlyn and Doge198_",
+        "body": "KOTH at Haunted Hill",
+        "designIndex": 9,
+        "kind": "halloffame"
+      },
+      {
+        "id": "design-halloffame-10",
+        "slug": "design-halloffame-10",
+        "title": "FlashStrength and p2wn",
+        "body": "$100 advertisement event",
+        "designIndex": 10,
+        "kind": "halloffame"
+      }
+    ],
+    "model": [
+      "ch2",
+      "ch2",
+      "ch1",
+      "ch1",
+      "ch1",
+      "ch1",
+      "beta",
+      "beta",
+      "beta",
+      "beta",
+      "beta"
+    ]
+  },
+  "creators": {
+    "items": [
+      {
+        "id": "design-creators-0",
+        "slug": "design-creators-0",
+        "title": "creators",
+        "body": "",
+        "designIndex": 0,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-1",
+        "slug": "design-creators-1",
+        "title": "creators",
+        "body": "",
+        "designIndex": 1,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-2",
+        "slug": "design-creators-2",
+        "title": "creators",
+        "body": "",
+        "designIndex": 2,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-3",
+        "slug": "design-creators-3",
+        "title": "creators",
+        "body": "",
+        "designIndex": 3,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-4",
+        "slug": "design-creators-4",
+        "title": "creators",
+        "body": "",
+        "designIndex": 4,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-5",
+        "slug": "design-creators-5",
+        "title": "creators",
+        "body": "",
+        "designIndex": 5,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-6",
+        "slug": "design-creators-6",
+        "title": "creators",
+        "body": "",
+        "designIndex": 6,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-7",
+        "slug": "design-creators-7",
+        "title": "creators",
+        "body": "",
+        "designIndex": 7,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-8",
+        "slug": "design-creators-8",
+        "title": "creators",
+        "body": "",
+        "designIndex": 8,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-9",
+        "slug": "design-creators-9",
+        "title": "creators",
+        "body": "",
+        "designIndex": 9,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-10",
+        "slug": "design-creators-10",
+        "title": "creators",
+        "body": "",
+        "designIndex": 10,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-11",
+        "slug": "design-creators-11",
+        "title": "creators",
+        "body": "",
+        "designIndex": 11,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-12",
+        "slug": "design-creators-12",
+        "title": "creators",
+        "body": "",
+        "designIndex": 12,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-13",
+        "slug": "design-creators-13",
+        "title": "creators",
+        "body": "",
+        "designIndex": 13,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-14",
+        "slug": "design-creators-14",
+        "title": "creators",
+        "body": "",
+        "designIndex": 14,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-15",
+        "slug": "design-creators-15",
+        "title": "creators",
+        "body": "",
+        "designIndex": 15,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-16",
+        "slug": "design-creators-16",
+        "title": "creators",
+        "body": "",
+        "designIndex": 16,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-17",
+        "slug": "design-creators-17",
+        "title": "creators",
+        "body": "",
+        "designIndex": 17,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-18",
+        "slug": "design-creators-18",
+        "title": "creators",
+        "body": "",
+        "designIndex": 18,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-19",
+        "slug": "design-creators-19",
+        "title": "creators",
+        "body": "",
+        "designIndex": 19,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-20",
+        "slug": "design-creators-20",
+        "title": "creators",
+        "body": "",
+        "designIndex": 20,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-21",
+        "slug": "design-creators-21",
+        "title": "creators",
+        "body": "",
+        "designIndex": 21,
+        "kind": "creators"
+      },
+      {
+        "id": "design-creators-22",
+        "slug": "design-creators-22",
+        "title": "creators",
+        "body": "",
+        "designIndex": 22,
+        "kind": "creators"
+      }
+    ],
+    "model": [
+      "m0",
+      "m2",
+      "m4",
+      "m1",
+      "other",
+      "m0",
+      "other",
+      "m3",
+      "other",
+      "m2",
+      "m0",
+      "m0",
+      "m2",
+      "other",
+      "m0",
+      "m3",
+      "m4",
+      "m1",
+      "m1",
+      "m1",
+      "m1",
+      "m1",
+      "other"
+    ]
+  },
+  "museum": {
+    "items": [
+      {
+        "id": "design-museum-0",
+        "slug": "design-museum-0",
+        "title": "museum",
+        "body": "",
+        "designIndex": 0,
+        "kind": "museum"
+      },
+      {
+        "id": "design-museum-1",
+        "slug": "design-museum-1",
+        "title": "museum",
+        "body": "",
+        "designIndex": 1,
+        "kind": "museum"
+      },
+      {
+        "id": "design-museum-2",
+        "slug": "design-museum-2",
+        "title": "museum",
+        "body": "",
+        "designIndex": 2,
+        "kind": "museum"
+      },
+      {
+        "id": "design-museum-3",
+        "slug": "design-museum-3",
+        "title": "museum",
+        "body": "",
+        "designIndex": 3,
+        "kind": "museum"
+      },
+      {
+        "id": "design-museum-4",
+        "slug": "design-museum-4",
+        "title": "museum",
+        "body": "",
+        "designIndex": 4,
+        "kind": "museum"
+      },
+      {
+        "id": "design-museum-5",
+        "slug": "design-museum-5",
+        "title": "museum",
+        "body": "",
+        "designIndex": 5,
+        "kind": "museum"
+      },
+      {
+        "id": "design-museum-6",
+        "slug": "design-museum-6",
+        "title": "museum",
+        "body": "",
+        "designIndex": 6,
+        "kind": "museum"
+      },
+      {
+        "id": "design-museum-7",
+        "slug": "design-museum-7",
+        "title": "museum",
+        "body": "",
+        "designIndex": 7,
+        "kind": "museum"
+      },
+      {
+        "id": "design-museum-8",
+        "slug": "design-museum-8",
+        "title": "museum",
+        "body": "",
+        "designIndex": 8,
+        "kind": "museum"
+      }
+    ],
+    "model": [
+      [
+        "comp",
+        "Competition 2026",
+        "2 x 2 maps",
+        "Great Hall, north wall"
+      ],
+      [
+        "comp",
+        "Competition 2026",
+        "3 x 2 maps",
+        "Great Hall, north wall"
+      ],
+      [
+        "comp",
+        "Competition 2026",
+        "1 x 1 maps",
+        "Great Hall, east wall"
+      ],
+      [
+        "community",
+        "Community",
+        "2 x 1 maps",
+        "Long Gallery"
+      ],
+      [
+        "community",
+        "Community",
+        "1 x 1 maps",
+        "Long Gallery"
+      ],
+      [
+        "community",
+        "Community",
+        "2 x 2 maps",
+        "Long Gallery"
+      ],
+      [
+        "community",
+        "Community",
+        "1 x 2 maps",
+        "Long Gallery"
+      ],
+      [
+        "staff",
+        "Staff picks",
+        "2 x 2 maps",
+        "Founders Room"
+      ],
+      [
+        "staff",
+        "Staff picks",
+        "1 x 1 maps",
+        "Founders Room"
+      ]
+    ]
+  },
+  "achievements": {
+    "items": [
+      {
+        "id": "design-achievements-0",
+        "slug": "design-achievements-0",
+        "title": "achievements",
+        "body": "A rank for players whose videos win or place in the Media Event.",
+        "designIndex": 0,
+        "kind": "achievements"
+      },
+      {
+        "id": "design-achievements-1",
+        "slug": "design-achievements-1",
+        "title": "achievements",
+        "body": "For the winners of the Mapart Competition.",
+        "designIndex": 1,
+        "kind": "achievements"
+      },
+      {
+        "id": "design-achievements-2",
+        "slug": "design-achievements-2",
+        "title": "achievements",
+        "body": "For the winners of the Build Competition.",
+        "designIndex": 2,
+        "kind": "achievements"
+      },
+      {
+        "id": "design-achievements-3",
+        "slug": "design-achievements-3",
+        "title": "achievements",
+        "body": "Chat prefixes that come with the two store ranks.",
+        "designIndex": 3,
+        "kind": "achievements"
+      },
+      {
+        "id": "design-achievements-4",
+        "slug": "design-achievements-4",
+        "title": "achievements",
+        "body": "A Discord role for players who keep the wiki and the server history.",
+        "designIndex": 4,
+        "kind": "achievements"
+      },
+      {
+        "id": "design-achievements-5",
+        "slug": "design-achievements-5",
+        "title": "achievements",
+        "body": "Goes to the top donor of the month, and stays with them for good.",
+        "designIndex": 5,
+        "kind": "achievements"
+      },
+      {
+        "id": "design-achievements-6",
+        "slug": "design-achievements-6",
+        "title": "achievements",
+        "body": "For players with 4 or more hours in the first betas.",
+        "designIndex": 6,
+        "kind": "achievements"
+      },
+      {
+        "id": "design-achievements-7",
+        "slug": "design-achievements-7",
+        "title": "achievements",
+        "body": "For the top bug reporters of the first betas.",
+        "designIndex": 7,
+        "kind": "achievements"
+      },
+      {
+        "id": "design-achievements-8",
+        "slug": "design-achievements-8",
+        "title": "achievements",
+        "body": "Came with the Founder ranks, which left the store on 2 June 2026.",
+        "designIndex": 8,
+        "kind": "achievements"
+      },
+      {
+        "id": "design-achievements-9",
+        "slug": "design-achievements-9",
+        "title": "achievements",
+        "body": "For a photo of the outdoors on Go Touch Grass Day, August 2026.",
+        "designIndex": 9,
+        "kind": "achievements"
+      },
+      {
+        "id": "design-achievements-10",
+        "slug": "design-achievements-10",
+        "title": "achievements",
+        "body": "For the hidden challenges on the temporary server before Chapter 2.",
+        "designIndex": 10,
+        "kind": "achievements"
+      }
+    ],
+    "model": [
+      "earn",
+      "earn",
+      "earn",
+      "earn",
+      "earn",
+      "earn",
+      "retired",
+      "retired",
+      "retired",
+      "retired",
+      "retired"
+    ]
+  }
+}

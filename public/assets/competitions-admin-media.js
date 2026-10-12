@@ -274,7 +274,11 @@ function bindControls() {
   for (const control of mediaControls.values()) {
     if (control.button.dataset.appearanceMediaBound === "true") continue;
     control.button.dataset.appearanceMediaBound = "true";
-    control.button.addEventListener("click", () => uploadAppearance(control));
+    if(document.body.dataset.exactWorkflow==='compadmin')control.input.hidden=true;
+    control.button.addEventListener("click", () => {
+      if(document.body.dataset.exactWorkflow==='compadmin'&&!control.input.files?.length){control.input.click();return;}
+      uploadAppearance(control);
+    });
     control.input.addEventListener("change", () => {
       control.result.textContent = control.input.files?.length
         ? "Ready to upload. The image will be re-encoded before it leaves your browser."

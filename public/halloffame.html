@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!doctype html>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preview | Hall of Fame</title>
-<meta name="description" content="Design preview of the Enthusia SMP site.">
-<link rel="preload" href="assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
+<title>Hall of Fame</title>
+<meta name="description" content="Explore Enthusia SMP, its community, server history and player features.">
+<link rel="preload" href="assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin="">
 <link rel="stylesheet" href="assets/enthusia.css">
 
 <style>
@@ -140,24 +139,442 @@ a{color:#b3201a}a:hover{color:#7d120e}
 .blk-gold{background:var(--gold);color:#3a0d0a;border:4px solid var(--edge);box-shadow:inset 4px 4px 0 #fff3a0,inset -4px -4px 0 var(--gold-lo);box-sizing:border-box}
 
 </style>
-<link rel="stylesheet" href="assets/community.css">
-</head>
-<body>
+<link rel="stylesheet" href="assets/exact-design.css"></head>
+<body data-exact-collection="halloffame">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="en">
 
-<header class="site-head site-header s-red"><div class="site-head-in"><a class="brand" href="index.html"><img id="site-logo" class="brand-logo" src="assets/ui/logo-256.png" alt="" width="44" height="44"><span>ENTHUSIA SMP</span></a><button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>Menu</button><nav class="nav" id="site-nav" aria-label="Primary navigation"><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>Play +</button><div class="panel nav-menu"><a href="plugins.html">About</a><a href="join.html">Join guide</a><a href="guide.html">Player guide</a><a href="rules.html">Rules</a><a href="vote.html">Vote</a><a href="appeal.html">Appeals</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>World +</button><div class="panel nav-menu"><a href="market.html">Market</a><a href="gallery.html">Gallery</a><a href="museum.html">Mapart Museum</a><a href="competitions/index.html">Competitions</a><a href="events.html">Events</a><a href="bounties.html">Bounties</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>Community +</button><div class="panel nav-menu"><a href="guilds.html">Guilds</a><a href="players.html">Players</a><a href="leaderboards.html">Leaderboards</a><a href="halloffame.html">Hall of Fame</a><a href="achievements.html">Achievements</a><a href="creators.html">Creators</a><a href="staff.html">Staff</a><a href="moderation.html">Moderation</a><a href="punishments.html">Punishments</a></div></div><div class="nav-group"><button class="navbtn" type="button" aria-expanded="false" data-menu>News +</button><div class="panel nav-menu"><a href="news.html">News</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="polls.html">Polls</a><a href="timeline.html">Timeline</a></div></div><a class="navbtn" href="store.html">Store</a><a class="navbtn" href="account.html">Account</a><a class="navbtn" href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a><a class="btn btn-gold" href="join.html">Play now!</a></nav></div></header>
+<header class="site-head s-red">
+<div class="site-head-in">
+<a class="brand" href="index.html" aria-label="Enthusia SMP home">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<button class="navbtn mob-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle="">Menu</button>
+<nav class="nav" id="site-nav" aria-label="Primary navigation">
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu="">Play <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu="">World <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn cur" type="button" aria-expanded="false" data-menu="">Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html" class="active" aria-current="page">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
+</div>
+<div class="nav-group">
+<button class="navbtn" type="button" aria-expanded="false" data-menu="">News <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu">
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</div>
+</div>
+<a href="store.html">Store</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="account.html">Account</a>
+</nav>
+<a class="btn btn-gold hdr-play" href="join.html">Play now!</a>
+</div>
+</header>
 
-<main id="main-content" class="page-main"><section class="hero hero-vars" aria-labelledby="hof-title">
+<main id="main-content">
+<section class="hero hero-vars" aria-labelledby="hof-title">
 <div style="max-width: 1240px; min-height: 240px; margin: 0 auto; padding: 48px 24px 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
 <p class="tag tag-gold" style="letter-spacing: 2px">COMMUNITY</p>
 <h1 id="hof-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">HALL OF FAME</h1>
 <p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">Champions, firsts and records. Earned in-game, kept for good.</p>
 </div>
 <div class="crenel"></div>
-</section><section class="s-cream community-section"><div class="container" data-community-app="halloffame"><p role="status">Loading halloffame...</p></div></section></main>
+</section>
+<section class="s-cream" aria-label="Reigning champions" style="padding: 72px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
 
-<footer class="site-foot s-red"><div class="site-foot-in"><div class="foot-cols"><nav class="foot" aria-label="Play"><p class="foot-title">PLAY</p><a href="plugins.html">About</a><a href="join.html">Join guide</a><a href="guide.html">Player guide</a><a href="rules.html">Rules</a><a href="vote.html">Vote</a><a href="appeal.html">Appeals</a></nav><nav class="foot" aria-label="World"><p class="foot-title">WORLD</p><a href="market.html">Market</a><a href="gallery.html">Gallery</a><a href="museum.html">Mapart Museum</a><a href="competitions/index.html">Competitions</a><a href="events.html">Events</a><a href="bounties.html">Bounties</a></nav><nav class="foot" aria-label="Community"><p class="foot-title">COMMUNITY</p><a href="guilds.html">Guilds</a><a href="players.html">Players</a><a href="leaderboards.html">Leaderboards</a><a href="halloffame.html">Hall of Fame</a><a href="achievements.html">Achievements</a><a href="creators.html">Creators</a><a href="staff.html">Staff</a><a href="punishments.html">Punishments</a></nav><nav class="foot" aria-label="News"><p class="foot-title">NEWS</p><a href="news.html">News</a><a href="changelog.html">Changelog</a><a href="roadmap.html">Roadmap</a><a href="polls.html">Polls</a><a href="timeline.html">Timeline</a></nav><nav class="foot" aria-label="Staff tools"><p class="foot-title">STAFF TOOLS</p><a href="newseditor.html">Publishing editor</a><a href="competitions/admin/index.html">Competition admin</a><a href="reviewer/index.html">Reviewer</a></nav></div><p>2026 Enthusia SMP - glorytoenthusia@gmail.com</p><p>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p></div></footer>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">REIGNING CHAMPIONS</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">The names to beat</h2>
+</div>
+<div class="tip fret-lg" style="padding: 40px">
+<div class="eq" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 24px">
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+<svg viewBox="0 0 12 11" width="72" height="72" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">PvP Tournament champion</p>
+<h3 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere; max-width: 100%">OinkerMC</h3>
+<p>Won the first PvP Tournament.</p>
+<p style="color: var(--muted)">21 June 2026</p>
+</div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+<svg viewBox="0 0 12 11" width="72" height="72" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">Prologue Champion</p>
+<h3 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere; max-width: 100%">Flomish</h3>
+<p>Last player standing at the End of the World.</p>
+<p style="color: var(--muted)">11 April 2026</p>
+</div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+<svg viewBox="0 0 12 11" width="72" height="72" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">Dragon Egg</p>
+<h3 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere; max-width: 100%">woulves1</h3>
+<p>Took the egg in the End Fight.</p>
+<p style="color: var(--muted)">9 May 2026</p>
+</div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+<svg viewBox="0 0 12 11" width="72" height="72" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">First to level 100</p>
+<h3 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); overflow-wrap: anywhere; max-width: 100%">Vibe</h3>
+<p>The first guild to reach level 100.</p>
+<p style="color: var(--muted)">28 June 2026</p>
+</div>
+</div>
+</div>
+
+<div class="tab-head" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">TROPHY WALL</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Every winner so far</h2>
+</div>
+<div class="tabs" role="group" aria-label="Filter by era" style="display: flex; flex-wrap: wrap; gap: 12px">
+<button class="chip" type="button" data-b-aria-pressed="{{fAll}}" data-on-click="pickAll">All</button>
+<button class="chip" type="button" data-b-aria-pressed="{{fCh2}}" data-on-click="pickCh2">Chapter 2</button>
+<button class="chip" type="button" data-b-aria-pressed="{{fCh1}}" data-on-click="pickCh1">Chapter 1</button>
+<button class="chip" type="button" data-b-aria-pressed="{{fBeta}}" data-on-click="pickBeta">Open Betas</button>
+</div>
+</div>
+<p aria-live="polite" style="color: var(--muted)"><span data-b-text="countLine"></span></p>
+<div class="grid3 eq">
+<template data-collection-template="" data-variant="0" data-group="ch2"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{t0}}">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<span class="slot" style="width: 48px; height: 48px; font-size: 24px; line-height: 24px">?</span>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">Halloween Build Competition</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--muted); overflow-wrap: anywhere">To be decided</h3>
+</div>
+</div>
+
+<p>Voting opens on 14 October. The winner is announced a week later.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="tag tag-plain">Chapter 2</span><span style="color: var(--muted)">21 Oct 2026</span></div>
+</article></template>
+<template data-collection-template="" data-variant="1" data-group="ch2"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{t1}}">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<span class="slot" style="width: 48px; height: 48px; font-size: 24px; line-height: 24px">?</span>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">Mapart Competition</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--muted); overflow-wrap: anywhere">To be decided</h3>
+</div>
+</div>
+
+<p>Opens on 24 October. Accepted entries go into the Mapart Museum.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="tag tag-plain">Chapter 2</span><span style="color: var(--muted)">Mid-Nov 2026</span></div>
+</article></template>
+<template data-collection-template="" data-variant="2" data-group="ch1"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{t2}}">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<svg viewBox="0 0 12 11" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">Media Event</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">StepSoy</h3>
+</div>
+</div>
+
+<p>Best video about the server. KILLTEAM and Jacco1OO also earned the Media rank.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="tag tag-plain">Chapter 1</span><span style="color: var(--muted)">1 Jul 2026</span></div>
+</article></template>
+<template data-collection-template="" data-variant="3" data-group="ch1"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{t3}}">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<svg viewBox="0 0 12 11" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">First guild to level 100</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">Vibe</h3>
+</div>
+</div>
+
+<p>BelovedOnes were close behind at level 88.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="tag tag-plain">Chapter 1</span><span style="color: var(--muted)">28 Jun 2026</span></div>
+</article></template>
+<template data-collection-template="" data-variant="4" data-group="ch1"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{t4}}">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<svg viewBox="0 0 12 11" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">First PvP Tournament</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">OinkerMC</h3>
+</div>
+</div>
+<div aria-label="Podium" style="display: flex; align-items: flex-end; gap: 8px">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">
+<img class="px" src="assets/design/56e374cdacb7.png" alt="" style="width: 48px; height: 48px">
+<span style="max-width: 100%; overflow-wrap: anywhere">Currut</span>
+<div class="slot" style="width: 100%; height: 64px; display: flex; align-items: center; justify-content: center; font-size: 32px; line-height: 32px">2</div>
+</div>
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">
+<img class="px" src="assets/design/56e374cdacb7.png" alt="" style="width: 48px; height: 48px">
+<span style="max-width: 100%; overflow-wrap: anywhere">OinkerMC</span>
+<div class="blk-gold" style="width: 100%; height: 96px; display: flex; align-items: center; justify-content: center; font-size: 32px; line-height: 32px">1</div>
+</div>
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">
+<img class="px" src="assets/design/56e374cdacb7.png" alt="" style="width: 48px; height: 48px">
+<span style="max-width: 100%; overflow-wrap: anywhere">Nicusormeow</span>
+<div class="slot" style="width: 100%; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 32px; line-height: 32px">3</div>
+</div>
+</div>
+<p>Sword PvP with totems and cobwebs, no maces. Hosted by auhfuls in the Duels Arena.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="tag tag-plain">Chapter 1</span><span style="color: var(--muted)">21 Jun 2026</span></div>
+</article></template>
+<template data-collection-template="" data-variant="5" data-group="ch1"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{t5}}">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<svg viewBox="0 0 12 11" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">The End Fight</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">Vibe, Dogeclan and BoopGang</h3>
+</div>
+</div>
+
+<p>woulves1 took the Dragon Egg, in front of a record 96 players online.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="tag tag-plain">Chapter 1</span><span style="color: var(--muted)">9 May 2026</span></div>
+</article></template>
+<template data-collection-template="" data-variant="6" data-group="beta"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{t6}}">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<svg viewBox="0 0 12 11" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">End of the World</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">Flomish, Prologue Champion</h3>
+</div>
+</div>
+
+<p>Last player standing in a one-life final fight. Blood Guard and OverHeaven were the last two guilds.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="tag tag-plain">Open Betas</span><span style="color: var(--muted)">11 Apr 2026</span></div>
+</article></template>
+<template data-collection-template="" data-variant="7" data-group="beta"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{t7}}">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<svg viewBox="0 0 12 11" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">The beta End event</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">Enthusiast and Blood Guard</h3>
+</div>
+</div>
+
+<p>Won the fight for the Dragon Egg in the Final Open Beta.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="tag tag-plain">Open Betas</span><span style="color: var(--muted)">26 Dec 2025</span></div>
+</article></template>
+<template data-collection-template="" data-variant="8" data-group="beta"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{t8}}">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<svg viewBox="0 0 12 11" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">Top Bug Hunter</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">RedstoneIsGreat</h3>
+</div>
+</div>
+
+<p>49 verified bug reports across the first betas.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="tag tag-plain">Open Betas</span><span style="color: var(--muted)">18 Nov 2025</span></div>
+</article></template>
+<template data-collection-template="" data-variant="9" data-group="beta"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{t9}}">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<svg viewBox="0 0 12 11" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">KOTH at Haunted Hill</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">p2wn, Borlyn and Doge198_</h3>
+</div>
+</div>
+
+<p>Captured the hill in the server-wide fight recorded for the promo video.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="tag tag-plain">Open Betas</span><span style="color: var(--muted)">15 Nov 2025</span></div>
+</article></template>
+<template data-collection-template="" data-variant="10" data-group="beta"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{t10}}">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<svg viewBox="0 0 12 11" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true" style="flex-shrink: 0"><path fill="#4a0b08" d="M1 0h10v1h1v4h-1v1h-1v1H9v1H8v1h1v1h1v1H2v-1h1V9h1V8H3V7H2V6H1V5H0V1h1z"></path><path fill="#ffcf1f" d="M2 1h8v1H2zM3 2h6v4H3zM1 2h1v3H1zM10 2h1v3h-1zM4 6h4v1H4zM5 7h2v2H5zM4 9h4v1H4z"></path><path fill="#fff3a0" d="M4 2h1v3H4z"></path><path fill="#e08f00" d="M8 2h1v4H8zM4 9h4v1H4z"></path></svg>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">$100 advertisement event</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">FlashStrength and p2wn</h3>
+</div>
+</div>
+
+<p>Both won for inviting the most members to the Discord.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="tag tag-plain">Open Betas</span><span style="color: var(--muted)">15 Nov 2025</span></div>
+</article></template>
+</div>
+</div>
+</section>
+<section class="s-red" aria-label="Server records" style="padding: 72px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">SERVER RECORDS</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">By the numbers</h2>
+</div>
+<div class="stats">
+<div class="stat"><b>96</b><span>Most players online at once, 9 May 2026</span></div>
+<div class="stat"><b>1,000</b><span>Discord members reached, 29 May 2026</span></div>
+<div class="stat"><b>100</b><span>Guild level first reached by Vibe, 28 Jun 2026</span></div>
+<div class="stat"><b>49</b><span>Verified bug reports by one player</span></div>
+</div>
+<div class="tip fret" style="padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">The betas compared</h3>
+<ul class="plain">
+<li class="shop" style="background: none; padding-top: 0; padding-bottom: 0"><span style="flex: 2 1 180px; min-width: 0; color: var(--muted)">Count</span><span style="flex: 1 1 100px; color: var(--muted)">First betas, 2025</span><span style="flex: 1 1 100px; color: var(--muted)">Final Open Beta</span></li>
+<li class="shop"><span style="flex: 2 1 180px; min-width: 0">First-time players</span><span style="flex: 1 1 100px; color: var(--muted)">239</span><span style="flex: 1 1 100px; color: var(--accent); font-size: 24px; line-height: 32px">837</span></li>
+<li class="shop"><span style="flex: 2 1 180px; min-width: 0">Guilds formed</span><span style="flex: 1 1 100px; color: var(--muted)">28</span><span style="flex: 1 1 100px; color: var(--accent); font-size: 24px; line-height: 32px">62</span></li>
+<li class="shop"><span style="flex: 2 1 180px; min-width: 0">PvP kills</span><span style="flex: 1 1 100px; color: var(--muted)">463</span><span style="flex: 1 1 100px; color: var(--accent); font-size: 24px; line-height: 32px">5,765</span></li>
+</ul>
+</div>
+</div>
+</section>
+<section class="s-cream" aria-label="Firsts and retired honours" style="padding: 72px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">FIRSTS</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Nobody did it before them</h2>
+</div>
+<ul class="plain">
+<li class="shop"><span style="flex: 0 0 120px; color: var(--muted)">30 Oct 2025</span><span style="flex: 1 1 200px; min-width: 0; color: var(--head)">First builders</span><span style="flex: 3 1 320px; min-width: 0">Marvus, Zom_B_Kitty_26 and Toxik, who built the first spawn.</span></li>
+<li class="shop"><span style="flex: 0 0 120px; color: var(--muted)">31 Oct 2025</span><span style="flex: 1 1 200px; min-width: 0; color: var(--head)">First truce</span><span style="flex: 3 1 320px; min-width: 0">Kingsmould and Everlights, within hours of the first beta opening.</span></li>
+<li class="shop"><span style="flex: 0 0 120px; color: var(--muted)">15 Nov 2025</span><span style="flex: 1 1 200px; min-width: 0; color: var(--head)">First server-wide KOTH</span><span style="flex: 3 1 320px; min-width: 0">p2wn, Borlyn and Doge198_ capture Haunted Hill.</span></li>
+<li class="shop"><span style="flex: 0 0 120px; color: var(--muted)">26 Dec 2025</span><span style="flex: 1 1 200px; min-width: 0; color: var(--head)">First End event</span><span style="flex: 3 1 320px; min-width: 0">Enthusiast and Blood Guard win the fight for the Dragon Egg.</span></li>
+<li class="shop"><span style="flex: 0 0 120px; color: var(--muted)">21 Jun 2026</span><span style="flex: 1 1 200px; min-width: 0; color: var(--head)">First tournament champion</span><span style="flex: 3 1 320px; min-width: 0">OinkerMC.</span></li>
+<li class="shop"><span style="flex: 0 0 120px; color: var(--muted)">28 Jun 2026</span><span style="flex: 1 1 200px; min-width: 0; color: var(--head)">First guild to level 100</span><span style="flex: 3 1 320px; min-width: 0">Vibe.</span></li>
+<li class="shop"><span style="flex: 0 0 120px; color: var(--muted)">1 Jul 2026</span><span style="flex: 1 1 200px; min-width: 0; color: var(--head)">First Media Event winner</span><span style="flex: 3 1 320px; min-width: 0">StepSoy.</span></li>
+</ul>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">RETIRED HONOURS</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">You had to be there</h2>
+</div>
+<p style="color: var(--muted); max-width: 760px">Ranks and tags that can no longer be earned. If you see one in chat, that player was there.</p>
+<div class="eq" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 24px">
+<div class="panel" style="padding: 20px; display: flex; flex-direction: column; gap: 8px">
+<span class="tag tag-dark" style="align-self: flex-start; white-space: normal">Founder ranks and the Founder Star</span>
+<p>Left the store for good on 2 June 2026.</p>
+</div>
+<div class="panel" style="padding: 20px; display: flex; flex-direction: column; gap: 8px">
+<span class="tag tag-dark" style="align-self: flex-start; white-space: normal">Beta Tester tag</span>
+<p>For players with 4 or more hours in the first betas.</p>
+</div>
+<div class="panel" style="padding: 20px; display: flex; flex-direction: column; gap: 8px">
+<span class="tag tag-dark" style="align-self: flex-start; white-space: normal">Bug Hunter tag</span>
+<p>For verified bug reports during the betas.</p>
+</div>
+<div class="panel" style="padding: 20px; display: flex; flex-direction: column; gap: 8px">
+<span class="tag tag-dark" style="align-self: flex-start; white-space: normal">Grass Toucher tag</span>
+<p>For a photo of the outdoors on Go Touch Grass Day, August 2026.</p>
+</div>
+<div class="panel" style="padding: 20px; display: flex; flex-direction: column; gap: 8px">
+<span class="tag tag-dark" style="align-self: flex-start; white-space: normal">Temp server challenge tags</span>
+<p>Earned on the temporary server before Chapter 2 and carried over.</p>
+</div>
+</div>
+
+<div class="tip fret" style="padding: 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">KEEP IT HONEST</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Is a name missing?</h3>
+<p>The Hall of Fame is kept by the server Historians. If a winner or a record is missing or wrong, tell them on Discord or fix it on the wiki.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<a class="btn btn-gold" href="https://discord.gg/5ccgDCmNSc">Tell a Historian</a>
+<a class="btn btn-dark" href="https://enthusia.miraheze.org/wiki/Main_Page">Open the wiki</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="site-foot s-red">
+<div class="site-foot-in">
+<div class="foot-brand">
+<a class="brand" href="index.html">
+<img src="assets/ui/logo-256.png" alt="" width="44" height="44">
+<span>ENTHUSIA SMP</span>
+</a>
+<p>A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
+<a class="btn btn-gold" href="join.html">Play now!</a>
+</div>
+<div class="foot-cols">
+<nav class="foot" aria-label="Play">
+<p class="foot-title">PLAY</p>
+<a href="plugins.html">About</a>
+<a href="join.html">Join guide</a>
+<a href="guide.html">Player guide</a>
+<a href="rules.html">Rules</a>
+<a href="vote.html">Vote</a>
+<a href="appeal.html">Appeals</a>
+</nav>
+<nav class="foot" aria-label="World">
+<p class="foot-title">WORLD</p>
+<a href="market.html">Market</a>
+<a href="gallery.html">Gallery</a>
+<a href="museum.html">Mapart Museum</a>
+<a href="competitions/index.html">Competitions</a>
+<a href="events.html">Events</a>
+<a href="bounties.html">Bounties</a>
+</nav>
+<nav class="foot" aria-label="Community">
+<p class="foot-title">COMMUNITY</p>
+<a href="guilds.html">Guilds</a>
+<a href="players.html">Players</a>
+<a href="leaderboards.html">Leaderboards</a>
+<a href="halloffame.html">Hall of Fame</a>
+<a href="achievements.html">Achievements</a>
+<a href="creators.html">Creators</a>
+<a href="staff.html">Staff</a>
+<a href="punishments.html">Punishments</a>
+<a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</nav>
+<nav class="foot" aria-label="News">
+<p class="foot-title">NEWS</p>
+<a href="news.html">News</a>
+<a href="changelog.html">Changelog</a>
+<a href="roadmap.html">Roadmap</a>
+<a href="polls.html">Polls</a>
+<a href="timeline.html">Timeline</a>
+</nav>
+<nav class="foot" aria-label="More">
+<p class="foot-title">MORE</p>
+<a href="store.html">Store</a>
+<a href="account.html">Account</a>
+<a href="https://discord.gg/5ccgDCmNSc" target="_blank" rel="noopener">Discord</a>
+<a href="404.html">404 page</a>
+<a href="home-christmas.html">Christmas skin</a>
+</nav>
+<nav class="foot" aria-label="Staff tools">
+<p class="foot-title">STAFF TOOLS</p>
+<a href="competitions/admin/index.html">Competition admin</a>
+<a href="newseditor.html">News editor</a>
+<a href="reviewer/index.html">Reviewer</a>
+<a href="reviewer/appeals.html">Appeal review</a>
+</nav>
+</div>
+<div class="foot-legal">
+<p><span data-year="">2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
+<p>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</p>
+</div>
+</div>
+</footer>
 
 
 </div>
@@ -167,5 +584,6 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script type="module" src="assets/community.js"></script><script src="assets/site-config.js" defer></script><script src="assets/enthusia.js" defer></script></body>
-</html>
+
+
+<script src="assets/site-config.js" defer=""></script><script src="assets/enthusia.js" defer=""></script><script src="assets/design-bindings.js" defer=""></script><script type="module" src="assets/exact-collections.js"></script></body></html>

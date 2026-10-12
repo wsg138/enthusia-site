@@ -32,3 +32,9 @@ test('sales require actual positive quantities and raw gold with canonical ident
 test('producer authorization fails closed without key, signature, or recent timestamp', async () => {
   assert.equal(await verifyProducer(new Request('https://example.com/api/community/ingest',{method:'POST'}),{},'{}'),false);
 });
+
+test('Warzone exports expose only public kit, leaderboard and activity fields',()=>{
+ const value=projectSnapshot('warzone',{items:[{id:'kit',name:'Current kit',description:'Public rules',type:'kit',endsAt:'2026-10-12T12:00:00Z',secretCoordinates:'private',internalId:'secret'}]});
+ assert.equal(value.items[0].type,'kit');assert.equal(value.items[0].endsAt,'2026-10-12T12:00:00.000Z');assert.equal(value.items[0].secretCoordinates,undefined);assert.equal(value.items[0].internalId,undefined);
+ assert.throws(()=>projectSnapshot('warzone',{items:[{id:'bad',name:'Unknown',type:'private'}]}),/invalid_warzone_type/);
+});

@@ -59,7 +59,7 @@ test("about documentation explains PieCloak from its public contract", async () 
   const page = await readFile(new URL("../public/plugins.html", import.meta.url), "utf8");
   assert.match(page, /id="piecloak"/);
   assert.match(page, /Within 24 blocks/);
-  assert.match(page, /From 24–48 blocks/);
+  assert.match(page, /From 24 to 48 blocks/);
   assert.match(page, /does not hide players or ordinary base blocks/);
   assert.match(page, /enthusia\.miraheze\.org\/wiki\/Main_Page/);
   assert.doesNotMatch(page, /Managed clues|base clues/);
