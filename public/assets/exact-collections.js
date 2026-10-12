@@ -47,7 +47,7 @@ function renderCreatorCredits(section,items){
   section.hidden=!items.length;
   // Event dates and submission instructions need their own published record.
   const instructions=section.querySelector('.panel');if(instructions)instructions.hidden=true;
-  const list=section.querySelector('ul');if(!list)return;
+  const list=section.querySelector('.tip ul');if(!list)return;
   list.replaceChildren(...items.map(item=>el('li',{class:'who'},[
     el('span',{text:item.title.replace(/^Media rank holder:\s*/, '')},[
       el('small',{text:item.body.split('\n')[0]}),
