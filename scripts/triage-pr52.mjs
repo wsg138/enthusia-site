@@ -4,6 +4,10 @@ import { parse } from 'acorn'; // Included in the locked ESLint development tool
 
 const findings = JSON.parse(await readFile('docs/pr-feedback/52-findings.json', 'utf8'));
 const cache = new Map();
+const archivedSources = new Map([
+  ['public/assets/exact-controls/home-christmas.js', 'designs/unreleased/christmas/controls.js.txt'],
+  ['public/preview/design-reference/mock/home-christmas.js', 'designs/unreleased/christmas/reference-controls.js.txt']
+]);
 const isFunction = node => /Function/.test(node.type) || node.type === 'ArrowFunctionExpression';
 const children = node => Object.values(node).flatMap(value => Array.isArray(value) ? value
   : value && typeof value === 'object' ? [value] : []).filter(value => value && typeof value.type === 'string');
@@ -24,7 +28,7 @@ function complexity(node) {
 async function sourceFunctions(file) {
   if (cache.has(file)) return cache.get(file);
   if (!/\.(js|mjs)$/.test(file)) return [];
-  const source = await readFile(file, 'utf8');
+  const source = await readFile(archivedSources.get(file) ?? file, 'utf8');
   const ast = parse(source, { ecmaVersion: 'latest', sourceType: 'module', locations: true });
   const functions = [];
   function visit(node, parent) {

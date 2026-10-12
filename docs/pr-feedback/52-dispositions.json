@@ -989,9 +989,9 @@
     "current": {
       "name": "ingest",
       "start": 92,
-      "end": 107,
-      "ccn": 5,
-      "sourceLines": 16
+      "end": 108,
+      "ccn": 7,
+      "sourceLines": 17
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -2527,8 +2527,8 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "insights",
-      "start": 113,
-      "end": 128,
+      "start": 114,
+      "end": 129,
       "ccn": 9,
       "sourceLines": 16
     },
@@ -3470,9 +3470,9 @@
     "current": {
       "name": "previewApi",
       "start": 64,
-      "end": 83,
-      "ccn": 20,
-      "sourceLines": 20
+      "end": 93,
+      "ccn": 28,
+      "sourceLines": 30
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3571,8 +3571,8 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "handleCommunity",
-      "start": 245,
-      "end": 258,
+      "start": 246,
+      "end": 259,
       "ccn": 10,
       "sourceLines": 14
     },
@@ -4033,8 +4033,8 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "handleCommunity",
-      "start": 245,
-      "end": 258,
+      "start": 246,
+      "end": 259,
       "ccn": 10,
       "sourceLines": 14
     },
@@ -4465,8 +4465,8 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "validateRecord",
-      "start": 31,
-      "end": 41,
+      "start": 32,
+      "end": 42,
       "ccn": 14,
       "sourceLines": 11
     },
