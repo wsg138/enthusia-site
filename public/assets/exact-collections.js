@@ -42,13 +42,31 @@ function renderAchievementDefinitions(section,items){
   for(const count of section.querySelectorAll('.slot b,.stat b'))count.textContent=items.length;
   const lead=section.querySelector('h2')?.parentElement.querySelector('p:last-child');if(lead)lead.textContent=items.length+' public achievement definitions. Complete achievements in game and claim rewards with /rewards.';
 }
+function renderCreatorCredits(section,items){
+  if(!section)return;
+  section.hidden=!items.length;
+  // Event dates and submission instructions need their own published record.
+  const instructions=section.querySelector('.panel');if(instructions)instructions.hidden=true;
+  const list=section.querySelector('ul');if(!list)return;
+  list.replaceChildren(...items.map(item=>el('li',{class:'who'},[
+    el('span',{text:item.title.replace(/^Media rank holder:\s*/, '')},[
+      el('small',{text:item.body.split('\n')[0]}),
+      ...(item.verification==='verified'?[]:[el('small',{text:'Awaiting source verification'})])
+    ])
+  ])));
+}
 async function start(){
   const sections=[...document.querySelectorAll('main>section')];
   // Literal reference-only summaries must never be mistaken for current server facts.
   if(!preview){for(const section of sections.slice(1))section.hidden=!(kind==='creators'&&section.getAttribute('aria-label')==='For creators');}
   const template=templates.values().next().value;
   try{
-    const data=await api(kind),items=data.items;
+    const data=await api(kind);let items=data.items;
+    if(kind==='creators'&&!preview){
+      const credits=items.filter(item=>item.category==='Media rank holders');
+      items=items.filter(item=>item.category!=='Media rank holders');
+      renderCreatorCredits(sections.find(section=>section.getAttribute('aria-label')==='The Media rank'),credits);
+    }
     if(kind==='achievements'&&!preview&&data.curated!==true){renderAchievementDefinitions(sections[1],items);return;}
     if(!items.length){const section=sections[1];if(section){section.hidden=false;section.replaceChildren(el('div',{class:'panel exact-empty'},[el('p',{text:'No published records yet.'})]));}return;}
     for(const [index,item]of items.entries()){
