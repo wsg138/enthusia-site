@@ -1,6 +1,6 @@
 const contentKinds = new Set(['news', 'changelog', 'roadmap', 'timeline', 'halloffame',
   'creators', 'museum', 'achievements', 'polls']);
-const publicKinds = new Set([...contentKinds, 'guilds', 'players', 'bounties', 'warzone',
+const publicKinds = new Set([...contentKinds, 'guilds', 'guildquests', 'players', 'bounties', 'warzone',
   'insights', 'alerts', 'market-design']);
 
 function validSegments(segments) {

@@ -31,6 +31,9 @@ test. Source changes use the existing regression suite.
 - Updated the saved-review triage tool to inspect the two explicitly archived
   Christmas JavaScript sources. Missing arbitrary source files still fail the
   audit. Archived findings are not silently marked resolved.
+- A focused regression reproduced the combined guild-quest route being rejected
+  by the older browser allowlist. Added the exact `guildquests` route while keeping
+  traversal and unsupported routes rejected.
 - All 512 tests pass; lint and site-reference checks pass. Map verification covers
   15 buildings, 71 stalls and 94 shops. Static build and Wrangler 4.149.0 Functions
   compilation pass.

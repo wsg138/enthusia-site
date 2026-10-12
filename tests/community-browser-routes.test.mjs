@@ -18,11 +18,11 @@ test('community requests reject traversal and unsupported routes before fetch', 
       await assert.rejects(api(path), /Unsupported community/);
     }
     assert.equal(calls.length, 0);
-    for (const path of ['news', 'guilds', 'polls/test-poll', 'admin/session', 'admin/timeline',
+    for (const path of ['news', 'guilds', 'guildquests', 'polls/test-poll', 'admin/session', 'admin/timeline',
       'insights?week=2026-10-12&mode=guild&item=minecraft%3Adiamond', 'market-design', 'alerts']) {
       await api(path);
     }
-    assert.equal(calls.length, 8);
+    assert.equal(calls.length, 9);
     await api('news', {credentials:'include',redirect:'follow'});
     assert.ok(calls.every(url => url.startsWith('/api/community/')));
   } finally {
