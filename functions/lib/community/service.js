@@ -3,6 +3,7 @@ import { getCompetitionIdentitySession } from '../competitions/identity.js';
 import { requireSameOrigin } from '../security.js';
 import { json } from '../responses.js';
 import { onRequestGet as leaderboard } from '../../api/leaderboards/[[path]].js';
+import { projectGuildDirectory } from '../guild-directory-source.js';
 import { CONTENT_KINDS, SNAPSHOT_KINDS, identifier, validateRecord, decodeRow, publicRecord, projectSnapshot, validateSale, verifyProducer } from './contracts.js';
 
 const unavailable=()=>json({error:'community_service_unavailable'},503);
@@ -132,7 +133,7 @@ export async function handleCommunity(context,dependencies={editor,identity}){
         const response=await leaderboard({...context,params:{path:'guilds'}});
         if(!response.ok)return unavailable();const data=await response.json();
         if(!Array.isArray(data.entries))return unavailable();
-        const projected=projectSnapshot('guilds',{items:data.entries.map(row=>({id:row.id,name:row.name,level:row.level,members:row.memberCount,banner:row.banner}))});
+        const projected=projectGuildDirectory(data);
         return json({...projected,updatedAt:data.generatedAt??null,limited:true,stale:data.generatedAt?Date.now()-Date.parse(data.generatedAt)>900000:true});
       }catch{return unavailable();}
     }
