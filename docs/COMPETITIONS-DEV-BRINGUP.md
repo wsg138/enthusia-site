@@ -138,7 +138,7 @@ The application currently requires Competition schema version 27 and verifies re
 In the Discord developer application:
 
 - add exactly the preview callback configured in `DISCORD_OAUTH_REDIRECT_URI`;
-- Competition sign-in requests only `identify`;
+- Competition sign-in requests `identify guilds.members.read`;
 - keep the client secret server-side;
 - configure the staff webhook for review alerts;
 - configure the optional bot token only if contributor invitation DMs are wanted during the preview.

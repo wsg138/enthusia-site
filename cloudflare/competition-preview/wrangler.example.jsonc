@@ -35,6 +35,12 @@
       "database_name": "enthusia-competitions-dev",
       "database_id": "REPLACE_WITH_DEV_D1_DATABASE_ID",
       "migrations_dir": "../../migrations"
+    },
+    {
+      "binding": "COMMUNITY_DB",
+      "database_name": "enthusia-community-dev",
+      "database_id": "REPLACE_WITH_COMMUNITY_DEV_D1_DATABASE_ID",
+      "migrations_dir": "../../migrations/community"
     }
   ],
   "r2_buckets": [
