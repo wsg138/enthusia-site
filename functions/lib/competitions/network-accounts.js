@@ -14,7 +14,8 @@ export function normalizeNetworkAccounts(payload) {
     const uuid = String(account?.uuid ?? "").toLowerCase();
     const name = String(account?.name ?? "");
     const linkedAt = String(account?.linkedAt ?? "");
-    if (!isCanonicalUuid(uuid) || !/^[A-Za-z0-9_]{1,16}$/.test(name)
+    // Authoritative names include Floodgate prefixes; ownership uses the UUID.
+    if (!isCanonicalUuid(uuid) || !name.trim() || name.length > 32 || /[<>]|\p{C}/u.test(name)
         || !Number.isFinite(Date.parse(linkedAt)) || seen.has(uuid)) {
       throw new Error("Invalid network account identity");
     }

@@ -23,8 +23,15 @@ function link(db, uuid, owner) {
 test("network identities reject malformed or duplicate records instead of accepting a partial list", () => {
   const account = { uuid: A, name: "P2wn", linkedAt: NOW };
   assert.deepEqual(normalizeNetworkAccounts({ accounts: [account] }), [account]);
-  for (const accounts of [null, [account, account], [{ ...account, uuid: "bad" }], [{ ...account, linkedAt: "bad" }], [{ ...account, name: "<script>" }]]) {
+  for (const accounts of [null, [account, account], [{ ...account, uuid: "bad" }], [{ ...account, linkedAt: "bad" }], [{ ...account, name: "<script>" }], [{ ...account, name: "Player\nName" }], [{ ...account, name: " " }], [{ ...account, name: "a".repeat(33) }]]) {
     assert.throws(() => normalizeNetworkAccounts({ accounts }));
+  }
+});
+
+test("authoritative names preserve Bedrock prefixes and full gamertags", () => {
+  for (const name of ["*BedrockPlayer", "*" + "a".repeat(16), ".Bedrock Player"]) {
+    const account = { uuid: A, name, linkedAt: NOW };
+    assert.deepEqual(normalizeNetworkAccounts({ accounts: [account] }), [account]);
   }
 });
 
