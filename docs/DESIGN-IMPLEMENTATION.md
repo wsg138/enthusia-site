@@ -115,3 +115,15 @@ Refine/evidence:
 - Existing nine mobile interactions still pass, including honest preview failure for save/vote/alert actions. Full local tests, lint, HTML references, map validation, build and latest public phone results are recorded with delivery.
 
 Live acceptance still requires configured COMMUNITY_DB/OAuth/Turnstile resources, real account verification, canonical server feed exporters, alert-worker activation and Tebex payment testing. No live vote, publication, upload, moderation decision, account change, Discord message, payment, merge or deployment was made during this audit. SPEAR remains the manual requirement/proof/implementation/evidence record; no local EARS/state tooling exists.
+
+### Live services and appeal progress follow-up
+
+Spec: check live website sign-in, Tebex checkout readiness and website-bot delivery separately, and bring the New appeal progress indicator into the square red/gold/cream theme. The user chose checkout readiness only; no purchase agreements or payment should be submitted.
+
+Prove: anonymous requests to enthusia.info returned 404 for account.html, the competition session/Discord-start routes, gallery session, appeal Turnstile and community insights/alerts. Live Tebex accepted the FainNeito identity, showed Discord connected as fainneito#0, and reached an Avid basket at USD 5. Required agreements remained unchecked and Proceed to checkout disabled. This establishes basket readiness, not paid checkout or rank fulfillment. No separate backend/operator connection was supplied; no website-bot credentials or Cloudflare operator access were available. The requested FainNeito website-bot delivery test could not run.
+
+Engine/architecture: the alert worker accepts the same dedicated website notification bot setting as website notifications, retaining both legacy aliases. Shared market item lookup accepts canonical material keys, namespaced keys and display names, so the worker's encoded item links select the intended chart. Chart deep links no longer wait for a market-map snapshot, and malformed fragments are ignored. Appeal progress uses square cream panels, red borders, gold step markers and readable text without changing workflow state.
+
+Refine/evidence: 489 local tests cover dedicated-token precedence, safe message mentions, canonical item links and lookup failures, alongside the existing worker cooldown/opt-out and application tests. Lint, HTML references, map layers and static build are checked for this delivery. Browser checks show Totem of Undying selected from its canonical material fragment and square, readable Account/Punishment/Appeal steps. Public preview verification is separate from these local checks. SPEAR remains manual because no project-local EARS/state helpers exist.
+
+Remaining live acceptance: deploy the reviewed backend with its D1/OAuth/Turnstile configuration through an authorized operator, verify real website sign-in, then exercise the dedicated website bot's opted-in delivery and opt-out. Payment processing and rank fulfillment were deliberately left untested at the user's request. No website-bot DM, payment, production deployment or merge was performed.

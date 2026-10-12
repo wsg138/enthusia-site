@@ -88,3 +88,17 @@ test('news pins order published records and author identity is set by the authen
  const publicItems=(await (await request(db,'news')).json()).items;
  assert.equal(publicItems[0].slug,'pinned');assert.equal(publicItems[0].pinned,true);assert.equal(publicItems[0].authorName,'RealEditor');assert.equal(publicItems[0].authorRank,'Admin');
 });
+
+test('market alerts use the dedicated website notification token before legacy credentials',async()=>{
+ const {db,sql}=database();
+ sql.prepare('INSERT INTO market_alerts(subscriber,item,threshold,updated_at) VALUES (?,?,?,?)').run('123456789012345678','minecraft:stone',1,new Date().toISOString());
+ sql.prepare('INSERT INTO market_sales VALUES (?,?,?,?,?,?,?)').run('token-sale','stall','guild','minecraft:stone',4,2,new Date().toISOString());
+ let messages=0;
+ const send=async(url,options)=>{
+  assert.equal(options.headers.authorization,'Bot dedicated-test-token');
+  if(url.endsWith('/channels'))return Response.json({id:'234567890123456789'});
+  const payload=JSON.parse(options.body);assert.match(payload.content,/#item=minecraft%3Astone/);assert.deepEqual(payload.allowed_mentions,{parse:[]});messages++;return Response.json({id:'345678901234567890'});
+ };
+ assert.equal((await dispatchAlerts({COMMUNITY_DB:db,MARKET_ALERTS_ENABLED:'true',ENTHUSIA_SITE_DISCORD_BOT_TOKEN:'dedicated-test-token',DISCORD_BOT_TOKEN:'legacy-test-token'},send)).sent,1);
+ assert.equal(messages,1);
+});

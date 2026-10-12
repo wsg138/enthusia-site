@@ -9,4 +9,6 @@ MARKET_ALERTS_ENABLED = "false"
 crons = ["*/15 * * * *"]
 
 # Configure COMMUNITY_DB to the same database used by Pages, and set the
-# DISCORD_BOT_TOKEN secret for the existing Enthusia bot. Do not commit IDs/secrets.
+# ENTHUSIA_SITE_DISCORD_BOT_TOKEN secret for the website notification bot.
+# COMPETITIONS_DISCORD_BOT_TOKEN and DISCORD_BOT_TOKEN remain legacy aliases.
+# Do not use the privileged moderation bot or commit IDs/secrets.

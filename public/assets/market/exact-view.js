@@ -425,7 +425,7 @@
 
   /* ---------- price alerts (sent as a Discord message by the Enthusia bot) ---------- */
 
-  function itemByName(name){return items.find(item=>item.name===name);}
+  function itemByName(name){return window.EnthusiaMarketFindItem(items,name);}
   function alertBox(it) {
     var box=h('div',{class:'mi-alert'},[h('p',{class:'mi-kick',text:'PRICE ALERT'}),h('h3',{text:'Tell me when the price moves'})]);
     var when=h('select',{class:'field','aria-label':'Alert when the price'},[h('option',{value:'below',text:'drops to or below'})]);
@@ -439,7 +439,8 @@
   /* ---------- movers + most traded ---------- */
 
   function selectItem(name) {
-    state.sel = name; state.idx = current().days.length-1; state.q = ""; state.sort = "all";
+    var item = itemByName(name); if (!item) return;
+    state.sel = item.name; state.idx = item.days.length-1; state.q = ""; state.sort = "all";
     var q = $("mi-q"); if (q) q.value = "";
     Array.prototype.forEach.call(document.querySelectorAll("[data-mi-sort]"), function (o) { o.setAttribute("aria-pressed", o.getAttribute("data-mi-sort") === "all" ? "true" : "false"); });
     renderRows(); renderDetail();
@@ -544,7 +545,7 @@
   function followHash() {
     var m = location.hash.match(/^#(stall|item)=(.+)$/);
     if (!m) return;
-    var name = decodeURIComponent(m[2]);
+    var name; try { name = decodeURIComponent(m[2]); } catch { return; }
     if (m[1] === "stall" && sid(name)) showOnMap(sid(name));
     if (m[1] === "item" && itemByName(name)) {
       selectItem(name);
@@ -595,7 +596,7 @@
     if ($("mi-strip")) renderStrip();
     if (!$("mi-winner")) return;
     renderWinner(); renderWeek(); renderHall();
-    if(items.length){renderRows(); renderDetail(); renderMovers(); renderTraded();} initMap();
+    if(items.length){renderRows(); renderDetail(); renderMovers(); renderTraded();followHash();} initMap();
     $("mi-q").addEventListener("input", function (e) { state.q = e.target.value; renderRows(); });
     Array.prototype.forEach.call(document.querySelectorAll("[data-mi-sort]"), function (b) {
       b.addEventListener("click", function () {

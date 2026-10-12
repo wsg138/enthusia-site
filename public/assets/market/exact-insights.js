@@ -1,8 +1,10 @@
 import { priceVerdict } from './exact-prices.js';
+import { findMarketItem } from './exact-items.js';
 import { api,el } from '../community-dom.js';
 const preview=document.documentElement.hasAttribute('data-preview-root');
 window.EnthusiaMarketDesignApi=api;
 window.EnthusiaMarketPriceVerdict=priceVerdict;
+window.EnthusiaMarketFindItem=findMarketItem;
 function week(offset=0){const value=new Date();value.setUTCHours(0,0,0,0);value.setUTCDate(value.getUTCDate()-((value.getUTCDay()+6)%7)+offset*7);return value.toISOString().slice(0,10);}
 function itemName(key){return key.replace(/^minecraft:/,'').replaceAll('_',' ').replace(/\b\w/g,c=>c.toUpperCase());}
 async function start(){

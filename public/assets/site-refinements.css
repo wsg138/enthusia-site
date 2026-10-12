@@ -6,6 +6,12 @@
 .en.workflow-page .competition-back-link{border-radius:0}
 .en input[type=file]::file-selector-button{font:inherit;background:#fff8e6;color:#3a0d0a;border:3px solid #4a0b08;border-radius:0;padding:6px 12px;cursor:pointer}
 .en .appeal-view-tabs{background:transparent;border:0;border-radius:0;box-shadow:none}
+.en .appeal-progress{gap:12px;border:0;border-radius:0;background:none;overflow:visible}
+.en .appeal-progress>li{padding:20px;background:#fff8e6;color:#3a0d0a;border:4px solid #4a0b08;border-radius:0;opacity:1;box-shadow:inset 3px 3px 0 #fff,inset -3px -3px 0 #ecc873}
+.en .appeal-progress>li.is-active{background:#ffe7b0;border-color:#b3201a}
+.en .appeal-progress>li>span{width:44px;height:44px;border:4px solid #4a0b08;border-radius:0;background:#ffcf1f;color:#3a0d0a;box-sizing:border-box;font-weight:400}
+.en .appeal-progress>li.is-complete>span{background:#1c7a32;color:#fff6e0;border-color:#4a0b08}
+.en .appeal-progress strong{color:#b3201a;font-weight:400}.en .appeal-progress small{color:#6b3a2a}
 .en .admin-service-panel,.en .competition-player-preview{border-radius:0}
 .en .admin-status-item{background:#fff8e6;color:#3a0d0a;border:4px solid #4a0b08;border-radius:0;box-shadow:inset 3px 3px 0 #fff,inset -3px -3px 0 #ecc873}
 .en .admin-status-item :where(strong,h3,p,small){color:#6b3a2a}
