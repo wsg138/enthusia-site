@@ -118,3 +118,11 @@ builders published as immutable values rather than concurrently mutated stores.
 Credential-free in-memory H2 URLs contain no passwords. One ConfigLoaderTest
 string warning points to unchanged baseline code. No blanket suppression or
 clean hosted grade is claimed; hosted checks remain separate from local proof.
+
+Hosted checkpoint: website head 4fa622b passes GitHub validation and Codacy;
+Duels head 4ff293f passes Codacy. MaceGuard head 1380a10 retains nine context
+annotations (five Java EE thread rules, three local map builders and the unchanged
+ConfigLoaderTest string). Companion Actions runs report action_required and need
+maintainer approval: MaceGuard Build 38435430531 / Codacy Analysis 38435430496,
+Duels Tests 38434487401. CodeRabbit skips automatic review for these OSS repos.
+These are not hosted test successes for the plugins and do not permit activation.
