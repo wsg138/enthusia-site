@@ -42,7 +42,7 @@ Automated moderation remains disabled by owner choice. Upload publication must
 continue to fail closed while moderation is unavailable; do not bypass that
 check to activate uploads or competition image submissions.
 
-The signed network account endpoints are prepared in EnthusiaStaff Velocity:
+The signed network account endpoints are active in EnthusiaStaff Velocity:
 `POST /v1/website/accounts` and `POST /v1/website/accounts/link`. They expose
 current Minecraft ownership to the authenticated website service and issue the
 existing five-minute `/link` challenge. The browser never supplies the Discord
@@ -51,13 +51,14 @@ network on authenticated requests, preserve competition identity locks, and
 fail closed on unavailable or conflicting data. Unlinking continues in-game
 through `/unlink CONFIRM` to preserve network main-account selection and history.
 
-`NETWORK_ACCOUNT_LINKS=false` deliberately keeps this integration inactive until
-the owner selects a proxy restart time and the prepared Velocity runtime is
-installed and verified. No database migration is required. After the protected
-endpoints pass live verification, set the flag to `true`, redeploy Pages, and
-test recognition of an existing linked account and a new in-game challenge.
-Changing only the website flag before the server deployment would break
-authenticated workflows and must not be used as an activation shortcut.
+`NETWORK_ACCOUNT_LINKS=true` enables the verified shared network integration.
+The October 13 network restart loaded the prepared Velocity runtime without a
+database migration. Live acceptance confirmed the owner's current linked
+account, unsigned access denial, invalid challenge rejection and preservation
+of the existing public punishment endpoint. New-account completion still
+requires a player to run the generated challenge in-game. For rollback, disable
+the website flag before reverting the native runtime; do not leave it enabled
+against a proxy that lacks these endpoints.
 
 Production notification workers are provisioned separately from development:
 `enthusia-competition-jobs-production` and `enthusia-market-alerts-production`.
@@ -125,7 +126,7 @@ maintained producer requires a separate validated change.
 
 ## Validation and rollback
 
-The current integration passes 517 site tests, lint, page/asset checks,
+The current integration passes 518 site tests, lint, page/asset checks,
 market layer checks, the static build and Pages Functions compilation.
 The bridge passes 14 Java tests
 against the live Paper API profile. The prepared network account runtime passes
@@ -148,9 +149,10 @@ site launch. Codacy's retained analyzer findings are described in
 
 ## Live feed acceptance still required
 
-The account page shows a pending server activation message and disables new
-link challenges while the network integration is staged. Its two panel rows
-were verified with matching heights on the deployed site.
+The account page uses the authoritative network links and exposes new link
+challenges when the shared service is available. Its two panel rows were
+verified with matching heights on the deployed site. New in-game challenge
+completion and unlink/relink acceptance remain manual checks.
 
 Guild rankings are live. The directory requests up to 50 existing leaderboard
 records and remains marked as limited; complete guild membership, quest and
