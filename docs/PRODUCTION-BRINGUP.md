@@ -197,3 +197,20 @@ setting the flag true and deploying the website. Do not schedule a restart
 without authorization. Keep notification workers and automated moderation
 disabled. After migration, do not resume appeal writes with an old native JAR
 without a compatibility review; use the feature flag to contain a failed cutover.
+
+## Public punishment presentation
+
+Account punishment summaries link to their public case records; non-public
+cases remain excluded by the native public projection. Public cards have equal
+heights, shaded reason/date/duration fields, no displayed case IDs and no
+remaining-time countdown. Finite durations describe the original punishment.
+Warnings are displayed as retained records without duration fields, including
+older records that carried an expiration timestamp. This changes presentation,
+not native warning enforcement or stored history. The original recorded warning
+reason is preserved; absent reasons and the known legacy import fallback are
+shown as unavailable rather than inferred from a modern reason category.
+
+The warning filter uses the native `WARNING` contract. The website also accepts
+the previous `WARN` filter spelling and normalizes it before signing the native
+request. These presentation fixes do not require the pending proxy restart;
+automatic linked-account appeals remain gated until their approved activation.

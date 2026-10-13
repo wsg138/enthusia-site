@@ -1,3 +1,4 @@
+import { publicPunishmentLink, punishmentReason } from "./punishment-presentation.js?v=1";
 let root = document.querySelector("#account-punishment-bindings");
 
 function element(tag, className, text) {
@@ -8,7 +9,8 @@ function element(tag, className, text) {
 }
 
 async function api(path, options = {}) {
-  if (!new Set(["/api/appeals/bindings", "/api/appeals/revalidate"]).has(path)      && !/^\/api\/appeals\/punishments\?(?:scope=(?:ACTIVE|EXPIRED|ALL))(?:&cursor=[A-Za-z0-9_-]{1,256})?$/.test(path)) {
+  if (!new Set(["/api/appeals/bindings", "/api/appeals/revalidate"]).has(path)
+      && !/^\/api\/appeals\/punishments\?(?:scope=(?:ACTIVE|EXPIRED|ALL))(?:&cursor=[A-Za-z0-9_-]{1,256})?$/.test(path)) {
     throw new Error("Unsupported punishment binding route");
   }
   const response = await fetch(path, {
@@ -22,7 +24,8 @@ async function api(path, options = {}) {
   });
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const code = typeof payload.error === "string" ? payload.error : payload.error?.code?.toLowerCase();    const error = new Error(code || `HTTP_${response.status}`);
+    const code = typeof payload.error === "string" ? payload.error : payload.error?.code?.toLowerCase();
+    const error = new Error(code || `HTTP_${response.status}`);
     error.status = response.status;
     error.code = code || null;
     throw error;
@@ -63,10 +66,11 @@ async function revalidate(binding, button, status) {
 
 function bindingRow(binding) {
   const row = element("li", "account-link-row");
-  const details = element("div");
+  const details = element("a", "account-owned-punishment-details account-punishment-record-link");
+  details.href = publicPunishmentLink({ caseId: binding.caseId, player: binding.boundUsername });
   details.append(
     element("strong", "", `${binding.boundUsername} · ${binding.punishmentType}`),
-    element("span", "", `Case ${binding.caseId}`)
+    element("span", "", "View public record")
   );
   const actions = element("div");
   const status = element("span", "account-link-status", stateText(binding));
@@ -107,9 +111,10 @@ async function loadBindings() {
 
 function ownedPunishmentRow(punishment) {
   const row = element("li", "account-owned-punishment-row");
-  const details = element("div", "account-owned-punishment-details");
+  const details = element("a", "account-owned-punishment-details account-punishment-record-link");
+  details.href = publicPunishmentLink(punishment);
   details.append(element("strong", "", `${punishment.minecraftName} · ${punishment.type}`),
-    element("span", "", punishment.reason),
+    element("span", "", punishmentReason(punishment)),
     element("span", "account-link-status", `Issued ${new Date(punishment.createdAt).toLocaleDateString()}`));
   const actions = element("div");
   if (punishment.appealable) {

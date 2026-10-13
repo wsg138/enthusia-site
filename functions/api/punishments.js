@@ -12,7 +12,8 @@ export function punishmentQuery(request) {
     return { path: "/v1/public/search", parameters: new URLSearchParams({ q: search }) };
   }
 
-  const filter = String(source.get("type") ?? "ALL").trim().toUpperCase();
+  const requestedFilter = String(source.get("type") ?? "ALL").trim().toUpperCase();
+  const filter = requestedFilter === "WARN" ? "WARNING" : requestedFilter;
   const cursor = String(source.get("cursor") ?? "").trim();
   if (!FILTERS.has(filter) || cursor.length > 128 || (cursor && !/^[A-Za-z0-9_-]+$/.test(cursor))) return null;
   const parameters = new URLSearchParams({ type: filter, limit: "30" });

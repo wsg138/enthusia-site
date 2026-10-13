@@ -121,7 +121,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 @media (max-width:720px){.tabs{justify-content:center !important}.tab-head{flex-direction:column !important;align-items:center !important;text-align:center}.tab-head>div{align-items:center !important}}
 
 </style>
-<link rel="stylesheet" href="assets/exact-design.css"><link rel="stylesheet" href="assets/site-refinements.css">
+<link rel="stylesheet" href="assets/exact-design.css"><link rel="stylesheet" href="assets/site-refinements.css?v=3">
 </head>
 <body data-mockup="" data-exact-punishments="">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -218,7 +218,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 <div class="tab-head" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px">
 <form id="punishment-search" style="flex: 1 1 360px; min-width: 0px; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px;">
-<label class="f" style="flex: 1 1 240px; min-width: 0; text-align: left">Username or case ID
+<label class="f" style="flex: 1 1 240px; min-width: 0; text-align: left">Player name
 <input class="field" type="text" id="punishment-query">
 </label>
 <button class="btn btn-gold" type="submit">Search</button>
@@ -227,13 +227,13 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <button class="chip" type="button" data-b-aria-pressed="{{fAll}}" data-on-click="pickAll" data-punishment-filter="ALL" aria-pressed="true">All</button>
 <button class="chip" type="button" data-b-aria-pressed="{{fBan}}" data-on-click="pickBan" data-punishment-filter="BAN" aria-pressed="false">Bans</button>
 <button class="chip" type="button" data-b-aria-pressed="{{fMute}}" data-on-click="pickMute" data-punishment-filter="MUTE" aria-pressed="false">Mutes</button>
-<button class="chip" type="button" data-b-aria-pressed="{{fWarn}}" data-on-click="pickWarn" data-punishment-filter="WARN" aria-pressed="false">Warnings</button>
+<button class="chip" type="button" data-b-aria-pressed="{{fWarn}}" data-on-click="pickWarn" data-punishment-filter="WARNING" aria-pressed="false">Warnings</button>
 </div>
 </div>
 
 <p aria-live="polite" style="color: var(--muted)"><span data-b-text="countLine" id="punishment-summary"></span></p>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr)); gap: 24px; align-items: start" id="punishment-results">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr)); gap: 24px; align-items: stretch; grid-auto-rows: 1fr" id="punishment-results">
 
 
 
@@ -255,7 +255,6 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <dl class="meta">
 <div><dt>Issued</dt><dd>[Date]</dd></div>
 <div><dt>Duration</dt><dd>Permanent</dd></div>
-<div><dt>Case</dt><dd>[Case ID]</dd></div>
 </dl>
 <a href="appeal.html" style="display: flex; align-items: center; min-height: 44px">Appeal this punishment</a>
 </article></template><template id="exact-punishment-1"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{r1}}">
@@ -269,8 +268,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <p>[Public reason]</p>
 <dl class="meta">
 <div><dt>Issued</dt><dd>[Date]</dd></div>
-<div><dt>Duration</dt><dd>[End date] · 3 days remaining</dd></div>
-<div><dt>Case</dt><dd>[Case ID]</dd></div>
+<div><dt>Duration</dt><dd>3 days</dd></div>
 </dl>
 <a href="appeal.html" style="display: flex; align-items: center; min-height: 44px">Appeal this punishment</a>
 </article></template><template id="exact-punishment-2"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{r2}}">
@@ -279,13 +277,11 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <p style="color: var(--kick); letter-spacing: 2px; text-transform: uppercase">Warning</p>
 <h2 style="font-size: 24px; line-height: 32px; color: var(--head); overflow-wrap: anywhere">[Player name]</h2>
 </div>
-<span class="tag tag-plain">Ended</span>
+<span class="tag tag-plain">Recorded</span>
 </div>
 <p>[Public reason]</p>
 <dl class="meta">
 <div><dt>Issued</dt><dd>[Date]</dd></div>
-<div><dt>Duration</dt><dd>[End date] · Ended</dd></div>
-<div><dt>Case</dt><dd>[Case ID]</dd></div>
 </dl>
 </article></template><template id="exact-punishment-3"><article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px" data-b-class="panel {{r3}}">
 <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px">
@@ -298,8 +294,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <p>[Public reason]</p>
 <dl class="meta">
 <div><dt>Issued</dt><dd>[Date]</dd></div>
-<div><dt>Duration</dt><dd>[End date] · Ended</dd></div>
-<div><dt>Case</dt><dd>[Case ID]</dd></div>
+<div><dt>Duration</dt><dd>Ended</dd></div>
 </dl>
 </article></template></main>
 
@@ -386,4 +381,4 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script src="assets/site-config.js" defer=""></script><script src="assets/enthusia.js" defer=""></script><script src="assets/punishments.js" type="module"></script></body></html>
+<script src="assets/site-config.js" defer=""></script><script src="assets/enthusia.js" defer=""></script><script src="assets/punishments.js?v=2" type="module"></script></body></html>

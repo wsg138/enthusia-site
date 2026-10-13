@@ -35,8 +35,10 @@ function validCursor(value) {
 function publicPunishmentFields(value) {
   const player = boundedText(value.player, 16);
   const punishmentType = boundedText(value.punishmentType, 64)?.toUpperCase();
-  const broadReason = boundedText(value.broadReason, 500);
-  const publicReason = boundedText(value.publicReason, 1000);
+  const warning = ["WARN", "WARNING"].includes(punishmentType);
+  const absent = text => text == null || (typeof text === "string" && !text.trim());
+  const broadReason = warning && absent(value.broadReason) ? "Warning" : boundedText(value.broadReason, 500);
+  const publicReason = warning && absent(value.publicReason) ? "Reason not recorded in the previous system." : boundedText(value.publicReason, 1000);
   const issuedAt = instant(value.issuedAt);
   const expiresAt = instant(value.expiresAt);
   const state = boundedText(value.state, 64)?.toUpperCase();
