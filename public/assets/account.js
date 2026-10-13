@@ -1,4 +1,4 @@
-import { renderExactAccount } from './exact-account.js?v=5';
+import { renderExactAccount } from './exact-account.js?v=6';
 const API = "/api/competitions/auth";
 const root = document.querySelector("#account-session");
 let pollTimer = null;
