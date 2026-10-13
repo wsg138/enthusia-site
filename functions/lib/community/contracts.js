@@ -51,6 +51,13 @@ export function publicRecord(row) {
 }
 function links(input) {return Array.isArray(input)?input.slice(0,8).map(v=>({label:text(v.label,80,true),url:publicUrl(v.url)})):[];}
 function memberNames(input){return Array.isArray(input)?input.slice(0,200).map(v=>text(v,40,true)):[];}
+function achievementNames(input){return Array.isArray(input)?input.slice(0,200).map(v=>text(v,80,true)):[];}
+function achievementIdentifier(value){
+  const id=text(value,160,true);
+  if(/^[A-Za-z0-9_.:-]+$/.test(id))return id;
+  if(!/^[a-z0-9_.-]+:[a-z0-9_.-]+(?:\/[a-z0-9_.-]+)*$/.test(id)||id.split(/[:/]/).some(part=>part==='.'||part==='..'))throw new Error('invalid_identifier');
+  return id;
+}
 function banner(input){
   if(!input)return null;
   const dyes=new Set(['WHITE','ORANGE','MAGENTA','LIGHT_BLUE','YELLOW','LIME','PINK','GRAY','LIGHT_GRAY','CYAN','PURPLE','BLUE','BROWN','GREEN','RED','BLACK']);
@@ -83,10 +90,10 @@ export function projectSnapshot(kind,input) {
   if(!SNAPSHOT_KINDS.has(kind)||!Array.isArray(input?.items)||input.items.length>1000)throw new Error('invalid_snapshot');
   const ids=new Set();
   const items=input.items.map(row=>{
-    const id=identifier(row.id);if(ids.has(id))throw new Error('duplicate_id');ids.add(id);
+    const id=kind==='achievements'?achievementIdentifier(row.id):identifier(row.id);if(ids.has(id))throw new Error('duplicate_id');ids.add(id);
     const base={id,name:text(row.name,80,true),description:text(row.description,2000)};
     if(kind==='guilds')return {...base,level:number(row.level),members:number(row.members,20000),elo:number(row.elo),prestige:number(row.prestige,1e6),foundedAt:timestamp(row.foundedAt),bankBalance:number(row.bankBalance),totalExperience:number(row.totalExperience),activityScore:number(row.activityScore),tag:text(row.tag,80),recruiting:typeof row.recruiting==='boolean'?row.recruiting:null,peaceful:typeof row.peaceful==='boolean'?row.peaceful:null,membersList:memberNames(row.membersList),banner:banner(row.banner),links:links(row.links)};
-    if(kind==='players')return {...base,guild:text(row.guild,80),rank:text(row.rank,80),playtime:number(row.playtime),balance:number(row.balance),reputation:number(row.reputation),achievements:memberNames(row.achievements),links:links(row.links),
+    if(kind==='players')return {...base,guild:text(row.guild,80),rank:text(row.rank,80),playtime:number(row.playtime),balance:number(row.balance),reputation:number(row.reputation),achievements:achievementNames(row.achievements),links:links(row.links),
       ...(row.balanceRank!==undefined?{balanceRank:leaderboardPosition(row.balanceRank)}:{}),...(row.playtimeRank!==undefined?{playtimeRank:leaderboardPosition(row.playtimeRank)}:{}),
       ...(row.achievementsKnown===true?{achievementsKnown:true}:{}),...(row.weeklyDuelWins!==undefined?{weeklyDuelWins:weeklyDuelWins(row.weeklyDuelWins)}:{}),
       ...(row.guildsKnown===true?{guildsKnown:true,guildMemberships:playerGuilds(row.guildMemberships),...(row.guildsPartial===true?{guildsPartial:true}:{})}:{})};

@@ -34,7 +34,7 @@ window.fetch=async(input,options={})=>{
   }
   if(url.origin==='https://market-api.enthusia.info')return Response.json(await marketData);
   if(url.pathname==='/api/community/guilds')return Response.json(await guildData);
-  if(url.pathname==='/api/community/achievements')return Response.json({items:[],curated:[]});
+  if(url.pathname==='/api/community/achievements')return Response.json((await activityData).achievements??{items:[],curated:[]});
   const kind=url.pathname.match(/^\/api\/community\/(guildquests|bounties|warzone)$/)?.[1];
   if(kind){
     if(new URLSearchParams(location.search).get('profile')==='example'){

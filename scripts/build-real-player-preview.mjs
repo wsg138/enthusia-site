@@ -2,7 +2,7 @@ import { readFile,writeFile } from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import { readPublicPlayerDirectory } from '../functions/lib/player-directory-source.js';
 import {connectPublicGuilds} from './lib/public-player-guilds.mjs';
-import {connectCompleteProfileCapture} from './lib/complete-profile-capture.mjs';
+import {connectCompleteProfileCapture,validateProfileImport} from './lib/complete-profile-capture.mjs';
 const file=process.argv[2];
 const rendererVersion=createHash('sha256').update(await readFile('public/assets/exact-directory.js')).digest('hex').slice(0,12);
 const rendererRevision=html=>html.replace('src="../assets/exact-directory.js"','src="../assets/exact-directory.js?local-profile='+rendererVersion+'"');
@@ -33,9 +33,11 @@ if(process.argv[4]){
 let feeds={};
 if(process.argv[5]){
   const raw=await readFile(process.argv[5],'utf8');if(Buffer.byteLength(raw)>2000000)throw new Error('Capture bundle is too large');
-  const connected=connectCompleteProfileCapture(structuredClone(data),JSON.parse(raw));data=connected.players;feeds=connected.feeds;
+  const input=JSON.parse(raw.replace(/^\uFEFF/,''));
+  const connected=input.kind==='local_profile_import'?validateProfileImport(input):connectCompleteProfileCapture(data,input);data=connected.players;feeds=connected.feeds;
+  if(feeds.guilds)await writeFile('public/preview/real-player-guild-data.json',JSON.stringify(feeds.guilds,null,2)+'\n');
   const guildFile='public/preview/real-player-guild-data.json';
-  if(process.argv[4]){
+  if(process.argv[4]||feeds.guilds){
     const directory=JSON.parse(await readFile(guildFile,'utf8')),byId=new Map(directory.items.map(row=>[row.id,row]));
     for(const player of data.items)for(const guild of player.guildMemberships??[]){
       byId.set(guild.id,{...(byId.get(guild.id)??{}),...guild});
