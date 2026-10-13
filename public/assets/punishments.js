@@ -1,5 +1,5 @@
-import { loadOwnedPunishmentAppeals, ownedPunishmentAppealLink } from "./punishment-appeal-links.js?v=1";
-import { exactPunishmentCard } from './exact-punishments.js?v=3';
+import { loadOwnedPunishmentAppeals, ownedPunishmentAppealLink } from "./punishment-appeal-links.js?v=2";
+import { exactPunishmentCard } from './exact-punishments.js?v=4';
 import { isWarning, punishmentReason, punishmentStatus, punishmentDuration } from './punishment-presentation.js?v=1';
 const resultsRoot = document.querySelector("#punishment-results");
 const summary = document.querySelector("#punishment-summary");
