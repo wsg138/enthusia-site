@@ -1,4 +1,5 @@
-import { exactPunishmentCard } from './exact-punishments.js?v=2';
+import { loadOwnedPunishmentAppeals, ownedPunishmentAppealLink } from "./punishment-appeal-links.js?v=1";
+import { exactPunishmentCard } from './exact-punishments.js?v=3';
 import { isWarning, punishmentReason, punishmentStatus, punishmentDuration } from './punishment-presentation.js?v=1';
 const resultsRoot = document.querySelector("#punishment-results");
 const summary = document.querySelector("#punishment-summary");
@@ -14,6 +15,8 @@ const selectedRecord = value => /^[0-9A-HJKMNP-TV-Z]{16}$/i.test(value);
 query.value = selectedRecord(activeSearch) ? "" : activeSearch;
 clearSearch.hidden = !activeSearch;
 let nextCursor = null;
+let ownedPunishments = [];
+let displayedItems = [];
 
 function date(value) {
   const parsed = Date.parse(value || "");
@@ -21,7 +24,8 @@ function date(value) {
 }
 
 function punishmentCard(item) {
-  if(document.body.hasAttribute("data-exact-punishments"))return exactPunishmentCard(item,date);
+  const appealHref = ownedPunishmentAppealLink(item, ownedPunishments);
+  if(document.body.hasAttribute("data-exact-punishments"))return exactPunishmentCard(item,date,appealHref);
   const article = document.createElement("article");
   article.className = "punishment-card card punishment-record-card";
   const top = document.createElement("div");
@@ -54,10 +58,10 @@ function punishmentCard(item) {
     meta.append(group);
   }
   article.append(top, reason, meta);
-  if (item.appealAvailable) {
+  if (appealHref) {
     const link = document.createElement("a");
     link.className = "text-button punishment-appeal-link";
-    link.href = "/appeal.html#new";
+    link.href = appealHref;
     link.textContent = "Appeal this punishment";
     article.append(link);
   }
@@ -72,6 +76,7 @@ function setLoading(loading) {
 async function load({ append = false } = {}) {
   setLoading(true);
   if (!append) {
+    displayedItems = [];
     resultsRoot.replaceChildren();
     summary.textContent = activeSearch ? (selectedRecord(activeSearch) ? "Loading selected public records…" : `Searching for “${activeSearch}”…`) : "Loading public records…";
   }
@@ -87,6 +92,7 @@ async function load({ append = false } = {}) {
     if (!response.ok) throw new Error(String(response.status));
     const items = Array.isArray(payload) ? payload : Array.isArray(payload.items) ? payload.items : [];
     if (!append) resultsRoot.replaceChildren();
+    displayedItems = append ? [...displayedItems, ...items] : items;
     resultsRoot.append(...items.map(punishmentCard));
     nextCursor = activeSearch ? null : payload.nextCursor || null;
     loadMore.hidden = !nextCursor;
@@ -129,4 +135,8 @@ clearSearch.addEventListener("click", () => {
 });
 loadMore.addEventListener("click", () => load({ append: true }));
 
+void loadOwnedPunishmentAppeals().then(owned => {
+  ownedPunishments = owned;
+  resultsRoot.replaceChildren(...displayedItems.map(punishmentCard));
+});
 load();

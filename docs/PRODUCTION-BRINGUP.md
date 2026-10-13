@@ -214,3 +214,12 @@ The warning filter uses the native `WARNING` contract. The website also accepts
 the previous `WARN` filter spelling and normalizes it before signing the native
 request. These presentation fixes do not require the pending proxy restart;
 automatic linked-account appeals remain gated until their approved activation.
+
+Record-specific appeal links are hidden until a private ownership and eligibility
+lookup succeeds. The prepared automatic flow uses current linked-punishment
+records; the existing flow requires native eligibility plus a binding belonging
+to a currently linked account. Public names and the shared `appealAvailable`
+flag alone do not display an appeal link. Anonymous sessions, unavailable
+ownership, other players' records and cooldowns keep the link hidden. Verified
+links preselect the owned Minecraft account and punishment. Submission ownership
+continues to be enforced by the existing server-side workflow.
