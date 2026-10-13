@@ -24,4 +24,3 @@ export function drawHistoryChart(it,{state,model,s,gold,pct}) {
     svg.appendChild(cur); svg.appendChild(dot);
     return { svg: svg, end:chartEnd, move: function (i) { cur.setAttribute("x1", x(i)); cur.setAttribute("x2", x(i)); dot.setAttribute("x", x(i) - 6); dot.setAttribute("y", y(it.days[i].avg) - 6); } };
   }
-

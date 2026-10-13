@@ -34,7 +34,7 @@ uses existing behavioral coverage and must not claim fabricated red/green proof.
 - [x] Repair history presentation and applicable market review findings.
 - [x] Refactor additional actionable findings and refresh per-finding evidence.
 - [ ] Complete the remaining maintainability backlog and obtain hosted analysis.
-- [ ] Run canonical local checks and provide a labeled interactive contract preview.
+- [x] Run canonical local checks and provide a labeled interactive contract preview.
 
 Backups and real live sales activation remain separate gates. Fixture data must
 not replace captured real player data or appear as live transactions.
@@ -64,9 +64,11 @@ also render captured real profiles. Guild, market and weekly win data remain
 limited by their captured source; full guild/quest/achievement imports still
 require the documented consistent backups.
 
-Local checks: 561 website tests, lint, site validation, 15-building/71-stall/
-94-shop map validation and six offline exporter tests pass. Build and compilation
-results for the final integrated PR head are recorded below when complete.
+Local checks after integrating canonical main 309a9a0: 561 website tests, lint,
+site validation, 15-building/71-stall/94-shop map validation, six offline exporter
+tests, the static build and Pages Functions compilation pass. The competition
+bridge passes clean Maven verify on both the default and Paper 26.2 API profiles.
+CI now also runs the offline exporter tests; hosted results remain pending.
 The interactive market check is synthetic and read-only; captured profile views
 remain separately labeled. Localhost preview links are computer-only, not hosted
 mobile-accessible links. No source change here activates a feed or sends Discord.
