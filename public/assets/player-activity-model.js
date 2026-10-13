@@ -21,14 +21,18 @@ export function profileBounties(player,snapshot,now=Date.now()){
 }
 export function profileDuelWins(player,snapshot,now=Date.now()){
   const own=player.weeklyDuelWins;
-  if(own)return {...own,complete:true,stale:now-Date.parse(own.capturedAt)>900000};
+  if(own&&!snapshot?.weekStartsAt)return {...own,complete:true,stale:now-Date.parse(own.capturedAt)>900000};
   if(!uuid(player.id))return null;
   if(!snapshot||!Array.isArray(snapshot.items))return null;
   const row=snapshot.items.find(row=>row.type==='leader'&&uuid(row.id.replace(/^duels-/,''))===uuid(player.id));
-  if(!row)return {listed:false};
-  const generated=Date.parse(snapshot.generatedAt??snapshot.updatedAt);
+  if(!row&&!snapshot.weekStartsAt)return {listed:false};
+  const generated=Date.parse(snapshot.duelUpdatedAt??snapshot.generatedAt??snapshot.updatedAt);
   if(!Number.isFinite(generated))return null;
   const date=new Date(generated);date.setUTCHours(0,0,0,0);date.setUTCDate(date.getUTCDate()-((date.getUTCDay()+6)%7));
-  return {listed:true,wins:row.wins,weekStartsAt:snapshot.weekStartsAt??date.toISOString(),complete:false,
-    stale:snapshot.stale===true||now-generated>900000};
+  const week=new Date(now);week.setUTCHours(0,0,0,0);week.setUTCDate(week.getUTCDate()-((week.getUTCDay()+6)%7));
+  const weekStartsAt=snapshot.weekStartsAt??date.toISOString(),stale=snapshot.stale===true||now-generated>900000;
+  if(Date.parse(weekStartsAt)!==week.getTime())return null;
+  const complete=snapshot.duelResultsComplete===true&&!stale;
+  if(!row&&!complete)return {listed:false,stale,weekStartsAt};
+  return {listed:true,wins:row?.wins??0,weekStartsAt,complete,stale};
 }

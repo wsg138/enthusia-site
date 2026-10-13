@@ -1,12 +1,31 @@
 import {el,link,api} from './community-dom.js';
+import {refreshPublicFeed} from './live-feed-refresh.js';
 import {ownedPlayerStalls} from './player-market-model.js';
 import {profileGuildQuests,profileBounties,profileDuelWins} from './player-activity-model.js';
-let marketSnapshot;
+let marketSnapshot,activeDuelRefresh;
 const profileFeeds=new Map();
 function feed(kind){if(!profileFeeds.has(kind))profileFeeds.set(kind,api(kind,{signal:AbortSignal.timeout(5000)}).catch(()=>{profileFeeds.delete(kind);return null;}));return profileFeeds.get(kind);}
+function renderDuelActivity(host,item,snapshot){
+  const result=profileDuelWins(item,snapshot);
+  host.replaceChildren(el('p',{role:'status',text:!result?'Weekly duel results are unavailable.':result.listed===false?'Not listed in the published weekly leaders. Full player totals are unavailable.':result.wins+' '+(result.wins===1?'match win':'match wins')}));
+  if(result?.weekStartsAt)host.append(el('small',{text:'Week of '+new Date(result.weekStartsAt).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'})+' · UTC'}));
+  if(result?.capturedAt)host.append(el('small',{text:'Captured '+new Date(result.capturedAt).toLocaleString('en-US')}));
+  if(result?.stale)host.append(el('small',{text:'Duel results may be stale.'}));
+}
+function bindDuelActivity(host,item,node){
+  const view=el('div',{},[el('p',{text:'Loading…',role:'status'})]);host.append(view);
+  queueMicrotask(()=>{
+    if(!node.isConnected)return;
+    activeDuelRefresh?.stop();let last;
+    activeDuelRefresh=refreshPublicFeed(signal=>api('warzone',{signal}),data=>{
+      if(node.isConnected){last=data;renderDuelActivity(view,item,data);}
+    },()=>{if(node.isConnected)renderDuelActivity(view,item,last?{...last,stale:true}:null);});
+  });
+}
 async function appendActivity(host,item,node,kind){
+  if(kind==='warzone'){bindDuelActivity(host,item,node);return;}
   const message=el('p',{text:'Loadingâ€¦',role:'status'});host.append(message);
-  const snapshot=await (kind==='warzone'&&item.weeklyDuelWins?null:feed(kind));if(!node.isConnected)return;
+  const snapshot=await feed(kind);if(!node.isConnected)return;
   if(kind==='guildquests'){
     const result=profileGuildQuests(item,snapshot);
     message.textContent=!result?'Guild quest progress is unavailable.':result.inactive?'No active quest week in this export.':result.quests.length?'Progress for your guilds':'No progress records for your guilds in this export.';
@@ -18,12 +37,6 @@ async function appendActivity(host,item,node,kind){
     const rows=profileBounties(item,snapshot);
     message.textContent=rows===null?'Bounty data is unavailable.':rows.length?rows.length+' open '+(rows.length===1?'bounty':'bounties')+' on this player':'No open bounty listed in this export.';
     for(const row of rows??[])host.append(el('div',{class:'player-activity-row'},[el('b',{text:row.gold===null||row.gold===undefined?'Payout details unavailable':row.gold.toLocaleString('en-US')+' raw gold'}),row.expiresAt?el('p',{text:'Expires '+new Date(row.expiresAt).toLocaleDateString('en-US')}):null]));
-  }else{
-    const result=profileDuelWins(item,snapshot);
-    message.textContent=!result?'Weekly duel results are unavailable.':result.listed===false?'Not listed in the published weekly leaders. Full player totals are unavailable.':result.wins+' '+(result.wins===1?'match win':'match wins');
-    if(result?.weekStartsAt)host.append(el('small',{text:'Week of '+new Date(result.weekStartsAt).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'})+' Â· UTC'}));
-    if(result?.capturedAt)host.append(el('small',{text:'Captured '+new Date(result.capturedAt).toLocaleString('en-US')}));
-    if(result?.stale)host.append(el('small',{text:'Captured duel results may be stale.'}));
   }
   const stamp=Date.parse(snapshot?.generatedAt??snapshot?.updatedAt);
   if(snapshot&&(snapshot.stale||!Number.isFinite(stamp)||Date.now()-stamp>900000))host.append(el('small',{text:'This feed may be stale.'}));
@@ -85,6 +98,7 @@ function playerHero(item){
       link('market.html#owner='+encodeURIComponent(item.name),'Market stalls','btn btn-dark')])]);
 }
 export function playerProfile(node,item) {
+  activeDuelRefresh?.stop();
   node.replaceChildren(playerHero(item));
   if(item.previewExample)node.append(el('p',{text:'Simulated profile layout. Guilds, quests, achievements, bounties and duel wins here are examples.'}));
   const values=[['Balance',item.balance],['Active playtime',item.playtime===null||item.playtime===undefined?null:

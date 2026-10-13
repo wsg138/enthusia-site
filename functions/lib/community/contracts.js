@@ -107,6 +107,18 @@ function snapshotRecord(kind,row,ids){
   const base={id,name:text(row.name,80,true),description:text(row.description,2000)};
   return recordProjections.get(kind)(base,row);
 }
+function warzoneMetadata(input,generatedAt){
+  if(input.weekStartsAt===undefined)return {};
+  const weekStartsAt=timestamp(input.weekStartsAt),duelUpdatedAt=timestamp(input.duelUpdatedAt);
+  const generated=Date.parse(generatedAt);
+  if(!validDuelWeek(weekStartsAt,generated))throw new Error('invalid_duel_week');
+  if(typeof input.duelResultsComplete!=='boolean'||!duelUpdatedAt||Date.parse(duelUpdatedAt)<Date.parse(weekStartsAt)||Date.parse(duelUpdatedAt)>generated)throw new Error('invalid_duel_results');
+  return {weekStartsAt,duelUpdatedAt,duelResultsComplete:input.duelResultsComplete};
+}
+function validDuelWeek(start,generated){
+  const week=Date.parse(start);
+  return Boolean(start)&&Number.isFinite(generated)&&new Date(week).getUTCDay()===1&&week%86400000===0&&generated>=week&&generated<week+7*86400000;
+}
 export function projectSnapshot(kind,input) {
   if(kind==='guildquests')return projectGuildQuests(input);
   if(!SNAPSHOT_KINDS.has(kind)||!Array.isArray(input?.items)||input.items.length>1000)throw new Error('invalid_snapshot');
@@ -116,7 +128,7 @@ export function projectSnapshot(kind,input) {
   if(generatedAt&&Date.parse(generatedAt)>Date.now()+60000)throw new Error('invalid_date');
   const sourceUpdatedAt=kind==='players'?timestamp(input.sourceUpdatedAt):null;
   if(sourceUpdatedAt&&generatedAt&&Date.parse(sourceUpdatedAt)>Date.parse(generatedAt))throw new Error('invalid_source_date');
-  return {schemaVersion:1,items,...(generatedAt?{generatedAt}:{}),...(sourceUpdatedAt?{sourceUpdatedAt}:{}),...(input.limited===true?{limited:true}:{}),
+  return {schemaVersion:1,items,...(generatedAt?{generatedAt}:{}),...(sourceUpdatedAt?{sourceUpdatedAt}:{}),...(kind==='warzone'?warzoneMetadata(input,generatedAt):{}),...(input.limited===true?{limited:true}:{}),
     ...(['public_leaderboards','configured_upstream','server_export'].includes(input.source)?{source:input.source}:{})};
 }
 export function pollOpen(record,now=Date.now()) {return record?.status==='published'&&Number.isFinite(Date.parse(record.closesAt))&&Date.parse(record.closesAt)>now;}

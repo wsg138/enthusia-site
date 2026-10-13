@@ -68,4 +68,18 @@ Implementation and verification details: [real feeds](REAL-FEEDS.md) and
 - [ ] Collect consistent backups and import the remaining real guild, quest and
   achievement data. The website PR does not include or activate server plugins.
 
+## Automatic Warzone updates, 13 October
+
+- [x] Deliver optional signed MaceGuard rotation exporter in companion PR 48.
+- [x] Deliver participant-aware public live Duels results in companion PR 24.
+- [x] Preserve explicit UTC week, freshness and bounded completeness in PR 53;
+  refresh visible home/profile views each minute without overlapping requests.
+- [x] Verify native signed end-to-end contract, unavailable/zero/stale states,
+  default paused rotation and loaded player heads at mobile width.
+- [ ] Maintainer canonical merges/runtime reconciliation and network pin updates.
+- [ ] Operator matching secret environment, verified builds and live activation.
+- [ ] Two consecutive signed exports and a real counted match acceptance check.
+
+Exact evidence/configuration: [live update guide](LIVE-WARZONE-UPDATES.md).
+
 Host documentation: [Bloom backup management](https://docs.bloom.host/backups).

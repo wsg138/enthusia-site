@@ -34,3 +34,14 @@ test('personal totals reject negative wins and non-Monday boundaries',()=>{
     assert.throws(()=>projectSnapshot('players',{items:[{...player,weeklyDuelWins}]}),/invalid/);
   }
 });
+
+ test('fresh complete live duel results override captures, confirm zero, and reject prior weeks',()=>{
+  const current=new Date(now);current.setUTCHours(0,0,0,0);current.setUTCDate(current.getUTCDate()-((current.getUTCDay()+6)%7));
+  const old={...player,weeklyDuelWins:{wins:99,weekStartsAt:current.toISOString(),capturedAt:stamp}};
+  const live={generatedAt:new Date(now).toISOString(),duelUpdatedAt:new Date(now).toISOString(),weekStartsAt:current.toISOString(),duelResultsComplete:true,items:[]};
+  assert.equal(profileDuelWins(old,live,now).wins,0);
+  assert.equal(profileDuelWins(old,{...live,items:[{id:'duels-'+id,type:'leader',wins:4}]},now).wins,4);
+  assert.equal(profileDuelWins(old,{...live,duelResultsComplete:false},now).listed,false);
+  assert.equal(profileDuelWins(old,{...live,stale:true},now).listed,false);
+  assert.equal(profileDuelWins(old,{...live,weekStartsAt:new Date(current.getTime()-7*86400000).toISOString()},now),null);
+ });

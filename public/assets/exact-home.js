@@ -1,5 +1,6 @@
 import { api } from './community-dom.js';
 import { renderWarzone } from './warzone-view.js';
+import { refreshPublicFeed } from './live-feed-refresh.js';
 const preview=document.documentElement.hasAttribute('data-preview-root');
 const set=(name,value)=>{for(const node of document.querySelectorAll('[data-b-text="'+name+'"]'))node.textContent=value;};
 const now=new Date(),start=new Date(now);start.setUTCHours(0,0,0,0);start.setUTCDate(start.getUTCDate()-((start.getUTCDay()+6)%7));const end=new Date(start);end.setUTCDate(end.getUTCDate()+6);
@@ -7,7 +8,8 @@ const date=value=>value.toLocaleDateString('en-US',{month:'short',day:'numeric'}
 set('wzWeek','DUEL WEEK · '+start.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}).toUpperCase()+' TO '+end.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}).toUpperCase()+' · UTC');
 const warzone=document.querySelector('#warzone-title')?.closest('section');
 renderWarzone(warzone,null);
-api('warzone').then(data=>renderWarzone(warzone,data)).catch(()=>{});
+let lastWarzone;
+if(warzone)refreshPublicFeed(signal=>api('warzone',{signal}),data=>{lastWarzone=data;renderWarzone(warzone,data);},()=>renderWarzone(warzone,lastWarzone?{...lastWarzone,stale:true}:null));
 set('wzNext','Next event to be announced');set('wzNextIn','Soon');
 if(preview){set('wzNext','Build Competition voting opens');set('wzNextIn','In '+Math.ceil((Date.UTC(2026,9,14,4)-Date.now())/86400000)+' days');}
 else {
