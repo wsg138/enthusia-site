@@ -202,7 +202,7 @@ without a compatibility review; use the feature flag to contain a failed cutover
 
 Account punishment summaries link to their public case records; non-public
 cases remain excluded by the native public projection. Public cards have equal
-heights, shaded reason/date/duration fields, no displayed case IDs and no
+heights, a compact shaded issued-date value, plain reasons and durations, no displayed case IDs and no
 remaining-time countdown. Finite durations describe the original punishment.
 Warnings are displayed as retained records without duration fields, including
 older records that carried an expiration timestamp. This changes presentation,
