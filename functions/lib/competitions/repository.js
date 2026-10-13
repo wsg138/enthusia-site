@@ -1,3 +1,4 @@
+import { insertDraftCompetitionSql, insertInitialCompetitionConfigSql, auditDraftCreationSql } from "./repository-queries.js";
 function requireDatabase(db) {
   if (!db || typeof db.prepare !== "function") {
     throw new TypeError("Competition database binding is unavailable");
@@ -51,17 +52,8 @@ export async function competitionSlugExists(db, slug) {
   return Boolean(row?.id);
 }
 
-export async function createDraftCompetition(db, draft) {
-  const database = requireWritableDatabase(db);
-  const configJson = JSON.stringify(draft.config);
-
-  await database.batch([
-    database.prepare(`
-      INSERT INTO competitions (
-        id, slug, title, category, lifecycle_state, current_config_version,
-        created_by_subject, created_by_uuid, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, 'DRAFT', 1, ?, ?, ?, ?)
-    `).bind(
+function competitionDraftInsertStatement(database, draft) {
+  return database.prepare(insertDraftCompetitionSql).bind(
       draft.id,
       draft.slug,
       draft.title,
@@ -70,26 +62,22 @@ export async function createDraftCompetition(db, draft) {
       draft.createdByUuid,
       draft.createdAt,
       draft.createdAt
-    ),
-    database.prepare(`
-      INSERT INTO competition_config_versions (
-        competition_id, version, config_json, created_by_subject,
-        created_by_uuid, created_at, change_note
-      ) VALUES (?, 1, ?, ?, ?, ?, ?)
-    `).bind(
+    );
+}
+
+function competitionInitialConfigStatement(database, draft, configJson) {
+  return database.prepare(insertInitialCompetitionConfigSql).bind(
       draft.id,
       configJson,
       draft.createdBySubject,
       draft.createdByUuid,
       draft.createdAt,
       "Initial draft"
-    ),
-    database.prepare(`
-      INSERT INTO competition_audit_events (
-        id, competition_id, actor_subject, actor_uuid, action,
-        after_json, note, created_at
-      ) VALUES (?, ?, ?, ?, 'COMPETITION_CREATED', ?, ?, ?)
-    `).bind(
+    );
+}
+
+function competitionDraftAuditStatement(database, draft) {
+  return database.prepare(auditDraftCreationSql).bind(
       draft.auditEventId,
       draft.id,
       draft.createdBySubject,
@@ -104,7 +92,17 @@ export async function createDraftCompetition(db, draft) {
       }),
       "Initial draft created",
       draft.createdAt
-    )
+    );
+}
+
+export async function createDraftCompetition(db, draft) {
+  const database = requireWritableDatabase(db);
+  const configJson = JSON.stringify(draft.config);
+
+  await database.batch([
+    competitionDraftInsertStatement(database, draft),
+    competitionInitialConfigStatement(database, draft, configJson),
+    competitionDraftAuditStatement(database, draft)
   ]);
 
   return {

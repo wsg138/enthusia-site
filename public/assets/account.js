@@ -152,14 +152,16 @@ function accountRow(account) {
   return row;
 }
 
+const CLAIM_ERROR_RULES = [
+  [error=>error.code === "turnstile_required","Complete the verification and try again."],
+  [error=>error.code === "PUNISHMENT_CODE_INVALID" || error.status === 404,"That punishment code and username could not be verified."],
+  [error=>error.code === "PUNISHMENT_ALREADY_BOUND" || error.status === 409,"That punishment is already bound to another website account."],
+  [error=>error.code === "PUNISHMENT_INELIGIBLE" || error.status === 422,"That punishment is not currently eligible for an appeal."],
+  [error=>error.status === 429,"Too many attempts were made. Wait a few minutes and try again."],
+  [error=>error.status === 503,"The punishment service is unavailable right now."]
+];
 function punishmentClaimError(error) {
-  if (error.code === "turnstile_required") return "Complete the verification and try again.";
-  if (error.code === "PUNISHMENT_CODE_INVALID" || error.status === 404) return "That punishment code and username could not be verified.";
-  if (error.code === "PUNISHMENT_ALREADY_BOUND" || error.status === 409) return "That punishment is already bound to another website account.";
-  if (error.code === "PUNISHMENT_INELIGIBLE" || error.status === 422) return "That punishment is not currently eligible for an appeal.";
-  if (error.status === 429) return "Too many attempts were made. Wait a few minutes and try again.";
-  if (error.status === 503) return "The punishment service is unavailable right now.";
-  return "That punishment code could not be verified right now.";
+  return CLAIM_ERROR_RULES.find(([matches])=>matches(error))?.[1] ?? "That punishment code could not be verified right now.";
 }
 
 async function configureClaimTurnstile(container, button, status) {

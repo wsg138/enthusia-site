@@ -63,25 +63,7 @@ function markUnifiedNavigation(nav) {
   }
 }
 
-export function normalizeSiteNavigation() {
-  const nav = document.querySelector(".site-header .nav");
-  if (!nav) return;
-  if (nav.closest(".site-head")) {
-    markUnifiedNavigation(nav);
-    return;
-  }
-  const { dropdown, menu, trigger } = communityMenu(nav);
-  const appeal = internalLink(nav, "/appeal.html", "Appeals");
-  const punishments = internalLink(nav, "/punishments.html", "Punishments");
-  const market = internalLink(nav, "/market.html", "Market");
-  const competition = internalLink(nav, "/competitions", "Competitions");
-  const wiki = menu.querySelector("a[data-link-target='wiki']");
-
-  nav.insertBefore(appeal, dropdown);
-  menu.insertBefore(punishments, wiki ?? null);
-  menu.insertBefore(market, wiki ?? null);
-  menu.insertBefore(competition, wiki ?? null);
-
+function markLegacyNavigation(nav,menu,trigger){
   const currentPath = trimTrailingSlashes(window.location.pathname);
   const currentSection = currentPath === "/index.html" ? "/" : currentPath;
   let activeLink = null;
@@ -105,6 +87,28 @@ export function normalizeSiteNavigation() {
   trigger.classList.toggle("active", hasActiveCommunityLink);
   if (hasActiveCommunityLink) trigger.setAttribute("aria-current", "page");
   else trigger.removeAttribute("aria-current");
+}
+
+export function normalizeSiteNavigation() {
+  const nav = document.querySelector(".site-header .nav");
+  if (!nav) return;
+  if (nav.closest(".site-head")) {
+    markUnifiedNavigation(nav);
+    return;
+  }
+  const { dropdown, menu, trigger } = communityMenu(nav);
+  const appeal = internalLink(nav, "/appeal.html", "Appeals");
+  const punishments = internalLink(nav, "/punishments.html", "Punishments");
+  const market = internalLink(nav, "/market.html", "Market");
+  const competition = internalLink(nav, "/competitions", "Competitions");
+  const wiki = menu.querySelector("a[data-link-target='wiki']");
+
+  nav.insertBefore(appeal, dropdown);
+  menu.insertBefore(punishments, wiki ?? null);
+  menu.insertBefore(market, wiki ?? null);
+  menu.insertBefore(competition, wiki ?? null);
+
+  markLegacyNavigation(nav,menu,trigger);
 }
 
 normalizeSiteNavigation();

@@ -64,17 +64,7 @@ export async function onRequestGet(context) {
   }
 }
 
-export async function onRequestPost(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-  const authorized = await authorize(context);
-  if (authorized.response) return authorized.response;
-  try {
-    const limited = await uploadRateLimit(context, authorized.session);
-    if (limited) return limited;
-  } catch {
-    return json({ error: "rate_limit_unavailable" }, 503);
-  }
-
+async function uploadForm(context) {
   let form;
   try { form = await context.request.formData(); } catch { return json({ error: "invalid_attachment_form" }, 400); }
   const draftId = draftIdFrom(form.get("draftId"));
@@ -83,12 +73,15 @@ export async function onRequestPost(context) {
     return json({ error: "invalid_attachment_form" }, 400);
   }
 
-  const limits = appealAttachmentLimits();
+  return {draftId,file};
+}
+
+async function uploadCapacity(context,session,draftId,file,limits) {
   let usage;
   try {
     usage = await draftAttachmentUsage(
       context.env.COMPETITIONS_DB,
-      authorized.session.discord.id,
+      session.discord.id,
       draftId
     );
   } catch {
@@ -97,6 +90,10 @@ export async function onRequestPost(context) {
   if (usage.attachmentCount >= limits.maxAttachments) return json({ error: "attachment_limit_reached" }, 409);
   if (Number(file.size) + usage.totalBytes > limits.maxDraftBytes) return json({ error: "attachment_total_too_large" }, 413);
 
+  return null;
+}
+
+async function uploadInspection(file) {
   let data;
   try { data = new Uint8Array(await file.arrayBuffer()); }
   catch { return json({ error: "attachment_read_failed" }, 400); }
@@ -107,6 +104,10 @@ export async function onRequestPost(context) {
     return json({ error: inspection.error }, status);
   }
 
+  return {data,displayName,inspection};
+}
+
+async function persistUpload(context,session,draftId,{data,displayName,inspection},limits) {
   const id = crypto.randomUUID();
   let stored;
   try {
@@ -125,7 +126,7 @@ export async function onRequestPost(context) {
     const attachment = await insertAppealAttachment(context.env.COMPETITIONS_DB, {
       id,
       draftId,
-      ownerDiscordId: authorized.session.discord.id,
+      ownerDiscordId: session.discord.id,
       storageKey: stored.key,
       displayName,
       mimeType: stored.mimeType,
@@ -141,6 +142,31 @@ export async function onRequestPost(context) {
     await cleanupAppealAttachment(context, context.env.COMPETITIONS_MEDIA, stored.key);
     return json({ error: "attachment_record_failed" }, 503);
   }
+}
+
+export async function onRequestPost(context) {
+  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+  const authorized = await authorize(context);
+  if (authorized.response) return authorized.response;
+  try {
+    const limited = await uploadRateLimit(context, authorized.session);
+    if (limited) return limited;
+  } catch {
+    return json({ error: "rate_limit_unavailable" }, 503);
+  }
+
+  const form = await uploadForm(context);
+  if (form instanceof Response) return form;
+  const {draftId,file} = form;
+
+  const limits = appealAttachmentLimits();
+  const capacity = await uploadCapacity(context,authorized.session,draftId,file,limits);
+  if (capacity) return capacity;
+
+  const inspected = await uploadInspection(file);
+  if (inspected instanceof Response) return inspected;
+  return persistUpload(context,authorized.session,draftId,inspected,limits);
+
 }
 
 export function onRequest() { return methodNotAllowed(["GET", "POST"]); }

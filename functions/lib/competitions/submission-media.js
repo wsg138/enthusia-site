@@ -1,3 +1,4 @@
+import { removeOwnedImageTemplate1, removeOwnedImageTemplate2, removeOwnedImageTemplate3, removeOwnedImageTemplate4 } from "./submission-media-queries.js";
 import {
   OWNER_SUBMISSION_EDIT_GUARD_SQL,
   ownerSubmissionEditPolicy
@@ -237,38 +238,8 @@ export async function attachSubmissionImage(db, image) {
     : { status: "CONFLICT" };
 }
 
-export async function removeSubmissionImage(db, removal) {
-  const database = requireWritableDatabase(db);
-  const policy = ownerSubmissionEditPolicy({
-    expectedConfigVersion: removal.expectedConfigVersion,
-    operationAt: removal.removedAt,
-    reviewCloseAt: removal.reviewCloseAt
-  });
-  const nextRevision = removal.expectedRevision + 1;
-  const marker = AUDIT_EVENT_MARKER_SQL;
-  const results = await database.batch([
-    database.prepare(`
-      INSERT INTO competition_audit_events (
-        id, competition_id, submission_id, actor_subject, actor_uuid,
-        action, after_json, note, created_at
-      )
-      SELECT ?, submissions.competition_id, submissions.id, ?, ?,
-             'SUBMISSION_IMAGE_REMOVED', ?, ?, ?
-      FROM submissions
-      WHERE id = ?
-        AND competition_id = ?
-        AND owner_subject = ?
-        AND revision = ?
-        AND status IN ('DRAFT','NEEDS_CHANGES')
-        AND removed_at IS NULL
-        AND ${OWNER_SUBMISSION_EDIT_GUARD_SQL}
-        AND EXISTS (
-          SELECT 1 FROM submission_images image
-          WHERE image.submission_id = submissions.id
-            AND image.id = ?
-            AND image.removed_at IS NULL
-        )
-    `).bind(
+function removeImageAuditStatement(database, removal, policy, nextRevision){
+  return database.prepare(removeOwnedImageTemplate1(OWNER_SUBMISSION_EDIT_GUARD_SQL)).bind(
       removal.auditEventId,
       removal.ownerSubject,
       removal.actorUuid,
@@ -284,18 +255,11 @@ export async function removeSubmissionImage(db, removal) {
       policy.operationAt,
       policy.reviewCloseAt,
       removal.imageId
-    ),
-    database.prepare(`
-      UPDATE submissions
-      SET revision = ?, updated_at = ?
-      WHERE id = ?
-        AND competition_id = ?
-        AND owner_subject = ?
-        AND revision = ?
-        AND status IN ('DRAFT','NEEDS_CHANGES')
-        AND removed_at IS NULL
-        AND ${marker}
-    `).bind(
+    );
+}
+
+function removeImageRevisionStatement(database, removal, policy, nextRevision, marker){
+  return database.prepare(removeOwnedImageTemplate2(marker)).bind(
       nextRevision,
       policy.operationAt,
       removal.submissionId,
@@ -305,15 +269,11 @@ export async function removeSubmissionImage(db, removal) {
       removal.auditEventId,
       removal.competitionId,
       removal.submissionId
-    ),
-    database.prepare(`
-      UPDATE submission_images
-      SET removed_at = ?, removed_by_uuid = ?
-      WHERE submission_id = ?
-        AND id = ?
-        AND removed_at IS NULL
-        AND ${marker}
-    `).bind(
+    );
+}
+
+function removeImageRowStatement(database, removal, policy, marker){
+  return database.prepare(removeOwnedImageTemplate3(marker)).bind(
       policy.operationAt,
       removal.actorUuid,
       removal.submissionId,
@@ -321,26 +281,11 @@ export async function removeSubmissionImage(db, removal) {
       removal.auditEventId,
       removal.competitionId,
       removal.submissionId
-    ),
-    database.prepare(`
-      UPDATE submissions
-      SET cover_image_id = CASE
-        WHEN cover_image_id = ? THEN (
-          SELECT id
-          FROM submission_images
-          WHERE submission_id = ?
-            AND removed_at IS NULL
-          ORDER BY sort_order ASC, id ASC
-          LIMIT 1
-        )
-        ELSE cover_image_id
-      END
-      WHERE id = ?
-        AND competition_id = ?
-        AND owner_subject = ?
-        AND revision = ?
-        AND ${marker}
-    `).bind(
+    );
+}
+
+function removeImageCoverStatement(database, removal, nextRevision, marker){
+  return database.prepare(removeOwnedImageTemplate4(marker)).bind(
       removal.imageId,
       removal.submissionId,
       removal.submissionId,
@@ -350,7 +295,23 @@ export async function removeSubmissionImage(db, removal) {
       removal.auditEventId,
       removal.competitionId,
       removal.submissionId
-    )
+    );
+}
+
+export async function removeSubmissionImage(db, removal) {
+  const database = requireWritableDatabase(db);
+  const policy = ownerSubmissionEditPolicy({
+    expectedConfigVersion: removal.expectedConfigVersion,
+    operationAt: removal.removedAt,
+    reviewCloseAt: removal.reviewCloseAt
+  });
+  const nextRevision = removal.expectedRevision + 1;
+  const marker = AUDIT_EVENT_MARKER_SQL;
+  const results = await database.batch([
+    removeImageAuditStatement(database, removal, policy, nextRevision),
+    removeImageRevisionStatement(database, removal, policy, nextRevision, marker),
+    removeImageRowStatement(database, removal, policy, marker),
+    removeImageCoverStatement(database, removal, nextRevision, marker)
   ]);
 
   return allStatementsChanged(results, [0, 1, 2])

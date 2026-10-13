@@ -1,4 +1,11 @@
 .player-profile-sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.player-profile-hero{padding:40px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:32px}
+.player-profile-skin{width:96px;height:192px;object-fit:contain;flex:none}
+.player-profile-title{flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.player-profile-title>p{color:var(--kick);letter-spacing:2px}
+.player-profile-title h2{color:var(--head);text-shadow:4px 4px 0 var(--head-sh);overflow-wrap:anywhere}
+.player-profile-stats{padding:28px;display:flex;flex-direction:column;gap:16px}
+.player-profile-stats h3{font-size:24px;line-height:32px;color:var(--head)}
 .player-profile-section{border:4px solid #4a0b08;box-shadow:inset 4px 4px #fffdf1,inset -4px -4px #efc976;background:#fff7e5;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
 .player-profile-section h4{font-size:24px;line-height:32px;color:#b3201a;margin:0}
 .player-profile-section p{margin:0;overflow-wrap:anywhere}
@@ -12,3 +19,4 @@
 .player-picker-card img{display:block;flex:0 0 32px;width:32px;height:32px}
 .player-picker-card span{min-width:0;overflow-wrap:anywhere;line-height:1.4}
 @media(max-width:720px){.player-profile-sections{grid-template-columns:minmax(0,1fr)}.player-profile-section .btn{align-self:flex-start}}
+@media(max-width:520px){.player-profile-hero{padding:24px;gap:24px}.player-profile-title h2{font-size:28px;line-height:36px}.player-profile-stats{padding:20px}}

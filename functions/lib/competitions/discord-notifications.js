@@ -17,7 +17,7 @@ function parsePayload(row) {
   return { ...row, payload, payloadJson: undefined };
 }
 
-function staffWebhookConfiguration(env) {
+function validatedStaffWebhook(env) {
   const raw = String(env?.COMPETITIONS_DISCORD_STAFF_WEBHOOK ?? "").trim();
   if (!raw) return null;
   let webhook;
@@ -36,6 +36,12 @@ function staffWebhookConfiguration(env) {
   webhook.hash = "";
   webhook.searchParams.set("wait", "true");
 
+  return webhook;
+}
+
+function staffWebhookConfiguration(env) {
+  const webhook = validatedStaffWebhook(env);
+  if (!webhook) return null;
   const roleId = String(env?.COMPETITIONS_DISCORD_STAFF_ROLE_ID ?? "").trim();
   if (roleId && !/^\d{16,22}$/.test(roleId)) throw new Error("Competition Discord staff role ID is invalid");
   return { webhook: webhook.toString(), roleId: roleId || null };
@@ -93,6 +99,16 @@ function contributorUrl(env, notification) {
   return `${origin}/competitions/detail.html?competition=${encodeURIComponent(slug)}`;
 }
 
+function webhookEmbeds(payload,url,createdAt) {
+  return [{
+      title: String(payload.submissionTitle ?? "Competition submission").slice(0, 256),
+      ...(url ? { url } : {}),
+      description: `**Competition:** ${String(payload.competitionTitle ?? "Unknown").slice(0, 200)}\n**Player:** ${String(payload.ownerName ?? "Unknown").slice(0, 80)}`,
+      footer: { text: "Enthusia Competition review" },
+      timestamp: createdAt
+    }];
+}
+
 function webhookPayload(env, notification, config) {
   const payload = notification.payload ?? {};
   if (notification.eventType !== "SUBMISSION_REVIEW") {
@@ -105,13 +121,7 @@ function webhookPayload(env, notification, config) {
     allowed_mentions: config.roleId
       ? { parse: [], roles: [config.roleId] }
       : { parse: [] },
-    embeds: [{
-      title: String(payload.submissionTitle ?? "Competition submission").slice(0, 256),
-      ...(url ? { url } : {}),
-      description: `**Competition:** ${String(payload.competitionTitle ?? "Unknown").slice(0, 200)}\n**Player:** ${String(payload.ownerName ?? "Unknown").slice(0, 80)}`,
-      footer: { text: "Enthusia Competition review" },
-      timestamp: notification.createdAt
-    }]
+    embeds: webhookEmbeds(payload,url,notification.createdAt)
   };
 }
 

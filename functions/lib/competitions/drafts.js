@@ -1,3 +1,4 @@
+import { insertDraftConfigVersionSql, updateDraftCompetitionSql, auditDraftCompetitionSql } from "./drafts-queries.js";
 function requireDatabase(db) {
   if (!db || typeof db.prepare !== "function") {
     throw new TypeError("Competition database binding is unavailable");
@@ -54,6 +55,49 @@ export async function getAdminCompetition(db, competitionId) {
   return { ...competition, config: parseConfig(configJson) };
 }
 
+function draftConfigVersionStatement(database, change, nextVersion, configJson) {
+  return database.prepare(insertDraftConfigVersionSql).bind(
+      nextVersion,
+      configJson,
+      change.actorSubject,
+      change.actorUuid,
+      change.createdAt,
+      change.changeNote,
+      change.operationId,
+      change.competitionId,
+      change.expectedVersion
+    );
+}
+
+function draftCompetitionUpdateStatement(database, change, nextVersion) {
+  return database.prepare(updateDraftCompetitionSql).bind(
+      change.title,
+      change.category,
+      change.visibility,
+      change.createdAt,
+      change.competitionId,
+      nextVersion,
+      change.operationId,
+      change.competitionId,
+      nextVersion
+    );
+}
+
+function draftCompetitionAuditStatement(database, change, nextVersion, beforeJson, afterJson) {
+  return database.prepare(auditDraftCompetitionSql).bind(
+      change.auditEventId,
+      change.actorSubject,
+      change.actorUuid,
+      beforeJson,
+      afterJson,
+      change.changeNote,
+      change.createdAt,
+      change.competitionId,
+      change.operationId,
+      nextVersion
+    );
+}
+
 export async function saveDraftCompetition(db, change) {
   const database = requireWritableDatabase(db);
   const nextVersion = change.expectedVersion + 1;
@@ -72,81 +116,9 @@ export async function saveDraftCompetition(db, change) {
   });
 
   const results = await database.batch([
-    database.prepare(`
-      INSERT INTO competition_config_versions (
-        competition_id, version, config_json, created_by_subject,
-        created_by_uuid, created_at, change_note, operation_id
-      )
-      SELECT id, ?, ?, ?, ?, ?, ?, ?
-      FROM competitions
-      WHERE id = ?
-        AND lifecycle_state = 'DRAFT'
-        AND current_config_version = ?
-    `).bind(
-      nextVersion,
-      configJson,
-      change.actorSubject,
-      change.actorUuid,
-      change.createdAt,
-      change.changeNote,
-      change.operationId,
-      change.competitionId,
-      change.expectedVersion
-    ),
-    database.prepare(`
-      UPDATE competitions
-      SET title = ?,
-          category = ?,
-          visibility = ?,
-          updated_at = ?
-      WHERE id = ?
-        AND lifecycle_state = 'DRAFT'
-        AND current_config_version = ?
-        AND EXISTS (
-          SELECT 1
-          FROM competition_config_versions
-          WHERE operation_id = ?
-            AND competition_id = ?
-            AND version = ?
-        )
-    `).bind(
-      change.title,
-      change.category,
-      change.visibility,
-      change.createdAt,
-      change.competitionId,
-      nextVersion,
-      change.operationId,
-      change.competitionId,
-      nextVersion
-    ),
-    database.prepare(`
-      INSERT INTO competition_audit_events (
-        id, competition_id, actor_subject, actor_uuid, action,
-        before_json, after_json, note, created_at
-      )
-      SELECT ?, c.id, ?, ?, 'COMPETITION_DRAFT_UPDATED', ?, ?, ?, ?
-      FROM competitions c
-      WHERE c.id = ?
-        AND EXISTS (
-          SELECT 1
-          FROM competition_config_versions
-          WHERE operation_id = ?
-            AND competition_id = c.id
-            AND version = ?
-        )
-    `).bind(
-      change.auditEventId,
-      change.actorSubject,
-      change.actorUuid,
-      beforeJson,
-      afterJson,
-      change.changeNote,
-      change.createdAt,
-      change.competitionId,
-      change.operationId,
-      nextVersion
-    )
+    draftConfigVersionStatement(database, change, nextVersion, configJson),
+    draftCompetitionUpdateStatement(database, change, nextVersion),
+    draftCompetitionAuditStatement(database, change, nextVersion, beforeJson, afterJson)
   ]);
 
   const inserted = Number(results?.[0]?.meta?.changes ?? 0);

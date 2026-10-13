@@ -33,6 +33,19 @@ async function staffIdentityUuids(db, staffUuid) {
   return [...values];
 }
 
+async function guildStaffConflict(env,submission,identityUuids){
+  if (submission.entryType === "GUILD" && submission.guildId) {
+    const members = await competitionGuildMembers(env, submission.guildId);
+    if (!members) throw new Error("Competition guild membership is unavailable");
+    const memberSet = new Set(members.map((uuid) => String(uuid).toLowerCase()));
+    if (identityUuids.some((uuid) => memberSet.has(uuid))) {
+      return { conflict: true, reason: "GUILD_MEMBER_OR_LINKED_GUILD_MEMBER" };
+    }
+  }
+
+  return null;
+}
+
 export async function staffSubmissionConflict(db, env, submission, staffUuid) {
   const database = requireDatabase(db);
   const normalizedStaffUuid = String(staffUuid ?? "").trim().toLowerCase();
@@ -56,14 +69,8 @@ export async function staffSubmissionConflict(db, env, submission, staffUuid) {
     return { conflict: true, reason: "PARTICIPANT_OR_LINKED_PARTICIPANT", role: participant.role };
   }
 
-  if (submission.entryType === "GUILD" && submission.guildId) {
-    const members = await competitionGuildMembers(env, submission.guildId);
-    if (!members) throw new Error("Competition guild membership is unavailable");
-    const memberSet = new Set(members.map((uuid) => String(uuid).toLowerCase()));
-    if (identityUuids.some((uuid) => memberSet.has(uuid))) {
-      return { conflict: true, reason: "GUILD_MEMBER_OR_LINKED_GUILD_MEMBER" };
-    }
-  }
+  const guildConflict = await guildStaffConflict(env,submission,identityUuids);
+  if (guildConflict) return guildConflict;
 
   return { conflict: false, reason: null };
 }

@@ -67,7 +67,21 @@ export async function readCommunitySales(env,fetchImpl=fetch,now=Date.now(),curs
     if(!Array.isArray(input?.items)||input.items.length>250)return null;
     if(input.nextCursor!==null&&(typeof input.nextCursor!=='string'||!/^[A-Za-z0-9_.:-]{1,80}$/.test(input.nextCursor)))return null;
     if(input.nextCursor!==null&&input.nextCursor===cursor)return null;
+    const checkpointCursor=salesCheckpoint(input,cursor);
     if(input.items.some(row=>!['SELL','BUY'].includes(row.direction)||row.currency!=='RAW_GOLD'))return null;
-    return {kind:'sales',items:input.items.filter(row=>row.direction==='SELL').map(row=>validateSale(row,now)),nextCursor:input.nextCursor};
+    return {kind:'sales',items:input.items.filter(row=>row.direction==='SELL').map(row=>validateSale(row,now)),nextCursor:input.nextCursor,checkpointCursor};
   } catch { return null; }
+}
+function salesCheckpoint(input,cursor) {
+  if(input.checkpointCursor===undefined)return input.nextCursor;
+  const checkpoint=input.checkpointCursor;
+  if(typeof checkpoint!=='string'||!/^\d{1,19}$/.test(checkpoint))throw new Error('invalid_sales_checkpoint');
+  if(BigInt(checkpoint)>9223372036854775807n)throw new Error('invalid_sales_checkpoint');
+  validateCheckpointOrder(checkpoint,cursor);
+  if(input.nextCursor!==null&&input.nextCursor!==checkpoint)throw new Error('inconsistent_sales_checkpoint');
+  return checkpoint;
+}
+function validateCheckpointOrder(checkpoint,cursor){
+  if(cursor===null)return;
+  if(!/^\d{1,19}$/.test(cursor)||BigInt(checkpoint)<BigInt(cursor))throw new Error('backwards_sales_checkpoint');
 }

@@ -1,25 +1,4 @@
-const API_ROOT = "/api/competitions";
-
-function slugFromLocation() {
-  return new URLSearchParams(window.location.search).get("competition")?.trim().toLowerCase() ?? "";
-}
-
-function imageList(submission) {
-  const images = Array.isArray(submission?.images) ? [...submission.images] : [];
-  images.sort((left, right) => {
-    const leftCover = left.id === submission?.coverImageId || left.isCover;
-    const rightCover = right.id === submission?.coverImageId || right.isCover;
-    if (leftCover !== rightCover) return leftCover ? -1 : 1;
-    return Number(left.sortOrder ?? 0) - Number(right.sortOrder ?? 0) || String(left.id).localeCompare(String(right.id));
-  });
-  return images.filter((image) => typeof image?.url === "string" && image.url.startsWith("/api/competitions/submission-media/"));
-}
-
-function installStyles() {
-  if (document.querySelector("style[data-competition-public-media]")) return;
-  const style = document.createElement("style");
-  style.dataset.competitionPublicMedia = "true";
-  style.textContent = `
+const PUBLIC_MEDIA_STYLES = `
     .competition-entry-media {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
@@ -113,6 +92,29 @@ function installStyles() {
       }
     }
   `;
+
+const API_ROOT = "/api/competitions";
+
+function slugFromLocation() {
+  return new URLSearchParams(window.location.search).get("competition")?.trim().toLowerCase() ?? "";
+}
+
+function imageList(submission) {
+  const images = Array.isArray(submission?.images) ? [...submission.images] : [];
+  images.sort((left, right) => {
+    const leftCover = left.id === submission?.coverImageId || left.isCover;
+    const rightCover = right.id === submission?.coverImageId || right.isCover;
+    if (leftCover !== rightCover) return leftCover ? -1 : 1;
+    return Number(left.sortOrder ?? 0) - Number(right.sortOrder ?? 0) || String(left.id).localeCompare(String(right.id));
+  });
+  return images.filter((image) => typeof image?.url === "string" && image.url.startsWith("/api/competitions/submission-media/"));
+}
+
+function installStyles() {
+  if (document.querySelector("style[data-competition-public-media]")) return;
+  const style = document.createElement("style");
+  style.dataset.competitionPublicMedia = "true";
+  style.textContent = PUBLIC_MEDIA_STYLES;
   document.head.append(style);
 }
 

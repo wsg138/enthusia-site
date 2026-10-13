@@ -29,15 +29,21 @@ function timestamp(value) {
   if(typeof value!=='string'||!Number.isFinite(Date.parse(value)))throw new Error('invalid_date');
   return new Date(value).toISOString();
 }
-export function validateRecord(input) {
-  if(!input||!CONTENT_KINDS.has(input.kind))throw new Error('invalid_kind');
+function recordPublication(input){
+  const status=input.status??"draft",verification=input.verification??"unverified";
+  if(!["draft","published","archived"].includes(status))throw new Error("invalid_status");
+  if(!["verified","unverified"].includes(verification))throw new Error("invalid_verification");
+  return {status,verification};
+}
+function recordPoll(input){
   const options=Array.isArray(input.options)?input.options.map(v=>text(v,160,true)):[];
   const closesAt=timestamp(input.closesAt);
-  if(input.kind==='polls'&&(options.length<2||options.length>8||new Set(options).size!==options.length||!closesAt))throw new Error('invalid_poll');
-  const status=input.status??'draft';
-  if(!['draft','published','archived'].includes(status))throw new Error('invalid_status');
-  const verification=input.verification??'unverified';
-  if(!['verified','unverified'].includes(verification))throw new Error('invalid_verification');
+  if(input.kind==="polls"&&(options.length<2||options.length>8||new Set(options).size!==options.length||!closesAt))throw new Error("invalid_poll");
+  return {options,closesAt};
+}
+export function validateRecord(input) {
+  if(!input||!CONTENT_KINDS.has(input.kind))throw new Error('invalid_kind');
+  const {options,closesAt}=recordPoll(input),{status,verification}=recordPublication(input);
   return {kind:input.kind,slug:identifier(input.slug),title:text(input.title,160,true),body:text(input.body,20000),category:text(input.category,80),date:timestamp(input.date),image:publicUrl(input.image),target:publicUrl(input.target),tags:Array.isArray(input.tags)?input.tags.slice(0,12).map(v=>text(v,40,true)):[],status,verification,options,closesAt,pinned:input.pinned===true};
 }
 export function decodeRow(row) {
@@ -85,22 +91,27 @@ function weeklyDuelWins(value){
     ||Date.parse(capturedAt)<Date.parse(weekStartsAt)||Date.parse(capturedAt)>Date.now()+60000||wins===null||!Number.isInteger(wins))throw new Error('invalid_player_duels');
   return {weekStartsAt,capturedAt,wins};
 }
+function guildProjection(base,row){return {...base,level:number(row.level),members:number(row.members,20000),elo:number(row.elo),prestige:number(row.prestige,1e6),foundedAt:timestamp(row.foundedAt),bankBalance:number(row.bankBalance),totalExperience:number(row.totalExperience),activityScore:number(row.activityScore),tag:text(row.tag,80),recruiting:typeof row.recruiting==='boolean'?row.recruiting:null,peaceful:typeof row.peaceful==='boolean'?row.peaceful:null,membersList:memberNames(row.membersList),banner:banner(row.banner),links:links(row.links)};}
+function bountyProjection(base,row){return {...base,gold:number(row.gold),state:['open','claimed','expired'].includes(row.state)?row.state:'open',hunter:text(row.hunter,80),expiresAt:timestamp(row.expiresAt)};}
+function achievementProjection(base,row){return {...base,category:text(row.category,80),reward:text(row.reward,200),completed:number(row.completed,1e8)};}
+function warzoneProjection(base,row){if(!['kit','leader','activity'].includes(row.type))throw new Error('invalid_warzone_type');const wins=number(row.wins,1e9);if(wins!==null&&!Number.isInteger(wins))throw new Error('invalid_wins');return {...base,type:row.type,kills:number(row.kills,1e9),wins,endsAt:timestamp(row.endsAt),target:publicUrl(row.target),rules:Array.isArray(row.rules)?row.rules.slice(0,12).map(v=>text(v,200,true)):[],manualOverride:row.manualOverride===true};}
+function playerOptionalProjection(row){return {
+      ...(row.balanceRank!==undefined?{balanceRank:leaderboardPosition(row.balanceRank)}:{}),...(row.playtimeRank!==undefined?{playtimeRank:leaderboardPosition(row.playtimeRank)}:{}),
+      ...(row.achievementsKnown===true?{achievementsKnown:true}:{}),...(row.weeklyDuelWins!==undefined?{weeklyDuelWins:weeklyDuelWins(row.weeklyDuelWins)}:{}),
+      ...(row.guildsKnown===true?{guildsKnown:true,guildMemberships:playerGuilds(row.guildMemberships),...(row.guildsPartial===true?{guildsPartial:true}:{})}:{})};}
+function playerProjection(base,row){return {...base,guild:text(row.guild,80),rank:text(row.rank,80),playtime:number(row.playtime),balance:number(row.balance),reputation:number(row.reputation),achievements:achievementNames(row.achievements),links:links(row.links),...playerOptionalProjection(row)};}
+const recordProjections=new Map([["guilds",guildProjection],["players",playerProjection],["warzone",warzoneProjection],["bounties",bountyProjection],["achievements",achievementProjection]]);
+function snapshotRecord(kind,row,ids){
+  const id=kind==="achievements"?achievementIdentifier(row.id):identifier(row.id);
+  if(ids.has(id))throw new Error("duplicate_id");ids.add(id);
+  const base={id,name:text(row.name,80,true),description:text(row.description,2000)};
+  return recordProjections.get(kind)(base,row);
+}
 export function projectSnapshot(kind,input) {
   if(kind==='guildquests')return projectGuildQuests(input);
   if(!SNAPSHOT_KINDS.has(kind)||!Array.isArray(input?.items)||input.items.length>1000)throw new Error('invalid_snapshot');
   const ids=new Set();
-  const items=input.items.map(row=>{
-    const id=kind==='achievements'?achievementIdentifier(row.id):identifier(row.id);if(ids.has(id))throw new Error('duplicate_id');ids.add(id);
-    const base={id,name:text(row.name,80,true),description:text(row.description,2000)};
-    if(kind==='guilds')return {...base,level:number(row.level),members:number(row.members,20000),elo:number(row.elo),prestige:number(row.prestige,1e6),foundedAt:timestamp(row.foundedAt),bankBalance:number(row.bankBalance),totalExperience:number(row.totalExperience),activityScore:number(row.activityScore),tag:text(row.tag,80),recruiting:typeof row.recruiting==='boolean'?row.recruiting:null,peaceful:typeof row.peaceful==='boolean'?row.peaceful:null,membersList:memberNames(row.membersList),banner:banner(row.banner),links:links(row.links)};
-    if(kind==='players')return {...base,guild:text(row.guild,80),rank:text(row.rank,80),playtime:number(row.playtime),balance:number(row.balance),reputation:number(row.reputation),achievements:achievementNames(row.achievements),links:links(row.links),
-      ...(row.balanceRank!==undefined?{balanceRank:leaderboardPosition(row.balanceRank)}:{}),...(row.playtimeRank!==undefined?{playtimeRank:leaderboardPosition(row.playtimeRank)}:{}),
-      ...(row.achievementsKnown===true?{achievementsKnown:true}:{}),...(row.weeklyDuelWins!==undefined?{weeklyDuelWins:weeklyDuelWins(row.weeklyDuelWins)}:{}),
-      ...(row.guildsKnown===true?{guildsKnown:true,guildMemberships:playerGuilds(row.guildMemberships),...(row.guildsPartial===true?{guildsPartial:true}:{})}:{})};
-    if(kind==='warzone'){if(!['kit','leader','activity'].includes(row.type))throw new Error('invalid_warzone_type');const wins=number(row.wins,1e9);if(wins!==null&&!Number.isInteger(wins))throw new Error('invalid_wins');return {...base,type:row.type,kills:number(row.kills,1e9),wins,endsAt:timestamp(row.endsAt),target:publicUrl(row.target),rules:Array.isArray(row.rules)?row.rules.slice(0,12).map(v=>text(v,200,true)):[],manualOverride:row.manualOverride===true};}
-    if(kind==='bounties')return {...base,gold:number(row.gold),state:['open','claimed','expired'].includes(row.state)?row.state:'open',hunter:text(row.hunter,80),expiresAt:timestamp(row.expiresAt)};
-    return {...base,category:text(row.category,80),reward:text(row.reward,200),completed:number(row.completed,1e8)};
-  });
+  const items=input.items.map(row=>snapshotRecord(kind,row,ids));
   const generatedAt=timestamp(input.generatedAt);
   if(generatedAt&&Date.parse(generatedAt)>Date.now()+60000)throw new Error('invalid_date');
   const sourceUpdatedAt=kind==='players'?timestamp(input.sourceUpdatedAt):null;

@@ -423,9 +423,15 @@ export function initialCompetitionConfig({ summary = "" } = {}) {
   };
 }
 
+function validConfigEnvelope(input){
+  if (!input || typeof input !== "object" || Array.isArray(input)) return false;
+  if (hasValue(input.schemaVersion) && input.schemaVersion !== 1) return false;
+
+  return true;
+}
+
 export function sanitizeCompetitionConfig(input) {
-  if (!input || typeof input !== "object" || Array.isArray(input)) return null;
-  if (hasValue(input.schemaVersion) && input.schemaVersion !== 1) return null;
+  if (!validConfigEnvelope(input)) return null;
 
   const defaults = initialCompetitionConfig();
   const sections = configSections(input);

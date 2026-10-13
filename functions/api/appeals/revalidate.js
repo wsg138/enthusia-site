@@ -33,7 +33,7 @@ function resultResponse(result) {
   return revalidationResponse(result.binding);
 }
 
-export async function onRequestPost(context) {
+async function authorizeMutation(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   let session;
   try { session = await authenticateLinkedAppealRequest(context.request, context.env); }
@@ -43,6 +43,14 @@ export async function onRequestPost(context) {
   let limited;
   try { limited = await revalidationRateLimit(context, session); } catch { return serviceUnavailable(); }
   if (limited) return limited;
+
+  return { session };
+}
+
+export async function onRequestPost(context) {
+  const authorized = await authorizeMutation(context);
+  if (authorized instanceof Response) return authorized;
+  const { session } = authorized;
 
   let payload;
   try { payload = await context.request.json(); } catch { payload = null; }

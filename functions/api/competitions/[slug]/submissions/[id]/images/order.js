@@ -25,7 +25,15 @@ function editable(competition, submission) {
   return Number.isFinite(close) && Date.now() <= close;
 }
 
-export async function onRequestPost(context) {
+function orderingParameters(context){
+  const slug = slugValue(context);
+  const id = submissionId(context);
+  if (!slug || !id) return json({ error: "submission_not_found" }, 404);
+
+  return {slug,id};
+}
+
+async function orderingAuthorization(context){
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   if (!competitionsEnabled(context.env)) return json({ error: "not_found" }, 404);
   const read = await authorizeCompetitionRead(context);
@@ -39,10 +47,13 @@ export async function onRequestPost(context) {
     return json({ error: "competition_identity_unavailable" }, 503);
   }
   if (!session) return unauthorized();
-  const slug = slugValue(context);
-  const id = submissionId(context);
-  if (!slug || !id) return json({ error: "submission_not_found" }, 404);
+  const parameters = orderingParameters(context);
+  if (parameters instanceof Response) return parameters;
+  const {slug,id} = parameters;
+  return {session,slug,id};
+}
 
+async function orderingInput(context){
   let input;
   try {
     input = await context.request.json();
@@ -57,7 +68,10 @@ export async function onRequestPost(context) {
     || input.imageIds.some((imageId) => !isCanonicalUuid(String(imageId ?? "").toLowerCase()))
   ) return json({ error: "invalid_image_order" }, 400);
 
-  try {
+  return input;
+}
+
+async function ownedOrderingContext(context,slug,id,session,input){
     const competition = await getPublicCompetitionBySlug(context.env.COMPETITIONS_DB, slug);
     if (!competition) return json({ error: "competition_not_found" }, 404);
     const submission = await getAccountSubmission(context.env.COMPETITIONS_DB, competition.id, id, session.subject);
@@ -65,6 +79,10 @@ export async function onRequestPost(context) {
     if (!editable(competition, submission)) return json({ error: "submission_locked" }, 409);
     if (submission.revision !== input.expectedRevision) return json({ error: "submission_revision_conflict" }, 409);
 
+    return {competition,submission};
+}
+
+async function completeImageOrder(context,submission,input){
     const current = await listSubmissionImages(context.env.COMPETITIONS_DB, submission.id);
     const currentIds = current.map((image) => image.id).sort();
     const requestedIds = input.imageIds.map((imageId) => String(imageId).toLowerCase());
@@ -74,6 +92,10 @@ export async function onRequestPost(context) {
       || requestedIds.slice().sort().some((value, index) => value !== currentIds[index])
     ) return json({ error: "image_order_must_include_all_images" }, 409);
 
+    return requestedIds;
+}
+
+async function persistImageOrder(context,competition,submission,session,input,requestedIds){
     const result = await reorderOwnedSubmissionImages(context.env.COMPETITIONS_DB, {
       competitionId: competition.id,
       submissionId: submission.id,
@@ -89,6 +111,25 @@ export async function onRequestPost(context) {
     });
     if (result.status !== "UPDATED") return json({ error: "submission_revision_conflict" }, 409);
     return json({ imageIds: requestedIds, coverImageId: String(input.coverImageId).toLowerCase(), revision: result.revision });
+}
+
+export async function onRequestPost(context) {
+  const authorized = await orderingAuthorization(context);
+  if (authorized instanceof Response) return authorized;
+  const {session,slug,id} = authorized;
+
+  const input = await orderingInput(context);
+  if (input instanceof Response) return input;
+
+  try {
+    const owned = await ownedOrderingContext(context,slug,id,session,input);
+    if (owned instanceof Response) return owned;
+    const {competition,submission} = owned;
+
+    const requestedIds = await completeImageOrder(context,submission,input);
+    if (requestedIds instanceof Response) return requestedIds;
+
+    return await persistImageOrder(context,competition,submission,session,input,requestedIds);
   } catch (error) {
     if (error instanceof TypeError) return json({ error: "invalid_image_order" }, 400);
     return json({ error: "submission_image_order_failed" }, 503);

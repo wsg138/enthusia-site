@@ -29,7 +29,7 @@ async function appendActivity(host,item,node,kind){
   if(snapshot&&(snapshot.stale||!Number.isFinite(stamp)||Date.now()-stamp>900000))host.append(el('small',{text:'This feed may be stale.'}));
   if(kind==='bounties'&&snapshot?.limited)host.append(el('small',{text:'Partial public bounty export.'}));
 }
-function section(title){return el('section',{class:'player-profile-section'},[el('h4',{text:title})]);}
+function section(title){return el('section',{class:'panel player-profile-section'},[el('h4',{text:title})]);}
 function guildSection(item){
   const host=section('Guilds');
   const guilds=item.guildMemberships??[];
@@ -60,26 +60,41 @@ async function appendMarket(host,item,node){
     if(!Number.isFinite(captured)||Date.now()-captured>900000)host.append(el('small',{text:'Market export may be stale.'}));
   }catch{marketSnapshot=null;if(node.isConnected)message.textContent='Public market data is unavailable.';}
 }
+function playerVisualIdentity(item){return /^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(item.id)?item.id:item.name;}
 export function playerHead(item,size=64) {
-  const identity=/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(item.id)?item.id:item.name;
+  const identity=playerVisualIdentity(item);
   const head=el('img',{src:item.previewExample?new URL('./market/player-head-base.svg',import.meta.url).href:'https://mc-heads.net/avatar/'+encodeURIComponent(identity)+'/'+size,
     alt:item.name+' Minecraft head',width:size,height:size,loading:'lazy',
     style:'image-rendering:pixelated;flex:none;max-width:100%'});
   head.addEventListener('error',()=>{head.src=new URL('./market/player-head-base.svg',import.meta.url).href;},{once:true});
   return head;
 }
+function playerSkin(item){
+  if(item.previewExample)return playerHead(item);
+  const skin=el('img',{class:'px player-profile-skin',src:'https://mc-heads.net/body/'+encodeURIComponent(playerVisualIdentity(item))+'/96',
+    alt:item.name+' Minecraft skin',width:96,height:192,loading:'lazy'});
+  skin.addEventListener('error',()=>skin.replaceWith(playerHead(item)),{once:true});
+  return skin;
+}
+function playerHero(item){
+  const name=el('div',{class:'player-profile-title'},[el('p',{text:'PLAYER PROFILE'}),el('h2',{class:'t-h2',text:item.name})]);
+  const guildLinks=(item.guildMemberships??[]).map(guild=>link('guilds.html#'+encodeURIComponent(guild.id),guild.name,'tag tag-guild'));
+  if(guildLinks.length)name.append(el('div',{class:'player-profile-links'},guildLinks));
+  return el('article',{class:'tip fret-lg player-profile-hero','aria-label':item.name+' profile'},[
+    playerSkin(item),name,el('div',{class:'player-profile-links'},[link('guilds.html','Guilds','btn btn-gold'),
+      link('market.html#owner='+encodeURIComponent(item.name),'Market stalls','btn btn-dark')])]);
+}
 export function playerProfile(node,item) {
-  const name=el('div',{},[el('p',{text:'PLAYER PROFILE'}),el('h3',{text:item.name,
-    style:'font-size:36px;line-height:44px;overflow-wrap:anywhere'})]);
-  node.replaceChildren(el('div',{style:'display:flex;gap:20px;align-items:center;flex-wrap:wrap'},[playerHead(item),name]));
+  node.replaceChildren(playerHero(item));
   if(item.previewExample)node.append(el('p',{text:'Simulated profile layout. Guilds, quests, achievements, bounties and duel wins here are examples.'}));
   const values=[['Balance',item.balance],['Active playtime',item.playtime===null||item.playtime===undefined?null:
     item.playtime.toLocaleString('en-US',{maximumFractionDigits:1})+' hours'],
     ['Balance leaderboard',item.balanceRank?'#'+item.balanceRank:null],['Playtime leaderboard',item.playtimeRank?'#'+item.playtimeRank:null]];
   const available=values.filter(([,value])=>value!==null&&value!==undefined);
-  node.append(el('div',{class:'stats',style:'display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:16px'},
+  const stats=el('div',{class:'stats',style:'display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:16px'},
     available.map(([label,value])=>el('div',{class:'stat',style:'padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0'},[
-      el('b',{text:typeof value==='number'?value.toLocaleString('en-US'):value,style:'font-size:24px;line-height:32px;overflow-wrap:anywhere'}),el('span',{text:label})]))));
+      el('b',{text:typeof value==='number'?value.toLocaleString('en-US'):value,style:'font-size:24px;line-height:32px;overflow-wrap:anywhere'}),el('span',{text:label})])));
+  node.append(el('section',{class:'panel player-profile-stats'},[el('h3',{text:'Stats'}),stats]));
   const market=section('At the market'),sections=el('div',{class:'player-profile-sections'},[guildSection(item),market]);
   node.append(sections);appendMarket(market,item,node);
   for(const [title,kind,url]of [['Guild quests','guildquests','guildquests.html'],['Bounties','bounties','bounties.html'],['Weekly duel wins','warzone','index.html#warzone']]){

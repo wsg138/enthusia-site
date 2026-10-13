@@ -1,13 +1,16 @@
 import { communityApiPath } from './community-route.js';
 
-export function el(tag,attributes={},children=[]){
-  const node=document.createElement(tag);
+function applyAttributes(node,attributes){
   for(const [key,value] of Object.entries(attributes)){
     if(key==='text')node.textContent=String(value??'');
     else if(key==='class')node.className=value;
     else if(key.startsWith('on'))node.addEventListener(key.slice(2),value);
     else if(value!==null&&value!==undefined)node.setAttribute(key,key==='src'&&String(value).startsWith('/assets/')?new URL(String(value).slice(8),import.meta.url).href:String(value));
   }
+}
+export function el(tag,attributes={},children=[]){
+  const node=document.createElement(tag);
+  applyAttributes(node,attributes);
   node.append(...children.filter(Boolean));return node;
 }
 export function link(url,label,className='btn btn-gold'){

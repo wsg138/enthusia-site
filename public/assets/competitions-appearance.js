@@ -52,6 +52,16 @@ function slugFromLink(link) {
   }
 }
 
+function decorateCatalogCategory(card,competition,appearance){
+  const categoryArt = imageFor(appearance.categoryImageId, "competition-category-art", `${competition.category} artwork`);
+  if (categoryArt) {
+    const body = card.querySelector(".competition-card-body") ?? card;
+    const meta = body.querySelector(".competition-card-meta");
+    if (meta) meta.after(categoryArt);
+    else body.prepend(categoryArt);
+  }
+}
+
 function decorateCatalogCard(card, competition) {
   if (!card || card.dataset.appearanceDecorated === "true") return;
   card.dataset.appearanceDecorated = "true";
@@ -64,13 +74,7 @@ function decorateCatalogCard(card, competition) {
     heading.before(row);
     row.append(icon, heading);
   }
-  const categoryArt = imageFor(appearance.categoryImageId, "competition-category-art", `${competition.category} artwork`);
-  if (categoryArt) {
-    const body = card.querySelector(".competition-card-body") ?? card;
-    const meta = body.querySelector(".competition-card-meta");
-    if (meta) meta.after(categoryArt);
-    else body.prepend(categoryArt);
-  }
+  decorateCatalogCategory(card,competition,appearance);
 }
 
 function decorateFeatured(root, competition) {

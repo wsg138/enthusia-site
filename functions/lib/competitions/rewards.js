@@ -61,15 +61,7 @@ export function defaultRewardDistribution(rewardType) {
   return null;
 }
 
-export function validateRewardDefinition(definition) {
-  const errors = [];
-  if (!REWARD_TYPES.has(definition?.rewardType))
-    errors.push("reward_type_invalid");
-  if (!Number.isInteger(definition?.placement) || definition.placement < 1)
-    errors.push("placement_invalid");
-  if (!DISTRIBUTION_MODES.has(definition?.distributionMode))
-    errors.push("distribution_mode_invalid");
-
+function validateRewardPolicy(definition, errors) {
   if (
     NON_DIVISIBLE_TYPES.has(definition?.rewardType) &&
     definition?.distributionMode === "SPLIT_ELIGIBLE"
@@ -78,8 +70,7 @@ export function validateRewardDefinition(definition) {
   }
 
   if (
-    (definition?.distributionMode === "RANDOM_ELIGIBLE" ||
-      definition?.distributionMode === "RANDOM_GUILD_MEMBERS") &&
+    new Set(["RANDOM_ELIGIBLE", "RANDOM_GUILD_MEMBERS"]).has(definition?.distributionMode) &&
     (!Number.isInteger(definition?.randomCount) || definition.randomCount < 1)
   ) {
     errors.push("random_recipient_count_invalid");
@@ -91,6 +82,19 @@ export function validateRewardDefinition(definition) {
   ) {
     errors.push("manual_reward_requires_manual_distribution");
   }
+
+}
+
+export function validateRewardDefinition(definition) {
+  const errors = [];
+  if (!REWARD_TYPES.has(definition?.rewardType))
+    errors.push("reward_type_invalid");
+  if (!Number.isInteger(definition?.placement) || definition.placement < 1)
+    errors.push("placement_invalid");
+  if (!DISTRIBUTION_MODES.has(definition?.distributionMode))
+    errors.push("distribution_mode_invalid");
+
+  validateRewardPolicy(definition, errors);
 
   return errors;
 }
@@ -128,8 +132,6 @@ export function selectRewardRecipients({
       return guildMembers;
     case "RANDOM_GUILD_MEMBERS":
       return takeRandom(guildMembers, randomCount, seededRandom(selectionSeed));
-    case "MANUAL":
-      return [];
     default:
       return [];
   }

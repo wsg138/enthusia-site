@@ -24,9 +24,12 @@ async function synchronizeSales(env,fetchImpl) {
     const data=await readCommunitySales(env,fetchImpl,Date.now(),cursor);
     if(!data)return {kind:'sales',status:'unavailable',records};
     const statements=await salesStatements(db,data);
-    if(data.nextCursor!==null)statements.push(db.prepare(`INSERT INTO community_snapshots(kind,payload,updated_at)
-      VALUES ('sales_cursor',?,?) ON CONFLICT(kind) DO UPDATE SET payload=excluded.payload,updated_at=excluded.updated_at`)
-      .bind(JSON.stringify({source:env.COMMUNITY_SALES_API_URL,cursor:data.nextCursor}),new Date().toISOString()));
+    if(data.checkpointCursor!==null)statements.push(db.prepare(`INSERT INTO community_snapshots(kind,payload,updated_at)
+      VALUES ('sales_cursor',?,?) ON CONFLICT(kind) DO UPDATE SET payload=excluded.payload,updated_at=excluded.updated_at
+      WHERE json_extract(community_snapshots.payload,'$.source')<>?
+        OR ?=0 OR CAST(json_extract(community_snapshots.payload,'$.cursor') AS INTEGER)<=CAST(? AS INTEGER)`)
+      .bind(JSON.stringify({source:env.COMMUNITY_SALES_API_URL,cursor:data.checkpointCursor}),new Date().toISOString(),
+        env.COMMUNITY_SALES_API_URL,/^\d{1,19}$/.test(data.checkpointCursor)?1:0,data.checkpointCursor));
     if(statements.length) {
       const results=await db.batch(statements);
       records+=results.slice(0,data.items.length).reduce((total,row)=>total+(row.meta.changes??0),0);

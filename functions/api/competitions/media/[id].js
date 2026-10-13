@@ -1,3 +1,4 @@
+import { publicCompetitionMediaResponse } from "../../../lib/competitions/public-media-response.js";
 import {
   hasCompetitionDatabase,
   hasCompetitionMedia
@@ -27,16 +28,7 @@ export async function onRequestGet(context) {
     if (!media) return json({ error: "media_not_found" }, 404);
 
     const object = await context.env.COMPETITIONS_MEDIA.get(media.storageKey);
-    if (!object?.body) return json({ error: "media_not_found" }, 404);
-
-    const headers = new Headers({
-      "content-type": media.mimeType,
-      "cache-control": "no-store",
-      "content-disposition": "inline",
-      "x-content-type-options": "nosniff"
-    });
-    if (object.httpEtag) headers.set("etag", object.httpEtag);
-    return new Response(object.body, { status: 200, headers });
+    return publicCompetitionMediaResponse(media,object);
   } catch {
     return json({ error: "competition_media_unavailable" }, 503);
   }

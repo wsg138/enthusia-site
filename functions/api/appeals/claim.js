@@ -19,7 +19,7 @@ async function claimRateLimit(context, session) {
     : json({ error: "rate_limited", retryAfterSeconds: result.retryAfterSeconds }, 429, rateLimitHeaders(result));
 }
 
-export async function onRequestPost(context) {
+async function authorizeMutation(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   let session;
   try { session = await authenticateLinkedAppealRequest(context.request, context.env); }
@@ -29,6 +29,24 @@ export async function onRequestPost(context) {
   let limited;
   try { limited = await claimRateLimit(context, session); } catch { return serviceUnavailable(); }
   if (limited) return limited;
+
+  return { session };
+}
+
+async function persistClaim(context, session, claim) {
+  const upstream = await claimPunishment(context.env, session, claim);
+  if (!upstream.ok) return staffApiResponse(upstream, "private, no-store");
+  const binding = sanitizePunishmentBinding(await upstream.json());
+  if (!binding) return json({ error: "invalid_punishment_binding" }, 502);
+
+  await saveClaimedPunishmentBinding(context.env?.COMPETITIONS_DB, session.subject, binding);
+  return json(binding, 200, { "cache-control": "private, no-store" });
+}
+
+export async function onRequestPost(context) {
+  const authorized = await authorizeMutation(context);
+  if (authorized instanceof Response) return authorized;
+  const { session } = authorized;
 
   let payload;
   try { payload = await context.request.json(); } catch { payload = null; }
@@ -41,13 +59,7 @@ export async function onRequestPost(context) {
   if (!humanVerified) return json({ error: "turnstile_required" }, 403);
 
   try {
-    const upstream = await claimPunishment(context.env, session, claim);
-    if (!upstream.ok) return staffApiResponse(upstream, "private, no-store");
-    const binding = sanitizePunishmentBinding(await upstream.json());
-    if (!binding) return json({ error: "invalid_punishment_binding" }, 502);
-
-    await saveClaimedPunishmentBinding(context.env?.COMPETITIONS_DB, session.subject, binding);
-    return json(binding, 200, { "cache-control": "private, no-store" });
+    return await persistClaim(context, session, claim);
   } catch {
     return serviceUnavailable();
   }

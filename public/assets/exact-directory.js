@@ -20,12 +20,14 @@ function guildProfile(node,item){
   if(!item.banner)node.append(el('p',{text:'This guild’s banner design is not available yet.'}));
   for(const entry of item.links??[])node.append(link(entry.url,entry.label,'btn btn-dark'));
 }
-function clone(type,item){
-  const template=templates.get(type+':'+(preview?item.designIndex??0:0))??templates.get(type+':0');if(!template)return null;
-  const node=template.content.firstElementChild.cloneNode(true);for(const element of [node,...node.querySelectorAll('*')])for(const attr of [...element.attributes]){
+function clearTemplateBindings(node){
+for(const element of [node,...node.querySelectorAll('*')])for(const attr of [...element.attributes]){
     if(attr.name==='class')element.className=attr.value.replace(/\{\{[^}]+\}\}/g,'').trim();
     if(attr.name.startsWith('data-b-')||attr.name.startsWith('data-on-'))element.removeAttribute(attr.name);
-  }return node;
+  }}
+function clone(type,item){
+  const template=templates.get(type+':'+(preview?item.designIndex??0:0))??templates.get(type+':0');if(!template)return null;
+  const node=template.content.firstElementChild.cloneNode(true);clearTemplateBindings(node);return node;
 }
 function target(type){return templates.get(type+':0')?.parentElement;}
 function replace(type,nodes){const parent=target(type);if(!parent)return;for(const node of [...parent.children])if(node.hasAttribute('data-rendered-record'))node.remove();for(const node of nodes){if(!node)continue;node.setAttribute('data-rendered-record','');parent.insertBefore(node,templates.get(type+':0'));}}
@@ -47,6 +49,11 @@ function selectGuildLink(id){
   history.replaceState(null,'','#'+encodeURIComponent(id));
 }
 function pressed(node){for(const sibling of node.parentElement.querySelectorAll('button'))sibling.setAttribute('aria-pressed',String(sibling===node));}
+function directoryCount(count){
+  if(kind==='guilds')return count+' of '+items.length+(limited?' guilds in this leaderboard.':' guilds shown.');
+  if(kind==='players')return count+' '+(count===1?'profile':'profiles')+' shown.';
+  return count+' '+(count===1?'bounty':'bounties')+' shown.';
+}
 function draw(){
   let rows=items.filter(item=>item.name.toLowerCase().includes(q.toLowerCase())&&(filter==='all'||item.state===filter||(filter==='recruiting'&&item.recruiting)||(filter==='peaceful'&&item.peaceful===true)||(filter==='hostile'&&item.peaceful===false)));
   rows=rows.sort((a,b)=>sort==='name'?a.name.localeCompare(b.name):(b[sort]??-1)-(a[sort]??-1));
@@ -63,7 +70,7 @@ function draw(){
     }else if(!preview){node.classList.add('player-picker-card');node.replaceChildren(playerHead(item,32),el('span',{text:item.name}));}
     if(kind!=='bounties'){node.setAttribute('aria-pressed',String(selected?.id===item.id));node.addEventListener('click',()=>choose(item));}return node;
   }));
-  const count=one('[data-b-text="countLine"]');if(count)count.textContent=kind==='guilds'?rows.length+' of '+items.length+(limited?' guilds in this leaderboard.':' guilds shown.'):rows.length+' '+(rows.length===1?'bounty':'bounties')+' shown.';
+  const count=one('[data-b-text="countLine"]');if(count)count.textContent=directoryCount(rows.length);
   for(const empty of document.querySelectorAll('[data-b-class*="emptyShow"],[data-b-class*="missShow"]'))empty.hidden=rows.length>0;
   if(kind==='guilds'&&rows.length&&!rows.some(item=>item.id===selected?.id))choose(rows[0]);
 }

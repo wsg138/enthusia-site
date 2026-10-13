@@ -44,19 +44,19 @@ function bindingDisplay(value) {
   };
 }
 
+function validBindingIdentifiers(punishmentId,caseId,codeGeneration){
+  return isCanonicalUuid(punishmentId) && Boolean(caseId) && Boolean(codeGeneration);
+}
+function validBindingDisplay(punishmentType,boundUsername,eligibilityState,eligible){
+  return TOKEN.test(punishmentType) && USERNAME.test(boundUsername) && typeof eligible === "boolean" && TOKEN.test(eligibilityState);
+}
+
 export function sanitizePunishmentBinding(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const { punishmentId, caseId, codeGeneration } = bindingIdentifiers(value);
   const { punishmentType, boundUsername, eligibilityState } = bindingDisplay(value);
-  if (!isCanonicalUuid(punishmentId)
-      || !caseId
-      || !codeGeneration
-      || !TOKEN.test(punishmentType)
-      || !USERNAME.test(boundUsername)
-      || typeof value.eligible !== "boolean"
-      || !TOKEN.test(eligibilityState)) {
-    return null;
-  }
+  if (!validBindingIdentifiers(punishmentId,caseId,codeGeneration)
+      || !validBindingDisplay(punishmentType,boundUsername,eligibilityState,value.eligible)) return null;
   return Object.freeze({
     punishmentId,
     caseId,

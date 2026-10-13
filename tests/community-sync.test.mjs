@@ -46,3 +46,45 @@ test('sales reject ambiguous currencies, missing cursors and stalled pagination'
     assert.equal(await readCommunitySales(env,async()=>Response.json(input),Date.now(),'2'),null);
   }
 });
+
+test('final producer checkpoint survives restarts and BUY-only pages',async()=>{
+  const {db,sql}=database(),env={COMMUNITY_DB:db,COMMUNITY_SYNC_ENABLED:'true',COMMUNITY_SALES_API_URL:'https://source.example/sales'};
+  const seen=[];
+  const fetchImpl=async url=>{
+    const after=url.searchParams.get('after');seen.push(after);
+    if(after===null)return Response.json({items:[sale()],nextCursor:null,checkpointCursor:'8'});
+    if(after==='8')return Response.json({items:[],nextCursor:null,checkpointCursor:'12'});
+    return Response.json({items:[],nextCursor:null,checkpointCursor:'12'});
+  };
+  await runCommunitySync(env,fetchImpl);await runCommunitySync(env,fetchImpl);await runCommunitySync(env,fetchImpl);
+  assert.deepEqual(seen,[null,'8','12']);
+  assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM market_sales').get().n,1);
+});
+
+test('explicit sales checkpoint rejects malformed and backwards ledger positions',async()=>{
+  const env={COMMUNITY_SALES_API_URL:'https://source.example/sales'};
+  for(const checkpointCursor of ['1','invalid marker',null,42,'9999999999999999999']) {
+    assert.equal(await readCommunitySales(env,async()=>Response.json({items:[],nextCursor:null,checkpointCursor}),Date.now(),'8'),null);
+  }
+});
+
+test('overlapping sync cannot move a numeric checkpoint backwards',async()=>{
+  const {db,sql}=database(),env={COMMUNITY_DB:db,COMMUNITY_SYNC_ENABLED:'true',COMMUNITY_SALES_API_URL:'https://source.example/sales'};
+  const original=db.batch;let injected=false;
+  db.batch=async statements=>{
+    if(!injected){injected=true;sql.prepare("INSERT INTO community_snapshots VALUES('sales_cursor',?,?)")
+      .run(JSON.stringify({source:env.COMMUNITY_SALES_API_URL,cursor:'12'}),new Date().toISOString());}
+    return original(statements);
+  };
+  await runCommunitySync(env,async()=>Response.json({items:[sale()],nextCursor:null,checkpointCursor:'8'}));
+  assert.equal(JSON.parse(sql.prepare("SELECT payload FROM community_snapshots WHERE kind='sales_cursor'").get().payload).cursor,'12');
+  assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM market_sales').get().n,1);
+});
+
+test('failed sales batch does not persist its terminal checkpoint',async()=>{
+  const {db,sql}=database(),env={COMMUNITY_DB:db,COMMUNITY_SYNC_ENABLED:'true',COMMUNITY_SALES_API_URL:'https://source.example/sales'};
+  db.batch=async()=>{throw new Error('simulated database failure');};
+  const result=await runCommunitySync(env,async()=>Response.json({items:[sale()],nextCursor:null,checkpointCursor:'8'}));
+  assert.equal(result.results.at(-1).status,'failed');
+  assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM community_snapshots').get().n,0);
+});

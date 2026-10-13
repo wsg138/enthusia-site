@@ -7,7 +7,7 @@ import { requireSameOrigin } from "../../../../lib/security.js";
 import { reviewerRank } from "../../../../lib/staff-api.js";
 import { isCanonicalUuid } from "../../../../lib/validation.js";
 
-export async function onRequestPost(context) {
+async function authorizeMutation(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   if (!context.env?.COMPETITIONS_DB) return serviceUnavailable();
   const appealId = String(context.params.id ?? "").trim().toLowerCase();
@@ -16,6 +16,14 @@ export async function onRequestPost(context) {
   try { session = await authenticateRequest(context.request, context.env); }
   catch { return unauthorized(); }
   if (!canReview(session, context.env) || !reviewerRank(session)) return forbidden();
+  return { session, appealId };
+}
+
+export async function onRequestPost(context) {
+  const authorized = await authorizeMutation(context);
+  if (authorized instanceof Response) return authorized;
+  const { session, appealId } = authorized;
+
   let input;
   try { input = sanitizeAppealComment(await context.request.json()); }
   catch { input = null; }
