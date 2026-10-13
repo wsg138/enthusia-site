@@ -126,3 +126,20 @@ ConfigLoaderTest string). Companion Actions runs report action_required and need
 maintainer approval: MaceGuard Build 38435430531 / Codacy Analysis 38435430496,
 Duels Tests 38434487401. CodeRabbit skips automatic review for these OSS repos.
 These are not hosted test successes for the plugins and do not permit activation.
+
+Review follow-up, 13 October: MaceGuard 360c73f replaces the unmanaged worker
+with a bounded Paper-owned asynchronous reader, constructs snapshot maps
+immutably and names the repeated test literal. All nine prior annotations have
+source repairs, with no rule suppressions; await the new Codacy result rather
+than treating the old grade as current. Clean Java 21 verify passes 544 tests;
+Duels 4ff293f passes a fresh 38-test verify. The synthetic native signed contract
+still passes. MaceGuard Build 38438008279 and Codacy Analysis 38438008266,
+and Duels Tests 38434487401, require maintainer workflow approval.
+
+Website validation removes the observed deprecated action warnings by pinning
+verified Node 24 action revisions and retaining Ubuntu 24.04 before the scheduled
+ubuntu-latest migration. Project runtime selections (Node 22, Python 3.12,
+Java 25), test/build commands, permissions and artifact destination are preserved.
+Infrastructure-only change: behavioral engine proof does not apply; verify the
+workflow syntax, upstream action metadata and exact new hosted check. No EARS
+validator/state helper is provided; this guide and TASKS.md record SPEAR evidence.

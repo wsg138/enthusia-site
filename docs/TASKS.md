@@ -82,4 +82,12 @@ Implementation and verification details: [real feeds](REAL-FEEDS.md) and
 
 Exact evidence/configuration: [live update guide](LIVE-WARZONE-UPDATES.md).
 
+- [x] Repair all nine remaining MaceGuard PR 48 source annotations without
+  suppression; 544 local tests and signed native integration pass.
+- [x] Recheck PR 53 and Duels PR 24 comments; no inline/human findings and
+  Codacy reports no issues. Duels clean local verify passes 38 tests.
+- [x] Remove deprecated validation actions and pin the website runner image.
+- [ ] Obtain exact updated hosted grades and maintainer approval of companion
+  workflow runs. CodeRabbit skipped automatic review on all three repositories.
+
 Host documentation: [Bloom backup management](https://docs.bloom.host/backups).
