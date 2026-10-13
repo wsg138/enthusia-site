@@ -8,7 +8,7 @@ function element(tag, className, text) {
 }
 
 async function api(path, options = {}) {
-  if (!new Set(["/api/appeals/bindings", "/api/appeals/revalidate"]).has(path)) {
+  if (!new Set(["/api/appeals/bindings", "/api/appeals/revalidate"]).has(path)      && !/^\/api\/appeals\/punishments\?(?:scope=(?:ACTIVE|EXPIRED|ALL))(?:&cursor=[A-Za-z0-9_-]{1,256})?$/.test(path)) {
     throw new Error("Unsupported punishment binding route");
   }
   const response = await fetch(path, {
@@ -22,9 +22,9 @@ async function api(path, options = {}) {
   });
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const error = new Error(payload.error || `HTTP_${response.status}`);
+    const code = typeof payload.error === "string" ? payload.error : payload.error?.code?.toLowerCase();    const error = new Error(code || `HTTP_${response.status}`);
     error.status = response.status;
-    error.code = payload.error || null;
+    error.code = code || null;
     throw error;
   }
   return payload;
@@ -105,5 +105,65 @@ async function loadBindings() {
   }
 }
 
-window.addEventListener("enthusia:account-rendered",()=>{root=document.querySelector("#account-punishment-bindings");void loadBindings();});
-void loadBindings();
+function ownedPunishmentRow(punishment) {
+  const row = element("li", "account-owned-punishment-row");
+  const details = element("div", "account-owned-punishment-details");
+  details.append(element("strong", "", `${punishment.minecraftName} · ${punishment.type}`),
+    element("span", "", punishment.reason),
+    element("span", "account-link-status", `Issued ${new Date(punishment.createdAt).toLocaleDateString()}`));
+  const actions = element("div");
+  if (punishment.appealable) {
+    const link = element("a", "account-text-button", "Appeal");
+    const query = new URLSearchParams({ minecraftUuid: punishment.minecraftUuid, punishmentId: punishment.id });
+    if (!punishment.active) query.set("includeExpired", "1");
+    link.href = `/appeal.html?${query}#new`;
+    actions.append(link);
+  } else {
+    actions.append(element("span", "account-link-status", `Appeal available ${new Date(punishment.nextAppealAt).toLocaleString()}`));
+  }
+  row.append(details, actions);
+  return row;
+}
+
+function ownedPunishmentPanel(panel, scope) {
+  if (!panel) return;
+  const status = element("p", "account-link-status", scope === "ACTIVE" ? "Loading punishments…" : "Expired punishments can still be appealed once every 14 days.");
+  const list = element("ul", "account-owned-punishment-list");
+  const button = element("button", "account-text-button", scope === "ACTIVE" ? "Load older punishments" : "Show expired punishments");
+  button.type = "button";
+  button.hidden = scope === "ACTIVE";
+  panel.append(status, list, button);
+  let cursor = null;
+  let loaded = false;
+  const load = async () => {
+    button.disabled = true;
+    status.textContent = "Loading punishments…";
+    try {
+      const query = new URLSearchParams({ scope });
+      if (cursor) query.set("cursor", cursor);
+      const payload = await api(`/api/appeals/punishments?${query}`);
+      const items = Array.isArray(payload.punishments) ? payload.punishments : [];
+      list.append(...items.map(ownedPunishmentRow));
+      loaded = true;
+      cursor = payload.nextCursor || null;
+      status.textContent = list.children.length ? "Each punishment can be appealed once every 14 days." : `No ${scope.toLowerCase()} punishments on your linked accounts.`;
+      button.hidden = !cursor;
+      button.textContent = "Load older punishments";
+    } catch (error) {
+      status.textContent = error.code === "minecraft_link_required" ? "Link your Minecraft account to see its punishments." : "Punishments could not be loaded right now.";
+      button.hidden = false;
+      button.textContent = loaded ? "Load older punishments" : "Try again";
+    } finally { button.disabled = false; }
+  };
+  button.addEventListener("click", () => void load());
+  if (scope === "ACTIVE") void load();
+}
+
+function loadAccountPunishments() {
+  root = document.querySelector("#account-punishment-bindings");
+  if (root) void loadBindings();
+  ownedPunishmentPanel(document.querySelector("#account-active-punishments"), "ACTIVE");
+  ownedPunishmentPanel(document.querySelector("#account-expired-punishments"), "EXPIRED");
+}
+window.addEventListener("enthusia:account-rendered", loadAccountPunishments);
+loadAccountPunishments();

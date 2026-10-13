@@ -1,6 +1,7 @@
 import { competitionsEnabled, hasCompetitionDatabase } from "../../../lib/competitions/access.js";
 import { getCompetitionIdentitySession } from "../../../lib/competitions/identity.js";
 import { json, methodNotAllowed } from "../../../lib/responses.js";
+import { automaticPunishmentAppeals } from "../../../lib/account-punishments.js";
 
 export async function onRequestGet(context) {
   if (!competitionsEnabled(context.env)) return json({ error: "not_found" }, 404);
@@ -15,6 +16,7 @@ export async function onRequestGet(context) {
       discordGuildMember: session.discordGuildMember,
       linkedMinecraftAccounts: session.linkedMinecraftAccounts,
       networkAccounts: session.networkAccounts,
+      linkedPunishmentAppeals: automaticPunishmentAppeals(context.env),
       networkAccountsPending: String(context.env.NETWORK_ACCOUNT_LINKS ?? "").trim().toLowerCase() === "false",
       expiresAt: session.expiresAt
     });

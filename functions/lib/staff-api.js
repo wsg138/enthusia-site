@@ -10,6 +10,8 @@ const STATIC_ROUTES = new Set([
   "/v1/website/appeals/eligible",
   "/v1/website/appeals/mine",
   "/v1/website/appeals/submit",
+  "/v1/website/appeals/linked",
+  "/v1/website/appeals/linked/submit",
   "/v1/website/appeals/reviewer/list"
 ]);
 const DECISION_ROUTE = /^\/v1\/website\/appeals\/reviewer\/[0-9a-f-]{36}\/decision$/i;

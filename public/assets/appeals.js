@@ -10,6 +10,11 @@ const form = document.querySelector("#appeal-form");
 const accountSelect = document.querySelector("#appeal-account");
 const punishmentSelect = document.querySelector("#appeal-punishment");
 const punishmentStatus = document.querySelector("#punishment-result");
+const expiredControl = document.querySelector("#expired-punishments-control");
+const includeExpired = document.querySelector("#include-expired-punishments");
+const olderPunishments = document.querySelector("#load-older-punishments");
+let punishmentRequest = 0;
+const requestedPunishment = new URLSearchParams(location.search).get("punishmentId");
 const punishmentRoot = document.querySelector("#selected-punishment");
 const questionsRoot = document.querySelector("#appeal-questions");
 const submitButton = document.querySelector("#submit-appeal");
@@ -35,6 +40,7 @@ const state = {
   appeals: [],
   punishments: [],
   selected: null,
+  nextCursor: null,
   attachments: [],
   draftId: null,
   uploading: false,
@@ -391,7 +397,7 @@ function answersValid() {
 }
 
 function updateSubmitState() {
-  submitButton.disabled = !state.selected || !answersValid() || state.uploading || state.submitting;
+  submitButton.disabled = !state.selected || state.selected.appealable === false || !answersValid() || state.uploading || state.submitting;
 }
 
 function updateAnswer(field) {
@@ -457,6 +463,8 @@ function showPunishment(punishment) {
     heading.append(element("strong", "", punishment.type), element("span", "", punishment.caseId ? `Case ${punishment.caseId}` : "Appealable punishment"));
     const reason = element("p", "", punishment.reason);
     punishmentRoot.append(heading, reason);
+    if (punishment.active === false) punishmentRoot.append(element("p", "", "This punishment has expired. You can still ask staff to review it."));
+    if (punishment.appealable === false) punishmentRoot.append(element("p", "appeal-selection-status", `You can appeal this punishment again on ${new Date(punishment.nextAppealAt).toLocaleString()}. Each punishment can be appealed once every 14 days.`));
     setStep("appeal", ["account", "punishment"]);
   } else if (state.session?.authenticated) {
     setStep("punishment", ["account"]);
@@ -471,40 +479,43 @@ function eligibilityMessage(payload, status) {
   return `Punishments could not be loaded (${status}).`;
 }
 
-async function loadPunishments() {
-  showPunishment(null);
-  state.punishments = [];
-  punishmentSelect.disabled = true;
-  punishmentSelect.replaceChildren(new Option("Loading punishments…", ""));
-  punishmentStatus.textContent = "Checking this account…";
+async function loadPunishments(append = false) {
+  const requestId = ++punishmentRequest;
   const minecraftUuid = accountSelect.value;
+  const previousSelection = append ? punishmentSelect.value : requestedPunishment;
+  if (!append) { showPunishment(null); state.punishments = []; state.nextCursor = null; }
+  punishmentSelect.disabled = true;
+  olderPunishments.hidden = true;
+  punishmentStatus.textContent = "Checking this account…";
   if (!minecraftUuid) return;
+  const query = new URLSearchParams({ minecraftUuid });
+  if (state.session?.linkedPunishmentAppeals && includeExpired.checked) query.set("includeExpired", "1");
+  if (append && state.nextCursor) query.set("cursor", state.nextCursor);
   try {
-    const response = await fetch(`/api/appeals/eligible?minecraftUuid=${encodeURIComponent(minecraftUuid)}`, {
-      credentials: "same-origin",
-      headers: { accept: "application/json" }
+    const response = await fetch(`/api/appeals/eligible?${query}`, {
+      credentials: "same-origin", headers: { accept: "application/json" }
     });
     const payload = await response.json().catch(() => ({}));
+    if (requestId !== punishmentRequest) return;
     if (!response.ok) {
       punishmentSelect.replaceChildren(new Option("Punishments unavailable", ""));
       punishmentStatus.textContent = eligibilityMessage(payload, response.status);
       return;
     }
-    state.punishments = Array.isArray(payload.punishments) ? payload.punishments : [];
-    if (!state.punishments.length) {
-      punishmentSelect.replaceChildren(new Option("No punishments available", ""));
-      punishmentStatus.textContent = "There are no active punishments available to appeal for this account.";
-      return;
-    }
-    punishmentSelect.replaceChildren(
-      new Option("Choose a punishment", ""),
-      ...state.punishments.map((punishment) => new Option(punishmentLabel(punishment), punishment.id))
-    );
-    punishmentSelect.disabled = false;
-    punishmentStatus.textContent = state.punishments.length === 1
-      ? "One punishment is available to appeal."
-      : `${state.punishments.length} punishments are available to appeal.`;
+    const incoming = Array.isArray(payload.punishments) ? payload.punishments : [];
+    state.punishments = append ? [...state.punishments, ...incoming.filter(item => !state.punishments.some(old => old.id === item.id))] : incoming;
+    state.nextCursor = payload.nextCursor || null;
+    olderPunishments.hidden = !state.nextCursor;
+    punishmentSelect.replaceChildren(new Option(state.punishments.length ? "Choose a punishment" : "No punishments available", ""),
+      ...state.punishments.map(punishment => new Option(punishmentLabel(punishment), punishment.id)));
+    punishmentSelect.disabled = !state.punishments.length;
+    punishmentStatus.textContent = state.punishments.length
+      ? `${state.punishments.length} punishment${state.punishments.length === 1 ? "" : "s"} found. Select one to check its appeal availability.`
+      : `There are no ${includeExpired.checked ? "active or expired" : "active"} punishments for this account.`;
+    const selected = state.punishments.find(item => item.id === previousSelection);
+    if (selected) { punishmentSelect.value = selected.id; showPunishment(selected); }
   } catch {
+    if (requestId !== punishmentRequest) return;
     punishmentSelect.replaceChildren(new Option("Punishments unavailable", ""));
     punishmentStatus.textContent = "Punishments could not be loaded right now. Try again in a few minutes.";
   }
@@ -630,10 +641,15 @@ async function removeAttachment(attachment, button) {
 }
 
 function populateAccounts() {
+  if (state.session.linkedPunishmentAppeals) document.querySelector("#punishment-selection-policy").textContent = "Active punishments are shown by default. Each punishment can be appealed once every 14 days.";
   accountSelect.replaceChildren(...state.session.linkedMinecraftAccounts.map((account) => (
     new Option(account.name, account.uuid)
   )));
-  accountSelect.value = state.session.linkedMinecraftAccounts[0].uuid;
+  const query = new URLSearchParams(location.search);
+  const requestedAccount = query.get("minecraftUuid");
+  accountSelect.value = state.session.linkedMinecraftAccounts.find(account => account.uuid === requestedAccount)?.uuid || state.session.linkedMinecraftAccounts[0].uuid;
+  expiredControl.hidden = !state.session.linkedPunishmentAppeals;
+  includeExpired.checked = Boolean(state.session.linkedPunishmentAppeals && query.get("includeExpired") === "1");
   loadPunishments();
 }
 
@@ -698,18 +714,20 @@ async function loadSession() {
   }
 }
 
-function submissionMessage(payload, status) {
+function submissionMessage(payload, status) {  if (typeof payload?.error === "object") payload = { ...payload, error: payload.error?.code?.toLowerCase() };
   if (payload?.error === "invalid_appeal") return "Check each answer and make sure it meets the minimum length.";
   if (payload?.error === "punishment_not_appealable") return "That punishment is no longer available to appeal. The list will be refreshed.";
   if (payload?.error === "appeal_attachment_conflict") return "One of the files changed before submission. Refresh the page and check the evidence list.";
   if (payload?.error === "appeal_draft_conflict") return "This draft was already sent with different answers. Refresh before starting another appeal.";
+  if (payload?.error === "appeal_cooldown") return "This punishment can be appealed once every 14 days. Check its next available date above.";
+  if (status === 429) return "Please wait before submitting another appeal.";
   if (status === 503) return "Your appeal could not be sent right now. Your answers and files are still here.";
   return `The appeal could not be sent (${status}).`;
 }
 
 async function submitAppeal(event) {
   event.preventDefault();
-  if (!state.selected || !answersValid()) {
+  if (!state.selected || state.selected.appealable === false || !answersValid()) {
     result.textContent = "Complete every required answer before sending the appeal.";
     form.reportValidity();
     updateSubmitState();
@@ -736,7 +754,7 @@ async function submitAppeal(event) {
     const responsePayload = await response.json().catch(() => ({}));
     if (!response.ok) {
       result.textContent = submissionMessage(responsePayload, response.status);
-      if (responsePayload.error === "punishment_not_appealable") await loadPunishments();
+      const errorCode = typeof responsePayload.error === "string" ? responsePayload.error : responsePayload.error?.code?.toLowerCase();      if (["punishment_not_appealable", "appeal_cooldown"].includes(errorCode)) await loadPunishments();
       return;
     }
     result.textContent = "Appeal sent. Staff can now review it.";
@@ -757,7 +775,9 @@ async function submitAppeal(event) {
   }
 }
 
-accountSelect.addEventListener("change", loadPunishments);
+accountSelect.addEventListener("change", () => loadPunishments());
+includeExpired.addEventListener("change", () => loadPunishments());
+olderPunishments.addEventListener("click", () => loadPunishments(true));
 punishmentSelect.addEventListener("change", () => {
   const selected = state.punishments.find((punishment) => punishment.id === punishmentSelect.value) ?? null;
   showPunishment(selected);

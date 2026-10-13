@@ -1,8 +1,10 @@
 import { listPunishmentBindings } from "../../lib/appeal-bindings.js";
+import { automaticPunishmentAppeals } from "../../lib/account-punishments.js";
 import { authenticateLinkedAppealRequest } from "../../lib/appeal-session.js";
 import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../lib/responses.js";
 
 export async function onRequestGet(context) {
+  if (automaticPunishmentAppeals(context.env)) return json({ error: "punishment_binding_removed" }, 410);
   let session;
   try { session = await authenticateLinkedAppealRequest(context.request, context.env); }
   catch { return serviceUnavailable(); }

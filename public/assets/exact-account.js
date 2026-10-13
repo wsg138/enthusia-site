@@ -13,9 +13,15 @@ export function renderExactAccount(root,session,actions){
     const link=panels[1],button=link.querySelector('button'),code=link.querySelector('.swap'),command=code.querySelector('.cmd'),status=code.querySelector('p:last-child');code.hidden=true;
     if(session.networkAccountsPending){button.disabled=true;link.querySelector('p').textContent='Linking will be available after the server connection is activated.';}
     button.addEventListener('click',()=>{code.hidden=false;actions.startLink(button,command,status);});
+    if(session.linkedPunishmentAppeals){
+      for(const [index,id,title] of [[2,'account-active-punishments','Active punishments'],[3,'account-expired-punishments','Expired punishments']]){
+        const panel=panels[index];panel.id=id;panel.replaceChildren();const heading=document.createElement('h3');heading.textContent=title;panel.append(heading);
+      }
+    }else{
     const claim=panels[2],liveClaim=actions.punishmentClaimSection(session);claim.replaceChildren(...liveClaim.children);
     for(const label of claim.querySelectorAll('label'))label.className='f';for(const input of claim.querySelectorAll('input,select'))input.className='field';claim.querySelector('button')?.classList.add('btn-gold');
     const bindings=panels[3];bindings.querySelector('[id]')?.removeAttribute('id');bindings.id='account-punishment-bindings';bindings.replaceChildren();
+    }
   }
   root.replaceChildren(fragment);
   window.dispatchEvent(new Event('enthusia:account-rendered'));
