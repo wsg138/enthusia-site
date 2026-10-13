@@ -222,3 +222,68 @@ has 375px document width and no horizontal overflow. Screenshot retained in
 the private evidence directory. Localhost only; no mobile-hosted link, PR,
 push, installation or deployment. Complete rosters and seven unpublished
 banner designs remain unavailable in the currently exposed public feeds.
+
+## Profile activity connections: local continuation
+
+Requirements: complete guild DTO imports replace partial memberships by UUID;
+never invent a banner. Guild quests are guild progress, not personal credit;
+select the active exported week, preserve Long counts and existing standings.
+Achievement definitions or aggregate completion counts do not prove personal
+completion. Explicit public player completion names/known-empty state are
+supported. Bounty targets join by UUID, omit closed/expired records, and never
+expose setters, whitelists or item metadata. Monetary units remain unknown
+unless the public adapter has verified raw gold. Weekly totals must use all
+counted matches, not infer zero from an absent top-three entry. All async sections
+must ignore results after profile selection changes and show unavailable/stale
+states. Continue manual SPEAR; no project-local EARS/state tooling exists.
+
+Local capture bundle (builder fifth argument): optional playerGuilds source
+contains generatedAt and requested id/guildMemberships rows; optional players
+contains generatedAt and publicly exportable achievement names with
+achievementsKnown, or weeklyDuelWins {weekStartsAt,capturedAt,wins}. Other optional
+guildquests/bounties/warzone entries use the existing bounded public contracts.
+Importing does not write to the website, server or Cloudflare. Complete data
+also refreshes local guild cards and preserves already available directory data.
+
+Read-only investigation: LumaGuilds temp_exports is empty. Its 1.4GB active
+SQLite database contents route returns 403; the signed download endpoint's TLS
+certificate is expired. No protection was bypassed and no active SQLite copy
+was used. Complete memberships, unconfirmed guild banners and actual guild quest
+standings still require a consistent public export. The live achievement route
+returns an empty catalogue with no personal completions; catalogue data is not
+treated as an empty personal achievement list.
+
+Fresh read-only bounty and H2 duel captures were byte-identical across two GETs.
+Only unrestricted public bounty target identity/state is projected; payout is
+null because currency/item eligibility is unverified. All 137 profiles receive
+complete counted weekly win totals from the captured H2 source using the native
+query filters: counted_as_match, non-DRAW, nonempty winner and UTC Monday interval.
+The SQLite source is separate and remains unavailable. H2 is opened locally in
+ACCESS_MODE_DATA=r with IFEXISTS; no production SQL or mutations run. These are
+captured results, not automatic live feeds. Raw captures, credentials, and
+raw database files remain outside the website repository. The reviewable
+read-only helper is scripts/export-captured-profile-wins.java (JDK 21 source
+launcher with the existing H2 2.2.224 and Gson libraries on the classpath).
+Arguments: captured H2 base filename without .mv.db, capture timestamp file,
+public profiles JSON, private output JSON. It never accesses the server or
+authenticates; the operator supplies an independently verified consistent copy.
+
+Verification: 549 website tests, lint, page checks, map checks, static build and
+Pages Functions compilation pass. The repository helper reproduces all 137
+captured weekly totals without changing the H2 input hash; the source has one
+weekly winner, Solan231 with one counted win. Other public profiles have verified
+zero in this capture. The fresh bounty source has 41 unrestricted targets and
+expiry is disabled (bounty-expire.time=-1), confirmed read-only. Unknown payouts
+remain null, and bounty summary totals render unavailable instead of zero.
+
+Browser checks cover real WeOnTop banner/profile, known-zero weekly results,
+averality's matching public bounty, and the separately labeled simulated quest
+42/100 progress, achievement and bounty states. Two observed UI failures (wrong
+feed route syntax and an immediate result before the cloned profile attached)
+were repaired and rechecked. Six profile cards use one column at 390px; document
+width 375px, no horizontal overflow. Captured-page links point to corresponding
+local capture views; unavailable feeds never fall through to sample page data.
+The local builder fingerprints the directory entry script to avoid a stale
+browser module obscuring the nullable-payout fix. Screenshot evidence remains
+outside source. No PR, push, remote writes, installation or deployment occurred.
+The interactive link is localhost only, not a hosted mobile-accessible link.

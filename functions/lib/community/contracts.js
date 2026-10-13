@@ -70,6 +70,14 @@ function leaderboardPosition(value){
   if(position!==null&&(!Number.isInteger(position)||position<1))throw new Error('invalid_leaderboard_position');
   return position;
 }
+function weeklyDuelWins(value){
+  if(value===undefined)return undefined;
+  const weekStartsAt=timestamp(value.weekStartsAt),capturedAt=timestamp(value.capturedAt),wins=number(value.wins,1e9);
+  const start=new Date(weekStartsAt);
+  if(!weekStartsAt||!capturedAt||start.getUTCDay()!==1||start.getUTCHours()!==0||start.getUTCMinutes()!==0||start.getUTCSeconds()!==0||start.getUTCMilliseconds()!==0
+    ||Date.parse(capturedAt)<Date.parse(weekStartsAt)||Date.parse(capturedAt)>Date.now()+60000||wins===null||!Number.isInteger(wins))throw new Error('invalid_player_duels');
+  return {weekStartsAt,capturedAt,wins};
+}
 export function projectSnapshot(kind,input) {
   if(kind==='guildquests')return projectGuildQuests(input);
   if(!SNAPSHOT_KINDS.has(kind)||!Array.isArray(input?.items)||input.items.length>1000)throw new Error('invalid_snapshot');
@@ -80,6 +88,7 @@ export function projectSnapshot(kind,input) {
     if(kind==='guilds')return {...base,level:number(row.level),members:number(row.members,20000),elo:number(row.elo),prestige:number(row.prestige,1e6),foundedAt:timestamp(row.foundedAt),bankBalance:number(row.bankBalance),totalExperience:number(row.totalExperience),activityScore:number(row.activityScore),tag:text(row.tag,80),recruiting:typeof row.recruiting==='boolean'?row.recruiting:null,peaceful:typeof row.peaceful==='boolean'?row.peaceful:null,membersList:memberNames(row.membersList),banner:banner(row.banner),links:links(row.links)};
     if(kind==='players')return {...base,guild:text(row.guild,80),rank:text(row.rank,80),playtime:number(row.playtime),balance:number(row.balance),reputation:number(row.reputation),achievements:memberNames(row.achievements),links:links(row.links),
       ...(row.balanceRank!==undefined?{balanceRank:leaderboardPosition(row.balanceRank)}:{}),...(row.playtimeRank!==undefined?{playtimeRank:leaderboardPosition(row.playtimeRank)}:{}),
+      ...(row.achievementsKnown===true?{achievementsKnown:true}:{}),...(row.weeklyDuelWins!==undefined?{weeklyDuelWins:weeklyDuelWins(row.weeklyDuelWins)}:{}),
       ...(row.guildsKnown===true?{guildsKnown:true,guildMemberships:playerGuilds(row.guildMemberships),...(row.guildsPartial===true?{guildsPartial:true}:{})}:{})};
     if(kind==='warzone'){if(!['kit','leader','activity'].includes(row.type))throw new Error('invalid_warzone_type');const wins=number(row.wins,1e9);if(wins!==null&&!Number.isInteger(wins))throw new Error('invalid_wins');return {...base,type:row.type,kills:number(row.kills,1e9),wins,endsAt:timestamp(row.endsAt),target:publicUrl(row.target),rules:Array.isArray(row.rules)?row.rules.slice(0,12).map(v=>text(v,200,true)):[],manualOverride:row.manualOverride===true};}
     if(kind==='bounties')return {...base,gold:number(row.gold),state:['open','claimed','expired'].includes(row.state)?row.state:'open',hunter:text(row.hunter,80),expiresAt:timestamp(row.expiresAt)};

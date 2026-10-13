@@ -13,7 +13,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 50,
-      "playtimeRank": 1
+      "playtimeRank": 1,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "9ea84cce-9fea-4a22-bdcf-301509b8de10",
@@ -37,7 +42,12 @@
           "level": 100,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "d02bf06f-425a-40b2-916c-0d6cf9d089c3",
@@ -50,7 +60,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 3
+      "playtimeRank": 3,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "44f0d972-a7aa-4145-8bc0-bdd267effed6",
@@ -64,7 +79,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 5,
-      "playtimeRank": 4
+      "playtimeRank": 4,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "f53b9522-15e1-405c-bb2e-8170b55b20ca",
@@ -78,7 +98,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 18,
-      "playtimeRank": 5
+      "playtimeRank": 5,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "51dd6d58-af99-41ac-8985-e55f11561cc6",
@@ -91,7 +116,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 6
+      "playtimeRank": 6,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "28613580-10cc-4066-86be-3bdb95660560",
@@ -105,7 +135,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 63,
-      "playtimeRank": 7
+      "playtimeRank": 7,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "5f8b99ed-c305-41bd-bbe3-829dac0a90f9",
@@ -129,7 +164,12 @@
           "level": 100,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "da904938-19a0-4cc5-a4bb-deaa58e5eac2",
@@ -177,7 +217,12 @@
             ]
           }
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "7ccc3217-21bb-4e61-a055-e756e29e2cc3",
@@ -225,7 +270,12 @@
             ]
           }
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "ea04ab7f-3378-4660-81de-6747e5a70008",
@@ -249,7 +299,12 @@
           "level": 100,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "a7a332bc-c45f-42da-8ef7-da43a4dc0cf9",
@@ -263,7 +318,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 9,
-      "playtimeRank": 12
+      "playtimeRank": 12,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "4eb9e6e1-92e2-4a29-9d33-423f2c871f7d",
@@ -277,7 +337,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 25,
-      "playtimeRank": 13
+      "playtimeRank": 13,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "d995c705-e8c8-40c4-991e-87755102874c",
@@ -291,7 +356,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 33,
-      "playtimeRank": 14
+      "playtimeRank": 14,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "f138c5f3-cd18-426a-a615-db0f4e4e7c97",
@@ -305,7 +375,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 22,
-      "playtimeRank": 15
+      "playtimeRank": 15,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "7402cfa7-ee57-41ba-8d65-f6d931547f11",
@@ -349,7 +424,12 @@
             ]
           }
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "bfc8481a-9523-4f84-9768-4b1de02ab776",
@@ -363,7 +443,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 24,
-      "playtimeRank": 17
+      "playtimeRank": 17,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "114583e7-f384-42c7-9352-4d34373c3df0",
@@ -377,7 +462,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 35,
-      "playtimeRank": 18
+      "playtimeRank": 18,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "03a878e6-1208-4a30-88d8-5205026b275f",
@@ -391,7 +481,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 43,
-      "playtimeRank": 19
+      "playtimeRank": 19,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "869b9050-f938-459c-be4f-c3bd0f8ac21f",
@@ -405,7 +500,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 17,
-      "playtimeRank": 20
+      "playtimeRank": 20,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "487f3f9d-7cc0-46bd-b55a-1083191c8d38",
@@ -419,7 +519,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 15,
-      "playtimeRank": 21
+      "playtimeRank": 21,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "30574201-76af-4a1b-b6b1-322ab72b9787",
@@ -443,7 +548,12 @@
           "level": 80,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "4c8181df-6058-4e19-9ed5-98b14618bd6b",
@@ -487,7 +597,12 @@
             ]
           }
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "d92f1d96-b57c-47e2-9448-294f15e701b9",
@@ -500,7 +615,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 24
+      "playtimeRank": 24,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "0a51c4ef-89b4-4560-ac2f-1f554ae28add",
@@ -524,7 +644,12 @@
           "level": 100,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "052985e3-07f2-4f19-8953-21742c34900c",
@@ -537,7 +662,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 26
+      "playtimeRank": 26,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "a368d767-e196-4a3b-9726-8edf7948b61f",
@@ -561,7 +691,12 @@
           "level": 92,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "4e0be828-7fa2-4903-94b2-1e150b7cced6",
@@ -574,7 +709,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 28
+      "playtimeRank": 28,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "b7777b2b-62d1-443e-b7dc-89c4f11f3628",
@@ -588,7 +728,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 69,
-      "playtimeRank": 29
+      "playtimeRank": 29,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "a4bdb259-4997-4530-90ba-d6d7660a2f80",
@@ -602,7 +747,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 16,
-      "playtimeRank": 30
+      "playtimeRank": 30,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "ed1d4c5e-b924-41e3-873a-72aad4a93312",
@@ -616,7 +766,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 2,
-      "playtimeRank": 31
+      "playtimeRank": 31,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "536b137e-72aa-439e-8c76-07a7b72cdc2a",
@@ -630,7 +785,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 38,
-      "playtimeRank": 32
+      "playtimeRank": 32,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "07821182-506c-40a7-9755-f7364d48eed4",
@@ -644,7 +804,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 11,
-      "playtimeRank": 33
+      "playtimeRank": 33,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "217606e9-7047-4e8d-883e-1723e7fc93fa",
@@ -658,7 +823,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 31,
-      "playtimeRank": 34
+      "playtimeRank": 34,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "37219811-0932-4b5b-b446-19ce0af4ab2d",
@@ -681,7 +851,12 @@
           "level": 79,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "22e816d0-c749-4dcf-b797-3f26507488bd",
@@ -705,7 +880,12 @@
           "level": 100,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "394402f0-6358-4f41-ba9c-7f7238280083",
@@ -718,7 +898,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 37
+      "playtimeRank": 37,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "ddc60bec-18a6-43c1-889b-d8931df8d977",
@@ -731,7 +916,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 38
+      "playtimeRank": 38,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "b00d1c8f-578c-47b0-97ff-78a44ec6a7d8",
@@ -745,7 +935,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 30,
-      "playtimeRank": 39
+      "playtimeRank": 39,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "7d246895-ccd7-48c4-92c2-724c2b06f73c",
@@ -758,7 +953,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 40
+      "playtimeRank": 40,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "8c502778-f789-4367-a3eb-03ebca043d31",
@@ -771,7 +971,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 41
+      "playtimeRank": 41,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "aa82005d-cd30-4089-a6b2-3fc097a0515c",
@@ -785,7 +990,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 19,
-      "playtimeRank": 42
+      "playtimeRank": 42,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "13e8830c-79f5-4b07-8be2-262e5d60b58b",
@@ -799,7 +1009,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 8,
-      "playtimeRank": 43
+      "playtimeRank": 43,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "89901d6b-a095-4fec-8401-d099722899de",
@@ -813,7 +1028,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 88,
-      "playtimeRank": 44
+      "playtimeRank": 44,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "b190aa51-8a91-43d3-93c5-4430a39e5a3f",
@@ -826,7 +1046,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 45
+      "playtimeRank": 45,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "bf15f0ff-5c20-4476-918a-a525e28f4270",
@@ -877,7 +1102,12 @@
             ]
           }
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "ff76a06d-104d-414a-8e9a-77d8ca7fefc6",
@@ -891,7 +1121,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 67,
-      "playtimeRank": 47
+      "playtimeRank": 47,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "6d89d319-6a74-4f54-b973-2d83388600d0",
@@ -904,7 +1139,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 48
+      "playtimeRank": 48,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "31afbdfd-803f-441e-82df-10521f27ec35",
@@ -927,7 +1167,12 @@
           "level": 94,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "85edef10-68ba-465a-8943-bef5a40e4c4e",
@@ -940,7 +1185,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 50
+      "playtimeRank": 50,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "3e3d7159-95bf-4215-aa30-8cda0ed7fc16",
@@ -954,7 +1204,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 6,
-      "playtimeRank": 51
+      "playtimeRank": 51,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "a93d1d76-e588-40ee-8839-53f3955baa1b",
@@ -967,7 +1222,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 52
+      "playtimeRank": 52,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "8fd77e35-7702-47c5-884c-c215eeb4511b",
@@ -980,7 +1240,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 53
+      "playtimeRank": 53,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "e8288eb9-6bd0-4376-ad54-27d079caad7a",
@@ -993,7 +1258,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 54
+      "playtimeRank": 54,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "c8d03832-42f4-4878-a1e1-ae6dc39f554c",
@@ -1007,7 +1277,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 41,
-      "playtimeRank": 55
+      "playtimeRank": 55,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "adaf62c8-347b-407a-a8b3-4455d2db25b4",
@@ -1020,7 +1295,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 56
+      "playtimeRank": 56,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "71f14fe1-af78-461e-97cf-8b6f1708c9e8",
@@ -1034,7 +1314,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 4,
-      "playtimeRank": 57
+      "playtimeRank": 57,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "a25b31dd-9319-42b5-a9e8-84654ee31993",
@@ -1048,7 +1333,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 91,
-      "playtimeRank": 58
+      "playtimeRank": 58,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "68aacf87-855e-4e83-8cc7-d134cd7cbc1b",
@@ -1072,7 +1362,12 @@
           "level": 100,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "bf4a25d6-9aa9-46c2-8f93-5eae0edc0fdb",
@@ -1086,7 +1381,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 21,
-      "playtimeRank": 60
+      "playtimeRank": 60,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "07ff2374-dab0-43ec-8f11-8f168df0ad83",
@@ -1100,7 +1400,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 13,
-      "playtimeRank": 61
+      "playtimeRank": 61,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "dbffe3af-dae7-4ec0-ba1c-45eba311f790",
@@ -1113,7 +1418,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 62
+      "playtimeRank": 62,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "37ff3edf-939d-45bf-8d6a-a4e53e1d33c5",
@@ -1156,7 +1466,12 @@
             ]
           }
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "fac5a41a-05b6-44e1-8acf-8f918016400e",
@@ -1169,7 +1484,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 64
+      "playtimeRank": 64,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "7cf5b62b-f299-42b9-a835-edea51688654",
@@ -1182,7 +1502,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 65
+      "playtimeRank": 65,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "50e34daa-5905-45d0-bb28-71505bb50d9b",
@@ -1195,7 +1520,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 66
+      "playtimeRank": 66,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "25981853-bc12-4cc2-b364-24d00bbd37be",
@@ -1208,7 +1538,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 67
+      "playtimeRank": 67,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "c8bf93ed-0a81-4ea4-a28d-ca3485956930",
@@ -1221,7 +1556,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 68
+      "playtimeRank": 68,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "cabdb4e5-4f1d-42e7-9f88-b8914ffecbe7",
@@ -1244,7 +1584,12 @@
           "level": 92,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "ac2d6287-b558-496a-a222-440c1d67db6a",
@@ -1258,7 +1603,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 34,
-      "playtimeRank": 70
+      "playtimeRank": 70,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "9f387a49-c23f-4740-8796-1bca8e5be2f4",
@@ -1272,7 +1622,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 73,
-      "playtimeRank": 71
+      "playtimeRank": 71,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "3adf20fe-5127-47d4-bce4-b94d37815150",
@@ -1286,7 +1641,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 100,
-      "playtimeRank": 72
+      "playtimeRank": 72,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "54515870-fb3b-4aa5-937c-c5d57919c0c9",
@@ -1300,7 +1660,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 93,
-      "playtimeRank": 74
+      "playtimeRank": 74,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "e6a94ee5-cb9e-47b1-b32c-06b16d6781d5",
@@ -1314,7 +1679,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 47,
-      "playtimeRank": 75
+      "playtimeRank": 75,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "ecf0217b-60aa-468b-95da-39aaf3b34e8c",
@@ -1327,7 +1697,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 76
+      "playtimeRank": 76,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "718b7b06-6609-4d04-8dc2-9ac7d51d0ea5",
@@ -1341,7 +1716,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 14,
-      "playtimeRank": 77
+      "playtimeRank": 77,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "9b1df9ac-2e09-427d-9b62-ad2db200a39e",
@@ -1355,7 +1735,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 66,
-      "playtimeRank": 78
+      "playtimeRank": 78,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "b782c035-f5b9-4d92-a4da-2abe4ddf7905",
@@ -1368,7 +1753,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 79
+      "playtimeRank": 79,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "daceaf37-b314-4d51-9a56-963c1ffb0014",
@@ -1382,7 +1772,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 36,
-      "playtimeRank": 80
+      "playtimeRank": 80,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "8fd1f06f-ae0a-4b3d-9383-6f0b0dcb14ff",
@@ -1433,7 +1828,12 @@
             ]
           }
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "a5d4acc7-7bc4-4f60-945f-d0e3bbc7faee",
@@ -1447,7 +1847,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 72,
-      "playtimeRank": 82
+      "playtimeRank": 82,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "36c5cd13-61f4-44f1-9987-0390f20c9ea2",
@@ -1461,7 +1866,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 28,
-      "playtimeRank": 83
+      "playtimeRank": 83,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "1aa50ca2-a806-4d5c-ae8e-a553fd1a8b7d",
@@ -1474,7 +1884,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 84
+      "playtimeRank": 84,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "66b75a73-ed90-4c5f-936b-07a769960dfd",
@@ -1488,7 +1903,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 42,
-      "playtimeRank": 85
+      "playtimeRank": 85,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "fdef7122-e216-40e8-8276-a31b7c00362a",
@@ -1502,7 +1922,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 46,
-      "playtimeRank": 86
+      "playtimeRank": 86,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "ebb2b10b-ef1d-4f11-a82e-c7b4623e6534",
@@ -1525,7 +1950,12 @@
           "level": 100,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "3ad1d37d-e794-4d43-8fbe-caaed8eedbd0",
@@ -1538,7 +1968,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 88
+      "playtimeRank": 88,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "a297d568-4c7f-44c9-9d54-c75d7e356e38",
@@ -1552,7 +1987,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 51,
-      "playtimeRank": 89
+      "playtimeRank": 89,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "7e3870d2-6b16-427f-a98b-d528f6114aa8",
@@ -1565,7 +2005,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 90
+      "playtimeRank": 90,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "f1a12e8d-9f3c-408e-8b02-a28c097b7d29",
@@ -1578,7 +2023,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 91
+      "playtimeRank": 91,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "5a14d26d-864a-43d0-9443-d85eb16abea6",
@@ -1592,7 +2042,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 86,
-      "playtimeRank": 92
+      "playtimeRank": 92,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "328e57cd-42ef-4fed-ab35-c46d688007f7",
@@ -1606,7 +2061,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 64,
-      "playtimeRank": 94
+      "playtimeRank": 94,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "af5647cd-a518-4ac0-932a-839b8e3d3df4",
@@ -1620,7 +2080,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 80,
-      "playtimeRank": 95
+      "playtimeRank": 95,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "a8893729-6c73-4d0d-bd92-0e338150dead",
@@ -1634,7 +2099,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 44,
-      "playtimeRank": 96
+      "playtimeRank": 96,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "12d162fa-2df8-49a2-97ee-1dbcbf624809",
@@ -1647,7 +2117,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 97
+      "playtimeRank": 97,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "1684c9cd-fc0d-494f-92a5-7efb180cd0bb",
@@ -1661,7 +2136,12 @@
       "achievements": [],
       "links": [],
       "balanceRank": 48,
-      "playtimeRank": 98
+      "playtimeRank": 98,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "3f7426c3-89f5-424a-baa8-8eef8ec1e034",
@@ -1708,7 +2188,12 @@
             ]
           }
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "c4e7c406-0a0e-4124-8643-30557cd21162",
@@ -1721,7 +2206,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "playtimeRank": 100
+      "playtimeRank": 100,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "f6627014-6c29-46a1-b8bc-57f4c5638737",
@@ -1734,7 +2224,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 12
+      "balanceRank": 12,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "dfc644bb-576a-4f09-b752-853aa9f95cb1",
@@ -1747,7 +2242,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 26
+      "balanceRank": 26,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "1d391da5-b67b-4a0e-a19a-d9bf851c4a3d",
@@ -1760,7 +2260,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 27
+      "balanceRank": 27,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "50977764-a1f9-4c62-824e-7cdcbc630f0d",
@@ -1773,7 +2278,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 32
+      "balanceRank": 32,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "db21d07c-b785-429f-b135-fc109151b458",
@@ -1786,7 +2296,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 37
+      "balanceRank": 37,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "258523e9-d0bf-46e0-a8f2-fcac6ffcd8cd",
@@ -1799,7 +2314,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 39
+      "balanceRank": 39,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "bd32460c-6bb6-488e-937e-43d31bc8a5b9",
@@ -1812,7 +2332,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 45
+      "balanceRank": 45,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "2cfd8361-0f95-4d11-ba25-28d2b0f89ca4",
@@ -1825,7 +2350,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 49
+      "balanceRank": 49,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "2d3c32c7-2594-4f10-bb32-442090323c87",
@@ -1868,7 +2398,12 @@
             ]
           }
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "3a0ac629-7fed-4e23-b42c-9dd9564816ed",
@@ -1881,7 +2416,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 54
+      "balanceRank": 54,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "55306c12-a187-4160-b9da-91798c84492c",
@@ -1894,7 +2434,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 55
+      "balanceRank": 55,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "2815b1b1-9b18-4e7a-b2dd-b8c5a0f52a5b",
@@ -1907,7 +2452,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 56
+      "balanceRank": 56,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "4b637d66-d800-45f7-9185-d3d46cc2ca92",
@@ -1920,7 +2470,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 57
+      "balanceRank": 57,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "d3545e65-b05d-4ba4-a2cf-da3c2b2d5829",
@@ -1933,7 +2488,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 59
+      "balanceRank": 59,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "09c9bc1b-82d5-45f4-b2e4-07b4da5895ee",
@@ -1946,7 +2506,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 60
+      "balanceRank": 60,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "44a9c404-c9cf-4aa9-8194-8d86d224ca94",
@@ -1959,7 +2524,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 61
+      "balanceRank": 61,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "4f745312-904e-4ecb-8d59-b42991fa73ae",
@@ -1972,7 +2542,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 62
+      "balanceRank": 62,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "bb726e03-4c0a-4575-91f0-a5cfb14d36e6",
@@ -1985,7 +2560,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 68
+      "balanceRank": 68,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "6d810bf9-2aba-4709-b1fc-5159773061c1",
@@ -1998,7 +2578,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 70
+      "balanceRank": 70,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "a5626e30-c4d0-4ac3-8b9f-4c32fd9ac4ce",
@@ -2011,7 +2596,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 71
+      "balanceRank": 71,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "a949c0d0-f21e-4aef-a23b-6eb1bc3a01cf",
@@ -2024,7 +2614,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 74
+      "balanceRank": 74,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "cb8ca7fa-973a-428c-8bc5-a84ee8d63cfa",
@@ -2037,7 +2632,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 75
+      "balanceRank": 75,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "3b20b501-1f33-4f24-8ab8-3c56d0c08d0f",
@@ -2050,7 +2650,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 77
+      "balanceRank": 77,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "bc443ce2-44e8-48fe-aadc-4c5c6638c600",
@@ -2063,7 +2668,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 78
+      "balanceRank": 78,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "801b8f12-7822-4b2d-8a85-2e0a09df910a",
@@ -2076,7 +2686,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 79
+      "balanceRank": 79,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "d679973f-9a61-4650-9851-2433ca3314d9",
@@ -2099,7 +2714,12 @@
           "level": 80,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "7415bbb9-272a-45f5-819a-ad30479d309a",
@@ -2112,7 +2732,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 82
+      "balanceRank": 82,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "d9e9fc72-fe5b-41f1-9cc9-d024dcd3175d",
@@ -2125,7 +2750,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 83
+      "balanceRank": 83,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "d1ca8560-da3d-4715-af7c-621c50efe218",
@@ -2138,7 +2768,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 84
+      "balanceRank": 84,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "b664078f-ae02-4375-8895-5882a2605bd7",
@@ -2151,7 +2786,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 85
+      "balanceRank": 85,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "28a66977-c4be-45e2-810d-8a837219915a",
@@ -2174,7 +2814,12 @@
           "level": 92,
           "banner": null
         }
-      ]
+      ],
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "d1e6b106-5384-41f8-a8d5-7b28d038211c",
@@ -2187,7 +2832,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 90
+      "balanceRank": 90,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "1b25b5aa-cb34-453f-b57f-81b1e5333657",
@@ -2200,7 +2850,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 92
+      "balanceRank": 92,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "8ee68ce2-b557-4a44-9c58-61e32f91d101",
@@ -2213,7 +2868,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 94
+      "balanceRank": 94,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 1
+      }
     },
     {
       "id": "ba19894e-40e0-44c6-b473-8a7612510236",
@@ -2226,7 +2886,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 95
+      "balanceRank": 95,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "3d984965-ecca-4309-8d13-c712df270d11",
@@ -2239,7 +2904,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 96
+      "balanceRank": 96,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "20cb4b57-e9a1-46ed-9f0f-a87a9177a9f0",
@@ -2252,7 +2922,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 97
+      "balanceRank": 97,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "de994fc0-3ad7-49cf-a1c6-0c3652843779",
@@ -2265,7 +2940,12 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 98
+      "balanceRank": 98,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     },
     {
       "id": "bf97677f-197d-4839-8177-e2c6669b0b4e",
@@ -2278,10 +2958,15 @@
       "reputation": null,
       "achievements": [],
       "links": [],
-      "balanceRank": 99
+      "balanceRank": 99,
+      "weeklyDuelWins": {
+        "weekStartsAt": "2026-10-12T00:00:00.000Z",
+        "capturedAt": "2026-10-13T00:40:40.194Z",
+        "wins": 0
+      }
     }
   ],
-  "generatedAt": "2026-10-12T21:11:20.376Z",
+  "generatedAt": "2026-10-13T00:40:40.194Z",
   "sourceUpdatedAt": "2026-10-12T21:08:01.165Z",
   "updatedAt": "2026-10-12T21:08:01.165Z",
   "stale": true,

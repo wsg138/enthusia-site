@@ -1,6 +1,34 @@
-import {el,link} from './community-dom.js';
+import {el,link,api} from './community-dom.js';
 import {ownedPlayerStalls} from './player-market-model.js';
+import {profileGuildQuests,profileBounties,profileDuelWins} from './player-activity-model.js';
 let marketSnapshot;
+const profileFeeds=new Map();
+function feed(kind){if(!profileFeeds.has(kind))profileFeeds.set(kind,api(kind,{signal:AbortSignal.timeout(5000)}).catch(()=>{profileFeeds.delete(kind);return null;}));return profileFeeds.get(kind);}
+async function appendActivity(host,item,node,kind){
+  const message=el('p',{text:'Loading…',role:'status'});host.append(message);
+  const snapshot=await (kind==='warzone'&&item.weeklyDuelWins?null:feed(kind));if(!node.isConnected)return;
+  if(kind==='guildquests'){
+    const result=profileGuildQuests(item,snapshot);
+    message.textContent=!result?'Guild quest progress is unavailable.':result.inactive?'No active quest week in this export.':result.quests.length?'Progress for your guilds':'No progress records for your guilds in this export.';
+    for(const quest of result?.quests.slice(0,6)??[])host.append(el('div',{class:'player-activity-row'},[
+      el('b',{text:quest.name}),el('p',{text:quest.guildName+' · '+quest.count+' / '+quest.target+(quest.rank?' · #'+quest.rank:'')+(quest.claimed?' · Claimed':'')}),
+      el('progress',{value:quest.percent,max:100,'aria-label':quest.name+' guild progress'})]));
+    if(result?.partial)host.append(el('small',{text:'Partial guild progress export.'}));
+  }else if(kind==='bounties'){
+    const rows=profileBounties(item,snapshot);
+    message.textContent=rows===null?'Bounty data is unavailable.':rows.length?rows.length+' open '+(rows.length===1?'bounty':'bounties')+' on this player':'No open bounty listed in this export.';
+    for(const row of rows??[])host.append(el('div',{class:'player-activity-row'},[el('b',{text:row.gold===null||row.gold===undefined?'Payout details unavailable':row.gold.toLocaleString('en-US')+' raw gold'}),row.expiresAt?el('p',{text:'Expires '+new Date(row.expiresAt).toLocaleDateString('en-US')}):null]));
+  }else{
+    const result=profileDuelWins(item,snapshot);
+    message.textContent=!result?'Weekly duel results are unavailable.':result.listed===false?'Not listed in the published weekly leaders. Full player totals are unavailable.':result.wins+' '+(result.wins===1?'match win':'match wins');
+    if(result?.weekStartsAt)host.append(el('small',{text:'Week of '+new Date(result.weekStartsAt).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'})+' · UTC'}));
+    if(result?.capturedAt)host.append(el('small',{text:'Captured '+new Date(result.capturedAt).toLocaleString('en-US')}));
+    if(result?.stale)host.append(el('small',{text:'Captured duel results may be stale.'}));
+  }
+  const stamp=Date.parse(snapshot?.generatedAt??snapshot?.updatedAt);
+  if(snapshot&&(snapshot.stale||!Number.isFinite(stamp)||Date.now()-stamp>900000))host.append(el('small',{text:'This feed may be stale.'}));
+  if(kind==='bounties'&&snapshot?.limited)host.append(el('small',{text:'Partial public bounty export.'}));
+}
 function section(title){return el('section',{class:'player-profile-section'},[el('h4',{text:title})]);}
 function guildSection(item){
   const host=section('Guilds');
@@ -44,7 +72,7 @@ export function playerProfile(node,item) {
   const name=el('div',{},[el('p',{text:'PLAYER PROFILE'}),el('h3',{text:item.name,
     style:'font-size:36px;line-height:44px;overflow-wrap:anywhere'})]);
   node.replaceChildren(el('div',{style:'display:flex;gap:20px;align-items:center;flex-wrap:wrap'},[playerHead(item),name]));
-  if(item.previewExample)node.append(el('p',{text:'Simulated guild layout example. This is not a real player or membership.'}));
+  if(item.previewExample)node.append(el('p',{text:'Simulated profile layout. Guilds, quests, achievements, bounties and duel wins here are examples.'}));
   const values=[['Balance',item.balance],['Active playtime',item.playtime===null||item.playtime===undefined?null:
     item.playtime.toLocaleString('en-US',{maximumFractionDigits:1})+' hours'],
     ['Balance leaderboard',item.balanceRank?'#'+item.balanceRank:null],['Playtime leaderboard',item.playtimeRank?'#'+item.playtimeRank:null]];
@@ -54,8 +82,13 @@ export function playerProfile(node,item) {
       el('b',{text:typeof value==='number'?value.toLocaleString('en-US'):value,style:'font-size:24px;line-height:32px;overflow-wrap:anywhere'}),el('span',{text:label})]))));
   const market=section('At the market'),sections=el('div',{class:'player-profile-sections'},[guildSection(item),market]);
   node.append(sections);appendMarket(market,item,node);
+  for(const [title,kind,url]of [['Guild quests','guildquests','guildquests.html'],['Bounties','bounties','bounties.html'],['Weekly duel wins','warzone','index.html#warzone']]){
+    const host=section(title);sections.append(host);appendActivity(host,item,node,kind).catch(()=>{if(node.isConnected)host.querySelector('[role="status"]').textContent='This data is unavailable.';});host.append(link(url,'View '+title.toLowerCase(),'btn btn-dark'));
+  }
+  const achievements=section('Achievements');sections.append(achievements);
+  achievements.append(item.achievements?.length?el('ul',{class:'plain'},item.achievements.map(name=>el('li',{text:name}))):el('p',{text:item.achievementsKnown?'No completed achievements in this export.':'Personal achievement progress is unavailable.'}));
+  achievements.append(link('achievements.html','Browse achievements','btn btn-dark'));
   if(item.rank)node.append(el('p',{text:'Rank: '+item.rank}));
-  if(item.achievements?.length)node.append(el('h3',{text:'Achievements'}),el('ul',{class:'plain'},item.achievements.map(name=>el('li',{text:name}))));
   market.append(link('market.html#owner='+encodeURIComponent(item.name),'Open market','btn btn-gold'));
   node.append(el('div',{class:'player-profile-links'},[link('leaderboards.html','Leaderboards','btn btn-dark'),link('guildquests.html','Guild quests','btn btn-dark')]));
   for(const entry of item.links??[])node.append(link(entry.url,entry.label,'btn btn-dark'));
