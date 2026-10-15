@@ -91,3 +91,18 @@ Exact evidence/configuration: [live update guide](LIVE-WARZONE-UPDATES.md).
   workflow runs. CodeRabbit skipped automatic review on all three repositories.
 
 Host documentation: [Bloom backup management](https://docs.bloom.host/backups).
+
+## Competition launch continuation, 15 October
+
+- [x] Reconcile PR 53 with current main cf21ef2, preserving account ownership,
+  shared unlink instructions, warning filters and private appeal links.
+- [x] Reproduce and repair expired Founder role snapshot rejection. Refresh
+  stale staff membership authoritatively with the existing website bot; retain
+  role, guild membership, Minecraft ownership and freshness checks.
+- [x] Add real website-signature/native Java bridge/SQLite contract verification
+  to CI, including UTF-8, tamper, stale and durable replay checks.
+- [x] Audit production schema, record counts and configuration read-only.
+- [ ] Complete bridge/provider connectivity, moderation decision, staff webhook,
+  isolated player beta, authorized delivery test and first competition details.
+
+Exact findings and gates: [competition launch checkpoint](COMPETITIONS-LAUNCH-CHECKPOINT.md).

@@ -1,5 +1,6 @@
 import { isCanonicalUuid } from "./validation.js";
 import { getCompetitionIdentitySession } from "./competitions/identity.js";
+import { refreshDiscordRoleSnapshot } from "./competitions/discord-role-refresh.js";
 
 const encoder = new TextEncoder();
 const DISCORD_ROLE_MAX_AGE_MS = 60 * 60 * 1000;
@@ -169,7 +170,9 @@ export async function authenticateRequest(request, env, verifier = verifyAccessJ
       const identity = await getCompetitionIdentitySession(request, env.COMPETITIONS_DB, undefined, env);
       if (identity) {
         try {
-          return buildDiscordStaffSession(identity, env);
+          const current = discordRoleSnapshotIsFresh(identity)
+            ? identity : await refreshDiscordRoleSnapshot(identity, env);
+          return buildDiscordStaffSession(current, env);
         } catch (error) {
           discordError = error;
         }

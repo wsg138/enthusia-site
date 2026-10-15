@@ -39,6 +39,8 @@ jobs:
         run: mvn -B -f minecraft/competition-bridge/pom.xml verify
       - name: Verify live Paper 26.2 compatibility
         run: mvn -B -f minecraft/competition-bridge/pom.xml -Ppaper-26-2 clean verify
+      - name: Verify actual website signer against native competition bridge
+        run: node scripts/verify-competition-bridge.mjs
       - name: Upload verified competition bridge JAR
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
