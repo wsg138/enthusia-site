@@ -50,6 +50,12 @@ stale role timestamp without a successful authoritative lookup.
    loopback listener, provider APIs and protected HTTPS connectivity. Configure
    distinct bridge bearer/HMAC credentials plus required Access service-token
    settings through an operator. Never substitute Staff API credentials.
+   Source inspection confirms the required GuildLookup methods in BadgersMC
+   LumaGuilds main 283d75f, but `SUBMIT_COMPETITION_ENTRIES` is absent there and
+   in wsg138/LumaGuilds main 47fce68. `hasShopPermission` rejects unknown enum
+   values, so installing only the bridge cannot enable guild entries. Reconcile
+   the prepared permission change and actual installed guilds build through its
+   own reviewed source/runtime process; do not substitute a broader permission.
 3. Obtain an explicit moderation decision and operator-supplied OpenAI key if
    enabling it. No bypass or automatic enabling is part of this work.
 4. Configure the staff-review webhook and verify notification delivery/opt-out
