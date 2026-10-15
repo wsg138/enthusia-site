@@ -243,7 +243,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
       <fieldset id="appeal-fields">
         <div class="appeal-form-heading">
           <div><p class="card-kicker">Punishment</p><h2>What are you appealing?</h2></div>
-          <p>Only active punishments that can be appealed are shown.</p>
+          <p id="punishment-selection-policy">Only active punishments that can be appealed are shown.</p>
         </div>
 
         <div class="appeal-identity-grid">
@@ -253,6 +253,8 @@ a{color:#b3201a}a:hover{color:#7d120e}
           <label class="appeal-field" for="appeal-punishment">Punishment
             <select name="punishmentId" id="appeal-punishment" required disabled><option value="">Choose a Minecraft account first</option></select>
           </label>
+          <label id="expired-punishments-control" hidden><input type="checkbox" id="include-expired-punishments"> Include expired punishments</label>
+          <button type="button" class="btn ghost" id="load-older-punishments" hidden>Load older punishments</button>
         </div>
         <p id="punishment-result" class="appeal-selection-status" role="status"></p>
         <section id="selected-punishment" class="appeal-sanction" aria-live="polite" hidden></section>
@@ -410,7 +412,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 </footer>
 <script src="assets/site-config.js?v=vision43" defer></script>
 <script src="assets/enthusia.js?v=integration1" defer></script>
-<script type="module" src="assets/appeals.js?v=4"></script>
+<script type="module" src="assets/appeals.js?v=5"></script>
 <script type="module" src="assets/appeals-lifecycle.js?v=1"></script>
 <script src="assets/site-account.js?v=integration1" type="module"></script>
 </body>

@@ -1,4 +1,6 @@
-import { exactPunishmentCard } from './exact-punishments.js';
+import { loadOwnedPunishmentAppeals, ownedPunishmentAppealLink } from "./punishment-appeal-links.js?v=2";
+import { exactPunishmentCard } from './exact-punishments.js?v=4';
+import { isWarning, punishmentReason, punishmentStatus, punishmentDuration } from './punishment-presentation.js?v=1';
 const resultsRoot = document.querySelector("#punishment-results");
 const summary = document.querySelector("#punishment-summary");
 const form = document.querySelector("#punishment-search");
@@ -7,31 +9,25 @@ const clearSearch = document.querySelector("#punishment-clear-search");
 const loadMore = document.querySelector("#punishment-load-more");
 const filters = [...document.querySelectorAll("[data-punishment-filter]")];
 let activeFilter = "ALL";
-let activeSearch = "";
+const initialQuery = new URLSearchParams(window.location.search).get("q")?.trim() || "";
+let activeSearch = initialQuery.length <= 80 ? initialQuery : "";
+const selectedRecord = value => /^[0-9A-HJKMNP-TV-Z]{16}$/i.test(value);
+query.value = selectedRecord(activeSearch) ? "" : activeSearch;
+clearSearch.hidden = !activeSearch;
 let nextCursor = null;
+let ownedPunishments = [];
+let displayedItems = [];
 
 function date(value) {
   const parsed = Date.parse(value || "");
   return Number.isFinite(parsed) ? new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(parsed) : "Unavailable";
 }
 
-function duration(seconds) {
-  const value = Math.max(0, Number(seconds) || 0);
-  if (!value) return "Ended";
-  const units = [[86400, "day"], [3600, "hour"], [60, "minute"]];
-  for (const [size, label] of units) {
-    if (value >= size) {
-      const amount = Math.ceil(value / size);
-      return `${amount} ${label}${amount === 1 ? "" : "s"} remaining`;
-    }
-  }
-  return "Less than a minute remaining";
-}
-
 function punishmentCard(item) {
-  if(document.body.hasAttribute("data-exact-punishments"))return exactPunishmentCard(item,date,duration);
+  const appealHref = ownedPunishmentAppealLink(item, ownedPunishments);
+  if(document.body.hasAttribute("data-exact-punishments"))return exactPunishmentCard(item,date,appealHref);
   const article = document.createElement("article");
-  article.className = "punishment-card card";
+  article.className = "punishment-card card punishment-record-card";
   const top = document.createElement("div");
   top.className = "punishment-card-top";
   const identity = document.createElement("div");
@@ -43,18 +39,15 @@ function punishmentCard(item) {
   identity.append(kicker, heading);
   const state = document.createElement("span");
   state.className = `punishment-state punishment-state-${String(item.state || "unknown").toLowerCase()}`;
-  state.textContent = item.state || "Unknown";
+  state.textContent = punishmentStatus(item);
   top.append(identity, state);
   const reason = document.createElement("p");
   reason.className = "punishment-reason";
-  reason.textContent = item.publicReason || item.broadReason || "No public reason is available.";
+  reason.textContent = punishmentReason(item);
   const meta = document.createElement("dl");
   meta.className = "punishment-meta";
-  const values = [
-    ["Issued", date(item.issuedAt)],
-    ["Duration", item.expiresAt ? `${date(item.expiresAt)} · ${duration(item.remainingSeconds)}` : "Permanent"],
-    ["Case", item.caseId || "Unavailable"]
-  ];
+  const values = [["Issued", date(item.issuedAt)]];
+  if (!isWarning(item)) values.push(["Duration", punishmentDuration(item)]);
   for (const [label, value] of values) {
     const group = document.createElement("div");
     const term = document.createElement("dt");
@@ -65,10 +58,10 @@ function punishmentCard(item) {
     meta.append(group);
   }
   article.append(top, reason, meta);
-  if (item.appealAvailable) {
+  if (appealHref) {
     const link = document.createElement("a");
     link.className = "text-button punishment-appeal-link";
-    link.href = "/appeal.html#new";
+    link.href = appealHref;
     link.textContent = "Appeal this punishment";
     article.append(link);
   }
@@ -83,8 +76,9 @@ function setLoading(loading) {
 async function load({ append = false } = {}) {
   setLoading(true);
   if (!append) {
+    displayedItems = [];
     resultsRoot.replaceChildren();
-    summary.textContent = activeSearch ? `Searching for “${activeSearch}”…` : "Loading public records…";
+    summary.textContent = activeSearch ? (selectedRecord(activeSearch) ? "Loading selected public records…" : `Searching for “${activeSearch}”…`) : "Loading public records…";
   }
   const parameters = new URLSearchParams();
   if (activeSearch) parameters.set("q", activeSearch);
@@ -98,13 +92,14 @@ async function load({ append = false } = {}) {
     if (!response.ok) throw new Error(String(response.status));
     const items = Array.isArray(payload) ? payload : Array.isArray(payload.items) ? payload.items : [];
     if (!append) resultsRoot.replaceChildren();
+    displayedItems = append ? [...displayedItems, ...items] : items;
     resultsRoot.append(...items.map(punishmentCard));
     nextCursor = activeSearch ? null : payload.nextCursor || null;
     loadMore.hidden = !nextCursor;
     const total = resultsRoot.childElementCount;
     summary.textContent = total
-      ? `${total} public record${total === 1 ? "" : "s"}${activeSearch ? ` matching “${activeSearch}”` : " shown"}.`
-      : activeSearch ? `No public records match “${activeSearch}”.` : "No public records are available for this filter.";
+      ? `${total} public record${total === 1 ? "" : "s"}${activeSearch ? (selectedRecord(activeSearch) ? " for the selected record" : ` matching “${activeSearch}”`) : " shown"}.`
+      : activeSearch ? (selectedRecord(activeSearch) ? "This punishment is not part of the public record. You can still manage its appeal from your account." : `No public records match “${activeSearch}”.`) : "No public records are available for this filter.";
   } catch {
     if (!append) resultsRoot.replaceChildren();
     summary.textContent = "Public punishment history is temporarily unavailable.";
@@ -140,4 +135,8 @@ clearSearch.addEventListener("click", () => {
 });
 loadMore.addEventListener("click", () => load({ append: true }));
 
+void loadOwnedPunishmentAppeals().then(owned => {
+  ownedPunishments = owned;
+  resultsRoot.replaceChildren(...displayedItems.map(punishmentCard));
+});
 load();

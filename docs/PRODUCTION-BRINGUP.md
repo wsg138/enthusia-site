@@ -167,3 +167,59 @@ Automatic donor updates also remain disconnected in the installed test build.
 Competition Bridge installation, protected connectivity, reward/provider
 acceptance, notification opt-in/opt-out and checkout fulfillment remain
 unverified. These gaps prevent treating the complete site as launch-ready.
+
+## Automatic punishment appeals prepared for activation
+
+`LINKED_PUNISHMENT_APPEALS=false` keeps the existing appeal workflow active until
+its matching native runtime is installed and accepted. The prepared runtime adds
+signed `/v1/website/appeals/linked` and `/v1/website/appeals/linked/submit` routes.
+They resolve current Discord-to-Minecraft links at request time. Neither a
+punishment code nor a browser-provided player name grants ownership.
+
+When activated, the account page shows active punishments by default and offers
+an explicit expired-punishment view. The appeal page selects a punishment from
+an owned Minecraft account and can include expired punishments. Both lists are
+paginated; existing appeal threads and staff replies remain available.
+
+A specific punishment can receive a new appeal once every 14 days, regardless
+of browser, draft or linked-account owner. The native transaction locks the
+sanction before checking that interval. Exact retries return the original
+attempt; later attempts receive new appeal IDs and preserve prior history.
+A staff information request should be answered in the existing appeal thread.
+
+Activation requires the reviewed native migration 32, which removes the unique
+one-appeal-per-punishment constraint, indexes attempt history and supports
+32-character authoritative player names. It preserves existing appeal records.
+No additional website D1 migration is required. Obtain approval for the
+production migration and proxy restart, keep the flag false through startup,
+then verify signed ownership, expired-list and cooldown responses before
+setting the flag true and deploying the website. Do not schedule a restart
+without authorization. Keep notification workers and automated moderation
+disabled. After migration, do not resume appeal writes with an old native JAR
+without a compatibility review; use the feature flag to contain a failed cutover.
+
+## Public punishment presentation
+
+Account punishment summaries link to their public case records; non-public
+cases remain excluded by the native public projection. Public cards have equal
+heights, a compact shaded issued-date value, plain reasons and durations, no displayed case IDs and no
+remaining-time countdown. Finite durations describe the original punishment.
+Warnings are displayed as retained records without duration fields, including
+older records that carried an expiration timestamp. This changes presentation,
+not native warning enforcement or stored history. The original recorded warning
+reason is preserved; absent reasons and the known legacy import fallback are
+shown as unavailable rather than inferred from a modern reason category.
+
+The warning filter uses the native `WARNING` contract. The website also accepts
+the previous `WARN` filter spelling and normalizes it before signing the native
+request. These presentation fixes do not require the pending proxy restart;
+automatic linked-account appeals remain gated until their approved activation.
+
+Record-specific appeal links are hidden until a private ownership and eligibility
+lookup succeeds. The prepared automatic flow uses current linked-punishment
+records; the existing flow requires native eligibility plus a binding belonging
+to a currently linked account. Public names and the shared `appealAvailable`
+flag alone do not display an appeal link. Anonymous sessions, unavailable
+ownership, other players' records and cooldowns keep the link hidden. Verified
+links preselect the owned Minecraft account and punishment. Submission ownership
+continues to be enforced by the existing server-side workflow.

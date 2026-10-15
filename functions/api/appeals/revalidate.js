@@ -1,4 +1,5 @@
 import { sanitizeRevalidationRequest } from "../../lib/appeal-revalidation.js";
+import { automaticPunishmentAppeals } from "../../lib/account-punishments.js";
 import { revalidateOwnedPunishmentBinding } from "../../lib/appeal-revalidation-service.js";
 import { authenticateLinkedAppealRequest } from "../../lib/appeal-session.js";
 import { competitionRateLimit, rateLimitHeaders } from "../../lib/competitions/rate-limit.js";
@@ -35,6 +36,7 @@ function resultResponse(result) {
 
 async function authorizeMutation(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+  if (automaticPunishmentAppeals(context.env)) return json({ error: "punishment_binding_removed" }, 410);
   let session;
   try { session = await authenticateLinkedAppealRequest(context.request, context.env); }
   catch { return serviceUnavailable(); }

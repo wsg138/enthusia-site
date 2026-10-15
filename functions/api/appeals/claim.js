@@ -6,6 +6,7 @@ import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../../
 import { requireSameOrigin } from "../../lib/security.js";
 import { staffApiResponse } from "../../lib/staff-api.js";
 import { verifyTurnstile } from "../../lib/turnstile.js";
+import { automaticPunishmentAppeals } from "../../lib/account-punishments.js";
 
 async function claimRateLimit(context, session) {
   const result = await competitionRateLimit(context.env?.COMPETITIONS_DB, {
@@ -21,6 +22,7 @@ async function claimRateLimit(context, session) {
 
 async function authorizeMutation(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+  if (automaticPunishmentAppeals(context.env)) return json({ error: "punishment_binding_removed" }, 410);
   let session;
   try { session = await authenticateLinkedAppealRequest(context.request, context.env); }
   catch { return serviceUnavailable(); }

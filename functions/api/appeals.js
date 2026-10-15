@@ -15,6 +15,7 @@ import { json, methodNotAllowed, serviceUnavailable, unauthorized } from "../lib
 import { requireSameOrigin } from "../lib/security.js";
 import { signedStaffRequest, staffApiResponse } from "../lib/staff-api.js";
 import { isCanonicalUuid } from "../lib/validation.js";
+import { automaticPunishmentAppeals } from "../lib/account-punishments.js";
 
 function buildAppealPayload(submission, account, websiteAccountId, payloadHash) {
   if (!isCanonicalUuid(websiteAccountId)) throw new TypeError("Website account ID is invalid");
@@ -42,7 +43,7 @@ async function linkedSession(context) {
 async function staffSubmission(context, payload) {
   const upstream = await signedStaffRequest(
     context.env,
-    "/v1/website/appeals/submit",
+    automaticPunishmentAppeals(context.env) ? "/v1/website/appeals/linked/submit" : "/v1/website/appeals/submit",
     payload
   );
   if (!upstream.ok) return { response: staffApiResponse(upstream, "private, no-store") };
@@ -58,6 +59,9 @@ export async function onRequestPost(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   const authenticated = await linkedSession(context);
   if (authenticated.response) return authenticated.response;
+  if (automaticPunishmentAppeals(context.env) && !authenticated.session.discord?.id) {
+    return json({ error: "discord_sign_in_required" }, 403);
+  }
 
   let submission;
   try { submission = sanitizeAppealSubmission(await context.request.json()); }
@@ -67,10 +71,12 @@ export async function onRequestPost(context) {
   if (!account) return json({ error: "linked_minecraft_account_required" }, 400);
 
   try {
-    const eligible = await requestEligiblePunishments(context.env, authenticated.session.accountId);
-    if (eligible.upstream) return staffApiResponse(eligible.upstream, "private, no-store");
-    if (!eligible.punishments.some((candidate) => candidate.id === submission.punishmentId)) {
-      return json({ error: "punishment_not_appealable" }, 409);
+    if (!automaticPunishmentAppeals(context.env)) {
+      const eligible = await requestEligiblePunishments(context.env, authenticated.session.accountId);
+      if (eligible.upstream) return staffApiResponse(eligible.upstream, "private, no-store");
+      if (!eligible.punishments.some((candidate) => candidate.id === submission.punishmentId)) {
+        return json({ error: "punishment_not_appealable" }, 409);
+      }
     }
 
     const payloadHash = await appealSubmissionHash(authenticated.session, submission);
@@ -84,6 +90,11 @@ export async function onRequestPost(context) {
     if (prepared.status === "ATTACHMENT_CONFLICT") return json({ error: "appeal_attachment_conflict" }, 409);
 
     const payload = buildAppealPayload(submission, account, authenticated.session.accountId, payloadHash);
+    if (automaticPunishmentAppeals(context.env)) {
+      delete payload.username;
+      payload.discordUserId = authenticated.session.discord.id;
+      payload.minecraftUuid = account.uuid;
+    }
     const submitted = await staffSubmission(context, payload);
     if (submitted.response) return submitted.response;
     await finalizeAppealSubmission(context.env.COMPETITIONS_DB, {

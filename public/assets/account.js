@@ -1,4 +1,4 @@
-import { renderExactAccount } from './exact-account.js?v=3';
+import { renderExactAccount } from './exact-account.js?v=6';
 const API = "/api/competitions/auth";
 const root = document.querySelector("#account-session");
 let pollTimer = null;
@@ -337,7 +337,7 @@ function signedIn(session) {
   });
   linker.append(copy, button, command, status);
 
-  root.append(header, links, linker, punishmentClaimSection(session));
+  root.append(header, links, linker);  if (session.linkedPunishmentAppeals) {    for (const [id, title] of [["account-active-punishments", "Active punishments"], ["account-expired-punishments", "Expired punishments"]]) {      const panel = element("section", "account-links");      panel.id = id;      panel.append(element("h3", "", title));      root.append(panel);    }    window.dispatchEvent(new Event("enthusia:account-rendered"));  } else root.append(punishmentClaimSection(session));
 }
 
 async function render() {
