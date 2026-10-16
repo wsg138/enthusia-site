@@ -106,3 +106,20 @@ Host documentation: [Bloom backup management](https://docs.bloom.host/backups).
   isolated player beta, authorized delivery test and first competition details.
 
 Exact findings and gates: [competition launch checkpoint](COMPETITIONS-LAUNCH-CHECKPOINT.md).
+
+## Account security, 16 October
+
+- [x] Reproduce and fix OAuth callback browser binding; retain hashed single-use
+  state and add bounded login initiation without exchanging unbound codes.
+- [x] Add atomic same-origin owner-only logout-all; preserve other accounts and
+  Minecraft links, and report database revocation failures correctly.
+- [x] Limit Discord staff authorization to eight hours from actual sign-in;
+  preserve ordinary thirty-day sessions and authoritative role refresh.
+- [x] Apply API security headers to success, errors, redirects and streams.
+- [x] Add themed all-device sign-out with inline confirmation and an explicit
+  sample-only success/failure preview. Verify mobile layout and touch targets.
+- [ ] Finish browser click acceptance after dismissing the temporary old dialog,
+  exact-head hosted checks, then separately approve merged-source deployment
+  and authorized real-session OAuth/revocation acceptance.
+
+Requirements, tests and rollout: [account security](ACCOUNT-SECURITY.md).

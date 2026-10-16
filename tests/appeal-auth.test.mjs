@@ -159,6 +159,7 @@ test("Discord staff sessions use fresh configured role IDs and a linked Minecraf
     discord: { id: DISCORD_USER_ID, username: "Reviewer" },
     discordGuildMember: true,
     discordRolesCheckedAt: checkedAt,
+    authenticatedAt: checkedAt,
     guildRoleIds: [adminRole, moderatorRole],
     linkedMinecraftAccounts: [{ uuid: PLAYER_ID, name: "Lincoln" }]
   };
@@ -181,6 +182,7 @@ test("Discord staff sessions fail closed for stale roles, missing membership, or
     subject: `discord:${DISCORD_USER_ID}`,
     discordGuildMember: true,
     discordRolesCheckedAt: checkedAt,
+    authenticatedAt: checkedAt,
     guildRoleIds: [roleId],
     linkedMinecraftAccounts: [{ uuid: PLAYER_ID, name: "Lincoln" }]
   };
@@ -221,7 +223,8 @@ test("staff API authentication accepts a current Discord session before the Acce
                 globalName: null,
                 avatarHash: null,
                 guildRoleIdsJson: JSON.stringify({ member: true, roleIds: [roleId] }),
-                discordRolesCheckedAt: new Date().toISOString()
+                discordRolesCheckedAt: new Date().toISOString(),
+                authenticatedAt: new Date().toISOString()
               };
             },
             async all() {

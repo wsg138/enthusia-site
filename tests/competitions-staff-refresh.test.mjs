@@ -10,7 +10,7 @@ function fixture({fresh=false,linked=true,changes=1}={}) {
   const env={DISCORD_GUILD_ID:guild,DISCORD_FOUNDER_ROLE_IDS:role,ENTHUSIA_SITE_DISCORD_BOT_TOKEN:'t'.repeat(60)};
   env.COMPETITIONS_DB={prepare(sql){return {bind(...values){return {
     async first(){return sql.includes('FROM competition_identity_sessions')?{
-      discordUserId:user,expiresAt:new Date(Date.now()+3600000).toISOString(),username:'Founder',
+      discordUserId:user,expiresAt:new Date(Date.now()+3600000).toISOString(),username:'Founder',authenticatedAt:new Date().toISOString(),
       guildRoleIdsJson:JSON.stringify({member:true,roleIds:[role]}),
       discordRolesCheckedAt:new Date(Date.now()-(fresh?0:7200000)).toISOString()}:null;},
     async all(){return {results:linked?[{uuid:'10000000-0000-4000-8000-000000000001',name:'Founder'}]:[]};},

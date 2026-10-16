@@ -1,4 +1,4 @@
-import { renderExactAccount } from './exact-account.js?v=6';
+import { renderExactAccount } from './exact-account.js?v=8';
 const API = "/api/competitions/auth";
 const root = document.querySelector("#account-session");
 let pollTimer = null;
@@ -58,12 +58,32 @@ function showAccountLoadError() {
   root.replaceChildren(element("p", "account-error", "Your account could not be loaded. Refresh the page to try again."));
 }
 
-function signOut(button) {
+function confirmAllDevices(button) {
+  if(root.querySelector('#account-signout-confirm'))return;
+  const confirmation=element('section','panel account-signout-confirm');
+  confirmation.id='account-signout-confirm';confirmation.setAttribute('role','group');
+  confirmation.setAttribute('aria-label','Confirm sign out all devices');
+  const explanation=element('p','','Sign out of this website on every device? Your Minecraft links will stay linked.');
+  const confirm=element('button',button.className,'Confirm sign out'),cancel=element('button',button.className,'Cancel');
+  confirm.type=cancel.type='button';cancel.dataset.signoutCancel='true';
+  confirm.addEventListener('click',()=>performSignOut(confirm,true));
+  cancel.addEventListener('click',()=>{confirmation.remove();button.focus();});
+  confirmation.append(explanation,confirm,cancel);button.parentElement.append(confirmation);cancel.focus();
+}
+
+function signOut(button,allDevices=false) {
+  if(allDevices){confirmAllDevices(button);return;}
+  performSignOut(button,false);
+}
+
+function performSignOut(button,allDevices) {
   button.disabled = true;
-  request(`${API}/logout`, { method: "POST", body: "{}" })
+  const cancel=root.querySelector('[data-signout-cancel]');if(cancel)cancel.disabled=true;
+  request(`${API}/${allDevices?'logout-all':'logout'}`, { method: "POST", body: "{}" })
     .then(() => window.location.reload())
     .catch(() => {
       button.disabled = false;
+      if(cancel)cancel.disabled=false;
       let feedback = root.querySelector('#account-signout-status');
       if (!feedback) {
         feedback = element('p', 'account-error');
@@ -312,7 +332,10 @@ function signedIn(session) {
   const signOutButton = element("button", "btn ghost", "Sign out");
   signOutButton.type = "button";
   signOutButton.addEventListener("click", () => signOut(signOutButton));
-  header.append(identity, signOutButton);
+  const controls=element('div','account-session-actions');
+  const allDevicesButton=element('button',signOutButton.className,'Sign out all devices');
+  allDevicesButton.type='button';allDevicesButton.addEventListener('click',()=>signOut(allDevicesButton,true));
+  controls.append(signOutButton,allDevicesButton);header.append(identity,controls);
 
   const links = element("section", "account-links");
   links.append(element("h3", "", "Linked Minecraft accounts"));

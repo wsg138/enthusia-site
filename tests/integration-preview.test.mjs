@@ -3,7 +3,7 @@ import test from 'node:test';
 import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 
-test('sample preview intercepts API reads and blocks every write without reaching a backend', async () => {
+test('sample preview intercepts reads, simulates sign-out and blocks backend writes', async () => {
   const calls=[];
   const data=JSON.parse(await readFile(new URL('../public/preview/data.json',import.meta.url),'utf8'));
   const market=JSON.parse(await readFile(new URL('../public/assets/market/sample-market-snapshot.json',import.meta.url),'utf8'));
@@ -18,6 +18,12 @@ test('sample preview intercepts API reads and blocks every write without reachin
     assert.equal((await response.json()).error,'preview_actions_are_not_saved');
   }
   assert.equal((await context.window.fetch('/api/competitions/admin')).status,403);
+  for(const path of ['/api/competitions/auth/logout','/api/competitions/auth/logout-all']){
+    assert.equal((await context.window.fetch(path,{method:'POST',body:'{}'})).status,200);
+    assert.equal((await context.window.fetch(path,{method:'DELETE'})).status,501);
+  }
+  context.location.href='https://preview.example/preview/index.html?signout=error';
+  assert.equal((await context.window.fetch('/api/competitions/auth/logout-all',{method:'POST'})).status,503);
   assert.equal(calls.length,2);
   assert.ok(calls.every(url=>!url.includes('/api/')));
 });

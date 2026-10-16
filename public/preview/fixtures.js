@@ -97,6 +97,11 @@ window.fetch = async (input,options={}) => {
   if(!url.pathname.startsWith('/api/'))return nativeFetch(input,options);
   await ready;
   const method=options.method||(input instanceof Request?input.method:'GET');
+  if(method==='POST'&&['/api/competitions/auth/logout','/api/competitions/auth/logout-all'].includes(url.pathname)){
+    if(new URL(location.href).searchParams.get('signout')==='error')return json({error:'session_revocation_unavailable'},503);
+    sessionStorage.setItem('enthusia-preview-persona','visitor');
+    return json({status:url.pathname.endsWith('logout-all')?'SIGNED_OUT_ALL_DEVICES':'SIGNED_OUT'});
+  }
   if(method!=='GET')return json({error:'preview_actions_are_not_saved'},501);
   return previewApi(url);
 };
@@ -106,6 +111,14 @@ const banner=document.createElement('aside');banner.className='preview-banner';b
 const label=document.createElement('strong');label.textContent='Combined preview';const note=document.createElement('span');note.textContent='Sample data · actions are not saved';
 const select=document.createElement('select');select.setAttribute('aria-label','Preview persona');for(const role of ['visitor','player','staff']){const opt=new Option(role.charAt(0).toUpperCase()+role.slice(1),role);opt.selected=role===persona;select.append(opt);}select.addEventListener('change',()=>{sessionStorage.setItem('enthusia-preview-persona',select.value);location.reload();});
 banner.append(label,note,select);if(document.body)document.body.prepend(banner);else document.addEventListener("DOMContentLoaded",()=>document.body.prepend(banner),{once:true});
+if(new URL(location.href).pathname.endsWith('/account.html')){
+  note.textContent='Sample account · sign-out is simulated · no real sessions change';
+  const mode=document.createElement('select');mode.setAttribute('aria-label','Sign-out preview state');
+  for(const [value,label]of [['success','Sign-out succeeds'],['error','Sign-out fails']]){
+    const option=new Option(label,value);option.selected=value===(new URL(location.href).searchParams.get('signout')??'success');mode.append(option);
+  }
+  mode.addEventListener('change',()=>{const url=new URL(location.href);url.searchParams.set('signout',mode.value);location.href=url.href;});banner.append(mode);
+}
 document.addEventListener('DOMContentLoaded',()=>{if(!document.getElementById('warzone'))return;const selector=document.createElement('select');selector.setAttribute('aria-label','Warzone preview state');const current=new URL(location.href).searchParams.get('warzone-state')??'captured';if(['captured','last-week'].includes(current))note.textContent='Warzone: captured real server data · Other sections: sample data · Actions are not saved';for(const [value,label]of [['captured','Server snapshot: current week'],['last-week','Server snapshot: last week'],['ready','Sample: connected'],['empty','Sample: no wins'],['stale','Sample: stale'],['unavailable','Sample: unavailable']]){const option=new Option(label,value);option.selected=value===current;selector.append(option);}selector.addEventListener('change',()=>{const url=new URL(location.href);url.searchParams.set('warzone-state',selector.value);url.hash='warzone';location.href=url.href;});banner.append(selector);},{once:true});
 document.addEventListener('click',event=>{
   const a=event.target.closest?.('a[href]');if(!a)return;

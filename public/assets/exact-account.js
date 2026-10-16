@@ -12,6 +12,10 @@ export function renderExactAccount(root,session,actions){
     head.querySelector('h2').textContent=session.discord.globalName||session.discord.username;
     head.querySelector('div>p:last-child').textContent='@'+session.discord.username;
     const logout=head.querySelector('button');logout.addEventListener('click',()=>actions.signOut(logout));
+    const controls=document.createElement('div');controls.className='account-session-actions';
+    const allDevices=document.createElement('button');allDevices.type='button';allDevices.className=logout.className;
+    allDevices.textContent='Sign out all devices';allDevices.addEventListener('click',()=>actions.signOut(allDevices,true));
+    logout.replaceWith(controls);controls.append(logout,allDevices);
     const panels=grid.children;linkedAccountRows(panels,session,actions);
     const link=panels[1],button=link.querySelector('button'),code=link.querySelector('.swap'),command=code.querySelector('.cmd'),status=code.querySelector('p:last-child');code.hidden=true;
     if(session.networkAccounts&&(session.linkedMinecraftAccounts??[]).length){const help=document.createElement('p');help.className='account-link-status';help.textContent='To unlink an account, run /unlink CONFIRM in-game using that account.';link.append(help);}
