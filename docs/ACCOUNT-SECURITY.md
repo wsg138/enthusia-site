@@ -49,7 +49,7 @@ OAuth-start throttling, owner-only all-device revocation, expired/cross-origin
 requests, unchanged links/other owners, current-device logout and database errors.
 Staff age tests preserve normal player sessions while rejecting privileged use.
 
-604 website tests pass with lint, 130 page/asset checks and map layers. Static
+607 website tests pass with lint, 130 page/asset checks and map layers. Static
 build and Pages Functions compilation pass. API header tests preserve two
 Set-Cookie values, redirect status/location, stream bytes and public cache policy;
 unexpected errors are generic, private and carry the same security headers.
@@ -57,9 +57,17 @@ unexpected errors are generic, private and carry the same security headers.
 The preview uses the actual account renderer and only simulates sign-out for
 sample personas. At 390px, document width is 375px with no horizontal overflow;
 both actions measure 48px tall. Inline confirmation, cancellation and simulated
-failure are exposed in the preview. A previous native demo dialog blocked browser
-click testing; full post-dialog interaction confirmation remains to be completed.
+failure are exposed in the preview. Isolated DOM tests execute the actual account
+actions: cancellation makes no request, confirmation uses the correct POST route,
+success reloads, and failure keeps retry/cancel available with honest feedback.
+A previous native demo dialog blocked browser click testing; full post-dialog
+browser interaction confirmation remains to be completed.
 Hosted checks and live provider acceptance are separate from these local results.
+
+Hosted checkpoint: b976a7c passes GitHub validation and Codacy with no findings.
+The additional DOM interaction tests are a follow-up; inspect its updated exact
+head before treating those hosted checks as final. CodeRabbit skips automatic
+review on this repository. No production deployment or real-session test occurred.
 
 ## Operator rollout
 
