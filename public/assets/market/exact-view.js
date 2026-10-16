@@ -26,7 +26,7 @@
   function $(id) { return document.getElementById(id); }
 
   function gold(n) {
-    if (n >= 100) return Math.round(n).toLocaleString("en-US");
+    if (n >= 100) return n.toLocaleString("en-US",{maximumFractionDigits:2});
     if (n >= 10) return n.toFixed(1);
     return n.toFixed(2);
   }
@@ -36,7 +36,7 @@
     return (v > 0 ? "+" : "") + v.toFixed(1) + "%";
   }
   function dir(p) { return p > 0.05 ? "up" : p < -0.05 ? "down" : "flat"; }
-  function day(d) { return MONTHS[d.getMonth()] + " " + d.getDate(); }
+  function day(d) { return MONTHS[model.preview?d.getMonth():d.getUTCMonth()] + " " + (model.preview?d.getDate():d.getUTCDate()); }
   function head(name, size, cls) {
     var img = h("img", { class: "px " + (cls || ""), width: size, height: size, alt: "" });
     img.src = "https://minotar.net/helm/" + encodeURIComponent(name) + "/" + size;
@@ -56,7 +56,7 @@
     return d;
   }
   function range(offsetWeeks) {
-    var a = weekStart(offsetWeeks), b = new Date(a); b.setDate(b.getDate() + 6);
+    var a = weekStart(offsetWeeks), b = new Date(a); if(model.preview)b.setDate(b.getDate() + 6);else b.setUTCDate(b.getUTCDate() + 6);
     return day(a) + " - " + day(b);
   }
   function daysLeft() {
@@ -80,7 +80,7 @@
   /* ---------- Stall of the Week ---------- */
 
   function renderWinner() {
-    var w = winners[0], el = $("mi-winner");
+    var w = window.EnthusiaMarketHistory.previousMarketWinner(model), el = $("mi-winner");
     if(!w){el.replaceChildren(h("p",{text:"No completed sales week has been exported."}));return;}
     clear(el);
     el.appendChild(h("div", { class: "mi-wk" }, [
@@ -127,59 +127,7 @@
 
   /* ---------- share card: a picture players can post on Discord ---------- */
 
-  function loadImage(src) {
-    return new Promise(function (resolve) {
-      var img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = function () { resolve(img); };
-      img.onerror = function () { resolve(null); };
-      img.src = src;
-    });
-  }
-  function drawCard(w) {
-    var c = document.createElement("canvas"), W = 1200, H = 630;
-    c.width = W; c.height = H;
-    var x = c.getContext("2d");
-    x.imageSmoothingEnabled = false;
-    var font = function (px) { return px + 'px "Minecraft", "Courier New", monospace'; };
-    var ready = document.fonts && document.fonts.load ? Promise.all([document.fonts.load(font(32)), document.fonts.load("bold " + font(32))]) : Promise.resolve();
-    return ready.then(function () {
-      return Promise.all([loadImage("https://minotar.net/helm/" + encodeURIComponent(w.name) + "/128"), loadImage("assets/ui/logo-256.png")]);
-    }).then(function (imgs) {
-      x.fillStyle = "#c0261d"; x.fillRect(0, 0, W, H);
-      x.fillStyle = "#4a0b08"; x.fillRect(0, 0, W, 12); x.fillRect(0, H - 12, W, 12); x.fillRect(0, 0, 12, H); x.fillRect(W - 12, 0, 12, H);
-      x.fillStyle = "#ffcf1f"; x.fillRect(24, 24, W - 48, 8); x.fillRect(24, H - 32, W - 48, 8); x.fillRect(24, 24, 8, H - 48); x.fillRect(W - 32, 24, 8, H - 48);
-      // fretwork corners
-      [[44, 44, 1, 1], [W - 44, 44, -1, 1], [44, H - 44, 1, -1], [W - 44, H - 44, -1, -1]].forEach(function (k) {
-        x.fillStyle = "#ffcf1f";
-        x.fillRect(k[0] + (k[2] < 0 ? -40 : 0), k[1] + (k[3] < 0 ? -8 : 0), 40, 8);
-        x.fillRect(k[0] + (k[2] < 0 ? -8 : 0), k[1] + (k[3] < 0 ? -40 : 0), 8, 40);
-        x.fillRect(k[0] + k[2] * 16 + (k[2] < 0 ? -8 : 0), k[1] + k[3] * 16 + (k[3] < 0 ? -8 : 0), 8, 8);
-      });
-      x.fillStyle = "#a51b16"; x.fillRect(80, 150, W - 160, 380);
-      x.textBaseline = "top";
-      function text(t, px, color, X, Y, shadow) {
-        x.font = font(px);
-        if (shadow) { x.fillStyle = shadow; x.fillText(t, X + px / 8, Y + px / 8); }
-        x.fillStyle = color; x.fillText(t, X, Y);
-      }
-      if (imgs[1]) x.drawImage(imgs[1], 80, 56, 72, 72);
-      text("STALL OF THE WEEK", 48, "#ffdb2e", 172, 62, "#6b0f0b");
-      x.font = font(24);
-      text(range(-1), 24, "#ffe9a8", W - 80 - x.measureText(range(-1)).width, 80);
-      x.fillStyle = "#4a0b08"; x.fillRect(112, 190, 200, 200);
-      if (imgs[0]) x.drawImage(imgs[0], 120, 198, 184, 184);
-      text(w.name, 56, "#ffdb2e", 352, 196, "#6b0f0b");
-      text(sl(w.name) + " at the Enthusia Market", 24, "#fff6e0", 352, 270);
-      text(gold(w.gold) + " raw gold earned", 40, "#ffffff", 352, 318, "#6b0f0b");
-      text(String(w.sales??"Unavailable") + " items sold to " + w.buyers + " players", 24, "#ffdcc8", 352, 378);
-      var best = "Best sellers: " + w.best.map(function (b) { return b[0]; }).join(", ");
-      text(best, 24, "#ffe9a8", 112, 440);
-      text("enthusia.info/market", 24, "#ffdb2e", 112, 560);
-      text("PLAY.ENTHUSIA.NET", 24, "#fff6e0", W - 112 - 17 * 15, 560);
-      return c;
-    });
-  }
+  function drawCard(w) {return window.EnthusiaMarketDrawShareCard(w,{gold,range,sl,preview:model.preview});}
   function buildShare(w, panel) {
     panel.appendChild(h("p", { class: "mi-sub", text: "Making the picture..." }));
     drawCard(w).then(function (canvas) {
@@ -212,6 +160,36 @@
     return n >= 2 ? h("span", { class: "tag tag-gold mi-streak", title: "In the top five " + n + " weeks in a row", text: n + " week streak" }) : null;
   }
 
+  function drawWeekRows(list,rows,guild,off,top) {
+      rows.forEach(function (r, i) {
+        var who = guild ? guildSlot(r) : head(r.name, 40, "sm");
+        var row = h("div", { class: "mi-rank" + (i === 0 ? " first" : "") }, [
+          h("span", { class: "bar", style: "width:0" }),
+          h("span", { class: "n", text: "#" + (i + 1) }), who,
+          h("span", { style: "min-width:0;overflow-wrap:anywhere" }, [h("b", { style: "font-weight:400", text: r.name }), h("span", { class: "mi-sub", text: guild ? " · " + (r.stalls??"?") + (r.stalls === 1 ? " stall" : " stalls") : " · " + sl(r.name) }), guild ? null : streakTag(r.name, off)]),
+          h("span", { class: "g", text: gold(r.gold) + " raw gold" })
+        ]);
+        list.appendChild(row);
+        var bar = row.firstChild;
+        requestAnimationFrame(function () { requestAnimationFrame(function () { bar.style.width = Math.round(r.gold / top * 100) + "%"; }); });
+      });
+  }
+
+  function weeklyCaption(off,guild,winner,left) {
+    if(off!==0)return guild?winner.name+" won this week.":winner.name+" won this week with stall "+winner.stall+".";
+    if(left<=1)return model.preview?"Ends tonight at 11:59 PM ET.":"Ends tonight in UTC.";
+    return left+(model.preview?" days left. Ends Sunday at 11:59 PM ET.":" days left. Ends Sunday in UTC.");
+  }
+  function drawWeeklyContent(list,title,sub,btn,off,guild,rows) {
+    title.textContent=guild?"Guild of the week":off===0?"This week so far":"Top stalls";
+    clear(list);
+    if(!rows.length){sub.textContent=range(off);list.appendChild(h("p",{class:"mi-empty",text:"No recorded sales for this view."}));btn.hidden=true;return;}
+    sub.textContent=weeklyCaption(off,guild,rows[0],daysLeft());
+    drawWeekRows(list,rows,guild,off,rows[0].gold);
+    btn.hidden=!sid(rows[0].name);
+    btn.onclick=function(){showOnMap(sid(rows[0].name));};
+  }
+
   function renderWeek() {
     var el = $("mi-week");
     clear(el);
@@ -228,42 +206,29 @@
     el.appendChild(sub); el.appendChild(list); el.appendChild(btn);
 
     let generation=0;
-    async function draw() {
-      const current=++generation,requested=wk.off,guildMode=wk.mode==='guilds';
-      if(window.EnthusiaMarketDesignLoadWeek){try{await window.EnthusiaMarketDesignLoadWeek(requested,guildMode?'guild':'stall');}catch(error){list.replaceChildren(h('p',{class:'mi-empty',text:error.message}));return;}if(current!==generation)return;}
-      var off = wk.off, guild = wk.mode === "guilds", rows = guild ? guildBoard(off) : weekBoard(off), top = rows[0]?.gold??0, left = daysLeft();
-      if(!rows.length){clear(list);list.appendChild(h("p",{class:"mi-empty",text:"No recorded sales for this view."}));btn.hidden=true;return;}
-      btn.hidden=false;
-      title.textContent = guild ? "Guild of the week" : (off === 0 ? "This week so far" : "Top stalls");
-      sub.textContent = off === 0 ? (left <= 1 ? (model.preview?"Ends tonight at 11:59 PM ET.":"Ends tonight in UTC.") : left + (model.preview?" days left. Ends Sunday at 11:59 PM ET.":" days left. Ends Sunday in UTC.")) : (guild ? rows[0].name + " won this week." : rows[0].name + " won this week with stall " + rows[0].stall + ".");
-      clear(list);
-      rows.forEach(function (r, i) {
-        var who = guild ? guildSlot(r) : head(r.name, 40, "sm");
-        var row = h("div", { class: "mi-rank" + (i === 0 ? " first" : "") }, [
-          h("span", { class: "bar", style: "width:0" }),
-          h("span", { class: "n", text: "#" + (i + 1) }), who,
-          h("span", { style: "min-width:0;overflow-wrap:anywhere" }, [h("b", { style: "font-weight:400", text: r.name }), h("span", { class: "mi-sub", text: guild ? " · " + (r.stalls??"?") + (r.stalls === 1 ? " stall" : " stalls") : " · " + sl(r.name) }), guild ? null : streakTag(r.name, off)]),
-          h("span", { class: "g", text: gold(r.gold) + " raw gold" })
-        ]);
-        list.appendChild(row);
-        var bar = row.firstChild;
-        requestAnimationFrame(function () { requestAnimationFrame(function () { bar.style.width = Math.round(r.gold / top * 100) + "%"; }); });
-      });
-      btn.style.display = !sid(rows[0].name) ? "none" : "";
-      btn.onclick = function () { showOnMap(sid(rows[0].name)); };
+    async function drawWeek() {
+      const current=++generation,requested=wk.off,guild=wk.mode==='guilds';
+      btn.hidden=true;
+      if(window.EnthusiaMarketDesignLoadWeek){
+        try{await window.EnthusiaMarketDesignLoadWeek(requested,guild?'guild':'stall');}
+        catch(error){if(current===generation)list.replaceChildren(h('p',{class:'mi-empty',text:error.message}));return;}
+      }
+      if(current!==generation)return;
+      const rows=guild?guildBoard(requested):weekBoard(requested);
+      drawWeeklyContent(list,title,sub,btn,requested,guild,rows);
     }
-    sel.addEventListener("change", function () { wk.off = parseInt(sel.value, 10); draw(); });
-    cs.addEventListener("click", function () { wk.mode = "stalls"; cs.setAttribute("aria-pressed", "true"); cg.setAttribute("aria-pressed", "false"); draw(); });
-    cg.addEventListener("click", function () { wk.mode = "guilds"; cg.setAttribute("aria-pressed", "true"); cs.setAttribute("aria-pressed", "false"); draw(); });
-    draw();
+    sel.addEventListener("change", function () { wk.off = parseInt(sel.value, 10); drawWeek(); });
+    cs.addEventListener("click", function () { wk.mode = "stalls"; cs.setAttribute("aria-pressed", "true"); cg.setAttribute("aria-pressed", "false"); drawWeek(); });
+    cg.addEventListener("click", function () { wk.mode = "guilds"; cg.setAttribute("aria-pressed", "true"); cs.setAttribute("aria-pressed", "false"); drawWeek(); });
+    drawWeek();
   }
 
   function renderHall() {
     var el = $("mi-hall");
     clear(el);
-    winners.slice(1).forEach(function (w, i) {
+    winners.filter(w=>w!==window.EnthusiaMarketHistory.previousMarketWinner(model)).forEach(function (w, i) {
       var card = h("div", { class: "panel mi-card" }, [
-        h("p", { class: "tag tag-plain", style: "align-self:flex-start", text: range(-(i + 2)) }),
+        h("p", { class: "tag tag-plain", style: "align-self:flex-start", text: model.preview?range(-(i + 2)):w.week }),
         h("div", { class: "mi-who" }, [
           head(w.name, 40, "sm"),
           h("div", {}, [h("b", { text: w.name }), h("span", { class: "mi-sub", text: sl(w.name) })])
@@ -281,14 +246,15 @@
 
   function spark(item) {
     if(!item.days.length)return h("span",{class:"mi-sub",text:"No history"});
-    var pts = item.days.slice(16).map(function (p) { return p.avg; });
+    var pts = item.days.slice(-14).map(function (p) { return p.avg; });
     var mn = Math.min.apply(null, pts), mx = Math.max.apply(null, pts), W = 112, H = 28;
     var span = mx - mn || 1;
     var d = pts.map(function (v, i) {
-      return Math.round(i / (pts.length - 1) * (W - 4) + 2) + "," + Math.round(H - 4 - (v - mn) / span * (H - 8));
+      return Math.round(i / Math.max(1,pts.length - 1) * (W - 4) + 2) + "," + Math.round(H - 4 - (v - mn) / span * (H - 8));
     }).join(" ");
     var svg = s("svg", { class: "mi-spark", viewBox: "0 0 " + W + " " + H, "aria-hidden": "true", focusable: "false" });
     svg.appendChild(s("polyline", { points: d, class: dir(item.d7)[0] }));
+    if(pts.length===1)svg.appendChild(s("circle",{cx:2,cy:H-4,r:2,fill:"currentColor"}));
     return svg;
   }
 
@@ -351,30 +317,7 @@
     return items[0];
   }
 
-  function chart(it) {
-    var W = 420, H = 240, L = 56, R = 404, T = 16, B = 200;
-    var mn = it.lo * 0.97, mx = it.hi * 1.03, span = mx - mn || 1;
-    function x(i) { return L + i / Math.max(1,it.days.length-1) * (R - L); }
-    function y(v) { return B - (v - mn) / span * (B - T); }
-    var svg = s("svg", { class: "mi-chart", viewBox: "0 0 " + W + " " + H, role: "img", tabindex: "0",
-      "aria-label": it.name + " price over the last 30 days, now " + gold(it.price) + " gold, " + pct(it.d7) + " this week. Use the left and right arrow keys to read each day." });
-    for (var g = 0; g < 4; g++) {
-      var gy = T + g * (B - T) / 3, gv = mx - g * span / 3;
-      svg.appendChild(s("line", { x1: L, x2: R, y1: gy, y2: gy, class: "grid" }));
-      var t = s("text", { x: L - 8, y: gy + 5, "text-anchor": "end" }); t.textContent = gold(gv); svg.appendChild(t);
-    }
-    var band = it.days.map(function (p, i) { return x(i).toFixed(1) + "," + y(p.hi).toFixed(1); })
-      .concat(it.days.slice().reverse().map(function (p, i) { return x(it.days.length-1-i).toFixed(1) + "," + y(p.lo).toFixed(1); }));
-    if(model.preview)svg.appendChild(s("polygon", { points: band.join(" "), class: "band" }));
-    svg.appendChild(s("polyline", { points: it.days.map(function (p, i) { return x(i).toFixed(1) + "," + y(p.avg).toFixed(1); }).join(" "), class: "avg" }));
-    [["30 days ago", L, "start"], ["15 days", (L + R) / 2, "middle"], ["Today", R, "end"]].forEach(function (a) {
-      var tx = s("text", { x: a[1], y: H - 12, "text-anchor": a[2] }); tx.textContent = a[0]; svg.appendChild(tx);
-    });
-    var cur = s("line", { class: "cur", y1: T, y2: B, x1: x(state.idx), x2: x(state.idx) });
-    var dot = s("rect", { class: "pt", width: 12, height: 12, x: x(state.idx) - 6, y: y(it.days[state.idx].avg) - 6 });
-    svg.appendChild(cur); svg.appendChild(dot);
-    return { svg: svg, move: function (i) { cur.setAttribute("x1", x(i)); cur.setAttribute("x2", x(i)); dot.setAttribute("x", x(i) - 6); dot.setAttribute("y", y(it.days[i].avg) - 6); } };
-  }
+  function chart(it) {return window.EnthusiaMarketDrawHistoryChart(it,{state,model,s,gold,pct});}
 
   function dayLabel(i) {
     var d = new Date(); d.setDate(d.getDate() - (29 - i));
@@ -388,6 +331,7 @@
   function renderDetail() {
     var it = current(), el = $("mi-detail");
     clear(el);
+    if(!it){el.appendChild(h("p",{class:"mi-note",text:"No completed item sales have been exported for the last 30 days."}));return;}
     el.appendChild(h("p", { class: "mi-kick", text: "30 DAY CHART" }));
     el.appendChild(h("h3", { text: it.name }));
     el.appendChild(h("p", { class: "mi-price", text: gold(it.price) + " raw gold each" }));
@@ -395,13 +339,14 @@
       h("span", { class: "tag " + (dir(it.d1) === "up" ? "tag-good" : dir(it.d1) === "down" ? "tag-red" : "tag-plain"), text: (model.preview?"24h ":"Daily change ") + pct(it.d1) }),
       h("span", { class: "tag " + (dir(it.d7) === "up" ? "tag-good" : dir(it.d7) === "down" ? "tag-red" : "tag-plain"), text: (model.preview?"7d ":"30d ") + pct(it.d7) })
     ]));
-    if(!it.days.length){el.appendChild(h('p',{class:'mi-note',text:'Select this item to load its recorded daily history.'}));el.appendChild(alertBox(it));window.EnthusiaMarketDesignLoadHistory?.(it);return;}
-    state.idx=Math.max(0,Math.min(state.idx,it.days.length-1));
+    if(!it.days.length){el.appendChild(h("p",{class:"mi-note",text:it.loaded?"No completed sales recorded for this item in the last 30 days.":"Loading recorded daily history…"}));el.appendChild(alertBox(it));window.EnthusiaMarketDesignLoadHistory?.(it);return;}
+    state.idx=Math.max(0,Math.min(state.idx<0?it.days.length-1:state.idx,it.days.length-1));
     var c = chart(it), read = h("p", { class: "mi-read", text: readout(it, state.idx) });
     function setIdx(i) { state.idx = Math.max(0, Math.min(it.days.length-1, i)); c.move(state.idx); read.textContent = readout(it, state.idx); }
     function fromEvent(e) {
       var r = c.svg.getBoundingClientRect(), px = (e.clientX - r.left) / r.width * 420;
-      setIdx(Math.round((px - 56) / (404 - 56) * (it.days.length-1)));
+      const position=(px-56)/(404-56);
+      setIdx(model.preview?Math.round(position*(it.days.length-1)):window.EnthusiaMarketHistory.nearestHistoryIndex(it.days,position,c.end));
     }
     c.svg.addEventListener("pointermove", fromEvent);
     c.svg.addEventListener("pointerdown", fromEvent);
@@ -456,13 +401,14 @@
       row.addEventListener("click", function () { selectItem(it.name); var d = $("mi-detail"); if (d && d.getBoundingClientRect().top > innerHeight) d.scrollIntoView({ behavior: "smooth", block: "center" }); });
       card.appendChild(row);
     });
+    if(!list.length)card.appendChild(h("p",{class:"mi-note",text:"No recorded comparison in this direction."}));
     return card;
   }
   function renderMovers() {
     var el = $("mi-movers"); clear(el);
-    var byUp = items.slice().sort(function (a, b) { return b.d7 - a.d7; });
+    var byUp = window.EnthusiaMarketHistory.marketMovers(items,"up"), byDown = window.EnthusiaMarketHistory.marketMovers(items,"down");
     el.appendChild(moverList(model.preview?"Biggest risers this week":"Biggest risers over 30 days", model.preview?"7 DAY CHANGE":"30 DAY CHANGE", byUp.slice(0, 3)));
-    el.appendChild(moverList(model.preview?"Biggest fallers this week":"Biggest fallers over 30 days", model.preview?"7 DAY CHANGE":"30 DAY CHANGE", byUp.slice(-3).reverse()));
+    el.appendChild(moverList(model.preview?"Biggest fallers this week":"Biggest fallers over 30 days", model.preview?"7 DAY CHANGE":"30 DAY CHANGE", byDown.slice(0, 3)));
   }
   function renderTraded() {
     var el = $("mi-traded"); clear(el);
@@ -558,8 +504,8 @@
   function renderStrip() {
     var el = $("mi-strip"), w = winners[0], lead = live[0];
     if(!w||!lead||!items.length){el.replaceChildren(h("a",{class:"btn btn-dark mi-strip-tile",href:"market.html",text:"Explore player shops. Sales insights await a server export."}));return;}
-    var up = items.slice().sort(function (a, b) { return b.d7 - a.d7; })[0];
-    var down = items.slice().sort(function (a, b) { return a.d7 - b.d7; })[0];
+    var up = window.EnthusiaMarketHistory.marketMovers(items,"up")[0];
+    var down = window.EnthusiaMarketHistory.marketMovers(items,"down")[0];
     clear(el);
     function tile(href, kick, kids) {
       return h("a", { class: "btn btn-dark mi-strip-tile", href: href }, [h("span", { class: "mi-kick", text: kick })].concat(kids));
@@ -572,11 +518,11 @@
       h("span", { class: "mi-who" }, [head(lead.name, 40, "sm"), h("span", { class: "mi-strip-big", text: lead.name })]),
       h("span", { class: "mi-sub", text: gold(lead.gold) + " raw gold so far" })
     ]));
-    el.appendChild(tile("market.html#item=" + encodeURIComponent(up.name), "BIGGEST RISER", [
+    if(up)el.appendChild(tile("market.html#item=" + encodeURIComponent(up.name), "BIGGEST RISER", [
       h("span", { class: "mi-strip-big", text: up.name }),
       h("span", {}, [change(up.d7), h("span", { class: "mi-sub", text: (model.preview?" this week · ":" over 30 days · ") + gold(up.price) + " raw gold" })])
     ]));
-    el.appendChild(tile("market.html#item=" + encodeURIComponent(down.name), "BIGGEST FALLER", [
+    if(down)el.appendChild(tile("market.html#item=" + encodeURIComponent(down.name), "BIGGEST FALLER", [
       h("span", { class: "mi-strip-big", text: down.name }),
       h("span", {}, [change(down.d7), h("span", { class: "mi-sub", text: (model.preview?" this week · ":" over 30 days · ") + gold(down.price) + " raw gold" })])
     ]));
@@ -596,7 +542,7 @@
     if ($("mi-strip")) renderStrip();
     if (!$("mi-winner")) return;
     renderWinner(); renderWeek(); renderHall();
-    if(items.length){renderRows(); renderDetail(); renderMovers(); renderTraded();followHash();} initMap();
+    renderRows();renderDetail();renderMovers();renderTraded();if(items.length)followHash();initMap();
     $("mi-q").addEventListener("input", function (e) { state.q = e.target.value; renderRows(); });
     Array.prototype.forEach.call(document.querySelectorAll("[data-mi-sort]"), function (b) {
       b.addEventListener("click", function () {
@@ -608,6 +554,7 @@
       });
     });
   }
+  window.EnthusiaMarketDesignHistoryError=(item,message)=>{if(current()===item)$("mi-detail").appendChild(h("p",{class:"mi-note",role:"status",text:message}));};
   window.EnthusiaMarketDesignRefresh=()=>{renderRows();renderDetail();};
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();

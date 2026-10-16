@@ -151,15 +151,7 @@ function delivery(reward, context, recipientUuid, detail, state = "PENDING") {
   };
 }
 
-export function planRewardForResult(reward, context, { guildMemberUuids = null } = {}) {
-  const candidates = eligibleParticipants(context, reward);
-  const eligibleUuids = candidates.map((candidate) => candidate.playerUuid);
-  const guildMembers = Array.isArray(guildMemberUuids)
-    ? [...new Set(guildMemberUuids.map(String))]
-        .filter((uuid) => !context.judgeUuids.has(uuid))
-        .sort()
-    : null;
-
+function guildRewardDependency(reward,context,guildMembers){
   if (
     (reward.distributionMode === "ALL_GUILD_MEMBERS" || reward.distributionMode === "RANDOM_GUILD_MEMBERS")
     && context.entryType !== "GUILD"
@@ -178,6 +170,46 @@ export function planRewardForResult(reward, context, { guildMemberUuids = null }
       deliveries: []
     };
   }
+
+  return null;
+}
+
+function selectedRewardDeliveries(reward,context,candidates,selected){
+  const payload = reward.config.payload ?? {};
+  if (reward.distributionMode === "SPLIT_ELIGIBLE" && (reward.rewardType === "MONEY" || reward.rewardType === "ITEM")) {
+    const total = Number(payload.amount);
+    const weights = candidates
+      .filter((candidate) => selected.includes(candidate.playerUuid))
+      .map((candidate) => ({ recipientUuid: candidate.playerUuid, weight: candidate.weight }));
+    const shares = splitWeightedIntegerReward(total, weights).filter((share) => share.amount > 0);
+    return {
+      ready: true,
+      deliveries: shares.map((share) => delivery(reward, context, share.recipientUuid, {
+        amount: share.amount,
+        splitTotal: total
+      }))
+    };
+  }
+
+  return {
+    ready: true,
+    deliveries: selected.map((recipientUuid) => delivery(reward, context, recipientUuid, {
+      amount: reward.rewardType === "ITEM" ? Number(payload.amount ?? 1) : undefined
+    }))
+  };
+}
+
+export function planRewardForResult(reward, context, { guildMemberUuids = null } = {}) {
+  const candidates = eligibleParticipants(context, reward);
+  const eligibleUuids = candidates.map((candidate) => candidate.playerUuid);
+  const guildMembers = Array.isArray(guildMemberUuids)
+    ? [...new Set(guildMemberUuids.map(String))]
+        .filter((uuid) => !context.judgeUuids.has(uuid))
+        .sort()
+    : null;
+
+  const dependency = guildRewardDependency(reward,context,guildMembers);
+  if (dependency) return dependency;
 
   if (reward.distributionMode === "MANUAL") {
     return {
@@ -202,28 +234,7 @@ export function planRewardForResult(reward, context, { guildMemberUuids = null }
     };
   }
 
-  const payload = reward.config.payload ?? {};
-  if (reward.distributionMode === "SPLIT_ELIGIBLE" && (reward.rewardType === "MONEY" || reward.rewardType === "ITEM")) {
-    const total = Number(payload.amount);
-    const weights = candidates
-      .filter((candidate) => selected.includes(candidate.playerUuid))
-      .map((candidate) => ({ recipientUuid: candidate.playerUuid, weight: candidate.weight }));
-    const shares = splitWeightedIntegerReward(total, weights).filter((share) => share.amount > 0);
-    return {
-      ready: true,
-      deliveries: shares.map((share) => delivery(reward, context, share.recipientUuid, {
-        amount: share.amount,
-        splitTotal: total
-      }))
-    };
-  }
-
-  return {
-    ready: true,
-    deliveries: selected.map((recipientUuid) => delivery(reward, context, recipientUuid, {
-      amount: reward.rewardType === "ITEM" ? Number(payload.amount ?? 1) : undefined
-    }))
-  };
+  return selectedRewardDeliveries(reward,context,candidates,selected);
 }
 
 export async function buildCompetitionRewardPlan(db, competitionId, { guildMembersByGuildId = {} } = {}) {

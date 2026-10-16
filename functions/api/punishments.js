@@ -4,6 +4,16 @@ import { publicStaffRequest, staffApiResponse } from "../lib/staff-api.js";
 
 const FILTERS = new Set(["ALL", "BAN", "MUTE", "WARNING"]);
 
+function punishmentListQuery(source){
+  const requestedFilter = String(source.get("type") ?? "ALL").trim().toUpperCase();
+  const filter = requestedFilter === "WARN" ? "WARNING" : requestedFilter;
+  const cursor = String(source.get("cursor") ?? "").trim();
+  if (!FILTERS.has(filter) || cursor.length > 128 || (cursor && !/^[A-Za-z0-9_-]+$/.test(cursor))) return null;
+  const parameters = new URLSearchParams({ type: filter, limit: "30" });
+  if (cursor) parameters.set("cursor", cursor);
+  return { path: "/v1/public/punishments", parameters };
+}
+
 export function punishmentQuery(request) {
   const source = new URL(request.url).searchParams;
   const search = String(source.get("q") ?? "").trim();
@@ -12,13 +22,7 @@ export function punishmentQuery(request) {
     return { path: "/v1/public/search", parameters: new URLSearchParams({ q: search }) };
   }
 
-  const requestedFilter = String(source.get("type") ?? "ALL").trim().toUpperCase();
-  const filter = requestedFilter === "WARN" ? "WARNING" : requestedFilter;
-  const cursor = String(source.get("cursor") ?? "").trim();
-  if (!FILTERS.has(filter) || cursor.length > 128 || (cursor && !/^[A-Za-z0-9_-]+$/.test(cursor))) return null;
-  const parameters = new URLSearchParams({ type: filter, limit: "30" });
-  if (cursor) parameters.set("cursor", cursor);
-  return { path: "/v1/public/punishments", parameters };
+  return punishmentListQuery(source);
 }
 
 export async function onRequestGet(context) {

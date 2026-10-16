@@ -68,3 +68,9 @@ body[data-competition-page=detail] .competition-reward-dialog :where(p,small){co
 #punishment-results dd{margin:0}
 #punishment-results dl>div:first-child dd{display:inline-block;width:fit-content;padding:4px 8px;background:rgba(74,11,8,.06);border:1px solid rgba(74,11,8,.15)}
 #punishment-results>article>a{margin-top:auto}
+
+.account-session-actions{display:flex;flex-direction:column;align-items:stretch;gap:12px;max-width:100%}
+.account-session-actions button{min-height:44px;white-space:normal}
+.account-signout-confirm{display:grid;gap:12px;padding:16px;min-width:0;max-width:100%}
+.account-signout-confirm p{overflow-wrap:anywhere}
+@media(max-width:600px){.account-session-actions{width:100%}}

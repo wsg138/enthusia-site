@@ -17,7 +17,7 @@ function commentAllowed(appeal) {
   return appeal.status === "INFORMATION_REQUESTED" || !appeal.claimed;
 }
 
-export async function onRequestPost(context) {
+async function authorizeMutation(context) {
   if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
   if (!context.env?.COMPETITIONS_DB) return serviceUnavailable();
   const appealId = String(context.params.id ?? "").trim().toLowerCase();
@@ -26,21 +26,35 @@ export async function onRequestPost(context) {
   try { session = await authenticateLinkedAppealRequest(context.request, context.env); }
   catch { return serviceUnavailable(); }
   if (!session) return unauthorized();
+  return { session, appealId };
+}
+
+async function commentPermission(context, session, appealId) {
+  const appeal = await findOwnedAppealLifecycle(
+    context.env.COMPETITIONS_DB,
+    session.discord.id,
+    appealId
+  );
+  if (!appeal) return json({ error: "appeal_not_found" }, 404);
+  if (!commentAllowed(appeal)) {
+    return json({ error: appeal.claimed ? "appeal_claimed" : "appeal_closed" }, 409);
+  }
+  return null;
+}
+
+export async function onRequestPost(context) {
+  const authorized = await authorizeMutation(context);
+  if (authorized instanceof Response) return authorized;
+  const { session, appealId } = authorized;
+
   let input;
   try { input = sanitizeAppealComment(await context.request.json()); }
   catch { input = null; }
   if (!input) return json({ error: "invalid_comment" }, 400);
 
   try {
-    const appeal = await findOwnedAppealLifecycle(
-      context.env.COMPETITIONS_DB,
-      session.discord.id,
-      appealId
-    );
-    if (!appeal) return json({ error: "appeal_not_found" }, 404);
-    if (!commentAllowed(appeal)) {
-      return json({ error: appeal.claimed ? "appeal_claimed" : "appeal_closed" }, 409);
-    }
+    const rejected = await commentPermission(context, session, appealId);
+    if (rejected) return rejected;
     const recorded = await recordAppealComment(context.env.COMPETITIONS_DB, {
       id: crypto.randomUUID(),
       appealId,

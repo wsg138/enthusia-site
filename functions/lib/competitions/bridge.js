@@ -157,9 +157,14 @@ export async function competitionPlayerLookup(env, minecraftName) {
   return { uuid, name: canonicalName };
 }
 
-export async function competitionGuildMembers(env, guildId) {
+function guildMembershipId(guildId) {
   const id = typeof guildId === "string" ? guildId.trim() : "";
   if (!id || id.length > 128 || !/^[A-Za-z0-9._:-]+$/.test(id)) throw new TypeError("Guild ID is invalid");
+  return id;
+}
+
+export async function competitionGuildMembers(env, guildId) {
+  const id = guildMembershipId(guildId);
   const response = await signedCompetitionBridgeRequest(env, "/v1/competitions/guild-members", { guildId: id });
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`Competition bridge guild membership failed: ${response.status}`);

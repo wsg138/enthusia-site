@@ -1,3 +1,4 @@
+import { insertCompetitionMediaSql, auditCompetitionMediaSql } from "./media-repository-queries.js";
 const APPEARANCE_MEDIA = Object.freeze({
   BANNER: Object.freeze({
     field: "bannerImageId",
@@ -63,6 +64,35 @@ function appearanceSpec(value) {
   return { purpose, ...spec };
 }
 
+function competitionMediaInsertStatement(database, record) {
+  return database.prepare(insertCompetitionMediaSql).bind(
+      record.id,
+      record.competitionId,
+      record.purpose,
+      record.storageKey,
+      record.sha256,
+      record.mimeType,
+      record.byteSize,
+      record.width,
+      record.height,
+      ...moderationBindings(record),
+      record.createdByUuid,
+      record.createdAt
+    );
+}
+
+function competitionMediaAuditStatement(database, record, afterJson) {
+  return database.prepare(auditCompetitionMediaSql).bind(
+      record.auditEventId,
+      record.competitionId,
+      record.actorSubject,
+      record.createdByUuid,
+      afterJson,
+      `${record.purpose} image uploaded and passed automated moderation`,
+      record.createdAt
+    );
+}
+
 export async function createCompetitionMediaRecord(db, record) {
   const database = requireWritableDatabase(db);
   const afterJson = JSON.stringify({
@@ -76,41 +106,8 @@ export async function createCompetitionMediaRecord(db, record) {
   });
 
   const results = await database.batch([
-    database.prepare(`
-      INSERT INTO competition_media (
-        id, competition_id, purpose, storage_key, sha256, mime_type,
-        byte_size, width, height, moderation_provider, moderation_model,
-        moderation_outcome, moderation_categories_json, moderation_scores_json,
-        moderation_applied_input_types_json, created_by_uuid, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PASSED', ?, ?, ?, ?, ?)
-    `).bind(
-      record.id,
-      record.competitionId,
-      record.purpose,
-      record.storageKey,
-      record.sha256,
-      record.mimeType,
-      record.byteSize,
-      record.width,
-      record.height,
-      ...moderationBindings(record),
-      record.createdByUuid,
-      record.createdAt
-    ),
-    database.prepare(`
-      INSERT INTO competition_audit_events (
-        id, competition_id, actor_subject, actor_uuid, action,
-        after_json, note, created_at
-      ) VALUES (?, ?, ?, ?, 'COMPETITION_MEDIA_CREATED', ?, ?, ?)
-    `).bind(
-      record.auditEventId,
-      record.competitionId,
-      record.actorSubject,
-      record.createdByUuid,
-      afterJson,
-      `${record.purpose} image uploaded and passed automated moderation`,
-      record.createdAt
-    )
+    competitionMediaInsertStatement(database, record),
+    competitionMediaAuditStatement(database, record, afterJson)
   ]);
 
   const inserted = Number(results?.[0]?.meta?.changes ?? 0);

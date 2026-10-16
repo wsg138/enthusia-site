@@ -46,16 +46,8 @@ export function buildStatusSnapshot(env, schemaReady) {
   const discordContributorReady = competitionContributorDiscordConfigured(env);
   const originReady = siteOriginConfigured(env);
   return {
-    ok: Boolean(
-      featureEnabled
-      && schemaReady
-      && mediaBound
-      && moderationConfigured
-      && oauthConfigured
-      && bridgeReady
-      && discordStaffReady
-      && originReady
-    ),
+    ok: [featureEnabled,schemaReady,mediaBound,moderationConfigured,
+      oauthConfigured,bridgeReady,discordStaffReady,originReady].every(Boolean),
     environment: String(env?.APP_ENV ?? "unknown"),
     featureEnabled,
     database: {

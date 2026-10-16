@@ -68,19 +68,7 @@ async function startMinecraftLink(context, session) {
   }
 }
 
-async function pollMinecraftLink(context, session, input) {
-  const requestId = typeof input?.requestId === "string" ? input.requestId.trim() : "";
-  if (!requestId || requestId.length > 128) return json({ error: "invalid_link_request" }, 400);
-  try {
-    const active = await getActiveLinkCode(
-      context.env.COMPETITIONS_DB,
-      session.discord.id,
-      requestId
-    );
-    if (!active) return json({ status: "EXPIRED_OR_USED" }, 410);
-    const bridge = await competitionLinkStatus(context.env, requestId);
-    if (bridge.status === "PENDING") return json({ status: "WAITING_FOR_MINECRAFT", expiresAt: active.expiresAt });
-    if (bridge.status !== "CLAIMED") return json({ error: "invalid_link_bridge_status" }, 503);
+async function commitMinecraftLink(context,session,requestId,bridge){
     const linked = await consumeMinecraftLinkCode(context.env.COMPETITIONS_DB, {
       discordUserId: session.discord.id,
       codeHash: requestId,
@@ -95,6 +83,28 @@ async function pollMinecraftLink(context, session, input) {
     }
     await consumeCompetitionLinkCode(context.env, requestId).catch(() => {});
     return json({ status: linked.status, minecraft: { uuid: linked.uuid, name: linked.name } });
+}
+
+function linkPollRequestId(input){
+  const requestId = typeof input?.requestId === "string" ? input.requestId.trim() : "";
+  if (!requestId || requestId.length > 128) return json({ error: "invalid_link_request" }, 400);
+  return requestId;
+}
+
+async function pollMinecraftLink(context, session, input) {
+  const requestId = linkPollRequestId(input);
+  if (requestId instanceof Response) return requestId;
+  try {
+    const active = await getActiveLinkCode(
+      context.env.COMPETITIONS_DB,
+      session.discord.id,
+      requestId
+    );
+    if (!active) return json({ status: "EXPIRED_OR_USED" }, 410);
+    const bridge = await competitionLinkStatus(context.env, requestId);
+    if (bridge.status === "PENDING") return json({ status: "WAITING_FOR_MINECRAFT", expiresAt: active.expiresAt });
+    if (bridge.status !== "CLAIMED") return json({ error: "invalid_link_bridge_status" }, 503);
+    return await commitMinecraftLink(context,session,requestId,bridge);
   } catch (error) {
     if (String(error?.message ?? error).includes("minecraft_identity_locked_to_another_discord")) {
       return json({ error: "minecraft_identity_locked_to_another_discord" }, 409);

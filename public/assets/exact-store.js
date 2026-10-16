@@ -1,23 +1,31 @@
 /* Preview only: logic of the "Store" mockup, run by preview/mock.js. */
-class StoreDesign extends window.DesignController {
-  renderVals() {
-    var self = this;
-    var st = Object.assign({ menu: '', name: '', who: '', avid: false, dev: false }, this.state || {});
-    var on = function (c) { return c ? 'true' : 'false'; };
-    var show = function (c) { return c ? '' : 'hide'; };
-    var v = {};
-    var i;
-    var menus = ['Play', 'World', 'Comm', 'News'];
-    v.mobOpen = on(!!st.mob);
-    v.mobCls = st.mob ? 'open' : '';
-    v.togMob = function () { self.setState({ mob: !st.mob }); };
-    for (i = 0; i < menus.length; i++) {
+function navigationValues(self,st,v) {
+  const on=c=>c?"true":"false",show=c=>c?"":"hide";
+  let i;
+var menus = ['Play', 'World', 'Comm', 'News'];
+v.mobOpen = on(!!st.mob);
+v.mobCls = st.mob ? 'open' : '';
+v.togMob = function () { self.setState({ mob: !st.mob }); };
+for (i = 0; i < menus.length; i++) {
       (function (name) {
         v['m' + name + 'Open'] = on(st.menu === name);
         v['m' + name + 'Show'] = show(st.menu === name);
         v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
       })(menus[i]);
     }
+}
+
+class StoreDesign extends window.DesignController {
+  renderVals() {
+    var self = this;
+    var st = Object.assign({ menu: '', name: '', who: '', avid: false, dev: false }, this.state || {});
+    var show = function (c) { return c ? '' : 'hide'; };
+    var v = {};
+    navigationValues(self,st,v);
+
+
+
+
     var clean = String(st.name || '').replace(/\s+/g, '');
     v.name = st.name;
     v.setName = function (e) { self.setState({ name: e.target.value.replace(/\s+/g, '') }); };

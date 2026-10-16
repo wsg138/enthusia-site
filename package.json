@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "test:profile-exports": "python -m unittest discover -s tests/offline-profile -v",
     "build": "node scripts/build.mjs",
     "check": "node scripts/validate-site.mjs",
     "lint": "eslint . --ext .js,.mjs",

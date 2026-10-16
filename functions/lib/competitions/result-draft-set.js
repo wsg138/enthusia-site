@@ -29,6 +29,15 @@ function score(value, label, nullable = false) {
   return value;
 }
 
+function requireResultSnapshot(result,configVersion){
+    if (!result?.snapshot || typeof result.snapshot !== "object" || Array.isArray(result.snapshot)) {
+      throw new TypeError("Each provisional result requires a snapshot");
+    }
+    if (result.snapshot.configVersion !== configVersion) {
+      throw new TypeError("Result snapshot config version does not match the result set");
+    }
+}
+
 function normalizeResultSet(results, configVersion) {
   if (!Array.isArray(results) || !results.length) {
     throw new TypeError("At least one provisional result is required");
@@ -44,12 +53,7 @@ function normalizeResultSet(results, configVersion) {
     if (submissions.has(submissionId)) {
       throw new TypeError("A submission may only appear once in a result set");
     }
-    if (!result?.snapshot || typeof result.snapshot !== "object" || Array.isArray(result.snapshot)) {
-      throw new TypeError("Each provisional result requires a snapshot");
-    }
-    if (result.snapshot.configVersion !== configVersion) {
-      throw new TypeError("Result snapshot config version does not match the result set");
-    }
+    requireResultSnapshot(result,configVersion);
 
     submissions.add(submissionId);
     placements.add(placement);

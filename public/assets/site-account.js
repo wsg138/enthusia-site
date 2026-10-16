@@ -151,6 +151,21 @@ function closeAccountMenus(except = null) {
   }
 }
 
+function accountAvatar(session){
+  const avatar = document.createElement("span");
+  avatar.className = "site-account-avatar";
+  const imageUrl = avatarUrl(session);
+  if (imageUrl) {
+    const image = document.createElement("img");
+    image.src = imageUrl;
+    image.alt = "";
+    avatar.append(image);
+  } else {
+    avatar.textContent = discordName(session).slice(0, 1).toUpperCase();
+  }
+  return avatar;
+}
+
 async function renderAccount(root, session) {
   root.replaceChildren();
   if (!session.authenticated) {
@@ -164,17 +179,7 @@ async function renderAccount(root, session) {
   details.className = "site-account-menu";
   const summary = document.createElement("summary");
   summary.title = "Open account menu";
-  const avatar = document.createElement("span");
-  avatar.className = "site-account-avatar";
-  const imageUrl = avatarUrl(session);
-  if (imageUrl) {
-    const image = document.createElement("img");
-    image.src = imageUrl;
-    image.alt = "";
-    avatar.append(image);
-  } else {
-    avatar.textContent = discordName(session).slice(0, 1).toUpperCase();
-  }
+  const avatar = accountAvatar(session);
   const identity = document.createElement("span");
   identity.className = "site-account-identity";
   const primary = document.createElement("strong");

@@ -1,8 +1,10 @@
 import { isCanonicalUuid } from "./validation.js";
 import { getCompetitionIdentitySession } from "./competitions/identity.js";
+import { refreshDiscordRoleSnapshot } from "./competitions/discord-role-refresh.js";
 
 const encoder = new TextEncoder();
 const DISCORD_ROLE_MAX_AGE_MS = 60 * 60 * 1000;
+const DISCORD_STAFF_LOGIN_MAX_AGE_MS = 8 * 60 * 60 * 1000;
 const DISCORD_STAFF_ROLE_BINDINGS = Object.freeze([
   Object.freeze(["founder", "DISCORD_FOUNDER_ROLE_IDS"]),
   Object.freeze(["admin", "DISCORD_ADMIN_ROLE_IDS"]),
@@ -144,6 +146,13 @@ function linkedStaffPlayer(session) {
   return null;
 }
 
+function requireRecentDiscordStaffLogin(session,now) {
+  const authenticatedAt=Date.parse(session?.authenticatedAt??"");
+  if(!Number.isFinite(authenticatedAt)||authenticatedAt>now+5*60*1000
+      ||now-authenticatedAt>=DISCORD_STAFF_LOGIN_MAX_AGE_MS)
+    throw new Error("Staff login expired; sign in again");
+}
+
 export function buildDiscordStaffSession(session, env, now = Date.now()) {
   if (!session || session.discordGuildMember !== true) {
     throw new Error("Discord server membership is required");
@@ -151,6 +160,7 @@ export function buildDiscordStaffSession(session, env, now = Date.now()) {
   if (!discordRoleSnapshotIsFresh(session, now)) {
     throw new Error("Discord staff roles must be refreshed");
   }
+  requireRecentDiscordStaffLogin(session,now);
   const roles = discordStaffRoles(session, env);
   if (!roles.length) throw new Error("A configured Discord staff role is required");
   const player = linkedStaffPlayer(session);
@@ -169,7 +179,10 @@ export async function authenticateRequest(request, env, verifier = verifyAccessJ
       const identity = await getCompetitionIdentitySession(request, env.COMPETITIONS_DB, undefined, env);
       if (identity) {
         try {
-          return buildDiscordStaffSession(identity, env);
+          requireRecentDiscordStaffLogin(identity,Date.now());
+          const current = discordRoleSnapshotIsFresh(identity)
+            ? identity : await refreshDiscordRoleSnapshot(identity, env);
+          return buildDiscordStaffSession(current, env);
         } catch (error) {
           discordError = error;
         }

@@ -196,6 +196,7 @@ export async function getCompetitionIdentitySession(request, db, now = new Date(
   const row = await database.prepare(`
     SELECT
       s.discord_user_id AS discordUserId,
+      s.created_at AS authenticatedAt,
       s.expires_at AS expiresAt,
       a.username,
       a.global_name AS globalName,
@@ -246,6 +247,7 @@ export async function getCompetitionIdentitySession(request, db, now = new Date(
     guildRoleIds: Object.freeze(Array.isArray(guildRoleIds) ? guildRoleIds.map(String) : []),
     discordRolesCheckedAt: row.discordRolesCheckedAt,
     expiresAt: row.expiresAt,
+    authenticatedAt: row.authenticatedAt,
     sessionHash
   });
 }
@@ -259,6 +261,17 @@ export async function deleteCompetitionIdentitySession(request, db) {
     "DELETE FROM competition_identity_sessions WHERE session_hash = ?"
   ).bind(sessionHash).run();
   return Number(result?.meta?.changes ?? 0) === 1;
+}
+
+export async function deleteAllCompetitionIdentitySessions(request,db,now=new Date()) {
+  const token=parseCookies(request).get(SESSION_COOKIE);
+  if(!token)return 0;
+  const hash=await identityHash(token);
+  const result=await requireDatabase(db).prepare(`DELETE FROM competition_identity_sessions
+    WHERE discord_user_id=(SELECT discord_user_id FROM competition_identity_sessions
+      WHERE session_hash=? AND expires_at>?)`)
+    .bind(hash,new Date(timestamp(now)).toISOString()).run();
+  return Number(result?.meta?.changes??0);
 }
 
 function randomLinkCode(length = 8) {

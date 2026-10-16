@@ -57,13 +57,15 @@ export function renderWarzone(section,data) {
   else if(kit?.description)columns[0].append(el('p',{text:kit.description}));
 
   const next=items.find(row=>row.id==='next-meta');
-  columns[1].append(el('p',{class:'wz-next-date',text:kit?.endsAt?dateLabel(kit.endsAt,{month:'short',day:'numeric'}):'Unavailable'}));
+  const transition=next?.name==='Automatic schedule paused'?'Schedule paused':next?.name==='After override is cleared'?'Until cleared':'Unavailable';
+  columns[1].append(el('p',{class:'wz-next-date',text:kit?.endsAt?dateLabel(kit.endsAt,{month:'short',day:'numeric'}):transition}));
   if(kit?.endsAt)columns[1].append(el('p',{class:'wz-next-time',text:dateLabel(kit.endsAt,{hour:'numeric',minute:'2-digit',timeZoneName:'short'})}));
   if(next)columns[1].append(el('p',{class:'wz-next-name',text:next.name==='Next meta'?next.description:'Up next: '+next.name}));
 
   if(data?.capturedSnapshot&&data.availableWeeks?.length)columns[2].append(weekPicker(data));
-  else if(data?.weekStart)columns[2].append(el('p',{class:'wz-week-label',text:weekLabel(data.weekStart)}));
+  else if(data?.weekStartsAt??data?.weekStart)columns[2].append(el('p',{class:'wz-week-label',text:weekLabel((data.weekStartsAt??data.weekStart).slice(0,10))}));
   const leaders=weeklyDuelLeaders(items);
+  if(data?.duelUpdatedAt&&Date.now()-Date.parse(data.duelUpdatedAt)>900000)columns[2].append(el('p',{text:'Results outdated',class:'wz-week-label'}));
   for(const [index,row]of leaders.entries())columns[2].append(el('div',{class:'wz-leader'},[
     el('span',{class:'wz-rank',text:index+1}),playerHead(row),el('span',{class:'wz-player',text:row.name}),el('strong',{class:'wz-score',text:row.wins+' '+(row.wins===1?'win':'wins')})
   ]));
@@ -72,7 +74,8 @@ export function renderWarzone(section,data) {
   const indicator=section.querySelector('[data-warzone-status]')??section.querySelector('.live')?.parentElement;
   if(indicator){
     indicator.setAttribute('data-warzone-status','');
-    indicator.textContent=data?(data.stale?'Outdated · ':data.capturedSnapshot?'Snapshot · ':'Updated · ')+dateLabel(data.updatedAt,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Feed unavailable';
+    const outdated=data?.stale===true||Date.now()-Date.parse(data?.generatedAt??data?.updatedAt)>900000;
+    indicator.textContent=data?(outdated?'Outdated · ':data.capturedSnapshot?'Snapshot · ':'Updated · ')+dateLabel(data.generatedAt??data.updatedAt,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Feed unavailable';
     indicator.title=data?.capturedSnapshot?'Captured server data; does not update automatically.':data?.stale?'The last server export is over 15 minutes old.':'';
   }
 }

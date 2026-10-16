@@ -59,11 +59,17 @@ function boundedMutationText(value, maximum, fallback = null) {
   return typeof value === "string" ? value.slice(0, maximum) : fallback;
 }
 
-export function projectAppealMutation(payload, appealId) {
+function mutationVersion(payload,appealId) {
   if (!payload || !isCanonicalUuid(payload.id) || payload.id.toLowerCase() !== appealId) return null;
   if (!isCanonicalUuid(payload.punishmentId) || !APPEAL_STATUSES.has(payload.status)) return null;
   const normalizedVersion = version(payload.version);
   if (!normalizedVersion || typeof payload.claimed !== "boolean") return null;
+  return normalizedVersion;
+}
+
+export function projectAppealMutation(payload, appealId) {
+  const normalizedVersion = mutationVersion(payload,appealId);
+  if (!normalizedVersion) return null;
   return Object.freeze({
     id: payload.id.toLowerCase(),
     punishmentId: payload.punishmentId.toLowerCase(),

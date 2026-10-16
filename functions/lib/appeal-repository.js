@@ -321,6 +321,16 @@ export async function findAppeal(db, appealId) {
   `).bind(appealId).first();
 }
 
+function existingCommentResult(existing,record){
+  if (existing) {
+    if (existing.body !== record.body || existing.authorName !== record.authorName) {
+      return { status: "CONFLICT" };
+    }
+    return { status: "REPLAYED", comment: comment(existing) };
+  }
+  return null;
+}
+
 export async function recordAppealComment(db, record) {
   const store = database(db);
   const existing = await store.prepare(`
@@ -331,12 +341,8 @@ export async function recordAppealComment(db, record) {
     WHERE appeal_id = ? AND author_type = ? AND author_id = ? AND idempotency_key = ?
     LIMIT 1
   `).bind(record.appealId, record.authorType, record.authorId, record.idempotencyKey).first();
-  if (existing) {
-    if (existing.body !== record.body || existing.authorName !== record.authorName) {
-      return { status: "CONFLICT" };
-    }
-    return { status: "REPLAYED", comment: comment(existing) };
-  }
+  const prior = existingCommentResult(existing,record);
+  if (prior) return prior;
   try {
     const result = await store.prepare(`
       INSERT INTO appeal_comments (

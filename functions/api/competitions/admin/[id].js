@@ -70,17 +70,7 @@ export async function onRequestGet(context) {
   }
 }
 
-export async function onRequestPatch(context) {
-  if (!requireSameOrigin(context.request)) {
-    return json({ error: "invalid_origin" }, 403);
-  }
-
-  const id = competitionId(context);
-  if (!id) return json({ error: "competition_not_found" }, 404);
-
-  const authorized = await authorizeManager(context);
-  if (authorized.response) return authorized.response;
-
+async function draftEditInput(context){
   let input;
   try {
     input = await context.request.json();
@@ -98,6 +88,10 @@ export async function onRequestPatch(context) {
     return json({ error: "invalid_competition_draft" }, 400);
   }
 
+  return {input,note,config};
+}
+
+async function editableDraft(context,id,input){
   let current;
   try {
     current = await getAdminCompetition(context.env.COMPETITIONS_DB, id);
@@ -112,6 +106,10 @@ export async function onRequestPatch(context) {
     return json({ error: "competition_version_conflict", currentVersion: current.configVersion }, 409);
   }
 
+  return current;
+}
+
+function draftEditMetadata(input,current,config){
   const visibility = sanitizeCompetitionVisibility(input.visibility, current.visibility);
   if (!visibility) return json({ error: "invalid_competition_draft" }, 400);
 
@@ -123,6 +121,10 @@ export async function onRequestPatch(context) {
   });
   if (!basics) return json({ error: "invalid_competition_draft" }, 400);
 
+  return {visibility,basics};
+}
+
+async function persistDraftEdit(context,id,authorized,input,note,config,current,visibility,basics){
   const now = new Date().toISOString();
   try {
     const result = await saveDraftCompetition(context.env.COMPETITIONS_DB, {
@@ -161,6 +163,31 @@ export async function onRequestPatch(context) {
     }
     return json({ error: "competition_update_failed" }, 503);
   }
+}
+
+export async function onRequestPatch(context) {
+  if (!requireSameOrigin(context.request)) {
+    return json({ error: "invalid_origin" }, 403);
+  }
+
+  const id = competitionId(context);
+  if (!id) return json({ error: "competition_not_found" }, 404);
+
+  const authorized = await authorizeManager(context);
+  if (authorized.response) return authorized.response;
+
+  const parsed = await draftEditInput(context);
+  if (parsed instanceof Response) return parsed;
+  const {input,note,config} = parsed;
+
+  const current = await editableDraft(context,id,input);
+  if (current instanceof Response) return current;
+
+  const metadata = draftEditMetadata(input,current,config);
+  if (metadata instanceof Response) return metadata;
+  const {visibility,basics} = metadata;
+
+  return persistDraftEdit(context,id,authorized,input,note,config,current,visibility,basics);
 }
 
 export function onRequest() {

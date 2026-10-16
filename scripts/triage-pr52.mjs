@@ -4,6 +4,9 @@ import { parse } from 'acorn'; // Included in the locked ESLint development tool
 
 const findings = JSON.parse(await readFile('docs/pr-feedback/52-findings.json', 'utf8'));
 const cache = new Map();
+// Exact saved finding -> renamed responsibility, reviewed during decomposition.
+// This avoids mistaking the separate alerts draw callback for the weekly draw.
+const renamedFunctions=new Map([['e3ed6a0f98d0875750839a9e3aa4b794','drawWeek']]);
 const archivedSources = new Map([
   ['public/assets/exact-controls/home-christmas.js', 'designs/unreleased/christmas/controls.js.txt'],
   ['public/preview/design-reference/mock/home-christmas.js', 'designs/unreleased/christmas/reference-controls.js.txt']
@@ -29,17 +32,26 @@ async function sourceFunctions(file) {
   if (cache.has(file)) return cache.get(file);
   if (!/\.(js|mjs)$/.test(file)) return [];
   const source = await readFile(archivedSources.get(file) ?? file, 'utf8');
-  const ast = parse(source, { ecmaVersion: 'latest', sourceType: 'module', locations: true });
+  const comments=[];
+  const ast = parse(source, { ecmaVersion: 'latest', sourceType: 'module', locations: true,onComment:comments });
+  // NLOC excludes blank/comment lines; source span includes both and is retained
+  // separately for location evidence. Preserve newlines when removing comments.
+  let code=source;
+  for(const comment of comments.slice().reverse())code=code.slice(0,comment.start)+code.slice(comment.start,comment.end).replace(/[^\r\n]/g,' ')+code.slice(comment.end);
+  const codeLines=code.split('\n');
   const functions = [];
   function visit(node, parent) {
     if (isFunction(node)) functions.push({
       name: node.id?.name ?? parent?.key?.name ?? parent?.id?.name ?? '(anonymous)',
       start: node.loc.start.line, end: node.loc.end.line,
-      ccn: complexity(node), sourceLines: node.loc.end.line - node.loc.start.line + 1
+      ccn: complexity(node), sourceLines: node.loc.end.line - node.loc.start.line + 1,
+      nloc:codeLines.slice(node.loc.start.line-1,node.loc.end.line).filter(line=>line.trim()).length
     });
     children(node).forEach(child => visit(child, node));
   }
   visit(ast, null);
+  functions.sourceLines=source.split('\n');
+  functions.nloc=codeLines.filter(line=>line.trim()).length;
   cache.set(file, functions);
   return functions;
 }
@@ -51,20 +63,33 @@ async function metricFinding(finding) {
   if (finding.file === 'wiki-worker/safety.py') return {
     disposition: 'changed-pending-hosted-analysis', reason: 'Trusted URL comparison was simplified; allowed and hostile URL cases passed.'
   };
-  if (finding.pattern === 'Lizard_file-nloc-medium') return {
-    disposition: 'maintainability-open', reason: 'Large first-party module needs a separate domain-specific decomposition.'
-  };
-  const name = finding.message.match(/^Method (.*?) has/)?.[1];
-  const candidates = (await sourceFunctions(finding.file)).filter(item => item.name === name);
-  // Never map ambiguous anonymous callbacks using an old report line number.
-  const current = candidates.length === 1 ? candidates[0] : null;
-  const withinThreshold = current && (finding.pattern === 'Lizard_ccn-medium' ? current.ccn <= 8 : current.sourceLines <= 50);
+  if (finding.pattern === 'Lizard_file-nloc-medium') {
+    const current=await sourceFunctions(finding.file);
+    return {disposition:current.nloc<=500?'below-threshold-local':'maintainability-open',
+      current:{nloc:current.nloc},reason:'Current nonblank/noncomment lines measured locally; hosted file metrics remain a separate gate.'};
+  }
+  const name = renamedFunctions.get(finding.id)??finding.message.match(/^Method (.*?) has/)?.[1];
+  const functions=await sourceFunctions(finding.file);
+  const candidates = functions.filter(item => item.name === name);
+  // Never use obsolete report line numbers. An anonymous callback can be located
+  // only by a unique exact saved source line, then its smallest enclosing function.
+  const current = candidates.length === 1 ? candidates[0] : anonymousLocation(finding,functions);
+  const withinThreshold = current && (finding.pattern === 'Lizard_ccn-medium' ? current.ccn <= 8 : current.nloc <= 50);
   return {
     disposition: withinThreshold ? 'below-threshold-local' : 'maintainability-open', current,
     reason: withinThreshold
       ? 'Current AST function is below the reported threshold; a fresh hosted analyzer result remains required.'
       : 'Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review.'
   };
+}
+
+function anonymousLocation(finding,functions){
+  if(!finding.message.startsWith('Method (anonymous)')||!finding.code)return null;
+  const matches=functions.sourceLines?.flatMap((line,index)=>line.trim()===finding.code.trim()?[index+1]:[])??[];
+  if(matches.length!==1)return null;
+  const candidates=functions.filter(row=>row.start<=matches[0]&&row.end>=matches[0]).sort((a,b)=>a.sourceLines-b.sourceLines);
+  if(!candidates.length||candidates[0].sourceLines===candidates[1]?.sourceLines)return null;
+  return candidates[0];
 }
 
 async function disposition(finding) {

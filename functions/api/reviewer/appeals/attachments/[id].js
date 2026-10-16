@@ -8,7 +8,7 @@ import { forbidden, json, methodNotAllowed, unauthorized } from "../../../../lib
 import { reviewerRank } from "../../../../lib/staff-api.js";
 import { isCanonicalUuid } from "../../../../lib/validation.js";
 
-export async function onRequestGet(context) {
+async function reviewerAttachmentIdentity(context) {
   let session;
   try { session = await authenticateRequest(context.request, context.env); }
   catch { return unauthorized(); }
@@ -17,6 +17,13 @@ export async function onRequestGet(context) {
   if (!isCanonicalUuid(id) || !context.env?.COMPETITIONS_DB || !context.env?.COMPETITIONS_MEDIA) {
     return json({ error: "attachment_not_found" }, 404);
   }
+  return {id};
+}
+
+export async function onRequestGet(context) {
+  const authorized = await reviewerAttachmentIdentity(context);
+  if (authorized instanceof Response) return authorized;
+  const {id} = authorized;
   let record;
   try { record = await findReviewerAppealAttachment(context.env.COMPETITIONS_DB, id); }
   catch { return json({ error: "attachment_unavailable" }, 503); }

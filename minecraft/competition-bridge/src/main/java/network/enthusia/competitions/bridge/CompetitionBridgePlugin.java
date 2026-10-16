@@ -31,6 +31,7 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
     private volatile RewardDeliveryService rewardDelivery;
     private volatile BridgeHttpServer httpServer;
     private volatile BukkitTask itemRetryTask;
+    private CommunityFeedHttpServer communityFeeds;
 
     @Override
     public void onEnable() {
@@ -59,10 +60,12 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
             linkCommand.setExecutor(this);
         }
         getLogger().info("EnthusiaCompetitionBridge enabled; listener " + listenerSummary(runtimeConfig));
+        startCommunityFeeds();
     }
 
     @Override
     public void onDisable() {
+        if (communityFeeds != null) communityFeeds.close();
         synchronized (runtimeLock) {
             cancelItemRetryTask();
             closeQuietly(httpServer);
@@ -73,6 +76,20 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
             repository = null;
             rewardDelivery = null;
             runtimeConfig = null;
+        }
+    }
+
+    private void startCommunityFeeds() {
+        if (!getConfig().getBoolean("community-feeds.enabled", false)) return;
+        try {
+            String token = System.getenv("ENTHUSIA_COMMUNITY_FEED_TOKEN");
+            communityFeeds = new CommunityFeedHttpServer(getConfig().getInt("community-feeds.port", 8766), token,
+                new PublicCommunitySources(this)::read);
+            communityFeeds.start();
+        } catch (Exception failure) {
+            if (communityFeeds != null) communityFeeds.close();
+            communityFeeds = null;
+            getLogger().warning("Public community feeds disabled: invalid configuration or unavailable listener");
         }
     }
 

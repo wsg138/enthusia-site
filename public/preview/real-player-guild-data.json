@@ -1,0 +1,271 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "23d9b7de-38cb-4ae1-9d3f-1bf124b0a34f",
+      "name": "Vibe",
+      "description": "",
+      "level": 100,
+      "members": 22,
+      "elo": null,
+      "prestige": null,
+      "foundedAt": "2026-05-02T17:53:30.000Z",
+      "bankBalance": 1053,
+      "totalExperience": 19537788,
+      "activityScore": 35,
+      "tag": "| Vibe |",
+      "recruiting": null,
+      "peaceful": null,
+      "membersList": [],
+      "banner": {
+        "baseColor": "BLACK",
+        "patterns": [
+          {
+            "type": "STRIPE_LEFT",
+            "color": "YELLOW"
+          },
+          {
+            "type": "TRIANGLE_BOTTOM",
+            "color": "BLACK"
+          },
+          {
+            "type": "STRIPE_DOWNLEFT",
+            "color": "YELLOW"
+          },
+          {
+            "type": "BORDER",
+            "color": "BLACK"
+          }
+        ]
+      },
+      "links": []
+    },
+    {
+      "id": "83b21e82-6c27-4bfe-88fa-da090dcb6ef4",
+      "name": "WeOnTop",
+      "description": "",
+      "level": 100,
+      "members": 39,
+      "elo": null,
+      "prestige": null,
+      "foundedAt": "2026-05-02T17:02:06.000Z",
+      "bankBalance": 524,
+      "totalExperience": 18084084,
+      "activityScore": 10,
+      "tag": "WOT",
+      "recruiting": null,
+      "peaceful": null,
+      "membersList": [],
+      "banner": {
+        "baseColor": "BLACK",
+        "patterns": [
+          {
+            "type": "TRIANGLE_BOTTOM",
+            "color": "BLUE"
+          },
+          {
+            "type": "TRIANGLES_BOTTOM",
+            "color": "BLACK"
+          },
+          {
+            "type": "STRIPE_LEFT",
+            "color": "BLUE"
+          },
+          {
+            "type": "STRIPE_RIGHT",
+            "color": "BLUE"
+          },
+          {
+            "type": "GRADIENT",
+            "color": "BLACK"
+          }
+        ]
+      },
+      "links": []
+    },
+    {
+      "id": "de063b44-fec7-4aeb-b9da-f14ff10ebbff",
+      "name": "Everlights",
+      "description": "",
+      "level": 100,
+      "members": 18,
+      "elo": null,
+      "prestige": null,
+      "foundedAt": "2026-05-02T17:01:55.000Z",
+      "bankBalance": 660,
+      "totalExperience": 17898528,
+      "activityScore": 25,
+      "tag": "Everlights⟡",
+      "recruiting": null,
+      "peaceful": null,
+      "membersList": [],
+      "banner": null,
+      "links": []
+    },
+    {
+      "id": "5abfc07e-f3dd-4397-b1cf-4e213ec0f464",
+      "name": "BelovedOnes",
+      "description": "",
+      "level": 100,
+      "members": 6,
+      "elo": null,
+      "prestige": null,
+      "foundedAt": "2026-05-02T17:03:43.000Z",
+      "bankBalance": 2256,
+      "totalExperience": 17609997,
+      "activityScore": 0,
+      "tag": "BelovedOnes",
+      "recruiting": null,
+      "peaceful": null,
+      "membersList": [],
+      "banner": null,
+      "links": []
+    },
+    {
+      "id": "724e5531-f6e4-4423-9c38-d4a7bec10973",
+      "name": "Asgard",
+      "description": "",
+      "level": 98,
+      "members": 11,
+      "elo": null,
+      "prestige": null,
+      "foundedAt": "2026-06-11T04:59:07.000Z",
+      "bankBalance": 0,
+      "totalExperience": 5257758,
+      "activityScore": 115,
+      "tag": "Asgard",
+      "recruiting": null,
+      "peaceful": null,
+      "membersList": [],
+      "banner": {
+        "baseColor": "BLACK",
+        "patterns": [
+          {
+            "type": "HALF_HORIZONTAL",
+            "color": "WHITE"
+          },
+          {
+            "type": "STRIPE_CENTER",
+            "color": "WHITE"
+          },
+          {
+            "type": "TRIANGLE_TOP",
+            "color": "BLACK"
+          },
+          {
+            "type": "RHOMBUS",
+            "color": "WHITE"
+          },
+          {
+            "type": "TRIANGLES_BOTTOM",
+            "color": "BLACK"
+          },
+          {
+            "type": "FLOWER",
+            "color": "WHITE"
+          }
+        ]
+      },
+      "links": []
+    },
+    {
+      "id": "75df6794-9d62-41c0-a047-887e5b8b99fe",
+      "name": "ghost",
+      "description": "",
+      "level": 94,
+      "members": 1,
+      "elo": null,
+      "prestige": null,
+      "foundedAt": "2026-05-30T08:38:22.000Z",
+      "bankBalance": 456,
+      "totalExperience": 4784586,
+      "activityScore": 5,
+      "tag": "👻",
+      "recruiting": null,
+      "peaceful": null,
+      "membersList": [],
+      "banner": null,
+      "links": []
+    },
+    {
+      "id": "b3d81fe8-c405-4a74-b888-83c43773d1b4",
+      "name": "Enthusiast",
+      "description": "",
+      "level": 92,
+      "members": 37,
+      "elo": null,
+      "prestige": null,
+      "foundedAt": "2026-05-02T15:10:23.000Z",
+      "bankBalance": 955,
+      "totalExperience": 4627703,
+      "activityScore": 0,
+      "tag": "Enthusiast",
+      "recruiting": null,
+      "peaceful": null,
+      "membersList": [],
+      "banner": null,
+      "links": []
+    },
+    {
+      "id": "bff78a2d-4d76-433d-a459-195501059129",
+      "name": "GuthardGang",
+      "description": "",
+      "level": 81,
+      "members": 4,
+      "elo": null,
+      "prestige": null,
+      "foundedAt": "2026-05-14T01:39:56.000Z",
+      "bankBalance": 126,
+      "totalExperience": 3561348,
+      "activityScore": 0,
+      "tag": "GuthardGang",
+      "recruiting": null,
+      "peaceful": null,
+      "membersList": [],
+      "banner": null,
+      "links": []
+    },
+    {
+      "id": "6bb21953-eace-4d48-8014-ab05d6c45743",
+      "name": "Architects",
+      "description": "",
+      "level": 80,
+      "members": 18,
+      "elo": null,
+      "prestige": null,
+      "foundedAt": "2026-05-02T17:15:31.000Z",
+      "bankBalance": 0,
+      "totalExperience": 3451722,
+      "activityScore": 0,
+      "tag": "Architects",
+      "recruiting": null,
+      "peaceful": null,
+      "membersList": [],
+      "banner": null,
+      "links": []
+    },
+    {
+      "id": "67fd6790-250c-4e3f-acbf-5dc6a97dc4bc",
+      "name": "FollowGod",
+      "description": "",
+      "level": 79,
+      "members": 2,
+      "elo": null,
+      "prestige": null,
+      "foundedAt": "2026-06-14T20:59:24.000Z",
+      "bankBalance": 0,
+      "totalExperience": 3361363,
+      "activityScore": 0,
+      "tag": "✝",
+      "recruiting": null,
+      "peaceful": null,
+      "membersList": [],
+      "banner": null,
+      "links": []
+    }
+  ],
+  "generatedAt": "2026-10-12T23:02:26.769018403Z",
+  "limited": true,
+  "updatedAt": "2026-10-12T23:02:26.769018403Z",
+  "stale": true
+}

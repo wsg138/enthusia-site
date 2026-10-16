@@ -1,4 +1,20 @@
 /* Preview only: logic of the "MapartComp" mockup, run by preview/mock.js. */
+function navigationValues(self,st,v) {
+  const on=c=>c?"true":"false",show=c=>c?"":"hide";
+  let i;
+var menus = ['Play', 'World', 'Comm', 'News'];
+v.mobOpen = on(!!st.mob);
+v.mobCls = st.mob ? 'open' : '';
+v.togMob = function () { self.setState({ mob: !st.mob }); };
+for (i = 0; i < menus.length; i++) {
+      (function (name) {
+        v['m' + name + 'Open'] = on(st.menu === name);
+        v['m' + name + 'Show'] = show(st.menu === name);
+        v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
+      })(menus[i]);
+    }
+}
+
 class Component extends DCLogic {
   renderVals() {
     var self = this;
@@ -7,17 +23,11 @@ class Component extends DCLogic {
     var show = function (c) { return c ? '' : 'hide'; };
     var v = {};
     var i;
-    var menus = ['Play', 'World', 'Comm', 'News'];
-    v.mobOpen = on(!!st.mob);
-    v.mobCls = st.mob ? 'open' : '';
-    v.togMob = function () { self.setState({ mob: !st.mob }); };
-    for (i = 0; i < menus.length; i++) {
-      (function (name) {
-        v['m' + name + 'Open'] = on(st.menu === name);
-        v['m' + name + 'Show'] = show(st.menu === name);
-        v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
-      })(menus[i]);
-    }
+    navigationValues(self,st,v);
+
+
+
+
     var CFG = {"stage": "upcoming", "next": {"upcoming": "Submissions open October 24", "submissions": "Voting opens November 8", "voting": "Results are published in mid-November", "results": "No further stages"}, "count": 8};
     var stage = this.props.stage ?? CFG.stage;
     var order = { upcoming: 0, submissions: 1, voting: 3, results: 5 };

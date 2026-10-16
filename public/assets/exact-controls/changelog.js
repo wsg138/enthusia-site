@@ -1,4 +1,22 @@
 /* Read-only controls ported from the authoritative design. Data model provided by the public API adapter. */
+function navigationValues(self,st,v) {
+  const on=c=>c?"true":"false",show=c=>c?"":"hide";
+  let i;
+var menus = ['Play', 'World', 'Comm', 'News'];
+for (i = 0; i < menus.length; i++) {
+      (function (name) {
+        v['m' + name + 'Open'] = on(st.menu === name);
+        v['m' + name + 'Show'] = show(st.menu === name);
+        v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
+      })(menus[i]);
+    }
+v.mobOpen = on(!!st.mob);
+v.mobCls = st.mob ? 'open' : '';
+v.togMob = function () { self.setState({ mob: !st.mob }); };
+}
+
+function changelogMatch(row,year,area,q) {return (year==='all'||row[0]===year)&&(area==='all'||row[1].indexOf(area)!==-1)&&(q===''||row[2].indexOf(q)!==-1);}
+
 class Component extends window.DesignController {
   renderVals() {
     var self = this;
@@ -7,24 +25,14 @@ class Component extends window.DesignController {
     var show = function (c) { return c ? '' : 'hide'; };
     var v = {};
     var i;
-    var menus = ['Play', 'World', 'Comm', 'News'];
-    for (i = 0; i < menus.length; i++) {
-      (function (name) {
-        v['m' + name + 'Open'] = on(st.menu === name);
-        v['m' + name + 'Show'] = show(st.menu === name);
-        v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
-      })(menus[i]);
-    }
-    v.mobOpen = on(!!st.mob);
-    v.mobCls = st.mob ? 'open' : '';
-    v.togMob = function () { self.setState({ mob: !st.mob }); };
+    navigationValues(self,st,v);
     var L = window.EnthusiaDesignModel;
     var year = st.year || 'all';
     var area = st.area || 'all';
     var q = (st.q || '').toLowerCase().replace(/^\s+|\s+$/g, '');
     var shown = 0;
     for (i = 0; i < L.length; i++) {
-      var match = (year === 'all' || L[i][0] === year) && (area === 'all' || L[i][1].indexOf(area) !== -1) && (q === '' || L[i][2].indexOf(q) !== -1);
+      var match = changelogMatch(L[i],year,area,q);
       if (match) { shown++; }
       v['l' + i] = show(match);
     }

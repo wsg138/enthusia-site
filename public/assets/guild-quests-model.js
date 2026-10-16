@@ -36,5 +36,5 @@ export function projectGuildQuests(input,now=Date.now()){
     return {id:id(week.id),startsAt,endsAt,fullSetBonusExperience:integer(week.fullSetBonusExperience),guilds,quests};
   });unique(items.map(w=>w.id));
   const currentWeekId=input.currentWeekId===null?null:id(input.currentWeekId);if(currentWeekId&&!items.some(w=>w.id===currentWeekId))fail();
-  return {kind:'guildquests',schemaVersion:1,generatedAt,currentWeekId,items};
+  return {kind:'guildquests',schemaVersion:1,generatedAt,currentWeekId,items,...(input.limited===true?{limited:true}:{})};
 }

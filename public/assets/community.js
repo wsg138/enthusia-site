@@ -6,20 +6,7 @@ const kinds=['news','changelog','roadmap','timeline','halloffame','creators','mu
 let marketSnapshot;
 document.body.classList.add('community-page');
 const metric=(label,value)=>el('div',{class:'community-stat'},[el('span',{text:label}),el('strong',{text:value??'Unavailable'})]);
-function detail(item,container){
-  container.replaceChildren(el('h2',{text:item.name??item.title}),markdown(item.description??item.body));
-  if(item.banner&&window.EnthusiaGuildBannerRenderer)container.prepend(window.EnthusiaGuildBannerRenderer.create(item.banner,item.name+' banner'));
-  if(item.image)container.append(el('img',{src:item.image,alt:item.title,loading:'lazy',style:'max-width:100%'}));
-  const stats=el('div',{class:'community-stats'});
-  for(const [key,label] of [['level','Level'],['members','Members'],['elo','ELO'],['gold','Raw gold'],['balance','Raw gold'],['playtime','Playtime'],['reputation','Reputation'],['completed','Completed']])if(key in item)stats.append(metric(label,item[key]));
-  container.append(stats);
-  if(item.guild)container.append(el('p',{text:'Guild: '+item.guild}));
-  if(item.rank)container.append(el('p',{text:'Rank: '+item.rank}));
-  if(item.expiresAt)container.append(el('p',{text:'Expires: '+new Date(item.expiresAt).toLocaleString()}));
-  if(item.hunter)container.append(el('p',{text:'Claimed by: '+item.hunter}));
-  if(item.membersList?.length)container.append(el('h3',{text:'Members'}),el('p',{text:item.membersList.join(', ')}));
-  if(item.achievements?.length)container.append(el('h3',{text:'Achievements'}),el('p',{text:item.achievements.join(', ')}));
-  if(kind==='players'){
+function appendPlayerMarket(item,container){
     const market=el('section',{class:'community-card'},[el('h3',{text:'At the Market'})]);container.append(market);
     const note=status(market,'Loading public stalls...');container.dataset.selectedPlayer=item.id;
     marketSnapshot??=fetch('https://market-api.enthusia.info/v1/market').then(async response=>{if(!response.ok)throw new Error('market_unavailable');const data=await response.json();if(data.schemaVersion!==1||!Array.isArray(data.stalls)||data.stalls.length>1000)throw new Error('market_unavailable');return data;});
@@ -30,7 +17,29 @@ function detail(item,container){
       for(const stall of stalls)market.append(link('market.html#stall='+encodeURIComponent(stall.id),stall.id+' - '+(stall.shops?.length??0)+' shops'));
     }).catch(()=>{note.textContent='Market data is unavailable.';marketSnapshot=null;});
     market.append(link('market.html#owner='+encodeURIComponent(item.name),'Open market'));
-  }
+}
+function appendPublicDetails(item,container){
+  for(const [key,label] of [['guild','Guild'],['rank','Rank'],['hunter','Claimed by']])
+    if(item[key])container.append(el('p',{text:label+': '+item[key]}));
+  if(item.expiresAt)container.append(el('p',{text:'Expires: '+new Date(item.expiresAt).toLocaleString()}));
+  for(const [key,label] of [['membersList','Members'],['achievements','Achievements']])
+    if(item[key]?.length)container.append(el('h3',{text:label}),el('p',{text:item[key].join(', ')}));
+}
+function appendDetailHeading(item,container){
+  container.replaceChildren(el('h2',{text:item.name??item.title}),markdown(item.description??item.body));
+  if(item.banner&&window.EnthusiaGuildBannerRenderer)container.prepend(window.EnthusiaGuildBannerRenderer.create(item.banner,item.name+' banner'));
+  if(item.image)container.append(el('img',{src:item.image,alt:item.title,loading:'lazy',style:'max-width:100%'}));
+}
+function appendDetailMetrics(item,container){
+  const stats=el('div',{class:'community-stats'});
+  for(const [key,label] of [['level','Level'],['members','Members'],['elo','ELO'],['gold','Raw gold'],['balance','Raw gold'],['playtime','Playtime'],['reputation','Reputation'],['completed','Completed']])if(key in item)stats.append(metric(label,item[key]));
+  container.append(stats);
+}
+function detail(item,container){
+  appendDetailHeading(item,container);
+  appendDetailMetrics(item,container);
+  appendPublicDetails(item,container);
+  if(kind==='players')appendPlayerMarket(item,container);
   for(const target of item.links??[])container.append(link(target.url,target.label));
   if(item.target)container.append(link(item.target,'Open reference'));
   if(kind==='timeline')container.append(el('p',{text:item.verification==='verified'?'Source verified':'Historical entry awaiting source verification'}));

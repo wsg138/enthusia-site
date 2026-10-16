@@ -2,15 +2,18 @@ import { el } from './community-dom.js';
 const preview=()=>document.documentElement.hasAttribute('data-preview-root');
 function date(value){return value?new Date(value).toLocaleDateString('en-US',{month:'long',day:'numeric'}):'To be announced';}
 function detail(competition){const root=new URL('../competitions/detail.html',import.meta.url);root.searchParams.set('competition',competition.slug);return root.href;}
-export function renderExactFeatured(root,competition){
-  if(!competition){root.replaceChildren(el('p',{class:'panel exact-empty',text:'No competition is currently scheduled.'}));return;}
-  const node=document.querySelector('#exact-feature-template').content.cloneNode(true);
-  if(!(preview()&&competition.visualVariant==='reference')){
+function featuredHeading(node,competition){
     const heading=node.querySelector('h3');if(heading)heading.textContent=competition.title;
     const image=node.querySelector('img');const id=competition.config?.appearance?.bannerImageId;
     if(image){if(id)image.src='/api/competitions/media/'+encodeURIComponent(id);else image.remove();}
     const paragraphs=node.querySelectorAll('.tip>p');if(paragraphs[0])paragraphs[0].textContent=competition.config?.public?.summary??'';
     const tags=node.querySelectorAll('.tip .tag');if(tags[0])tags[0].textContent=competition.lifecycleState.replace(/_/g,' ');if(tags[1])tags[1].textContent='Theme: '+(competition.config?.public?.theme??competition.category);
+}
+export function renderExactFeatured(root,competition){
+  if(!competition){root.replaceChildren(el('p',{class:'panel exact-empty',text:'No competition is currently scheduled.'}));return;}
+  const node=document.querySelector('#exact-feature-template').content.cloneNode(true);
+  if(!(preview()&&competition.visualVariant==='reference')){
+    featuredHeading(node,competition);
     const schedule=competition.config?.schedule??{};
     const rows=node.querySelectorAll('.tip>div[style*="justify-content: space-between"]');const values=[date(schedule.submissionsOpenAt),date(schedule.votingOpenAt),date(schedule.resultsPublishedAt)];rows.forEach((row,i)=>{if(row.lastElementChild)row.lastElementChild.textContent=values[i]??'To be announced';});
     const steps=node.querySelectorAll('.trk');steps.forEach((step,i)=>{step.classList.toggle('now',i===0&&competition.lifecycleState==='UPCOMING');step.querySelector('small').textContent=i===0?competition.lifecycleState.replace(/_/g,' '):'See competition schedule';});

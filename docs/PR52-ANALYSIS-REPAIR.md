@@ -49,3 +49,27 @@ Local browser: design reference Events category filtering and month navigation p
 The 182 open entries are a substantial separate decomposition backlog. They must not be labeled false positives as a group. Some reported function spans include embedded SQL/CSS or regex parser errors and need individual verification. Existing [Codacy baseline](CODACY-BASELINE.md) describes the linked coding-standard mismatch; a repository administrator must align it with the supported runtimes while keeping applicable security rules enabled.
 
 No clean Codacy grade or hosted-check success is claimed. PR 52 is already merged; fixes are prepared on a fork branch with no new PR, canonical write/merge or production deployment. Production remains on hold at the user's request.
+
+## Local continuation on current main, 12 October
+
+Integrated main bcc9d25 while preserving its account, Discord and production
+activation gates. Added real-feed contracts and regressions. An older/undated
+signed bounty regression failed before repair, then passed with HTTP 409 and the
+newer snapshot preserved. Unattributed sales support prices without fabricated
+stall/guild leaders. Decomposed market deep links, community details and appeal
+cards while preserving actions and unavailable-response protections.
+
+Saved triage: 176 maintainability entries open, 62 below local thresholds,
+13 changed/pending hosted, 40 verified-safe and 26 analyzer mismatches (317 total).
+No blanket suppressions or hosted-grade claim. Website checks and 536 tests pass;
+producer/privacy/HTTP and companion builds are recorded in REAL-FEEDS.md.
+All changes remain local, with no PR, remote push or deployment.
+
+## Website PR preparation, 13 October
+
+The owner has now authorized a PR. The review continuation and market history
+work are documented in [LOCAL-MARKET-REVIEW.md](LOCAL-MARKET-REVIEW.md).
+Refreshed local triage: 102 maintainability entries open, 136 below local AST
+thresholds, 13 changed/pending hosted, 40 verified safe and 26 analyzer/runtime
+mismatches (317 total). Hosted checks remain a separate gate. These totals
+supersede the earlier checkpoints above; unresolved findings are not suppressed.

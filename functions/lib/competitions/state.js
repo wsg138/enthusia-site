@@ -1,3 +1,4 @@
+import { transitionLifecycleSql, auditLifecycleTransitionSql } from "./state-queries.js";
 function requireWritableDatabase(db) {
   if (!db || typeof db.prepare !== "function" || typeof db.batch !== "function") {
     throw new TypeError("Competition database binding is not writable");
@@ -34,35 +35,8 @@ function rewardPublicationStatements(database, transition) {
   return statements;
 }
 
-export async function transitionCompetitionState(db, transition) {
-  const database = requireWritableDatabase(db);
-  const beforeJson = JSON.stringify({ lifecycleState: transition.expectedState });
-  const afterJson = JSON.stringify({ lifecycleState: transition.targetState });
-  const rewardStatements = rewardPublicationStatements(database, transition);
-  const updateIndex = rewardStatements.length;
-
-  const results = await database.batch([
-    ...rewardStatements,
-    database.prepare(`
-      UPDATE competitions
-      SET lifecycle_state = ?,
-          updated_at = ?,
-          last_lifecycle_operation_id = ?,
-          published_at = CASE
-            WHEN ? = 'UPCOMING' AND published_at IS NULL THEN ?
-            ELSE published_at
-          END,
-          archived_at = CASE
-            WHEN ? = 'ARCHIVED' THEN ?
-            ELSE archived_at
-          END,
-          cancelled_at = CASE
-            WHEN ? = 'CANCELLED' THEN ?
-            ELSE cancelled_at
-          END
-      WHERE id = ?
-        AND lifecycle_state = ?
-    `).bind(
+function lifecycleUpdateStatement(database, transition) {
+  return database.prepare(transitionLifecycleSql).bind(
       transition.targetState,
       transition.createdAt,
       transition.operationId,
@@ -74,18 +48,11 @@ export async function transitionCompetitionState(db, transition) {
       transition.createdAt,
       transition.competitionId,
       transition.expectedState
-    ),
-    database.prepare(`
-      INSERT INTO competition_audit_events (
-        id, competition_id, actor_subject, actor_uuid, action,
-        before_json, after_json, note, created_at
-      )
-      SELECT ?, c.id, ?, ?, 'COMPETITION_STATE_CHANGED', ?, ?, ?, ?
-      FROM competitions c
-      WHERE c.id = ?
-        AND c.last_lifecycle_operation_id = ?
-        AND c.lifecycle_state = ?
-    `).bind(
+    );
+}
+
+function lifecycleAuditStatement(database, transition, beforeJson, afterJson) {
+  return database.prepare(auditLifecycleTransitionSql).bind(
       transition.auditEventId,
       transition.actorSubject,
       transition.actorUuid,
@@ -96,7 +63,20 @@ export async function transitionCompetitionState(db, transition) {
       transition.competitionId,
       transition.operationId,
       transition.targetState
-    )
+    );
+}
+
+export async function transitionCompetitionState(db, transition) {
+  const database = requireWritableDatabase(db);
+  const beforeJson = JSON.stringify({ lifecycleState: transition.expectedState });
+  const afterJson = JSON.stringify({ lifecycleState: transition.targetState });
+  const rewardStatements = rewardPublicationStatements(database, transition);
+  const updateIndex = rewardStatements.length;
+
+  const results = await database.batch([
+    ...rewardStatements,
+    lifecycleUpdateStatement(database, transition),
+    lifecycleAuditStatement(database, transition, beforeJson, afterJson)
   ]);
 
   const changed = Number(results?.[updateIndex]?.meta?.changes ?? 0);

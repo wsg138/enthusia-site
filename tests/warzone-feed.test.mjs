@@ -18,3 +18,11 @@ test('website accepts the independent Java HMAC contract and rejects tampering',
   assert.equal(await verifyProducer(request,{COMMUNITY_INGEST_SECRET:'s'.repeat(32)},body,1791806400000),true);
   assert.equal(await verifyProducer(request,{COMMUNITY_INGEST_SECRET:'s'.repeat(32)},body+' ',1791806400000),false);
 });
+
+ test('live duel metadata survives projection and rejects a mislabeled week',()=>{
+  const now=new Date(),week=new Date(now);week.setUTCHours(0,0,0,0);week.setUTCDate(week.getUTCDate()-((week.getUTCDay()+6)%7));
+  const input={items:[],generatedAt:now.toISOString(),weekStartsAt:week.toISOString(),duelResultsComplete:true,duelUpdatedAt:now.toISOString()};
+  const result=projectSnapshot('warzone',input);
+  assert.equal(result.weekStartsAt,input.weekStartsAt);assert.equal(result.duelResultsComplete,true);
+  assert.throws(()=>projectSnapshot('warzone',{...input,weekStartsAt:new Date(week.getTime()-86400000).toISOString()}));
+ });

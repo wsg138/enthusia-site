@@ -19,11 +19,7 @@ export async function onRequestGet(context) {
   return json({ submissions: (result.results ?? []).map((row) => ({ ...row, imageUrl: `/api/gallery/media/${row.id}` })) });
 }
 
-export async function onRequestPost(context) {
-  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
-  if (!context.env?.COMPETITIONS_DB || !context.env?.COMPETITIONS_MEDIA) return json({ error: "gallery_unavailable" }, 503);
-  const session = await gallerySession(context).catch(() => null);
-  if (!session) return unauthorized();
+async function galleryUploadForm(context){
   let form;
   try { form = await context.request.formData(); } catch { return json({ error: "invalid_form" }, 400); }
   const category = String(form.get("category") ?? "").toUpperCase();
@@ -32,12 +28,19 @@ export async function onRequestPost(context) {
   const image = form.get("image");
   if (!SUBMITTABLE_CATEGORIES.has(category) || !title || !description) return json({ error: "invalid_submission" }, 400);
   if (!(image instanceof File) || image.size < 1 || image.size > competitionImageLimits().maxBytes) return json({ error: "invalid_image" }, 400);
-  const id = crypto.randomUUID();
+  return {category,title,description,image};
+}
+
+async function prepareGalleryUpload(context,image,id){
   const prepared = await prepareGalleryImage({ data: new Uint8Array(await image.arrayBuffer()), mediaId: id, env: context.env }).catch(() => null);
   if (!prepared) return json({ error: "image_processing_failed" }, 400);
   if (prepared.status === "REJECTED") return json({ error: prepared.error }, 400);
   if (prepared.status === "BLOCKED") return json({ error: "image_blocked_by_moderation" }, 422);
   if (prepared.status !== "READY") return json({ error: "image_moderation_unavailable" }, 503);
+  return prepared;
+}
+
+async function persistGalleryUpload(context,session,id,category,title,description,prepared){
   let stored;
   try { stored = await storePreparedCompetitionImage(context.env.COMPETITIONS_MEDIA, prepared); }
   catch { return json({ error: "gallery_storage_failed" }, 503); }
@@ -63,6 +66,20 @@ export async function onRequestPost(context) {
     await deleteGalleryImage(context.env.COMPETITIONS_MEDIA, stored.key).catch(() => {});
     return json({ error: "gallery_submission_failed" }, 503);
   }
+}
+
+export async function onRequestPost(context) {
+  if (!requireSameOrigin(context.request)) return json({ error: "invalid_origin" }, 403);
+  if (!context.env?.COMPETITIONS_DB || !context.env?.COMPETITIONS_MEDIA) return json({ error: "gallery_unavailable" }, 503);
+  const session = await gallerySession(context).catch(() => null);
+  if (!session) return unauthorized();
+  const form = await galleryUploadForm(context);
+  if (form instanceof Response) return form;
+  const {category,title,description,image} = form;
+  const id = crypto.randomUUID();
+  const prepared = await prepareGalleryUpload(context,image,id);
+  if (prepared instanceof Response) return prepared;
+  return persistGalleryUpload(context,session,id,category,title,description,prepared);
 }
 
 export function onRequest() { return methodNotAllowed(["GET", "POST"]); }

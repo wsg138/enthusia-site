@@ -1,4 +1,20 @@
 /* Read-only controls ported from the authoritative design. Data model provided by the public API adapter. */
+function navigationValues(self,st,v) {
+  const on=c=>c?"true":"false",show=c=>c?"":"hide";
+  let i;
+var menus = ['Play', 'World', 'Comm', 'News'];
+for (i = 0; i < menus.length; i++) {
+      (function (name) {
+        v['m' + name + 'Open'] = on(st.menu === name);
+        v['m' + name + 'Show'] = show(st.menu === name);
+        v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
+      })(menus[i]);
+    }
+v.mobOpen = on(!!st.mob);
+v.mobCls = st.mob ? 'open' : '';
+v.togMob = function () { self.setState({ mob: !st.mob }); };
+}
+
 class Component extends window.DesignController {
   renderVals() {
     var self = this;
@@ -7,17 +23,11 @@ class Component extends window.DesignController {
     var show = function (c) { return c ? '' : 'hide'; };
     var v = {};
     var i;
-    var menus = ['Play', 'World', 'Comm', 'News'];
-    for (i = 0; i < menus.length; i++) {
-      (function (name) {
-        v['m' + name + 'Open'] = on(st.menu === name);
-        v['m' + name + 'Show'] = show(st.menu === name);
-        v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
-      })(menus[i]);
-    }
-    v.mobOpen = on(!!st.mob);
-    v.mobCls = st.mob ? 'open' : '';
-    v.togMob = function () { self.setState({ mob: !st.mob }); };
+    navigationValues(self,st,v);
+
+
+
+
     var M = window.EnthusiaDesignModel;
     var filter = st.filter || 'all';
     var sel = st.sel === undefined ? 0 : st.sel;

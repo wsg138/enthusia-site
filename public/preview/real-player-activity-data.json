@@ -1,0 +1,404 @@
+{
+  "bounties": {
+    "schemaVersion": 1,
+    "items": [
+      {
+        "id": "c284f763-5649-4c3b-9065-b23f1249d15d",
+        "name": "EmeraldWise1",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "22e816d0-c749-4dcf-b797-3f26507488bd",
+        "name": "Rafffff3282",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "a297d568-4c7f-44c9-9d54-c75d7e356e38",
+        "name": "wouter222",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "10860894-111c-4db9-8fa2-d3cf10da313d",
+        "name": "Largente",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "a25b31dd-9319-42b5-a9e8-84654ee31993",
+        "name": "SantoXD",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "b14e11bf-f3c9-40af-9b79-7ba7b271206a",
+        "name": "nottadam",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "3fbd6157-c87d-41cd-a81d-da74277a8265",
+        "name": "BedNation",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "bfc8481a-9523-4f84-9768-4b1de02ab776",
+        "name": "FiireFlyy",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "8d4ebde6-909f-44cf-807a-375b48d13679",
+        "name": "Veccmas",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "cabdb4e5-4f1d-42e7-9f88-b8914ffecbe7",
+        "name": "FainNoir",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "d02bf06f-425a-40b2-916c-0d6cf9d089c3",
+        "name": "averality",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "711d8149-49cc-430f-9d21-c02efe730d65",
+        "name": "TheMidsterEpic",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "4c0aca51-b126-415c-a2e4-0633635a5266",
+        "name": "EnthusiaSMP",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "71f14fe1-af78-461e-97cf-8b6f1708c9e8",
+        "name": "GussyBacka",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "a4bdb259-4997-4530-90ba-d6d7660a2f80",
+        "name": "Currut",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "37fc3a07-74fc-406b-9af8-0bb07cc6da63",
+        "name": "profi_cigan",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "bed99e3d-4222-426e-95f6-9ef8ec86c84f",
+        "name": "Yobama46",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "006ecf12-a5bd-456a-8bc7-ded87e53a0db",
+        "name": "Vampole",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "2d56f618-0ed3-4db4-8b27-a0ba7cb30d60",
+        "name": "ZagX",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "a8893729-6c73-4d0d-bd92-0e338150dead",
+        "name": "winners800",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "f138c5f3-cd18-426a-a615-db0f4e4e7c97",
+        "name": "FlashStrength",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "52931a65-1aaa-4614-9911-9d00db750d20",
+        "name": "sharpmatt",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "fdef7122-e216-40e8-8276-a31b7c00362a",
+        "name": "DeathByLance",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "d92f1d96-b57c-47e2-9448-294f15e701b9",
+        "name": "GavinGamerMC",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "7a9ab5be-a66b-43b5-b098-42f3a6a3837e",
+        "name": "Smeeleee",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "c8d03832-42f4-4878-a1e1-ae6dc39f554c",
+        "name": "Nicusormeow",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "199c9ffc-5502-4053-96c3-14cf8946f6fd",
+        "name": "AvoidMyAgro",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "00000000-0000-0000-0009-01f2fdc33985",
+        "name": "*Fains_Mom",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "55306c12-a187-4160-b9da-91798c84492c",
+        "name": "OrbitzX",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "00000000-0000-0000-0009-01f3440559d8",
+        "name": "*CyberSphinx5695",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "d679973f-9a61-4650-9851-2433ca3314d9",
+        "name": "Zom_B_Kitty_26",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "f00f4b10-f8a9-4526-80e7-6927134ef865",
+        "name": "TrumpVoter",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "ef316c91-28c6-418c-ac9d-81a55ac734b1",
+        "name": "KILLTEAM",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "0d55d7a9-c8a8-4a40-a20e-ced1791cfcca",
+        "name": "1n32",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "dfc644bb-576a-4f09-b752-853aa9f95cb1",
+        "name": "percy_mc",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "37ff3edf-939d-45bf-8d6a-a4e53e1d33c5",
+        "name": "woulves1",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "258523e9-d0bf-46e0-a8f2-fcac6ffcd8cd",
+        "name": "bakerya",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "e6a94ee5-cb9e-47b1-b32c-06b16d6781d5",
+        "name": "p2wn",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "5a14d26d-864a-43d0-9443-d85eb16abea6",
+        "name": "BadgersMC",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "66b75a73-ed90-4c5f-936b-07a769960dfd",
+        "name": "Jacco1OO",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      },
+      {
+        "id": "6fb3a7c4-66b0-4808-8670-e6f5068ca5c4",
+        "name": "BaldFemboyFrez",
+        "description": "",
+        "gold": null,
+        "state": "open",
+        "hunter": "",
+        "expiresAt": null
+      }
+    ],
+    "generatedAt": "2026-10-13T00:40:40.194Z",
+    "limited": true,
+    "updatedAt": "2026-10-13T00:40:40.194Z",
+    "capturedSnapshot": true,
+    "stale": true
+  },
+  "warzone": {
+    "schemaVersion": 1,
+    "items": [
+      {
+        "id": "duels-8ee68ce2-b557-4a44-9c58-61e32f91d101",
+        "name": "Solan231",
+        "description": "",
+        "type": "leader",
+        "kills": null,
+        "wins": 1,
+        "endsAt": null,
+        "target": "",
+        "rules": [],
+        "manualOverride": false
+      }
+    ],
+    "generatedAt": "2026-10-13T00:40:40.194Z",
+    "limited": true,
+    "weekStartsAt": "2026-10-12T00:00:00.000Z",
+    "updatedAt": "2026-10-13T00:40:40.194Z",
+    "capturedSnapshot": true,
+    "stale": true
+  }
+}

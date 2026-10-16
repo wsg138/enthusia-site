@@ -13,6 +13,14 @@ function competitionId(context) {
   return isCanonicalUuid(value) ? value : null;
 }
 
+function requestedAuditLimit(context){
+  const url = new URL(context.request.url);
+  const requestedLimit = Number(url.searchParams.get("limit") || 100);
+  const limit = Number.isInteger(requestedLimit) ? requestedLimit : 100;
+
+  return limit;
+}
+
 export async function onRequestGet(context) {
   if (!competitionsEnabled(context.env)) return json({ error: "not_found" }, 404);
 
@@ -32,9 +40,7 @@ export async function onRequestGet(context) {
     return json({ error: "competition_database_unavailable" }, 503);
   }
 
-  const url = new URL(context.request.url);
-  const requestedLimit = Number(url.searchParams.get("limit") || 100);
-  const limit = Number.isInteger(requestedLimit) ? requestedLimit : 100;
+  const limit = requestedAuditLimit(context);
 
   try {
     const events = await listCompetitionAuditEvents(context.env.COMPETITIONS_DB, id, limit);

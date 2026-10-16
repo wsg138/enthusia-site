@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "current-meta",
+      "name": "Elytra, No Rockets",
+      "description": "Rocket boosts blocked",
+      "type": "kit",
+      "kills": null,
+      "wins": null,
+      "endsAt": "2026-10-14T16:28:33.370Z",
+      "target": "",
+      "rules": [],
+      "manualOverride": true
+    },
+    {
+      "id": "next-meta",
+      "name": "Vanilla",
+      "description": "",
+      "type": "activity",
+      "kills": null,
+      "wins": null,
+      "endsAt": null,
+      "target": "",
+      "rules": [],
+      "manualOverride": false
+    },
+    {
+      "id": "duels-00000000-0000-4000-8000-000000000001",
+      "name": "FixtureOne",
+      "description": "",
+      "type": "leader",
+      "kills": null,
+      "wins": 1,
+      "endsAt": null,
+      "target": "",
+      "rules": [],
+      "manualOverride": false
+    },
+    {
+      "id": "duels-00000000-0000-4000-8000-000000000002",
+      "name": "FixtureTwo",
+      "description": "",
+      "type": "leader",
+      "kills": null,
+      "wins": 1,
+      "endsAt": null,
+      "target": "",
+      "rules": [],
+      "manualOverride": false
+    },
+    {
+      "id": "duels-status",
+      "name": "Weekly duel wins",
+      "description": "Counted WarzoneDuels match wins this week.",
+      "type": "activity",
+      "kills": null,
+      "wins": null,
+      "endsAt": null,
+      "target": "",
+      "rules": [],
+      "manualOverride": false
+    }
+  ],
+  "generatedAt": "2026-10-13T16:28:33.370Z",
+  "weekStartsAt": "2026-10-12T00:00:00.000Z",
+  "duelUpdatedAt": "2026-10-13T16:28:33.370Z",
+  "duelResultsComplete": true,
+  "source": "server_export",
+  "updatedAt": "2026-10-13T16:28:33.370Z",
+  "stale": false
+}

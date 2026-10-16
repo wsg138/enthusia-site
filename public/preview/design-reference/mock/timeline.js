@@ -1,4 +1,29 @@
 /* Preview only: logic of the "Timeline" mockup, run by preview/mock.js. */
+function navigationValues(self,st,v) {
+  const on=c=>c?"true":"false",show=c=>c?"":"hide";
+  let i;
+var menus = ['Play', 'World', 'Comm', 'News'];
+for (i = 0; i < menus.length; i++) {
+      (function (name) {
+        v['m' + name + 'Open'] = on(st.menu === name);
+        v['m' + name + 'Show'] = show(st.menu === name);
+        v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
+      })(menus[i]);
+    }
+v.mobOpen = on(!!st.mob);
+v.mobCls = st.mob ? 'open' : '';
+v.togMob = function () { self.setState({ mob: !st.mob }); };
+}
+
+function timelineOrderValues(self,st,v,on){
+    var newest = st.newest === undefined ? true : !!st.newest;
+    v.revCls = newest ? 'rev' : '';
+    v.oOld = on(!newest);
+    v.oNew = on(newest);
+    v.goOld = function () { self.setState({ newest: false }); };
+    v.goNew = function () { self.setState({ newest: true }); };
+}
+
 class Component extends DCLogic {
   renderVals() {
     var self = this;
@@ -7,17 +32,7 @@ class Component extends DCLogic {
     var show = function (c) { return c ? '' : 'hide'; };
     var v = {};
     var i;
-    var menus = ['Play', 'World', 'Comm', 'News'];
-    for (i = 0; i < menus.length; i++) {
-      (function (name) {
-        v['m' + name + 'Open'] = on(st.menu === name);
-        v['m' + name + 'Show'] = show(st.menu === name);
-        v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
-      })(menus[i]);
-    }
-    v.mobOpen = on(!!st.mob);
-    v.mobCls = st.mob ? 'open' : '';
-    v.togMob = function () { self.setState({ mob: !st.mob }); };
+    navigationValues(self,st,v);
     var entries = [["dev", "milestone"], ["dev", "milestone"], ["dev", "update"], ["dev", "community"], ["dev", "community"], ["dev", "milestone"], ["dev", "update"], ["beta1", "milestone"], ["beta1", "guild"], ["beta1", "guild"], ["beta1", "update"], ["beta1", "update"], ["beta1", "event"], ["beta1", "community"], ["beta1", "milestone"], ["beta1", "community"], ["beta2", "event"], ["beta2", "milestone"], ["beta2", "update"], ["beta2", "milestone"], ["beta2", "guild"], ["beta2", "event"], ["beta2", "milestone"], ["beta2", "milestone"], ["beta2", "update"], ["beta2", "guild"], ["beta2", "guild"], ["beta2", "community"], ["beta2", "update"], ["beta2", "update"], ["beta2", "guild"], ["beta2", "guild"], ["beta2", "milestone"], ["beta2", "update"], ["beta2", "update"], ["beta2", "event"], ["beta2", "guild"], ["beta2", "milestone"], ["ch1", "milestone"], ["ch1", "event"], ["ch1", "event"], ["ch1", "guild"], ["ch1", "update"], ["ch1", "update"], ["ch1", "event"], ["ch1", "update"], ["ch1", "community"], ["ch1", "update"], ["ch1", "update"], ["ch1", "update"], ["ch1", "guild"], ["ch1", "guild"], ["ch1", "guild"], ["ch1", "event"], ["ch1", "update"], ["ch1", "guild"], ["ch1", "update"], ["ch1", "event"], ["ch1", "community"], ["ch1", "milestone"], ["ch1", "event"], ["ch1", "update"], ["ch1", "update"], ["ch1", "guild"], ["ch1", "guild"], ["ch1", "guild"], ["ch1", "event"], ["ch1", "update"], ["ch1", "update"], ["ch1", "guild"], ["ch1", "guild"], ["ch1", "community"], ["ch1", "guild"], ["ch1", "guild"], ["ch1", "milestone"], ["ch2", "milestone"], ["ch2", "event"], ["ch2", "milestone"], ["ch2", "community"]];
     var eras = ["dev", "beta1", "beta2", "ch1", "ch2"];
     var kinds = ["milestone", "event", "update", "guild", "community"];
@@ -56,12 +71,7 @@ class Component extends DCLogic {
         self.setState({ closed: next });
       };
     });
-    var newest = st.newest === undefined ? true : !!st.newest;
-    v.revCls = newest ? 'rev' : '';
-    v.oOld = on(!newest);
-    v.oNew = on(newest);
-    v.goOld = function () { self.setState({ newest: false }); };
-    v.goNew = function () { self.setState({ newest: true }); };
+    timelineOrderValues(self,st,v,on);
     var big = st.big || {};
     for (i = 0; i < 10; i++) {
       (function (n) {

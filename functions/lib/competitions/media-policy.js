@@ -42,106 +42,108 @@ function validDimensions(width, height) {
     && width * height <= MAX_IMAGE_PIXELS;
 }
 
+function pngChunk(data, offset) {
+  if (offset + 12 > data.byteLength) return null;
+  const length = readU32(data, offset), type = ascii4(data, offset + 4);
+  const end = offset + 12 + length;
+  if (end > data.byteLength || !/^[A-Za-z]{4}$/.test(type)) return null;
+  return { length, type, end, offset };
+}
+function pngHeader(data, chunk, state) {
+  if (state.sawHeader || chunk.length !== 13 || chunk.offset !== 8) return false;
+  state.width = readU32(data, chunk.offset + 8);
+  state.height = readU32(data, chunk.offset + 12);
+  state.sawHeader = true;
+  return true;
+}
+function acceptPngChunk(data, chunk, state) {
+  if (chunk.type === "IHDR" && !pngHeader(data, chunk, state)) return false;
+  if (chunk.type === "IDAT") state.sawData = true;
+  if (PNG_PRIVATE_METADATA_CHUNKS.has(chunk.type)) state.privateMetadata = true;
+  if (new Set(["acTL", "fcTL", "fdAT"]).has(chunk.type)) return false;
+  if (chunk.type === "IEND") {
+    if (chunk.length !== 0) return false;
+    state.sawEnd = true;
+  }
+  return true;
+}
+function pngInspection(state, offset, length) {
+  if (!state.sawHeader || !state.sawData || !state.sawEnd || offset !== length) return null;
+  if (!validDimensions(state.width, state.height)) return null;
+  return { mimeType: "image/png", extension: "png", width: state.width, height: state.height, privateMetadata: state.privateMetadata };
+}
 function inspectPng(data) {
-  if (data.byteLength < 33) return null;
-  for (let index = 0; index < PNG_SIGNATURE.length; index += 1) {
-    if (data[index] !== PNG_SIGNATURE[index]) return null;
-  }
-
+  if (data.byteLength < 33 || PNG_SIGNATURE.some((value,index)=>data[index]!==value)) return null;
+  const state = { sawHeader: false, sawData: false, sawEnd: false, privateMetadata: false, width: null, height: null };
   let offset = 8;
-  let width = null;
-  let height = null;
-  let sawHeader = false;
-  let sawData = false;
-  let sawEnd = false;
-  let privateMetadata = false;
-
   while (offset < data.byteLength) {
-    if (offset + 12 > data.byteLength) return null;
-    const length = readU32(data, offset);
-    const type = ascii4(data, offset + 4);
-    const end = offset + 12 + length;
-    if (end > data.byteLength || !/^[A-Za-z]{4}$/.test(type)) return null;
-
-    if (type === "IHDR") {
-      if (sawHeader || length !== 13 || offset !== 8) return null;
-      width = readU32(data, offset + 8);
-      height = readU32(data, offset + 12);
-      sawHeader = true;
-    }
-    if (type === "IDAT") sawData = true;
-    if (PNG_PRIVATE_METADATA_CHUNKS.has(type)) privateMetadata = true;
-    if (type === "acTL" || type === "fcTL" || type === "fdAT") return null;
-
-    offset = end;
-    if (type === "IEND") {
-      if (length !== 0) return null;
-      sawEnd = true;
-      break;
+    const chunk = pngChunk(data, offset);
+    if (!chunk || !acceptPngChunk(data, chunk, state)) return null;
+    offset = chunk.end;
+    if (state.sawEnd) break;
+  }
+  return pngInspection(state, offset, data.byteLength);
+}
+function jpegMarker(data, offset) {
+  if (data[offset] !== 0xff) return null;
+  while (offset < data.byteLength && data[offset] === 0xff) offset += 1;
+  if (offset >= data.byteLength) return null;
+  return { marker: data[offset], offset: offset + 1 };
+}
+function jpegSegment(data, offset) {
+  if (offset + 2 > data.byteLength) return null;
+  const length = readU16(data, offset);
+  if (length < 2 || offset + length > data.byteLength) return null;
+  return { length, end: offset + length };
+}
+function jpegInspection(state) {
+  if (!validDimensions(state.width, state.height)) return null;
+  return { mimeType: "image/jpeg", extension: "jpg", width: state.width, height: state.height, privateMetadata: state.privateMetadata };
+}
+function acceptJpegFrame(data, marker, offset, length, state) {
+  if (JPEG_METADATA_MARKERS.has(marker)) state.privateMetadata = true;
+  if (marker === 0xc0) {
+    if (length < 8 || state.sawFrame) return false;
+    state.height = readU16(data, offset + 3);
+    state.width = readU16(data, offset + 5);
+    state.sawFrame = true;
+  } else if ((marker >= 0xc1 && marker <= 0xcf) && ![0xc4, 0xc8, 0xcc].includes(marker)) {
+    return false;
+  }
+  return true;
+}
+function jpegScan(data, offset, state) {
+  if (!state.sawFrame || state.sawScan) return null;
+  state.sawScan = true;
+  for (let index = offset; index < data.byteLength - 1; index += 1) {
+    if (data[index] === 0xff && data[index + 1] === 0xd9) {
+      return index + 2 === data.byteLength ? jpegInspection(state) : null;
     }
   }
-
-  if (!sawHeader || !sawData || !sawEnd || offset !== data.byteLength) return null;
-  if (!validDimensions(width, height)) return null;
-  return { mimeType: "image/png", extension: "png", width, height, privateMetadata };
+  return null;
 }
-
-function isJpegSof(marker) {
-  return marker === 0xc0;
+function inspectJpegSegment(data, marked, state) {
+  const { marker, offset } = marked;
+  if (marker === 0xd9) return { result: jpegEnd(data, offset, state) };
+  if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) return { offset };
+  const segment = jpegSegment(data, offset);
+  if (!segment || !acceptJpegFrame(data, marker, offset, segment.length, state)) return { result: null };
+  if (marker === 0xda) return { result: jpegScan(data, segment.end, state) };
+  return { offset: segment.end };
 }
-
+function jpegEnd(data, offset, state) {
+  return state.sawFrame && state.sawScan && offset === data.byteLength ? jpegInspection(state) : null;
+}
 function inspectJpeg(data) {
   if (data.byteLength < 12 || data[0] !== 0xff || data[1] !== 0xd8) return null;
   let offset = 2;
-  let width = null;
-  let height = null;
-  let privateMetadata = false;
-  let sawFrame = false;
-  let sawScan = false;
-
+  const state = { width: null, height: null, privateMetadata: false, sawFrame: false, sawScan: false };
   while (offset < data.byteLength) {
-    if (data[offset] !== 0xff) return null;
-    while (offset < data.byteLength && data[offset] === 0xff) offset += 1;
-    if (offset >= data.byteLength) return null;
-    const marker = data[offset];
-    offset += 1;
-
-    if (marker === 0xd9) {
-      return sawFrame && sawScan && offset === data.byteLength && validDimensions(width, height)
-        ? { mimeType: "image/jpeg", extension: "jpg", width, height, privateMetadata }
-        : null;
-    }
-
-    if (marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) continue;
-    if (offset + 2 > data.byteLength) return null;
-    const length = readU16(data, offset);
-    if (length < 2 || offset + length > data.byteLength) return null;
-
-    if (JPEG_METADATA_MARKERS.has(marker)) privateMetadata = true;
-    if (isJpegSof(marker)) {
-      if (length < 8 || sawFrame) return null;
-      height = readU16(data, offset + 3);
-      width = readU16(data, offset + 5);
-      sawFrame = true;
-    } else if ((marker >= 0xc1 && marker <= 0xcf) && ![0xc4, 0xc8, 0xcc].includes(marker)) {
-      return null;
-    }
-
-    if (marker === 0xda) {
-      if (!sawFrame || sawScan) return null;
-      sawScan = true;
-      offset += length;
-      for (let index = offset; index < data.byteLength - 1; index += 1) {
-        if (data[index] === 0xff && data[index + 1] === 0xd9) {
-          return index + 2 === data.byteLength && validDimensions(width, height)
-            ? { mimeType: "image/jpeg", extension: "jpg", width, height, privateMetadata }
-            : null;
-        }
-      }
-      return null;
-    }
-
-    offset += length;
+    const marked = jpegMarker(data, offset);
+    if (!marked) return null;
+    const next = inspectJpegSegment(data, marked, state);
+    if (Object.hasOwn(next, "result")) return next.result;
+    offset = next.offset;
   }
   return null;
 }

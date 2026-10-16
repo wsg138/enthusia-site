@@ -1,26 +1,22 @@
 /* Read-only controls ported from the authoritative design. Data model provided by the public API adapter. */
-class Component extends window.DesignController {
-  renderVals() {
-    var self = this;
-    var st = Object.assign({ menu: '' }, this.state || {});
-    var on = function (c) { return c ? 'true' : 'false'; };
-    var show = function (c) { return c ? '' : 'hide'; };
-    var v = {};
-    var i;
-    var menus = ['Play', 'World', 'Comm', 'News'];
-    for (i = 0; i < menus.length; i++) {
+function navigationValues(self,st,v) {
+  const on=c=>c?"true":"false",show=c=>c?"":"hide";
+  let i;
+var menus = ['Play', 'World', 'Comm', 'News'];
+for (i = 0; i < menus.length; i++) {
       (function (name) {
         v['m' + name + 'Open'] = on(st.menu === name);
         v['m' + name + 'Show'] = show(st.menu === name);
         v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
       })(menus[i]);
     }
-    v.mobOpen = on(!!st.mob);
-    v.mobCls = st.mob ? 'open' : '';
-    v.togMob = function () { self.setState({ mob: !st.mob }); };
-    var V = window.EnthusiaDesignModel;
-    var who = st.who || 'all';
-    var all = !!st.all;
+v.mobOpen = on(!!st.mob);
+v.mobCls = st.mob ? 'open' : '';
+v.togMob = function () { self.setState({ mob: !st.mob }); };
+}
+
+function videoVisibility(V,who,all,v,show) {
+  let i;
     var shown = 0, matched = 0;
     for (i = 0; i < V.length; i++) {
       var match = who === 'all' || V[i] === who;
@@ -29,6 +25,21 @@ class Component extends window.DesignController {
       if (vis) { shown++; }
       v['vd' + i] = show(vis);
     }
+  return shown;
+}
+
+class Component extends window.DesignController {
+  renderVals() {
+    var self = this;
+    var st = Object.assign({ menu: '' }, this.state || {});
+    var on = function (c) { return c ? 'true' : 'false'; };
+    var show = function (c) { return c ? '' : 'hide'; };
+    var v = {};
+    navigationValues(self,st,v);
+    var V = window.EnthusiaDesignModel;
+    var who = st.who || 'all';
+    var all = !!st.all;
+    const shown=videoVisibility(V,who,all,v,show);
     v.total = String(V.length);
     v.countLine = shown + ' of ' + V.length + ' videos shown.';
     v.moreShow = show(who === 'all' && !all);

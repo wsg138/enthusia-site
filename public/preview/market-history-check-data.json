@@ -1,0 +1,163 @@
+{
+  "": {
+    "week": "2026-10-12T00:00:00.000Z",
+    "mode": "stall",
+    "leaders": [],
+    "hallOfFame": [],
+    "stallTotals": [],
+    "prices": [
+      {
+        "item": "diamond",
+        "price": 14,
+        "quantity": 12,
+        "trades": 4,
+        "lastSale": "2026-10-11T03:22:55.179Z",
+        "change": 16.666666666666675
+      },
+      {
+        "item": "emerald",
+        "price": 4,
+        "quantity": 12,
+        "trades": 4,
+        "lastSale": "2026-10-11T03:22:55.179Z",
+        "change": -33.333333333333336
+      }
+    ],
+    "history": [],
+    "weeks": [
+      "2026-10-05",
+      "2026-09-28",
+      "2026-09-21",
+      "2026-09-14",
+      "2026-09-07",
+      "2026-08-24",
+      "2026-08-17"
+    ],
+    "updatedAt": "2026-10-11T03:22:55.179Z",
+    "sales": 14
+  },
+  "diamond": {
+    "week": "2026-10-12T00:00:00.000Z",
+    "mode": "stall",
+    "leaders": [],
+    "hallOfFame": [],
+    "stallTotals": [],
+    "prices": [
+      {
+        "item": "diamond",
+        "price": 14,
+        "quantity": 12,
+        "trades": 4,
+        "lastSale": "2026-10-11T03:22:55.179Z",
+        "change": 16.666666666666675
+      },
+      {
+        "item": "emerald",
+        "price": 4,
+        "quantity": 12,
+        "trades": 4,
+        "lastSale": "2026-10-11T03:22:55.179Z",
+        "change": -33.333333333333336
+      }
+    ],
+    "history": [
+      {
+        "day": "2026-09-18",
+        "item": "diamond",
+        "price": 14,
+        "quantity": 3
+      },
+      {
+        "day": "2026-09-23",
+        "item": "diamond",
+        "price": 14,
+        "quantity": 3
+      },
+      {
+        "day": "2026-10-03",
+        "item": "diamond",
+        "price": 14,
+        "quantity": 3
+      },
+      {
+        "day": "2026-10-11",
+        "item": "diamond",
+        "price": 14,
+        "quantity": 3
+      }
+    ],
+    "weeks": [
+      "2026-10-05",
+      "2026-09-28",
+      "2026-09-21",
+      "2026-09-14",
+      "2026-09-07",
+      "2026-08-24",
+      "2026-08-17"
+    ],
+    "updatedAt": "2026-10-11T03:22:55.179Z",
+    "sales": 14
+  },
+  "emerald": {
+    "week": "2026-10-12T00:00:00.000Z",
+    "mode": "stall",
+    "leaders": [],
+    "hallOfFame": [],
+    "stallTotals": [],
+    "prices": [
+      {
+        "item": "diamond",
+        "price": 14,
+        "quantity": 12,
+        "trades": 4,
+        "lastSale": "2026-10-11T03:22:55.179Z",
+        "change": 16.666666666666675
+      },
+      {
+        "item": "emerald",
+        "price": 4,
+        "quantity": 12,
+        "trades": 4,
+        "lastSale": "2026-10-11T03:22:55.179Z",
+        "change": -33.333333333333336
+      }
+    ],
+    "history": [
+      {
+        "day": "2026-09-18",
+        "item": "emerald",
+        "price": 4,
+        "quantity": 3
+      },
+      {
+        "day": "2026-09-23",
+        "item": "emerald",
+        "price": 4,
+        "quantity": 3
+      },
+      {
+        "day": "2026-10-03",
+        "item": "emerald",
+        "price": 4,
+        "quantity": 3
+      },
+      {
+        "day": "2026-10-11",
+        "item": "emerald",
+        "price": 4,
+        "quantity": 3
+      }
+    ],
+    "weeks": [
+      "2026-10-05",
+      "2026-09-28",
+      "2026-09-21",
+      "2026-09-14",
+      "2026-09-07",
+      "2026-08-24",
+      "2026-08-17"
+    ],
+    "updatedAt": "2026-10-11T03:22:55.179Z",
+    "sales": 14
+  }
+}

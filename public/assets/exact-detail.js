@@ -15,9 +15,12 @@ export function exactDetailStage(competition,tabs){
   for(const button of node.querySelectorAll('[data-b-class]')){const key=Object.keys(visibility).find(key=>button.dataset.bClass.includes(key));if(!key)continue;button.hidden=!visibility[key];if(key==='ctaEnter')button.addEventListener('click',event=>{event.preventDefault();const entry=tabs.querySelector('[data-tab="my-submission"]');if(entry)entry.click();else location.href=new URL('../account.html',import.meta.url).href;});if(key!=='ctaEnter')button.addEventListener('click',()=>tabs.querySelector('[data-tab="'+(key==='ctaWait'?'rules':key==='ctaVote'?'vote':'results')+'"]')?.click());}
   return node;
 }
+function overviewFacts(node,config){
+  const panel=node.querySelector('.panel');panel.querySelector('p').textContent=config.public?.description??config.public?.summary??'';
+  const facts=[config.public?.theme??'To be announced',(config.entries?.allowedTypes??[]).join(', '),'PNG or JPEG, up to 8 MB each','Sign in with Discord and link your Minecraft account'];panel.querySelectorAll(':scope>div').forEach((row,index)=>row.lastElementChild.textContent=facts[index]);
+}
 export function exactDetailOverview(competition){
   const node=clone('overview');if(preview()&&competition.visualVariant==='reference')return node;
-  const config=competition.config??{},panel=node.querySelector('.panel');panel.querySelector('p').textContent=config.public?.description??config.public?.summary??'';
-  const facts=[config.public?.theme??'To be announced',(config.entries?.allowedTypes??[]).join(', '),'PNG or JPEG, up to 8 MB each','Sign in with Discord and link your Minecraft account'];panel.querySelectorAll(':scope>div').forEach((row,index)=>row.lastElementChild.textContent=facts[index]);
+  const config=competition.config??{};overviewFacts(node,config);
   const schedule=config.schedule??{};node.querySelectorAll('.tip>div').forEach((row,index)=>row.lastElementChild.textContent=[date(schedule.submissionsOpenAt),date(schedule.votingOpenAt),date(schedule.resultsPublishedAt)][index]);return node;
 }

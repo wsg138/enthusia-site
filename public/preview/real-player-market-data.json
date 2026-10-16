@@ -1,0 +1,2287 @@
+{
+  "generatedAt": "2026-10-12T22:55:47.813153679Z",
+  "updatedAt": "2026-10-12T23:02:26.926Z",
+  "stalls": [
+    {
+      "id": "stall1",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "0a51c4ef-89b4-4560-ac2f-1f554ae28add"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "BUY"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "BUY"
+        }
+      ]
+    },
+    {
+      "id": "stall2",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "bf4a25d6-9aa9-46c2-8f93-5eae0edc0fdb"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall3",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "1b25b5aa-cb34-453f-b57f-81b1e5333657"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall4",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "07948b71-3841-41a2-a10a-d242c5c43373"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall5",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "07ff2374-dab0-43ec-8f11-8f168df0ad83"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "BUY"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall6",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "7402cfa7-ee57-41ba-8d65-f6d931547f11"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall7",
+      "owner": {
+        "type": "GUILD",
+        "uuid": "23d9b7de-38cb-4ae1-9d3f-1bf124b0a34f"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall8",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "fdef7122-e216-40e8-8276-a31b7c00362a"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "BUY"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall9",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "1cc4e7e8-5815-4599-9582-ecf47b952a82"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall10",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "5f8b99ed-c305-41bd-bbe3-829dac0a90f9"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall11",
+      "owner": {
+        "type": "GUILD",
+        "uuid": "9a220d43-b027-4a56-a57b-6b82eeb9a4b5"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall12",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "ed1d4c5e-b924-41e3-873a-72aad4a93312"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall13",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "d995c705-e8c8-40c4-991e-87755102874c"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall14",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "07948b71-3841-41a2-a10a-d242c5c43373"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall15",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "ff76a06d-104d-414a-8e9a-77d8ca7fefc6"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall16",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "36c5cd13-61f4-44f1-9987-0390f20c9ea2"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall17",
+      "owner": {
+        "type": "GUILD",
+        "uuid": "724e5531-f6e4-4423-9c38-d4a7bec10973"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall18",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall19",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall20",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "0b2fd3a4-f35d-4d3c-a6d0-dcabc7e61c4d"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall21",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall22",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "c7b256f8-df2e-4e0f-abc1-05fa0f437ac2"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall23",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall24",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall25",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall26",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall27",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall28",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall29",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall30",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall31",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall32",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "1aa50ca2-a806-4d5c-ae8e-a553fd1a8b7d"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall33",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "217606e9-7047-4e8d-883e-1723e7fc93fa"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall34",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "b7777b2b-62d1-443e-b7dc-89c4f11f3628"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall35",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "f1a12e8d-9f3c-408e-8b02-a28c097b7d29"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall36",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "aa82005d-cd30-4089-a6b2-3fc097a0515c"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall37",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "f53b9522-15e1-405c-bb2e-8170b55b20ca"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall38",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "98b3a379-7895-4c1d-a395-b04264ed2283"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall39",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "bfc8481a-9523-4f84-9768-4b1de02ab776"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall40",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "da904938-19a0-4cc5-a4bb-deaa58e5eac2"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "BUY"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall41",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "07821182-506c-40a7-9755-f7364d48eed4"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall42",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "7ccc3217-21bb-4e61-a055-e756e29e2cc3"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall43",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "179a4f63-0588-4c4d-9517-729086b1a98d"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall44",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "258523e9-d0bf-46e0-a8f2-fcac6ffcd8cd"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall45",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "a7a332bc-c45f-42da-8ef7-da43a4dc0cf9"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall46",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "ae00c9d8-4cdf-46e1-b90e-ce4dc73c2b37"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall47",
+      "owner": {
+        "type": "GUILD",
+        "uuid": "83b21e82-6c27-4bfe-88fa-da090dcb6ef4"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall48",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "b00d1c8f-578c-47b0-97ff-78a44ec6a7d8"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "BUY"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall49",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "5e791a5d-30ab-49ec-8d88-8fe80436b9a2"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall50",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "718b7b06-6609-4d04-8dc2-9ac7d51d0ea5"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall51",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "869b9050-f938-459c-be4f-c3bd0f8ac21f"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall52",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "d66439e7-7a7a-4be0-ba9d-66e4281d3103"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall53",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "536b137e-72aa-439e-8c76-07a7b72cdc2a"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall54",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "217606e9-7047-4e8d-883e-1723e7fc93fa"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall55",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "9ea84cce-9fea-4a22-bdcf-301509b8de10"
+      },
+      "shops": [
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        },
+        {
+          "direction": "SELL"
+        }
+      ]
+    },
+    {
+      "id": "stall56",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "6c876138-49a4-4c66-bf47-359210900e2b"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall57",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "362a94d5-2710-40c6-ac0e-3d081df394c3"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall58",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "5a14d26d-864a-43d0-9443-d85eb16abea6"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall59",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "c8bf93ed-0a81-4ea4-a28d-ca3485956930"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall60",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall61",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall62",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "98b3a379-7895-4c1d-a395-b04264ed2283"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall63",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall64",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall65",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall66",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "5a14d26d-864a-43d0-9443-d85eb16abea6"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall67",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "58ffcf6f-0ac9-48e3-b51f-6f593f83e14e"
+      },
+      "shops": []
+    },
+    {
+      "id": "stall68",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall69",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall70",
+      "owner": {
+        "type": "NONE",
+        "uuid": null
+      },
+      "shops": []
+    },
+    {
+      "id": "stall71",
+      "owner": {
+        "type": "PLAYER",
+        "uuid": "a7a332bc-c45f-42da-8ef7-da43a4dc0cf9"
+      },
+      "shops": []
+    }
+  ]
+}

@@ -1,4 +1,20 @@
 /* Preview only: logic of the "Guilds" mockup, run by preview/mock.js. */
+function navigationValues(self,st,v) {
+  const on=c=>c?"true":"false",show=c=>c?"":"hide";
+  let i;
+var menus = ['Play', 'World', 'Comm', 'News'];
+for (i = 0; i < menus.length; i++) {
+      (function (name) {
+        v['m' + name + 'Open'] = on(st.menu === name);
+        v['m' + name + 'Show'] = show(st.menu === name);
+        v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
+      })(menus[i]);
+    }
+v.mobOpen = on(!!st.mob);
+v.mobCls = st.mob ? 'open' : '';
+v.togMob = function () { self.setState({ mob: !st.mob }); };
+}
+
 class Component extends DCLogic {
   renderVals() {
     var self = this;
@@ -7,17 +23,11 @@ class Component extends DCLogic {
     var show = function (c) { return c ? '' : 'hide'; };
     var v = {};
     var i;
-    var menus = ['Play', 'World', 'Comm', 'News'];
-    for (i = 0; i < menus.length; i++) {
-      (function (name) {
-        v['m' + name + 'Open'] = on(st.menu === name);
-        v['m' + name + 'Show'] = show(st.menu === name);
-        v['tog' + name] = function () { self.setState({ menu: st.menu === name ? '' : name }); };
-      })(menus[i]);
-    }
-    v.mobOpen = on(!!st.mob);
-    v.mobCls = st.mob ? 'open' : '';
-    v.togMob = function () { self.setState({ mob: !st.mob }); };
+    navigationValues(self,st,v);
+
+
+
+
     var G = [["Vibe", 100, 1420, 22, 0, "h"], ["BelovedOnes", 96, 1310, 14, 0, "p"], ["WOT", 81, 1265, 19, 1, "h"], ["BoopGang", 74, 1350, 11, 0, "h"], ["Dogeclan", 66, 1205, 9, 1, "h"], ["Asgard", 62, 1290, 12, 1, "h"], ["Enthusiast", 58, 1180, 16, 1, "h"], ["PTC", 47, 1150, 8, 0, "h"], ["Everlights", 44, 1040, 10, 0, "p"], ["Chillage", 31, 1005, 13, 1, "p"], ["Hoplience", 22, 985, 7, 1, "p"], ["Kirky", 18, 970, 5, 0, "p"]];
     var sort = st.sort || 'lvl';
     var filt = st.filt || 'all';

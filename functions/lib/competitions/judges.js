@@ -1,3 +1,4 @@
+import { assignJudgeSql, auditJudgeAssignmentSql } from "./judges-queries.js";
 import { calculateJudgeScore } from "./scoring.js";
 
 function requireDatabase(db) {
@@ -76,6 +77,30 @@ export async function getActiveCompetitionJudge(db, competitionId, judgeUuid) {
   return row ? { ...row, canViewCoordinates: Boolean(row.canViewCoordinates) } : null;
 }
 
+function judgeAssignmentStatement(database, assignment, judgeName){
+  return database.prepare(assignJudgeSql).bind(
+      assignment.competitionId,
+      assignment.judgeUuid,
+      judgeName,
+      assignment.assignedByUuid,
+      assignment.assignedAt,
+      assignment.canViewCoordinates ? 1 : 0
+    );
+}
+
+function judgeAssignmentAuditStatement(database, assignment, judgeName, beforeJson, afterJson){
+  return database.prepare(auditJudgeAssignmentSql).bind(
+      assignment.auditEventId,
+      assignment.competitionId,
+      assignment.actorSubject,
+      assignment.assignedByUuid,
+      beforeJson,
+      afterJson,
+      assignment.note ?? `Assigned judge ${judgeName}`,
+      assignment.assignedAt
+    );
+}
+
 export async function assignCompetitionJudge(db, assignment) {
   const database = requireWritableDatabase(db);
   const judgeName = text(assignment.judgeName, 64);
@@ -90,42 +115,8 @@ export async function assignCompetitionJudge(db, assignment) {
   });
 
   const results = await database.batch([
-    database.prepare(`
-      INSERT INTO competition_judges (
-        competition_id, judge_uuid, judge_name,
-        assigned_by_uuid, assigned_at, removed_at, removed_by_uuid,
-        can_view_coordinates
-      ) VALUES (?, ?, ?, ?, ?, NULL, NULL, ?)
-      ON CONFLICT(competition_id, judge_uuid) DO UPDATE SET
-        judge_name = excluded.judge_name,
-        assigned_by_uuid = excluded.assigned_by_uuid,
-        assigned_at = excluded.assigned_at,
-        removed_at = NULL,
-        removed_by_uuid = NULL,
-        can_view_coordinates = excluded.can_view_coordinates
-    `).bind(
-      assignment.competitionId,
-      assignment.judgeUuid,
-      judgeName,
-      assignment.assignedByUuid,
-      assignment.assignedAt,
-      assignment.canViewCoordinates ? 1 : 0
-    ),
-    database.prepare(`
-      INSERT INTO competition_audit_events (
-        id, competition_id, actor_subject, actor_uuid, action,
-        before_json, after_json, note, created_at
-      ) VALUES (?, ?, ?, ?, 'COMPETITION_JUDGE_ASSIGNED', ?, ?, ?, ?)
-    `).bind(
-      assignment.auditEventId,
-      assignment.competitionId,
-      assignment.actorSubject,
-      assignment.assignedByUuid,
-      beforeJson,
-      afterJson,
-      assignment.note ?? `Assigned judge ${judgeName}`,
-      assignment.assignedAt
-    )
+    judgeAssignmentStatement(database, assignment, judgeName),
+    judgeAssignmentAuditStatement(database, assignment, judgeName, beforeJson, afterJson)
   ]);
 
   return Number(results?.[0]?.meta?.changes ?? 0) === 1;

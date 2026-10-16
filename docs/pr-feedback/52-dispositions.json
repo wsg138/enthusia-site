@@ -689,10 +689,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 85,
-      "ccn": 22,
-      "sourceLines": 83
+      "start": 19,
+      "end": 95,
+      "ccn": 20,
+      "sourceLines": 77,
+      "nloc": 73
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -709,7 +710,8 @@
       "start": 174,
       "end": 183,
       "ccn": 5,
-      "sourceLines": 10
+      "sourceLines": 10,
+      "nloc": 10
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -723,10 +725,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "sendDiscordDirectMessage",
-      "start": 286,
-      "end": 294,
+      "start": 296,
+      "end": 304,
       "ccn": 4,
-      "sourceLines": 9
+      "sourceLines": 9,
+      "nloc": 9
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -737,15 +740,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method appealCard has a cyclomatic complexity of 19 (limit is 8)",
     "code": "function appealCard(appeal) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "appealCard",
-      "start": 284,
-      "end": 333,
-      "ccn": 15,
-      "sourceLines": 50
+      "start": 318,
+      "end": 348,
+      "ccn": 7,
+      "sourceLines": 31,
+      "nloc": 28
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "dd129f88600e0bad9ce16023459a1001",
@@ -760,7 +764,8 @@
       "start": 110,
       "end": 114,
       "ccn": 4,
-      "sourceLines": 5
+      "sourceLines": 5,
+      "nloc": 5
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -771,15 +776,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method deepLink has a cyclomatic complexity of 9 (limit is 8)",
     "code": "  function deepLink(){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "deepLink",
-      "start": 28,
+      "start": 29,
       "end": 34,
-      "ccn": 9,
-      "sourceLines": 7
+      "ccn": 6,
+      "sourceLines": 6,
+      "nloc": 6
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "2bfcac66273b85a1af8974a9eb53cf37",
@@ -794,7 +800,8 @@
       "start": 21,
       "end": 30,
       "ccn": 5,
-      "sourceLines": 10
+      "sourceLines": 10,
+      "nloc": 10
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -811,7 +818,8 @@
       "start": 161,
       "end": 174,
       "ccn": 7,
-      "sourceLines": 14
+      "sourceLines": 14,
+      "nloc": 14
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -823,7 +831,10 @@
     "message": "File public/assets/competitions-participant-v2.js has 755 non-comment lines of code",
     "code": "const API_ROOT = \"/api/competitions\";",
     "disposition": "maintainability-open",
-    "reason": "Large first-party module needs a separate domain-specific decomposition."
+    "current": {
+      "nloc": 755
+    },
+    "reason": "Current nonblank/noncomment lines measured locally; hosted file metrics remain a separate gate."
   },
   {
     "id": "121e12d222d1263e66707d75e3ad7985",
@@ -832,15 +843,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method detail has a cyclomatic complexity of 23 (limit is 8)",
     "code": "function detail(item,container){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "detail",
-      "start": 9,
-      "end": 38,
-      "ccn": 21,
-      "sourceLines": 30
+      "start": 38,
+      "end": 47,
+      "ccn": 8,
+      "sourceLines": 10,
+      "nloc": 10
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "58ba58aa7cfd53012de8fa9b22a70c99",
@@ -855,7 +867,8 @@
       "start": 134,
       "end": 143,
       "ccn": 5,
-      "sourceLines": 10
+      "sourceLines": 10,
+      "nloc": 10
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -866,15 +879,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method inviteSubmissionContributor has 102 lines of code (limit is 50)",
     "code": "export async function inviteSubmissionContributor(db, invite) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "inviteSubmissionContributor",
-      "start": 27,
-      "end": 130,
-      "ccn": 4,
-      "sourceLines": 104
+      "start": 76,
+      "end": 91,
+      "ccn": 3,
+      "sourceLines": 16,
+      "nloc": 14
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "a0a105bbcf52b3b964168d8ccf453adf",
@@ -883,15 +897,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method renderVals has a cyclomatic complexity of 22 (limit is 8)",
     "code": "  renderVals() {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "renderVals",
-      "start": 6,
-      "end": 58,
-      "ccn": 22,
-      "sourceLines": 53
+      "start": 56,
+      "end": 77,
+      "ccn": 5,
+      "sourceLines": 22,
+      "nloc": 22
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "dfc5ff180929ee31824d689da3040b0a",
@@ -903,10 +918,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "drainCompetitionDiscordNotifications",
-      "start": 334,
-      "end": 346,
+      "start": 344,
+      "end": 356,
       "ccn": 5,
-      "sourceLines": 13
+      "sourceLines": 13,
+      "nloc": 13
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -923,7 +939,8 @@
       "start": 14,
       "end": 19,
       "ccn": 3,
-      "sourceLines": 6
+      "sourceLines": 6,
+      "nloc": 6
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -940,7 +957,8 @@
       "start": 69,
       "end": 86,
       "ccn": 9,
-      "sourceLines": 18
+      "sourceLines": 18,
+      "nloc": 18
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -951,15 +969,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method renderVals has a cyclomatic complexity of 9 (limit is 8)",
     "code": "  renderVals() {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 55,
-      "ccn": 9,
-      "sourceLines": 53
+      "start": 19,
+      "end": 65,
+      "ccn": 7,
+      "sourceLines": 47,
+      "nloc": 43
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "15f9476a48f7ea6717df6b87bf491484",
@@ -971,10 +990,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "poll",
-      "start": 61,
-      "end": 72,
+      "start": 72,
+      "end": 83,
       "ccn": 7,
-      "sourceLines": 12
+      "sourceLines": 12,
+      "nloc": 12
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -988,10 +1008,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "ingest",
-      "start": 92,
-      "end": 108,
-      "ccn": 7,
-      "sourceLines": 17
+      "start": 94,
+      "end": 109,
+      "ccn": 8,
+      "sourceLines": 16,
+      "nloc": 16
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1005,10 +1026,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "renderExactAccount",
-      "start": 1,
-      "end": 20,
-      "ccn": 7,
-      "sourceLines": 20
+      "start": 6,
+      "end": 25,
+      "ccn": 6,
+      "sourceLines": 20,
+      "nloc": 20
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1019,9 +1041,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method draw has a cyclomatic complexity of 14 (limit is 8)",
     "code": "    async function draw() {",
-    "disposition": "maintainability-open",
-    "current": null,
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "disposition": "below-threshold-local",
+    "current": {
+      "name": "drawWeek",
+      "start": 209,
+      "end": 219,
+      "ccn": 7,
+      "sourceLines": 11,
+      "nloc": 11
+    },
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "986f8151426f312c08bd155b5f944589",
@@ -1036,7 +1065,8 @@
       "start": 6,
       "end": 24,
       "ccn": 6,
-      "sourceLines": 19
+      "sourceLines": 19,
+      "nloc": 19
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1053,7 +1083,8 @@
       "start": 760,
       "end": 805,
       "ccn": 21,
-      "sourceLines": 46
+      "sourceLines": 46,
+      "nloc": 45
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1067,10 +1098,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 77,
-      "ccn": 13,
-      "sourceLines": 75
+      "start": 28,
+      "end": 87,
+      "ccn": 9,
+      "sourceLines": 60,
+      "nloc": 60
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1087,7 +1119,8 @@
       "start": 83,
       "end": 115,
       "ccn": 18,
-      "sourceLines": 33
+      "sourceLines": 33,
+      "nloc": 33
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1099,7 +1132,14 @@
     "message": "Method (anonymous) has 52 lines of code (limit is 50)",
     "code": "test(\"appearance media, config version, and audit persist atomically in D1\", async () => {",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 137,
+      "end": 190,
+      "ccn": 1,
+      "sourceLines": 54,
+      "nloc": 52
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -1109,15 +1149,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method installStyles has 100 lines of code (limit is 50)",
     "code": "function installStyles() {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "installStyles",
-      "start": 18,
-      "end": 117,
+      "start": 113,
+      "end": 119,
       "ccn": 2,
-      "sourceLines": 100
+      "sourceLines": 7,
+      "nloc": 7
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "4924a6c69b93c271f12f37f45975ffc9",
@@ -1129,10 +1170,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 44,
-      "ccn": 14,
-      "sourceLines": 42
+      "start": 19,
+      "end": 52,
+      "ccn": 12,
+      "sourceLines": 34,
+      "nloc": 30
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1143,15 +1185,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method renderVals has a cyclomatic complexity of 12 (limit is 8)",
     "code": "  renderVals() {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 44,
-      "ccn": 15,
-      "sourceLines": 42
+      "start": 21,
+      "end": 52,
+      "ccn": 8,
+      "sourceLines": 32,
+      "nloc": 32
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "618ad08ef0f7b2b3758c2ff0b3e65995",
@@ -1166,7 +1209,8 @@
       "start": 67,
       "end": 71,
       "ccn": 5,
-      "sourceLines": 5
+      "sourceLines": 5,
+      "nloc": 5
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1191,10 +1235,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 52,
-      "ccn": 17,
-      "sourceLines": 50
+      "start": 36,
+      "end": 67,
+      "ccn": 10,
+      "sourceLines": 32,
+      "nloc": 28
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1208,10 +1253,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "publishProvisionalResults",
-      "start": 147,
-      "end": 228,
+      "start": 128,
+      "end": 152,
       "ccn": 6,
-      "sourceLines": 82
+      "sourceLines": 25,
+      "nloc": 22
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1228,7 +1274,8 @@
       "start": 18,
       "end": 157,
       "ccn": 18,
-      "sourceLines": 140
+      "sourceLines": 140,
+      "nloc": 125
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1239,9 +1286,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method (anonymous) has a cyclomatic complexity of 9 (limit is 8)",
     "code": "  const normalized = results.map((result) => {",
-    "disposition": "maintainability-open",
-    "current": null,
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "disposition": "below-threshold-local",
+    "current": {
+      "name": "(anonymous)",
+      "start": 47,
+      "end": 69,
+      "ccn": 5,
+      "sourceLines": 23,
+      "nloc": 22
+    },
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "46ccaf8176f762de8193ec9c25cab36d",
@@ -1256,7 +1310,8 @@
       "start": 14,
       "end": 20,
       "ccn": 7,
-      "sourceLines": 7
+      "sourceLines": 7,
+      "nloc": 7
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1267,15 +1322,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method onRequestPost has 73 lines of code (limit is 50)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 67,
-      "end": 144,
-      "ccn": 17,
-      "sourceLines": 78
+      "start": 147,
+      "end": 170,
+      "ccn": 8,
+      "sourceLines": 24,
+      "nloc": 20
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "1d53e439b32323818ca5b309e71cb48c",
@@ -1290,7 +1346,8 @@
       "start": 803,
       "end": 892,
       "ccn": 24,
-      "sourceLines": 90
+      "sourceLines": 90,
+      "nloc": 83
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1304,10 +1361,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "body",
-      "start": 22,
-      "end": 30,
+      "start": 26,
+      "end": 34,
       "ccn": 8,
-      "sourceLines": 9
+      "sourceLines": 9,
+      "nloc": 9
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1318,15 +1376,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method renderVals has a cyclomatic complexity of 13 (limit is 8)",
     "code": "  renderVals() {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 41,
-      "ccn": 13,
-      "sourceLines": 39
+      "start": 32,
+      "end": 53,
+      "ccn": 4,
+      "sourceLines": 22,
+      "nloc": 22
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "f627771cd02da66d7f34a53c1376a6c",
@@ -1341,7 +1400,8 @@
       "start": 579,
       "end": 657,
       "ccn": 15,
-      "sourceLines": 79
+      "sourceLines": 79,
+      "nloc": 71
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1352,15 +1412,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method renderVals has a cyclomatic complexity of 12 (limit is 8)",
     "code": "  renderVals() {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 55,
-      "ccn": 22,
-      "sourceLines": 53
+      "start": 53,
+      "end": 74,
+      "ccn": 5,
+      "sourceLines": 22,
+      "nloc": 22
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "76897350cc76b519ba2013f1050d493d",
@@ -1369,15 +1430,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method buildStatusSnapshot has a cyclomatic complexity of 11 (limit is 8)",
     "code": "export function buildStatusSnapshot(env, schemaReady) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "buildStatusSnapshot",
       "start": 38,
-      "end": 87,
-      "ccn": 10,
-      "sourceLines": 50
+      "end": 79,
+      "ccn": 3,
+      "sourceLines": 42,
+      "nloc": 42
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "605a8faf67aa7f459f81c988e1a48e85",
@@ -1386,15 +1448,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method onRequestPost has 64 lines of code (limit is 50)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 28,
-      "end": 96,
-      "ccn": 27,
-      "sourceLines": 69
+      "start": 116,
+      "end": 137,
+      "ccn": 7,
+      "sourceLines": 22,
+      "nloc": 18
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "e9fab64ad2e97c3c016f60711f1930ba",
@@ -1403,15 +1466,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method inspectJpeg has a cyclomatic complexity of 35 (limit is 8)",
     "code": "function inspectJpeg(data) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "inspectJpeg",
-      "start": 93,
-      "end": 147,
-      "ccn": 35,
-      "sourceLines": 55
+      "start": 137,
+      "end": 149,
+      "ccn": 7,
+      "sourceLines": 13,
+      "nloc": 13
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "c9adda4c1b5631edd401b8cd5c3d23",
@@ -1423,10 +1487,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 52,
-      "ccn": 17,
-      "sourceLines": 50
+      "start": 36,
+      "end": 63,
+      "ccn": 10,
+      "sourceLines": 28,
+      "nloc": 28
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1438,7 +1503,14 @@
     "message": "Method (anonymous) has a cyclomatic complexity of 13 (limit is 8)",
     "code": "    list=list.sort((a,b)=>['name','title'].includes(sort)?String(a[sort]??'').localeCompare(String(b[sort]??'')):sort==='date'?Date.parse(b.date??0)-Date.parse(a.date??0):(b[sort]??-1)-(a[sort]??-1));",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 61,
+      "end": 61,
+      "ccn": 9,
+      "sourceLines": 1,
+      "nloc": 1
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -1448,15 +1520,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestGet has a cyclomatic complexity of 9 (limit is 8)",
     "code": "export async function onRequestGet(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestGet",
-      "start": 15,
-      "end": 43,
-      "ccn": 9,
-      "sourceLines": 29
+      "start": 16,
+      "end": 35,
+      "ccn": 7,
+      "sourceLines": 20,
+      "nloc": 17
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "d5073192698c396ca020d0b3d2e79c15",
@@ -1471,7 +1544,8 @@
       "start": 150,
       "end": 211,
       "ccn": 15,
-      "sourceLines": 62
+      "sourceLines": 62,
+      "nloc": 56
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1485,10 +1559,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 44,
-      "ccn": 13,
-      "sourceLines": 42
+      "start": 19,
+      "end": 54,
+      "ccn": 11,
+      "sourceLines": 36,
+      "nloc": 32
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1510,15 +1585,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method createCompetitionMediaRecord has 62 lines of code (limit is 50)",
     "code": "export async function createCompetitionMediaRecord(db, record) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "createCompetitionMediaRecord",
-      "start": 66,
-      "end": 129,
+      "start": 96,
+      "end": 126,
       "ccn": 3,
-      "sourceLines": 64
+      "sourceLines": 31,
+      "nloc": 29
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "81f970bdff6976c29980029b13db78d5",
@@ -1527,15 +1603,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method renderExactFeatured has a cyclomatic complexity of 15 (limit is 8)",
     "code": "export function renderExactFeatured(root,competition){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "renderExactFeatured",
-      "start": 5,
-      "end": 20,
-      "ccn": 15,
-      "sourceLines": 16
+      "start": 12,
+      "end": 23,
+      "ccn": 7,
+      "sourceLines": 12,
+      "nloc": 12
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "d80d933922812a4184647b8c187e7b3",
@@ -1544,15 +1621,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method punishmentClaimError has a cyclomatic complexity of 10 (limit is 8)",
     "code": "function punishmentClaimError(error) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "punishmentClaimError",
-      "start": 155,
-      "end": 163,
-      "ccn": 10,
-      "sourceLines": 9
+      "start": 163,
+      "end": 165,
+      "ccn": 2,
+      "sourceLines": 3,
+      "nloc": 3
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "71175e12a89cd3f0a8de1e2b9d83e167",
@@ -1562,7 +1640,14 @@
     "message": "Method (anonymous) has 51 lines of code (limit is 50)",
     "code": "test(\"appearance media write rolls back when its config version is stale\", async () => {",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 192,
+      "end": 244,
+      "ccn": 1,
+      "sourceLines": 53,
+      "nloc": 51
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -1578,7 +1663,8 @@
       "start": 1,
       "end": 7,
       "ccn": 3,
-      "sourceLines": 7
+      "sourceLines": 7,
+      "nloc": 7
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1595,7 +1681,8 @@
       "start": 631,
       "end": 724,
       "ccn": 13,
-      "sourceLines": 94
+      "sourceLines": 94,
+      "nloc": 91
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1606,15 +1693,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method saveDraftCompetition has 109 lines of code (limit is 50)",
     "code": "export async function saveDraftCompetition(db, change) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "saveDraftCompetition",
-      "start": 57,
-      "end": 168,
+      "start": 101,
+      "end": 140,
       "ccn": 3,
-      "sourceLines": 112
+      "sourceLines": 40,
+      "nloc": 37
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "22ea302cdcee0735a46aa434ba779e10",
@@ -1623,15 +1711,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method projectAppealMutation has a cyclomatic complexity of 10 (limit is 8)",
     "code": "export function projectAppealMutation(payload, appealId) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "projectAppealMutation",
-      "start": 62,
-      "end": 83,
-      "ccn": 10,
-      "sourceLines": 22
+      "start": 70,
+      "end": 89,
+      "ccn": 4,
+      "sourceLines": 20,
+      "nloc": 20
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "4f3062a786718590cde0f264e7d29e75",
@@ -1643,10 +1732,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 85,
-      "ccn": 22,
-      "sourceLines": 83
+      "start": 19,
+      "end": 95,
+      "ccn": 20,
+      "sourceLines": 77,
+      "nloc": 73
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1663,7 +1753,8 @@
       "start": 794,
       "end": 846,
       "ccn": 13,
-      "sourceLines": 53
+      "sourceLines": 53,
+      "nloc": 49
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1674,15 +1765,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method countLinkedPlayerEntrySlots has 51 lines of code (limit is 50)",
     "code": "export async function countLinkedPlayerEntrySlots(db, competitionId, playerUuids) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "countLinkedPlayerEntrySlots",
-      "start": 36,
-      "end": 86,
+      "start": 38,
+      "end": 44,
       "ccn": 2,
-      "sourceLines": 51
+      "sourceLines": 7,
+      "nloc": 7
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "917a4a2600c7ce4b4dd71598dfb39123",
@@ -1697,7 +1789,8 @@
       "start": 132,
       "end": 132,
       "ccn": 2,
-      "sourceLines": 1
+      "sourceLines": 1,
+      "nloc": 1
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1711,10 +1804,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "enhanceResults",
-      "start": 251,
-      "end": 273,
+      "start": 253,
+      "end": 275,
       "ccn": 11,
-      "sourceLines": 23
+      "sourceLines": 23,
+      "nloc": 23
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1725,15 +1819,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method validateRewardDefinition has a cyclomatic complexity of 13 (limit is 8)",
     "code": "export function validateRewardDefinition(definition) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "validateRewardDefinition",
-      "start": 64,
-      "end": 96,
-      "ccn": 13,
-      "sourceLines": 33
+      "start": 88,
+      "end": 100,
+      "ccn": 5,
+      "sourceLines": 13,
+      "nloc": 11
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "dbd186c950dfd3d2fbb76c3dac4c20f7",
@@ -1748,7 +1843,8 @@
       "start": 71,
       "end": 211,
       "ccn": 25,
-      "sourceLines": 141
+      "sourceLines": 141,
+      "nloc": 134
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1765,7 +1861,8 @@
       "start": 203,
       "end": 220,
       "ccn": 8,
-      "sourceLines": 18
+      "sourceLines": 18,
+      "nloc": 15
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1782,7 +1879,8 @@
       "start": 15,
       "end": 19,
       "ccn": 2,
-      "sourceLines": 5
+      "sourceLines": 5,
+      "nloc": 5
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1799,7 +1897,8 @@
       "start": 81,
       "end": 140,
       "ccn": 10,
-      "sourceLines": 60
+      "sourceLines": 60,
+      "nloc": 59
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1816,7 +1915,8 @@
       "start": 64,
       "end": 80,
       "ccn": 8,
-      "sourceLines": 17
+      "sourceLines": 17,
+      "nloc": 17
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1828,7 +1928,14 @@
     "message": "Method (anonymous) has a cyclomatic complexity of 18 (limit is 8)",
     "code": "  save.addEventListener(\"click\", async () => {",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 162,
+      "end": 212,
+      "ccn": 16,
+      "sourceLines": 51,
+      "nloc": 51
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -1838,15 +1945,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method planRewardForResult has a cyclomatic complexity of 19 (limit is 8)",
     "code": "export function planRewardForResult(reward, context, { guildMemberUuids = null } = {}) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "planRewardForResult",
-      "start": 154,
-      "end": 227,
-      "ccn": 16,
-      "sourceLines": 74
+      "start": 202,
+      "end": 238,
+      "ccn": 7,
+      "sourceLines": 37,
+      "nloc": 32
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "a888c628c9b86aa296c9e8cb2b44f4a4",
@@ -1861,7 +1969,8 @@
       "start": 6,
       "end": 28,
       "ccn": 5,
-      "sourceLines": 23
+      "sourceLines": 23,
+      "nloc": 23
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1878,7 +1987,8 @@
       "start": 678,
       "end": 737,
       "ccn": 3,
-      "sourceLines": 60
+      "sourceLines": 60,
+      "nloc": 60
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1895,7 +2005,8 @@
       "start": 739,
       "end": 792,
       "ccn": 9,
-      "sourceLines": 54
+      "sourceLines": 54,
+      "nloc": 50
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1912,7 +2023,8 @@
       "start": 53,
       "end": 61,
       "ccn": 7,
-      "sourceLines": 9
+      "sourceLines": 9,
+      "nloc": 9
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1923,15 +2035,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method transitionCompetitionState has 71 lines of code (limit is 50)",
     "code": "export async function transitionCompetitionState(db, transition) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "transitionCompetitionState",
-      "start": 37,
-      "end": 109,
+      "start": 69,
+      "end": 89,
       "ccn": 3,
-      "sourceLines": 73
+      "sourceLines": 21,
+      "nloc": 19
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "a35e0877e6dd24b1db8f1033acfe5a42",
@@ -1946,7 +2059,8 @@
       "start": 81,
       "end": 140,
       "ccn": 10,
-      "sourceLines": 60
+      "sourceLines": 60,
+      "nloc": 59
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -1963,7 +2077,8 @@
       "start": 21,
       "end": 42,
       "ccn": 13,
-      "sourceLines": 22
+      "sourceLines": 22,
+      "nloc": 22
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -1974,15 +2089,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method selectRewardRecipients has a cyclomatic complexity of 9 (limit is 8)",
     "code": "export function selectRewardRecipients({",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "selectRewardRecipients",
-      "start": 108,
-      "end": 136,
-      "ccn": 9,
-      "sourceLines": 29
+      "start": 112,
+      "end": 138,
+      "ccn": 8,
+      "sourceLines": 27,
+      "nloc": 26
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "78513db9f0dda04ff1c04f363bf45b5a",
@@ -1991,15 +2107,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPost has a cyclomatic complexity of 29 (limit is 8)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 28,
-      "end": 96,
-      "ccn": 27,
-      "sourceLines": 69
+      "start": 116,
+      "end": 137,
+      "ccn": 7,
+      "sourceLines": 22,
+      "nloc": 18
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "347961cee7fa930792bc1cf4cebd709a",
@@ -2009,7 +2126,10 @@
     "message": "File public/assets/competitions-admin.js has 845 non-comment lines of code",
     "code": "const API_ROOT = \"/api/competitions/admin\";",
     "disposition": "maintainability-open",
-    "reason": "Large first-party module needs a separate domain-specific decomposition."
+    "current": {
+      "nloc": 845
+    },
+    "reason": "Current nonblank/noncomment lines measured locally; hosted file metrics remain a separate gate."
   },
   {
     "id": "9eb24cd2365cacd47233bc48069a53fd",
@@ -2024,7 +2144,8 @@
       "start": 17,
       "end": 35,
       "ccn": 35,
-      "sourceLines": 19
+      "sourceLines": 19,
+      "nloc": 19
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2036,7 +2157,10 @@
     "message": "File public/preview/design-reference/mock/market-insights.js has 660 non-comment lines of code",
     "code": "/* Market insights (Stall of the Week + Price Tracker). Stand-in data; the real page loads the same shapes from the market API.",
     "disposition": "maintainability-open",
-    "reason": "Large first-party module needs a separate domain-specific decomposition."
+    "current": {
+      "nloc": 658
+    },
+    "reason": "Current nonblank/noncomment lines measured locally; hosted file metrics remain a separate gate."
   },
   {
     "id": "6909da1ee8a69e4ca85df3f20b55a65a",
@@ -2048,10 +2172,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "load",
-      "start": 120,
-      "end": 120,
+      "start": 129,
+      "end": 129,
       "ccn": 14,
-      "sourceLines": 1
+      "sourceLines": 1,
+      "nloc": 1
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2062,15 +2187,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method punishmentQuery has a cyclomatic complexity of 14 (limit is 8)",
     "code": "export function punishmentQuery(request) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "punishmentQuery",
-      "start": 7,
-      "end": 21,
-      "ccn": 11,
-      "sourceLines": 15
+      "start": 16,
+      "end": 25,
+      "ccn": 4,
+      "sourceLines": 10,
+      "nloc": 9
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "ddb84c47a798e74a4891da1aef46b32",
@@ -2079,15 +2205,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPost has a cyclomatic complexity of 16 (limit is 8)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 20,
-      "end": 59,
-      "ccn": 15,
-      "sourceLines": 40
+      "start": 45,
+      "end": 73,
+      "ccn": 8,
+      "sourceLines": 29,
+      "nloc": 27
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "8312eefbf53693018deabd73774561aa",
@@ -2102,7 +2229,8 @@
       "start": 172,
       "end": 202,
       "ccn": 12,
-      "sourceLines": 31
+      "sourceLines": 31,
+      "nloc": 31
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2113,15 +2241,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method renderVals has a cyclomatic complexity of 9 (limit is 8)",
     "code": "  renderVals() {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 36,
-      "ccn": 9,
-      "sourceLines": 34
+      "start": 19,
+      "end": 46,
+      "ccn": 7,
+      "sourceLines": 28,
+      "nloc": 24
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "6aba59e8758b6b7523022d62e71e9e85",
@@ -2131,7 +2260,14 @@
     "message": "Method (anonymous) has 66 lines of code (limit is 50)",
     "code": "(function () {",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 11,
+      "end": 122,
+      "ccn": 8,
+      "sourceLines": 112,
+      "nloc": 99
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -2147,7 +2283,8 @@
       "start": 50,
       "end": 78,
       "ccn": 19,
-      "sourceLines": 29
+      "sourceLines": 29,
+      "nloc": 26
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2161,10 +2298,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "saveJudgeScore",
-      "start": 170,
-      "end": 217,
+      "start": 161,
+      "end": 208,
       "ccn": 7,
-      "sourceLines": 48
+      "sourceLines": 48,
+      "nloc": 45
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -2178,10 +2316,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 18,
-      "end": 157,
-      "ccn": 18,
-      "sourceLines": 140
+      "start": 34,
+      "end": 167,
+      "ccn": 16,
+      "sourceLines": 134,
+      "nloc": 115
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2195,10 +2334,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 18,
-      "end": 157,
-      "ccn": 18,
-      "sourceLines": 140
+      "start": 34,
+      "end": 167,
+      "ccn": 16,
+      "sourceLines": 134,
+      "nloc": 115
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2215,7 +2355,8 @@
       "start": 363,
       "end": 366,
       "ccn": 2,
-      "sourceLines": 4
+      "sourceLines": 4,
+      "nloc": 4
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -2226,15 +2367,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPatch has a cyclomatic complexity of 22 (limit is 8)",
     "code": "export async function onRequestPatch(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPatch",
-      "start": 73,
-      "end": 164,
-      "ccn": 21,
-      "sourceLines": 92
+      "start": 168,
+      "end": 191,
+      "ccn": 7,
+      "sourceLines": 24,
+      "nloc": 18
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "a160a84da2517eba9d1a7e2cbf8180c",
@@ -2243,15 +2385,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method recordAppealComment has a cyclomatic complexity of 9 (limit is 8)",
     "code": "export async function recordAppealComment(db, record) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "recordAppealComment",
-      "start": 324,
-      "end": 375,
-      "ccn": 9,
-      "sourceLines": 52
+      "start": 334,
+      "end": 381,
+      "ccn": 7,
+      "sourceLines": 48,
+      "nloc": 48
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "4690477a447515361447fbd328e28bb9",
@@ -2266,7 +2409,8 @@
       "start": 138,
       "end": 145,
       "ccn": 7,
-      "sourceLines": 8
+      "sourceLines": 8,
+      "nloc": 8
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -2278,7 +2422,10 @@
     "message": "File public/assets/script.js has 1594 non-comment lines of code",
     "code": "import(\"./site-navigation.js\").catch(() => {});",
     "disposition": "maintainability-open",
-    "reason": "Large first-party module needs a separate domain-specific decomposition."
+    "current": {
+      "nloc": 1594
+    },
+    "reason": "Current nonblank/noncomment lines measured locally; hosted file metrics remain a separate gate."
   },
   {
     "id": "3e77686aef381b2eb463475414727299",
@@ -2287,9 +2434,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method (anonymous) has a cyclomatic complexity of 10 (limit is 8)",
     "code": "  images.sort((left, right) => {",
-    "disposition": "maintainability-open",
-    "current": null,
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "disposition": "below-threshold-local",
+    "current": {
+      "name": "(anonymous)",
+      "start": 104,
+      "end": 109,
+      "ccn": 8,
+      "sourceLines": 6,
+      "nloc": 6
+    },
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "caf20e96efde335d93c3e81239419b44",
@@ -2304,7 +2458,8 @@
       "start": 42,
       "end": 64,
       "ccn": 8,
-      "sourceLines": 23
+      "sourceLines": 23,
+      "nloc": 23
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -2321,7 +2476,8 @@
       "start": 803,
       "end": 892,
       "ccn": 24,
-      "sourceLines": 90
+      "sourceLines": 90,
+      "nloc": 83
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2335,10 +2491,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 85,
-      "ccn": 22,
-      "sourceLines": 83
+      "start": 19,
+      "end": 95,
+      "ccn": 20,
+      "sourceLines": 77,
+      "nloc": 73
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2349,15 +2506,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestGet has a cyclomatic complexity of 13 (limit is 8)",
     "code": "export async function onRequestGet(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestGet",
-      "start": 11,
-      "end": 29,
-      "ccn": 12,
-      "sourceLines": 19
+      "start": 23,
+      "end": 36,
+      "ccn": 6,
+      "sourceLines": 14,
+      "nloc": 14
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "3c4b1adcd37f73425ee3f30bc5fe9032",
@@ -2366,15 +2524,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPost has a cyclomatic complexity of 24 (limit is 8)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 22,
-      "end": 66,
-      "ccn": 20,
-      "sourceLines": 45
+      "start": 71,
+      "end": 83,
+      "ccn": 7,
+      "sourceLines": 13,
+      "nloc": 13
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "f76671827eb9141b81ce8017183b119d",
@@ -2389,7 +2548,8 @@
       "start": 222,
       "end": 270,
       "ccn": 10,
-      "sourceLines": 49
+      "sourceLines": 49,
+      "nloc": 44
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2401,7 +2561,14 @@
     "message": "Method (anonymous) has a cyclomatic complexity of 12 (limit is 8)",
     "code": "  function refresh(){let list=items.filter(item=>(item.name??item.title??'').toLowerCase().includes(q)&&(category==='All'||item.category===category||item.state===category||(category==='Recruiting'&&item.recruiting)||(category==='Peaceful'&&item.peaceful)||(category==='Hostile'&&item.peaceful===false)));",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 60,
+      "end": 60,
+      "ccn": 12,
+      "sourceLines": 1,
+      "nloc": 1
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -2417,7 +2584,8 @@
       "start": 299,
       "end": 306,
       "ccn": 6,
-      "sourceLines": 8
+      "sourceLines": 8,
+      "nloc": 8
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -2428,15 +2596,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method exactDetailOverview has a cyclomatic complexity of 9 (limit is 8)",
     "code": "export function exactDetailOverview(competition){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "exactDetailOverview",
-      "start": 18,
-      "end": 23,
-      "ccn": 9,
-      "sourceLines": 6
+      "start": 22,
+      "end": 26,
+      "ccn": 5,
+      "sourceLines": 5,
+      "nloc": 5
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "40cabf7e3edb3d506cd123f704e87db",
@@ -2448,10 +2617,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "buildCompetitionRewardPlan",
-      "start": 229,
-      "end": 258,
+      "start": 240,
+      "end": 269,
       "ccn": 8,
-      "sourceLines": 30
+      "sourceLines": 30,
+      "nloc": 28
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -2468,7 +2638,8 @@
       "start": 579,
       "end": 657,
       "ccn": 15,
-      "sourceLines": 79
+      "sourceLines": 79,
+      "nloc": 71
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2479,15 +2650,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method inspectPng has a cyclomatic complexity of 24 (limit is 8)",
     "code": "function inspectPng(data) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "inspectPng",
-      "start": 45,
-      "end": 87,
-      "ccn": 24,
-      "sourceLines": 43
+      "start": 75,
+      "end": 86,
+      "ccn": 7,
+      "sourceLines": 12,
+      "nloc": 12
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "c42a21c6255ddc96b22b0110699852b5",
@@ -2502,7 +2674,8 @@
       "start": 31,
       "end": 76,
       "ccn": 12,
-      "sourceLines": 46
+      "sourceLines": 46,
+      "nloc": 46
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2514,7 +2687,14 @@
     "message": "Method (anonymous) has a cyclomatic complexity of 9 (limit is 8)",
     "code": "      bound.forEach(function (item) {",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 50,
+      "end": 67,
+      "ccn": 9,
+      "sourceLines": 18,
+      "nloc": 18
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -2524,15 +2704,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method insights has a cyclomatic complexity of 12 (limit is 8)",
     "code": "async function insights(db,url){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "insights",
-      "start": 114,
-      "end": 129,
-      "ccn": 9,
-      "sourceLines": 16
+      "start": 115,
+      "end": 130,
+      "ccn": 3,
+      "sourceLines": 16,
+      "nloc": 16
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "d2c3d33d818739215327274c690af1bc",
@@ -2541,15 +2722,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method onRequestPatch has 81 lines of code (limit is 50)",
     "code": "export async function onRequestPatch(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPatch",
-      "start": 73,
-      "end": 164,
-      "ccn": 21,
-      "sourceLines": 92
+      "start": 168,
+      "end": 191,
+      "ccn": 7,
+      "sourceLines": 24,
+      "nloc": 18
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "9b741b222feedac9f774ed973df2263e",
@@ -2561,10 +2743,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "base64Url",
-      "start": 30,
-      "end": 34,
+      "start": 31,
+      "end": 35,
       "ccn": 2,
-      "sourceLines": 5
+      "sourceLines": 5,
+      "nloc": 5
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -2581,7 +2764,8 @@
       "start": 42,
       "end": 67,
       "ccn": 9,
-      "sourceLines": 26
+      "sourceLines": 26,
+      "nloc": 25
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2598,7 +2782,8 @@
       "start": 91,
       "end": 215,
       "ccn": 10,
-      "sourceLines": 125
+      "sourceLines": 125,
+      "nloc": 119
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2615,7 +2800,8 @@
       "start": 313,
       "end": 375,
       "ccn": 16,
-      "sourceLines": 63
+      "sourceLines": 63,
+      "nloc": 59
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2626,15 +2812,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method submitSubmissionForReview has 77 lines of code (limit is 50)",
     "code": "export async function submitSubmissionForReview(db, submission) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "submitSubmissionForReview",
-      "start": 272,
-      "end": 348,
+      "start": 283,
+      "end": 303,
       "ccn": 3,
-      "sourceLines": 77
+      "sourceLines": 21,
+      "nloc": 21
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "d21d49458ce4bf9aa02cc3c5e4d3c4d2",
@@ -2644,7 +2831,10 @@
     "message": "File public/assets/competitions.js has 825 non-comment lines of code",
     "code": "import { exactDetailHead, exactDetailStage, exactDetailOverview } from './exact-detail.js';",
     "disposition": "maintainability-open",
-    "reason": "Large first-party module needs a separate domain-specific decomposition."
+    "current": {
+      "nloc": 825
+    },
+    "reason": "Current nonblank/noncomment lines measured locally; hosted file metrics remain a separate gate."
   },
   {
     "id": "22c711cb39060c7235e6793beecf7c29",
@@ -2653,15 +2843,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method competitionGuildMembers has a cyclomatic complexity of 10 (limit is 8)",
     "code": "export async function competitionGuildMembers(env, guildId) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "competitionGuildMembers",
-      "start": 160,
-      "end": 174,
-      "ccn": 10,
-      "sourceLines": 15
+      "start": 166,
+      "end": 179,
+      "ccn": 6,
+      "sourceLines": 14,
+      "nloc": 14
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "e16a47829424b152cdc45e47fdc51bb2",
@@ -2676,7 +2867,8 @@
       "start": 80,
       "end": 142,
       "ccn": 24,
-      "sourceLines": 63
+      "sourceLines": 63,
+      "nloc": 59
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2687,15 +2879,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method renderVals has a cyclomatic complexity of 13 (limit is 8)",
     "code": "  renderVals() {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 41,
-      "ccn": 13,
-      "sourceLines": 39
+      "start": 32,
+      "end": 52,
+      "ccn": 4,
+      "sourceLines": 21,
+      "nloc": 21
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "cf3ac46d13cbf604d5f208c291c1cae9",
@@ -2710,7 +2903,8 @@
       "start": 228,
       "end": 266,
       "ccn": 14,
-      "sourceLines": 39
+      "sourceLines": 39,
+      "nloc": 38
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2727,7 +2921,8 @@
       "start": 464,
       "end": 481,
       "ccn": 9,
-      "sourceLines": 18
+      "sourceLines": 18,
+      "nloc": 17
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2738,15 +2933,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method renderVals has a cyclomatic complexity of 12 (limit is 8)",
     "code": "  renderVals() {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 44,
-      "ccn": 15,
-      "sourceLines": 42
+      "start": 21,
+      "end": 52,
+      "ccn": 8,
+      "sourceLines": 32,
+      "nloc": 32
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "2b24957636c88372ffcb1a43c5fb0750",
@@ -2761,7 +2957,8 @@
       "start": 24,
       "end": 33,
       "ccn": 9,
-      "sourceLines": 10
+      "sourceLines": 10,
+      "nloc": 10
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2772,15 +2969,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method pollMinecraftLink has a cyclomatic complexity of 14 (limit is 8)",
     "code": "async function pollMinecraftLink(context, session, input) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "pollMinecraftLink",
-      "start": 70,
-      "end": 103,
-      "ccn": 12,
-      "sourceLines": 34
+      "start": 94,
+      "end": 114,
+      "ccn": 8,
+      "sourceLines": 21,
+      "nloc": 21
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "982d6ed6f1d299c6fd9ab5948a21a71e",
@@ -2789,15 +2987,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method clone has a cyclomatic complexity of 10 (limit is 8)",
     "code": "function clone(type,item){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "clone",
-      "start": 22,
-      "end": 28,
-      "ccn": 10,
-      "sourceLines": 7
+      "start": 28,
+      "end": 31,
+      "ccn": 5,
+      "sourceLines": 4,
+      "nloc": 4
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "f421756a055e8007698c21acb6a5015b",
@@ -2806,9 +3005,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method (anonymous) has a cyclomatic complexity of 13 (limit is 8)",
     "code": "    deliveries: plan.deliveries.map((delivery) => ({",
-    "disposition": "maintainability-open",
-    "current": null,
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "disposition": "below-threshold-local",
+    "current": {
+      "name": "(anonymous)",
+      "start": 57,
+      "end": 70,
+      "ccn": 7,
+      "sourceLines": 14,
+      "nloc": 14
+    },
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "f8feafda451d3c4a671ab1bc9963b23f",
@@ -2823,7 +3029,8 @@
       "start": 80,
       "end": 142,
       "ccn": 24,
-      "sourceLines": 63
+      "sourceLines": 63,
+      "nloc": 59
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2834,15 +3041,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method el has a cyclomatic complexity of 10 (limit is 8)",
     "code": "export function el(tag,attributes={},children=[]){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "el",
-      "start": 3,
-      "end": 12,
-      "ccn": 10,
-      "sourceLines": 10
+      "start": 11,
+      "end": 15,
+      "ccn": 1,
+      "sourceLines": 5,
+      "nloc": 5
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "c6da749d97a4c40a2ee7ac59b69897ee",
@@ -2851,15 +3059,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestGet has a cyclomatic complexity of 9 (limit is 8)",
     "code": "export async function onRequestGet(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestGet",
-      "start": 12,
-      "end": 36,
-      "ccn": 9,
-      "sourceLines": 25
+      "start": 13,
+      "end": 29,
+      "ccn": 7,
+      "sourceLines": 17,
+      "nloc": 17
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "a84d1e2c15ec6e3dbb69f7d6fb5e570",
@@ -2874,7 +3083,8 @@
       "start": 313,
       "end": 375,
       "ccn": 16,
-      "sourceLines": 63
+      "sourceLines": 63,
+      "nloc": 59
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2891,7 +3101,8 @@
       "start": 83,
       "end": 115,
       "ccn": 18,
-      "sourceLines": 33
+      "sourceLines": 33,
+      "nloc": 33
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -2902,15 +3113,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPost has a cyclomatic complexity of 22 (limit is 8)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 12,
-      "end": 58,
-      "ccn": 20,
-      "sourceLines": 47
+      "start": 36,
+      "end": 69,
+      "ccn": 8,
+      "sourceLines": 34,
+      "nloc": 31
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "b1ce90a830bebfadb208247f19f5f30e",
@@ -2925,7 +3137,8 @@
       "start": 218,
       "end": 264,
       "ccn": 10,
-      "sourceLines": 47
+      "sourceLines": 47,
+      "nloc": 44
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2942,7 +3155,8 @@
       "start": 43,
       "end": 56,
       "ccn": 8,
-      "sourceLines": 14
+      "sourceLines": 14,
+      "nloc": 14
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -2956,10 +3170,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 85,
-      "ccn": 22,
-      "sourceLines": 83
+      "start": 19,
+      "end": 95,
+      "ccn": 20,
+      "sourceLines": 77,
+      "nloc": 73
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2976,7 +3191,8 @@
       "start": 35,
       "end": 66,
       "ccn": 16,
-      "sourceLines": 32
+      "sourceLines": 32,
+      "nloc": 32
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -2987,15 +3203,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPost has a cyclomatic complexity of 13 (limit is 8)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 22,
-      "end": 54,
-      "ccn": 13,
-      "sourceLines": 33
+      "start": 46,
+      "end": 66,
+      "ccn": 7,
+      "sourceLines": 21,
+      "nloc": 18
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "350c8f63c442417bbda5c9f97cf58758",
@@ -3010,7 +3227,8 @@
       "start": 1,
       "end": 12,
       "ccn": 14,
-      "sourceLines": 12
+      "sourceLines": 12,
+      "nloc": 12
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3021,15 +3239,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPost has a cyclomatic complexity of 9 (limit is 8)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 36,
-      "end": 64,
-      "ccn": 9,
-      "sourceLines": 29
+      "start": 50,
+      "end": 72,
+      "ccn": 5,
+      "sourceLines": 23,
+      "nloc": 21
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "b5a812dd28f02621d699b13a3553809e",
@@ -3038,15 +3257,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPost has a cyclomatic complexity of 15 (limit is 8)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 10,
-      "end": 44,
-      "ccn": 14,
-      "sourceLines": 35
+      "start": 22,
+      "end": 52,
+      "ccn": 8,
+      "sourceLines": 31,
+      "nloc": 29
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "3d5f94ba4cc9fce0bee635694f3d6ebd",
@@ -3072,7 +3292,8 @@
       "start": 15,
       "end": 19,
       "ccn": 2,
-      "sourceLines": 5
+      "sourceLines": 5,
+      "nloc": 5
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3089,7 +3310,8 @@
       "start": 27,
       "end": 51,
       "ccn": 11,
-      "sourceLines": 25
+      "sourceLines": 25,
+      "nloc": 25
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3117,7 +3339,8 @@
       "start": 109,
       "end": 183,
       "ccn": 17,
-      "sourceLines": 75
+      "sourceLines": 75,
+      "nloc": 73
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3134,7 +3357,8 @@
       "start": 109,
       "end": 183,
       "ccn": 17,
-      "sourceLines": 75
+      "sourceLines": 75,
+      "nloc": 73
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3151,7 +3375,8 @@
       "start": 71,
       "end": 211,
       "ccn": 25,
-      "sourceLines": 141
+      "sourceLines": 141,
+      "nloc": 134
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3162,15 +3387,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method normalizeSiteNavigation has a cyclomatic complexity of 12 (limit is 8)",
     "code": "export function normalizeSiteNavigation() {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "normalizeSiteNavigation",
-      "start": 66,
-      "end": 108,
-      "ccn": 9,
-      "sourceLines": 43
+      "start": 92,
+      "end": 112,
+      "ccn": 6,
+      "sourceLines": 21,
+      "nloc": 19
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "75ced237c391767af0e8a1095d8218c4",
@@ -3185,7 +3411,8 @@
       "start": 38,
       "end": 38,
       "ccn": 3,
-      "sourceLines": 1
+      "sourceLines": 1,
+      "nloc": 1
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3202,7 +3429,8 @@
       "start": 431,
       "end": 440,
       "ccn": 5,
-      "sourceLines": 10
+      "sourceLines": 10,
+      "nloc": 10
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3219,7 +3447,8 @@
       "start": 24,
       "end": 82,
       "ccn": 16,
-      "sourceLines": 59
+      "sourceLines": 59,
+      "nloc": 50
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3230,15 +3459,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method staffSubmissionConflict has a cyclomatic complexity of 13 (limit is 8)",
     "code": "export async function staffSubmissionConflict(db, env, submission, staffUuid) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "staffSubmissionConflict",
-      "start": 36,
-      "end": 69,
-      "ccn": 11,
-      "sourceLines": 34
+      "start": 49,
+      "end": 76,
+      "ccn": 8,
+      "sourceLines": 28,
+      "nloc": 24
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "38c5318d319fa188666528f04cb6cc8",
@@ -3247,15 +3477,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPost has a cyclomatic complexity of 19 (limit is 8)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 9,
-      "end": 53,
-      "ccn": 17,
-      "sourceLines": 45
+      "start": 26,
+      "end": 59,
+      "ccn": 7,
+      "sourceLines": 34,
+      "nloc": 32
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "e5ebbb0db02d0f9ea4588e4751d185b0",
@@ -3264,15 +3495,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestGet has a cyclomatic complexity of 9 (limit is 8)",
     "code": "export async function onRequestGet(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestGet",
-      "start": 16,
-      "end": 45,
-      "ccn": 9,
-      "sourceLines": 30
+      "start": 24,
+      "end": 51,
+      "ccn": 7,
+      "sourceLines": 28,
+      "nloc": 24
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "2e9795ec37e5f540c5137329fa90e366",
@@ -3287,7 +3519,8 @@
       "start": 308,
       "end": 319,
       "ccn": 13,
-      "sourceLines": 12
+      "sourceLines": 12,
+      "nloc": 12
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3299,7 +3532,14 @@
     "message": "Method (anonymous) has a cyclomatic complexity of 12 (limit is 8)",
     "code": "    return stall.shops.length <= 256 && stall.shops.every(shop => isObject(shop) && isPositive(shop.id) && isObject(shop.owner) && isBoundedString(shop.owner.name, 64) && [\"BUY\", \"SELL\", \"TRADE\"].includes(shop.direction) && validItem(shop.sellItem) && isPositive(shop.sellAmount) && validItem(shop.costItem) && isPositive(shop.costAmount) && validLocation(shop.interaction) && isInteger(shop.stockCount) && isInteger(shop.availableTrades));",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 68,
+      "end": 68,
+      "ccn": 12,
+      "sourceLines": 1,
+      "nloc": 1
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -3312,10 +3552,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "start",
-      "start": 79,
-      "end": 94,
-      "ccn": 29,
-      "sourceLines": 16
+      "start": 77,
+      "end": 96,
+      "ccn": 45,
+      "sourceLines": 20,
+      "nloc": 20
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3326,15 +3567,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method staffWebhookConfiguration has a cyclomatic complexity of 13 (limit is 8)",
     "code": "function staffWebhookConfiguration(env) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "staffWebhookConfiguration",
-      "start": 20,
-      "end": 42,
-      "ccn": 11,
-      "sourceLines": 23
+      "start": 42,
+      "end": 48,
+      "ccn": 6,
+      "sourceLines": 7,
+      "nloc": 7
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "d6415e14a1b887206aeb70411477f111",
@@ -3344,7 +3586,10 @@
     "message": "File public/assets/market/exact-view.js has 560 non-comment lines of code",
     "code": "/* Market insights (Stall of the Week + Price Tracker). Stand-in data; the real page loads the same shapes from the market API.",
     "disposition": "maintainability-open",
-    "reason": "Large first-party module needs a separate domain-specific decomposition."
+    "current": {
+      "nloc": 504
+    },
+    "reason": "Current nonblank/noncomment lines measured locally; hosted file metrics remain a separate gate."
   },
   {
     "id": "d8f70d31e659773486247ae6b28bdef",
@@ -3359,7 +3604,8 @@
       "start": 81,
       "end": 89,
       "ccn": 7,
-      "sourceLines": 9
+      "sourceLines": 9,
+      "nloc": 9
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3376,7 +3622,8 @@
       "start": 150,
       "end": 211,
       "ccn": 15,
-      "sourceLines": 62
+      "sourceLines": 62,
+      "nloc": 56
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3387,15 +3634,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method removeSubmissionImage has 119 lines of code (limit is 50)",
     "code": "export async function removeSubmissionImage(db, removal) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "removeSubmissionImage",
-      "start": 240,
-      "end": 359,
+      "start": 301,
+      "end": 320,
       "ccn": 2,
-      "sourceLines": 120
+      "sourceLines": 20,
+      "nloc": 19
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "7953c15322a7eb3b5331e1b38e8292ba",
@@ -3410,7 +3658,8 @@
       "start": 128,
       "end": 208,
       "ccn": 6,
-      "sourceLines": 81
+      "sourceLines": 81,
+      "nloc": 74
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3427,7 +3676,8 @@
       "start": 74,
       "end": 106,
       "ccn": 8,
-      "sourceLines": 33
+      "sourceLines": 33,
+      "nloc": 33
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3438,9 +3688,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method (anonymous) has a cyclomatic complexity of 9 (limit is 8)",
     "code": "  Promise.allSettled([fetch('/api/competitions').then(r=>{if(!r.ok)throw new Error();return r.json();}),api('news')]).then(([competition,news])=>{",
-    "disposition": "maintainability-open",
-    "current": null,
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "disposition": "below-threshold-local",
+    "current": {
+      "name": "(anonymous)",
+      "start": 16,
+      "end": 16,
+      "ccn": 2,
+      "sourceLines": 1,
+      "nloc": 1
+    },
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "28d3e6421c76297bc193d9202a1616b5",
@@ -3455,7 +3712,8 @@
       "start": 1,
       "end": 14,
       "ccn": 2,
-      "sourceLines": 14
+      "sourceLines": 14,
+      "nloc": 14
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3472,7 +3730,8 @@
       "start": 64,
       "end": 93,
       "ccn": 28,
-      "sourceLines": 30
+      "sourceLines": 30,
+      "nloc": 30
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3489,7 +3748,8 @@
       "start": 38,
       "end": 38,
       "ccn": 3,
-      "sourceLines": 1
+      "sourceLines": 1,
+      "nloc": 1
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3506,7 +3766,8 @@
       "start": 49,
       "end": 71,
       "ccn": 18,
-      "sourceLines": 23
+      "sourceLines": 23,
+      "nloc": 23
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3523,7 +3784,8 @@
       "start": 91,
       "end": 215,
       "ccn": 10,
-      "sourceLines": 125
+      "sourceLines": 125,
+      "nloc": 119
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3540,7 +3802,8 @@
       "start": 677,
       "end": 719,
       "ccn": 24,
-      "sourceLines": 43
+      "sourceLines": 43,
+      "nloc": 43
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3554,10 +3817,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "decorateFeatured",
-      "start": 76,
-      "end": 92,
+      "start": 80,
+      "end": 96,
       "ccn": 8,
-      "sourceLines": 17
+      "sourceLines": 17,
+      "nloc": 17
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3571,10 +3835,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "handleCommunity",
-      "start": 246,
-      "end": 259,
-      "ccn": 10,
-      "sourceLines": 14
+      "start": 264,
+      "end": 276,
+      "ccn": 6,
+      "sourceLines": 13,
+      "nloc": 13
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3585,15 +3850,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method createDraftCompetition has 65 lines of code (limit is 50)",
     "code": "export async function createDraftCompetition(db, draft) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "createDraftCompetition",
-      "start": 54,
-      "end": 120,
+      "start": 98,
+      "end": 118,
       "ccn": 1,
-      "sourceLines": 67
+      "sourceLines": 21,
+      "nloc": 19
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "6204ff830c7038da2644bae32477b0dc",
@@ -3603,7 +3869,14 @@
     "message": "Method (anonymous) has a cyclomatic complexity of 9 (limit is 8)",
     "code": "  let rows=items.filter(item=>item.name.toLowerCase().includes(q.toLowerCase())&&(filter==='all'||item.state===filter||(filter==='recruiting'&&item.recruiting)||(filter==='peaceful'&&item.peaceful===true)||(filter==='hostile'&&item.peaceful===false)));",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 58,
+      "end": 58,
+      "ccn": 9,
+      "sourceLines": 1,
+      "nloc": 1
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -3613,15 +3886,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method decorateCatalogCard has a cyclomatic complexity of 11 (limit is 8)",
     "code": "function decorateCatalogCard(card, competition) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "decorateCatalogCard",
-      "start": 55,
-      "end": 74,
-      "ccn": 9,
-      "sourceLines": 20
+      "start": 65,
+      "end": 78,
+      "ccn": 6,
+      "sourceLines": 14,
+      "nloc": 14
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "3e26f895c674f0e6868e088341d08de3",
@@ -3631,7 +3905,14 @@
     "message": "Method (anonymous) has 66 lines of code (limit is 50)",
     "code": "test(\"players can read status and ordered appeal messages without seeing another account\", async () => {",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 153,
+      "end": 221,
+      "ccn": 1,
+      "sourceLines": 69,
+      "nloc": 67
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -3641,15 +3922,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method resultPublicationReadiness has 73 lines of code (limit is 50)",
     "code": "export async function resultPublicationReadiness(db, competitionId) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "resultPublicationReadiness",
-      "start": 35,
-      "end": 111,
+      "start": 37,
+      "end": 62,
       "ccn": 7,
-      "sourceLines": 77
+      "sourceLines": 26,
+      "nloc": 22
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "3a94bc30ca49b905017fdc9074c06c77",
@@ -3661,10 +3943,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 77,
-      "ccn": 13,
-      "sourceLines": 75
+      "start": 28,
+      "end": 87,
+      "ccn": 9,
+      "sourceLines": 60,
+      "nloc": 60
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3681,7 +3964,8 @@
       "start": 174,
       "end": 183,
       "ccn": 5,
-      "sourceLines": 10
+      "sourceLines": 10,
+      "nloc": 10
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3698,7 +3982,8 @@
       "start": 1,
       "end": 7,
       "ccn": 3,
-      "sourceLines": 7
+      "sourceLines": 7,
+      "nloc": 7
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3715,7 +4000,8 @@
       "start": 75,
       "end": 162,
       "ccn": 22,
-      "sourceLines": 88
+      "sourceLines": 88,
+      "nloc": 83
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3732,7 +4018,8 @@
       "start": 21,
       "end": 42,
       "ccn": 13,
-      "sourceLines": 22
+      "sourceLines": 22,
+      "nloc": 22
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3754,15 +4041,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method renderAccount has 56 lines of code (limit is 50)",
     "code": "async function renderAccount(root, session) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "renderAccount",
-      "start": 154,
-      "end": 210,
-      "ccn": 6,
-      "sourceLines": 57
+      "start": 169,
+      "end": 215,
+      "ccn": 5,
+      "sourceLines": 47,
+      "nloc": 46
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "4b5572f1f70f7734cfd034b10d0692a4",
@@ -3777,7 +4065,8 @@
       "start": 288,
       "end": 297,
       "ccn": 8,
-      "sourceLines": 10
+      "sourceLines": 10,
+      "nloc": 10
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3794,7 +4083,8 @@
       "start": 64,
       "end": 93,
       "ccn": 11,
-      "sourceLines": 30
+      "sourceLines": 30,
+      "nloc": 27
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3811,7 +4101,8 @@
       "start": 631,
       "end": 724,
       "ccn": 13,
-      "sourceLines": 94
+      "sourceLines": 94,
+      "nloc": 91
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3823,7 +4114,14 @@
     "message": "Method (anonymous) has 51 lines of code (limit is 50)",
     "code": "  save.addEventListener(\"click\", async () => {",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 162,
+      "end": 212,
+      "ccn": 16,
+      "sourceLines": 51,
+      "nloc": 51
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -3839,7 +4137,8 @@
       "start": 18,
       "end": 157,
       "ccn": 18,
-      "sourceLines": 140
+      "sourceLines": 140,
+      "nloc": 125
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3850,15 +4149,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method assignCompetitionJudge has 51 lines of code (limit is 50)",
     "code": "export async function assignCompetitionJudge(db, assignment) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "assignCompetitionJudge",
-      "start": 79,
-      "end": 132,
-      "ccn": 5,
-      "sourceLines": 54
+      "start": 104,
+      "end": 123,
+      "ccn": 3,
+      "sourceLines": 20,
+      "nloc": 17
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "bdbb942e3ec3b6033ba99fa9ceb38082",
@@ -3873,7 +4173,8 @@
       "start": 289,
       "end": 309,
       "ccn": 9,
-      "sourceLines": 21
+      "sourceLines": 21,
+      "nloc": 19
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3890,7 +4191,8 @@
       "start": 75,
       "end": 162,
       "ccn": 22,
-      "sourceLines": 88
+      "sourceLines": 88,
+      "nloc": 83
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3907,7 +4209,8 @@
       "start": 138,
       "end": 166,
       "ccn": 8,
-      "sourceLines": 29
+      "sourceLines": 29,
+      "nloc": 29
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3924,7 +4227,8 @@
       "start": 132,
       "end": 132,
       "ccn": 2,
-      "sourceLines": 1
+      "sourceLines": 1,
+      "nloc": 1
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3936,7 +4240,10 @@
     "message": "File public/assets/competitions-participant.js has 1007 non-comment lines of code",
     "code": "const API_ROOT = \"/api/competitions\";",
     "disposition": "maintainability-open",
-    "reason": "Large first-party module needs a separate domain-specific decomposition."
+    "current": {
+      "nloc": 993
+    },
+    "reason": "Current nonblank/noncomment lines measured locally; hosted file metrics remain a separate gate."
   },
   {
     "id": "6ccb038cc11733566f5961316b426cf4",
@@ -3951,7 +4258,8 @@
       "start": 18,
       "end": 157,
       "ccn": 18,
-      "sourceLines": 140
+      "sourceLines": 140,
+      "nloc": 125
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -3968,7 +4276,8 @@
       "start": 105,
       "end": 137,
       "ccn": 7,
-      "sourceLines": 33
+      "sourceLines": 33,
+      "nloc": 31
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3985,7 +4294,8 @@
       "start": 2,
       "end": 13,
       "ccn": 8,
-      "sourceLines": 12
+      "sourceLines": 12,
+      "nloc": 12
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -3996,15 +4306,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method saveRecord has a cyclomatic complexity of 11 (limit is 8)",
     "code": "async function saveRecord(db,input,actor){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "saveRecord",
-      "start": 37,
-      "end": 60,
-      "ccn": 12,
-      "sourceLines": 24
+      "start": 63,
+      "end": 71,
+      "ccn": 6,
+      "sourceLines": 9,
+      "nloc": 9
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "fa3fe0c97e62219e95da3892abbb44b8",
@@ -4016,10 +4327,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "discordBotConfiguration",
-      "start": 44,
-      "end": 55,
+      "start": 50,
+      "end": 61,
       "ccn": 7,
-      "sourceLines": 12
+      "sourceLines": 12,
+      "nloc": 12
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -4030,15 +4342,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method handleCommunity has a cyclomatic complexity of 53 (limit is 8)",
     "code": "export async function handleCommunity(context,dependencies={editor,identity}){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "handleCommunity",
-      "start": 246,
-      "end": 259,
-      "ccn": 10,
-      "sourceLines": 14
+      "start": 264,
+      "end": 276,
+      "ccn": 6,
+      "sourceLines": 13,
+      "nloc": 13
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "f300a1686151279706adf26eacc07c17",
@@ -4050,10 +4363,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 66,
-      "ccn": 24,
-      "sourceLines": 64
+      "start": 19,
+      "end": 76,
+      "ccn": 22,
+      "sourceLines": 58,
+      "nloc": 54
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -4064,15 +4378,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPost has a cyclomatic complexity of 19 (limit is 8)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 11,
-      "end": 56,
-      "ccn": 17,
-      "sourceLines": 46
+      "start": 28,
+      "end": 62,
+      "ccn": 7,
+      "sourceLines": 35,
+      "nloc": 33
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "8b686c2a786894c780d7c00bca758521",
@@ -4084,10 +4399,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 48,
-      "ccn": 13,
-      "sourceLines": 46
+      "start": 19,
+      "end": 58,
+      "ccn": 11,
+      "sourceLines": 40,
+      "nloc": 36
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -4101,10 +4417,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "start",
-      "start": 58,
-      "end": 93,
+      "start": 61,
+      "end": 96,
       "ccn": 40,
-      "sourceLines": 36
+      "sourceLines": 36,
+      "nloc": 34
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -4115,15 +4432,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method publishProvisionalResults has 79 lines of code (limit is 50)",
     "code": "export async function publishProvisionalResults(db, publication) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "publishProvisionalResults",
-      "start": 147,
-      "end": 228,
+      "start": 128,
+      "end": 152,
       "ccn": 6,
-      "sourceLines": 82
+      "sourceLines": 25,
+      "nloc": 22
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "2aa13e505e37d9dde6ba2090f3927ecc",
@@ -4133,7 +4451,10 @@
     "message": "File public/assets/competitions-admin-tools.js has 507 non-comment lines of code",
     "code": "const ROOT = \"/api/competitions/admin\";",
     "disposition": "maintainability-open",
-    "reason": "Large first-party module needs a separate domain-specific decomposition."
+    "current": {
+      "nloc": 507
+    },
+    "reason": "Current nonblank/noncomment lines measured locally; hosted file metrics remain a separate gate."
   },
   {
     "id": "df4758a4031839c512944cb58a2e7ae9",
@@ -4148,7 +4469,8 @@
       "start": 136,
       "end": 161,
       "ccn": 14,
-      "sourceLines": 26
+      "sourceLines": 26,
+      "nloc": 24
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -4159,15 +4481,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPatch has a cyclomatic complexity of 31 (limit is 8)",
     "code": "export async function onRequestPatch(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPatch",
-      "start": 7,
-      "end": 51,
-      "ccn": 24,
-      "sourceLines": 45
+      "start": 52,
+      "end": 64,
+      "ccn": 8,
+      "sourceLines": 13,
+      "nloc": 13
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "a3064c8a5ead00d9d1b2cf8645649c24",
@@ -4176,15 +4499,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method planRewardForResult has 62 lines of code (limit is 50)",
     "code": "export function planRewardForResult(reward, context, { guildMemberUuids = null } = {}) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "planRewardForResult",
-      "start": 154,
-      "end": 227,
-      "ccn": 16,
-      "sourceLines": 74
+      "start": 202,
+      "end": 238,
+      "ccn": 7,
+      "sourceLines": 37,
+      "nloc": 32
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "533b80d188c3bf77fca291e600372273",
@@ -4193,15 +4517,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method start has a cyclomatic complexity of 18 (limit is 8)",
     "code": "async function start(){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "start",
-      "start": 4,
-      "end": 23,
-      "ccn": 21,
-      "sourceLines": 20
+      "start": 17,
+      "end": 30,
+      "ccn": 4,
+      "sourceLines": 14,
+      "nloc": 14
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "6ad46d2cc4795ea62d382f9718a0129",
@@ -4210,15 +4535,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method renderVals has a cyclomatic complexity of 9 (limit is 8)",
     "code": "  renderVals() {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 47,
-      "ccn": 9,
-      "sourceLines": 45
+      "start": 19,
+      "end": 57,
+      "ccn": 7,
+      "sourceLines": 39,
+      "nloc": 35
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "b67ba6e62afb2bfb0732ea81749c5c2a",
@@ -4233,7 +4559,8 @@
       "start": 53,
       "end": 61,
       "ccn": 7,
-      "sourceLines": 9
+      "sourceLines": 9,
+      "nloc": 9
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -4247,10 +4574,11 @@
     "disposition": "maintainability-open",
     "current": {
       "name": "renderVals",
-      "start": 3,
-      "end": 52,
-      "ccn": 17,
-      "sourceLines": 50
+      "start": 36,
+      "end": 63,
+      "ccn": 10,
+      "sourceLines": 28,
+      "nloc": 28
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -4262,7 +4590,14 @@
     "message": "Method (anonymous) has a cyclomatic complexity of 9 (limit is 8)",
     "code": "      bound.forEach(function (item) {",
     "disposition": "maintainability-open",
-    "current": null,
+    "current": {
+      "name": "(anonymous)",
+      "start": 60,
+      "end": 77,
+      "ccn": 9,
+      "sourceLines": 18,
+      "nloc": 18
+    },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
   {
@@ -4272,15 +4607,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method sanitizeCompetitionConfig has a cyclomatic complexity of 9 (limit is 8)",
     "code": "export function sanitizeCompetitionConfig(input) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "sanitizeCompetitionConfig",
-      "start": 426,
-      "end": 457,
-      "ccn": 9,
-      "sourceLines": 32
+      "start": 433,
+      "end": 463,
+      "ccn": 5,
+      "sourceLines": 31,
+      "nloc": 28
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "36fd2fada067b05ad95669bda858f9ae",
@@ -4295,7 +4631,8 @@
       "start": 363,
       "end": 366,
       "ccn": 2,
-      "sourceLines": 4
+      "sourceLines": 4,
+      "nloc": 4
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -4312,7 +4649,8 @@
       "start": 640,
       "end": 699,
       "ccn": 6,
-      "sourceLines": 60
+      "sourceLines": 60,
+      "nloc": 60
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -4329,7 +4667,8 @@
       "start": 18,
       "end": 157,
       "ccn": 18,
-      "sourceLines": 140
+      "sourceLines": 140,
+      "nloc": 125
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -4341,7 +4680,10 @@
     "message": "File public/assets/competitions-admin-workspace.js has 983 non-comment lines of code",
     "code": "const ROOT = \"/api/competitions/admin\";",
     "disposition": "maintainability-open",
-    "reason": "Large first-party module needs a separate domain-specific decomposition."
+    "current": {
+      "nloc": 983
+    },
+    "reason": "Current nonblank/noncomment lines measured locally; hosted file metrics remain a separate gate."
   },
   {
     "id": "e5a3bdef8e5cfea9e78014b26e12047",
@@ -4350,15 +4692,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method sanitizePunishmentBinding has a cyclomatic complexity of 11 (limit is 8)",
     "code": "export function sanitizePunishmentBinding(value) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "sanitizePunishmentBinding",
-      "start": 47,
+      "start": 54,
       "end": 69,
-      "ccn": 11,
-      "sourceLines": 23
+      "ccn": 6,
+      "sourceLines": 16,
+      "nloc": 16
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "d5c52c30f326f58548a5ed4942b11732",
@@ -4367,15 +4710,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method onRequestPost has a cyclomatic complexity of 17 (limit is 8)",
     "code": "export async function onRequestPost(context) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "onRequestPost",
-      "start": 67,
-      "end": 144,
-      "ccn": 17,
-      "sourceLines": 78
+      "start": 147,
+      "end": 170,
+      "ccn": 8,
+      "sourceLines": 24,
+      "nloc": 20
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "94cc9a39ac614afce7a9a8ee43631da6",
@@ -4384,15 +4728,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method webhookPayload has a cyclomatic complexity of 9 (limit is 8)",
     "code": "function webhookPayload(env, notification, config) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "webhookPayload",
-      "start": 96,
-      "end": 116,
-      "ccn": 9,
-      "sourceLines": 21
+      "start": 112,
+      "end": 126,
+      "ccn": 5,
+      "sourceLines": 15,
+      "nloc": 15
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "d586da9103f055dffe4daa80539f1638",
@@ -4407,7 +4752,8 @@
       "start": 217,
       "end": 264,
       "ccn": 9,
-      "sourceLines": 48
+      "sourceLines": 48,
+      "nloc": 43
     },
     "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
   },
@@ -4418,15 +4764,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method hydrateProfile has a cyclomatic complexity of 30 (limit is 8)",
     "code": "function hydrateProfile(node,item){",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "hydrateProfile",
-      "start": 32,
-      "end": 58,
-      "ccn": 31,
-      "sourceLines": 27
+      "start": 34,
+      "end": 40,
+      "ccn": 4,
+      "sourceLines": 7,
+      "nloc": 5
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "eb36f607cfc3f0fe973ad4fc2e1bff9",
@@ -4441,7 +4788,8 @@
       "start": 922,
       "end": 928,
       "ccn": 2,
-      "sourceLines": 7
+      "sourceLines": 7,
+      "nloc": 7
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -4453,7 +4801,10 @@
     "message": "File public/assets/appeals.js has 744 non-comment lines of code",
     "code": "import { appealPlainText, renderAppealMarkup } from \"./appeal-markup.js\";",
     "disposition": "maintainability-open",
-    "reason": "Large first-party module needs a separate domain-specific decomposition."
+    "current": {
+      "nloc": 744
+    },
+    "reason": "Current nonblank/noncomment lines measured locally; hosted file metrics remain a separate gate."
   },
   {
     "id": "130337845624b881114363f776f18ffe",
@@ -4462,15 +4813,16 @@
     "pattern": "Lizard_ccn-medium",
     "message": "Method validateRecord has a cyclomatic complexity of 14 (limit is 8)",
     "code": "export function validateRecord(input) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "validateRecord",
-      "start": 32,
-      "end": 42,
-      "ccn": 14,
-      "sourceLines": 11
+      "start": 44,
+      "end": 48,
+      "ccn": 4,
+      "sourceLines": 5,
+      "nloc": 5
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "7342501dd66a927c83647056eddff91d",
@@ -4479,15 +4831,16 @@
     "pattern": "Lizard_nloc-medium",
     "message": "Method moderateSubmission has 108 lines of code (limit is 50)",
     "code": "export async function moderateSubmission(db, decision) {",
-    "disposition": "maintainability-open",
+    "disposition": "below-threshold-local",
     "current": {
       "name": "moderateSubmission",
-      "start": 163,
-      "end": 270,
+      "start": 208,
+      "end": 221,
       "ccn": 3,
-      "sourceLines": 108
+      "sourceLines": 14,
+      "nloc": 14
     },
-    "reason": "Retained as open. Literal SQL/CSS bodies, ambiguous callbacks and complex business/UI logic require manual decomposition or analyzer review."
+    "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
   {
     "id": "a4fc452642abd2046671cdfccfcff43f",
@@ -4502,7 +4855,8 @@
       "start": 161,
       "end": 174,
       "ccn": 7,
-      "sourceLines": 14
+      "sourceLines": 14,
+      "nloc": 14
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },
@@ -4516,10 +4870,11 @@
     "disposition": "below-threshold-local",
     "current": {
       "name": "start",
-      "start": 10,
-      "end": 36,
-      "ccn": 5,
-      "sourceLines": 27
+      "start": 32,
+      "end": 53,
+      "ccn": 8,
+      "sourceLines": 22,
+      "nloc": 21
     },
     "reason": "Current AST function is below the reported threshold; a fresh hosted analyzer result remains required."
   },

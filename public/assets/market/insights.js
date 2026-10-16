@@ -1,3 +1,4 @@
+import { selectedMarketStall } from './deep-link.js';
 import { el,link,button,api,status } from '../community-dom.js';
 const host=document.querySelector('[data-market-insights]');
 const gold=value=>Number(value).toLocaleString(undefined,{maximumFractionDigits:2});
@@ -28,8 +29,7 @@ function connectMap(data){
   function deepLink(){
     const params=new URLSearchParams(location.hash.slice(1)),snapshot=map.getSnapshot();if(!snapshot)return;
     if(appliedHash===location.hash)return;appliedHash=location.hash;
-    if(params.has('stall')){const requested=params.get('stall').toLowerCase().replace(/\s/g,'');const stall=snapshot.stalls.find(v=>v.id.toLowerCase()===requested||('stall'+v.id.replace(/\D/g,''))===requested);if(stall)map.showStall(stall.id);}
-    if(params.has('owner')){const owner=params.get('owner').toLowerCase();const stalls=snapshot.stalls.filter(v=>v.owner?.type==='PLAYER'&&v.owner.name?.toLowerCase()===owner);if(stalls[0])map.showStall(stalls[0].id);}
+    const selection=selectedMarketStall(snapshot.stalls,params);if(selection)map.showStall(selection.id);
     if(params.has('item')){const field=document.querySelector('#item-search');if(field){field.value=params.get('item');field.dispatchEvent(new Event('input',{bubbles:true}));field.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));}}
   }
   applyDeepLink=deepLink;deepLink();map.subscribe(deepLink);window.addEventListener('hashchange',deepLink);

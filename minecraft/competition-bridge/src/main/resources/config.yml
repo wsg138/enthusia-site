@@ -1,4 +1,11 @@
 # Enthusia Competition Bridge
+community-feeds:
+  enabled: false
+  port: 8766
+  # Verify the installed NotBounties currency before setting RAW_GOLD.
+  bounty-currency: UNVERIFIED
+  # Dedicated token comes only from ENTHUSIA_COMMUNITY_FEED_TOKEN.
+  # Expose loopback GET routes through a secured HTTPS proxy; restart after changes.
 # Keep the listener on loopback and expose it only through a protected HTTPS reverse proxy / Cloudflare Tunnel.
 server:
   enabled: false

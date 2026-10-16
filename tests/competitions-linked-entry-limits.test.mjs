@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { DatabaseSync } from "node:sqlite";
 import test from "node:test";
+import {countLinkedPlayerEntrySlots} from '../functions/lib/competitions/submissions.js';
 
 const NOW = "2026-08-23T03:10:00.000Z";
 const DISCORD = "1".repeat(18);
@@ -163,8 +164,15 @@ test("helpers and guild workers do not consume the personal entry cap", async ()
 });
 
 test("entry-slot helper expands current UUIDs through links and identity locks", async () => {
-  const source = await readFile(new URL("../functions/lib/competitions/submissions.js", import.meta.url), "utf8");
-  assert.match(source, /competition_minecraft_identity_locks/);
-  assert.match(source, /competition_minecraft_links/);
-  assert.match(source, /countLinkedPlayerEntrySlots/);
+  const database=await migratedDatabase();
+  try {
+    seedCompetition(database);seedDiscord(database);
+    link(database,ALT_A,'AltA');link(database,ALT_B,'AltB');
+    insertSubmission(database,{id:'linked-count-entry',ownerSubject:'discord:'+DISCORD,ownerUuid:ALT_A,ownerName:'AltA',entryType:'SOLO'});
+    const db={prepare(sql){let args=[];return {bind(...values){args=values;return this;},
+      async first(){return database.prepare(sql).get(...args)??null;}};}};
+    assert.equal(await countLinkedPlayerEntrySlots(db,'competition-limit',[ALT_B]),1);
+    database.prepare('DELETE FROM competition_minecraft_links WHERE minecraft_uuid=?').run(ALT_A);
+    assert.equal(await countLinkedPlayerEntrySlots(db,'competition-limit',[ALT_B]),1);
+  }finally{database.close();}
 });
