@@ -15,6 +15,7 @@ export function publicUrl(value) {
   if(!value)return '';
   const input=text(value,500,true);
   if(input.startsWith('/assets/')&&!input.includes('..'))return input;
+  if(/^\/api\/community\/news-media\/[a-f0-9]{32}$/.test(input))return input;
   const url=new URL(input);
   if(url.protocol!=='https:'||url.username||url.password)throw new Error('invalid_url');
   return url.href;

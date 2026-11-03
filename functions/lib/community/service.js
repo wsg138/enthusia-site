@@ -12,6 +12,7 @@ import { salesStatements,snapshotStatement } from './persistence.js';
 import { topFiveByWeek,consecutiveTopWeeks } from './market-history.js';
 import { marketWeekRange } from '../../../public/assets/market/eastern-week.js';
 import { CONTENT_KINDS, SNAPSHOT_KINDS, identifier, validateRecord, decodeRow, publicRecord, projectSnapshot, verifyProducer } from './contracts.js';
+import { uploadNewsMedia, readNewsMedia } from './news-media.js';
 
 const unavailable=()=>json({error:'community_service_unavailable'},503);
 async function identity(request,env){
@@ -190,6 +191,7 @@ async function adminRoute(context, parts, dependencies) {
   if (parts[1]==='session' && request.method==='GET') {
     return json({editor:true,name:actor.name??'Staff',rank:actor.rank??'Staff'});
   }
+  if(parts.length===2 && parts[1]==='news-media' && request.method==='POST') return uploadNewsMedia(request,env,actor);
   if (parts.length!==2 || !CONTENT_KINDS.has(parts[1])) return notFound();
   if (request.method==='GET') return recordList(db,parts[1],true);
   const input = JSON.parse(await body(request));
@@ -268,6 +270,7 @@ async function publicRoute(context, parts) {
 
 async function routeCommunity(context, parts, dependencies) {
   switch (parts[0]) {
+    case 'news-media': return parts.length===2 && context.request.method==='GET' ? readNewsMedia(context.request,context.env,parts[1],dependencies.editor) : notFound();
     case 'ingest':
       return parts.length===1 && context.request.method==='POST'
         ? ingest(context.env.COMMUNITY_DB,context.request,context.env) : notFound();

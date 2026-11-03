@@ -1,4 +1,8 @@
 import { el,link } from './community-dom.js';
+export function newsImageSource(url){
+  if(document.documentElement.hasAttribute('data-preview-root')&&window.EnthusiaNewsPreviewImages?.[url])return window.EnthusiaNewsPreviewImages[url];
+  return url;
+}
 export function formattedDate(value){if(!value)return '';const date=new Date(value);return Number.isFinite(date.getTime())?date.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',timeZone:'UTC'}):String(value);}
 function segments(source){
   const out=[],regex=/(`[^`\n]{1,1000}`|\*\*[^*\n]{1,1000}\*\*|__[^_\n]{1,1000}__|~~[^~\n]{1,1000}~~|\|\|[^|\n]{1,1000}\|\||\*[^*\n]{1,1000}\*|_[^_\n]{1,1000}_|\[[^\]\n]{1,200}\]\([^\n)]{1,500}\))/g;let index=0;
@@ -14,6 +18,8 @@ export function renderMarkup(host,source){
   const blocks=[];let code=false;
   for(const original of String(source??'').slice(0,20000).split('\n')){
     if(original.trim().startsWith('```')){code=!code;continue;}
+    const image=!code&&original.trim().match(/^!\[([^\]\n]{0,160})\]\((\/api\/community\/news-media\/[a-f0-9]{32})\)$/);
+    if(image){blocks.push(el('img',{class:'news-inline-image',src:newsImageSource(image[2]),alt:image[1],loading:'lazy'}));continue;}
     let cls='md-p',line=original;
     if(code){cls='md-pre';}else if(!line.trim()){cls='md-gap';}else if(line.startsWith('### ')){cls='md-h3';line=line.slice(4);}else if(line.startsWith('## ')){cls='md-h2';line=line.slice(3);}else if(line.startsWith('# ')){cls='md-h1';line=line.slice(2);}else if(line.startsWith('-# ')){cls='md-sub';line=line.slice(3);}else if(line.startsWith('> ')){cls='md-quote';line=line.slice(2);}else if(line.startsWith('- ')||line.startsWith('* ')){cls='md-li';line=line.slice(2);}else if(/^\d+\. /.test(line)){cls='md-ol';}
     blocks.push(el('div',{class:cls},cls==='md-pre'?[el('span',{class:'md-t',text:line||' '})]:segments(line)));

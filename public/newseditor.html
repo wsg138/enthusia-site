@@ -131,6 +131,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 </style>
 <link rel="stylesheet" href="assets/exact-design.css"><link rel="stylesheet" href="assets/site-refinements.css">
+<link rel="stylesheet" href="assets/news-images.css?v=news-images-20261103">
 </head>
 <body data-exact-page="newseditor">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -236,12 +237,14 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <button class="chip tool" type="button" aria-label="Quote" data-on-click="lineQ">&gt; Quote</button>
 <button class="chip tool" type="button" aria-label="Small text" data-on-click="lineSub">-# Small</button>
 </div>
+<div class="news-upload-actions"><button class="chip" type="button" data-news-add-image disabled>Add image</button><button class="chip" type="button" data-news-add-cover disabled>Add cover image</button><button class="chip" type="button" data-news-remove-cover hidden>Remove cover</button><input data-news-image-file type="file" accept="image/png,image/jpeg" hidden><input data-news-cover-file type="file" accept="image/png,image/jpeg" hidden></div><p class="news-media-status" data-news-media-status role="status">PNG or JPEG. Images are uploaded when selected.</p>
 <textarea class="field" aria-label="Post text, Discord formatting" data-b-value="{{draft}}" data-on-change="setDraft" data-on-select="trackSel" data-on-keyup="trackSel" data-on-click="trackSel"></textarea>
 <p style="color: var(--muted)"><span data-b-text="charCount"></span></p>
 </div>
 <label class="check"><input type="checkbox" data-b-checked="{{pin}}" data-on-change="togPin">Pin to the top of News</label>
 <label class="check"><input type="checkbox" data-b-checked="{{ping}}" data-on-change="togPing">Also announce in Discord with a link to the post</label>
 <div style="display: flex; flex-wrap: wrap; gap: 12px">
+<button class="btn btn-dark" type="button" data-news-full-preview>Preview post</button>
 <button class="btn btn-gold" type="button" data-on-click="publish">Publish post</button>
 <button class="btn btn-dark" type="button">Save draft</button>
 </div>
@@ -261,6 +264,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 </div>
 <div style="border-top: 4px solid #ecc873; padding-top: 20px">
 <div class="md">
+<img data-news-cover class="news-cover" alt="" hidden>
 <div class="mock-blocks" data-b-blocks="blocks"></div>
 </div>
 </div>
@@ -287,6 +291,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 </div>
 </div>
 </section>
+<dialog class="news-preview-dialog" data-news-preview-dialog aria-label="Post preview"><div data-news-preview-content></div><button type="button" class="btn btn-dark news-preview-close" data-news-preview-close>Close preview</button></dialog>
 </main>
 
 <footer class="site-foot s-red">
@@ -370,5 +375,5 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script src="assets/site-config.js" defer></script><script src="assets/enthusia.js" defer></script><script type="module" src="assets/exact-news.js"></script></body>
+<script src="assets/site-config.js" defer></script><script src="assets/enthusia.js" defer></script><script type="module" src="assets/exact-news.js?v=news-images-20261103"></script></body>
 </html>
