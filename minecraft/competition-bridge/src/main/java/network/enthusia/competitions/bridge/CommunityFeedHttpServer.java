@@ -10,13 +10,19 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import java.util.UUID;
+import java.net.URLDecoder;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /** Opt-in read-only loopback listener, separate from privileged competition routes. */
 final class CommunityFeedHttpServer implements AutoCloseable {
-    interface Source { Map<String, Object> read(String kind) throws Exception; }
+    interface Source {
+        Map<String, Object> read(String kind) throws Exception;
+        default Map<String, Object> readPlayers(List<UUID> players) throws Exception { throw new IllegalStateException("Player feed unavailable"); }
+    }
     private record Cached(long readAt, byte[] body) {}
     private final Map<String, Cached> cache = new java.util.HashMap<>();
     private final Gson gson = new GsonBuilder().serializeNulls().disableHtmlEscaping().create();
@@ -41,17 +47,43 @@ final class CommunityFeedHttpServer implements AutoCloseable {
         try {
             String path = exchange.getRequestURI().getPath();
             String kind = path.substring(path.lastIndexOf('/') + 1);
-            if (!Set.of("bounties", "achievements").contains(kind) || !path.equals("/api/community/" + kind)) {
+            if (!Set.of("bounties", "achievements", "player-achievements").contains(kind) || !path.equals("/api/community/" + kind)) {
                 send(exchange, 404, gson.toJson(Map.of("error", "not_found")).getBytes(StandardCharsets.UTF_8)); return;
             }
             if (!exchange.getRequestMethod().equals("GET")) { sendError(exchange, 405, "method_not_allowed"); return; }
             String supplied = exchange.getRequestHeaders().getFirst("Authorization");
             if (supplied == null || !MessageDigest.isEqual(supplied.getBytes(StandardCharsets.UTF_8),
                     ("Bearer " + token).getBytes(StandardCharsets.UTF_8))) { sendError(exchange, 401, "unauthorized"); return; }
+            if (kind.equals("player-achievements")) {
+                List<UUID> players;
+                try { players = requestedPlayers(exchange.getRequestURI().getRawQuery()); }
+                catch (IllegalArgumentException invalid) { sendError(exchange, 400, "invalid_players"); return; }
+                byte[] body = gson.toJson(source.readPlayers(players)).getBytes(StandardCharsets.UTF_8);
+                if (body.length > 150_000) throw new IllegalArgumentException("Public feed too large");
+                send(exchange, 200, body); return;
+            }
             if (exchange.getRequestURI().getRawQuery() != null) { sendError(exchange, 400, "query_not_supported"); return; }
             send(exchange, 200, snapshot(kind));
         } catch (Exception failure) { try { sendError(exchange, 503, "public_feed_unavailable"); } catch (IOException ignored) { /* Client disconnected. */ } }
         finally { exchange.close(); }
+    }
+    private static List<UUID> requestedPlayers(String raw) {
+        if (raw == null || raw.length() > 3000 || !raw.startsWith("players=") || raw.indexOf('&') >= 0)
+            throw new IllegalArgumentException("Invalid players query");
+        String value = URLDecoder.decode(raw.substring("players=".length()), StandardCharsets.UTF_8);
+        String[] parts = value.split(",", -1);
+        if (parts.length < 1 || parts.length > 50) throw new IllegalArgumentException("Invalid players count");
+        List<UUID> result = new java.util.ArrayList<>();
+        for (String part : parts) {
+            addRequestedPlayer(result, part);
+        }
+        return List.copyOf(result);
+    }
+    private static void addRequestedPlayer(List<UUID> result, String part) {
+        if (!part.matches("[a-fA-F0-9]{8}(-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}")) throw new IllegalArgumentException("Invalid UUID");
+        UUID id = UUID.fromString(part);
+        if (result.contains(id)) throw new IllegalArgumentException("Duplicate UUID");
+        result.add(id);
     }
     private synchronized byte[] snapshot(String kind) throws Exception {
         long now = System.currentTimeMillis();

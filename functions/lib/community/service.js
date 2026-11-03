@@ -6,7 +6,7 @@ import { readGuildDirectory } from '../../api/leaderboards/[[path]].js';
 import { readLiveGuildDirectory, readPublicLeaderboardPlayers, resolvePublicGuildMembers } from '../live-guild-directory.js';
 import { publicMarketBanners } from '../guild-banner-source.js';
 import { projectGuildDirectory } from '../guild-directory-source.js';
-import { readPublicPlayerDirectory, enrichStoredPlayerGuilds } from '../player-directory-source.js';
+import { readPublicPlayerDirectory, enrichStoredPlayerGuilds, enrichPlayerAchievements } from '../player-directory-source.js';
 import { readCommunityUpstream } from './upstream.js';
 import { salesStatements,snapshotStatement } from './persistence.js';
 import { topFiveByWeek,consecutiveTopWeeks } from './market-history.js';
@@ -240,7 +240,7 @@ async function alertsRoute(context, parts, dependencies) {
 
 async function storedSnapshot(row,kind,env){
   let snapshot=projectSnapshot(kind,JSON.parse(row.payload));
-  if(kind==='players') snapshot=await enrichStoredPlayerGuilds({...snapshot,updatedAt:row.updated_at},env);
+  if(kind==='players') snapshot=await enrichPlayerAchievements(await enrichStoredPlayerGuilds({...snapshot,updatedAt:row.updated_at},env),env);
   const sourceTime=Date.parse(snapshot.sourceUpdatedAt??snapshot.generatedAt??row.updated_at);
   return json({...snapshot,updatedAt:row.updated_at,
     stale:!Number.isFinite(sourceTime)||sourceTime>Date.now()+300000||Date.now()-sourceTime>900000});
@@ -249,7 +249,7 @@ async function snapshotRoute(db, kind, env) {
   const row = await db.prepare('SELECT payload,updated_at FROM community_snapshots WHERE kind=?').bind(kind).first();
   if (row) return storedSnapshot(row,kind,env);
   const upstream=await readCommunityUpstream(kind,env);
-  if(upstream)return json(upstream);
+  if(upstream)return json(kind==='players'?await enrichPlayerAchievements(upstream,env):upstream);
   if (kind==='players') {
     const data=await readPublicPlayerDirectory(env);
     return data?json(data):unavailable();
@@ -308,7 +308,7 @@ export async function handleCommunity(context,dependencies={editor,identity}) {
   }
   if (!db && request.method==='GET' && parts.length===1 && parts[0]==='players') {
     const upstream=await readCommunityUpstream('players',env);
-    if(upstream)return json(upstream);
+    if(upstream)return json(await enrichPlayerAchievements(upstream,env));
     const data=await readPublicPlayerDirectory(env);
     return data?json(data):unavailable();
   }

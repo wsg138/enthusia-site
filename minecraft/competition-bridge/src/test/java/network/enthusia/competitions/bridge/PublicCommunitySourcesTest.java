@@ -3,11 +3,24 @@ package network.enthusia.competitions.bridge;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PublicCommunitySourcesTest {
+    private static final String GENERATED_AT = "generatedAt";
+    @Test void playerAchievementsExposeOnlyRequestedKnownPublicLabels() {
+        UUID player=UUID.randomUUID(), missing=UUID.randomUUID();
+        Map<String,Object> row=Map.of("id",player.toString(),"achievementsKnown",true,"achievements",List.of("Public title"),"private","secret");
+        Map<String,Object> input=Map.of(GENERATED_AT,Instant.EPOCH.toString(),"items",List.of(row));
+        Map<String,Object> output=PublicCommunitySources.projectPlayerAchievements(input,List.of(player,missing));
+        Map<?,?> result=(Map<?,?>)((List<?>)output.get("items")).getFirst();
+        assertEquals(Set.of("id","achievementsKnown","achievements"),result.keySet());
+        assertEquals(List.of("Public title"),result.get("achievements"));
+        assertThrows(IllegalArgumentException.class,()->PublicCommunitySources.projectPlayerAchievements(input,List.of(missing)));
+        assertThrows(IllegalArgumentException.class,()->PublicCommunitySources.projectPlayerAchievements(Map.of(GENERATED_AT,Instant.EPOCH.toString(),"items",List.of(row,row)),List.of(player,missing)));
+    }
     public static final class PublicProvider {
         public static List<String> getPublicBounties(int sort) { return List.of("visible"); }
         public static List<String> getAllBounties(int sort) { return List.of("visible", "hidden"); }
@@ -55,11 +68,11 @@ class PublicCommunitySourcesTest {
     }
     @Test void achievementProjectionStripsProviderInternalsAndDoesNotInventCompletionTotals() {
         Map<String, Object> row = Map.of("id", "provider:node", "name", "Real node", "description", "", "category", "provider", "icon", "diamond", "reward", "private command", "playerProgress", "private");
-        var result = PublicCommunitySources.projectAchievements(Map.of("generatedAt", Instant.EPOCH.toString(), "items", List.of(row)));
+        var result = PublicCommunitySources.projectAchievements(Map.of(GENERATED_AT, Instant.EPOCH.toString(), "items", List.of(row)));
         Map<?, ?> projected = (Map<?, ?>) ((List<?>) result.get("items")).getFirst();
         assertNull(projected.get("completed"));
         assertEquals("", projected.get("reward"));
         assertFalse(result.toString().contains("private"));
-        assertThrows(java.time.format.DateTimeParseException.class, () -> PublicCommunitySources.projectAchievements(Map.of("generatedAt", "bad", "items", List.of())));
+        assertThrows(java.time.format.DateTimeParseException.class, () -> PublicCommunitySources.projectAchievements(Map.of(GENERATED_AT, "bad", "items", List.of())));
     }
 }

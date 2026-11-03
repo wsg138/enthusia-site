@@ -1,7 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readCommunityUpstream } from '../functions/lib/community/upstream.js';
+import { readCommunityUpstream,readPlayerAchievements } from '../functions/lib/community/upstream.js';
 const at=new Date(Date.now()-60000).toISOString();
+test('player achievement batches reject missing tokens, stale data and identities outside the request',async()=>{
+  const id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',other='bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
+  const env={COMMUNITY_PLAYER_ACHIEVEMENTS_API_URL:'https://api.example/players',COMMUNITY_PLAYER_ACHIEVEMENTS_API_TOKEN:'x'.repeat(32)};
+  let calls=0;const fetcher=async()=>{calls++;return Response.json({generatedAt:at,items:[]});};
+  assert.equal(await readPlayerAchievements([id],{...env,COMMUNITY_PLAYER_ACHIEVEMENTS_API_TOKEN:''},fetcher),null);assert.equal(calls,0);
+  for(const payload of [{generatedAt:new Date(Date.now()-3600000).toISOString(),items:[]},{generatedAt:at,items:[{id:other,achievementsKnown:true,achievements:[]}]},{generatedAt:at,items:[{id,achievementsKnown:false,achievements:[]}]}])
+    assert.equal(await readPlayerAchievements([id],env,async()=>Response.json(payload)),null);
+});
 test('configured real feeds are bounded and projected without private fields',async()=>{
   const calls=[];
   const fetchImpl=async(url,options)=>{calls.push({url:String(url),options});return Response.json({generatedAt:at,items:[{id:'player',name:'Player',balance:4,ip:'private'}]});};

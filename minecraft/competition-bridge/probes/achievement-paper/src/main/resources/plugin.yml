@@ -1,0 +1,5 @@
+name: AchievementBridgeProbe
+version: '1'
+main: probe.Probe
+api-version: '1.21'
+depend: [EnthusiaCompetitionBridge, EnthusiaAdvancements]

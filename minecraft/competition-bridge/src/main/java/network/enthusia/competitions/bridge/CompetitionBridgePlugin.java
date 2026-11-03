@@ -84,7 +84,7 @@ public final class CompetitionBridgePlugin extends JavaPlugin implements Listene
         try {
             String token = System.getenv("ENTHUSIA_COMMUNITY_FEED_TOKEN");
             communityFeeds = new CommunityFeedHttpServer(getConfig().getInt("community-feeds.port", 8766), token,
-                new PublicCommunitySources(this)::read);
+                new PublicCommunitySources(this));
             communityFeeds.start();
         } catch (Exception failure) {
             if (communityFeeds != null) communityFeeds.close();
