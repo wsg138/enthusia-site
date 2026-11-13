@@ -24,6 +24,25 @@ function database() {
 }
 const generation = '4a200000-0000-4000-8000-000000000001';
 const source = 'https://source.example/sales';
+
+test('v2 sends both Access headers and the Market bearer only to the configured route', async () => {
+  const { readSalesV2 } = await import('../functions/lib/community/upstream.js');
+  const config = { COMMUNITY_SALES_API_URL: source, COMMUNITY_SALES_API_TOKEN: 'market-token',
+    COMMUNITY_SALES_ACCESS_CLIENT_ID: 'test-client', COMMUNITY_SALES_ACCESS_CLIENT_SECRET: 'test-secret' };
+  const fetchImpl = async (url, options) => {
+    assert.equal(url.href, source + '?protocol=2');
+    assert.equal(options.redirect, 'error');
+    assert.equal(options.headers.authorization, 'Bearer market-token');
+    assert.equal(options.headers['CF-Access-Client-Id'], 'test-client');
+    assert.equal(options.headers['CF-Access-Client-Secret'], 'test-secret');
+    return Response.json({ protocol: 2, generation });
+  };
+  assert.deepEqual(await readSalesV2(config, fetchImpl), { generation });
+  let called = false;
+  const partial = { ...config, COMMUNITY_SALES_ACCESS_CLIENT_SECRET: undefined };
+  assert.equal(await readSalesV2(partial, () => { called = true; }), null);
+  assert.equal(called, false);
+});
 const env = db => ({ COMMUNITY_DB: db, COMMUNITY_SALES_API_URL: source, COMMUNITY_SALES_API_TOKEN: 'test-token' });
 
 test('candidate commits an authenticated discovered page with a generation-bound checkpoint', async () => {

@@ -86,6 +86,11 @@ Existing data or a restored source requires reconciliation and generation
 rotation before polling can resume. The worker will not adopt a discovered
 generation or resume an unbound legacy checkpoint.
 
+When a TEST HTTPS proxy uses Cloudflare Access, configure
+`COMMUNITY_SALES_ACCESS_CLIENT_ID` and `COMMUNITY_SALES_ACCESS_CLIENT_SECRET`
+on the TEST worker. Use a service token scoped to the exporter route.
+The worker sends the Access headers alongside the Market bearer and rejects redirects.
+
 Verify an eligible solo-shop raw-gold purchase reaches the public price tracker,
 then repeat the poll and check that the sale count is unchanged. The
 `/api/community/insights?view=stall-week` response reports the last closed New
