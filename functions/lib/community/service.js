@@ -9,8 +9,9 @@ import { projectGuildDirectory } from '../guild-directory-source.js';
 import { readPublicPlayerDirectory, enrichStoredPlayerGuilds } from '../player-directory-source.js';
 import { readCommunityUpstream } from './upstream.js';
 import { salesStatements,snapshotStatement } from './persistence.js';
+import { legacySalesFence,clearSalesFenceAssertions } from './sales-generation-fence.js';
 import { topFiveByWeek,consecutiveTopWeeks } from './market-history.js';
-import { marketWeekRange } from '../../../public/assets/market/eastern-week.js';
+import { marketWeekKey, marketWeekRange } from '../../../public/assets/market/eastern-week.js';
 import { CONTENT_KINDS, SNAPSHOT_KINDS, identifier, validateRecord, decodeRow, publicRecord, projectSnapshot, verifyProducer } from './contracts.js';
 import { uploadNewsMedia, readNewsMedia } from './news-media.js';
 
@@ -99,11 +100,13 @@ async function ingest(db,request,env){
   const raw=await body(request);
   if(!await verifyProducer(request,env,raw))return json({error:'invalid_producer_signature'},401);
   const input=JSON.parse(raw),now=new Date().toISOString(),nonce=request.headers.get('x-enthusia-nonce');
+  // Do not let the legacy signed writer bypass the v2 generation hold.
+  if(input.kind==='sales'&&env.COMMUNITY_SALES_PROTOCOL==='2')return json({error:'sales_generation_unavailable'},503,{'cache-control':'no-store'});
   const first=db.prepare('INSERT INTO community_nonces(nonce,occurred_at) VALUES (?,?)').bind(nonce,now);
   const cleanup=db.prepare('DELETE FROM community_nonces WHERE occurred_at<?').bind(new Date(Date.now()-86400000).toISOString());
   let statements;
   if(input.kind==='sales'){
-    statements=await salesStatements(db,input);
+    statements=[legacySalesFence(db),...await salesStatements(db,input),clearSalesFenceAssertions(db)];
   }else{
     const snapshot=projectSnapshot(input.kind,input);
     statements=[snapshotStatement(db,input.kind,snapshot,now)];
@@ -114,7 +117,20 @@ async function ingest(db,request,env){
 // SQLite has no timezone database. Apply modern US daylight-saving boundaries
 // to the UTC timestamp before grouping each sale by its New York calendar week.
 const easternWeekSql=`date(occurred_at, CASE WHEN julianday(occurred_at)>=julianday(strftime('%Y',occurred_at)||'-03-01','weekday 0','+7 days','+7 hours') AND julianday(occurred_at)<julianday(strftime('%Y',occurred_at)||'-11-01','weekday 0','+6 hours') THEN '-4 hours' ELSE '-5 hours' END,'weekday 0','-6 days')`;
+// A producer flag alone cannot establish historical coverage or continuity after a restore.
+const salesCoverageComplete = false;
+
+async function stallOfTheWeek(db) {
+  const week = marketWeekKey(new Date(), -1);
+  const [start, end] = marketWeekRange(week);
+  const winner = salesCoverageComplete ? await db.prepare(`SELECT stall AS name, SUM(gold) AS gold
+    FROM market_sales WHERE occurred_at>=? AND occurred_at<? AND stall<>''
+    GROUP BY stall ORDER BY gold DESC, stall ASC LIMIT 1`).bind(start, end).first() : null;
+  return json({week, coverageComplete: salesCoverageComplete, winner}, 200, {'cache-control':'no-store'});
+}
+
 async function insights(db,url){
+  if (url.searchParams.get('view') === 'stall-week') return stallOfTheWeek(db);
   const [start,end]=marketWeekRange(url.searchParams.get('week'));
   const mode=url.searchParams.get('mode')==='guild'?'guild':'stall';
   const leaders=await db.prepare(`SELECT ${mode} AS name,SUM(gold) AS gold,SUM(quantity) AS quantity,COUNT(DISTINCT stall) AS stalls FROM market_sales WHERE occurred_at>=? AND occurred_at<? AND ${mode}<>'' GROUP BY ${mode} ORDER BY gold DESC,${mode} ASC LIMIT 50`).bind(start,end).all();
@@ -124,9 +140,7 @@ async function insights(db,url){
   const history=await db.prepare(`SELECT substr(occurred_at,1,10) AS day,item,SUM(gold)/SUM(quantity) AS price,SUM(quantity) AS quantity FROM market_sales WHERE occurred_at>=? AND item=? GROUP BY day,item ORDER BY day`).bind(new Date(Date.now()-30*86400000).toISOString(),url.searchParams.get('item')??'').all();
   const weeks=await db.prepare(`SELECT DISTINCT ${easternWeekSql} AS week FROM market_sales ORDER BY week DESC LIMIT 52`).all();
   const recent=await db.prepare('SELECT MAX(occurred_at) AS updatedAt,COUNT(*) AS sales FROM market_sales').first();
-  // A fresh producer flag cannot prove historical coverage or continuity after
-  // a restore. Keep official rankings unavailable until both can be verified.
-  const coverageComplete=false;
+  const coverageComplete=salesCoverageComplete;
   const hall=await db.prepare(`SELECT ${easternWeekSql} AS week,${mode} AS name,SUM(gold) AS gold FROM market_sales WHERE ${mode}<>'' GROUP BY week,${mode} ORDER BY week DESC,gold DESC,${mode} ASC LIMIT 1000`).all();
   const topWeeks=topFiveByWeek(hall.results);
   const selected=start.slice(0,10),streaks=consecutiveTopWeeks(leaders.results,topWeeks,start);

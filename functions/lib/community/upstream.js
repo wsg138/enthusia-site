@@ -72,6 +72,29 @@ export async function readCommunitySales(env,fetchImpl=fetch,now=Date.now(),curs
     return {kind:'sales',items:input.items.filter(row=>row.direction==='SELL').map(row=>validateSale(row,now)),nextCursor:input.nextCursor,checkpointCursor,complete:input.complete===true};
   } catch { return null; }
 }
+// Protocol-v2 transport preparation only. Callers must not persist its pages
+// until generation-fenced transactions and legacy reconciliation exist.
+const salesGenerationPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+export async function readSalesV2(env,fetchImpl=fetch,now=Date.now(),expectedGeneration=null,cursor=null) {
+  const config=configuration('sales',env);
+  if(!config||config.url.search||!config.headers.authorization)return null;
+  const discovery=expectedGeneration===null&&cursor===null;
+  if(!discovery&&(!salesGenerationPattern.test(expectedGeneration??'')||typeof cursor!=='string'||
+    !/^\d{1,19}$/.test(cursor)||BigInt(cursor)>9223372036854775807n))return null;
+  config.url.search=discovery?'?protocol=2':`?protocol=2&after=${cursor}&generation=${expectedGeneration}`;
+  try {
+    const response=await fetchImpl(config.url,{method:'GET',headers:config.headers,redirect:'error',signal:globalThis.AbortSignal.timeout(5000)});
+    const input=await boundedJson(response);
+    if(input?.protocol!==2||typeof input.generation!=='string'||!salesGenerationPattern.test(input.generation))return null;
+    if(discovery)return Object.keys(input).every(key=>['protocol','generation'].includes(key))?{generation:input.generation}:null;
+    if(input.generation!==expectedGeneration||!Array.isArray(input.items)||input.items.length>250||input.complete!==false)return null;
+    if(input.nextCursor!==null&&(typeof input.nextCursor!=='string'||!/^\d{1,19}$/.test(input.nextCursor)))return null;
+    if(input.nextCursor!==null&&BigInt(input.nextCursor)<=BigInt(cursor))return null;
+    const checkpointCursor=salesCheckpoint(input,cursor);
+    if(checkpointCursor===null||input.items.some(row=>row.direction!=='SELL'||row.currency!=='RAW_GOLD'))return null;
+    return {kind:'sales',generation:input.generation,items:input.items.map(row=>validateSale(row,now)),nextCursor:input.nextCursor,checkpointCursor,complete:false};
+  } catch { return null; }
+}
 function salesCheckpoint(input,cursor) {
   if(input.checkpointCursor===undefined)return input.nextCursor;
   const checkpoint=input.checkpointCursor;

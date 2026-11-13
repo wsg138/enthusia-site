@@ -2,6 +2,8 @@ import { projectSnapshot } from '../../functions/lib/community/contracts.js';
 import { readCommunityUpstream,readCommunitySales } from '../../functions/lib/community/upstream.js';
 import { readPublicPlayerDirectory } from '../../functions/lib/player-directory-source.js';
 import { salesStatements,snapshotStatement } from '../../functions/lib/community/persistence.js';
+import { legacySalesFence,clearSalesFenceAssertions } from '../../functions/lib/community/sales-generation-fence.js';
+import { synchronizeSalesV2 } from '../../functions/lib/community/v2-sales-sync.js';
 
 const kinds=['guilds','guildquests','players','bounties','achievements','warzone'];
 async function synchronizeSnapshot(kind,env,fetchImpl) {
@@ -16,6 +18,7 @@ async function synchronizeSnapshot(kind,env,fetchImpl) {
   return {kind,status:result[0].meta.changes?'updated':'unchanged',records:snapshot.items.length};
 }
 async function synchronizeSales(env,fetchImpl) {
+  if(env.COMMUNITY_SALES_PROTOCOL==='2')return synchronizeSalesV2(env,fetchImpl);
   const db=env.COMMUNITY_DB;
   const syncStartedAt=new Date().toISOString();
   const saved=await db.prepare("SELECT payload FROM community_snapshots WHERE kind='sales_cursor'").first();
@@ -37,8 +40,8 @@ async function synchronizeSales(env,fetchImpl) {
         OR (excluded.updated_at=community_snapshots.updated_at AND json_extract(excluded.payload,'$.complete')=0)`)
       .bind(JSON.stringify({complete:data.complete}),syncStartedAt));
     if(statements.length) {
-      const results=await db.batch(statements);
-      records+=results.slice(0,data.items.length).reduce((total,row)=>total+(row.meta.changes??0),0);
+      const results=await db.batch([legacySalesFence(db),...statements,clearSalesFenceAssertions(db)]);
+      records+=results.slice(1,1+data.items.length).reduce((total,row)=>total+(row.meta.changes??0),0);
     }
     if(data.nextCursor===null)return {kind:'sales',status:records?'updated':'empty',records};
     cursor=data.nextCursor;
