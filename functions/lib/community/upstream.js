@@ -93,7 +93,7 @@ export async function readSalesV2(env,fetchImpl=fetch,now=Date.now(),expectedGen
     !/^\d{1,19}$/.test(cursor)||BigInt(cursor)>9223372036854775807n))return null;
   config.url.search=discovery?'?protocol=2':`?protocol=2&after=${cursor}&generation=${expectedGeneration}`;
   try {
-    const response=await fetchImpl(config.url,{method:'GET',headers:{...config.headers,...accessHeaders},redirect:'error',signal:globalThis.AbortSignal.timeout(5000)});
+    const response=await fetchImpl(config.url,{method:'GET',headers:{...config.headers,...accessHeaders},redirect:'manual',signal:globalThis.AbortSignal.timeout(5000)});
     const input=await boundedJson(response);
     if(input?.protocol!==2||typeof input.generation!=='string'||!salesGenerationPattern.test(input.generation))return null;
     if(discovery)return Object.keys(input).every(key=>['protocol','generation'].includes(key))?{generation:input.generation}:null;
