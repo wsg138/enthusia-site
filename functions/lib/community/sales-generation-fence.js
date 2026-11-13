@@ -47,8 +47,10 @@ export function beginSalesReconciliation(db, generation, revision) {
 // rotated and independently verified by an authorized operator. Never activates.
 export function stageSalesGenerationRotation(db, oldGeneration, revision, newGeneration) {
   const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-  if(!uuid.test(oldGeneration??'')||!uuid.test(newGeneration??'')||oldGeneration===newGeneration||
-    !Number.isSafeInteger(revision)||revision<0||revision>=Number.MAX_SAFE_INTEGER) throw new Error('invalid_sales_generation_rotation');
+  const validRevision = Number.isSafeInteger(revision) && revision >= 0 && revision < Number.MAX_SAFE_INTEGER;
+  if (!validRevision || !uuid.test(oldGeneration) || !uuid.test(newGeneration) || oldGeneration === newGeneration) {
+    throw new Error('invalid_sales_generation_rotation');
+  }
   const guard=db.prepare(`INSERT INTO market_fence_assertion(valid) VALUES (CASE WHEN EXISTS
     (SELECT 1 FROM market_generation_state WHERE id=1 AND generation=? AND revision=? AND mode='reconcile')
     THEN 1 ELSE NULL END)`).bind(oldGeneration,revision);
@@ -61,13 +63,19 @@ export function stageSalesGenerationRotation(db, oldGeneration, revision, newGen
   return [guard,rememberOld,reserveNew,rotate,coverage,clearSalesFenceAssertions(db)];
 }
 
-// Preparation only: neither writer calls this until migration, reconciliation,
-// D1 transaction behavior and both deployment environments have been verified.
+function validCursor(cursor) {
+  return typeof cursor === 'string' && /^\d{1,19}$/.test(cursor) && BigInt(cursor) <= 9223372036854775807n;
+}
+
+function validCursorTransition(priorCursor, cursor) {
+  return validCursor(cursor) &&
+    (priorCursor === null || (validCursor(priorCursor) && BigInt(cursor) >= BigInt(priorCursor)));
+}
+
 export async function buildFencedSalesPage(db, { source, generation, revision, priorCursor, page }) {
   const cursor = page?.checkpointCursor;
   if (typeof source !== 'string' || !source || page?.generation !== generation || page?.complete !== false ||
-      typeof cursor !== 'string' || !/^\d{1,19}$/.test(cursor) || BigInt(cursor) > 9223372036854775807n ||
-      (priorCursor !== null && (typeof priorCursor !== 'string' || !/^\d{1,19}$/.test(priorCursor) || BigInt(cursor) < BigInt(priorCursor)))) {
+      !validCursorTransition(priorCursor, cursor)) {
     throw new Error('invalid_fenced_sales_page');
   }
   const rows = await salesStatements(db, page);

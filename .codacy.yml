@@ -1,0 +1,6 @@
+---
+engines:
+  tsqllint:
+    exclude_paths:
+      # This D1 migration uses SQLite and is executed by the community tests.
+      - "migrations/community/0002_market_generation_fence.sql"
