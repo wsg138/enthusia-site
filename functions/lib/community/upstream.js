@@ -72,6 +72,42 @@ export async function readCommunitySales(env,fetchImpl=fetch,now=Date.now(),curs
     return {kind:'sales',items:input.items.filter(row=>row.direction==='SELL').map(row=>validateSale(row,now)),nextCursor:input.nextCursor,checkpointCursor,complete:input.complete===true};
   } catch { return null; }
 }
+// Optional Cloudflare Access credentials protect the sales route independently
+// of the Market bearer token. Partial configuration fails closed.
+function salesAccessHeaders(env) {
+  const id = env.COMMUNITY_SALES_ACCESS_CLIENT_ID;
+  const secret = env.COMMUNITY_SALES_ACCESS_CLIENT_SECRET;
+  if (id === undefined && secret === undefined) return {};
+  const valid = value => typeof value === 'string' && /^[\x21-\x7e]{1,512}$/.test(value);
+  if (!valid(id) || !valid(secret)) return null;
+  return {'CF-Access-Client-Id': id, 'CF-Access-Client-Secret': secret};
+}
+
+const salesGenerationPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+export async function readSalesV2(env,fetchImpl=fetch,now=Date.now(),expectedGeneration=null,cursor=null) {
+  const config=configuration('sales',env);
+  const accessHeaders=salesAccessHeaders(env);
+  if(!config||config.url.search||!config.headers.authorization||!accessHeaders)return null;
+  const discovery=expectedGeneration===null&&cursor===null;
+  if(!discovery&&(!salesGenerationPattern.test(expectedGeneration??'')||typeof cursor!=='string'||
+    !/^\d{1,19}$/.test(cursor)||BigInt(cursor)>9223372036854775807n))return null;
+  config.url.search=discovery?'?protocol=2':`?protocol=2&after=${cursor}&generation=${expectedGeneration}`;
+  try {
+    const response=await fetchImpl(config.url,{method:'GET',headers:{...config.headers,...accessHeaders},redirect:'manual',signal:globalThis.AbortSignal.timeout(5000)});
+    const input=await boundedJson(response);
+    if(input?.protocol!==2||typeof input.generation!=='string'||!salesGenerationPattern.test(input.generation))return null;
+    if(discovery)return Object.keys(input).every(key=>['protocol','generation'].includes(key))?{generation:input.generation}:null;
+    if(input.generation!==expectedGeneration||!Array.isArray(input.items)||input.items.length>250||input.complete!==false)return null;
+    if(input.nextCursor!==null&&(typeof input.nextCursor!=='string'||!/^\d{1,19}$/.test(input.nextCursor)))return null;
+    if(input.nextCursor!==null&&BigInt(input.nextCursor)<=BigInt(cursor))return null;
+    const checkpointCursor=salesCheckpoint(input,cursor);
+    if(checkpointCursor===null||input.items.some(row=>row.direction!=='SELL'||row.currency!=='RAW_GOLD'))return null;
+    const awardCoverage = Object.hasOwn(input, 'awardCoverage') ? readAwardCoverage(input.awardCoverage, now) : undefined;
+    if (input.nextCursor !== null && awardCoverage) return null;
+    const items = input.items.map(row => ({...validateSale(row, now), awardOwner: readAwardOwner(row.awardOwner)}));
+    return {kind:'sales',generation:input.generation,items,nextCursor:input.nextCursor,checkpointCursor,complete:false,awardCoverage};
+  } catch { return null; }
+}
 function salesCheckpoint(input,cursor) {
   if(input.checkpointCursor===undefined)return input.nextCursor;
   const checkpoint=input.checkpointCursor;
@@ -84,4 +120,26 @@ function salesCheckpoint(input,cursor) {
 function validateCheckpointOrder(checkpoint,cursor){
   if(cursor===null)return;
   if(!/^\d{1,19}$/.test(cursor)||BigInt(checkpoint)<BigInt(cursor))throw new Error('backwards_sales_checkpoint');
+}
+
+function readAwardOwner(owner) {
+  if (owner == null) return null;
+  if (typeof owner.id !== 'string' || !salesGenerationPattern.test(owner.id) ||
+      typeof owner.representative !== 'string' || !salesGenerationPattern.test(owner.representative) ||
+      typeof owner.name !== 'string' || !owner.name.trim() || owner.name.length > 48 ||
+      Array.from(owner.name).some(isControlCharacter)) throw new Error('invalid_award_owner');
+  return {id:owner.id, name:owner.name, representative:owner.representative};
+}
+
+function readAwardCoverage(window, now) {
+  if (window == null) return null;
+  const from = Date.parse(window.from), through = Date.parse(window.through);
+  if (!Number.isFinite(from) || !Number.isFinite(through) || from >= through || through > now + 60000)
+    throw new Error('invalid_award_coverage');
+  return {from:new Date(from).toISOString(), through:new Date(through).toISOString()};
+}
+
+function isControlCharacter(character) {
+  const code = character.charCodeAt(0);
+  return code < 32 || (code >= 127 && code <= 159);
 }

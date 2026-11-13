@@ -76,6 +76,29 @@ synthetic API contract tests do not prove installed 1.22.37 binary compatibility
   public fields, protects source timestamps and persists transaction cursors in
   the same batch as sales. Old/undated exports cannot replace dated snapshots.
 
+### Market sales rehearsal
+
+Apply community migrations to the rehearsal database before running the worker.
+Use `COMMUNITY_SYNC_ENABLED=true` and `COMMUNITY_SALES_PROTOCOL=2` with the
+dedicated sales URL and token. The worker requires an active generation matching
+the producer. The fixture seeds an empty database with a known generation.
+Existing data or a restored source requires reconciliation and generation
+rotation before polling can resume. The worker will not adopt a discovered
+generation or resume an unbound legacy checkpoint.
+
+When a TEST HTTPS proxy uses Cloudflare Access, configure
+`COMMUNITY_SALES_ACCESS_CLIENT_ID` and `COMMUNITY_SALES_ACCESS_CLIENT_SECRET`
+on the TEST worker. Use a service token scoped to the exporter route.
+The worker sends the Access headers alongside the Market bearer and rejects redirects.
+Sale ID conflicts are checked within the page transaction, so a full 250-sale
+page fits the Worker request budget and replay does not duplicate sales.
+
+Verify an eligible solo-shop raw-gold purchase reaches the public price tracker,
+then repeat the poll and check that the sale count is unchanged. The
+`/api/community/insights?view=stall-week` response reports the last closed New
+York week. The website and Minecraft withhold the official award while coverage
+is incomplete.
+
 ### Proof and remaining gates
 
 The older/undated bounty regression first failed (HTTP 200 instead of 409), then
@@ -287,3 +310,13 @@ The local builder fingerprints the directory entry script to avoid a stale
 browser module obscuring the nullable-payout fix. Screenshot evidence remains
 outside source. No PR, push, remote writes, installation or deployment occurred.
 The interactive link is localhost only, not a hosted mobile-accessible link.
+
+### Finalized weekly stall displays
+
+Apply community migration `0003_weekly_stall_awards.sql` before rolling out the award endpoint. The read-only views `view=stall-week` and `view=guild-stall-week` return the last closed New York week independently. Only an operator-reviewed finalized row establishes that category's coverage. A row with no winner records a verified week with no eligible sales. Record the winning stall, the award-time owner name and the public Minecraft profile UUID of the owner or guild leader. Keep the corresponding coverage and ownership evidence with the release records. Omit any unverified category. The poller never promotes partial sales to an official result.
+
+### Automatic weekly awards
+
+Apply migration 0004 before enabling the updated worker. The authenticated producer supplies sale-time owner and representative identities and a coverage interval on a drained terminal page. The worker writes attribution, checkpoint, and coverage in one fenced batch. Each award uses the last closed New York week. Rented stall IDs are grouped by owner UUID to prevent turnover from combining two owners' sales. The latest counted sale supplies the name and representative for the winning owner.
+
+Start at a verified capture boundary pinned to the producer generation. No sale or award is inferred for earlier weeks. A missing or stale terminal page, incomplete archive, or generation in reconciliation keeps automatic awards pending. Staff-reviewed entries from migration 0003 still take precedence. Rotate the generation and reconcile before resuming after a restore, downgrade, or capture interruption. The price tracker continues to use the existing price feed, including eligible guild sales from the upgraded producer.
