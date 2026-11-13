@@ -76,6 +76,29 @@ synthetic API contract tests do not prove installed 1.22.37 binary compatibility
   public fields, protects source timestamps and persists transaction cursors in
   the same batch as sales. Old/undated exports cannot replace dated snapshots.
 
+### Market sales rehearsal
+
+Apply community migrations to the rehearsal database before running the worker.
+Use `COMMUNITY_SYNC_ENABLED=true` and `COMMUNITY_SALES_PROTOCOL=2` with the
+dedicated sales URL and token. The worker requires an active generation matching
+the producer. The fixture seeds an empty database with a known generation.
+Existing data or a restored source requires reconciliation and generation
+rotation before polling can resume. The worker will not adopt a discovered
+generation or resume an unbound legacy checkpoint.
+
+When a TEST HTTPS proxy uses Cloudflare Access, configure
+`COMMUNITY_SALES_ACCESS_CLIENT_ID` and `COMMUNITY_SALES_ACCESS_CLIENT_SECRET`
+on the TEST worker. Use a service token scoped to the exporter route.
+The worker sends the Access headers alongside the Market bearer and rejects redirects.
+Sale ID conflicts are checked within the page transaction, so a full 250-sale
+page fits the Worker request budget and replay does not duplicate sales.
+
+Verify an eligible solo-shop raw-gold purchase reaches the public price tracker,
+then repeat the poll and check that the sale count is unchanged. The
+`/api/community/insights?view=stall-week` response reports the last closed New
+York week. The website and Minecraft withhold the official award while coverage
+is incomplete.
+
 ### Proof and remaining gates
 
 The older/undated bounty regression first failed (HTTP 200 instead of 409), then
