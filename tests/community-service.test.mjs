@@ -8,6 +8,7 @@ import { guildQuestPreview } from '../scripts/guild-quests-preview-data.mjs';
 
 function database(){
   const sql=new DatabaseSync(':memory:');sql.exec(readFileSync(new URL('../migrations/community/0001_community.sql',import.meta.url),'utf8'));
+  sql.exec(readFileSync(new URL('../migrations/community/0002_market_generation_fence.sql',import.meta.url),'utf8'));
   const db={prepare(query){let values=[];return {bind(...v){values=v;return this;},async first(){return sql.prepare(query).get(...values)??null;},async all(){return {results:sql.prepare(query).all(...values)};},async run(){const r=sql.prepare(query).run(...values);return {meta:{changes:Number(r.changes)}};}};},async batch(statements){sql.exec('BEGIN');try{const r=[];for(const s of statements)r.push(await s.run());sql.exec('COMMIT');return r;}catch(e){sql.exec('ROLLBACK');throw e;}}};
   return {db,sql};
 }
