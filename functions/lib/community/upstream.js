@@ -102,7 +102,10 @@ export async function readSalesV2(env,fetchImpl=fetch,now=Date.now(),expectedGen
     if(input.nextCursor!==null&&BigInt(input.nextCursor)<=BigInt(cursor))return null;
     const checkpointCursor=salesCheckpoint(input,cursor);
     if(checkpointCursor===null||input.items.some(row=>row.direction!=='SELL'||row.currency!=='RAW_GOLD'))return null;
-    return {kind:'sales',generation:input.generation,items:input.items.map(row=>validateSale(row,now)),nextCursor:input.nextCursor,checkpointCursor,complete:false};
+    const awardCoverage = Object.hasOwn(input, 'awardCoverage') ? readAwardCoverage(input.awardCoverage, now) : undefined;
+    if (input.nextCursor !== null && awardCoverage) return null;
+    const items = input.items.map(row => ({...validateSale(row, now), awardOwner: readAwardOwner(row.awardOwner)}));
+    return {kind:'sales',generation:input.generation,items,nextCursor:input.nextCursor,checkpointCursor,complete:false,awardCoverage};
   } catch { return null; }
 }
 function salesCheckpoint(input,cursor) {
@@ -117,4 +120,26 @@ function salesCheckpoint(input,cursor) {
 function validateCheckpointOrder(checkpoint,cursor){
   if(cursor===null)return;
   if(!/^\d{1,19}$/.test(cursor)||BigInt(checkpoint)<BigInt(cursor))throw new Error('backwards_sales_checkpoint');
+}
+
+function readAwardOwner(owner) {
+  if (owner == null) return null;
+  if (typeof owner.id !== 'string' || !salesGenerationPattern.test(owner.id) ||
+      typeof owner.representative !== 'string' || !salesGenerationPattern.test(owner.representative) ||
+      typeof owner.name !== 'string' || !owner.name.trim() || owner.name.length > 48 ||
+      Array.from(owner.name).some(isControlCharacter)) throw new Error('invalid_award_owner');
+  return {id:owner.id, name:owner.name, representative:owner.representative};
+}
+
+function readAwardCoverage(window, now) {
+  if (window == null) return null;
+  const from = Date.parse(window.from), through = Date.parse(window.through);
+  if (!Number.isFinite(from) || !Number.isFinite(through) || from >= through || through > now + 60000)
+    throw new Error('invalid_award_coverage');
+  return {from:new Date(from).toISOString(), through:new Date(through).toISOString()};
+}
+
+function isControlCharacter(character) {
+  const code = character.charCodeAt(0);
+  return code < 32 || (code >= 127 && code <= 159);
 }

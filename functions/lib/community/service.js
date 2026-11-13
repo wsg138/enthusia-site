@@ -125,8 +125,33 @@ async function stallOfTheWeek(db, category) {
   const result = await db.prepare(`SELECT stall_id AS name, owner_name AS ownerName,
     representative_uuid AS representativeUuid FROM market_weekly_stall_awards
     WHERE week=? AND category=?`).bind(week, category).first();
-  const winner = result?.name == null ? null : result;
-  return json({week, coverageComplete: result != null, winner}, 200, {'cache-control':'no-store'});
+  if (result != null) return json({week, coverageComplete:true, winner:result.name == null ? null : result},
+    200, {'cache-control':'no-store'});
+  const [start, end] = marketWeekRange(week);
+  const cutoff = new Date(Date.now()-15*60000).toISOString();
+  const automatic = await db.prepare(`WITH qualified AS (
+    SELECT s.id, s.stall, s.gold, s.occurred_at, a.owner_id, a.owner_name, a.representative_uuid
+    FROM market_sales s JOIN market_sale_award_owners a ON a.sale_id=s.id
+    WHERE a.category=? AND s.occurred_at>=? AND s.occurred_at<?
+  ), ranked AS (
+    SELECT stall, owner_id FROM qualified GROUP BY stall, owner_id
+    ORDER BY SUM(gold) DESC, stall, owner_id LIMIT 1
+  )
+  SELECT q.stall AS name, q.owner_name AS ownerName, q.representative_uuid AS representativeUuid
+  FROM market_award_coverage c JOIN market_generation_state g
+    ON g.id=1 AND g.mode='active' AND g.generation=c.generation
+  LEFT JOIN ranked r ON 1=1
+  LEFT JOIN qualified q ON q.stall=r.stall AND q.owner_id=r.owner_id
+  JOIN community_snapshots coverage ON coverage.kind='sales_coverage'
+    AND json_extract(coverage.payload,'$.awardReady')=1
+  WHERE c.id=1 AND c.capture_from<=? AND c.captured_through>=? AND c.observed_at>=?
+    AND NOT EXISTS (
+      SELECT 1 FROM market_sales s LEFT JOIN market_sale_award_owners a ON a.sale_id=s.id
+      WHERE a.sale_id IS NULL AND s.occurred_at>=? AND s.occurred_at<?
+    )
+  ORDER BY q.occurred_at DESC, q.id DESC LIMIT 1`).bind(category,start,end,start,end,cutoff,start,end).first();
+  return json({week, coverageComplete:automatic != null, winner:automatic?.name == null ? null : automatic},
+    200, {'cache-control':'no-store'});
 }
 
 async function insights(db,url){

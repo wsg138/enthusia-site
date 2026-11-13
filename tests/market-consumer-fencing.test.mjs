@@ -11,6 +11,7 @@ function database() {
   sql.exec(readFileSync(new URL('../migrations/community/0001_community.sql', import.meta.url), 'utf8'));
   sql.exec(readFileSync(new URL('../migrations/community/0002_market_generation_fence.sql', import.meta.url), 'utf8'));
   sql.exec(readFileSync(new URL('../migrations/community/0003_weekly_stall_awards.sql', import.meta.url), 'utf8'));
+  sql.exec(readFileSync(new URL('../migrations/community/0004_market_automatic_awards.sql', import.meta.url), 'utf8'));
   const db = {
     prepare(query) {
       let values = [];
@@ -248,4 +249,40 @@ test('closed-week player and guild awards are independent and require verified r
   assert.equal((await read('guild-stall-week')).winner.ownerName, 'Example Guild');
   sql.prepare("UPDATE market_weekly_stall_awards SET stall_id=NULL,owner_name=NULL,representative_uuid=NULL WHERE week=? AND category='guild'").run(week);
   assert.deepEqual(await read('guild-stall-week'), { week, coverageComplete: true, winner: null });
+});
+test('terminal sales pages rank each stall category only after complete coverage', async () => {
+  const { sql, db } = database();
+  const { marketWeekKey, marketWeekRange } = await import('../public/assets/market/eastern-week.js');
+  const [start, end] = marketWeekRange(marketWeekKey(new Date(), -1));
+  const generation = '4a200000-0000-4000-8000-000000000001';
+  const owner = {id:generation, name:'First Owner', representative:generation};
+  const other = {id:'4a200000-0000-4000-8000-000000000002', name:'Other Owner', representative:generation};
+  sql.prepare("INSERT INTO market_generation_state VALUES (1,?,0,'active')").run(generation);
+  const env = {COMMUNITY_DB:db, COMMUNITY_SYNC_ENABLED:'true', COMMUNITY_SALES_PROTOCOL:'2',
+    COMMUNITY_SALES_API_URL:'https://source.example/sales', COMMUNITY_SALES_API_TOKEN:'test-token'};
+  const row = (n,stall,gold,awardOwner,guild='',occurredAt=start) => ({
+    id:'market-award-'+n, stall, guild, item:'redstone', quantity:1, gold, awardOwner, occurredAt,
+    direction:'SELL', currency:'RAW_GOLD',
+  });
+  const items = [
+    row(1,'stall12',40,owner), row(2,'stall12',45,owner), row(3,'stall12',75,other),
+    row(4,'stall13',80,other), row(5,'stall69',100,{...other,name:'Guild Winner'},'Guild Winner'),
+    row(6,'stall70',95,owner,'Other Guild'), row(7,'stall70',900,owner,'Other Guild',end),
+  ];
+  let through = new Date(Date.parse(end)-1).toISOString();
+  const poll = () => runCommunitySync(env,async url => Response.json(url.search === '?protocol=2' ?
+    {protocol:2,generation} : {protocol:2,generation,items,nextCursor:null,checkpointCursor:'7',
+      complete:false,awardCoverage:{from:start,through}}));
+  const read = async view => {
+    const request = new Request('https://example.com/api/community/insights?view='+view);
+    return (await handleCommunity({request,params:{path:['insights']},env})).json();
+  };
+  assert.equal((await poll()).results.at(-1).records,7);
+  assert.equal((await read('stall-week')).coverageComplete,false);
+  through=end;
+  assert.equal((await poll()).results.at(-1).records,0);
+  assert.equal((await read('stall-week')).winner.ownerName,'First Owner');
+  assert.equal((await read('guild-stall-week')).winner.name,'stall69');
+  sql.prepare("UPDATE market_generation_state SET mode='reconcile'").run();
+  assert.equal((await read('guild-stall-week')).coverageComplete,false);
 });

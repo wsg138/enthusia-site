@@ -92,6 +92,23 @@ export function buildFencedSalesPage(db, { source, generation, revision, priorCu
     .bind(JSON.stringify({ source, generation, cursor }), now);
   const coverage = db.prepare(`INSERT INTO community_snapshots(kind,payload,updated_at) VALUES ('sales_coverage',?,?)
     ON CONFLICT(kind) DO UPDATE SET payload=excluded.payload,updated_at=excluded.updated_at`)
-    .bind(JSON.stringify({ complete:false, generation }), now);
-  return fencedSalesBatch(db, generation, revision, [checkpointGuard, ...rows, checkpoint, coverage]);
+    .bind(JSON.stringify({ complete:false, generation, awardReady: Boolean(page.awardCoverage) }), now);
+  const awards = page.items.filter(sale => sale.awardOwner).map(sale => {
+    const owner = sale.awardOwner;
+    return db.prepare(`INSERT INTO market_sale_award_owners (sale_id, category, owner_id, owner_name, representative_uuid)
+      VALUES (?, ?, ?, ?, ?) ON CONFLICT(sale_id) DO UPDATE SET owner_id=NULL WHERE
+      category<>excluded.category OR owner_id<>excluded.owner_id OR owner_name<>excluded.owner_name OR
+      representative_uuid<>excluded.representative_uuid`)
+      .bind(sale.id, sale.guild ? 'guild' : 'player', owner.id, owner.name, owner.representative);
+  });
+  if (page.awardCoverage) {
+    awards.push(db.prepare(`INSERT INTO market_award_coverage (id,generation,capture_from,captured_through,observed_at)
+      VALUES (1,?,?,?,?) ON CONFLICT(id) DO UPDATE SET generation=excluded.generation,
+      capture_from=excluded.capture_from,captured_through=excluded.captured_through,observed_at=excluded.observed_at`)
+      .bind(generation, page.awardCoverage.from, page.awardCoverage.through, now));
+  } else if (page.awardCoverage === null) {
+    // Older producers do not have a coverage interval; clear any prior assertion.
+    awards.push(db.prepare('DELETE FROM market_award_coverage WHERE id=1'));
+  }
+  return fencedSalesBatch(db, generation, revision, [checkpointGuard, ...rows, checkpoint, coverage, ...awards]);
 }
