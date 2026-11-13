@@ -310,3 +310,7 @@ The local builder fingerprints the directory entry script to avoid a stale
 browser module obscuring the nullable-payout fix. Screenshot evidence remains
 outside source. No PR, push, remote writes, installation or deployment occurred.
 The interactive link is localhost only, not a hosted mobile-accessible link.
+
+### Finalized weekly stall displays
+
+Apply community migration `0003_weekly_stall_awards.sql` before rolling out the award endpoint. The read-only views `view=stall-week` and `view=guild-stall-week` return the last closed New York week independently. Only an operator-reviewed finalized row establishes that category's coverage. A row with no winner records a verified week with no eligible sales. Record the winning stall, the award-time owner name and the public Minecraft profile UUID of the owner or guild leader. Keep the corresponding coverage and ownership evidence with the release records. Omit any unverified category. The poller never promotes partial sales to an official result.

@@ -10,6 +10,7 @@ function database() {
   const sql = new DatabaseSync(':memory:');
   sql.exec(readFileSync(new URL('../migrations/community/0001_community.sql', import.meta.url), 'utf8'));
   sql.exec(readFileSync(new URL('../migrations/community/0002_market_generation_fence.sql', import.meta.url), 'utf8'));
+  sql.exec(readFileSync(new URL('../migrations/community/0003_weekly_stall_awards.sql', import.meta.url), 'utf8'));
   const db = {
     prepare(query) {
       let values = [];
@@ -225,4 +226,26 @@ test('a generation activated after legacy validation still rejects the signed sa
   assert.equal(response.status, 503);
   assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM market_sales').get().n, 0);
   assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM community_nonces').get().n, 0);
+});
+
+test('closed-week player and guild awards are independent and require verified results', async () => {
+  const { sql, db } = database();
+  const { marketWeekKey } = await import('../public/assets/market/eastern-week.js');
+  const week = marketWeekKey(new Date(), -1);
+  const representative = '4a200000-0000-4000-8000-000000000001';
+  const insert = sql.prepare('INSERT INTO market_weekly_stall_awards VALUES (?, ?, ?, ?, ?)');
+  insert.run(week, 'player', 'stall18', 'ExamplePlayer', representative);
+  insert.run(marketWeekKey(new Date()), 'guild', 'stall20', 'WrongWeek', representative);
+  const read = async view => {
+    const request = new Request('https://example.com/api/community/insights?view=' + view);
+    return (await handleCommunity({ request, params: { path: ['insights'] }, env: { COMMUNITY_DB: db } })).json();
+  };
+  assert.deepEqual(await read('stall-week'), { week, coverageComplete: true, winner: {
+    name: 'stall18', ownerName: 'ExamplePlayer', representativeUuid: representative,
+  } });
+  assert.deepEqual(await read('guild-stall-week'), { week, coverageComplete: false, winner: null });
+  insert.run(week, 'guild', 'stall69', 'Example Guild', representative);
+  assert.equal((await read('guild-stall-week')).winner.ownerName, 'Example Guild');
+  sql.prepare("UPDATE market_weekly_stall_awards SET stall_id=NULL,owner_name=NULL,representative_uuid=NULL WHERE week=? AND category='guild'").run(week);
+  assert.deepEqual(await read('guild-stall-week'), { week, coverageComplete: true, winner: null });
 });

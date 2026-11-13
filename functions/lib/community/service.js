@@ -120,17 +120,19 @@ const easternWeekSql=`date(occurred_at, CASE WHEN julianday(occurred_at)>=julian
 // A producer flag alone cannot establish historical coverage or continuity after a restore.
 const salesCoverageComplete = false;
 
-async function stallOfTheWeek(db) {
+async function stallOfTheWeek(db, category) {
   const week = marketWeekKey(new Date(), -1);
-  const [start, end] = marketWeekRange(week);
-  const winner = salesCoverageComplete ? await db.prepare(`SELECT stall AS name, SUM(gold) AS gold
-    FROM market_sales WHERE occurred_at>=? AND occurred_at<? AND stall<>''
-    GROUP BY stall ORDER BY gold DESC, stall ASC LIMIT 1`).bind(start, end).first() : null;
-  return json({week, coverageComplete: salesCoverageComplete, winner}, 200, {'cache-control':'no-store'});
+  const result = await db.prepare(`SELECT stall_id AS name, owner_name AS ownerName,
+    representative_uuid AS representativeUuid FROM market_weekly_stall_awards
+    WHERE week=? AND category=?`).bind(week, category).first();
+  const winner = result?.name == null ? null : result;
+  return json({week, coverageComplete: result != null, winner}, 200, {'cache-control':'no-store'});
 }
 
 async function insights(db,url){
-  if (url.searchParams.get('view') === 'stall-week') return stallOfTheWeek(db);
+  const view = url.searchParams.get('view');
+  if (view === 'stall-week') return stallOfTheWeek(db, 'player');
+  if (view === 'guild-stall-week') return stallOfTheWeek(db, 'guild');
   const [start,end]=marketWeekRange(url.searchParams.get('week'));
   const mode=url.searchParams.get('mode')==='guild'?'guild':'stall';
   const leaders=await db.prepare(`SELECT ${mode} AS name,SUM(gold) AS gold,SUM(quantity) AS quantity,COUNT(DISTINCT stall) AS stalls FROM market_sales WHERE occurred_at>=? AND occurred_at<? AND ${mode}<>'' GROUP BY ${mode} ORDER BY gold DESC,${mode} ASC LIMIT 50`).bind(start,end).all();
