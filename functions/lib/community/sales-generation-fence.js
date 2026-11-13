@@ -72,13 +72,13 @@ function validCursorTransition(priorCursor, cursor) {
     (priorCursor === null || (validCursor(priorCursor) && BigInt(cursor) >= BigInt(priorCursor)));
 }
 
-export async function buildFencedSalesPage(db, { source, generation, revision, priorCursor, page }) {
+export function buildFencedSalesPage(db, { source, generation, revision, priorCursor, page }) {
   const cursor = page?.checkpointCursor;
   if (typeof source !== 'string' || !source || page?.generation !== generation || page?.complete !== false ||
       !validCursorTransition(priorCursor, cursor)) {
     throw new Error('invalid_fenced_sales_page');
   }
-  const rows = await salesStatements(db, page);
+  const rows = salesStatements(db, page);
   const checkpointGuard = db.prepare(`INSERT INTO market_fence_assertion(valid) VALUES (CASE WHEN
     (? IS NULL AND NOT EXISTS (SELECT 1 FROM community_snapshots WHERE kind='sales_cursor')
       AND NOT EXISTS (SELECT 1 FROM market_sales)) OR

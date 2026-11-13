@@ -27,7 +27,7 @@ async function synchronizeSales(env,fetchImpl) {
   for(let page=0;page<4;page++) {
     const data=await readCommunitySales(env,fetchImpl,Date.now(),cursor);
     if(!data)return {kind:'sales',status:'unavailable',records};
-    const statements=await salesStatements(db,data);
+    const statements=salesStatements(db,data);
     if(data.checkpointCursor!==null)statements.push(db.prepare(`INSERT INTO community_snapshots(kind,payload,updated_at)
       VALUES ('sales_cursor',?,?) ON CONFLICT(kind) DO UPDATE SET payload=excluded.payload,updated_at=excluded.updated_at
       WHERE json_extract(community_snapshots.payload,'$.source')<>?

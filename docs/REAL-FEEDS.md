@@ -90,6 +90,8 @@ When a TEST HTTPS proxy uses Cloudflare Access, configure
 `COMMUNITY_SALES_ACCESS_CLIENT_ID` and `COMMUNITY_SALES_ACCESS_CLIENT_SECRET`
 on the TEST worker. Use a service token scoped to the exporter route.
 The worker sends the Access headers alongside the Market bearer and rejects redirects.
+Sale ID conflicts are checked within the page transaction, so a full 250-sale
+page fits the Worker request budget and replay does not duplicate sales.
 
 Verify an eligible solo-shop raw-gold purchase reaches the public price tracker,
 then repeat the poll and check that the sale count is unchanged. The

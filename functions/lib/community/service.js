@@ -106,7 +106,7 @@ async function ingest(db,request,env){
   const cleanup=db.prepare('DELETE FROM community_nonces WHERE occurred_at<?').bind(new Date(Date.now()-86400000).toISOString());
   let statements;
   if(input.kind==='sales'){
-    statements=[legacySalesFence(db),...await salesStatements(db,input),clearSalesFenceAssertions(db)];
+    statements=[legacySalesFence(db),...salesStatements(db,input),clearSalesFenceAssertions(db)];
   }else{
     const snapshot=projectSnapshot(input.kind,input);
     statements=[snapshotStatement(db,input.kind,snapshot,now)];

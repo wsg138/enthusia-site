@@ -110,3 +110,36 @@ test('candidate refuses to start with pre-existing legacy sales even without a c
   assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM market_sales').get().n, 1);
   assert.equal(sql.prepare('SELECT revision FROM market_generation_state WHERE id=1').get().revision, 1);
 });
+
+test('a full Market page fits the D1 request budget and replays without duplicates', async () => {
+  const { synchronizeSalesV2 } = await import('../functions/lib/community/v2-sales-sync.js');
+  const { sql, db } = database();
+  sql.prepare("INSERT INTO market_generation_state VALUES (1,?,0,'active')").run(generation);
+  const prepare = db.prepare;
+  const batch = db.batch;
+  let requests = 0;
+  db.prepare = (query) => {
+    const statement = prepare(query);
+    const first = statement.first;
+    statement.first = () => {
+      assert.ok(++requests <= 50, 'D1 invocation request budget exceeded');
+      return first();
+    };
+    return statement;
+  };
+  db.batch = (statements) => {
+    assert.ok(++requests <= 50, 'D1 invocation request budget exceeded');
+    return batch(statements);
+  };
+  const items = Array.from({ length: 250 }, (_, index) => ({
+    id: 'market-sale-' + index, stall: 'stall12', guild: '', item: 'redstone',
+    quantity: 1, gold: 11, occurredAt: '2026-01-01T00:00:00Z', direction: 'SELL', currency: 'RAW_GOLD',
+  }));
+  const fetchImpl = async url => Response.json(url.search === '?protocol=2' ? { protocol: 2, generation } : {
+    protocol: 2, generation, items, nextCursor: null, checkpointCursor: '250', complete: false,
+  });
+
+  assert.equal((await synchronizeSalesV2(env(db), fetchImpl)).records, 250);
+  assert.equal((await synchronizeSalesV2(env(db), fetchImpl)).records, 0);
+  assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM market_sales').get().n, 250);
+});

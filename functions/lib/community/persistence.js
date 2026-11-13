@@ -1,17 +1,10 @@
 import { validateSale } from './contracts.js';
-export async function salesStatements(db,input) {
+export function salesStatements(db,input) {
   if(!Array.isArray(input.items)||input.items.length>250)throw new Error('invalid_sales_batch');
-  const sales=input.items.map(value=>validateSale(value)),seen=new Map();
-  for(const sale of sales) {
-    const stored=await db.prepare('SELECT id,stall,guild,item,quantity,gold,occurred_at AS occurredAt FROM market_sales WHERE id=?').bind(sale.id).first();
-    const existing=stored??seen.get(sale.id);
-    if(existing&&Object.keys(sale).some(key=>sale[key]!==existing[key]))throw new Error('invalid_sale_id_reuse');
-    seen.set(sale.id,sale);
-  }
-  // Enforce equality inside the batch as well as in the early diagnostic read:
-  // another writer can insert this ID between that read and the transaction.
-  // A differing row violates the existing NOT NULL constraint, rolling back the
-  // complete D1 batch; an identical replay remains a no-op.
+  const sales=input.items.map(value=>validateSale(value));
+  // Enforce immutable IDs in the same D1 batch as the checkpoint.
+  // A conflicting row violates NOT NULL and rolls back the whole page.
+  // An identical replay is a no-op.
   return sales.map(sale=>db.prepare(`INSERT INTO market_sales(id,stall,guild,item,quantity,gold,occurred_at) VALUES (?,?,?,?,?,?,?)
     ON CONFLICT(id) DO UPDATE SET quantity=NULL WHERE
       market_sales.stall<>excluded.stall OR market_sales.guild<>excluded.guild OR

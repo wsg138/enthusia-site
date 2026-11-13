@@ -22,7 +22,7 @@ export async function synchronizeSalesV2(env, fetchImpl=fetch) {
     for(let count=0;count<4;count++) {
       const page=await readSalesV2(env,fetchImpl,Date.now(),state.generation,priorCursor??'0');
       if(!page)return {kind:'sales',status:'unavailable',records};
-      const statements=await buildFencedSalesPage(db,{source,generation:state.generation,revision,priorCursor,page});
+      const statements=buildFencedSalesPage(db,{source,generation:state.generation,revision,priorCursor,page});
       const results=await db.batch(statements);
       records+=results.slice(2,2+page.items.length).reduce((sum,row)=>sum+(row.meta.changes??0),0);
       revision++; priorCursor=page.checkpointCursor;
