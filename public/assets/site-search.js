@@ -43,6 +43,10 @@ function install(header) {
     }
     return link;
   }
+  function resultStatus(count) {
+    if (count) return '';
+    return pending ? 'Searching…' : 'No matches.';
+  }
   function draw() {
     if (!dialog.open) return;
     const q = input.value.trim().toLowerCase();
@@ -57,7 +61,7 @@ function install(header) {
       count += shown.length;
       results.append(el('section',{},[el('h3',{text:category}),...shown.map(resultLink)]));
     }
-    status.textContent = [!count && (pending?'Searching…':'No matches.'), failed && 'Some public listings are unavailable.'].filter(Boolean).join(' ');
+    status.textContent = [resultStatus(count), failed && 'Some public listings are unavailable.'].filter(Boolean).join(' ');
   }
   async function load(group, read) {
     pending++;
@@ -95,25 +99,40 @@ function install(header) {
   });
   dialog.addEventListener('close',()=>trigger.focus());
   document.addEventListener('keydown',e=>{
-    if(e.key==='/' && !e.repeat && !e.ctrlKey && !e.altKey && !e.metaKey && !dialog.open && !document.querySelector('dialog[open]') && !e.target.closest('input,textarea,select,[contenteditable]')){
+    if(e.key!=='/' || [e.repeat,e.ctrlKey,e.altKey,e.metaKey].some(Boolean))return;
+    if(!document.querySelector('dialog[open]') && !e.target.closest('input,textarea,select,[contenteditable]')){
       e.preventDefault();open();
     }
   });
   const main=document.querySelector('main');
   const labels='span,strong,b,small,h2,h3,h4,p,td,dd,li';
-  function linkLabel(node) {
-    if(!node.matches(labels)||node.childElementCount||node.closest('a,button,label,dialog,form,[contenteditable],.release-body,.news-body,code'))return;
-    const name=node.textContent.trim();
-    const staff=node.closest('.staff-info');
+  function profileKind(node,account) {
+    if(node.dataset.profileKind)return node.dataset.profileKind;
+    if(account || node.matches('.wz-player,.who span'))return 'players';
+    return node.matches('.quest-rank-name') ? 'guilds' : '';
+  }
+  function profileKey(node,name,account) {
+    if(node.dataset.profileKey)return node.dataset.profileKey;
+    if(account)return account;
+    const founder=name==='Fain' && node.matches('[data-author-name]') && node.parentElement.textContent.includes('Founder');
+    return founder ? 'FainNeito' : name;
+  }
+  function profileUrl(node,name,staff) {
     const account = staff && node.matches('h3,p span')
       ? staff.querySelector('a[href*="laby.net/@"]')?.href.split('@').pop() : null;
+    const identity=profileKey(node,name,account);
+    const kind=profileKind(node,account);
+    if(!kind)return identities.get(identity.toLowerCase());
+    return typed[kind]?.get(identity.toLowerCase()) || entry(name,kind+'.html#'+encodeURIComponent(identity)).href;
+  }
+  function linkLabel(node) {
+    if(!node.matches(labels)||node.childElementCount||node.closest('a,button,label,dialog,form,[contenteditable],.release-body,.news-body,code'))return;
+    const staff=node.closest('.staff-info');
     if(staff && node.matches('p span') && !node.parentElement.textContent.trim().startsWith('Minecraft'))return;
-    const founder=name==='Fain' && node.matches('[data-author-name]') && node.parentElement.textContent.includes('Founder');
-    const identity=node.dataset.profileKey || account || (founder?'FainNeito':name);
-    let match=identities.get(identity.toLowerCase());
-    const kind=node.dataset.profileKind || (account || node.matches('.wz-player,.who span') ? 'players' : node.matches('.quest-rank-name') ? 'guilds' : '');
-    if(kind) match=typed[kind].get(identity.toLowerCase()) || entry(name,kind+'.html#'+encodeURIComponent(identity)).href;
-    if(!name||!match)return;
+    const name=node.textContent.trim();
+    if(!name)return;
+    const match=profileUrl(node,name,staff);
+    if(!match)return;
     node.replaceChildren(el('a',{href:match,class:'identity-link',text:name}));
   }
   function scan(node){
