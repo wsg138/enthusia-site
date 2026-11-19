@@ -1,5 +1,5 @@
 import { isCanonicalUuid } from "../validation.js";
-import { networkAccountsEnabled, refreshNetworkAccounts } from "./network-accounts.js";
+import { NetworkAccountLookupError, networkAccountsEnabled, refreshNetworkAccounts } from "./network-accounts.js";
 
 const SESSION_COOKIE = "__Host-enthusia_competition_session";
 const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60;
@@ -205,8 +205,10 @@ async function identityLinks(database, env, discordUserId, options) {
   if (!networkAccountsEnabled(env)) return { links: await listDiscordMinecraftLinks(database, discordUserId), networkAccountsUnavailable: false };
   try { return { links: await refreshNetworkAccounts(database, env, discordUserId), networkAccountsUnavailable: false }; }
   catch (error) {
+    const failure = error instanceof NetworkAccountLookupError ? error : new NetworkAccountLookupError("local_storage");
+    console.warn("Minecraft account lookup failed", failure.stage, failure.status ?? "");
     // Only the account display may show Discord without live ownership proof.
-    if (options.accountDisplayOnly !== true) throw error;
+    if (options.accountDisplayOnly !== true) throw failure;
     return { links: [], networkAccountsUnavailable: true };
   }
 }
