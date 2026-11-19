@@ -27,9 +27,17 @@
 .totals dd { margin:8px 0 0; font-size:24px; color:#a51b16; }
 .fees { padding:12px 20px; margin-top:12px; }
 @media(max-width:640px) {
-  .firsts,.totals { grid-template-columns:1fr; }
+  .totals { grid-template-columns:1fr; }
+  .firsts { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
   .spotlight { flex-direction:column; text-align:center; }
-  .first { display:grid; grid-template-columns:64px 1fr; text-align:left; align-items:center; }
-  .first img { grid-row:1 / span 4; }
-  .first > :not(img) { grid-column:2; justify-self:start; }
+  .first { padding:12px 6px; overflow-wrap:anywhere; }
+  .first img { width:32px; height:32px; }
+  .first time,.first .tag { font-size:13px; }
 }
+.guild-identity,.heads a { display:flex; align-items:center; gap:8px; }
+.guild-identity { justify-content:center; }
+.heads a { padding:4px 8px; }
+.milestones li { scroll-margin-top:96px; }
+.milestones li:target { outline:3px solid #dba000; outline-offset:2px; }
+.guild-card > a { margin:0 16px 12px; }
+.spotlight .btn { margin-top:12px; }

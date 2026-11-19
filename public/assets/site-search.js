@@ -19,6 +19,7 @@ function install(header) {
   for (const [path, label] of [['index.html','Home'],['join.html#commands','Player guide · Commands'],['join.html#warzone','Warzone rules and rotations'],['join.html#join-faq-title','Joining FAQ']]) {
     pages.set(new URL(path, root).href, label);
   }
+  if (preview) pages.set(new URL('guildquests.html', root).href, 'Weekly Guild Quests');
   if (preview) pages.set(new URL('prestige.html', root).href, 'Hall of Prestige');
   groups.set('Pages and guides', Array.from(pages, ([href, name]) => ({href, name})));
 

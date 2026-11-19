@@ -629,6 +629,61 @@
           "recruiting": false,
           "peaceful": true,
           "designIndex": 11
+        },
+        {
+          "id": "6513270e-269e-4d37-b2a7-4de452e6b438",
+          "name": "Sample Wardens",
+          "tag": "WRD",
+          "level": 12,
+          "members": 18,
+          "prestige": 3,
+          "banner": {
+            "baseColor": "BLACK",
+            "baseColorHex": "#1D1D21",
+            "patterns": [
+              {
+                "type": "minecraft:rhombus",
+                "color": "YELLOW",
+                "colorHex": "#FED83D"
+              },
+              {
+                "type": "minecraft:border",
+                "color": "RED",
+                "colorHex": "#B02E26"
+              }
+            ]
+          },
+          "previewExample": true
+        },
+        {
+          "id": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+          "name": "Sample Tidecallers",
+          "tag": "TIDE",
+          "level": 61,
+          "members": 9,
+          "prestige": 1,
+          "banner": {
+            "baseColor": "CYAN",
+            "baseColorHex": "#169C9C",
+            "patterns": [
+              {
+                "type": "minecraft:stripe_bottom",
+                "color": "WHITE",
+                "colorHex": "#F9FFFE"
+              }
+            ]
+          },
+          "previewExample": true
+        },
+        {
+          "id": "9531985d-5d9d-49f8-9818-e811892f902b",
+          "name": "Sample Emberforge",
+          "tag": null,
+          "level": 4,
+          "members": 6,
+          "prestige": 1,
+          "banner": null,
+          "previewExample": true
         }
       ]
     },
@@ -648,6 +703,36 @@
           "id": "design-player-2",
           "name": "LavKun",
           "designIndex": 2
+        },
+        {
+          "id": "98289fcd-59a5-4a7b-b1fe-e08f57124242",
+          "name": "SampleAsh",
+          "previewExample": true
+        },
+        {
+          "id": "74c9df6a-cc01-4cdd-9474-031b7f26144b",
+          "name": "SampleLark",
+          "previewExample": true
+        },
+        {
+          "id": "5bd86d40-fc89-4b4a-aa50-df4db4d66a3a",
+          "name": "SampleReed",
+          "previewExample": true
+        },
+        {
+          "id": "f52ddf5d-6164-49c9-a25a-7605aec6f024",
+          "name": "SampleBay",
+          "previewExample": true
+        },
+        {
+          "id": "c7ac1491-def8-4334-a647-cb8f74e69a5d",
+          "name": "SampleFlint",
+          "previewExample": true
+        },
+        {
+          "id": "cc4169a3-ae3a-4b7f-9fe0-1893f3aed0b6",
+          "name": "SampleWren",
+          "previewExample": true
         }
       ]
     },
@@ -5735,7 +5820,7 @@
     "guildquests": {
       "kind": "guildquests",
       "schemaVersion": 1,
-      "generatedAt": "2026-11-19T05:20:11.929Z",
+      "generatedAt": "2026-11-19T06:47:36.516Z",
       "currentWeekId": "sample-current",
       "items": [
         {
@@ -5745,7 +5830,7 @@
           "fullSetBonusExperience": 1500,
           "guilds": [
             {
-              "id": "asgard",
+              "id": "design-guild-5",
               "name": "Asgard",
               "banner": {
                 "baseColor": "BLUE",
@@ -5753,7 +5838,7 @@
               }
             },
             {
-              "id": "boop",
+              "id": "design-guild-3",
               "name": "BoopGang",
               "banner": {
                 "baseColor": "RED",
@@ -5761,7 +5846,7 @@
               }
             },
             {
-              "id": "everlights",
+              "id": "design-guild-8",
               "name": "Everlights",
               "banner": {
                 "baseColor": "YELLOW",
@@ -5769,12 +5854,47 @@
               }
             },
             {
-              "id": "vibe",
+              "id": "design-guild-0",
               "name": "Vibe",
               "banner": {
                 "baseColor": "PURPLE",
                 "patterns": []
               }
+            },
+            {
+              "id": "6513270e-269e-4d37-b2a7-4de452e6b438",
+              "name": "Sample Wardens",
+              "banner": {
+                "baseColor": "BLACK",
+                "patterns": [
+                  {
+                    "color": "YELLOW",
+                    "type": "RHOMBUS"
+                  },
+                  {
+                    "color": "RED",
+                    "type": "BORDER"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+              "name": "Sample Tidecallers",
+              "banner": {
+                "baseColor": "CYAN",
+                "patterns": [
+                  {
+                    "color": "WHITE",
+                    "type": "STRIPE_BOTTOM"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "9531985d-5d9d-49f8-9818-e811892f902b",
+              "name": "Sample Emberforge",
+              "banner": null
             }
           ],
           "quests": [
@@ -5794,32 +5914,53 @@
               "payouts": [],
               "standings": [
                 {
-                  "guildId": "asgard",
+                  "guildId": "design-guild-5",
                   "rank": 1,
                   "count": "2800",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "boop",
+                  "guildId": "design-guild-3",
                   "rank": 2,
                   "count": "2099",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "everlights",
+                  "guildId": "design-guild-8",
                   "rank": 3,
                   "count": "1400",
                   "claimed": false,
                   "rewardDelivered": false
                 },
                 {
-                  "guildId": "vibe",
+                  "guildId": "design-guild-0",
                   "rank": 4,
                   "count": "700",
                   "claimed": false,
                   "rewardDelivered": false
+                },
+                {
+                  "guildId": "9531985d-5d9d-49f8-9818-e811892f902b",
+                  "count": "3",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 5
+                },
+                {
+                  "guildId": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+                  "count": "2",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 6
+                },
+                {
+                  "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+                  "count": "1",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 7
                 }
               ]
             },
@@ -5839,32 +5980,53 @@
               "payouts": [],
               "standings": [
                 {
-                  "guildId": "asgard",
+                  "guildId": "design-guild-5",
                   "rank": 1,
                   "count": "1680",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "boop",
+                  "guildId": "design-guild-3",
                   "rank": 2,
                   "count": "1259",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "everlights",
+                  "guildId": "design-guild-8",
                   "rank": 3,
                   "count": "840",
                   "claimed": false,
                   "rewardDelivered": false
                 },
                 {
-                  "guildId": "vibe",
+                  "guildId": "design-guild-0",
                   "rank": 4,
                   "count": "420",
                   "claimed": false,
                   "rewardDelivered": false
+                },
+                {
+                  "guildId": "9531985d-5d9d-49f8-9818-e811892f902b",
+                  "count": "3",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 5
+                },
+                {
+                  "guildId": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+                  "count": "2",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 6
+                },
+                {
+                  "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+                  "count": "1",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 7
                 }
               ]
             },
@@ -5884,32 +6046,53 @@
               "payouts": [],
               "standings": [
                 {
-                  "guildId": "asgard",
+                  "guildId": "design-guild-5",
                   "rank": 1,
                   "count": "700",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "boop",
+                  "guildId": "design-guild-3",
                   "rank": 2,
                   "count": "524",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "everlights",
+                  "guildId": "design-guild-8",
                   "rank": 3,
                   "count": "350",
                   "claimed": false,
                   "rewardDelivered": false
                 },
                 {
-                  "guildId": "vibe",
+                  "guildId": "design-guild-0",
                   "rank": 4,
                   "count": "175",
                   "claimed": false,
                   "rewardDelivered": false
+                },
+                {
+                  "guildId": "9531985d-5d9d-49f8-9818-e811892f902b",
+                  "count": "3",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 5
+                },
+                {
+                  "guildId": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+                  "count": "2",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 6
+                },
+                {
+                  "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+                  "count": "1",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 7
                 }
               ]
             },
@@ -5929,32 +6112,53 @@
               "payouts": [],
               "standings": [
                 {
-                  "guildId": "asgard",
+                  "guildId": "design-guild-5",
                   "rank": 1,
                   "count": "1120",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "boop",
+                  "guildId": "design-guild-3",
                   "rank": 2,
                   "count": "839",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "everlights",
+                  "guildId": "design-guild-8",
                   "rank": 3,
                   "count": "560",
                   "claimed": false,
                   "rewardDelivered": false
                 },
                 {
-                  "guildId": "vibe",
+                  "guildId": "design-guild-0",
                   "rank": 4,
                   "count": "280",
                   "claimed": false,
                   "rewardDelivered": false
+                },
+                {
+                  "guildId": "9531985d-5d9d-49f8-9818-e811892f902b",
+                  "count": "3",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 5
+                },
+                {
+                  "guildId": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+                  "count": "2",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 6
+                },
+                {
+                  "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+                  "count": "1",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 7
                 }
               ]
             },
@@ -5976,32 +6180,53 @@
               "payouts": [],
               "standings": [
                 {
-                  "guildId": "asgard",
+                  "guildId": "design-guild-5",
                   "rank": 1,
                   "count": "56",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "boop",
+                  "guildId": "design-guild-3",
                   "rank": 2,
                   "count": "41",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "everlights",
+                  "guildId": "design-guild-8",
                   "rank": 3,
                   "count": "28",
                   "claimed": false,
                   "rewardDelivered": false
                 },
                 {
-                  "guildId": "vibe",
+                  "guildId": "design-guild-0",
                   "rank": 4,
                   "count": "14",
                   "claimed": false,
                   "rewardDelivered": false
+                },
+                {
+                  "guildId": "9531985d-5d9d-49f8-9818-e811892f902b",
+                  "count": "3",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 5
+                },
+                {
+                  "guildId": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+                  "count": "2",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 6
+                },
+                {
+                  "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+                  "count": "1",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 7
                 }
               ]
             },
@@ -6034,32 +6259,53 @@
               ],
               "standings": [
                 {
-                  "guildId": "asgard",
+                  "guildId": "design-guild-5",
                   "rank": 1,
                   "count": "7000",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "boop",
+                  "guildId": "design-guild-3",
                   "rank": 2,
                   "count": "5249",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "everlights",
+                  "guildId": "design-guild-8",
                   "rank": 3,
                   "count": "3500",
                   "claimed": false,
                   "rewardDelivered": false
                 },
                 {
-                  "guildId": "vibe",
+                  "guildId": "design-guild-0",
                   "rank": 4,
                   "count": "1750",
                   "claimed": false,
                   "rewardDelivered": false
+                },
+                {
+                  "guildId": "9531985d-5d9d-49f8-9818-e811892f902b",
+                  "count": "3",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 5
+                },
+                {
+                  "guildId": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+                  "count": "2",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 6
+                },
+                {
+                  "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+                  "count": "1",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 7
                 }
               ]
             }
@@ -6072,7 +6318,7 @@
           "fullSetBonusExperience": 1500,
           "guilds": [
             {
-              "id": "asgard",
+              "id": "design-guild-5",
               "name": "Asgard",
               "banner": {
                 "baseColor": "BLUE",
@@ -6080,7 +6326,7 @@
               }
             },
             {
-              "id": "boop",
+              "id": "design-guild-3",
               "name": "BoopGang",
               "banner": {
                 "baseColor": "RED",
@@ -6088,7 +6334,7 @@
               }
             },
             {
-              "id": "everlights",
+              "id": "design-guild-8",
               "name": "Everlights",
               "banner": {
                 "baseColor": "YELLOW",
@@ -6096,12 +6342,47 @@
               }
             },
             {
-              "id": "vibe",
+              "id": "design-guild-0",
               "name": "Vibe",
               "banner": {
                 "baseColor": "PURPLE",
                 "patterns": []
               }
+            },
+            {
+              "id": "6513270e-269e-4d37-b2a7-4de452e6b438",
+              "name": "Sample Wardens",
+              "banner": {
+                "baseColor": "BLACK",
+                "patterns": [
+                  {
+                    "color": "YELLOW",
+                    "type": "RHOMBUS"
+                  },
+                  {
+                    "color": "RED",
+                    "type": "BORDER"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+              "name": "Sample Tidecallers",
+              "banner": {
+                "baseColor": "CYAN",
+                "patterns": [
+                  {
+                    "color": "WHITE",
+                    "type": "STRIPE_BOTTOM"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "9531985d-5d9d-49f8-9818-e811892f902b",
+              "name": "Sample Emberforge",
+              "banner": null
             }
           ],
           "quests": [
@@ -6121,32 +6402,53 @@
               "payouts": [],
               "standings": [
                 {
-                  "guildId": "asgard",
+                  "guildId": "design-guild-5",
                   "rank": 1,
                   "count": "2800",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "boop",
+                  "guildId": "design-guild-3",
                   "rank": 2,
                   "count": "2099",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "everlights",
+                  "guildId": "design-guild-8",
                   "rank": 3,
                   "count": "1400",
                   "claimed": false,
                   "rewardDelivered": false
                 },
                 {
-                  "guildId": "vibe",
+                  "guildId": "design-guild-0",
                   "rank": 4,
                   "count": "700",
                   "claimed": false,
                   "rewardDelivered": false
+                },
+                {
+                  "guildId": "9531985d-5d9d-49f8-9818-e811892f902b",
+                  "count": "3",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 5
+                },
+                {
+                  "guildId": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+                  "count": "2",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 6
+                },
+                {
+                  "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+                  "count": "1",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 7
                 }
               ]
             },
@@ -6166,32 +6468,53 @@
               "payouts": [],
               "standings": [
                 {
-                  "guildId": "asgard",
+                  "guildId": "design-guild-5",
                   "rank": 1,
                   "count": "1680",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "boop",
+                  "guildId": "design-guild-3",
                   "rank": 2,
                   "count": "1259",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "everlights",
+                  "guildId": "design-guild-8",
                   "rank": 3,
                   "count": "840",
                   "claimed": false,
                   "rewardDelivered": false
                 },
                 {
-                  "guildId": "vibe",
+                  "guildId": "design-guild-0",
                   "rank": 4,
                   "count": "420",
                   "claimed": false,
                   "rewardDelivered": false
+                },
+                {
+                  "guildId": "9531985d-5d9d-49f8-9818-e811892f902b",
+                  "count": "3",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 5
+                },
+                {
+                  "guildId": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+                  "count": "2",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 6
+                },
+                {
+                  "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+                  "count": "1",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 7
                 }
               ]
             },
@@ -6211,32 +6534,53 @@
               "payouts": [],
               "standings": [
                 {
-                  "guildId": "asgard",
+                  "guildId": "design-guild-5",
                   "rank": 1,
                   "count": "700",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "boop",
+                  "guildId": "design-guild-3",
                   "rank": 2,
                   "count": "524",
                   "claimed": true,
                   "rewardDelivered": true
                 },
                 {
-                  "guildId": "everlights",
+                  "guildId": "design-guild-8",
                   "rank": 3,
                   "count": "350",
                   "claimed": false,
                   "rewardDelivered": false
                 },
                 {
-                  "guildId": "vibe",
+                  "guildId": "design-guild-0",
                   "rank": 4,
                   "count": "175",
                   "claimed": false,
                   "rewardDelivered": false
+                },
+                {
+                  "guildId": "9531985d-5d9d-49f8-9818-e811892f902b",
+                  "count": "3",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 5
+                },
+                {
+                  "guildId": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+                  "count": "2",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 6
+                },
+                {
+                  "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+                  "count": "1",
+                  "claimed": false,
+                  "rewardDelivered": false,
+                  "rank": 7
                 }
               ]
             }
