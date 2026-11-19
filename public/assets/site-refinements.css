@@ -277,3 +277,25 @@ a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
   .en .gallery-page .gallery-hero-inner { padding-block: clamp(24px, 4vw, 56px); }
   .en .gallery-page .gallery-tabs { flex-wrap: wrap; }
 }
+
+/* Group header controls on one line; the expanded menu gets its own row. */
+@media (max-width: 1240px) {
+  .en .site-head .site-head-in { justify-content: flex-start; }
+  .en .site-head .brand { margin-inline-end: auto; }
+  .en .site-head .mob-btn { display: flex; min-height: 44px; border-color: currentColor; }
+  .en .site-head .nav { display: none !important; }
+  .en .site-head .nav.open {
+    display: flex !important;
+    order: 1;
+    flex: 0 0 100%;
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 0 !important;
+  }
+  .en .site-head .nav.open .panel { position: static !important; margin: 0 0 8px; }
+  .en .site-head .nav.open :is(.navbtn, a) { min-height: 44px; }
+}
+@media (max-width: 360px) {
+  .en .site-head .brand { font-size: 16px; gap: 4px; }
+  .en .site-head .mob-btn { padding-inline: 6px !important; }
+}
