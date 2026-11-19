@@ -332,3 +332,67 @@ test('public player boards remain available without the optional community datab
   assert.equal(response.status,200);const result=await response.json();assert.equal(result.items[0].name,'Player');assert.equal(result.limited,true);
   assert.equal((await request(null,'news')).status,503);
 });
+
+test('Discord announcement requires an opted-in publication and confirmed deliveries cannot be resent',async()=>{
+  const {db,sql}=database();
+  const originalFetch=globalThis.fetch;
+  const sends=[];
+  globalThis.fetch=async(url,options)=>{
+    sends.push({url:String(url),payload:JSON.parse(options.body)});
+    return Response.json({id:'123456789012345678'});
+  };
+  const env={COMMUNITY_DB:db,COMMUNITY_DISCORD_CHANGELOG_WEBHOOK:'https://discord.com/api/webhooks/123456789012345678/test-token'};
+  const call=(path,payload,origin='https://enthusia.info')=>handleCommunity({
+    request:new Request(origin+'/api/community/'+path,{method:payload?'POST':'GET',headers:{origin},...(payload?{body:JSON.stringify(payload)}:{})}),
+    params:{path},env
+  },dependencies);
+  try {
+    const article={...news,category:'Changelog',discordSummary:'Short summary',image:'/api/community/news-media/'+'a'.repeat(32)};
+    await call('admin/news',{...article,announce:true});
+    await call('admin/news',{...article,status:'published',revision:1});
+    assert.equal(sends.length,0);
+    const result=await call('admin/news',{...article,status:'published',announce:true,revision:2});
+    assert.equal((await result.json()).discordDelivery,'sent');
+    const [message]=sends;
+    assert.equal(new URL(message.url).searchParams.get('wait'),'true');
+    assert.deepEqual(message.payload.allowed_mentions,{parse:[]});
+    assert.equal(message.payload.embeds.length,1);
+    const [embed]=message.payload.embeds;
+    assert.equal(embed.url,'https://enthusia.info/news#hello');
+    assert.match(embed.description,/Short summary/);
+    assert.equal(embed.image.url,'https://enthusia.info'+article.image);
+    await call('admin/news',{...article,status:'published',announce:true,revision:3});
+    await call('admin/discord-delivery/news/hello',{});
+    assert.equal(sends.length,1);
+    const preview=await call('admin/news',{...article,slug:'preview-only',status:'published',announce:true},'https://preview.pages.dev');
+    assert.equal(preview.ok,false);
+    assert.equal(sends.length,1);
+  } finally {globalThis.fetch=originalFetch;sql.close();}
+});
+
+test('Discord retries only definitely unsent announcements and keeps the article published',async()=>{
+  const {db,sql}=database();
+  const originalFetch=globalThis.fetch;
+  const env={COMMUNITY_DB:db};
+  let sends=0,reply=()=>new Response(null,{status:429});
+  globalThis.fetch=async()=>{sends++;return reply();};
+  const call=(path,payload)=>handleCommunity({
+    request:new Request('https://enthusia.info/api/community/'+path,{method:payload?'POST':'GET',
+      headers:{origin:'https://enthusia.info'},...(payload?{body:JSON.stringify(payload)}:{})}),params:{path},env
+  },dependencies);
+  try {
+    const input={...news,status:'published',announce:true,discordSummary:'Summary'};
+    assert.equal((await (await call('admin/news',input)).json()).discordDelivery,'unconfigured');
+    assert.equal((await (await call('news')).json()).items.length,1);
+    const retry='admin/discord-delivery/news/hello';
+    env.COMMUNITY_DISCORD_NEWS_WEBHOOK='https://discord.com/api/webhooks/123456789012345678/test-token';
+    assert.equal((await (await call(retry,{})).json()).status,'rejected');
+    reply=()=>{throw new Error('transport interrupted');};
+    assert.equal((await (await call(retry,{})).json()).status,'uncertain');
+    assert.equal((await (await call(retry,{})).json()).status,'uncertain');
+    assert.equal(sends,2);
+    assert.equal((await call('admin/news',{...input,slug:'collision',revision:1})).status,409);
+    assert.equal((await (await call('admin/discord-delivery/news/collision')).json()).status,null);
+    assert.equal((await call('discord_news_delivery')).status,404);
+  } finally {globalThis.fetch=originalFetch;sql.close();}
+});

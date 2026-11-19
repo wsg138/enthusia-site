@@ -49,7 +49,39 @@ async function reader(){
 async function editor(){
   const title=one('[data-on-change="setTitle"]'),body=one('[data-on-change="setDraft"]'),preview=one('[data-b-blocks="blocks"]'),pin=one('[data-on-change="togPin"]'),ping=one('[data-on-change="togPing"]');
   let category='Announcement',slug='',revision=0,cover='',uploading=0;const message=one('[data-b-class="swap {{sentShow}}"]');message.hidden=true;
-  function draw(){text('[data-b-text="title"]',title.value);text('[data-b-text="cat"]',category);text('[data-b-text="charCount"]',body.value.length+' characters - Discord would cut a message off at 2,000');setCover(cover);one('[data-news-remove-cover]').hidden=!cover;renderMarkup(preview,body.value);one('[data-b-class="tag {{postTag}}"]')?.setAttribute('class','tag '+tags.get(category));one('[data-b-class="tag tag-gold {{pinShow}}"]')?.toggleAttribute('hidden',!pin.checked);}
+  const summary=one('#discord-summary'), delivery=one('[data-discord-status]'), retry=one('[data-discord-retry]');
+  const labels={
+    pending:'Queued for Discord.', processing:'Sending to Discord.', sent:'Delivered to Discord.',
+    unconfigured:'The channel webhook needs configuration. Retry after it is set.',
+    rejected:'Discord rejected the message. Check the webhook, then retry.',
+    uncertain:'Delivery is unconfirmed. Check the Discord channel before taking further action.',
+    status_unavailable:'Delivery status is unavailable. Reopen this post to check.'
+  };
+  function showDelivery(status) {
+    delivery.textContent=labels[status]??'';
+    delivery.hidden=!delivery.textContent;
+    retry.hidden=!['pending','unconfigured','rejected'].includes(status);
+  }
+  retry.addEventListener('click',async()=>{
+    retry.disabled=true;
+    try { showDelivery((await api('admin/discord-delivery/news/'+encodeURIComponent(slug),{method:'POST'})).status); }
+    catch { showDelivery('status_unavailable'); }
+    finally { retry.disabled=false; }
+  });
+  function drawDiscord() {
+    one('[data-discord-options]').hidden=!ping.checked;
+    if(!ping.checked)return;
+    text('[data-discord-brand]','✦ ENTHUSIA SMP · '+(category==='Changelog'?'CHANGELOG':'ANNOUNCEMENT'));
+    text('[data-discord-title]',title.value);
+    text('[data-discord-description]',summary.value);
+    const img=one('[data-discord-cover]');
+    img.hidden=!cover;
+    if(cover)img.src=newsImageSource(cover);
+    else img.removeAttribute('src');
+  }
+  ping.addEventListener('change',drawDiscord);
+  summary.addEventListener('input',drawDiscord);
+  function draw(){drawDiscord();text('[data-b-text="title"]',title.value);text('[data-b-text="cat"]',category);text('[data-b-text="charCount"]',body.value.length+' characters - Discord would cut a message off at 2,000');setCover(cover);one('[data-news-remove-cover]').hidden=!cover;renderMarkup(preview,body.value);one('[data-b-class="tag {{postTag}}"]')?.setAttribute('class','tag '+tags.get(category));one('[data-b-class="tag tag-gold {{pinShow}}"]')?.toggleAttribute('hidden',!pin.checked);}
   for(const node of document.querySelectorAll('[data-on-click^="pickC"]'))node.addEventListener('click',()=>{category=node.dataset.onClick.slice(5);for(const option of node.parentElement.children)option.setAttribute('aria-pressed',String(option===node));draw();});
   one('[data-on-click="pickCAnnouncement"]').setAttribute('aria-pressed','true');title.addEventListener('input',draw);body.addEventListener('input',draw);pin.addEventListener('change',draw);
   const wraps=new Map([['wrapB','**'],['wrapI','*'],['wrapU','__'],['wrapS','~~'],['wrapC','`'],['wrapSp','||']]),prefixes=new Map([['lineH','# '],['lineL','- '],['lineQ','> '],['lineSub','-# ']]);
@@ -86,12 +118,15 @@ async function editor(){
   }
   async function save(state){
     if(uploading){mediaStatus.textContent='Wait for the image upload to finish.';return;}
+    if(state==='published' && ping.checked && !summary.value.trim()){
+      summary.focus();summary.setCustomValidity('Enter a short summary for Discord.');summary.reportValidity();summary.setCustomValidity('');return;
+    }
     const controls=[...document.querySelectorAll('main button')],disabled=controls.map(node=>node.disabled);controls.forEach(node=>node.disabled=true);
     try{
       const safeSlug=slug||title.value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60)||'post-'+Date.now();
-      const record=await api('admin/news',{method:'POST',body:JSON.stringify({kind:'news',slug:safeSlug,title:title.value,body:body.value,image:cover,category,status:state,revision,date:new Date().toISOString(),pinned:pin.checked})});
+      const record=await api('admin/news',{method:'POST',body:JSON.stringify({kind:'news',slug:safeSlug,title:title.value,body:body.value,image:cover,category,discordSummary:summary.value,announce:state==='published'&&ping.checked,status:state,revision,date:new Date().toISOString(),pinned:pin.checked})});
       slug=record.slug;revision=record.revision;message.hidden=false;message.textContent=state==='published'?'Published to News.':'Draft saved.';
-      if(ping.checked)message.textContent+=' Discord announcement delivery is not configured.';
+      if(record.discordDelivery)showDelivery(record.discordDelivery);
       history.replaceState(null,'','?slug='+encodeURIComponent(slug));
     }catch(error){message.hidden=false;message.textContent=error.message;}finally{controls.forEach((node,index)=>node.disabled=disabled[index]);}
   }
@@ -101,7 +136,11 @@ async function editor(){
     const session=await api('admin/session');author({authorName:session.name,authorRank:session.rank});
     const records=await api('admin/news'),requested=new URLSearchParams(location.search).get('slug');
     const record=records.items.find(item=>item.slug===requested)??(document.documentElement.hasAttribute('data-preview-root')?records.items[0]:null);
-    if(record){title.value=record.title;body.value=document.documentElement.hasAttribute('data-preview-root')&&!requested?records.editorDraft??record.body:record.body;category=record.category;slug=record.slug;revision=record.revision;cover=record.image??'';pin.checked=document.documentElement.hasAttribute('data-preview-root')&&!requested||record.pinned===true;ping.checked=document.documentElement.hasAttribute('data-preview-root');for(const option of document.querySelectorAll('[data-on-click^="pickC"]'))option.setAttribute('aria-pressed',String(option.dataset.onClick==='pickC'+category));}
+    if(record){summary.value=record.discordSummary??'';title.value=record.title;body.value=document.documentElement.hasAttribute('data-preview-root')&&!requested?records.editorDraft??record.body:record.body;category=record.category;slug=record.slug;revision=record.revision;cover=record.image??'';pin.checked=document.documentElement.hasAttribute('data-preview-root')&&!requested||record.pinned===true;ping.checked=document.documentElement.hasAttribute('data-preview-root');for(const option of document.querySelectorAll('[data-on-click^="pickC"]'))option.setAttribute('aria-pressed',String(option.dataset.onClick==='pickC'+category));}
+    if(record && !document.documentElement.hasAttribute('data-preview-root')){
+      try { showDelivery((await api('admin/discord-delivery/news/'+encodeURIComponent(slug))).status); }
+      catch { showDelivery('status_unavailable'); }
+    }
     one('[data-news-add-image]').disabled=false;one('[data-news-add-cover]').disabled=false;
   }catch(error){message.hidden=false;message.textContent='Publishing requires an authorized staff account. '+error.message;mediaStatus.textContent='Sign in with an authorized staff account to upload images.';one('[data-on-click="publish"]').disabled=true;if(draft)draft.disabled=true;}
   draw();
