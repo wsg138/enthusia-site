@@ -136,6 +136,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <link rel="stylesheet" href="../assets/exact-design.css">
 <link rel="stylesheet" href="../assets/site-refinements.css?v=header-20261119">
 <meta name="robots" content="noindex,nofollow,noarchive">
+<link rel="stylesheet" href="../assets/store-layout.css">
 </head>
 <body data-exact-store="" data-mockup>
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -204,49 +205,20 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 <main id="main-content" class="page-main">
 <section class="hero hero-vars" aria-labelledby="store-title">
-<div style="max-width: 1240px; min-height: 320px; margin: 0 auto; padding: 56px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
-<p class="tag tag-gold" style="letter-spacing: 2px">STORE</p>
+<div style="max-width: 1240px; min-height: 240px; margin: 0 auto; padding: 56px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
+
 <h1 id="store-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">ENTHUSIA STORE</h1>
 <p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">Purchases from this store directly support Enthusia's hosting, development, events, and future improvements.</p>
 </div>
 <div class="crenel"></div>
 </section>
-<section class="s-cream" aria-label="Shop" style="padding: 56px 0 72px">
+<section class="s-cream" aria-label="Shop" style="padding: 32px 0 40px">
 <div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px">
-<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
-<div class="swap" style="display: flex; flex-direction: column; gap: 12px" data-b-class="swap {{loginShow}}">
-<label>Please enter your username to continue. Usernames can not contain spaces.
-<input class="field" type="text" placeholder="Your Minecraft username" data-b-value="{{name}}" data-on-change="setName"></label>
-<div style="display: flex"><button class="btn btn-gold" type="button" data-on-click="confirm">Continue</button></div>
-</div>
-<div class="swap" style="display: flex; align-items: center; gap: 16px" data-b-class="swap {{signedShow}}">
-<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 32px; line-height: 32px"><span data-b-text="initial"></span></div>
-<div style="flex-grow: 1; min-width: 0"><p style="color: var(--muted)">Shopping as</p><p style="font-size: 24px; line-height: 32px; overflow-wrap: anywhere"><span data-b-text="who"></span></p></div>
-<button class="btn btn-dark" type="button" data-on-click="logout">Change</button>
-</div>
-</div>
-<div class="tip fret" aria-label="Your cart" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
-<div style="display: flex; justify-content: space-between; gap: 12px"><h2 style="font-size: 24px; line-height: 32px; color: var(--head)">Your cart</h2><span aria-live="polite" style="font-size: 24px; line-height: 32px; color: var(--accent)"><span data-b-text="total"></span></span></div>
-<p class="" style="color: var(--muted)" data-b-class="{{emptyShow}}">Keep adding items to cart and check back here to complete your purchase!</p>
-<div class="swap" style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; background: var(--row)" data-b-class="swap {{lineAvid}}"><span>Avid - one-time</span><span>$5.00</span></div>
-<div class="swap" style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; background: var(--row)" data-b-class="swap {{lineDev}}"><span>Devotee - monthly</span><span>$10.00</span></div>
-<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 4px">
-<a class="btn btn-gold" data-tebex-checkout="" href="https://enthusia-shop.tebex.io/category/3081497">Checkout with Tebex</a>
-<span style="color: var(--muted)"><span data-b-text="hint"></span></span>
-</div>
-</div>
-</div>
-
-<div class="tip fret-sm" style="padding: 20px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px">
-<span class="tag tag-gold">Fair ranks</span>
-<p style="flex: 1 1 420px">Our ranks focus on useful quality-of-life and community features without selling combat gear, currency, or unfair progression advantages.</p>
-</div>
-
 <div style="display: flex; flex-direction: column; gap: 8px">
-<p style="color: var(--kick); letter-spacing: 2px">TWO OPTIONS</p>
+
 <h2 id="ranks-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Choose your rank</h2>
+<p>Support the server with chat, Discord, and in-game perks. Both ranks keep combat and progression fair.</p>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px">
@@ -259,8 +231,11 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <span style="color: var(--muted)">USD - one-time, permanent</span>
 </div>
 <p class="chat"><span style="color: #55e0ff">[Avid]</span> <span data-b-text="chatName"></span>: hello!</p>
+<p>Sign your gear and track kills or blocks mined.</p>
+<details class="store-details"><summary>View all perks</summary>
+<div class="store-perks">
 <div style="padding: 16px; background: var(--row); border: 4px dashed #b3201a; display: flex; flex-direction: column; gap: 8px">
-<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px"><h4 style="font-size: 24px; line-height: 32px; color: var(--head)">Signed items</h4><span class="tag tag-gold">New</span></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px"><h4 style="font-size: 24px; line-height: 32px; color: var(--head)">Signed items</h4></div>
 <p>Put your name on your gear. /sign adds a permanent creator signature to the item in your hand, with your name in colour and your own message. You see a preview and confirm it before it becomes permanent.</p>
 <p>/track adds a counter to an item for player kills, mob kills or blocks mined. It keeps counting when the item changes hands.</p>
 <p style="color: var(--muted)">One signature and one tracker per item. Neither can be removed.</p>
@@ -279,9 +254,11 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <li>Access to Donor Chat</li>
 <li>View in-game-chat channel</li>
 </ul>
+</div></details>
 <div style="display: flex; flex-wrap: wrap; gap: 12px">
 <button class="btn btn-gold" type="button" style="min-height: 56px; font-size: 24px; line-height: 32px" data-b-class="btn btn-gold {{avidOut}}" data-on-click="togAvid">Add to cart</button>
 <button class="btn btn-dark" type="button" style="min-height: 56px" data-b-class="btn btn-dark {{avidIn}}" data-on-click="togAvid">In your cart - remove</button>
+<a class="btn btn-gold hide" data-b-class="btn btn-gold {{avidIn}}" href="#store-checkout">View cart</a>
 </div>
 </div>
 </article>
@@ -294,8 +271,11 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <span style="color: var(--muted)">USD per month - subscription</span>
 </div>
 <p class="chat"><span style="color: #8f9bff">[Devotee]</span> <span data-b-text="chatName"></span>: hello!</p>
+<p>Display approved map art on shields in Java Edition.</p>
+<details class="store-details"><summary>View all perks</summary>
+<div class="store-perks">
 <div style="padding: 16px; background: var(--row); border: 4px dashed #b3201a; display: flex; flex-direction: column; gap: 8px">
-<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px"><h4 style="font-size: 24px; line-height: 32px; color: var(--head)">Mapart shields</h4><span class="tag tag-gold">New</span></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px"><h4 style="font-size: 24px; line-height: 32px; color: var(--head)">Mapart shields</h4></div>
 <p>Carry your mapart into battle. Hold a filled map and run /mapshield create with a name. Once staff approve the design, /mapshield apply puts it on the shield in your hand.</p>
 <p>The shield keeps its durability, enchantments and name, and blocks like any other. /mapshield remove takes the art off again.</p>
 <p style="color: var(--muted)">Needs the server resource pack. Java Edition only: the art is not shown to Bedrock players.</p>
@@ -318,16 +298,17 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <li>Ability to send messages through the in-game-chat channel</li>
 <li>Avatar head emoji</li>
 </ul>
+</div></details>
 <div style="display: flex; flex-wrap: wrap; gap: 12px">
 <button class="btn btn-gold" type="button" style="min-height: 56px; font-size: 24px; line-height: 32px" data-b-class="btn btn-gold {{devOut}}" data-on-click="togDev">Subscribe</button>
 <button class="btn btn-dark" type="button" style="min-height: 56px" data-b-class="btn btn-dark {{devIn}}" data-on-click="togDev">In your cart - remove</button>
+<a class="btn btn-gold hide" data-b-class="btn btn-gold {{devIn}}" href="#store-checkout">View cart</a>
 </div>
 </div>
 </article>
 </div>
 
-<div class="panel" style="padding: 28px; display: flex; flex-direction: column; gap: 4px">
-<h3 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh); padding-bottom: 12px">Compare the ranks</h3>
+<details class="panel store-details store-compare"><summary>Compare the ranks</summary>
 <div class="cmp cmp-top"><span></span><span>Avid</span><span>Devotee</span></div>
 <div class="cmp cmp-h"><span>In game</span></div>
 <div class="cmp"><span>Custom chat prefix</span><span class="cmp-v" data-col="Avid"><b>[Avid]</b></span><span class="cmp-v" data-col="Devotee"><b>[Devotee]</b></span></div>
@@ -345,91 +326,53 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <div class="cmp"><span>View the in-game-chat channel</span><span class="cmp-v" data-col="Avid"><b style="color: var(--good)">Yes</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
 <div class="cmp"><span>Send messages through in-game-chat</span><span class="cmp-v" data-col="Avid"><b style="color: var(--muted)">-</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
 <div class="cmp"><span>Avatar head emoji</span><span class="cmp-v" data-col="Avid"><b style="color: var(--muted)">-</b></span><span class="cmp-v" data-col="Devotee"><b style="color: var(--good)">Yes</b></span></div>
-</div>
+</details>
 
-</div>
-</section>
-
-<section data-tebex-summary="" class="s-red" aria-labelledby="goal-title" style="padding: 72px 0; border-top: 4px solid #4a0b08; border-bottom: 4px solid #4a0b08">
-<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
-<div style="display: flex; flex-direction: column; gap: 8px">
-<p style="color: var(--kick); letter-spacing: 2px">COMMUNITY</p>
-<h2 id="goal-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Keeping the server running</h2>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 24px">
-<div class="panel" style="padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<div style="display: flex; justify-content: space-between; gap: 12px"><h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Monthly goal</h3><span style="font-size: 24px; line-height: 32px; color: var(--accent)">0%</span></div>
-<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px"><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span></div>
-<p style="color: var(--muted)">Purchases go toward hosting, development, events, and future improvements.</p>
-</div>
-<div class="tip fret" style="padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<h3 style="font-size: 24px; line-height: 32px; color: var(--head); text-align: center">Recent supporters</h3>
-<div class="row" style="display: flex; align-items: center; gap: 12px; padding: 6px 16px 6px 6px; background: var(--row)"><img class="px" src="../assets/design/b6e2c7d2d993.png" alt="" style="width: 40px; height: 40px"><span>Fr0stDraws</span></div>
-<div class="row" style="display: flex; align-items: center; gap: 12px; padding: 6px 16px 6px 6px; background: var(--row)"><img class="px" src="../assets/design/e06b692805b8.png" alt="" style="width: 40px; height: 40px"><span>Millistii</span></div>
-<div class="row" style="display: flex; align-items: center; gap: 12px; padding: 6px 16px 6px 6px; background: var(--row)"><img class="px" src="../assets/design/10a7c046422c.png" alt="" style="width: 40px; height: 40px"><span>Oceanium</span></div>
-<div class="row" style="display: flex; align-items: center; gap: 12px; padding: 6px 16px 6px 6px; background: var(--row)"><img class="px" src="../assets/design/6a8f6d7223f0.png" alt="" style="width: 40px; height: 40px"><span>ToxikFlame11</span></div>
-<div class="row" style="display: flex; align-items: center; gap: 12px; padding: 6px 16px 6px 6px; background: var(--row)"><img class="px" src="../assets/design/04255a8b9fd3.png" alt="" style="width: 40px; height: 40px"><span>qaysoz</span></div>
-</div>
-<div class="panel" style="padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Top supporter this month</h3>
-<div class="slot" style="width: 96px; height: 96px; color: var(--head); font-size: 48px; line-height: 48px">?</div>
-<p style="color: var(--muted)">No recent top spenders.</p>
-</div>
-</div>
-</div>
-</section>
-
-<section class="s-cream" aria-labelledby="before-title" style="padding: 72px 0; flex-grow: 1;">
-<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
-<div style="display: flex; flex-direction: column; gap: 8px">
-<p style="color: var(--kick); letter-spacing: 2px">HOW IT WORKS</p>
-<h2 id="before-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Before you buy</h2>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 16px">
-<article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
-<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">01</div>
-<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Enter your exact username</h3>
-<p style="color: var(--muted)">Enter your exact Minecraft username when requested.</p>
-</article>
-<article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
-<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">02</div>
-<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Read the package</h3>
-<p style="color: var(--muted)">Read the complete package description before purchasing.</p>
-</article>
-<article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
-<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">03</div>
-<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Check out with Tebex</h3>
-<p style="color: var(--muted)">Complete checkout securely through Tebex.</p>
-</article>
-<article class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
-<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 24px; line-height: 24px">04</div>
-<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Something missing?</h3>
-<p style="color: var(--muted)">Open a support ticket in the Enthusia Discord if delivery issues occur.</p>
-</article>
-</div>
+<h2 class="t-h2" id="store-checkout">Checkout</h2>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px">
 <div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
-<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Pay in your currency</h3>
-<div style="display: flex; flex-wrap: wrap; gap: 8px">
-<span class="tag tag-gold">USD</span>
-<span class="tag tag-plain">AUD</span>
-<span class="tag tag-plain">BRL</span>
-<span class="tag tag-plain">CAD</span>
-<span class="tag tag-plain">DKK</span>
-<span class="tag tag-plain">EUR</span>
-<span class="tag tag-plain">NOK</span>
-<span class="tag tag-plain">NZD</span>
-<span class="tag tag-plain">PLN</span>
-<span class="tag tag-plain">GBP</span>
-<span class="tag tag-plain">SEK</span>
+<div class="swap" style="display: flex; flex-direction: column; gap: 12px" data-b-class="swap {{loginShow}}">
+<label>Minecraft username
+<input class="field" type="text" placeholder="Your Minecraft username" data-b-value="{{name}}" data-on-change="setName"></label>
+<div style="display: flex"><button class="btn btn-gold" type="button" data-on-click="confirm">Continue</button></div>
+</div>
+<div class="swap" style="display: flex; align-items: center; gap: 16px" data-b-class="swap {{signedShow}}">
+<div class="slot" style="width: 64px; height: 64px; color: var(--head); font-size: 32px; line-height: 32px"><span data-b-text="initial"></span></div>
+<div style="flex-grow: 1; min-width: 0"><p style="color: var(--muted)">Shopping as</p><p style="font-size: 24px; line-height: 32px; overflow-wrap: anywhere"><span data-b-text="who"></span></p></div>
+<button class="btn btn-dark" type="button" data-on-click="logout">Change</button>
 </div>
 </div>
-<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
-<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Java and Bedrock</h3>
-<p style="color: var(--muted)">Enthusia supports both Java and Bedrock players. Need help with a purchase? Open a ticket in Discord.</p>
-<div style="display: flex"><a class="btn btn-red" href="https://discord.gg/5ccgDCmNSc">Join the Discord</a></div>
+<div class="tip fret" aria-label="Your cart" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; gap: 12px"><h2 style="font-size: 24px; line-height: 32px; color: var(--head)">Your cart</h2><span aria-live="polite" style="font-size: 24px; line-height: 32px; color: var(--accent)"><span data-b-text="total"></span></span></div>
+<p class="" style="color: var(--muted)" data-b-class="{{emptyShow}}">Your cart is empty. Choose a rank above.</p>
+<div class="swap" style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; background: var(--row)" data-b-class="swap {{lineAvid}}"><span>Avid - one-time</span><span>$5.00</span></div>
+<div class="swap" style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; background: var(--row)" data-b-class="swap {{lineDev}}"><span>Devotee - monthly</span><span>$10.00</span></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 4px">
+<a class="btn btn-gold" data-tebex-checkout="" href="https://enthusia-shop.tebex.io/category/3081497">Continue to Tebex</a>
+<span style="color: var(--muted)"><span data-b-text="hint"></span></span>
 </div>
 </div>
+</div>
+
+
+
+</div>
+</section>
+
+<section class="s-red store-support" aria-labelledby="before-title">
+<div class="store-support-inner">
+<div>
+<h2 id="before-title" class="t-h2">Purchase help</h2>
+<details class="panel store-details"><summary>How do I buy a rank?</summary><p>Enter your exact Minecraft username. Review the package, billing terms, and price on Tebex before paying.</p></details>
+<details class="panel store-details"><summary>Which currencies can I use?</summary><p>USD, AUD, BRL, CAD, DKK, EUR, NOK, NZD, PLN, GBP, and SEK. Select your currency on Tebex.</p></details>
+<details class="panel store-details"><summary>Can Bedrock players buy ranks?</summary><p>Java and Bedrock players can buy ranks. Check each perk for edition requirements. Custom shield art is visible on Java Edition.</p></details>
+<details class="panel store-details"><summary>My purchase is missing</summary><p>Open a support ticket in the <a href="https://discord.gg/5ccgDCmNSc">Enthusia Discord</a> for help with delivery.</p></details>
+</div>
+<aside class="tip fret store-community">
+<h2 class="t-h2">Community support</h2>
+<p>See the monthly goal, recent supporters, and top supporter on Tebex.</p>
+<a class="btn btn-gold" href="https://enthusia-shop.tebex.io/">View the store on Tebex</a>
+</aside>
 </div>
 </section>
 </main>
@@ -507,6 +450,6 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script src="../assets/site-config.js" defer></script><script src="../assets/enthusia.js" defer></script><script src="../assets/design-bindings.js" defer></script><script src="../assets/exact-store.js" defer></script>
+<script src="../assets/site-config.js" defer></script><script src="../assets/enthusia.js" defer></script><script src="../assets/design-bindings.js" defer></script><script src="../assets/exact-store.js?v=store-layout" defer></script>
 <script type="module" src="../assets/staff-navigation.js"></script></body>
 </html>

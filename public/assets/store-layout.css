@@ -1,0 +1,16 @@
+.store-details {padding: 12px 16px; min-width: 0;}
+.store-details summary {color: var(--head); font: inherit; font-weight: bold; cursor: pointer;}
+.store-details[open] > summary {margin-bottom: 12px;}
+.store-perks {display: grid; gap: 10px;}
+.rank .store-details {padding-inline: 0; border-top: 2px solid var(--edge);}
+.store-compare {padding: 16px 24px;}
+.store-support {padding: 40px 0;}
+.store-support-inner {max-width: 1240px; margin: auto; padding: 0 24px; display: grid; grid-template-columns: 3fr 2fr; gap: 24px; align-items: start;}
+.store-support-inner h2 {margin-bottom: 12px;}
+.store-support-inner details + details {margin-top: 8px;}
+.store-community {padding: 24px; display: grid; justify-items: start; gap: 12px;}
+.store-community h2 {margin: 0;}
+@media (max-width: 720px) {
+  .store-support-inner {grid-template-columns: minmax(0,1fr);}
+  .store-compare {padding: 12px;}
+}
