@@ -24,11 +24,13 @@ export async function checkout({request, env}, send) {
   if (!env.TEBEX_PLUGIN_SECRET || !/^\d+$/.test(packageId)) return json({error:'checkout_unconfigured'},503);
   try {
     const response = await send('https://plugin.tebex.io/checkout',{
-      method:'POST', redirect:'error', headers:{'Content-Type':'application/json','X-Tebex-Secret':env.TEBEX_PLUGIN_SECRET},
+      method:'POST', redirect:'manual', headers:{Accept:'application/json','Content-Type':'application/json','X-Tebex-Secret':env.TEBEX_PLUGIN_SECRET},
       body:JSON.stringify({package_id:packageId, username:input.username})
     });
     if (!response.ok) return json({error:'tebex_rejected', providerStatus:response.status},502);
-    const raw = (await response.json()).url;
+    const result = await response.json().catch(() => null);
+    const raw = result?.url ?? result?.data?.url;
+    if (typeof raw !== 'string' || !URL.canParse(raw)) return json({error:'invalid_checkout_response'},502);
     const url = checkoutUrl(raw);
     if (!url) return json({error:'unexpected_checkout_url', providerHost:new URL(raw).hostname},502);
     return json({url},200);
