@@ -1,4 +1,4 @@
-const DISCORD_TIMEOUT_MS = 5000;
+import { fetchDiscord } from '../discord-transport.js';
 const MAX_ERROR_LENGTH = 500;
 const DISCORD_API_ROOT = "https://discord.com/api/v10";
 
@@ -144,15 +144,7 @@ function contributorMessagePayload(env, notification) {
   };
 }
 
-async function boundedFetch(url, options, fetchImpl = fetch) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), DISCORD_TIMEOUT_MS);
-  try {
-    return await fetchImpl(url, { ...options, signal: controller.signal });
-  } finally {
-    clearTimeout(timer);
-  }
-}
+
 
 export async function listPendingCompetitionDiscordNotifications(db, nowIso, limit = 25) {
   const safeLimit = Number.isInteger(limit) ? Math.min(100, Math.max(1, limit)) : 25;
@@ -234,7 +226,7 @@ export async function recoverStaleCompetitionDiscordNotifications(db, nowIso, le
 async function deliverStaffWebhook(env, notification, fetchImpl) {
   const config = staffWebhookConfiguration(env);
   if (!config) return { status: "NOT_CONFIGURED" };
-  const response = await boundedFetch(config.webhook, {
+  const response = await fetchDiscord(config.webhook, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(webhookPayload(env, notification, config))
@@ -267,7 +259,7 @@ export function discordDmFailureIsPermanent(error) {
 }
 
 async function openDirectMessageChannel(recipient, auth, fetchImpl) {
-  const channelResponse = await boundedFetch(`${DISCORD_API_ROOT}/users/@me/channels`, {
+  const channelResponse = await fetchDiscord(`${DISCORD_API_ROOT}/users/@me/channels`, {
     method: "POST",
     headers: auth,
     body: JSON.stringify({ recipient_id: recipient })
@@ -281,7 +273,7 @@ async function openDirectMessageChannel(recipient, auth, fetchImpl) {
 }
 
 async function postDirectMessage(channelId, payload, auth, fetchImpl) {
-  const messageResponse = await boundedFetch(`${DISCORD_API_ROOT}/channels/${channelId}/messages`, {
+  const messageResponse = await fetchDiscord(`${DISCORD_API_ROOT}/channels/${channelId}/messages`, {
     method: "POST",
     headers: auth,
     body: JSON.stringify({ ...payload, allowed_mentions: { parse: [] } })

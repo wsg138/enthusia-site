@@ -11,8 +11,10 @@ import { readCommunityUpstream } from './upstream.js';
 import { salesStatements,snapshotStatement } from './persistence.js';
 import { topFiveByWeek,consecutiveTopWeeks } from './market-history.js';
 import { marketWeekRange } from '../../../public/assets/market/eastern-week.js';
-import { CONTENT_KINDS, SNAPSHOT_KINDS, identifier, validateRecord, decodeRow, publicRecord, projectSnapshot, verifyProducer } from './contracts.js';
+import { CONTENT_KINDS, SNAPSHOT_KINDS, identifier, text, validateRecord, decodeRow, publicRecord, projectSnapshot, verifyProducer } from './contracts.js';
 import { uploadNewsMedia, readNewsMedia } from './news-media.js';
+
+import { queueAnnouncement, deliveryStatus, deliverAnnouncement } from './discord-delivery.js';
 
 const unavailable=()=>json({error:'community_service_unavailable'},503);
 async function identity(request,env){
@@ -66,14 +68,35 @@ function recordStatements(db,record,actor,revision,now){
     .bind(actor.id,record.status,record.kind,record.slug,revision+1,now);
   return [revision===0?write:update,audit];
 }
-async function saveRecord(db,input,actor){
+function prepareAnnouncement(input,record) {
+  if(record.kind!=='news') return false;
+  const announce=record.status==='published' && input.announce===true;
+  if(input.discordSummary!=null || announce) record.discordSummary=text(input.discordSummary,1000,announce);
+  return announce;
+}
+
+async function submitAnnouncement(env,slug) {
+  try { return await deliverAnnouncement(env,slug); }
+  catch { return 'status_unavailable'; }
+}
+
+async function saveRecord(context,input,actor){
+  const db=context.env.COMMUNITY_DB;
   const record=staffRecord(input,actor),revision=input.revision??0;
   if(!Number.isInteger(revision)||revision<0)throw new Error('invalid_revision');
   if(await pollOptionsLocked(db,record))return json({error:'poll_options_locked'},409);
-  const now=new Date().toISOString();
-  const result=await db.batch(recordStatements(db,record,actor,revision,now));
+  const announce=prepareAnnouncement(input,record);
+  if(announce && new URL(context.request.url).origin!=='https://enthusia.info') return json({error:'production_only'},403);
+  return writeRecord(context.env,record,actor,revision,announce);
+}
+async function writeRecord(env,record,actor,revision,announce){
+  const db=env.COMMUNITY_DB, now=new Date().toISOString();
+  const statements=recordStatements(db,record,actor,revision,now);
+  if(announce) statements.push(queueAnnouncement(db,record,actor,now));
+  const result=await db.batch(statements);
   if(!result[0].meta.changes)return json({error:'revision_conflict'},409);
-  return json({...record,revision:revision+1,updatedAt:now});
+  const discordDelivery=announce ? await submitAnnouncement(env,record.slug) : undefined;
+  return json({...record,revision:revision+1,updatedAt:now,discordDelivery});
 }
 async function poll(db,slug,request,actor){
   const row=decodeRow(await db.prepare("SELECT payload,revision,updated_at FROM community_records WHERE kind='polls' AND slug=? AND status='published'").bind(slug).first());
@@ -187,10 +210,17 @@ const notFound = () => json({error:'not_found'},404);
 async function adminRoute(context, parts, dependencies) {
   const {request,env} = context, db = env.COMMUNITY_DB;
   let actor;
-  const publishing = parts.length===2 && ['session','news','changelog','news-media'].includes(parts[1]);
+  const delivery = parts.length===4 && parts[1]==='discord-delivery' && parts[2]==='news';
+  const publishing = delivery || parts.length===2 && ['session','news','changelog','news-media'].includes(parts[1]);
   try { actor = await dependencies.editor(request,env,publishing); }
   catch { return json({error:'authentication_required'},401); }
   if (!actor) return json({error:'editor_role_required'},403);
+  if(delivery) {
+    const slug=identifier(parts[3]);
+    if(request.method==='GET') return json({status:await deliveryStatus(db,slug)});
+    if(new URL(request.url).origin!=='https://enthusia.info') return json({error:'production_only'},403);
+    return json({status:await deliverAnnouncement(env,slug,true)});
+  }
   if (parts[1]==='session' && request.method==='GET') {
     return json({editor:true,name:actor.name??'Staff',rank:actor.rank??'Staff'});
   }
@@ -199,7 +229,7 @@ async function adminRoute(context, parts, dependencies) {
   if (request.method==='GET') return recordList(db,parts[1],true);
   const input = JSON.parse(await body(request));
   if (input.kind!==parts[1]) return json({error:'invalid_kind'},400);
-  return saveRecord(db,input,actor);
+  return saveRecord(context,input,actor);
 }
 
 async function linkedActor(context, dependencies) {
