@@ -21,11 +21,13 @@ async function identity(request,env){
   if(!s?.discordGuildMember||!s.linkedMinecraftAccounts?.length)return null;
   return {id:s.discord.id};
 }
-async function editor(request,env){
-  const s=await authenticateRequest(request,env);
+async function editor(request,env,allowDiscordPublisher=false){
+  const publishingDiscordId = allowDiscordPublisher ? env.COMMUNITY_PUBLISHER_DISCORD_ID : null;
+  const s=await authenticateRequest(request,env,undefined,{publishingDiscordId});
   const roles=new Set(String(env.COMMUNITY_EDITOR_ROLES??'founder,admin').split(',').map(v=>v.trim()));
   if(!s.roles.some(role=>roles.has(role)))return null;
-  return {id:s.player.uuid,name:s.player.name,rank:s.roles.includes('founder')?'Founder':s.roles.includes('admin')?'Admin':'Staff'};
+  return {id:s.player?.uuid??s.subject,name:s.player?.name??s.discord?.globalName??s.discord?.username??'Staff',
+    rank:s.roles.includes('founder')?'Founder':s.roles.includes('admin')?'Admin':'Staff'};
 }
 async function body(request){
   if(Number(request.headers.get('content-length')??0)>150000)throw new Error('body_too_large');
@@ -185,7 +187,8 @@ const notFound = () => json({error:'not_found'},404);
 async function adminRoute(context, parts, dependencies) {
   const {request,env} = context, db = env.COMMUNITY_DB;
   let actor;
-  try { actor = await dependencies.editor(request,env); }
+  const publishing = parts.length===2 && ['session','news','changelog','news-media'].includes(parts[1]);
+  try { actor = await dependencies.editor(request,env,publishing); }
   catch { return json({error:'authentication_required'},401); }
   if (!actor) return json({error:'editor_role_required'},403);
   if (parts[1]==='session' && request.method==='GET') {
@@ -270,7 +273,8 @@ async function publicRoute(context, parts) {
 
 async function routeCommunity(context, parts, dependencies) {
   switch (parts[0]) {
-    case 'news-media': return parts.length===2 && context.request.method==='GET' ? readNewsMedia(context.request,context.env,parts[1],dependencies.editor) : notFound();
+    case 'news-media': return parts.length===2 && context.request.method==='GET'
+      ? readNewsMedia(context.request,context.env,parts[1],(request,env)=>dependencies.editor(request,env,true)) : notFound();
     case 'ingest':
       return parts.length===1 && context.request.method==='POST'
         ? ingest(context.env.COMMUNITY_DB,context.request,context.env) : notFound();

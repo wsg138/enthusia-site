@@ -16,6 +16,50 @@ function request(db,path,method='GET',payload,extra={}){
   return handleCommunity({request:new Request('https://site.example/api/community/'+path,{method,headers:{origin:'https://site.example',...extra.headers},...(payload===undefined?{}:{body:JSON.stringify(payload)})}),params:{path},env:{COMMUNITY_DB:db,...extra.env}},extra.dependencies??dependencies);
 }
 const news={kind:'news',slug:'hello',title:'Hello',body:'**Hi**',status:'draft'};
+test('configured Discord publisher can publish during a Minecraft lookup outage',async()=>{
+  const {db,sql}=database();
+  const publisherId='123456789012345678', founderRoleId='234567890123456789';
+  const now=new Date().toISOString();
+  const session={discordUserId:publisherId,username:'Publisher',globalName:null,
+    expiresAt:now,authenticatedAt:now,discordRolesCheckedAt:now,
+    guildRoleIdsJson:JSON.stringify({member:true,roleIds:[founderRoleId]})};
+  const env={
+    COMMUNITY_DB:db, NETWORK_ACCOUNT_LINKS:'true',
+    COMMUNITY_PUBLISHER_DISCORD_ID:publisherId, DISCORD_FOUNDER_ROLE_IDS:founderRoleId,
+    COMPETITIONS_DB:{prepare(query){return {bind(){return {
+      first:async()=>query.includes('FROM competition_identity_sessions')?session:null,
+      run:async()=>({meta:{changes:1}})
+    };}};}}
+  };
+  const call=(path,payload)=>{
+    const request=new Request('https://site.example/api/community/'+path,{
+      method:payload?'POST':'GET',
+      headers:{origin:'https://site.example',cookie:'__Host-enthusia_competition_session=test-session-token'},
+      ...(payload?{body:JSON.stringify(payload)}:{})
+    });
+    return handleCommunity({request,params:{path},env});
+  };
+  try {
+    const editor=await call('admin/session');
+    assert.equal(editor.status,200);
+    assert.deepEqual(await editor.json(),{editor:true,name:'Publisher',rank:'Founder'});
+    for(const kind of ['news','changelog']){
+      const response=await call('admin/'+kind,{...news,kind,status:'published'});
+      assert.equal(response.status,200);
+    }
+    assert.equal(sql.prepare('SELECT actor FROM community_audit LIMIT 1').get().actor,'discord:'+publisherId);
+    assert.equal((await call('admin/roadmap')).status,401);
+
+    session.discordUserId='345678901234567890';
+    assert.equal((await call('admin/session')).status,401);
+    session.discordUserId=publisherId;
+    session.authenticatedAt=new Date(Date.now()-9*3600000).toISOString();
+    assert.equal((await call('admin/session')).status,401);
+    session.authenticatedAt=now;
+    session.guildRoleIdsJson=JSON.stringify({member:true,roleIds:[]});
+    assert.equal((await call('admin/session')).status,401);
+  } finally {sql.close();}
+});
 test('fresh guild association does not conceal stale balance and playtime in a stored profile',async()=>{
   const {db}=database();const sourceUpdatedAt=new Date(Date.now()-3600000).toISOString();
   await signed(db,{kind:'players',generatedAt:new Date().toISOString(),sourceUpdatedAt,items:[{id:'player',name:'Player',balance:42,guildsKnown:true,guildMemberships:[{id:'guild',name:'Guild'}]}]},'profile-fresh-guild-12345');

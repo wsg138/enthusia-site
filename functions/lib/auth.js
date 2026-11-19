@@ -153,7 +153,7 @@ function requireRecentDiscordStaffLogin(session,now) {
     throw new Error("Staff login expired; sign in again");
 }
 
-export function buildDiscordStaffSession(session, env, now = Date.now()) {
+export function buildDiscordStaffSession(session, env, now = Date.now(), publishingDiscordId = null) {
   if (!session || session.discordGuildMember !== true) {
     throw new Error("Discord server membership is required");
   }
@@ -164,25 +164,30 @@ export function buildDiscordStaffSession(session, env, now = Date.now()) {
   const roles = discordStaffRoles(session, env);
   if (!roles.length) throw new Error("A configured Discord staff role is required");
   const player = linkedStaffPlayer(session);
-  if (!player) throw new Error("A linked Minecraft account is required");
+  const verifiedPublisher = publishingDiscordId && session.discord?.id === publishingDiscordId;
+  if (!player && !verifiedPublisher) throw new Error("A linked Minecraft account is required");
   return Object.freeze({
     ...session,
-    player: Object.freeze(player),
+    player: player ? Object.freeze(player) : null,
     roles: Object.freeze(roles)
   });
 }
 
-export async function authenticateRequest(request, env, verifier = verifyAccessJwt) {
+export async function authenticateRequest(request, env, verifier = verifyAccessJwt, options = {}) {
+  const candidate = options.publishingDiscordId;
+  const publishingDiscordId = typeof candidate === "string" && /^\d{16,22}$/.test(candidate)
+    ? candidate : null;
   let discordError = null;
   if (env?.COMPETITIONS_DB && typeof env.COMPETITIONS_DB.prepare === "function") {
     try {
-      const identity = await getCompetitionIdentitySession(request, env.COMPETITIONS_DB, undefined, env);
+      const identity = await getCompetitionIdentitySession(request, env.COMPETITIONS_DB, undefined, env,
+        { accountDisplayOnly: Boolean(publishingDiscordId) });
       if (identity) {
         try {
           requireRecentDiscordStaffLogin(identity,Date.now());
           const current = discordRoleSnapshotIsFresh(identity)
             ? identity : await refreshDiscordRoleSnapshot(identity, env);
-          return buildDiscordStaffSession(current, env);
+          return buildDiscordStaffSession(current, env, Date.now(), publishingDiscordId);
         } catch (error) {
           discordError = error;
         }
