@@ -21,10 +21,9 @@ export async function attachNewsMenu(article) {
   const params = new URLSearchParams(location.search);
   let category = categories.has(params.get('category')) ? params.get('category') : 'All';
   sort.value = params.get('order') === 'oldest' ? 'oldest' : 'newest';
-  let posts;
+  let posts = [];
   function draw() {
     for (const button of filters.children) button.setAttribute('aria-pressed',String(button.value === category));
-    if (!posts) return;
     const items = orderNewsPosts(posts.filter(post => category === 'All' || category === post.category),sort.value);
     const query = new URLSearchParams();
     if (category !== 'All') query.set('category', category);
@@ -45,7 +44,7 @@ export async function attachNewsMenu(article) {
     filters.append(el('button', {type:'button', class:'chip', value, text:label, onclick:()=>{category=value; draw();}}));
   }
   sort.addEventListener('change', draw);
-  draw();
+  for (const button of filters.children) button.setAttribute('aria-pressed',String(button.value === category));
   try { posts=(await api('news')).items; draw(); }
   catch { list.replaceChildren(el('a',{href:'/news',text:'Open the news index'})); }
 }

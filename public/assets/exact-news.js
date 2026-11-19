@@ -33,6 +33,12 @@ function cardExcerpt(body, title) {
   }
   return '';
 }
+function storyCover(url, lead) {
+  const cover = el('img', {class:'news-story-cover', alt:'', loading:lead ? 'eager' : 'lazy'});
+  cover.addEventListener('error', () => cover.remove(), {once:true});
+  cover.src = newsImageSource(url);
+  return cover;
+}
 function storyCard(post, row, embedded, lead) {
   const card = embedded ? row : el('a', {href:'/news/' + encodeURIComponent(post.slug) + location.search});
   card.className = 'postbtn news-story';
@@ -43,12 +49,7 @@ function storyCard(post, row, embedded, lead) {
   if (excerpt) copy.append(el('span', {class:'news-story-excerpt', text:excerpt}));
   copy.append(byline);
   card.replaceChildren(copy);
-  if (post.image) {
-    const cover = el('img', {class:'news-story-cover', alt:'', loading:lead ? 'eager' : 'lazy'});
-    cover.addEventListener('error', () => cover.remove(), {once:true});
-    cover.src = newsImageSource(post.image);
-    card.prepend(cover);
-  }
+  if (post.image) card.prepend(storyCover(post.image, lead));
   return card;
 }
 async function reader(){

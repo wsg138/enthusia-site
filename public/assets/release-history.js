@@ -10,7 +10,6 @@ export function releaseHistory(section) {
   let order = 'newest';
 
   function draw() {
-    if (!entries) return;
     const term = search.value.trim().toLowerCase();
     const matches = orderNewsPosts(entries, order).filter(entry =>
       [entry.title, entry.body, entry.dateLabel, ...(entry.tags || [])]
@@ -48,12 +47,12 @@ export function releaseHistory(section) {
     draw();
   }
 
-  search.addEventListener('input', draw);
+  search.addEventListener('input', () => { if (entries) draw(); });
   return (category, direction) => {
     section.hidden = category !== 'All' && category !== 'Changelog';
     order = direction;
     if (section.hidden) return;
     if (!loading) loading = load();
-    else draw();
+    else if (entries) draw();
   };
 }
