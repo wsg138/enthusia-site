@@ -1,7 +1,7 @@
-.prestige-wrap { max-width:1100px; margin:auto; padding:24px clamp(16px,4vw,46px) 64px; background:#fff1cf; color:#3a0d0a; border-inline:4px solid #4a0b08; }
+.prestige-wrap { max-width:1100px; margin:auto; padding:24px clamp(16px,4vw,46px) 64px; background:var(--site-crimson); color:var(--ink); border-inline:4px solid var(--edge); box-shadow:var(--site-rails); }
 .prestige-wrap section { margin-top:32px; }
 .prestige-wrap h2 { font-size:clamp(26px,4vw,40px); line-height:1.2; margin-bottom:12px; }
-.sample-note { text-align:center; color:#713d20; }
+.sample-note { text-align:center; color:var(--muted); }
 .spotlight { padding:clamp(20px,4vw,40px); display:flex; align-items:center; justify-content:center; gap:28px; }
 .spotlight h2 { margin:12px 0; }
 .rank-art { display:grid; place-items:center; width:256px; max-width:100%; min-height:128px; background:#4a0b08; }
@@ -9,8 +9,8 @@
 .prestige-wrap img,.prestige-wrap canvas { image-rendering:pixelated; }
 .firsts,.totals { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
 .first { display:flex; flex-direction:column; align-items:center; text-align:center; gap:5px; padding:16px; }
-.unclaimed img { opacity:.45; filter:grayscale(1); }
-#ladder h3 { margin:16px 0 6px; color:#81231c; }
+.unclaimed img { opacity:.65; filter:grayscale(1); }
+#ladder h3 { margin:16px 0 6px; color:var(--kick); }
 .guild-card { margin:8px 0; scroll-margin-top:96px; }
 .guild-card > summary { display:flex; align-items:center; gap:16px; padding:16px; }
 .guild-card small { display:block; }
@@ -24,7 +24,7 @@
 .heads { display:flex; flex-wrap:wrap; gap:4px; }
 .roster summary,.fees summary { text-decoration:underline; padding:8px 0; }
 .totals { grid-template-columns:repeat(4,1fr); text-align:center; padding:20px; }
-.totals dd { margin:8px 0 0; font-size:24px; color:#a51b16; }
+.totals dd { margin:8px 0 0; font-size:24px; color:var(--head); }
 .fees { padding:12px 20px; margin-top:12px; }
 @media(max-width:640px) {
   .totals { grid-template-columns:1fr; }
@@ -41,3 +41,9 @@
 .milestones li:target { outline:3px solid #dba000; outline-offset:2px; }
 .guild-card > a { margin:0 16px 12px; }
 .spotlight .btn { margin-top:12px; }
+
+.en main:has(> .prestige-wrap) { background:var(--site-crimson); }
+.en main:has(> .prestige-wrap) .crenel { background-image:linear-gradient(90deg,transparent 25%,var(--site-crimson) 25% 75%,transparent 75%); }
+.prestige-wrap :is(h2,h3),.prestige-wrap .guild-card summary:hover,.prestige-wrap .fees summary:hover { color:var(--head); }
+.prestige-wrap .unclaimed { background-color:var(--site-crimson); }
+.prestige-wrap .roster summary:hover { color:var(--gold-hi); }

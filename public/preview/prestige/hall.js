@@ -74,7 +74,7 @@ function render(snapshot, players) {
   } else document.querySelector('#spotlight').textContent='No guild has prestiged yet.';
   for (const tier of snapshot.tiers) {
     const first=tier.first;
-    document.querySelector('#firsts').append(el('article',{class:'panel first' + (first?'':' unclaimed')},[
+    document.querySelector('#firsts').append(el('article',{class:'tip first' + (first?'':' unclaimed')},[
       badge(tier.tier,64),el('h3',{text:'Prestige ' + tier.roman}),
       first && !first.disbanded ? guildLink(first,tier.tier) : el('strong',{text:first?.name ?? 'Unclaimed'}),
       first && el('time',{datetime:first.reachedAt,text:date(first.reachedAt)}),
@@ -91,7 +91,7 @@ function render(snapshot, players) {
       const summary=el('summary',{},[banner,el('span',{},[
         el('strong',{text:'#' + g.hallRank + ' ' + g.name}),el('small',{text:[g.tag,'Level ' + g.level,g.memberCount+' members'].join(' · ')}),
         el('small',{text:'Prestige ' + tier.roman + ' since ' + date(g.reachedAt)})]),badge(g.tier,32)]);
-      const card=el('details',{class:'panel guild-card',id:'g-'+g.id},[summary,
+      const card=el('details',{class:'tip guild-card',id:'g-'+g.id},[summary,
         el('a',{class:'btn btn-dark',href:'guilds.html#'+encodeURIComponent(g.id),text:'View guild profile'}),
         el('ol',{class:'milestones'},g.history.map(h=>milestone(g.id,h,tiers.get(h.tier),players)))]);
       ladder.append(card);
@@ -118,5 +118,5 @@ try {
   const directory=await api('players').catch(()=>({items:[]}));
   render(await response.json(), new Map(directory.items.map(player=>[player.id,player])));
 } catch {
-  document.querySelector('#hall').replaceChildren(el('p',{class:'panel fees',role:'status',text:'The sample Hall of Prestige could not be loaded. Refresh to try again.'}));
+  document.querySelector('#hall').replaceChildren(el('p',{class:'tip fees',role:'status',text:'The sample Hall of Prestige could not be loaded. Refresh to try again.'}));
 }
