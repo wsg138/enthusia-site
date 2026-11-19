@@ -337,8 +337,8 @@ test('Discord announcement requires an opted-in publication and confirmed delive
   const {db,sql}=database();
   const originalFetch=globalThis.fetch;
   const sends=[];
-  globalThis.fetch=async(url,options)=>{
-    sends.push({url:String(url),payload:JSON.parse(options.body)});
+  globalThis.fetch=async(request)=>{
+    sends.push({url:request.url,payload:await request.json()});
     return Response.json({id:'123456789012345678'});
   };
   const env={COMMUNITY_DB:db,COMMUNITY_DISCORD_CHANGELOG_WEBHOOK:'https://discord.com/api/webhooks/123456789012345678/test-token'};

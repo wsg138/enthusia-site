@@ -8,7 +8,7 @@ export function queueAnnouncement(db, article, actor, now) {
   const channel = article.category === 'Changelog' ? 'CHANGELOG' : 'NEWS';
   const embed = {
     author: {name: '✦ ENTHUSIA SMP · ' + (channel === 'NEWS' ? 'ANNOUNCEMENT' : 'CHANGELOG')},
-    title: article.title, url, color: 11739162,
+    title: article.title, url, color: Number.parseInt('b3201a',16),
     description: article.discordSummary + '\n\n[Read the full post](' + url + ')'
   };
   if (article.image) embed.image = {url: new URL(article.image, site).href};
@@ -33,12 +33,16 @@ function webhook(raw) {
 
 async function send(embed, endpoint) {
   if (!endpoint) return {status:'unconfigured'};
+  const destination = new URL('https://discord.com/api/webhooks/');
+  destination.pathname += encodeURIComponent(endpoint.id) + '/' + encodeURIComponent(endpoint.token);
+  destination.searchParams.set('wait','true');
   try {
-    const response = await fetch(`https://discord.com/api/webhooks/${endpoint.id}/${endpoint.token}?wait=true`, {
+    const request = new Request(destination, {
       method:'POST', headers:{'content-type':'application/json'}, redirect:'error',
       signal:globalThis.AbortSignal.timeout(8000),
       body:JSON.stringify({embeds:[embed], allowed_mentions:{parse:[]}})
     });
+    const response = await fetch(request);
     if (response.ok) {
       const message = await response.json();
       if (/^\d{16,22}$/.test(message?.id)) return {status:'sent', messageId:message.id};
