@@ -32,7 +32,7 @@ function ascii4(data, offset) {
   return String.fromCharCode(data[offset], data[offset + 1], data[offset + 2], data[offset + 3]);
 }
 
-function validDimensions(width, height) {
+export function validDimensions(width, height) {
   return Number.isInteger(width)
     && Number.isInteger(height)
     && width > 0

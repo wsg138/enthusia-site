@@ -1,6 +1,8 @@
 import { inspectCompetitionImage, competitionImageLimits } from '../competitions/media-policy.js';
 import { json } from '../responses.js';
 
+import { inspectNewsGif } from './news-gif.js';
+
 const prefix='news-media/';
 const validId=/^[a-f0-9]{32}$/;
 
@@ -16,10 +18,10 @@ export async function uploadNewsMedia(request,env,actor){
   if(!actor)return json({error:'editor_role_required'},403);
   if(!env.COMPETITIONS_MEDIA?.put)return json({error:'news_media_unavailable'},503);
   let data;try{data=await bytes(request,competitionImageLimits().maxBytes);}catch(error){return json({error:error.message},error.message==='image_too_large'?413:400);}
-  const inspected=inspectCompetitionImage(data);
+  const inspected=inspectNewsGif(data) ?? inspectCompetitionImage(data);
   if(!inspected.ok)return json({error:inspected.error},400);
   const id=crypto.randomUUID().replace(/-/g,'');
-  await env.COMPETITIONS_MEDIA.put(prefix+id,data,{httpMetadata:{contentType:inspected.mimeType},customMetadata:{owner:actor.id}});
+  await env.COMPETITIONS_MEDIA.put(prefix+id,inspected.data ?? data,{httpMetadata:{contentType:inspected.mimeType},customMetadata:{owner:actor.id}});
   return json({url:'/api/community/news-media/'+id,width:inspected.width,height:inspected.height},201);
 }
 
@@ -34,6 +36,6 @@ export async function readNewsMedia(request,env,id,editor){
   if(!await mayRead(request,env,url,editor))return json({error:'not_found'},404);
   const object=await env.COMPETITIONS_MEDIA.get(prefix+id);if(!object)return json({error:'not_found'},404);
   const type=object.httpMetadata?.contentType;
-  if(!['image/png','image/jpeg'].includes(type))return json({error:'not_found'},404);
+  if(!['image/png','image/jpeg','image/gif'].includes(type))return json({error:'not_found'},404);
   return new Response(object.body,{headers:{'content-type':type,'x-content-type-options':'nosniff','cache-control':'private, no-store','content-security-policy':"default-src 'none'; sandbox"}});
 }

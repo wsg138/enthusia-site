@@ -107,7 +107,11 @@ async function editor(){
   one('[data-news-preview-close]').addEventListener('click',()=>dialog.close());
   one('[data-news-remove-cover]').addEventListener('click',()=>{cover='';draw();});
   async function prepareImage(file){
-    if(!['image/png','image/jpeg'].includes(file.type)||file.size>16*1024*1024)throw new Error('Choose a PNG or JPEG under 16 MB.');
+    if(file.type==='image/gif'){
+      if(file.size>8*1024*1024)throw new Error('Choose a GIF of 8 MB or less.');
+      return file;
+    }
+    if(!['image/png','image/jpeg'].includes(file.type)||file.size>16*1024*1024)throw new Error('Choose a PNG or JPEG under 16 MB, or a GIF up to 8 MB.');
     let image;
     try { image=await createImageBitmap(file); }
     catch { throw new Error('Unable to read this image. Export it as a PNG or JPEG and try again.'); }

@@ -240,7 +240,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <button class="chip tool" type="button" aria-label="Quote" data-on-click="lineQ">&gt; Quote</button>
 <button class="chip tool" type="button" aria-label="Small text" data-on-click="lineSub">-# Small</button>
 </div>
-<div class="news-upload-actions"><button class="chip" type="button" data-news-add-image disabled>Add image</button><button class="chip" type="button" data-news-add-cover disabled>Add cover image</button><button class="chip" type="button" data-news-remove-cover hidden>Remove cover</button><input data-news-image-file type="file" accept="image/png,image/jpeg" hidden><input data-news-cover-file type="file" accept="image/png,image/jpeg" hidden></div><p class="news-media-status" data-news-media-status role="status">PNG or JPEG. Images are uploaded when selected.</p>
+<div class="news-upload-actions"><button class="chip" type="button" data-news-add-image disabled>Add image</button><button class="chip" type="button" data-news-add-cover disabled>Add cover image</button><button class="chip" type="button" data-news-remove-cover hidden>Remove cover</button><input data-news-image-file type="file" accept="image/png,image/jpeg,image/gif" hidden><input data-news-cover-file type="file" accept="image/png,image/jpeg,image/gif" hidden></div><p class="news-media-status" data-news-media-status role="status">PNG, JPEG, or GIF. GIFs can be up to 8 MB. Images are uploaded when selected.</p>
 <textarea class="field" aria-label="Post text, Discord formatting" data-b-value="{{draft}}" data-on-change="setDraft" data-on-select="trackSel" data-on-keyup="trackSel" data-on-click="trackSel"></textarea>
 <p style="color: var(--muted)"><span data-b-text="charCount"></span></p>
 </div>
@@ -392,5 +392,5 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script src="assets/site-config.js" defer></script><script src="assets/enthusia.js" defer></script><script type="module" src="assets/exact-news.js?v=discord-role-pings"></script></body>
+<script src="assets/site-config.js" defer></script><script src="assets/enthusia.js" defer></script><script type="module" src="assets/exact-news.js?v=news-gifs"></script></body>
 </html>

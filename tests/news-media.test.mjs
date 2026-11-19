@@ -46,3 +46,27 @@ test('draft media is restricted to editors and public access follows publication
     response=await call('news-media/'+id,'GET',undefined,false);assert.equal(response.status,200);
   }finally{sql.close();}
 });
+
+// Two 1x1 frames with a shared red/blue palette, separate delays and an infinite loop.
+const animation=Buffer.from('47494638396101000100800000ff00000000ff21ff0b4e45545343415045322e30030100000021f90400060000002c000000000100010000020244010021f904000c0000002c00000000010001000002024c01003b','hex');
+test('animated News GIFs preserve frame data, timing and loop on upload and publication',async()=>{
+  const {sql,call}=fixture();
+  try {
+    for(const bytes of [animation,Buffer.concat([animation.subarray(0,-1),Buffer.from([0x21,0xfe,3,65,66,67,0,0x3b])])]){
+      const uploaded=await call('admin/news-media','POST',bytes);
+      assert.equal(uploaded.status,201);
+      const {url,width,height}=await uploaded.json();
+      assert.deepEqual([width,height],[1,1]);
+      const path=url.split('/api/community/')[1];
+      assert.equal((await call(path,'GET',undefined,false)).status,404);
+      const post={kind:'news',slug:url.split('/').pop(),title:'GIF',body:'![Animated]('+url+')',image:url,status:'published'};
+      assert.equal((await call('admin/news','POST',JSON.stringify(post))).status,200);
+      const response=await call(path,'GET',undefined,false);
+      assert.equal(response.headers.get('content-type'),'image/gif');
+      assert.deepEqual(Buffer.from(await response.arrayBuffer()),animation);
+    }
+    for(const invalid of [animation.subarray(0,-1),Buffer.concat([animation,Buffer.from('extra')])]){
+      assert.equal((await call('admin/news-media','POST',invalid)).status,400);
+    }
+  } finally {sql.close();}
+});
