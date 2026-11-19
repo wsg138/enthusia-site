@@ -1,3 +1,4 @@
+import { playerHead } from './exact-player-profile.js';
 import { api, el } from './community-dom.js';
 import { saleItemName } from './market/history-model.js';
 
@@ -32,6 +33,16 @@ function install(header) {
   dialog.append(el('div',{class:'site-search-top'},[el('h2',{id:'site-search-title',text:'Search Enthusia'}),close]),input,status,results);
   (header.closest('.en') || document.body).append(dialog);
   let started=false, pending=0, failed=0;
+  function resultLink(row) {
+    const link = el('a',{href:row.href,text:row.name});
+    if (row.player) {
+      const head = playerHead(row.player, 32);
+      head.alt = '';
+      link.className = 'player-search-result';
+      link.prepend(head);
+    }
+    return link;
+  }
   function draw() {
     if (!dialog.open) return;
     const q = input.value.trim().toLowerCase();
@@ -44,7 +55,7 @@ function install(header) {
       const shown = matching.slice(0, q ? 8 : 6);
       if (!shown.length) continue;
       count += shown.length;
-      results.append(el('section',{},[el('h3',{text:category}),...shown.map(row=>el('a',{href:row.href,text:row.name}))]));
+      results.append(el('section',{},[el('h3',{text:category}),...shown.map(resultLink)]));
     }
     status.textContent = [!count && (pending?'Searching…':'No matches.'), failed && 'Some public listings are unavailable.'].filter(Boolean).join(' ');
   }
@@ -114,6 +125,7 @@ function install(header) {
     load(group,async()=>{
       const rows=(await publicFeed(kind)).items.map(v=>{
         const row=entry(v.name,kind+'.html#'+encodeURIComponent(v.id));
+        if(kind==='players') row.player=v;
         for(const key of new Set([v.name,v.id])) {
           if(!key)continue;
           const k=String(key).toLowerCase();

@@ -187,3 +187,25 @@ body[data-competition-page=detail] .competition-reward-dialog :where(p,small){co
 a.identity-link { color:inherit; text-decoration:underline; text-decoration-color:#bc8a19; text-underline-offset:3px; }
 a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
 @media(max-width:580px){.site-head .site-head-in:has(.site-search-trigger){gap:5px!important;padding-inline:8px!important}.site-head .site-search-trigger{flex-basis:36px;height:38px}.site-head .brand img{max-width:32px;max-height:32px}}
+
+.home-hero-shade { position:absolute; inset:0; background:linear-gradient(90deg,rgba(41,9,6,.44),transparent 82%); pointer-events:none; }
+.home-hero-wrap,.home-slides-footer { position:relative; box-sizing:border-box; max-width:1240px; margin:auto; padding-inline:clamp(16px,4vw,48px); }
+.home-hero-wrap { padding-block:clamp(24px,4vw,60px); }
+.home-hero-panel { box-sizing:border-box; width:min(100%,540px); padding:clamp(16px,2.5vw,30px); border:3px solid #4a0b08; box-shadow:inset 0 0 0 2px #efbf47; background:rgba(75,12,9,.94); color:#fff8e6; }
+.home-hero-brand { display:flex; align-items:center; gap:12px; }
+.home-hero-brand img { flex:none; image-rendering:pixelated; }
+.home-hero-brand h1 { margin:0; font-size:clamp(24px,4vw,45px); line-height:1.15; color:#ffcf1f; text-shadow:3px 3px #4a0b08; }
+.home-hero-brand h1 span { color:#fff8e6; }
+.home-hero-description { margin:12px 0 16px; line-height:1.5; }
+.home-hero-panel .home-addresses { width:100%; max-width:none; margin:0; gap:8px; }
+.home-hero-panel .home-join-links { justify-content:flex-start; gap:8px; margin-top:12px; }
+.home-slides-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; padding-bottom:12px; }
+.home-slides-footer p { background:#4a0b08; color:#fff8e6; padding:4px 10px; }
+@media(max-width:540px) {
+  .home-hero-brand img { width:36px; height:36px; }
+  .home-hero-panel .home-addresses .btn { display:grid; grid-template-columns:auto 1fr; text-align:left; gap:0 8px; padding:6px 12px; }
+  .home-addresses .btn span,.home-addresses .btn small { text-align:right; }
+  .home-addresses .btn small { grid-column:1/-1; }
+  .home-slides-footer .btn { padding-inline:8px; }
+}
+.site-search-results a.player-search-result { display:flex; align-items:center; gap:10px; min-height:44px; box-sizing:border-box; }
