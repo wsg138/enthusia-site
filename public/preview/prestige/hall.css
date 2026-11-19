@@ -1,0 +1,35 @@
+.prestige-wrap { max-width:1100px; margin:auto; padding:24px clamp(16px,4vw,46px) 64px; background:#fff1cf; color:#3a0d0a; border-inline:4px solid #4a0b08; }
+.prestige-wrap section { margin-top:32px; }
+.prestige-wrap h2 { font-size:clamp(26px,4vw,40px); line-height:1.2; margin-bottom:12px; }
+.sample-note { text-align:center; color:#713d20; }
+.spotlight { padding:clamp(20px,4vw,40px); display:flex; align-items:center; justify-content:center; gap:28px; }
+.spotlight h2 { margin:12px 0; }
+.rank-art { display:grid; place-items:center; width:256px; max-width:100%; min-height:128px; background:#4a0b08; }
+.rank-art canvas { max-width:100%; height:auto; }
+.prestige-wrap img,.prestige-wrap canvas { image-rendering:pixelated; }
+.firsts,.totals { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.first { display:flex; flex-direction:column; align-items:center; text-align:center; gap:5px; padding:16px; }
+.unclaimed img { opacity:.45; filter:grayscale(1); }
+#ladder h3 { margin:16px 0 6px; color:#81231c; }
+.guild-card { margin:8px 0; scroll-margin-top:96px; }
+.guild-card > summary { display:flex; align-items:center; gap:16px; padding:16px; }
+.guild-card small { display:block; }
+.guild-card > summary::after { content:'+'; margin-left:auto; }
+.guild-card[open] > summary::after { content:'−'; }
+.guild-banner { width:32px; height:64px; flex:none; }
+.milestones { padding:0 16px 18px !important; }
+.milestones li { padding:12px 0; border-top:2px solid #ecc873; }
+.milestones strong,.milestones time { margin-inline:8px; }
+.milestones img { vertical-align:middle; }
+.heads { display:flex; flex-wrap:wrap; gap:4px; }
+.roster summary,.fees summary { text-decoration:underline; padding:8px 0; }
+.totals { grid-template-columns:repeat(4,1fr); text-align:center; padding:20px; }
+.totals dd { margin:8px 0 0; font-size:24px; color:#a51b16; }
+.fees { padding:12px 20px; margin-top:12px; }
+@media(max-width:640px) {
+  .firsts,.totals { grid-template-columns:1fr; }
+  .spotlight { flex-direction:column; text-align:center; }
+  .first { display:grid; grid-template-columns:64px 1fr; text-align:left; align-items:center; }
+  .first img { grid-row:1 / span 4; }
+  .first > :not(img) { grid-column:2; justify-self:start; }
+}

@@ -153,6 +153,24 @@ if(new URL(location.href).pathname.endsWith('/account.html')){
   mode.addEventListener('change',()=>{const url=new URL(location.href);url.searchParams.set('signout',mode.value);location.href=url.href;});banner.append(mode);
 }
 document.addEventListener('DOMContentLoaded',()=>{if(!document.getElementById('warzone'))return;const selector=document.createElement('select');selector.setAttribute('aria-label','Warzone preview state');const current=new URL(location.href).searchParams.get('warzone-state')??'captured';if(['captured','last-week'].includes(current))note.textContent='Warzone: captured real server data · Other sections: sample data · Actions are not saved';for(const [value,label]of [['captured','Server snapshot: current week'],['last-week','Server snapshot: last week'],['ready','Sample: connected'],['empty','Sample: no wins'],['stale','Sample: stale'],['unavailable','Sample: unavailable']]){const option=new Option(label,value);option.selected=value===current;selector.append(option);}selector.addEventListener('change',()=>{const url=new URL(location.href);url.searchParams.set('warzone-state',selector.value);url.hash='warzone';location.href=url.href;});banner.append(selector);},{once:true});
+document.addEventListener('DOMContentLoaded', () => {
+  const url = new URL('prestige.html', root);
+  const onHall = location.pathname.replace(/\.html$/, '') === url.pathname.replace(/\.html$/, '');
+  const addLink = (after, styled) => {
+    const link = document.createElement('a');
+    link.href = url.href;
+    link.textContent = 'Hall of Prestige';
+    if (styled) link.className = 'btn btn-gold';
+    if (onHall) link.setAttribute('aria-current', 'page');
+    after.after(link);
+  };
+  document.querySelectorAll('nav a, footer a').forEach(link => {
+    if (link.href === new URL('guildquests.html', root).href) addLink(link, false);
+  });
+  const intro = Array.from(document.querySelectorAll('main h2, main h3')).find(heading =>
+    ['Prestige and Seasonal ELO', 'Nobody did it before them'].includes(heading.textContent.trim()));
+  if (intro) addLink(intro, true);
+}, {once:true});
 document.addEventListener('click',event=>{
   const a=event.target.closest?.('a[href]');if(!a)return;
   const url=new URL(a.href);

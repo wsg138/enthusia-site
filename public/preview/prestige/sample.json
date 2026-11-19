@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-19T06:00:00Z",
+  "revision": "2f4b882993ea6bfd61940a53bb186590af96473f6edaa56e179d5ada1202af83",
+  "maxTier": 6,
+  "tiers": [
+    {
+      "tier": 1,
+      "roman": "I",
+      "fee": 8000,
+      "perks": [],
+      "first": {
+        "guildId": "36f675cc-81e7-4ef5-a8e2-5d940ed90475",
+        "name": "Sample Old Guard",
+        "reachedAt": "2026-10-12T19:00:00Z",
+        "disbanded": true
+      },
+      "guildCount": 2
+    },
+    {
+      "tier": 2,
+      "roman": "II",
+      "fee": 16000,
+      "perks": [
+        "second_ally_home"
+      ],
+      "first": {
+        "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+        "name": "Sample Wardens",
+        "reachedAt": "2026-11-02T20:05:31Z",
+        "disbanded": false
+      },
+      "guildCount": 0
+    },
+    {
+      "tier": 3,
+      "roman": "III",
+      "fee": 24000,
+      "perks": [],
+      "first": {
+        "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+        "name": "Sample Wardens",
+        "reachedAt": "2026-11-14T22:41:09Z",
+        "disbanded": false
+      },
+      "guildCount": 1
+    },
+    {
+      "tier": 4,
+      "roman": "IV",
+      "fee": 24000,
+      "perks": [],
+      "first": null,
+      "guildCount": 0
+    },
+    {
+      "tier": 5,
+      "roman": "V",
+      "fee": 24000,
+      "perks": [],
+      "first": null,
+      "guildCount": 0
+    },
+    {
+      "tier": 6,
+      "roman": "VI",
+      "fee": 24000,
+      "perks": [
+        "second_vault"
+      ],
+      "first": null,
+      "guildCount": 0
+    }
+  ],
+  "guilds": [
+    {
+      "id": "6513270e-269e-4d37-b2a7-4de452e6b438",
+      "name": "Sample Wardens",
+      "tag": "WRD",
+      "tier": 3,
+      "hallRank": 1,
+      "reachedAt": "2026-11-14T22:41:09Z",
+      "level": 12,
+      "memberCount": 18,
+      "banner": {
+        "baseColor": "BLACK",
+        "baseColorHex": "#1D1D21",
+        "patterns": [
+          {
+            "type": "minecraft:rhombus",
+            "color": "YELLOW",
+            "colorHex": "#FED83D"
+          },
+          {
+            "type": "minecraft:border",
+            "color": "RED",
+            "colorHex": "#B02E26"
+          }
+        ]
+      },
+      "history": [
+        {
+          "tier": 1,
+          "reachedAt": "2026-10-19T01:12:44Z",
+          "firstOnServer": false,
+          "keptReward": {
+            "id": "bank-10",
+            "name": "Bank Extension 10"
+          },
+          "feePaid": 8000,
+          "credited": [
+            "6b0d549b-6f03-475a-9600-a35a099950d8",
+            "8d116ece-1738-47d9-bd9c-172411e20b8f",
+            "90c192cf-d3ac-44af-8f21-ddb66cad4a26",
+            "a170b338-3926-4059-b28c-105d1fb17c23",
+            "0fd630f1-f29d-4da9-953f-48f1a09f76b5",
+            "0cb1e29c-658c-4a14-95e6-0af593bd04cf",
+            "8e81973e-0bec-47b0-b898-d190f9ebdacc",
+            "6b4cb242-4a23-4596-a217-beaddbc496cb",
+            "92276658-1e27-41c0-8a6a-63ec24ede6a4",
+            "ae97ba94-d0ed-482f-8f6d-05584ef8aa38",
+            "923a7369-94e3-4f91-9a61-dbe22e44158b"
+          ],
+          "creditedTotal": 11
+        },
+        {
+          "tier": 2,
+          "reachedAt": "2026-11-02T20:05:31Z",
+          "firstOnServer": true,
+          "keptReward": {
+            "id": "cooldown-5",
+            "name": "Quick Travel 5"
+          },
+          "feePaid": 16000,
+          "credited": [
+            "b64ce422-8c38-4b29-98f1-35d25f557203",
+            "9e7769b1-0f42-45b4-907a-70c31012f037",
+            "881ed162-ae2e-4154-bf15-052434b9b5df",
+            "7731af10-506b-42ef-86f8-77186d76b07e",
+            "5c90a958-7403-4430-ac66-a78795e761d1",
+            "2e05319a-cb5c-4427-bf98-e2774cbd87ad",
+            "14f4733f-3e7d-4bfb-87a2-ea20b2f14c94",
+            "7ebff206-8673-4721-8cdd-2055930d6eaf",
+            "72e6cc3a-babc-4d20-97ee-05cde00902c7",
+            "12bd4ace-faec-4d38-9be4-bcfc49b64a08",
+            "2a3af4d4-6b0a-48e8-830e-07bc1e398f10",
+            "eeeacbe2-26e8-4555-9790-f82ec1d3fcff",
+            "f646e1f4-0a09-4c97-abf4-6c697d2caf82",
+            "8ede0d7a-c3ba-4a9e-93de-ef86ab1031d0"
+          ],
+          "creditedTotal": 14
+        },
+        {
+          "tier": 3,
+          "reachedAt": "2026-11-14T22:41:09Z",
+          "firstOnServer": true,
+          "keptReward": {
+            "id": "cooldown-5",
+            "name": "Quick Travel 5"
+          },
+          "feePaid": 24000,
+          "credited": [
+            "98289fcd-59a5-4a7b-b1fe-e08f57124242",
+            "74c9df6a-cc01-4cdd-9474-031b7f26144b",
+            "f1d69ed6-17f5-4837-9708-20fe119a72d1",
+            "aa05e11a-b271-4945-b95e-8229451abd81",
+            "b394fb36-bb2d-420f-8f88-080b10a3d6b2",
+            "fe3b890b-93f4-48b3-a5aa-3c814f426dcb",
+            "48db40af-7215-4370-9269-a9a5ae658f33",
+            "ab2cd31e-e315-4288-a2c3-3a4fb774eb52",
+            "7631a992-f0ce-4835-85c6-af0758d5563d",
+            "1df9fd78-9c65-4938-ab05-37e65affb229",
+            "c4aaeac1-37dc-46fb-8f17-a3007e62aa0a",
+            "3f63af83-bd05-41e6-a11c-70cf49952399",
+            "df1582b0-eab4-47d2-a415-479c65dc9f50",
+            "72fdf202-2a96-4b1a-94a0-f9e77f1b103c",
+            "e2257159-4720-471f-8ca8-181166d22876",
+            "dd2e1609-6e36-4ab0-91bc-52d9230d977e"
+          ],
+          "creditedTotal": 16
+        }
+      ]
+    },
+    {
+      "id": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+      "name": "Sample Tidecallers",
+      "tag": "TIDE",
+      "tier": 1,
+      "hallRank": 2,
+      "reachedAt": "2026-10-25T17:30:00Z",
+      "level": 61,
+      "memberCount": 9,
+      "banner": {
+        "baseColor": "CYAN",
+        "baseColorHex": "#169C9C",
+        "patterns": [
+          {
+            "type": "minecraft:stripe_bottom",
+            "color": "WHITE",
+            "colorHex": "#F9FFFE"
+          }
+        ]
+      },
+      "history": [
+        {
+          "tier": 1,
+          "reachedAt": "2026-10-25T17:30:00Z",
+          "firstOnServer": false,
+          "keptReward": {
+            "id": "fee-5",
+            "name": "Treasury Discount 5"
+          },
+          "feePaid": 8000,
+          "credited": [
+            "5bd86d40-fc89-4b4a-aa50-df4db4d66a3a",
+            "f52ddf5d-6164-49c9-a25a-7605aec6f024",
+            "2d1c9af0-153e-4c2a-a6a2-c0bd3b1287ff",
+            "3bbbe9ea-a894-4c89-bb61-867626bb7dbd",
+            "96d0cc5f-d4c2-4c2e-bc26-847f0316909e",
+            "010c4759-482c-4cbc-8343-5cc52eae05cf",
+            "5e8766ed-88da-4401-ab40-13ef254b0c4e",
+            "f3fe39c0-5190-48f5-90fb-bd119c1caaf7",
+            "83f73f16-dbf4-48b2-b0c4-312d20203626"
+          ],
+          "creditedTotal": 9
+        }
+      ]
+    },
+    {
+      "id": "9531985d-5d9d-49f8-9818-e811892f902b",
+      "name": "Sample Emberforge",
+      "tag": null,
+      "tier": 1,
+      "hallRank": 3,
+      "reachedAt": "2026-11-18T03:02:10Z",
+      "level": 4,
+      "memberCount": 6,
+      "banner": null,
+      "history": [
+        {
+          "tier": 1,
+          "reachedAt": "2026-11-18T03:02:10Z",
+          "firstOnServer": false,
+          "keptReward": {
+            "id": "fee-5",
+            "name": "Treasury Discount 5"
+          },
+          "feePaid": 8000,
+          "credited": [
+            "c7ac1491-def8-4334-a647-cb8f74e69a5d",
+            "cc4169a3-ae3a-4b7f-9fe0-1893f3aed0b6",
+            "66237a04-65e7-4423-a472-f1a38f2c6ec8",
+            "a260cd0b-7b45-445c-9a81-682c64e50cad",
+            "113db17d-30cb-497d-8fef-792866836886",
+            "298cb3a5-70cc-4c31-b571-810afc132d0d"
+          ],
+          "creditedTotal": 6
+        }
+      ]
+    }
+  ],
+  "recent": [
+    {
+      "guildId": "9531985d-5d9d-49f8-9818-e811892f902b",
+      "name": "Sample Emberforge",
+      "tier": 1,
+      "reachedAt": "2026-11-18T03:02:10Z",
+      "disbanded": false
+    },
+    {
+      "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+      "name": "Sample Wardens",
+      "tier": 3,
+      "reachedAt": "2026-11-14T22:41:09Z",
+      "disbanded": false
+    },
+    {
+      "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+      "name": "Sample Wardens",
+      "tier": 2,
+      "reachedAt": "2026-11-02T20:05:31Z",
+      "disbanded": false
+    },
+    {
+      "guildId": "d23f0824-128b-4f33-8c5c-7fd0a6a3a450",
+      "name": "Sample Tidecallers",
+      "tier": 1,
+      "reachedAt": "2026-10-25T17:30:00Z",
+      "disbanded": false
+    },
+    {
+      "guildId": "6513270e-269e-4d37-b2a7-4de452e6b438",
+      "name": "Sample Wardens",
+      "tier": 1,
+      "reachedAt": "2026-10-19T01:12:44Z",
+      "disbanded": false
+    },
+    {
+      "guildId": "36f675cc-81e7-4ef5-a8e2-5d940ed90475",
+      "name": "Sample Old Guard",
+      "tier": 1,
+      "reachedAt": "2026-10-12T19:00:00Z",
+      "disbanded": true
+    }
+  ],
+  "totals": {
+    "prestiges": 6,
+    "guildsPrestiged": 4,
+    "tiersClaimed": 3,
+    "goldSpent": 72000
+  }
+}
