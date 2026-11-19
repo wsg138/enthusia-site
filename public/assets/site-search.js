@@ -5,12 +5,7 @@ import { saleItemName } from './market/history-model.js';
 const header = document.querySelector('.site-head-in');
 if (header) install(header);
 
-function install(header) {
-  const root = new URL('.', header.querySelector('.brand').href);
-  const preview = document.documentElement.hasAttribute('data-preview-root');
-  const groups = new Map();
-  const identities = new Map();
-  const typed = {players:new Map(),guilds:new Map()};
+function navigationResults(header,root) {
   const pages = new Map();
   for (const a of header.querySelectorAll('nav a[href]')) {
     if (a.origin !== location.origin || a.closest('[data-staff-link]')) continue;
@@ -19,7 +14,16 @@ function install(header) {
   for (const [path, label] of [['index.html','Home'],['join.html#commands','Player guide · Commands'],['join.html#warzone','Warzone rules and rotations'],['join.html#join-faq-title','Joining FAQ']]) {
     pages.set(new URL(path, root).href, label);
   }
-  groups.set('Pages and guides', Array.from(pages, ([href, name]) => ({href, name})));
+  return Array.from(pages, ([href, name]) => ({href, name}));
+}
+
+function install(header) {
+  const root = new URL('.', header.querySelector('.brand').href);
+  const preview = document.documentElement.hasAttribute('data-preview-root');
+  const groups = new Map();
+  const identities = new Map();
+  const typed = {players:new Map(),guilds:new Map()};
+  groups.set('Pages and guides', navigationResults(header,root));
 
   const trigger = el('button', {type:'button',class:'site-search-trigger','aria-label':'Search site','aria-haspopup':'dialog',title:'Search site (/)'});
   trigger.append(el('span', {class:'site-search-glass','aria-hidden':'true'}));
@@ -118,6 +122,7 @@ function install(header) {
     return founder ? 'FainNeito' : name;
   }
   function profileUrl(node,name,staff) {
+    if(!name)return null;
     const account = staff && node.matches('h3,p span')
       ? staff.querySelector('a[href*="laby.net/@"]')?.href.split('@').pop() : null;
     const identity=profileKey(node,name,account);
@@ -130,7 +135,6 @@ function install(header) {
     const staff=node.closest('.staff-info');
     if(staff && node.matches('p span') && !node.parentElement.textContent.trim().startsWith('Minecraft'))return;
     const name=node.textContent.trim();
-    if(!name)return;
     const match=profileUrl(node,name,staff);
     if(!match)return;
     node.replaceChildren(el('a',{href:match,class:'identity-link',text:name}));
