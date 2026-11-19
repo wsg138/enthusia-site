@@ -1,3 +1,4 @@
+import { changelogEmbed } from '../../../public/assets/changelog-embed.js';
 import { fetchDiscord } from '../discord-transport.js';
 
 // Delivery receipts use a private record kind outside CONTENT_KINDS. One receipt per
@@ -22,8 +23,8 @@ function mentionFields(mention) {
 export function queueAnnouncement(db, article, actor, now) {
   const url = site + '/news#' + encodeURIComponent(article.slug);
   const channel = article.category === 'Changelog' ? 'CHANGELOG' : 'NEWS';
-  const embed = {
-    author: {name: '✦ ENTHUSIA SMP · ' + (channel === 'NEWS' ? 'ANNOUNCEMENT' : 'CHANGELOG')},
+  const embed = channel === 'CHANGELOG' ? changelogEmbed(article) : {
+    author: {name: '✦ ENTHUSIA SMP · ANNOUNCEMENT'},
     title: article.title, url, color: Number.parseInt('b3201a',16),
     description: article.discordSummary + '\n\n[Read the full post](' + url + ')'
   };

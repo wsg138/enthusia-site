@@ -349,7 +349,7 @@ test('Discord announcement requires an opted-in publication and confirmed delive
     params:{path},env
   },dependencies);
   try {
-    const article={...news,category:'Changelog',discordSummary:'Short summary',image:'/api/community/news-media/'+'a'.repeat(32)};
+    const article={...news,category:'Changelog',body:'## 🏠 Homes\n- Use `/home`',discordSummary:'Short summary',image:'/api/community/news-media/'+'a'.repeat(32)};
     await call('admin/news',{...article,announce:true});
     await call('admin/news',{...article,status:'published',revision:1});
     assert.equal(sends.length,0);
@@ -363,6 +363,8 @@ test('Discord announcement requires an opted-in publication and confirmed delive
     const [embed]=message.payload.embeds;
     assert.equal(embed.url,'https://enthusia.info/news#hello');
     assert.match(embed.description,/Short summary/);
+    assert.ok(embed.description.includes('**🏠 Homes**\n> • Use `/home`'));
+    assert.ok(embed.footer.text.startsWith('by '));
     assert.equal(embed.image.url,'https://enthusia.info'+article.image);
     await call('admin/news',{...article,status:'published',announce:true,revision:3});
     await call('admin/discord-delivery/news/hello',{});
