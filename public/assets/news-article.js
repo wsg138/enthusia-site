@@ -1,8 +1,10 @@
+import { attachNewsMenu } from './news-article-menu.js';
 import { renderMarkup, notice } from './exact-markup.js?v=news-images-20261103';
 
 const article = document.querySelector('.release');
 const body = article.querySelector('.release-body');
 if (body) {
+  attachNewsMenu(article);
   renderMarkup(body, body.textContent);
   const dialog = document.querySelector('.release-lightbox');
   const enlarged = dialog.querySelector('img');
