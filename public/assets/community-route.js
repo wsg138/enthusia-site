@@ -3,7 +3,13 @@ const contentKinds = new Set(['news', 'changelog', 'roadmap', 'timeline', 'hallo
 const publicKinds = new Set([...contentKinds, 'guilds', 'guildquests', 'players', 'bounties', 'warzone',
   'insights', 'alerts', 'market-design']);
 
+function newsReceipt(segments) {
+  return segments.slice(0,3).join('/') === 'admin/discord-delivery/news'
+    && /^[A-Za-z0-9_.:-]{1,80}$/.test(segments[3]) && !['.', '..'].includes(segments[3]);
+}
+
 function validSegments(segments) {
+  if (segments.length === 4) return newsReceipt(segments);
   if (segments.length === 1) return publicKinds.has(segments[0]);
   if (segments.length !== 2) return false;
   if (segments[0] === 'admin') return segments[1] === 'session' || contentKinds.has(segments[1]);

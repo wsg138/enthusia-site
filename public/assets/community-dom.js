@@ -1,4 +1,4 @@
-import { communityApiPath } from './community-route.js';
+import { communityApiPath } from './community-route.js?v=news-receipts';
 
 function applyAttributes(node,attributes){
   for(const [key,value] of Object.entries(attributes)){
