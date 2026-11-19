@@ -1,0 +1,21 @@
+.release-main { padding:clamp(24px,5vw,72px) 18px; min-height:60vh }
+.release { max-width:850px; margin:auto; color:#39130c; overflow-wrap:anywhere }
+.release-back { display:inline-block; margin-bottom:24px; color:#7d120e }
+.release-header { padding-bottom:24px; border-bottom:4px solid #d8ab54 }
+.release-meta,.release-byline,.release-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px }
+.release-meta time,.release-byline span { color:#70452c }
+.en .release h1 { margin:16px 0; font-size:clamp(30px,5vw,60px); line-height:1.14; color:#870f0c }
+.release-byline img { image-rendering:pixelated }
+.release-cover { margin:24px 0; background:#ffe5a9; border:3px solid #502418; text-align:center }
+.release-zoom { cursor:zoom-in; max-width:100%; background:none; border:0; padding:0; vertical-align:middle }
+.release-cover .release-zoom { width:100% }
+.release-cover img { display:block; margin:auto; max-height:440px; max-width:100%; object-fit:contain }
+.release-body { margin:28px 0; font:18px/1.65 system-ui,sans-serif }
+.release-body :is(.md-h1,.md-h2,.md-h3) { margin:1em 0 .4em; color:#761812; line-height:1.25 }
+.release-body .news-inline-image { max-width:100%; box-sizing:border-box; height:auto }
+.release-actions { margin-top:36px; padding-top:22px; border-top:3px solid #d8ab54; justify-content:space-between }
+.release-lightbox { box-sizing:border-box; width:100vw; max-width:100vw; height:100dvh; max-height:100dvh; padding:18px; margin:0; border:0; background:#170f0cf5; color:white }
+.release-lightbox[open] { display:grid; grid-template-rows:auto minmax(0,1fr); gap:14px }
+.release-lightbox::backdrop { background:#170f0c }
+.release-lightbox button { justify-self:end }
+.release-lightbox img { width:100%; height:100%; object-fit:contain }

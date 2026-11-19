@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { changelogEmbed } from '../public/assets/changelog-embed.js';
 
 const article = {slug:'release', title:'November update', authorName:'Fain'};
-const link = '[Read the full changelog](https://enthusia.info/news#release)';
+const link = '[Read the full changelog](https://enthusia.info/news/release)';
 
 test('changelog groups unheaded notes and emoji topics without an intro', () => {
   const body = 'General fix\n## 🏠 Homes\n- Use `/home`\n• Claim changes\n# Empty section';

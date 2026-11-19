@@ -1,4 +1,4 @@
-import { changelogEmbed,changelogColor } from './changelog-embed.js?v=discord-avatar';
+import { changelogEmbed,changelogColor } from './changelog-embed.js?v=article-links';
 import { api,el } from './community-dom.js?v=news-receipts';
 import { renderMarkup,formattedDate,notice,newsImageSource } from './exact-markup.js?v=news-images-20261103';
 import { orderNewsPosts } from './news-order.js';
@@ -20,7 +20,23 @@ function author(record) {
   text('[data-author-rank]', record.authorRank ?? 'Staff');
 }
 function setCover(url){const image=one('[data-news-cover]');if(!image)return;image.hidden=!url;if(url)image.src=newsImageSource(url);else image.removeAttribute('src');}
+function articleRow(row,slug){
+  const link=document.createElement('a');
+  link.className='postbtn';
+  link.href='/news/'+encodeURIComponent(slug);
+  link.append(...row.children);
+  return link;
+}
 async function reader(){
+  const embedded=document.documentElement.hasAttribute('data-preview-root');
+  if(!embedded && location.hash && location.hash!=='#main-content'){
+    let legacy;
+    try { legacy=decodeURIComponent(location.hash.slice(1)); } catch { legacy=''; }
+    if(/^[A-Za-z0-9_.:-]{1,80}$/.test(legacy) && !['.','..'].includes(legacy)){
+      location.replace('/news/'+encodeURIComponent(legacy));
+      return;
+    }
+  }
   const template=one('#news-row-template'),panel=one('article.panel.swap'),list=template.parentElement.firstElementChild;let posts=[],selected=null,category='All',order='newest';
   const feedback=el('p',{class:'exact-status',role:'status',text:'Loading posts...'});list.append(feedback);panel.hidden=true;
   function choose(post){
@@ -36,16 +52,17 @@ async function reader(){
     list.replaceChildren(...items.map(post=>{
       const row=clearBindings(template.content.firstElementChild.cloneNode(true));row.className='postbtn';row.dataset.slug=post.slug;row.setAttribute('aria-pressed',String(selected?.slug===post.slug));
       row.children[0].className='tag '+(tags.get(post.category)??'tag-dark');row.children[0].textContent=post.category;row.children[1].textContent=post.title;row.children[2].textContent=formattedDate(post.date)+' - '+(post.authorName??'Staff');
+      if(!embedded)return articleRow(row,post.slug);
       row.addEventListener('click',()=>choose(post));return row;
     }));
     if(!items.length){list.append(el('p',{class:'exact-status',text:'No published posts in this category.'}));panel.hidden=true;}
-    else if(!items.some(post=>post.slug===selected?.slug))choose(items[0]);
+    else if(embedded && !items.some(post=>post.slug===selected?.slug))choose(items[0]);
   }
   for(const node of document.querySelectorAll('[data-on-click^="pickK"]'))node.addEventListener('click',()=>{category=node.dataset.onClick.slice(5);for(const button of node.parentElement.children)button.setAttribute('aria-pressed',String(button===node));draw();});
   for(const button of document.querySelectorAll('[data-news-order]'))button.addEventListener('click',()=>{order=button.dataset.newsOrder;for(const peer of document.querySelectorAll('[data-news-order]'))peer.setAttribute('aria-pressed',String(peer===button));draw();});
   one('[data-on-click="pickKAll"]').setAttribute('aria-pressed','true');
   const copy=[...panel.querySelectorAll('button')].find(node=>node.textContent.includes('Copy link'));copy?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(new URL('#'+encodeURIComponent(selected.slug),location.href).href);notice('Post link copied.');}catch{notice('Copy the address from your browser.');}});
-  try{posts=(await api('news')).items;selected=posts.find(post=>post.slug===decodeURIComponent(location.hash.slice(1)))??null;draw();if(selected)choose(selected);}catch(error){feedback.textContent=error.message;}
+  try{posts=(await api('news')).items;selected=embedded?posts.find(post=>post.slug===decodeURIComponent(location.hash.slice(1)))??null:null;draw();if(selected)choose(selected);}catch(error){feedback.textContent=error.message;}
 }
 function newsSlug(title){return title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60);}
 async function editor(){

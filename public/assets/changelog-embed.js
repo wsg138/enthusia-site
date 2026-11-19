@@ -18,7 +18,7 @@ function* changeLines(body) {
 }
 
 export function changelogEmbed(article, avatarUrl) {
-  const url = 'https://enthusia.info/news#' + encodeURIComponent(article.slug);
+  const url = 'https://enthusia.info/news/' + encodeURIComponent(article.slug);
   const link = '[Read the full changelog](' + url + ')';
   const overflow = 'More changes on the site. ';
   let description = (article.discordSummary || '').trim();
