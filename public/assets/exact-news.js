@@ -1,5 +1,5 @@
 import { releaseHistory } from './release-history.js';
-import { changelogEmbed,changelogColor } from './changelog-embed.js?v=article-links';
+import { changelogEmbed,changelogColor } from './changelog-embed.js?v=redesign-gold';
 import { api,el } from './community-dom.js?v=news-receipts';
 import { renderMarkup,formattedDate,notice,newsImageSource } from './exact-markup.js?v=news-images-20261103';
 import { orderNewsPosts } from './news-order.js';
