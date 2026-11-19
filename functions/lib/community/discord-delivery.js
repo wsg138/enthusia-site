@@ -8,7 +8,7 @@ export function queueAnnouncement(db, article, actor, now) {
   const channel = article.category === 'Changelog' ? 'CHANGELOG' : 'NEWS';
   const embed = {
     author: {name: '✦ ENTHUSIA SMP · ' + (channel === 'NEWS' ? 'ANNOUNCEMENT' : 'CHANGELOG')},
-    title: article.title, url, color: 0xb3201a,
+    title: article.title, url, color: 11739162,
     description: article.discordSummary + '\n\n[Read the full post](' + url + ')'
   };
   if (article.image) embed.image = {url: new URL(article.image, site).href};
@@ -26,14 +26,15 @@ export async function deliveryStatus(db, slug) {
 }
 
 function webhook(raw) {
-  if (typeof raw !== 'string' || !/^https:\/\/discord(?:app)?\.com\/api\/webhooks\/\d{16,22}\/[A-Za-z0-9._-]+$/.test(raw)) return null;
-  return new URL(raw + '?wait=true');
+  if (typeof raw !== 'string') return null;
+  const parts = /^https:\/\/discord(?:app)?\.com\/api\/webhooks\/(\d{16,22})\/([A-Za-z0-9._-]+)$/.exec(raw);
+  return parts ? {id:parts[1], token:parts[2]} : null;
 }
 
 async function send(embed, endpoint) {
   if (!endpoint) return {status:'unconfigured'};
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetch(`https://discord.com/api/webhooks/${endpoint.id}/${endpoint.token}?wait=true`, {
       method:'POST', headers:{'content-type':'application/json'}, redirect:'error',
       signal:globalThis.AbortSignal.timeout(8000),
       body:JSON.stringify({embeds:[embed], allowed_mentions:{parse:[]}})

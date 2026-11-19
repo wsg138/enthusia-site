@@ -68,25 +68,34 @@ function recordStatements(db,record,actor,revision,now){
     .bind(actor.id,record.status,record.kind,record.slug,revision+1,now);
   return [revision===0?write:update,audit];
 }
+function prepareAnnouncement(input,record) {
+  if(record.kind!=='news') return false;
+  const announce=record.status==='published' && input.announce===true;
+  if(input.discordSummary!=null || announce) record.discordSummary=text(input.discordSummary,1000,announce);
+  return announce;
+}
+
+async function submitAnnouncement(env,slug) {
+  try { return await deliverAnnouncement(env,slug); }
+  catch { return 'status_unavailable'; }
+}
+
 async function saveRecord(context,input,actor){
   const db=context.env.COMMUNITY_DB;
   const record=staffRecord(input,actor),revision=input.revision??0;
   if(!Number.isInteger(revision)||revision<0)throw new Error('invalid_revision');
   if(await pollOptionsLocked(db,record))return json({error:'poll_options_locked'},409);
-  const now=new Date().toISOString();
-  const announce=record.kind==='news' && record.status==='published' && input.announce===true;
-  if(record.kind==='news' && input.discordSummary!=null) record.discordSummary=text(input.discordSummary,1000,announce);
-  if(announce && !record.discordSummary) return json({error:'missing_summary'},400);
+  const announce=prepareAnnouncement(input,record);
   if(announce && new URL(context.request.url).origin!=='https://enthusia.info') return json({error:'production_only'},403);
+  return writeRecord(context.env,record,actor,revision,announce);
+}
+async function writeRecord(env,record,actor,revision,announce){
+  const db=env.COMMUNITY_DB, now=new Date().toISOString();
   const statements=recordStatements(db,record,actor,revision,now);
   if(announce) statements.push(queueAnnouncement(db,record,actor,now));
   const result=await db.batch(statements);
   if(!result[0].meta.changes)return json({error:'revision_conflict'},409);
-  let discordDelivery;
-  if(announce) {
-    try { discordDelivery=await deliverAnnouncement(context.env,record.slug); }
-    catch { discordDelivery='status_unavailable'; }
-  }
+  const discordDelivery=announce ? await submitAnnouncement(env,record.slug) : undefined;
   return json({...record,revision:revision+1,updatedAt:now,discordDelivery});
 }
 async function poll(db,slug,request,actor){
