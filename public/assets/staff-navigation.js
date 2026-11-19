@@ -1,3 +1,4 @@
+import './site-search.js';
 import { staffCapabilities, hasStaffTools } from './staff-capabilities.js';
 
 const template = document.querySelector('template[data-staff-entry]');

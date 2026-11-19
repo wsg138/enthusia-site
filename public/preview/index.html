@@ -94,9 +94,7 @@
 
 <main id="main-content" class="page-main">
 <section class="hero-vars" aria-labelledby="hero-title" data-slide-auto="hero" data-interval="7000" style="position: relative; overflow: hidden; background: #7d120e">
-<img class="heroimg show" src="../assets/screenshots/slide-01.webp" alt="" data-slide="hero" data-label="Season 1 spawn">
-<img class="heroimg" src="../assets/screenshots/slide-05.webp" alt="" data-slide="hero" data-label="Open Beta KOTH arena" loading="lazy">
-<img class="heroimg" src="../assets/screenshots/slide-12.webp" alt="" data-slide="hero" data-label="SarahNova&#x27;s Open Beta house" loading="lazy">
+<img data-home-screenshots class="heroimg show" src="../assets/screenshots/slide-01.webp" alt="" data-slide="hero" data-label="Season 1 spawn">
 <div style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: rgba(60, 8, 5, 0.24)"></div>
 <div style="position: relative; max-width: 1240px; min-height: 640px; margin: 0 auto; padding: 64px 24px 24px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center">
 <img src="../assets/ui/logo-animated.gif" alt="" width="112" height="112" style="width: 112px; height: 112px; display: block">
@@ -109,18 +107,21 @@
 <p class="splash" aria-hidden="true" style="position: absolute; right: -150px; bottom: 34px; transform: rotate(-14deg); color: #ffe24a; font-size: 24px; line-height: 32px; white-space: nowrap; text-shadow: 3px 3px 0 #4a3c00">Semi-anarchy!</p>
 </div>
 <p style="max-width: 660px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">A permanent semi-anarchy world for builders, traders, guilds, and players who want survival with real stakes.</p>
-<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 12px">
-<button class="btn btn-gold" type="button" data-copy-ip style="min-height: 72px; padding: 8px 32px; font-size: 24px; line-height: 32px">enthusia.net <span style="font-size: 16px; line-height: 24px; color: #5a3a0a">Click to copy</span></button>
+<div class="home-addresses" role="group" aria-label="Copy a server address">
+<button class="btn btn-gold" type="button" data-copy-ip="java"><strong>Java Edition</strong><span>enthusia.net</span><small>Copy address</small></button>
+<button class="btn btn-gold" type="button" data-copy-ip="bedrock"><strong>Bedrock Edition</strong><span>bedrock.enthusia.net</span><small>Port 19132 · Copy address</small></button>
+</div>
+<div class="home-join-links">
 <a class="btn btn-dark" href="join.html">Join guide</a>
-<a class="btn btn-dark" href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener" style="min-height: 72px; padding: 8px 28px">Join the Discord</a>
+<a class="btn btn-dark" href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Join the Discord</a>
 </div>
 </div>
 <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 24px 12px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
 <p style="padding: 4px 12px; background: rgba(74, 11, 8, 0.8)">Pictured: <span style="color: var(--hi)" data-slide-label="hero">Season 1 spawn</span></p>
 <div role="group" aria-label="Choose background screenshot" style="display: flex; align-items: center">
-<button class="dot" type="button" aria-label="Show Season 1 spawn" aria-pressed="true" data-slide-to="hero" data-index="0"><span></span></button>
-<button class="dot" type="button" aria-label="Show Open Beta KOTH arena" aria-pressed="false" data-slide-to="hero" data-index="1"><span></span></button>
-<button class="dot" type="button" aria-label="Show SarahNova's Open Beta house" aria-pressed="false" data-slide-to="hero" data-index="2"><span></span></button>
+<button class="btn btn-dark" type="button" aria-label="Previous screenshot" data-slide-step="hero" data-step="-1">&#9664;</button>
+<span data-slide-pos="hero" style="padding:4px 10px;background:#4a0b08"></span>
+<button class="btn btn-dark" type="button" aria-label="Next screenshot" data-slide-step="hero" data-step="1">&#9654;</button>
 </div>
 </div>
 <div class="crenel" style="position: relative"></div>
@@ -139,7 +140,36 @@
 <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 4px"><span style="color: var(--muted)">Status</span><span style="display: flex; align-items: center; gap: 12px; font-size: 24px; line-height: 32px; color: var(--good)"><span class="live unknown" data-status="dot"></span><span data-status="state" role="status" aria-live="polite">Checking</span></span></div>
 <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 4px; background: var(--row)"><span style="color: var(--muted)">Players online</span><span style="font-size: 24px; line-height: 32px; color: var(--accent)" data-status="count" aria-live="polite">--</span></div>
 <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 4px"><span style="color: var(--muted)">Version · 1.17+ can join</span><span style="font-size: 24px; line-height: 32px; color: var(--accent)">26.2</span></div>
-<div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 4px; background: var(--row)"><span style="color: var(--muted)">Bedrock port</span><span style="font-size: 24px; line-height: 32px; color: var(--accent)">19132</span></div>
+</div>
+</div>
+</section>
+
+<section class="s-cream" aria-labelledby="mstrip-title" style="padding: 32px 0 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px"><p style="color: var(--kick); letter-spacing: 2px">MARKET THIS WEEK</p><h2 id="mstrip-title" style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">At the Market</h2></div>
+<a class="btn btn-gold" href="market.html">Open the market map</a>
+</div>
+<div class="mi-strip" id="mi-strip"></div>
+</div>
+</section>
+
+<section id="warzone" class="s-cream" aria-labelledby="warzone-title" style="padding: 24px 0 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box">
+<div class="tip fret-lg" style="padding: clamp(16px, 3vw, 32px); display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px"><span data-b-text="wzWeek"></span></p>
+<h2 id="warzone-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Warzone</h2>
+</div>
+<div class="home-warzone-links"><p data-warzone-status>Checking feed</p><a class="btn btn-gold" href="leaderboards.html">Leaderboards</a></div>
+</div>
+<div class="wz-grid">
+
+<div class="wz-col"><h3>Active rules</h3><p>Unavailable</p></div>
+<div class="wz-col"><h3>Next rotation</h3><p>Unavailable</p></div>
+<div class="wz-col"><h3>Weekly duel wins</h3><p>Unavailable</p></div>
+</div>
 </div>
 </div>
 </section>
@@ -255,7 +285,7 @@
 </div>
 </div>
 
-<script src="../assets/site-config.js?v=bedrock-20261102" defer></script><script src="../assets/enthusia.js?v=bedrock-20261102" defer></script><script src="../assets/video-rotation.js" defer></script><script src="../assets/video-of-the-week.js" defer></script><script type="module" src="../assets/exact-home.js?v=2"></script>
+<script src="../assets/site-config.js?v=bedrock-20261102" defer></script><script src="../assets/enthusia.js?v=bedrock-20261102" defer></script><script src="../assets/video-rotation.js" defer></script><script src="../assets/video-of-the-week.js" defer></script><script src="../assets/guild-banner-renderer.js" defer></script><script type="module" src="../assets/market/exact-insights.js?v=stall-integrity-20261102"></script><script type="module" src="../assets/guide-warzone.js"></script><script type="module" src="../assets/exact-home.js?v=3"></script>
 <script type="module" src="../assets/staff-navigation.js"></script></body>
 </html>
 

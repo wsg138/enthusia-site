@@ -17,7 +17,7 @@ function articleContent(post) {
     <a class="release-back" href="/news">← All news</a>
     <header class="release-header"><div class="release-meta"><span class="tag {{tag}}">{{category}}</span><time datetime="{{timestamp}}">{{date}}</time></div>
     <h1>{{title}}</h1>
-    <div class="release-byline"><img alt="" width="40" height="40" src="https://minotar.net/helm/{{skin}}/40"> {{name}} <span class="tag tag-gold">{{rank}}</span></div></header>`;
+    <div class="release-byline"><img alt="" width="40" height="40" src="https://minotar.net/helm/{{skin}}/40"> <span data-profile-key="{{skin}}">{{name}}</span> <span class="tag tag-gold">{{rank}}</span></div></header>`;
   const figure = '<figure class="release-cover"><img class="news-cover" src="{{cover}}" alt="Cover for {{title}}"></figure>';
   const body = `<div class="release-body md">{{body}}</div>
     <footer class="release-actions"><a class="chip" href="/news">← All news</a><button class="chip" data-copy-article>Copy link to post</button></footer>

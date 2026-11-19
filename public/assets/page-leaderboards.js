@@ -57,6 +57,7 @@
     var uuids = guildMemberUuids(entry);
     return {
       name: name,
+      profileKey: name,
       detail: members !== null ? formatNumber(members) + " members" : "",
       value: guildValue(level, experience, score),
       banner: entry.banner && typeof entry.banner === "object" ? entry.banner : null,
@@ -73,6 +74,7 @@
     // Donor feed IDs are not Minecraft UUIDs. Resolve these skins by username.
     if (board && board.id === "donators-all-time") skinId = /^[a-z0-9_]{1,16}$/i.test(username) ? username : "";
     return {
+      profileKey: pickText(entry.username, entry.name, entry.uuid),
       name: pickText(entry.displayName, entry.username, entry.name),
       detail: pickText(entry.subtext, entry.subtitle, entry.description),
       value: pickText(entry.formattedValue, entry.formatted, entry.stat, entry.score, entry.amount, entry.hours, entry.balance, entry.experience, entry.level),
@@ -113,10 +115,17 @@
     return head;
   }
 
+  function profileLabel(entry, tag, className) {
+    var label = el(tag, className, entry.name);
+    label.dataset.profileKind = entry.isGuild ? "guilds" : "players";
+    label.dataset.profileKey = entry.profileKey || entry.name;
+    return label;
+  }
+
   function boardRow(entry, rank, isTop) {
     var item = el("li", "row lb-row" + (isTop ? " top" : ""));
     var name = el("span", "lb-name");
-    name.append(el("span", "lb-name-text", entry.name));
+    name.append(profileLabel(entry, "span", "lb-name-text"));
     if (entry.detail) name.append(el("small", "", entry.detail));
     item.append(el("span", "slot lb-rank", rank), entryVisual(entry, 64), name, el("span", "lb-value", entry.value));
     return item;
@@ -138,7 +147,7 @@
     var place = el("div", "podium-place podium-" + rank);
     var visual = podiumVisual(entry);
     visual.classList.add("podium-visual");
-    place.append(visual, el("p", "podium-name", entry.name), el("p", "podium-value", entry.value), el("div", rank === 1 ? "blk-gold podium-block" : "panel podium-block", rank));
+    place.append(visual, profileLabel(entry, "p", "podium-name"), el("p", "podium-value", entry.value), el("div", rank === 1 ? "blk-gold podium-block" : "panel podium-block", rank));
     return place;
   }
 

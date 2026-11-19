@@ -195,9 +195,17 @@
     var timer = 0;
     var cleanup = 0;
 
+    function fetchSlide(image) {
+      if (image.dataset.slideSrc) {
+        image.src = image.dataset.slideSrc;
+        delete image.dataset.slideSrc;
+      }
+      if (image.loading === "lazy") image.loading = "eager";
+    }
+
     function settle(image) {
       // Fetch a slide that was left to load lazily, then wait until it can be painted in one go.
-      if (image.loading === "lazy") image.loading = "eager";
+      fetchSlide(image);
       var loaded = image.complete && image.naturalWidth > 0 ? Promise.resolve() : new Promise(function (resolve) {
         var done = function () {
           image.removeEventListener("load", done);
@@ -247,7 +255,7 @@
       // Start fetching the slide that previous / next / autoplay will reach, so its fade does not wait.
       for (var i = 1; i <= slides.length; i += 1) {
         var next = (index + i) % slides.length;
-        if (allowed(next)) { if (slides[next].loading === "lazy") slides[next].loading = "eager"; return; }
+        if (allowed(next)) { fetchSlide(slides[next]); return; }
       }
     }
 
@@ -311,6 +319,26 @@
   }
 
   function initSlideshows() {
+    var cover = selectOne("[data-home-screenshots]");
+    if (cover && cfg.home && cfg.home.screenshots && cfg.home.screenshots.length) {
+      var siteRoot = new URL("../../", cover.src);
+      var remaining = doc.createDocumentFragment();
+      cfg.home.screenshots.forEach(function (shot, index) {
+        var slide = index === 0 ? cover : doc.createElement("img");
+        var url = new URL(shot.src, siteRoot).href;
+        slide.dataset.label = shot.label;
+        if (index === 0) {
+          if (cover.src !== url) cover.src = url;
+          return;
+        }
+        slide.className = "heroimg";
+        slide.alt = "";
+        slide.dataset.slide = "hero";
+        slide.dataset.slideSrc = url;
+        remaining.appendChild(slide);
+      });
+      cover.after(remaining);
+    }
     var names = {};
     selectAll("[data-slide]").forEach(function (slide) { names[slide.getAttribute("data-slide")] = true; });
     Object.keys(names).forEach(initSlideshow);

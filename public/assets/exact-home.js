@@ -14,7 +14,6 @@ if (!preview) {
 }
 
 const formerHomeSections = {
-  '#warzone': 'guide.html#warzone',
   '#join': 'join.html',
   '#gallery': 'gallery.html',
   '#leaderboards': 'leaderboards.html',

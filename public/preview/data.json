@@ -5735,13 +5735,13 @@
     "guildquests": {
       "kind": "guildquests",
       "schemaVersion": 1,
-      "generatedAt": "2026-10-12T22:29:47.512Z",
+      "generatedAt": "2026-11-19T05:20:11.929Z",
       "currentWeekId": "sample-current",
       "items": [
         {
           "id": "sample-current",
-          "startsAt": "2026-10-12T00:00:00.000Z",
-          "endsAt": "2026-10-19T00:00:00.000Z",
+          "startsAt": "2026-11-16T00:00:00.000Z",
+          "endsAt": "2026-11-23T00:00:00.000Z",
           "fullSetBonusExperience": 1500,
           "guilds": [
             {
@@ -6067,8 +6067,8 @@
         },
         {
           "id": "sample-previous",
-          "startsAt": "2026-10-05T00:00:00.000Z",
-          "endsAt": "2026-10-12T00:00:00.000Z",
+          "startsAt": "2026-11-09T00:00:00.000Z",
+          "endsAt": "2026-11-16T00:00:00.000Z",
           "fullSetBonusExperience": 1500,
           "guilds": [
             {

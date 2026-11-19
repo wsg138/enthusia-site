@@ -1,5 +1,5 @@
 const descriptionLimit = 4096;
-export const changelogColor = '#5865f2';
+export const changelogColor = '#ffcf1f';
 
 function* changeLines(body) {
   let heading = 'Changes';

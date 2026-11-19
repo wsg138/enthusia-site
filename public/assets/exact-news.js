@@ -54,7 +54,7 @@ function storyCard(post, row, embedded, lead) {
 }
 async function reader(){
   const embedded=document.documentElement.hasAttribute('data-preview-root');
-  if(!embedded && location.hash && !['#main-content','#news-title','#site-nav'].includes(location.hash)){
+  if(!embedded && location.hash && !['#main-content','#news-title','#site-nav','#release-history-title'].includes(location.hash)){
     let legacy;
     try { legacy=decodeURIComponent(location.hash.slice(1)); } catch { legacy=''; }
     if(/^[A-Za-z0-9_.:-]{1,80}$/.test(legacy) && !['.','..'].includes(legacy)){

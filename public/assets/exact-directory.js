@@ -40,13 +40,13 @@ function hydrateProfile(node,item){
   if(kind==='players')playerProfile(node,item);
 }
 function choose(item){document.querySelector('[data-guild-lookup-missing]')?.remove();selected=item;const panel=clone('profile',item);if(panel){hydrateProfile(panel,item);replace('profile',[panel]);}for(const row of document.querySelectorAll('[data-record-id]'))row.setAttribute('aria-pressed',String(row.dataset.recordId===item.id));history.replaceState(null,'','#'+encodeURIComponent(item.id));}
-function selectGuildLink(id){
+function selectProfileLink(id){
   if(!id)return;
-  const guild=items.find(item=>item.id===id);if(guild){choose(guild);return;}
+  const guild=items.find(item=>item.id===id)??items.find(item=>item.name.toLowerCase()===id.toLowerCase());if(guild){choose(guild);return;}
   replace('profile',[]);selected=null;
   for(const row of document.querySelectorAll('[data-record-id]'))row.setAttribute('aria-pressed','false');
   document.querySelector('[data-guild-lookup-missing]')?.remove();
-  target('profile')?.before(el('p',{class:'exact-status',role:'status','data-guild-lookup-missing':'',text:'This guild is not included in the available directory export. Browse the guilds below.'}));
+  target('profile')?.before(el('p',{class:'exact-status',role:'status','data-guild-lookup-missing':'',text:'This '+(kind==='players'?'player':'guild')+' is not included in the available directory export.'}));
   history.replaceState(null,'','#'+encodeURIComponent(id));
 }
 function pressed(node){for(const sibling of node.parentElement.querySelectorAll('button'))sibling.setAttribute('aria-pressed',String(sibling===node));}
@@ -89,12 +89,12 @@ async function start(){
   try{const data=await api(kind);if(!Array.isArray(data.items))throw new Error('Data is unavailable. Try again later.');items=data.items;limited=data.limited===true;loaded=true;
     if(kind==='guilds'&&!preview){for(const [action,key] of [['pickFRec','recruiting'],['pickFHos','peaceful'],['pickFPea','peaceful'],['pickSElo','elo']]){const control=one('[data-on-click="'+action+'"]');if(control&&!items.some(item=>item[key]!==null&&item[key]!==undefined)){control.disabled=true;control.title='Server data for this filter is not available yet.';}}for(const live of document.querySelectorAll('main .live'))if(limited)live.parentElement.textContent='Limited server export';}
     if(kind==='players'&&!preview){const picker=target('picker');picker?.setAttribute('aria-label','Public profiles');picker?.before(el('p',{text:'Search '+items.filter(item=>!item.previewExample).length+' public profiles. Up to 12 matching names are shown.'}));}
-    const requestedGuildId=kind==='guilds'?decodeURIComponent(location.hash.slice(1)):'';
-    draw();if(kind==='players'&&items.length)choose(items.find(item=>item.id===decodeURIComponent(location.hash.slice(1)))??items[0]);
+    const requestedId=decodeURIComponent(location.hash.slice(1));
+    draw();if(kind==='players'&&items.length&&!requestedId)choose(items[0]);
     if(kind==='bounties'){const open=items.filter(v=>v.state==='open'),amountsKnown=open.every(item=>item.gold!==null&&item.gold!==undefined);const values=[open.length,amountsKnown?open.reduce((sum,item)=>sum+item.gold,0).toLocaleString('en-US'):'Unavailable',amountsKnown?Math.max(0,...open.map(item=>item.gold)).toLocaleString('en-US'):'Unavailable',preview?items.filter(v=>v.state==='claimed').length:'Unavailable'];document.querySelectorAll('main .stats .stat>b').forEach((node,i)=>node.textContent=values[i]??'Unavailable');}
     if(kind==='bounties'&&!preview){const live=one('main .live');if(live)live.parentElement.textContent=data.capturedSnapshot?'Captured server snapshot':data.stale?'Outdated server export':data.limited?'Partial server export':'Server export';}
     if(data.limited||data.stale){status.hidden=false;status.textContent=data.limited?(kind==='players'?'Public profiles; leaderboard coverage is partial.':kind==='bounties'?'Public bounty export; coverage may be partial.':'Public guild export. Membership and recruitment details may be incomplete.')+(data.stale?(kind==='players'?' Leaderboard stats are stale.':' The export is stale.'):''):'The last server export is stale.';}
-    if(kind==='guilds'){selectGuildLink(requestedGuildId);window.addEventListener('hashchange',()=>selectGuildLink(decodeURIComponent(location.hash.slice(1))));}
+    if(kind==='guilds'||kind==='players'){selectProfileLink(requestedId);window.addEventListener('hashchange',()=>selectProfileLink(decodeURIComponent(location.hash.slice(1))));}
     if(kind==='guilds'&&!preview&&items.some(item=>!item.banner)){
       const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),5000);
       fetch('https://market-api.enthusia.info/v1/market',{headers:{Accept:'application/json'},credentials:'omit',signal:controller.signal})
