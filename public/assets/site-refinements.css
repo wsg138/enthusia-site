@@ -170,7 +170,7 @@ body[data-competition-page=detail] .competition-reward-dialog :where(p,small){co
 .home-addresses { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; width:min(100%, 560px); margin-top:12px; }
 .home-addresses .btn { display:flex; flex-direction:column; gap:3px; padding:10px 12px; }
 .home-addresses small { font-size:14px; }
-.home-join-links,.home-warzone-links { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px; }
+.home-join-links { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px; }
 #warzone .wz-col { display:flex; flex-direction:column; min-width:0; }
 @media (max-width:540px) { .home-addresses { grid-template-columns:1fr; max-width:320px; } }
 
