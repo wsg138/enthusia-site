@@ -84,11 +84,11 @@ body[data-competition-page=detail] .competition-reward-dialog :where(p,small){co
 
 @media screen {
   /* Frame the existing content wrapper so its own grid and width stay intact. */
-  .en section.s-cream:has(> :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap)) {
+  .en section.s-cream:has(> :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap, .exact-empty, .exact-detail-inner)) {
     background-color: var(--site-crimson);
   }
 
-  .en section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap) {
+  .en section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap, .exact-empty, .exact-detail-inner) {
     background-color: #fff1cf;
     border: 3px solid var(--edge);
     box-shadow: var(--site-rails);
@@ -100,7 +100,7 @@ body[data-competition-page=detail] .competition-reward-dialog :where(p,small){co
     box-shadow: inset 0 3px var(--edge), inset 0 5px var(--gold);
   }
 
-  .en section:has(+ section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap)) > .crenel {
+  .en section:has(+ section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap, .exact-empty, .exact-detail-inner)) > .crenel {
     --divider-color: var(--site-crimson);
   }
 
@@ -108,7 +108,7 @@ body[data-competition-page=detail] .competition-reward-dialog :where(p,small){co
     --divider-color: var(--site-red);
   }
 
-  .en section:has(+ section.s-red, + section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap)) > .crenel {
+  .en section:has(+ section.s-red, + section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap, .exact-empty, .exact-detail-inner)) > .crenel {
     background-image: linear-gradient(90deg, transparent 25%, var(--divider-color) 25% 75%, transparent 75%);
   }
 
@@ -196,7 +196,9 @@ a.identity-link { color:inherit; text-decoration:underline; text-decoration-colo
 a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
 @media(max-width:580px){.site-head .site-head-in:has(.site-search-trigger){gap:5px!important;padding-inline:8px!important}.site-head .site-search-trigger{flex-basis:36px;height:38px}.site-head .brand img{max-width:32px;max-height:32px}}
 
-.home-community-sections { box-sizing:border-box; max-width:1240px; margin:auto; padding:32px 24px; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:24px; align-items:start; }
+.home-community-band { background:var(--site-crimson); padding-block:24px; }
+.home-community-sections > #warzone { grid-column:1 / -1; gap:24px; }
+.home-community-sections { box-sizing:border-box; border:3px solid var(--edge); box-shadow:var(--site-rails); max-width:1240px; margin:auto; padding:32px 24px; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:24px; align-items:start; }
 .home-community-sections > section { display:grid; gap:12px; padding:clamp(16px,3vw,28px); min-width:0; }
 .home-community-sections h2 { color:var(--head); text-align:center; }
 
@@ -232,13 +234,17 @@ a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
 
   .en .market-stage,
   .en.workflow-page .page-main:has(> .exact-workflow-wrap),
-  .en.workflow-page .page-main > .page-section.band {
+  .en.workflow-page .page-main > .page-section.band,
+  .en.workflow-page .gallery-page > .page-section.compact,
+  .en #competitionDetail:has(> .competition-error) {
     background-color: var(--site-crimson);
   }
 
   .en .market-stage > .market-page-root,
   .en.workflow-page .page-main > .exact-workflow-wrap,
-  .en.workflow-page .page-section.band > .container {
+  .en.workflow-page .page-section.band > .container,
+  .en.workflow-page .gallery-page > .page-section.compact > .container,
+  .en #competitionDetail > .competition-error {
     box-sizing: border-box;
     background-color: #fff1cf;
     border: 3px solid var(--edge);
@@ -251,4 +257,23 @@ a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
   .en .hero:has(+ .market-stage, + .exact-workflow-wrap) > .crenel {
     background-image: linear-gradient(90deg, transparent 25%, var(--site-crimson) 25% 75%, transparent 75%);
   }
+}
+
+@media screen {
+  .en .gallery-page .gallery-hero {
+    background: var(--site-red);
+    border-bottom: 4px solid var(--gold);
+    color: #fff6e0;
+  }
+
+  .en .gallery-hero :is(h1, .eyebrow) { color: #ffdb2e; }
+  .en .gallery-hero .page-lead { color: #fff6e0; }
+  .en #competitionDetail:has(> .competition-error) { padding: 32px 16px; }
+  .en section.s-cream > .exact-empty:only-child { box-sizing: border-box; }
+}
+
+@media screen {
+  .en.workflow-page .gallery-page { padding-top: 0; }
+  .en .gallery-page .gallery-hero-inner { padding-block: clamp(24px, 4vw, 56px); }
+  .en .gallery-page .gallery-tabs { flex-wrap: wrap; }
 }
