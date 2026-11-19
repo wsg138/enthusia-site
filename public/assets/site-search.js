@@ -67,7 +67,6 @@ function install(header) {
   const publicFeed = kind => api(kind,{signal:AbortSignal.timeout(6000)});
   const entry = (name,path) => ({name,href:new URL(path,root).href});
   function more() {
-    if (started) return;
     started=true;
     load('Guide commands',async()=>{
       const url=new URL('join.html',root);
@@ -87,7 +86,7 @@ function install(header) {
       return (await res.json()).competitions.map(c=>entry(c.title,'competitions/detail.html?competition='+encodeURIComponent(c.slug)));
     });
   }
-  function open(){ dialog.showModal(); input.focus(); more(); draw(); }
+  function open(){ dialog.showModal(); input.focus(); if (!started) more(); draw(); }
   trigger.addEventListener('click',open);
   input.addEventListener('input',draw);
   input.addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();results.querySelector('a')?.focus();}});

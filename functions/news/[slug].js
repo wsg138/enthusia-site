@@ -8,22 +8,18 @@ function articleContent(post) {
   const date = post.date ? new Date(post.date).toLocaleDateString('en-US',{dateStyle:'long',timeZone:'UTC'}) : '';
   const name = post.authorName || 'Staff';
   const skin = name === 'Fain' && post.authorRank === 'Founder' ? 'FainNeito' : name;
-  const fields = {
-    tag: {Changelog:'tag-dark',Event:'tag-gold'}[post.category] || 'tag-red',
-    category:post.category, timestamp:post.date, date, title:post.title, name,
-    skin:encodeURIComponent(skin), rank:post.authorRank, cover, body:post.body
-  };
+  const tag = {Changelog:'tag-dark',Event:'tag-gold'}[post.category] || 'tag-red';
   const header = `<article class="release panel">
     <a class="release-back" href="/news">← All news</a>
-    <header class="release-header"><div class="release-meta"><span class="tag {{tag}}">{{category}}</span><time datetime="{{timestamp}}">{{date}}</time></div>
-    <h1>{{title}}</h1>
-    <div class="release-byline"><img alt="" width="40" height="40" src="https://minotar.net/helm/{{skin}}/40"> <span data-profile-key="{{skin}}">{{name}}</span> <span class="tag tag-gold">{{rank}}</span></div></header>`;
-  const figure = '<figure class="release-cover"><img class="news-cover" src="{{cover}}" alt="Cover for {{title}}"></figure>';
-  const body = `<div class="release-body md">{{body}}</div>
+    <header class="release-header"><div class="release-meta"><span class="tag ${escape(tag)}">${escape(post.category)}</span><time datetime="${escape(post.date)}">${escape(date)}</time></div>
+    <h1>${escape(post.title)}</h1>
+    <div class="release-byline"><img alt="" width="40" height="40" src="https://minotar.net/helm/${escape(encodeURIComponent(skin))}/40"> <span data-profile-key="${escape(encodeURIComponent(skin))}">${escape(name)}</span> <span class="tag tag-gold">${escape(post.authorRank)}</span></div></header>`;
+  const figure = `<figure class="release-cover"><img class="news-cover" src="${escape(cover)}" alt="Cover for ${escape(post.title)}"></figure>`;
+  const body = `<div class="release-body md">${escape(post.body)}</div>
     <footer class="release-actions"><a class="chip" href="/news">← All news</a><button class="chip" data-copy-article>Copy link to post</button></footer>
     </article>
     <dialog class="release-lightbox" aria-label="Enlarged image"><button type="button" class="chip" autofocus>Close ✕</button><img alt=""></dialog>`;
-  return (header + (cover ? figure : '') + body).replace(/{{(\w+)}}/g, (_, key) => escape(fields[key]));
+  return header + (cover ? figure : '') + body;
 }
 
 export async function onRequestGet({params,env,request}) {
