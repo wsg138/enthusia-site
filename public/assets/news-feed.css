@@ -1,0 +1,54 @@
+.news-story-grid {
+  flex: 1 1 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 24px);
+}
+.en .news-story {
+  display: flex;
+  flex-flow: column;
+  align-items: stretch;
+  justify-content: start;
+  min-width: 0;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  text-decoration: none;
+  text-align: left;
+  background: #fff8e6;
+  border: 4px solid var(--edge);
+  box-shadow: var(--site-rails);
+}
+.en .news-story:hover, .en .news-story:focus-visible { background: #fff1cf; }
+.news-story:focus-visible { outline: 3px solid var(--edge); outline-offset: 2px; }
+.news-story-grid .news-story:first-child { grid-column: 1 / -1; }
+.news-story-cover {
+  display: block;
+  width: calc(100% - 10px);
+  margin: 5px 5px 0;
+  aspect-ratio: 2.65;
+  object-fit: cover;
+  background: var(--site-crimson);
+}
+.news-story-copy { display: grid; align-content: center; justify-items: start; gap: 10px; padding: clamp(20px, 3vw, 36px); overflow-wrap: anywhere; }
+.news-story-title { color: #a51b16; font-size: clamp(20px, 2.3vw, 32px) !important; line-height: 1.15 !important; }
+.news-story-excerpt { color: #3a0d0a; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+@media (min-width: 721px) {
+  .news-story:first-child:not(details):has(.news-story-cover), .release-note:first-child summary:has(.news-story-cover) { display: grid; grid-template-columns: 55% 1fr; }
+  .news-story:first-child .news-story-cover { height: calc(100% - 10px); margin: 5px; aspect-ratio: 2.4; }
+}
+@media (max-width: 720px) { .news-story-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.news-story-grid .release-note { display:block; align-self:start; }
+.release-note summary { display:block; list-style:none; cursor:pointer; }
+.release-note summary::-webkit-details-marker { display:none; }
+.release-note summary:focus-visible { outline:3px solid var(--edge); outline-offset:-8px; }
+.release-note[open] .news-story-excerpt { display:none; }
+.release-note-body { border-top:2px solid #ecc873; margin:0 16px; padding:16px 4px; overflow-wrap:anywhere; }
+.release-pages { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:4px; }
+.release-pages[hidden] { display:none; }
+.release-pages .chip { min-width:44px; padding:6px 10px; }
+.release-pages [aria-current=page] { background:var(--gold); color:var(--edge); }
+.release-pages button:disabled { opacity:.5; }
+#release-history-title { scroll-margin-top:100px; }
