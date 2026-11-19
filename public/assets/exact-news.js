@@ -102,12 +102,17 @@ async function editor(){
   one('[data-news-remove-cover]').addEventListener('click',()=>{cover='';draw();});
   async function prepareImage(file){
     if(!['image/png','image/jpeg'].includes(file.type)||file.size>16*1024*1024)throw new Error('Choose a PNG or JPEG under 16 MB.');
-    const objectUrl=URL.createObjectURL(file);try{
-      const image=new Image();image.src=objectUrl;await image.decode();
-      if(!image.naturalWidth||!image.naturalHeight||image.naturalWidth*image.naturalHeight>40*1000*1000)throw new Error('Image dimensions are too large.');
-      const scale=Math.min(1,2048/Math.max(image.naturalWidth,image.naturalHeight)),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
+    let image;
+    try { image=await createImageBitmap(file); }
+    catch { throw new Error('Unable to read this image. Export it as a PNG or JPEG and try again.'); }
+    try {
+      const {width,height}=image;
+      if(!width||!height||width*height>40*1000*1000)throw new Error('Image dimensions are too large.');
+      const scale=Math.min(1,2048/Math.max(width,height)),canvas=document.createElement('canvas');
+      canvas.width=Math.max(1,Math.round(width*scale));canvas.height=Math.max(1,Math.round(height*scale));
+      canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
       const blob=await new Promise(resolve=>canvas.toBlob(resolve,file.type,.9));if(!blob||blob.size>8*1024*1024)throw new Error('Image is too large to upload.');return blob;
-    }finally{URL.revokeObjectURL(objectUrl);}
+    } finally { image.close(); }
   }
   for(const [buttonSelector,inputSelector,isCover] of [['[data-news-add-image]','[data-news-image-file]',false],['[data-news-add-cover]','[data-news-cover-file]',true]]){
     const button=one(buttonSelector),input=one(inputSelector);button.addEventListener('click',()=>input.click());
