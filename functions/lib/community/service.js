@@ -23,12 +23,16 @@ async function identity(request,env){
   if(!s?.discordGuildMember||!s.linkedMinecraftAccounts?.length)return null;
   return {id:s.discord.id};
 }
+function discordAvatar(discord) {
+  if (!/^\d{16,22}$/.test(discord?.id) || !/^(?:a_)?[a-f0-9]{32}$/.test(discord?.avatarHash)) return undefined;
+  return 'https://cdn.discordapp.com/avatars/' + discord.id + '/' + discord.avatarHash + '.png?size=64';
+}
 async function editor(request,env,allowDiscordPublisher=false){
   const publishingDiscordId = allowDiscordPublisher ? env.COMMUNITY_PUBLISHER_DISCORD_ID : null;
   const s=await authenticateRequest(request,env,undefined,{publishingDiscordId});
   const roles=new Set(String(env.COMMUNITY_EDITOR_ROLES??'founder,admin').split(',').map(v=>v.trim()));
   if(!s.roles.some(role=>roles.has(role)))return null;
-  return {id:s.player?.uuid??s.subject,name:s.player?.name??s.discord?.globalName??s.discord?.username??'Staff',
+  return {id:s.player?.uuid??s.subject,avatarUrl:discordAvatar(s.discord),name:s.player?.name??s.discord?.globalName??s.discord?.username??'Staff',
     rank:s.roles.includes('founder')?'Founder':s.roles.includes('admin')?'Admin':'Staff'};
 }
 async function body(request){
@@ -72,6 +76,7 @@ function prepareAnnouncement(input,record) {
   if(record.kind!=='news') return false;
   const announce=record.status==='published' && input.announce===true;
   if(input.pingEveryone===true && record.category==='Announcement') record.pingEveryone=true;
+  if(input.pingChangelogRole===true && record.category==='Changelog') record.pingChangelogRole=true;
   if(input.discordSummary!=null || announce) record.discordSummary=text(input.discordSummary,1000,announce && record.category!=='Changelog');
   return announce;
 }
@@ -223,7 +228,7 @@ async function adminRoute(context, parts, dependencies) {
     return json({status:await deliverAnnouncement(env,slug,true)});
   }
   if (parts[1]==='session' && request.method==='GET') {
-    return json({editor:true,name:actor.name??'Staff',rank:actor.rank??'Staff'});
+    return json({editor:true,avatarUrl:actor.avatarUrl,name:actor.name??'Staff',rank:actor.rank??'Staff'});
   }
   if(parts.length===2 && parts[1]==='news-media' && request.method==='POST') return uploadNewsMedia(request,env,actor);
   if (parts.length!==2 || !CONTENT_KINDS.has(parts[1])) return notFound();
