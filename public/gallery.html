@@ -30,27 +30,23 @@
 <button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="plugins.html">About</a>
-<a href="join.html">Join guide</a>
-<a href="guide.html">Player guide</a>
+<a href="join.html">Start playing</a>
 <a href="rules.html">Rules</a>
 <a href="vote.html">Vote</a>
 <a href="appeal.html">Appeals</a>
 </div>
 </div>
 <div class="nav-group">
-<button class="navbtn cur" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<button class="navbtn cur" type="button" aria-expanded="false" data-menu>World &amp; Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu nav-directory">
+<div role="group" aria-label="World"><strong>World</strong>
 <a href="market.html">Market</a>
 <a href="gallery.html" class="active" aria-current="page">Gallery</a>
 <a href="museum.html">Mapart Museum</a>
-<a href="competitions/index.html">Competitions</a>
-<a href="events.html">Events</a>
+<a href="events.html">Event calendar</a>
 <a href="bounties.html">Bounties</a>
 </div>
-</div>
-<div class="nav-group">
-<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<div role="group" aria-label="Community"><strong>Community</strong>
 <a href="guilds.html">Guilds</a>
 <a href="guildquests.html">Guild quests</a>
 <a href="players.html">Players</a>
@@ -59,15 +55,17 @@
 <a href="achievements.html">Achievements</a>
 <a href="creators.html">Creators</a>
 <a href="staff.html">Staff</a>
+<template data-staff-entry><a href="reviewer/index.html">Staff dashboard</a></template>
 <a href="punishments.html">Punishments</a>
 <a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
 </div>
 </div>
 <div class="nav-group">
 <button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="news.html">News</a>
-<a href="changelog.html">Changelog</a>
+<a href="news.html?category=Changelog">Changelogs</a>
 <a href="roadmap.html">Roadmap</a>
 <a href="polls.html">Polls</a>
 <a href="timeline.html">Timeline</a>
@@ -180,8 +178,7 @@
 <nav class="foot" aria-label="Play">
 <p class="foot-title">PLAY</p>
 <a href="plugins.html">About</a>
-<a href="join.html">Join guide</a>
-<a href="guide.html">Player guide</a>
+<a href="join.html">Start playing</a>
 <a href="rules.html">Rules</a>
 <a href="vote.html">Vote</a>
 <a href="appeal.html">Appeals</a>
@@ -191,8 +188,7 @@
 <a href="market.html">Market</a>
 <a href="gallery.html">Gallery</a><a href="gallery/submit.html">Submit your work</a>
 <a href="museum.html">Mapart Museum</a>
-<a href="competitions/index.html">Competitions</a>
-<a href="events.html">Events</a>
+<a href="events.html">Event calendar</a>
 <a href="bounties.html">Bounties</a>
 </nav>
 <nav class="foot" aria-label="Community">
@@ -211,7 +207,7 @@
 <nav class="foot" aria-label="News">
 <p class="foot-title">NEWS</p>
 <a href="news.html">News</a>
-<a href="changelog.html">Changelog</a>
+<a href="news.html?category=Changelog">Changelogs</a>
 <a href="roadmap.html">Roadmap</a>
 <a href="polls.html">Polls</a>
 <a href="timeline.html">Timeline</a>
@@ -224,13 +220,7 @@
 <a href="404.html">404 page</a>
 
 </nav>
-<nav class="foot" aria-label="Staff tools">
-<p class="foot-title">STAFF TOOLS</p>
-<a href="competitions/admin/index.html">Competition admin</a>
-<a href="newseditor.html">News editor</a>
-<a href="reviewer/index.html">Reviewer</a>
-<a href="reviewer/appeals.html">Appeal review</a>
-</nav>
+
 </div>
 <div class="foot-legal">
 <p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
@@ -248,5 +238,5 @@
 
 
 
-<script src="assets/site-config.js" defer></script><script type="module" src="assets/exact-gallery.js"></script></body>
+<script src="assets/site-config.js" defer></script><script type="module" src="assets/exact-gallery.js"></script><script type="module" src="assets/staff-navigation.js"></script></body>
 </html>

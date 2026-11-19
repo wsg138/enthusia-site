@@ -1,3 +1,4 @@
+import {staffCapabilities,hasStaffTools} from './staff-capabilities.js';
 import { normalizeSiteNavigation } from "./site-navigation.js";
 
 const AUTH_API = "/api/competitions/auth";
@@ -32,23 +33,6 @@ async function fetchSession() {
     return response.ok ? response.json() : { authenticated: false };
   } catch {
     return { authenticated: false };
-  }
-}
-
-async function staffCapabilities() {
-  try {
-    const response = await fetch("/api/reviewer/session", {
-      credentials: "same-origin",
-      headers: { accept: "application/json" }
-    });
-    if (!response.ok) return { appeals: false, competitions: false };
-    const payload = await response.json();
-    return {
-      appeals: payload.appeals === true,
-      competitions: payload.competitions === true
-    };
-  } catch {
-    return { appeals: false, competitions: false };
   }
 }
 
@@ -206,9 +190,9 @@ async function renderAccount(root, session) {
   root.append(details);
   const [staff, replyCount] = await Promise.all([staffCapabilities(), appealReplyCount()]);
   showAppealReplyCount(appealsLink, replyCount);
-  if (staff.appeals || staff.competitions) {
+  if (!document.querySelector("template[data-staff-entry]") && hasStaffTools(staff)) {
     actions.insertBefore(
-      menuLink("Staff dashboard", "/reviewer/", "Appeals and competition tools"),
+      menuLink("Staff dashboard", "/reviewer/", "Open your staff tools"),
       logout
     );
   }

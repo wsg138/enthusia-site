@@ -1,0 +1,15 @@
+.calendar-wrap {display:grid;gap:24px}
+.calendar-layout {display:grid;grid-template-columns:minmax(245px,1fr) minmax(0,2fr);gap:24px;align-items:start}
+.calendar-month,.calendar-guide,.calendar-entry {padding:20px}
+.calendar-month-nav {display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:center}
+.calendar-month-nav h2 {font-size:20px}
+.calendar-days {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));text-align:center;gap:2px;margin-top:16px}
+.calendar-days > * {padding:4px 0}
+.calendar-days span[aria-current=date] {outline:2px solid var(--gold)}
+.calendar-days a {background:var(--gold);color:var(--edge);font-weight:bold}
+.calendar-entry {display:grid;gap:8px;margin-top:12px;overflow-wrap:anywhere;scroll-margin-top:90px}
+.calendar-entry .tag {justify-self:start}
+.calendar-entry:target,.calendar-entry:focus {outline:3px solid #a51b16}
+.calendar-guide summary {cursor:pointer;color:var(--head)}
+.calendar-guide h3,.calendar-guide p:last-child {margin-top:16px}
+@media(max-width:760px){.calendar-layout{grid-template-columns:minmax(0,1fr)}}

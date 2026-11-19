@@ -1,0 +1,14 @@
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:24px;align-items:start}
+.chip-sm{min-height:44px;padding:4px 14px}
+.tick{width:48px;height:48px;flex-shrink:0;padding:0;border:4px solid var(--edge);background:#ffffff;color:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:inset 4px 4px 0 #ecc873}
+.tick[aria-pressed="true"]{background:#1c7a32;color:#ffffff;box-shadow:inset 4px 4px 0 #2fa34a,inset -4px -4px 0 #125522}
+.seg{flex:1 1 0;height:16px;background:#5c0d09;border:4px solid var(--edge);box-sizing:border-box}
+.seg.on{background:var(--gold)}
+.cmds{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(520px,100%),1fr));gap:8px 24px;margin:0;padding:0;list-style:none}
+
+
+.guide-jumps { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
+.guide-jumps .chip { text-decoration:none; }
+.guide-console { flex:1 0 100%; min-width:0; padding:16px 20px; }
+.guide-console summary { cursor:pointer; color:var(--head); }
+main :is(section[id], h2[id]) { scroll-margin-top:90px; }

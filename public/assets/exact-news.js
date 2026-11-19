@@ -1,3 +1,4 @@
+import { releaseHistory } from './release-history.js';
 import { changelogEmbed,changelogColor } from './changelog-embed.js?v=article-links';
 import { api,el } from './community-dom.js?v=news-receipts';
 import { renderMarkup,formattedDate,notice,newsImageSource } from './exact-markup.js?v=news-images-20261103';
@@ -20,16 +21,39 @@ function author(record) {
   text('[data-author-rank]', record.authorRank ?? 'Staff');
 }
 function setCover(url){const image=one('[data-news-cover]');if(!image)return;image.hidden=!url;if(url)image.src=newsImageSource(url);else image.removeAttribute('src');}
-function articleRow(row,slug){
-  const link=document.createElement('a');
-  link.className='postbtn';
-  link.href='/news/'+encodeURIComponent(slug);
-  link.append(...row.children);
-  return link;
+function cardExcerpt(body, title) {
+  let inCode = false;
+  for (const line of String(body || '').split('\n')) {
+    if (line.trim().startsWith('```')) { inCode = !inCode; continue; }
+    if (inCode || /^\s*(?:#{1,3} |!\[|$)/.test(line)) continue;
+    const text = line.trim().replace(/^(?:[-*>] |\d+\. |-# )/, '')
+      .replace(/\|\|.*?\|\|/g, '…').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .replace(/(\*\*|__|~~|`|\*|_)(.+?)\1/g, '$2');
+    if (text && text !== title) return text;
+  }
+  return '';
+}
+function storyCard(post, row, embedded, lead) {
+  const card = embedded ? row : el('a', {href:'/news/' + encodeURIComponent(post.slug) + location.search});
+  card.className = 'postbtn news-story';
+  const [tag, title, byline] = row.children;
+  const copy = el('span', {class:'news-story-copy'}, [tag, title]);
+  title.className = 'news-story-title';
+  const excerpt = cardExcerpt(post.body, post.title);
+  if (excerpt) copy.append(el('span', {class:'news-story-excerpt', text:excerpt}));
+  copy.append(byline);
+  card.replaceChildren(copy);
+  if (post.image) {
+    const cover = el('img', {class:'news-story-cover', alt:'', loading:lead ? 'eager' : 'lazy'});
+    cover.addEventListener('error', () => cover.remove(), {once:true});
+    cover.src = newsImageSource(post.image);
+    card.prepend(cover);
+  }
+  return card;
 }
 async function reader(){
   const embedded=document.documentElement.hasAttribute('data-preview-root');
-  if(!embedded && location.hash && location.hash!=='#main-content'){
+  if(!embedded && location.hash && !['#main-content','#news-title','#site-nav'].includes(location.hash)){
     let legacy;
     try { legacy=decodeURIComponent(location.hash.slice(1)); } catch { legacy=''; }
     if(/^[A-Za-z0-9_.:-]{1,80}$/.test(legacy) && !['.','..'].includes(legacy)){
@@ -38,6 +62,20 @@ async function reader(){
     }
   }
   const template=one('#news-row-template'),panel=one('article.panel.swap'),list=template.parentElement.firstElementChild;let posts=[],selected=null,category='All',order='newest';
+  const params=new URLSearchParams(location.search);
+  if(tags.has(params.get('category')))category=params.get('category');
+  if(params.get('order')==='oldest')order='oldest';
+  const historyView=releaseHistory(one('[data-release-history]'));
+  function syncFilters(){
+    const url=new URL(location.href);
+    for(const [key,value,base] of [['category',category,'All'],['order',order,'newest']]){
+      if(value===base)url.searchParams.delete(key);else url.searchParams.set(key,value);
+    }
+    history.replaceState(null,'',url);
+    for(const button of document.querySelectorAll('[data-on-click^="pickK"]'))button.setAttribute('aria-pressed',String(button.dataset.onClick.slice(5)===category));
+    for(const button of document.querySelectorAll('[data-news-order]'))button.setAttribute('aria-pressed',String(button.dataset.newsOrder===order));
+    historyView(category,order);
+  }
   const feedback=el('p',{class:'exact-status',role:'status',text:'Loading posts...'});list.append(feedback);panel.hidden=true;
   function choose(post){
     selected=post;panel.hidden=false;
@@ -49,18 +87,19 @@ async function reader(){
   }
   function draw(){
     const items=orderNewsPosts(posts.filter(post=>category==='All'||post.category===category),order);
-    list.replaceChildren(...items.map(post=>{
+    list.replaceChildren(...items.map((post,index)=>{
       const row=clearBindings(template.content.firstElementChild.cloneNode(true));row.className='postbtn';row.dataset.slug=post.slug;row.setAttribute('aria-pressed',String(selected?.slug===post.slug));
       row.children[0].className='tag '+(tags.get(post.category)??'tag-dark');row.children[0].textContent=post.category;row.children[1].textContent=post.title;row.children[2].textContent=formattedDate(post.date)+' - '+(post.authorName??'Staff');
-      if(!embedded)return articleRow(row,post.slug);
-      row.addEventListener('click',()=>choose(post));return row;
+      const card=storyCard(post,row,embedded,index===0);
+      if(embedded)card.addEventListener('click',()=>choose(post));
+      return card;
     }));
     if(!items.length){list.append(el('p',{class:'exact-status',text:'No published posts in this category.'}));panel.hidden=true;}
     else if(embedded && !items.some(post=>post.slug===selected?.slug))choose(items[0]);
   }
-  for(const node of document.querySelectorAll('[data-on-click^="pickK"]'))node.addEventListener('click',()=>{category=node.dataset.onClick.slice(5);for(const button of node.parentElement.children)button.setAttribute('aria-pressed',String(button===node));draw();});
-  for(const button of document.querySelectorAll('[data-news-order]'))button.addEventListener('click',()=>{order=button.dataset.newsOrder;for(const peer of document.querySelectorAll('[data-news-order]'))peer.setAttribute('aria-pressed',String(peer===button));draw();});
-  one('[data-on-click="pickKAll"]').setAttribute('aria-pressed','true');
+  for(const node of document.querySelectorAll('[data-on-click^="pickK"]'))node.addEventListener('click',()=>{category=node.dataset.onClick.slice(5);syncFilters();draw();});
+  for(const button of document.querySelectorAll('[data-news-order]'))button.addEventListener('click',()=>{order=button.dataset.newsOrder;syncFilters();draw();});
+  syncFilters();
   const copy=[...panel.querySelectorAll('button')].find(node=>node.textContent.includes('Copy link'));copy?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(new URL('#'+encodeURIComponent(selected.slug),location.href).href);notice('Post link copied.');}catch{notice('Copy the address from your browser.');}});
   try{posts=(await api('news')).items;selected=embedded?posts.find(post=>post.slug===decodeURIComponent(location.hash.slice(1)))??null:null;draw();if(selected)choose(selected);}catch(error){feedback.textContent=error.message;}
 }

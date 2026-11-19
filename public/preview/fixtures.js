@@ -28,7 +28,7 @@ const details = slug => {
 const json = (body,status=200) => new Response(JSON.stringify(body),{status,headers:{'content-type':'application/json'}});
 const routes = new Map([
   ['/api/competitions/auth/session', () => json(session)],
-  ['/api/reviewer/session', () => json({appeals:staff,competitions:staff})],
+  ['/api/reviewer/session', () => session.authenticated ? json({appeals:staff,competitions:staff}) : json({error:'unauthorized'},401)],
   ['/api/appeals/turnstile', () => json({siteKey:'preview',action:'appeal'})],
   ['/api/appeals/eligible', () => json({punishments:session.authenticated?[eligible]:[]})],
   ['/api/appeals/bindings', () => json({bindings:[]})],

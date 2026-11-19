@@ -2,6 +2,9 @@
 <html data-preview-root="./" lang="en">
 <head>
 <script src="./fixtures.js"></script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Enthusia SMP news</title>
@@ -130,8 +133,8 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 </style>
 <link rel="stylesheet" href="../assets/exact-design.css"><link rel="stylesheet" href="../assets/site-refinements.css">
-<meta name="robots" content="noindex,nofollow,noarchive">
 <link rel="stylesheet" href="../assets/news-images.css?v=news-images-20261103">
+<meta name="robots" content="noindex,nofollow,noarchive">
 </head>
 <body data-exact-page="news">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -149,27 +152,23 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="plugins.html">About</a>
-<a href="join.html">Join guide</a>
-<a href="guide.html">Player guide</a>
+<a href="join.html">Start playing</a>
 <a href="rules.html">Rules</a>
 <a href="vote.html">Vote</a>
 <a href="appeal.html">Appeals</a>
 </div>
 </div>
 <div class="nav-group">
-<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World &amp; Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu nav-directory">
+<div role="group" aria-label="World"><strong>World</strong>
 <a href="market.html">Market</a>
 <a href="gallery.html">Gallery</a>
 <a href="museum.html">Mapart Museum</a>
-<a href="competitions/index.html">Competitions</a>
-<a href="events.html">Events</a>
+<a href="events.html">Event calendar</a>
 <a href="bounties.html">Bounties</a>
 </div>
-</div>
-<div class="nav-group">
-<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<div role="group" aria-label="Community"><strong>Community</strong>
 <a href="guilds.html">Guilds</a>
 <a href="guildquests.html">Guild quests</a>
 <a href="players.html">Players</a>
@@ -178,15 +177,17 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <a href="achievements.html">Achievements</a>
 <a href="creators.html">Creators</a>
 <a href="staff.html">Staff</a>
+<template data-staff-entry><a href="reviewer/index.html">Staff dashboard</a></template>
 <a href="punishments.html">Punishments</a>
 <a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
 </div>
 </div>
 <div class="nav-group">
 <button class="navbtn cur" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="news.html" class="active" aria-current="page">News</a>
-<a href="changelog.html">Changelog</a>
+<a href="news.html?category=Changelog">Changelogs</a>
 <a href="roadmap.html">Roadmap</a>
 <a href="polls.html">Polls</a>
 <a href="timeline.html">Timeline</a>
@@ -218,7 +219,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <button class="chip" type="button" data-b-aria-pressed="{{kChangelog}}" data-on-click="pickKChangelog">Changelogs</button>
 <button class="chip" type="button" data-b-aria-pressed="{{kEvent}}" data-on-click="pickKEvent">Events</button>
 </div>
-<a class="btn btn-dark" href="newseditor.html">Write a post (staff)</a>
+
 </div>
 <div role="group" aria-label="Sort posts by date" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
 <span style="color: var(--muted)">Sort by date</span>
@@ -226,7 +227,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <button class="chip" type="button" data-news-order="oldest" aria-pressed="false">Oldest first</button>
 </div>
 <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px">
-<div style="flex: 2 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<div class="news-story-grid">
 
 
 
@@ -257,6 +258,11 @@ a{color:#b3201a}a:hover{color:#7d120e}
 </div>
 </article>
 </div>
+<section data-release-history hidden aria-labelledby="release-history-title" class="panel" style="padding:24px">
+<h2 id="release-history-title" class="t-h2">Earlier release notes</h2>
+<label class="f">Search release notes<input type="search" class="field" data-release-search placeholder="Title, year, or topic"></label>
+<div data-release-list></div>
+</section>
 </div>
 </section>
 </main>
@@ -275,8 +281,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <nav class="foot" aria-label="Play">
 <p class="foot-title">PLAY</p>
 <a href="plugins.html">About</a>
-<a href="join.html">Join guide</a>
-<a href="guide.html">Player guide</a>
+<a href="join.html">Start playing</a>
 <a href="rules.html">Rules</a>
 <a href="vote.html">Vote</a>
 <a href="appeal.html">Appeals</a>
@@ -286,8 +291,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <a href="market.html">Market</a>
 <a href="gallery.html">Gallery</a>
 <a href="museum.html">Mapart Museum</a>
-<a href="competitions/index.html">Competitions</a>
-<a href="events.html">Events</a>
+<a href="events.html">Event calendar</a>
 <a href="bounties.html">Bounties</a>
 </nav>
 <nav class="foot" aria-label="Community">
@@ -306,7 +310,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <nav class="foot" aria-label="News">
 <p class="foot-title">NEWS</p>
 <a href="news.html">News</a>
-<a href="changelog.html">Changelog</a>
+<a href="news.html?category=Changelog">Changelogs</a>
 <a href="roadmap.html">Roadmap</a>
 <a href="polls.html">Polls</a>
 <a href="timeline.html">Timeline</a>
@@ -319,13 +323,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <a href="404.html">404 page</a>
 
 </nav>
-<nav class="foot" aria-label="Staff tools">
-<p class="foot-title">STAFF TOOLS</p>
-<a href="competitions/admin/index.html">Competition admin</a>
-<a href="newseditor.html">News editor</a>
-<a href="reviewer/index.html">Reviewer</a>
-<a href="reviewer/appeals.html">Appeal review</a>
-</nav>
+
 </div>
 <div class="foot-legal">
 <p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
@@ -342,5 +340,5 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script src="../assets/site-config.js" defer></script><script src="../assets/enthusia.js" defer></script><script type="module" src="../assets/exact-news.js?v=news-images-20261103"></script></body>
+<script src="../assets/site-config.js" defer></script><script src="../assets/enthusia.js" defer></script><script type="module" src="../assets/exact-news.js?v=article-pages"></script><script type="module" src="../assets/staff-navigation.js"></script></body>
 </html>
