@@ -13,6 +13,7 @@
 <link rel="preload" href="assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="assets/enthusia.css">
 <link rel="stylesheet" href="assets/warzone-view.css">
+<link rel="stylesheet" href="assets/leaderboard-layout.css">
 
 
 <style>
@@ -212,6 +213,58 @@
 
 
 
+<div class="home-community-sections s-cream">
+<section id="leaderboards" class="tip fret" aria-labelledby="community-title">
+<h2 id="community-title" class="t-h2">Leaderboards</h2>
+<div role="group" aria-label="Choose a leaderboard" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px">
+<button class="chip" type="button" aria-pressed="true" data-switch="lb" data-value="playtime">Playtime</button>
+<button class="chip" type="button" aria-pressed="false" data-switch="lb" data-value="balance">Balance</button>
+</div>
+
+<div class="swap" data-switch-panel="lb" data-value="playtime" data-board="playtime-active-all" data-limit="5">
+<ol class="lb-list" data-board-rows hidden></ol>
+<div class="board-state" data-board-state><p>Loading the leaderboard...</p></div>
+</div>
+
+<div class="swap hide" data-switch-panel="lb" data-value="balance" data-board="balance-active-all" data-limit="5">
+<ol class="lb-list" data-board-rows hidden></ol>
+<div class="board-state" data-board-state><p>Loading the leaderboard...</p></div>
+</div>
+
+<div style="display: flex; justify-content: center"><a class="btn btn-dark" href="leaderboards.html">All leaderboards</a></div>
+</section>
+<section class="tip fret" aria-labelledby="faq-title">
+<h2 id="faq-title" class="t-h2">FAQ</h2>
+<details class="panel" open="">
+<summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; padding: 12px 24px; color: var(--head)">What versions can I join on?<span aria-hidden="true" style="color: var(--kick)">+</span></summary>
+<p class="swap" style="padding: 0 24px 24px; color: var(--muted)">The main server version is 26.2, and any version 1.17 or above can join. The server updates toward the newest Minecraft version over time.</p>
+</details>
+<details class="panel">
+<summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; padding: 12px 24px; color: var(--head)">Is the server pay-to-win?<span aria-hidden="true" style="color: var(--kick)">+</span></summary>
+<p class="swap" style="padding: 0 24px 24px; color: var(--muted)">No. The store has two non-P2W ranks: a $5 permanent rank and a $10 monthly rank. Ranked players can also spend in-game gold or money to start events.</p>
+</details>
+<details class="panel">
+<summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; padding: 12px 24px; color: var(--head)">Can I grief things?<span aria-hidden="true" style="color: var(--kick)">+</span></summary>
+<p class="swap" style="padding: 0 24px 24px; color: var(--muted)">Yes. Raiding, griefing, and base hunting are part of the server. Build with that risk in mind.</p>
+</details>
+<details class="panel">
+<summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; padding: 12px 24px; color: var(--head)">Are there any events?<span aria-hidden="true" style="color: var(--kick)">+</span></summary>
+<p class="swap" style="padding: 0 24px 24px; color: var(--muted)">See the <a href="events.html">event calendar</a> for upcoming events, active competitions, and results.</p>
+</details>
+<details class="panel">
+<summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; padding: 12px 24px; color: var(--head)">Where are the rules?<span aria-hidden="true" style="color: var(--kick)">+</span></summary>
+<p class="swap" style="padding: 0 24px 24px; color: var(--muted)">You can read the full rule list on the <a href="rules.html">Rules page</a>.</p>
+</details>
+<details class="panel">
+<summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; padding: 12px 24px; color: var(--head)">How do I report a player or a bug?<span aria-hidden="true" style="color: var(--kick)">+</span></summary>
+<p class="swap" style="padding: 0 24px 24px; color: var(--muted)">Join the <a href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Discord</a> and open a ticket, or use /report in game.</p>
+</details>
+<details class="panel">
+<summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; padding: 12px 24px; color: var(--head)">Where can I get more detailed server info?<span aria-hidden="true" style="color: var(--kick)">+</span></summary>
+<p class="swap" style="padding: 0 24px 24px; color: var(--muted)">For deeper info on mechanics, features, and guides, check the <a href="https://enthusia.miraheze.org/wiki/Main_Page" data-link-target="wiki" target="_blank" rel="noopener">Enthusia wiki</a>.</p>
+</details>
+</section>
+</div>
 </main>
 
 <footer class="site-foot s-red">
@@ -285,7 +338,7 @@
 </div>
 </div>
 
-<script src="assets/site-config.js?v=bedrock-20261102" defer></script><script src="assets/enthusia.js?v=bedrock-20261102" defer></script><script src="assets/video-rotation.js" defer></script><script src="assets/video-of-the-week.js" defer></script><script src="assets/guild-banner-renderer.js" defer></script><script type="module" src="assets/market/exact-insights.js?v=stall-integrity-20261102"></script><script type="module" src="assets/guide-warzone.js"></script><script type="module" src="assets/exact-home.js?v=3"></script>
+<script src="assets/site-config.js?v=bedrock-20261102" defer></script><script src="assets/enthusia.js?v=bedrock-20261102" defer></script><script src="assets/video-rotation.js" defer></script><script src="assets/video-of-the-week.js" defer></script><script src="assets/guild-banner-renderer.js" defer></script><script src="assets/page-leaderboards.js" defer></script><script type="module" src="assets/market/exact-insights.js?v=stall-integrity-20261102"></script><script type="module" src="assets/guide-warzone.js"></script><script type="module" src="assets/exact-home.js?v=3"></script>
 <script type="module" src="assets/staff-navigation.js"></script></body>
 </html>
 

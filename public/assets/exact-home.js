@@ -16,8 +16,6 @@ if (!preview) {
 const formerHomeSections = {
   '#join': 'join.html',
   '#gallery': 'gallery.html',
-  '#leaderboards': 'leaderboards.html',
-  '#faq-title': 'join.html#join-faq-title',
   '#staff-title': 'staff.html'
 };
 if (Object.hasOwn(formerHomeSections, location.hash)) {
