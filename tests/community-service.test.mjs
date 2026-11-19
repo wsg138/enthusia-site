@@ -337,8 +337,10 @@ test('Discord announcement requires an opted-in publication and confirmed delive
   const {db,sql}=database();
   const originalFetch=globalThis.fetch;
   const sends=[];
-  globalThis.fetch=async(request)=>{
-    sends.push({url:request.url,payload:await request.json()});
+  globalThis.fetch=async(url,options)=>{
+    assert.equal(new URL(url).origin,'https://discord.com');
+    assert.equal(options.redirect,'error');
+    sends.push({url:String(url),payload:JSON.parse(options.body)});
     return Response.json({id:'123456789012345678'});
   };
   const env={COMMUNITY_DB:db,COMMUNITY_DISCORD_CHANGELOG_WEBHOOK:'https://discord.com/api/webhooks/123456789012345678/test-token'};
@@ -390,6 +392,9 @@ test('Discord retries only definitely unsent announcements and keeps the article
     reply=()=>{throw new Error('transport interrupted');};
     assert.equal((await (await call(retry,{})).json()).status,'uncertain');
     assert.equal((await (await call(retry,{})).json()).status,'uncertain');
+    assert.equal(sends,2);
+    env.COMMUNITY_DISCORD_NEWS_WEBHOOK='https://example.com/api/webhooks/123456789012345678/test-token';
+    assert.equal((await (await call('admin/news',{...input,slug:'bad-config'})).json()).discordDelivery,'unconfigured');
     assert.equal(sends,2);
     assert.equal((await call('admin/news',{...input,slug:'collision',revision:1})).status,409);
     assert.equal((await (await call('admin/discord-delivery/news/collision')).json()).status,null);

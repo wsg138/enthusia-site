@@ -1,3 +1,5 @@
+import { fetchDiscord } from '../discord-transport.js';
+
 // Delivery receipts use a private record kind outside CONTENT_KINDS. One receipt per
 // News slug survives edits and retries without requiring a separate deployment migration.
 const receipt = "kind='discord_news_delivery' AND slug=?";
@@ -37,12 +39,10 @@ async function send(embed, endpoint) {
   destination.pathname += encodeURIComponent(endpoint.id) + '/' + encodeURIComponent(endpoint.token);
   destination.searchParams.set('wait','true');
   try {
-    const request = new Request(destination, {
+    const response = await fetchDiscord(destination, {
       method:'POST', headers:{'content-type':'application/json'}, redirect:'error',
-      signal:globalThis.AbortSignal.timeout(8000),
       body:JSON.stringify({embeds:[embed], allowed_mentions:{parse:[]}})
     });
-    const response = await fetch(request);
     if (response.ok) {
       const message = await response.json();
       if (/^\d{16,22}$/.test(message?.id)) return {status:'sent', messageId:message.id};
