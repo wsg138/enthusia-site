@@ -1,4 +1,4 @@
-import { changelogEmbed,changelogColor } from './changelog-embed.js?v=discord-avatar';
+import { changelogEmbed,changelogColor } from './changelog-embed.js?v=gold-changelog';
 import { api,el } from './community-dom.js?v=news-receipts';
 import { renderMarkup,formattedDate,notice,newsImageSource } from './exact-markup.js?v=news-images-20261103';
 import { orderNewsPosts } from './news-order.js';
