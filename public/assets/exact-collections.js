@@ -47,6 +47,23 @@ function populate(node,item){
     if(kind!=='timeline'&&item.verification!=='verified')node.querySelector('.ev-card')?.append(el('span',{class:'tag tag-plain',text:'Awaiting source verification'}));
   }
 }
+function restoreTimelineCopy(node, item, source, categoryLabel) {
+  if (!source) return;
+  const displayDate = source.content.querySelector('.ev-date b')?.textContent;
+  const originalYear = source.content.querySelector('.ev-date span')?.textContent;
+  if (item.date?.startsWith(originalYear + '-') && displayDate && !/^\d{1,2} [A-Z][a-z]{2}$/.test(displayDate)) {
+    node.querySelector('.ev-date b').textContent = displayDate;
+  }
+  const summary = node.querySelector('.ev-text p');
+  const originalText = source.content.querySelector('.ev-text p')?.textContent;
+  const caption = Array.from(source.content.querySelectorAll('.ev-shot figcaption, .ev-shot span'), element => element.textContent).join(' ');
+  if (originalText) {
+    const imported = summary.textContent.trim();
+    const alternatives = [originalText, categoryLabel + ' ' + originalText];
+    if (caption) alternatives.push(...alternatives.map(text => text + ' ' + caption));
+    if (alternatives.includes(imported)) summary.textContent = originalText;
+  }
+}
 function populateTimelineCard(node,item,index,timelineSources,releaseNotes){
   const source = timelineSources.get(node.querySelector('h3').textContent);
   if(!preview){
@@ -58,20 +75,7 @@ function populateTimelineCard(node,item,index,timelineSources,releaseNotes){
     const badge = node.querySelector('.ev-text .tag');
     badge.textContent = category.charAt(0).toUpperCase() + category.slice(1);
     badge.className = 'tag ' + ({milestone:'tag-gold',guild:'tag-guild',community:'tag-dark',event:'tag-red'}[category] || 'tag-plain');
-    const displayDate = source?.content.querySelector('.ev-date b')?.textContent;
-    const originalYear = source?.content.querySelector('.ev-date span')?.textContent;
-    if (item.date?.startsWith(originalYear + '-') && displayDate && !/^\d{1,2} [A-Z][a-z]{2}$/.test(displayDate)) {
-      node.querySelector('.ev-date b').textContent = displayDate;
-    }
-    const summary = node.querySelector('.ev-text p');
-    const originalText = source?.content.querySelector('.ev-text p')?.textContent;
-    const caption = source?.content.querySelector('.ev-shot figcaption, .ev-shot span')?.textContent;
-    if (originalText) {
-      const imported = summary.textContent.trim();
-      const alternatives = [originalText, badge.textContent + ' ' + originalText];
-      if (caption) alternatives.push(...alternatives.map(text => text + ' ' + caption));
-      if (alternatives.includes(imported)) summary.textContent = originalText;
-    }
+    restoreTimelineCopy(node, item, source, badge.textContent);
   }
   const release = releaseNotes.get(timelineReleaseTitle(item.slug));
   if(release){
