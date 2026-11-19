@@ -68,7 +68,13 @@ async function editor(){
     catch { showDelivery('status_unavailable'); }
     finally { retry.disabled=false; }
   });
+  const everyone=one('[data-ping-everyone]');
   function drawDiscord() {
+    const showEveryone=ping.checked && category==='Announcement';
+    one('[data-everyone-option]').hidden=!showEveryone;
+    everyone.disabled=!showEveryone;
+    if(!showEveryone)everyone.checked=false;
+    one('[data-changelog-ping]').hidden=category!=='Changelog';
     one('[data-discord-options]').hidden=!ping.checked;
     if(!ping.checked)return;
     text('[data-discord-brand]','✦ ENTHUSIA SMP · '+(category==='Changelog'?'CHANGELOG':'ANNOUNCEMENT'));
@@ -129,7 +135,7 @@ async function editor(){
     const controls=[...document.querySelectorAll('main button')],disabled=controls.map(node=>node.disabled);controls.forEach(node=>node.disabled=true);
     try{
       const safeSlug=slug||title.value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60)||'post-'+Date.now();
-      const record=await api('admin/news',{method:'POST',body:JSON.stringify({kind:'news',slug:safeSlug,title:title.value,body:body.value,image:cover,category,discordSummary:summary.value,announce:state==='published'&&ping.checked,status:state,revision,date:new Date().toISOString(),pinned:pin.checked})});
+      const record=await api('admin/news',{method:'POST',body:JSON.stringify({kind:'news',slug:safeSlug,title:title.value,body:body.value,image:cover,category,discordSummary:summary.value,announce:state==='published'&&ping.checked,pingEveryone:everyone.checked,status:state,revision,date:new Date().toISOString(),pinned:pin.checked})});
       slug=record.slug;revision=record.revision;message.hidden=false;message.textContent=state==='published'?'Published to News.':'Draft saved.';
       if(record.discordDelivery)showDelivery(record.discordDelivery);
       history.replaceState(null,'','?slug='+encodeURIComponent(slug));

@@ -357,7 +357,8 @@ test('Discord announcement requires an opted-in publication and confirmed delive
     assert.equal((await result.json()).discordDelivery,'sent');
     const [message]=sends;
     assert.equal(new URL(message.url).searchParams.get('wait'),'true');
-    assert.deepEqual(message.payload.allowed_mentions,{parse:[]});
+    assert.equal(message.payload.content,'<@&1410343158402781195>');
+    assert.deepEqual(message.payload.allowed_mentions,{parse:[],roles:['1410343158402781195']});
     assert.equal(message.payload.embeds.length,1);
     const [embed]=message.payload.embeds;
     assert.equal(embed.url,'https://enthusia.info/news#hello');
@@ -369,6 +370,17 @@ test('Discord announcement requires an opted-in publication and confirmed delive
     const preview=await call('admin/news',{...article,slug:'preview-only',status:'published',announce:true},'https://preview.pages.dev');
     assert.equal(preview.ok,false);
     assert.equal(sends.length,1);
+    env.COMMUNITY_DISCORD_NEWS_WEBHOOK=env.COMMUNITY_DISCORD_CHANGELOG_WEBHOOK;
+    for(const [slug,category,pingEveryone,expected] of [
+      ['all','Announcement',true,'@everyone'],['silent','Announcement',false,undefined],
+      ['event','Event',true,undefined],['role','Changelog',true,'<@&1410343158402781195>']
+    ]){
+      const saved=await call('admin/news',{...article,slug,category,pingEveryone,status:'published',announce:true});
+      assert.equal((await saved.json()).discordDelivery,'sent');
+      const {payload}=sends.at(-1);
+      assert.equal(payload.content,expected);
+      if(category!=='Changelog')assert.deepEqual(payload.allowed_mentions,{parse:expected?['everyone']:[]});
+    }
   } finally {globalThis.fetch=originalFetch;sql.close();}
 });
 
