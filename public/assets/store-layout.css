@@ -8,7 +8,7 @@
 .store-support-inner {max-width: 1240px; margin: auto; padding: 0 24px; display: grid; grid-template-columns: 3fr 2fr; gap: 24px; align-items: start;}
 .store-support-inner h2 {margin-bottom: 12px;}
 .store-support-inner details + details {margin-top: 8px;}
-.store-community {padding: 24px; display: grid; justify-items: start; gap: 12px;}
+.store-community {padding: 24px; display: grid; justify-items: center; text-align: center; gap: 12px;}
 .store-community h2 {margin: 0;}
 @media (max-width: 720px) {
   .store-support-inner {grid-template-columns: minmax(0,1fr);}
@@ -25,3 +25,6 @@
 @media (max-width: 520px) {
   .store-compare th, .store-compare td {padding: 8px 5px; line-height: 1.35;}
 }
+
+.store-checkout-panels > div {text-align: center; justify-content: center;}
+.store-checkout-panels .field {text-align: center;}
