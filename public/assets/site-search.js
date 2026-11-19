@@ -26,11 +26,11 @@ function install(header) {
   if (!trigger.isConnected) header.append(trigger);
   const dialog = el('dialog', {class:'site-search-dialog','aria-labelledby':'site-search-title'});
   const input = el('input', {type:'search',placeholder:'Search players, guilds, items, or pages', 'aria-label':'Search site',autocomplete:'off'});
-  const close = el('button',{type:'button',class:'btn btn-dark',text:'Close',onclick:()=>dialog.close()});
+  const close = el('button',{type:'button',class:'btn btn-gold',text:'Close',onclick:()=>dialog.close()});
   const results = el('div',{class:'site-search-results'});
   const status = el('p', {role:'status'});
   dialog.append(el('div',{class:'site-search-top'},[el('h2',{id:'site-search-title',text:'Search Enthusia'}),close]),input,status,results);
-  document.body.append(dialog);
+  (header.closest('.en') || document.body).append(dialog);
   let started=false, pending=0, failed=0;
   function draw() {
     if (!dialog.open) return;
