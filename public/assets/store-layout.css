@@ -14,3 +14,14 @@
   .store-support-inner {grid-template-columns: minmax(0,1fr);}
   .store-compare {padding: 12px;}
 }
+.rank .store-details summary {padding: 8px 12px; background: var(--row); border-left: 4px solid var(--accent);}
+.store-perks h4 {color: var(--head); border-bottom: 2px solid #d8ad53; margin-top: 8px;}
+.store-perks code, .store-compare code {font: inherit; background: #ffedbd; color: #4a0b08; padding-inline: 3px;}
+.store-compare p {margin-block: 12px 16px;}
+.store-compare table {border-collapse: collapse; table-layout: fixed; width: 100%; color: var(--ink); background: var(--paper, #fff7e4);}
+.store-compare th, .store-compare td {text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 2px solid #dfbd71; overflow-wrap: anywhere;}
+.store-compare thead th {background: #781510; color: #ffe193; border-bottom: 4px solid #d8ad53;}
+.store-compare tbody tr:nth-child(even) {background: #fff0cd;}
+@media (max-width: 520px) {
+  .store-compare th, .store-compare td {padding: 8px 5px; line-height: 1.35;}
+}
