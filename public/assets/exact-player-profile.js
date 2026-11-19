@@ -111,7 +111,7 @@ export function playerProfile(node,item) {
   node.append(el('section',{class:'panel player-profile-stats'},[el('h3',{text:'Stats'}),stats]));
   const market=section('At the market'),sections=el('div',{class:'player-profile-sections'},[guildSection(item),market]);
   node.append(sections);appendMarket(market,item,node);
-  for(const [title,kind,url]of [['Guild quests','guildquests','guildquests.html'],['Bounties','bounties','bounties.html'],['Weekly duel wins','warzone','index.html#warzone']]){
+  for(const [title,kind,url]of [['Guild quests','guildquests','guildquests.html'],['Bounties','bounties','bounties.html'],['Weekly duel wins','warzone','guide.html#warzone']]){
     const host=section(title);sections.append(host);appendActivity(host,item,node,kind).catch(()=>{if(node.isConnected)host.querySelector('[role="status"]').textContent='This data is unavailable.';});host.append(link(url,'View '+title.toLowerCase(),'btn btn-dark'));
   }
   const achievements=section('Achievements');sections.append(achievements);

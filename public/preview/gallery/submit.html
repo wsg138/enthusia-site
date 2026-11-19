@@ -1,5 +1,8 @@
 <!DOCTYPE html><html data-preview-root="../" lang="en" id="top"><head>
-<script src="../fixtures.js"></script><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Community Gallery | Enthusia SMP</title><meta name="description" content="Explore builds, mapart, PVP, and moments from every era of Enthusia SMP."/><meta name="theme-color" content="#100d0a"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet"/><link rel="stylesheet" href="../../assets/enthusia.css?v=red1">
+<script src="../fixtures.js"></script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Community Gallery | Enthusia SMP</title><meta name="description" content="Explore builds, mapart, PVP, and moments from every era of Enthusia SMP."/><meta name="theme-color" content="#100d0a"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;800;900&display=swap" rel="stylesheet"/><link rel="stylesheet" href="../../assets/enthusia.css?v=red1">
 <link rel="stylesheet" href="../../assets/platform-workflows.css?v=1"><link rel="stylesheet" href="../../assets/gallery.css?v=1"/><link rel="stylesheet" href="../../assets/integration.css?v=1">
 <link rel="stylesheet" href="../../assets/community.css">
 <link rel="stylesheet" href="../../assets/exact-design.css">
@@ -19,27 +22,23 @@
 <button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="../plugins.html">About</a>
-<a href="../join.html">Join guide</a>
-<a href="../guide.html">Player guide</a>
+<a href="../join.html">Start playing</a>
 <a href="../rules.html">Rules</a>
 <a href="../vote.html">Vote</a>
 <a href="../appeal.html">Appeals</a>
 </div>
 </div>
 <div class="nav-group">
-<button class="navbtn cur" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<button class="navbtn cur" type="button" aria-expanded="false" data-menu>World &amp; Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu nav-directory">
+<div role="group" aria-label="World"><strong>World</strong>
 <a href="../market.html">Market</a>
 <a href="../gallery.html" class="active" aria-current="page">Gallery</a>
 <a href="../museum.html">Mapart Museum</a>
-<a href="../competitions/index.html">Competitions</a>
-<a href="../events.html">Events</a>
+<a href="../events.html">Event calendar</a>
 <a href="../bounties.html">Bounties</a>
 </div>
-</div>
-<div class="nav-group">
-<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<div role="group" aria-label="Community"><strong>Community</strong>
 <a href="../guilds.html">Guilds</a>
 <a href="../guildquests.html">Guild quests</a>
 <a href="../players.html">Players</a>
@@ -48,15 +47,17 @@
 <a href="../achievements.html">Achievements</a>
 <a href="../creators.html">Creators</a>
 <a href="../staff.html">Staff</a>
+<template data-staff-entry><a href="../reviewer/index.html">Staff dashboard</a></template>
 <a href="../punishments.html">Punishments</a>
 <a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
 </div>
 </div>
 <div class="nav-group">
 <button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="../news.html">News</a>
-<a href="../changelog.html">Changelog</a>
+<a href="../news.html?category=Changelog">Changelogs</a>
 <a href="../roadmap.html">Roadmap</a>
 <a href="../polls.html">Polls</a>
 <a href="../timeline.html">Timeline</a>
@@ -88,8 +89,7 @@
 <nav class="foot" aria-label="Play">
 <p class="foot-title">PLAY</p>
 <a href="../plugins.html">About</a>
-<a href="../join.html">Join guide</a>
-<a href="../guide.html">Player guide</a>
+<a href="../join.html">Start playing</a>
 <a href="../rules.html">Rules</a>
 <a href="../vote.html">Vote</a>
 <a href="../appeal.html">Appeals</a>
@@ -99,8 +99,7 @@
 <a href="../market.html">Market</a>
 <a href="../gallery.html">Gallery</a>
 <a href="../museum.html">Mapart Museum</a>
-<a href="../competitions/index.html">Competitions</a>
-<a href="../events.html">Events</a>
+<a href="../events.html">Event calendar</a>
 <a href="../bounties.html">Bounties</a>
 </nav>
 <nav class="foot" aria-label="Community">
@@ -119,7 +118,7 @@
 <nav class="foot" aria-label="News">
 <p class="foot-title">NEWS</p>
 <a href="../news.html">News</a>
-<a href="../changelog.html">Changelog</a>
+<a href="../news.html?category=Changelog">Changelogs</a>
 <a href="../roadmap.html">Roadmap</a>
 <a href="../polls.html">Polls</a>
 <a href="../timeline.html">Timeline</a>
@@ -132,13 +131,7 @@
 <a href="../404.html">404 page</a>
 
 </nav>
-<nav class="foot" aria-label="Staff tools">
-<p class="foot-title">STAFF TOOLS</p>
-<a href="../competitions/admin/index.html">Competition admin</a>
-<a href="../newseditor.html">News editor</a>
-<a href="../reviewer/index.html">Reviewer</a>
-<a href="../reviewer/appeals.html">Appeal review</a>
-</nav>
+
 </div>
 <div class="foot-legal">
 <p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
@@ -146,4 +139,4 @@
 </div>
 </div>
 </footer><script src="../../assets/site-config.js?v=vision41" defer></script><script src="../../assets/enthusia.js?v=integration1" defer></script><script src="../../assets/gallery.js?v=1" defer></script><script src="../../assets/site-account.js?v=integration1" type="module"></script>
-</body></html>
+<script type="module" src="../../assets/staff-navigation.js"></script></body></html>

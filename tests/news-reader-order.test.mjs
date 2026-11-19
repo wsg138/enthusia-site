@@ -24,7 +24,7 @@ test('news ordering controls and category filtering update the actual reader wit
   const posts=[{slug:'older',title:'Older',category:'Event',date:'2024-01-01'}, {slug:'newer',title:'Newer',category:'Event',date:'2026-01-01'}, {slug:'middle',title:'Middle',category:'Announcement',date:'2025-01-01'}];
   let code=await readFile(new URL('../public/assets/exact-news.js',import.meta.url),'utf8');
   code=code.replace(/^import .*;\r?\n/gm,'').replace(/\(page===.*\n?$/,'');
-  const context={document,orderNewsPosts,api:async()=>({items:posts}),el:()=>new Node(),formattedDate:s=>s,renderMarkup:()=>{},notice:()=>{},history:{replaceState(){}},location:{hash:'',href:'https://example.test/'},navigator:{},URL,console};
+  const context={document,orderNewsPosts,api:async()=>({items:posts}),el:()=>new Node(),formattedDate:s=>s,renderMarkup:()=>{},notice:()=>{},history:{replaceState(){}},location:{hash:'',href:'https://example.test/'},navigator:{},URL,URLSearchParams,releaseHistory:()=>()=>{},console};
   await vm.runInNewContext(code+'\nreader()',context);
   assert.deepEqual(list.children.map(x=>x.dataset.slug),['newer','middle','older']);
   list.children[1].events.click();

@@ -1,6 +1,10 @@
 <!doctype html>
 <html data-preview-root="../" lang="en"><head>
 <script src="../fixtures.js"></script>
+<script src="../../assets/calendar-redirect.js"></script><meta http-equiv="refresh" content="0;url=../events.html">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Enthusia SMP competitions</title>
@@ -115,7 +119,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <link rel="stylesheet" href="../../assets/exact-design.css"><meta name="robots" content="noindex,nofollow,noarchive"><link rel="stylesheet" href="../../assets/site-refinements.css">
 <meta name="robots" content="noindex,nofollow,noarchive">
 </head>
-<body data-competition-page="catalog" data-exact-catalog="">
+<body >
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="en">
 
@@ -131,16 +135,16 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <button class="navbtn" type="button" aria-expanded="false" data-menu="">Play <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="../plugins.html">About</a>
-<a href="../join.html">Join guide</a>
-<a href="../guide.html">Player guide</a>
+<a href="../join.html">Start playing</a>
 <a href="../rules.html">Rules</a>
 <a href="../vote.html">Vote</a>
 <a href="../appeal.html">Appeals</a>
 </div>
 </div>
 <div class="nav-group">
-<button class="navbtn cur" type="button" aria-expanded="false" data-menu="">World <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<button class="navbtn cur" type="button" aria-expanded="false" data-menu="">World &amp; Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu nav-directory">
+<div role="group" aria-label="World"><strong>World</strong>
 <a href="../market.html">Market</a>
 <a href="../gallery.html">Gallery</a>
 <a href="../museum.html">Mapart Museum</a>
@@ -148,10 +152,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <a href="../events.html">Events</a>
 <a href="../bounties.html">Bounties</a>
 </div>
-</div>
-<div class="nav-group">
-<button class="navbtn" type="button" aria-expanded="false" data-menu="">Community <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<div role="group" aria-label="Community"><strong>Community</strong>
 <a href="../guilds.html">Guilds</a>
 <a href="../guildquests.html">Guild quests</a>
 <a href="../players.html">Players</a>
@@ -160,15 +161,17 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <a href="../achievements.html">Achievements</a>
 <a href="../creators.html">Creators</a>
 <a href="../staff.html">Staff</a>
+<template data-staff-entry><a href="../reviewer/index.html">Staff dashboard</a></template>
 <a href="../punishments.html">Punishments</a>
 <a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
 </div>
 </div>
 <div class="nav-group">
 <button class="navbtn" type="button" aria-expanded="false" data-menu="">News <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="../news.html">News</a>
-<a href="../changelog.html">Changelog</a>
+<a href="../news.html?category=Changelog">Changelogs</a>
 <a href="../roadmap.html">Roadmap</a>
 <a href="../polls.html">Polls</a>
 <a href="../timeline.html">Timeline</a>
@@ -182,78 +185,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 </div>
 </header>
 
-<main id="main-content" class="page-main">
-<section class="hero hero-vars" aria-labelledby="comp-title">
-<div style="max-width: 1240px; min-height: 320px; margin: 0 auto; padding: 56px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
-<p class="tag tag-gold" style="letter-spacing: 2px">WORLD</p>
-<h1 id="comp-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">COMPETITIONS</h1>
-<p style="max-width: 700px; padding: 12px 20px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">See what is running, submit your entry, and follow the results.</p>
-</div>
-<div class="crenel"></div>
-</section>
-<section class="s-cream" aria-labelledby="now-title" style="padding: 72px 0">
-<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
-<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
-<div style="display: flex; flex-direction: column; gap: 8px">
-<p style="color: var(--kick); letter-spacing: 2px">NOW</p>
-<h2 id="now-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Current competition</h2>
-</div>
-<a class="btn btn-dark" href="../competitions/guide.html">How competitions work</a>
-</div>
-
-
-<template id="exact-feature-template"><div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 24px">
-<a class="frame tile" href="detail.html?competition=build" aria-label="Open the Build Competition" style="flex: 3 1 480px; min-width: 0; min-height: 320px; display: block"><img src="../../assets/screenshots/slide-06.webp" alt="The Halloween spawn from the Open Beta"></a>
-<div class="tip fret-lg" style="flex: 2 1 340px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 12px">
-<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-gold">Opening soon</span><span class="tag tag-plain">Theme: Halloween</span></div>
-<h3 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Build Competition</h3>
-<p style="color: var(--muted)">Entries open soon. Read the brief and plan your build while you wait.</p>
-<div style="display: flex; justify-content: space-between; gap: 16px; padding: 8px 12px; background: var(--row)"><span>Entries open</span><span style="color: var(--accent)">To be announced</span></div>
-<div style="display: flex; justify-content: space-between; gap: 16px; padding: 8px 12px; background: var(--row)"><span>Voting opens</span><span style="color: var(--accent)">October 14</span></div>
-<div style="display: flex; justify-content: space-between; gap: 16px; padding: 8px 12px; background: var(--row)"><span>Results</span><span style="color: var(--accent)">October 21</span></div>
-<div style="display: flex; margin-top: 8px"><a class="btn btn-gold" href="detail.html?competition=build">View competition</a></div>
-</div>
-</div><div aria-label="Competition stages" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); gap: 8px">
-<div class="trk now"><span>01</span><strong>Getting ready</strong><small>Now</small></div>
-<div class="trk "><span>02</span><strong>Submissions</strong><small>Opening soon</small></div>
-<div class="trk "><span>03</span><strong>Entry review</strong><small>After submissions close</small></div>
-<div class="trk "><span>04</span><strong>Community voting</strong><small>Opens October 14</small></div>
-<div class="trk "><span>05</span><strong>Final checks</strong><small>Before results</small></div>
-<div class="trk "><span>06</span><strong>Results published</strong><small>October 21</small></div>
-</div></template><div id="featuredCompetition"></div></div>
-</section>
-
-<section class="s-red" aria-labelledby="next-title" style="padding: 72px 0; border-top: 4px solid #4a0b08; border-bottom: 4px solid #4a0b08">
-<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
-<div style="display: flex; flex-direction: column; gap: 8px">
-<p style="color: var(--kick); letter-spacing: 2px">NEXT</p>
-<h2 id="next-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Upcoming</h2>
-</div>
-<template id="exact-card-template"><article class="panel" style="padding: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px">
-<div class="mapframe" style="width: 144px; flex-shrink: 0">MAP</div>
-<div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
-<div style="display: flex; flex-wrap: wrap; gap: 8px"><span class="tag tag-red">Getting ready</span></div>
-<h3 style="font-size: 32px; line-height: 40px; color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Mapart Competition</h3>
-<p style="color: var(--muted)">Submissions open October 24. Voting opens November 8, and results are published in mid-November alongside the Mapart Museum.</p>
-</div>
-<a class="btn btn-gold" href="detail.html?competition=mapart">View competition</a>
-</article></template><div id="upcomingCompetitions"></div>
-</div>
-</section>
-
-<section class="s-cream" aria-labelledby="archive-title" style="padding: 72px 0; flex-grow: 1;">
-<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
-<div style="display: flex; flex-direction: column; gap: 8px">
-<p style="color: var(--kick); letter-spacing: 2px">ARCHIVE</p>
-<h2 id="archive-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Completed competitions</h2>
-</div>
-<template id="exact-history-empty"><div class="panel" style="padding: 40px 28px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
-<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">No completed competitions yet</h3>
-<p style="color: var(--muted)">Finished rounds stay here with their placements, approved entries and published rewards.</p>
-</div></template><div id="competitionHistory"></div>
-</div>
-</section>
-</main>
+<main id="main-content" class="page-main"><a href="../events.html">Open the event calendar</a></main>
 
 <footer class="site-foot s-red">
 <div class="site-foot-in">
@@ -269,8 +201,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <nav class="foot" aria-label="Play">
 <p class="foot-title">PLAY</p>
 <a href="../plugins.html">About</a>
-<a href="../join.html">Join guide</a>
-<a href="../guide.html">Player guide</a>
+<a href="../join.html">Start playing</a>
 <a href="../rules.html">Rules</a>
 <a href="../vote.html">Vote</a>
 <a href="../appeal.html">Appeals</a>
@@ -280,8 +211,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <a href="../market.html">Market</a>
 <a href="../gallery.html">Gallery</a>
 <a href="../museum.html">Mapart Museum</a>
-<a href="../competitions/index.html">Competitions</a>
-<a href="../events.html">Events</a>
+<a href="../events.html">Event calendar</a>
 <a href="../bounties.html">Bounties</a>
 </nav>
 <nav class="foot" aria-label="Community">
@@ -300,7 +230,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <nav class="foot" aria-label="News">
 <p class="foot-title">NEWS</p>
 <a href="../news.html">News</a>
-<a href="../changelog.html">Changelog</a>
+<a href="../news.html?category=Changelog">Changelogs</a>
 <a href="../roadmap.html">Roadmap</a>
 <a href="../polls.html">Polls</a>
 <a href="../timeline.html">Timeline</a>
@@ -313,13 +243,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <a href="../404.html">404 page</a>
 
 </nav>
-<nav class="foot" aria-label="Staff tools">
-<p class="foot-title">STAFF TOOLS</p>
-<a href="../competitions/admin/index.html">Competition admin</a>
-<a href="../newseditor.html">News editor</a>
-<a href="../reviewer/index.html">Reviewer</a>
-<a href="../reviewer/appeals.html">Appeal review</a>
-</nav>
+
 </div>
 <div class="foot-legal">
 <p><span data-year="">2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
@@ -338,4 +262,4 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script src="../../assets/site-config.js" defer=""></script><script src="../../assets/enthusia.js" defer=""></script><script type="module" src="../../assets/competitions.js"></script></body></html>
+<script src="../../assets/site-config.js" defer=""></script><script src="../../assets/enthusia.js" defer=""></script><script type="module" src="../../assets/staff-navigation.js"></script></body></html>

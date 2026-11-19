@@ -21,7 +21,7 @@ function mentionFields(mention) {
 }
 
 export function queueAnnouncement(db, article, actor, now) {
-  const url = site + '/news#' + encodeURIComponent(article.slug);
+  const url = site + '/news/' + encodeURIComponent(article.slug);
   const channel = article.category === 'Changelog' ? 'CHANGELOG' : 'NEWS';
   const embed = channel === 'CHANGELOG' ? changelogEmbed(article, actor.avatarUrl) : {
     author: {name: '✦ ENTHUSIA SMP · ANNOUNCEMENT'},

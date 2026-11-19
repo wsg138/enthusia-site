@@ -32,8 +32,11 @@ test("staff dashboard is private, capability-aware, and links to maintained work
   ]);
   assert.match(html, /name="robots" content="noindex,nofollow,noarchive"/);
   assert.match(html, /href="appeals\.html"/);
-  assert.match(html, /href="\.\.\/competitions\/admin\/"/);
-  assert.match(script, /requestJson\("\/api\/reviewer\/session"\)/);
+  assert.match(html, /href="\.\.\/competitions\/admin\/index\.html"/);
+  const capabilities = await readFile(new URL("../public/assets/staff-capabilities.js", import.meta.url), "utf8");
+  assert.match(capabilities, /api\/reviewer\/session/);
+  assert.match(capabilities, /api\/community\/admin\/session/);
+  assert.match(capabilities, /api\/gallery\/session/);
   assert.match(script, /status=OPEN/);
   assert.match(script, /status=INFORMATION_REQUESTED/);
   assert.match(script, /Promise\.allSettled\(jobs\)/);

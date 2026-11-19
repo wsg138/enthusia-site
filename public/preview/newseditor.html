@@ -2,6 +2,9 @@
 <html data-preview-root="./" lang="en">
 <head>
 <script src="./fixtures.js"></script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Enthusia SMP news editor</title>
@@ -132,8 +135,8 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 </style>
 <link rel="stylesheet" href="../assets/exact-design.css"><link rel="stylesheet" href="../assets/site-refinements.css">
-<meta name="robots" content="noindex,nofollow,noarchive">
 <link rel="stylesheet" href="../assets/news-images.css?v=news-images-20261103">
+<meta name="robots" content="noindex,nofollow,noarchive">
 </head>
 <body data-exact-page="newseditor">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -151,27 +154,23 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <button class="navbtn" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="plugins.html">About</a>
-<a href="join.html">Join guide</a>
-<a href="guide.html">Player guide</a>
+<a href="join.html">Start playing</a>
 <a href="rules.html">Rules</a>
 <a href="vote.html">Vote</a>
 <a href="appeal.html">Appeals</a>
 </div>
 </div>
 <div class="nav-group">
-<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World &amp; Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu nav-directory">
+<div role="group" aria-label="World"><strong>World</strong>
 <a href="market.html">Market</a>
 <a href="gallery.html">Gallery</a>
 <a href="museum.html">Mapart Museum</a>
-<a href="competitions/index.html">Competitions</a>
-<a href="events.html">Events</a>
+<a href="events.html">Event calendar</a>
 <a href="bounties.html">Bounties</a>
 </div>
-</div>
-<div class="nav-group">
-<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<div role="group" aria-label="Community"><strong>Community</strong>
 <a href="guilds.html">Guilds</a>
 <a href="guildquests.html">Guild quests</a>
 <a href="players.html">Players</a>
@@ -180,15 +179,17 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <a href="achievements.html">Achievements</a>
 <a href="creators.html">Creators</a>
 <a href="staff.html">Staff</a>
+<template data-staff-entry><a href="reviewer/index.html">Staff dashboard</a></template>
 <a href="punishments.html">Punishments</a>
 <a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
 </div>
 </div>
 <div class="nav-group">
 <button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="news.html">News</a>
-<a href="changelog.html">Changelog</a>
+<a href="news.html?category=Changelog">Changelogs</a>
 <a href="roadmap.html">Roadmap</a>
 <a href="polls.html">Polls</a>
 <a href="timeline.html">Timeline</a>
@@ -239,12 +240,27 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <button class="chip tool" type="button" aria-label="Quote" data-on-click="lineQ">&gt; Quote</button>
 <button class="chip tool" type="button" aria-label="Small text" data-on-click="lineSub">-# Small</button>
 </div>
-<div class="news-upload-actions"><button class="chip" type="button" data-news-add-image disabled>Add image</button><button class="chip" type="button" data-news-add-cover disabled>Add cover image</button><button class="chip" type="button" data-news-remove-cover hidden>Remove cover</button><input data-news-image-file type="file" accept="image/png,image/jpeg" hidden><input data-news-cover-file type="file" accept="image/png,image/jpeg" hidden></div><p class="news-media-status" data-news-media-status role="status">PNG or JPEG. Images are uploaded when selected.</p>
+<div class="news-upload-actions"><button class="chip" type="button" data-news-add-image disabled>Add image</button><button class="chip" type="button" data-news-add-cover disabled>Add cover image</button><button class="chip" type="button" data-news-remove-cover hidden>Remove cover</button><input data-news-image-file type="file" accept="image/png,image/jpeg,image/gif" hidden><input data-news-cover-file type="file" accept="image/png,image/jpeg,image/gif" hidden></div><p class="news-media-status" data-news-media-status role="status">PNG, JPEG, or GIF. GIFs can be up to 8 MB. Images are uploaded when selected.</p>
 <textarea class="field" aria-label="Post text, Discord formatting" data-b-value="{{draft}}" data-on-change="setDraft" data-on-select="trackSel" data-on-keyup="trackSel" data-on-click="trackSel"></textarea>
 <p style="color: var(--muted)"><span data-b-text="charCount"></span></p>
 </div>
 <label class="check"><input type="checkbox" data-b-checked="{{pin}}" data-on-change="togPin">Pin to the top of News</label>
 <label class="check"><input type="checkbox" data-b-checked="{{ping}}" data-on-change="togPing">Also announce in Discord with a link to the post</label>
+<div data-discord-options hidden>
+<div data-everyone-option hidden><label class="check"><input type="checkbox" data-ping-everyone>Ping @everyone</label></div>
+<div data-changelog-ping hidden><label class="check"><input type="checkbox" data-ping-role>Ping the changelog role</label><p>Use the heading button for each topic and put each change on its own line. Emoji in headings and inline code for commands carry through to Discord.</p></div>
+<label for="discord-summary">Discord summary</label>
+<textarea id="discord-summary" class="field" maxlength="1000" rows="3" placeholder="What should players know?"></textarea>
+<article class="panel" aria-label="Discord announcement preview" style="padding:16px;border-left:4px solid #b3201a">
+<strong data-discord-brand></strong><h3 data-discord-title></h3>
+<div data-discord-description style="white-space:pre-wrap;overflow-wrap:anywhere"></div>
+<img data-discord-cover hidden alt="" style="max-width:100%;max-height:220px">
+<small data-discord-footer hidden><img hidden alt="" width="20" height="20" style="border-radius:50%;vertical-align:middle;margin-right:6px"><span data-discord-byline></span></small>
+<span data-discord-post-link>Read the full post</span>
+</article>
+</div>
+<p role="status" data-discord-status hidden></p>
+<button type="button" class="chip" data-discord-retry hidden>Retry Discord delivery</button>
 <div style="display: flex; flex-wrap: wrap; gap: 12px">
 <button class="btn btn-dark" type="button" data-news-full-preview>Preview post</button>
 <button class="btn btn-gold" type="button" data-on-click="publish">Publish post</button>
@@ -310,8 +326,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <nav class="foot" aria-label="Play">
 <p class="foot-title">PLAY</p>
 <a href="plugins.html">About</a>
-<a href="join.html">Join guide</a>
-<a href="guide.html">Player guide</a>
+<a href="join.html">Start playing</a>
 <a href="rules.html">Rules</a>
 <a href="vote.html">Vote</a>
 <a href="appeal.html">Appeals</a>
@@ -321,8 +336,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <a href="market.html">Market</a>
 <a href="gallery.html">Gallery</a>
 <a href="museum.html">Mapart Museum</a>
-<a href="competitions/index.html">Competitions</a>
-<a href="events.html">Events</a>
+<a href="events.html">Event calendar</a>
 <a href="bounties.html">Bounties</a>
 </nav>
 <nav class="foot" aria-label="Community">
@@ -341,7 +355,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <nav class="foot" aria-label="News">
 <p class="foot-title">NEWS</p>
 <a href="news.html">News</a>
-<a href="changelog.html">Changelog</a>
+<a href="news.html?category=Changelog">Changelogs</a>
 <a href="roadmap.html">Roadmap</a>
 <a href="polls.html">Polls</a>
 <a href="timeline.html">Timeline</a>
@@ -354,13 +368,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 <a href="404.html">404 page</a>
 
 </nav>
-<nav class="foot" aria-label="Staff tools">
-<p class="foot-title">STAFF TOOLS</p>
-<a href="competitions/admin/index.html">Competition admin</a>
-<a href="newseditor.html">News editor</a>
-<a href="reviewer/index.html">Reviewer</a>
-<a href="reviewer/appeals.html">Appeal review</a>
-</nav>
+
 </div>
 <div class="foot-legal">
 <p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
@@ -377,5 +385,5 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script src="../assets/site-config.js" defer></script><script src="../assets/enthusia.js" defer></script><script type="module" src="../assets/exact-news.js?v=news-images-20261103"></script></body>
+<script src="../assets/site-config.js" defer></script><script src="../assets/enthusia.js" defer></script><script type="module" src="../assets/exact-news.js?v=redesign-gold"></script><script type="module" src="../assets/staff-navigation.js"></script></body>
 </html>

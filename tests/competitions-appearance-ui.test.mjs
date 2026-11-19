@@ -21,9 +21,9 @@ test("competition appearance browser modules remain valid JavaScript", () => {
   syntaxCheck(adminScriptUrl);
 });
 
-test("catalog and detail load the appearance enhancer and stylesheet", () => {
-  assert.match(catalogHtml, /data-exact-catalog/);
-  assert.match(catalogHtml, /exact-card-template/);
+test("catalog opens the calendar and detail retains competition appearance", () => {
+  assert.match(catalogHtml, /calendar-redirect\.js/);
+  assert.match(catalogHtml, /href="\.\.\/events\.html"/);
   for (const html of [detailHtml]) {
     assert.match(html, /competitions-appearance\.css/);
     assert.match(html, /competitions-appearance\.js/);

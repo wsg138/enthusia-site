@@ -2,9 +2,12 @@
 <html data-preview-root="./" lang="en" class="no-js">
 <head>
 <script src="./fixtures.js"></script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Join the server</title>
+<title>Join &amp; Player Guide · Enthusia SMP</title>
 <meta name="description" content="How to join Enthusia SMP on Java Edition, Bedrock Edition and console: the server address, the Bedrock port, and what to read before you log in.">
 <meta name="theme-color" content="#c0261d">
 <link rel="preload" href="../assets/fonts/minecraft-regular.otf" as="font" type="font/otf" crossorigin>
@@ -12,6 +15,7 @@
 
 <link rel="stylesheet" href="../assets/exact-design.css">
 <link rel="stylesheet" href="../assets/site-refinements.css">
+<link rel="stylesheet" href="../assets/join-guide.css">
 <meta name="robots" content="noindex,nofollow,noarchive">
 </head>
 <body>
@@ -30,27 +34,23 @@
 <button class="navbtn cur" type="button" aria-expanded="false" data-menu>Play <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="plugins.html">About</a>
-<a href="join.html" class="active" aria-current="page">Join guide</a>
-<a href="guide.html">Player guide</a>
+<a href="join.html" class="active" aria-current="page">Start playing</a>
 <a href="rules.html">Rules</a>
 <a href="vote.html">Vote</a>
 <a href="appeal.html">Appeals</a>
 </div>
 </div>
 <div class="nav-group">
-<button class="navbtn" type="button" aria-expanded="false" data-menu>World <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<button class="navbtn" type="button" aria-expanded="false" data-menu>World &amp; Community <span aria-hidden="true">+</span></button>
+<div class="panel nav-menu nav-directory">
+<div role="group" aria-label="World"><strong>World</strong>
 <a href="market.html">Market</a>
 <a href="gallery.html">Gallery</a>
 <a href="museum.html">Mapart Museum</a>
-<a href="competitions/index.html">Competitions</a>
-<a href="events.html">Events</a>
+<a href="events.html">Event calendar</a>
 <a href="bounties.html">Bounties</a>
 </div>
-</div>
-<div class="nav-group">
-<button class="navbtn" type="button" aria-expanded="false" data-menu>Community <span aria-hidden="true">+</span></button>
-<div class="panel nav-menu">
+<div role="group" aria-label="Community"><strong>Community</strong>
 <a href="guilds.html">Guilds</a>
 <a href="guildquests.html">Guild quests</a>
 <a href="players.html">Players</a>
@@ -59,15 +59,17 @@
 <a href="achievements.html">Achievements</a>
 <a href="creators.html">Creators</a>
 <a href="staff.html">Staff</a>
+<template data-staff-entry><a href="reviewer/index.html">Staff dashboard</a></template>
 <a href="punishments.html">Punishments</a>
 <a href="https://enthusia.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Wiki</a>
+</div>
 </div>
 </div>
 <div class="nav-group">
 <button class="navbtn" type="button" aria-expanded="false" data-menu>News <span aria-hidden="true">+</span></button>
 <div class="panel nav-menu">
 <a href="news.html">News</a>
-<a href="changelog.html">Changelog</a>
+<a href="news.html?category=Changelog">Changelogs</a>
 <a href="roadmap.html">Roadmap</a>
 <a href="polls.html">Polls</a>
 <a href="timeline.html">Timeline</a>
@@ -85,9 +87,9 @@
 <section class="hero hero-vars hero-join" aria-labelledby="join-page-title">
 <div style="max-width: 1240px; min-height: 360px; margin: 0 auto; padding: 56px 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center">
 <p class="tag tag-gold" style="letter-spacing: 2px">PLAY</p>
-<h1 id="join-page-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">JOIN THE SERVER</h1>
-<button class="btn btn-gold" type="button" data-copy-ip style="min-height: 72px; padding: 8px 32px; font-size: 24px; line-height: 32px">enthusia.net <span style="font-size: 16px; line-height: 24px; color: #5a3a0a">Click to copy</span></button>
+<h1 id="join-page-title" class="t-hero2" style="color: var(--head); text-shadow: 6px 6px 0 var(--head-sh)">START PLAYING</h1>
 <p style="padding: 8px 16px; background: rgba(74, 11, 8, 0.8); border: 4px solid #4a0b08">Java &amp; Bedrock · Version 26.2 · 1.17+ can join</p>
+<nav class="guide-jumps" aria-label="Player guide sections"><a class="chip" href="#device-title">How to join</a><a class="chip" href="#guide-title">First hour</a><a class="chip" href="#commands">Commands</a><a class="chip" href="#systems">Server guides</a><a class="chip" href="#warzone">Warzone</a><a class="chip" href="#join-faq-title">FAQ</a></nav>
 </div>
 <div class="crenel"></div>
 </section>
@@ -96,12 +98,11 @@
 <div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
 <div style="display: flex; flex-direction: column; gap: 8px">
 <p style="color: var(--kick); letter-spacing: 2px">STEP BY STEP</p>
-<h2 id="device-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">What are you playing on?</h2>
+<h2 id="device-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Choose your edition</h2>
 </div>
-<div role="group" aria-label="Choose your device" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 16px">
+<div role="group" aria-label="Choose your edition" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 16px">
 <button class="dev" type="button" aria-pressed="true" data-switch="device" data-value="java">Java Edition<span>PC, Mac and Linux</span></button>
-<button class="dev" type="button" aria-pressed="false" data-switch="device" data-value="bedrock">Bedrock Edition<span>Windows, phones and tablets</span></button>
-<button class="dev" type="button" aria-pressed="false" data-switch="device" data-value="console">Console<span>Xbox, PlayStation and Switch</span></button>
+<button class="dev" type="button" aria-pressed="false" data-switch="device" data-value="bedrock">Bedrock Edition<span>Windows, mobile and consoles</span></button>
 </div>
 
 <div class="swap" data-switch-panel="device" data-value="java" style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 24px">
@@ -123,7 +124,7 @@
 <h3 style="font-size: 24px; line-height: 32px; color: var(--head); text-align: center">Edit Server Info</h3>
 <div style="display: flex; flex-direction: column; gap: 8px"><p style="color: var(--muted)">Server Name</p><p class="field">Enthusia SMP</p></div>
 <div style="display: flex; flex-direction: column; gap: 8px"><p style="color: var(--muted)">Server Address</p><p class="field">enthusia.net<span class="caret" aria-hidden="true">_</span></p></div>
-<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px"><span class="btn btn-gold">Done</span><span class="btn btn-dark">Cancel</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px"><button class="btn btn-gold" type="button" data-copy-ip>Copy address</button></div>
 </div>
 </div>
 
@@ -147,26 +148,256 @@
 <div style="display: flex; flex-direction: column; gap: 8px"><p style="color: var(--muted)">Server Name</p><p class="field">Enthusia SMP</p></div>
 <div style="display: flex; flex-direction: column; gap: 8px"><p style="color: var(--muted)">Server Address</p><p class="field">bedrock.enthusia.net</p></div>
 <div style="display: flex; flex-direction: column; gap: 8px"><p style="color: var(--muted)">Port</p><p class="field">19132<span class="caret" aria-hidden="true">_</span></p></div>
-<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px"><span class="btn btn-gold">Save</span><span class="btn btn-dark">Play</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px"><button class="btn btn-gold" type="button" data-copy-ip="bedrock">Copy address</button></div>
 </div>
-</div>
-
-<div class="swap hide" data-switch-panel="device" data-value="console" style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 24px">
-<article class="panel" style="flex: 3 1 420px; min-width: 0; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<details class="guide-console panel"><summary>Playing on Xbox, PlayStation or Switch?</summary><div style="flex: 3 1 420px; min-width: 0; padding: 28px; display: flex; flex-direction: column; gap: 16px">
 <h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Consoles need one extra step</h3>
 <p style="color: var(--muted)">Xbox, PlayStation and Switch do not have an Add Server button, so console players connect through a workaround.</p>
 <p style="color: var(--muted)">The method changes between consoles and updates, so ask in the Discord and someone will walk you through the current one.</p>
 <p style="color: var(--muted)">Once you are connected, the address is <span style="color: var(--hi)">bedrock.enthusia.net</span> and the port is <span style="color: var(--hi)">19132</span>.</p>
 <div style="display: flex"><a class="btn btn-red" href="https://discord.gg/5ccgDCmNSc" data-link-target="discord" target="_blank" rel="noopener">Ask for help in Discord</a></div>
-</article>
-<div class="tip fret-lg" aria-label="What the Add Server screen should look like" style="flex: 2 1 340px; min-width: 0; padding: 32px; display: flex; flex-direction: column; gap: 20px">
-<h3 style="font-size: 24px; line-height: 32px; color: var(--head); text-align: center">What you will need</h3>
-<div style="display: flex; flex-direction: column; gap: 8px"><p style="color: var(--muted)">Server Address</p><p class="field">bedrock.enthusia.net</p></div>
-<div style="display: flex; flex-direction: column; gap: 8px"><p style="color: var(--muted)">Port</p><p class="field">19132</p></div>
-<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px"><button class="btn btn-gold" type="button" data-copy-ip="bedrock">Copy address</button></div>
+</div></details>
+</div>
+
+</div>
+</section>
+
+<section class="s-cream" id="guide-title" aria-label="Your first hour" style="padding: 72px 0">
+<div style="max-width: 1040px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">YOUR FIRST HOUR</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Seven things to do first</h2>
+</div>
+<div class="tip fret" style="padding: 24px 28px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px">
+<p aria-live="polite" style="font-size: 24px; line-height: 32px; color: var(--head)"><span data-b-text="doneLine"></span></p>
+<button class="linkbtn" type="button" data-on-click="resetSteps">Start over</button>
+</div>
+<div style="display: flex; gap: 4px" aria-hidden="true">
+<span class="seg" data-b-class="seg {{sg0}}"></span><span class="seg" data-b-class="seg {{sg1}}"></span><span class="seg" data-b-class="seg {{sg2}}"></span><span class="seg" data-b-class="seg {{sg3}}"></span><span class="seg" data-b-class="seg {{sg4}}"></span><span class="seg" data-b-class="seg {{sg5}}"></span><span class="seg" data-b-class="seg {{sg6}}"></span>
+</div>
+</div>
+<ol style="display: flex; flex-direction: column; gap: 12px">
+<li class="panel" style="padding: 16px 20px; display: flex; align-items: center; gap: 16px">
+<button class="tick" type="button" aria-label="Mark step 1 as done" data-b-aria-pressed="{{ck0}}" data-on-click="tk0"><svg viewBox="0 0 8 8" width="24" height="24" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M6 1h1v1H6zM5 2h1v1H5zM4 3h1v1H4zM3 4h1v1H3zM2 5h1v1H2zM1 4h1v1H1zM0 3h1v1H0zM2 4h1v1H2zM3 5h1v1H3z"/></svg></button>
+<span style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 24px; line-height: 32px; color: var(--head)">1. Read the rules</span><span style="color: var(--muted)">Raiding, griefing and open PvP are allowed in the wilderness. Cheating is not.</span></span>
+<a href="rules.html" style="white-space: nowrap">Rules</a>
+</li>
+<li class="panel" style="padding: 16px 20px; display: flex; align-items: center; gap: 16px">
+<button class="tick" type="button" aria-label="Mark step 2 as done" data-b-aria-pressed="{{ck1}}" data-on-click="tk1"><svg viewBox="0 0 8 8" width="24" height="24" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M6 1h1v1H6zM5 2h1v1H5zM4 3h1v1H4zM3 4h1v1H3zM2 5h1v1H2zM1 4h1v1H1zM0 3h1v1H0zM2 4h1v1H2zM3 5h1v1H3z"/></svg></button>
+<span style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 24px; line-height: 32px; color: var(--head)">2. Open your Diary</span><span style="color: var(--muted)">Every player is given a Diary on first join. Write your story in it as you go.</span></span>
+
+</li>
+<li class="panel" style="padding: 16px 20px; display: flex; align-items: center; gap: 16px">
+<button class="tick" type="button" aria-label="Mark step 3 as done" data-b-aria-pressed="{{ck2}}" data-on-click="tk2"><svg viewBox="0 0 8 8" width="24" height="24" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M6 1h1v1H6zM5 2h1v1H5zM4 3h1v1H4zM3 4h1v1H3zM2 5h1v1H2zM1 4h1v1H1zM0 3h1v1H0zM2 4h1v1H2zM3 5h1v1H3z"/></svg></button>
+<span style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 24px; line-height: 32px; color: var(--head)">3. Get away from spawn and set a home</span><span style="color: var(--muted)">Spawn and the Market are the only protected areas. Find somewhere quiet, then run /sethome.</span></span>
+
+</li>
+<li class="panel" style="padding: 16px 20px; display: flex; align-items: center; gap: 16px">
+<button class="tick" type="button" aria-label="Mark step 4 as done" data-b-aria-pressed="{{ck3}}" data-on-click="tk3"><svg viewBox="0 0 8 8" width="24" height="24" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M6 1h1v1H6zM5 2h1v1H5zM4 3h1v1H4zM3 4h1v1H3zM2 5h1v1H2zM1 4h1v1H1zM0 3h1v1H0zM2 4h1v1H2zM3 5h1v1H3z"/></svg></button>
+<span style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 24px; line-height: 32px; color: var(--head)">4. Bank your first Raw Gold</span><span style="color: var(--muted)">Raw Gold is the currency. /deposit puts it in the bank, where it cannot be looted.</span></span>
+
+</li>
+<li class="panel" style="padding: 16px 20px; display: flex; align-items: center; gap: 16px">
+<button class="tick" type="button" aria-label="Mark step 5 as done" data-b-aria-pressed="{{ck4}}" data-on-click="tk4"><svg viewBox="0 0 8 8" width="24" height="24" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M6 1h1v1H6zM5 2h1v1H5zM4 3h1v1H4zM3 4h1v1H3zM2 5h1v1H2zM1 4h1v1H1zM0 3h1v1H0zM2 4h1v1H2zM3 5h1v1H3z"/></svg></button>
+<span style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 24px; line-height: 32px; color: var(--head)">5. Join or start a guild</span><span style="color: var(--muted)">/g menu lists the guilds. /g create [name] starts your own.</span></span>
+<a href="guilds.html" style="white-space: nowrap">Guilds</a>
+<a href="guildquests.html">Guild quests</a>
+</li>
+<li class="panel" style="padding: 16px 20px; display: flex; align-items: center; gap: 16px">
+<button class="tick" type="button" aria-label="Mark step 6 as done" data-b-aria-pressed="{{ck5}}" data-on-click="tk5"><svg viewBox="0 0 8 8" width="24" height="24" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M6 1h1v1H6zM5 2h1v1H5zM4 3h1v1H4zM3 4h1v1H3zM2 5h1v1H2zM1 4h1v1H1zM0 3h1v1H0zM2 4h1v1H2zM3 5h1v1H3z"/></svg></button>
+<span style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 24px; line-height: 32px; color: var(--head)">6. Link your Discord</span><span style="color: var(--muted)">Run /link in-game and follow the steps, to unlock linked features on the Discord and this site.</span></span>
+<a href="account.html" style="white-space: nowrap">Your profile</a>
+</li>
+<li class="panel" style="padding: 16px 20px; display: flex; align-items: center; gap: 16px">
+<button class="tick" type="button" aria-label="Mark step 7 as done" data-b-aria-pressed="{{ck6}}" data-on-click="tk6"><svg viewBox="0 0 8 8" width="24" height="24" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M6 1h1v1H6zM5 2h1v1H5zM4 3h1v1H4zM3 4h1v1H3zM2 5h1v1H2zM1 4h1v1H1zM0 3h1v1H0zM2 4h1v1H2zM3 5h1v1H3z"/></svg></button>
+<span style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column"><span style="font-size: 24px; line-height: 32px; color: var(--head)">7. Claim your daily reward</span><span style="color: var(--muted)">/daily once a day, and /rewards for the achievements you have earned.</span></span>
+<a href="achievements.html" style="white-space: nowrap">Achievements</a>
+</li>
+</ol>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-gold" href="#device-title">How to connect</a><a class="btn btn-dark" href="plugins.html">About the server</a></div>
+</div>
+</section>
+<section class="s-red" id="systems" aria-label="How the server works" style="padding: 72px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">HOW THE SERVER WORKS</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">The systems, in a sentence each</h2>
+</div>
+<div class="grid4 eq">
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Raw Gold</h3>
+<p>The currency is an item: Raw Gold. Bank it with /deposit, take it out with /withdrawl and pay other players with /pay. Gold kept in shulker boxes counts towards your balance.</p>
+<a href="leaderboards.html" style="display: flex; align-items: center; min-height: 44px; margin-top: auto">Richest players</a>
+</div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">The Market</h3>
+<p>Rent a stall at the Market and stock it with shops. One stall per player. Every stall and its stock can be searched from this site.</p>
+<a href="market.html" style="display: flex; align-items: center; min-height: 44px; margin-top: auto">Open the Market</a>
+</div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Guilds</h3>
+<p>Custom ranks, a guild vault, guild homes, levels, allies, enemies and wars.</p>
+<a href="guilds.html" style="display: flex; align-items: center; min-height: 44px; margin-top: auto">Browse guilds</a>
+</div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Reputation</h3>
+<p>After a trade or a fight, leave the other player a positive or negative commendation with /rep. False and mass rep are against the rules.</p>
+<a href="rules.html" style="display: flex; align-items: center; min-height: 44px; margin-top: auto">Reputation rules</a>
+</div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Combat and the Warzone</h3>
+<p>PvP is on everywhere except Spawn and the Market. The Warzone rotates through combat metas with their own item restrictions. Check the Warzone section below for the current meta and its next rotation.</p>
+<a href="#warzone" style="display: flex; align-items: center; min-height: 44px; margin-top: auto">Current Warzone meta and duel wins</a>
+</div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Bounties</h3>
+<p>Put Raw Gold on any head with /bounty. Whoever makes the kill collects the gold, and the head.</p>
+<a href="bounties.html" style="display: flex; align-items: center; min-height: 44px; margin-top: auto">Bounty board</a>
+</div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Mail</h3>
+<p>EnthusiaExpress delivers letters and packages to players who are offline, paid for in Raw Gold. Start with /mail.</p>
+
+</div>
+<div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 8px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Death Duels</h3>
+<p>Challenge a player to a duel in the spawn arena, with your own rules, a wager and a loot vault for the winner.</p>
+<a href="events.html" style="display: flex; align-items: center; min-height: 44px; margin-top: auto">Events and duels</a>
+</div>
+</div>
+</div>
+</section>
+<section class="s-cream" id="commands" aria-label="Commands" style="padding: 72px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+
+<div class="tab-head" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 24px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px">COMMANDS</p>
+<h2 class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">The cheat sheet</h2>
+</div>
+<label class="f" style="flex: 0 1 320px; min-width: 0; text-align: left">Search commands
+<input class="field" type="text" placeholder="Try home, gold or guild" data-b-value="{{q}}" data-on-change="setQ">
+</label>
+</div>
+<div class="tabs" role="group" aria-label="Command categories" style="display: flex; flex-wrap: wrap; gap: 8px">
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{c_all}}" data-on-click="pc_all">All</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{c_general}}" data-on-click="pc_general">General</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{c_homes}}" data-on-click="pc_homes">Homes</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{c_tp}}" data-on-click="pc_tp">Teleport</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{c_economy}}" data-on-click="pc_economy">Economy</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{c_guild}}" data-on-click="pc_guild">Guilds</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{c_fight}}" data-on-click="pc_fight">Bounties and duels</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{c_mail}}" data-on-click="pc_mail">Mail</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{c_shops}}" data-on-click="pc_shops">Shops</button>
+<button class="chip chip-sm" type="button" data-b-aria-pressed="{{c_ranks}}" data-on-click="pc_ranks">Rank perks</button>
+</div>
+<p aria-live="polite" style="color: var(--muted)"><span data-b-text="cmdLine"></span></p>
+<ul class="cmds">
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm0}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/spawn</span><span style="flex: 1 1 200px; min-width: 0">Teleport to spawn</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm1}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/playtime</span><span style="flex: 1 1 200px; min-width: 0">See your playtime. /playtime top lists the leaders</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm2}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/firstjoined</span><span style="flex: 1 1 200px; min-width: 0">See when you first joined</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm3}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/report</span><span style="flex: 1 1 200px; min-width: 0">Report a player or a bug</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm4}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/msg and /r</span><span style="flex: 1 1 200px; min-width: 0">Private message a player, and reply</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm5}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/ignore</span><span style="flex: 1 1 200px; min-width: 0">Block messages, mail and teleport requests from a player</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm6}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/link</span><span style="flex: 1 1 200px; min-width: 0">Link your Minecraft account to Discord</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm7}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/daily</span><span style="flex: 1 1 200px; min-width: 0">Claim your daily reward</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm8}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/rewards</span><span style="flex: 1 1 200px; min-width: 0">Claim rewards for achievements</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm9}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/rep</span><span style="flex: 1 1 200px; min-width: 0">Leave a commendation for another player</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm10}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/ping and /tps</span><span style="flex: 1 1 200px; min-width: 0">Check your connection and the server</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm11}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/sethome</span><span style="flex: 1 1 200px; min-width: 0">Save a home where you stand</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm12}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/home</span><span style="flex: 1 1 200px; min-width: 0">Teleport to a home</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm13}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/homes</span><span style="flex: 1 1 200px; min-width: 0">See all your homes</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm14}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/delhome</span><span style="flex: 1 1 200px; min-width: 0">Delete a home</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm15}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/bed manage</span><span style="flex: 1 1 200px; min-width: 0">See and delete your saved beds</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm16}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/tpa</span><span style="flex: 1 1 200px; min-width: 0">Ask to teleport to a player</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm17}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/tpahere</span><span style="flex: 1 1 200px; min-width: 0">Ask a player to teleport to you</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm18}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/tpaccept and /tpdeny</span><span style="flex: 1 1 200px; min-width: 0">Answer a teleport request</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm19}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/tpignore</span><span style="flex: 1 1 200px; min-width: 0">Ignore teleport requests from a player</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm20}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/tptoggle</span><span style="flex: 1 1 200px; min-width: 0">Turn teleport requests on or off</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm21}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/bal</span><span style="flex: 1 1 200px; min-width: 0">See your balance</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm22}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/baltop</span><span style="flex: 1 1 200px; min-width: 0">The richest players</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm23}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/deposit</span><span style="flex: 1 1 200px; min-width: 0">Put Raw Gold in the bank. /deposit all banks everything</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm24}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/withdrawl</span><span style="flex: 1 1 200px; min-width: 0">Take Raw Gold out of the bank</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm25}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/pay</span><span style="flex: 1 1 200px; min-width: 0">Pay another player</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm26}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/g create</span><span style="flex: 1 1 200px; min-width: 0">Start a guild</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm27}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/g menu</span><span style="flex: 1 1 200px; min-width: 0">Open the guild menu</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm28}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/g list</span><span style="flex: 1 1 200px; min-width: 0">List every guild</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm29}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/g info</span><span style="flex: 1 1 200px; min-width: 0">Look up a guild</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm30}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/g join</span><span style="flex: 1 1 200px; min-width: 0">Accept a guild invite</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm31}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/g invite</span><span style="flex: 1 1 200px; min-width: 0">Invite a player</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm32}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/g home</span><span style="flex: 1 1 200px; min-width: 0">Teleport to a guild home</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm33}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/g vault</span><span style="flex: 1 1 200px; min-width: 0">Open the guild vault</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm34}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/g ranks</span><span style="flex: 1 1 200px; min-width: 0">Manage guild ranks</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm35}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/g war</span><span style="flex: 1 1 200px; min-width: 0">Declare war on another guild</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm36}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/g leave</span><span style="flex: 1 1 200px; min-width: 0">Leave your guild</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm37}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/pc</span><span style="flex: 1 1 200px; min-width: 0">Party chat</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm38}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/bounty</span><span style="flex: 1 1 200px; min-width: 0">Set a bounty on a player</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm39}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/bounty list</span><span style="flex: 1 1 200px; min-width: 0">See every open bounty</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm40}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/duel watch</span><span style="flex: 1 1 200px; min-width: 0">Watch a Death Duel</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm41}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/mail</span><span style="flex: 1 1 200px; min-width: 0">Open your mailbox</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm42}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/mail send</span><span style="flex: 1 1 200px; min-width: 0">Send a letter or a package</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm43}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/mail inbox</span><span style="flex: 1 1 200px; min-width: 0">Read what you have received</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm44}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/itemshopstutorial</span><span style="flex: 1 1 200px; min-width: 0">Learn how item shops work</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm45}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/shop list</span><span style="flex: 1 1 200px; min-width: 0">List your shops</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm46}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/shop search</span><span style="flex: 1 1 200px; min-width: 0">Search shops</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm47}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/shop edit</span><span style="flex: 1 1 200px; min-width: 0">Edit a shop</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm48}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/shop trust</span><span style="flex: 1 1 200px; min-width: 0">Let another player manage your shop</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm49}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/shopvault</span><span style="flex: 1 1 200px; min-width: 0">Open your shop vault</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm50}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/seen</span><span style="flex: 1 1 200px; min-width: 0">See when a player was last online</span><span class="tag tag-gold">Avid</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm51}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">[item]</span><span style="flex: 1 1 200px; min-width: 0">Show the item in your hand in chat</span><span class="tag tag-gold">Avid</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm52}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/sit and /lay</span><span style="flex: 1 1 200px; min-width: 0">Sit or lie down</span><span class="tag tag-gold">Avid</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm53}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/sign and /track</span><span style="flex: 1 1 200px; min-width: 0">Sign your gear and add stat trackers to it</span><span class="tag tag-gold">Avid</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm54}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/spin</span><span style="flex: 1 1 200px; min-width: 0">Spin</span><span class="tag tag-gold">Devotee</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm55}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">[inv] and [ender]</span><span style="flex: 1 1 200px; min-width: 0">Show your inventory or ender chest in chat</span><span class="tag tag-gold">Devotee</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm56}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/mapshield</span><span style="flex: 1 1 200px; min-width: 0">Put your mapart on a shield</span><span class="tag tag-gold">Devotee</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm57}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/events</span><span style="flex: 1 1 200px; min-width: 0">Start an event, paid in Raw Gold. Arrives with Events</span><span class="tag tag-gold">Devotee</span></li>
+<li class="shop" style="justify-content: flex-start; gap: 4px 16px" data-b-class="shop {{cm58}}"><span class="cmd" style="padding: 4px 12px; flex-shrink: 0">/start koth</span><span style="flex: 1 1 200px; min-width: 0">Start a KOTH. Arrives with KOTH</span><span class="tag tag-gold">Devotee</span></li>
+</ul>
+<p class="note" data-b-class="note {{cmdEmpty}}">No command matches that search.</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px">
+<div class="tip fret" style="padding: 28px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px">
+<p style="color: var(--kick); letter-spacing: 2px">RESOURCE PACK</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">The Enthusia pack</h3>
+<p>The server resource pack is made by sucrash in a vanilla style: custom guild gear, guild emojis and server emojis. It is offered when you join.</p>
+</div>
+<div class="tip fret" style="padding: 28px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px">
+<p style="color: var(--kick); letter-spacing: 2px">MODS AND CLIENTS</p>
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">What you can run</h3>
+<p>Performance mods such as Sodium and Iris, Simple Voice Chat, Replay Mod and schematic-only Litematica are fine. World map mods, x-ray, ESP and freecam are not.</p>
+<a class="btn btn-dark" href="rules.html">Full list in the rules</a>
 </div>
 </div>
 
+<div class="panel" style="padding: 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px">
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<h3 style="font-size: 24px; line-height: 32px; color: var(--head)">Want the deep version?</h3>
+<p style="color: var(--muted)">The wiki has full pages on every mechanic, written and kept up to date by players.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px"><a class="btn btn-gold" href="https://enthusia.miraheze.org/wiki/Main_Page">Open the wiki</a><a class="btn btn-dark" href="https://discord.gg/5ccgDCmNSc">Ask on Discord</a></div>
+</div>
+</div>
+</section>
+<section id="warzone" class="s-cream" aria-labelledby="warzone-title" style="padding: 56px 0">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; box-sizing: border-box">
+<div class="tip fret-lg" style="padding: 40px; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="color: var(--kick); letter-spacing: 2px"><span data-b-text="wzWeek"></span></p>
+<h2 id="warzone-title" class="t-h2" style="color: var(--head); text-shadow: 4px 4px 0 var(--head-sh)">Warzone</h2>
+</div>
+<p style="display: flex; align-items: center; gap: 12px; color: var(--good)"><span class="live"></span>Live from the server</p>
+</div>
+<div class="wz-grid">
+
+<div class="wz-col"><h3>Active rules</h3><p>Unavailable</p></div>
+<div class="wz-col"><h3>Next rotation</h3><p>Unavailable</p></div>
+<div class="wz-col"><h3>Weekly duel wins</h3><p>Unavailable</p></div>
+</div>
+</div>
 </div>
 </section>
 
@@ -234,8 +465,7 @@
 <nav class="foot" aria-label="Play">
 <p class="foot-title">PLAY</p>
 <a href="plugins.html">About</a>
-<a href="join.html">Join guide</a>
-<a href="guide.html">Player guide</a>
+<a href="join.html">Start playing</a>
 <a href="rules.html">Rules</a>
 <a href="vote.html">Vote</a>
 <a href="appeal.html">Appeals</a>
@@ -245,8 +475,7 @@
 <a href="market.html">Market</a>
 <a href="gallery.html">Gallery</a>
 <a href="museum.html">Mapart Museum</a>
-<a href="competitions/index.html">Competitions</a>
-<a href="events.html">Events</a>
+<a href="events.html">Event calendar</a>
 <a href="bounties.html">Bounties</a>
 </nav>
 <nav class="foot" aria-label="Community">
@@ -265,7 +494,7 @@
 <nav class="foot" aria-label="News">
 <p class="foot-title">NEWS</p>
 <a href="news.html">News</a>
-<a href="changelog.html">Changelog</a>
+<a href="news.html?category=Changelog">Changelogs</a>
 <a href="roadmap.html">Roadmap</a>
 <a href="polls.html">Polls</a>
 <a href="timeline.html">Timeline</a>
@@ -278,13 +507,7 @@
 <a href="404.html">404 page</a>
 
 </nav>
-<nav class="foot" aria-label="Staff tools">
-<p class="foot-title">STAFF TOOLS</p>
-<a href="competitions/admin/index.html">Competition admin</a>
-<a href="newseditor.html">News editor</a>
-<a href="reviewer/index.html">Reviewer</a>
-<a href="reviewer/appeals.html">Appeal review</a>
-</nav>
+
 </div>
 <div class="foot-legal">
 <p><span data-year>2026</span> Enthusia SMP · Contact: glorytoenthusia@gmail.com</p>
@@ -303,5 +526,6 @@
 
 
 <script src="../assets/site-config.js?v=bedrock-20261102" defer></script><script src="../assets/enthusia.js?v=bedrock-20261102" defer></script>
-</body>
+<script src="../assets/design-bindings.js" defer></script><script src="../assets/player-guide.js" defer></script><script type="module" src="../assets/guide-warzone.js"></script>
+<script type="module" src="../assets/staff-navigation.js"></script></body>
 </html>

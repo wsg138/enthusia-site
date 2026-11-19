@@ -362,7 +362,7 @@ test('Discord announcement requires an opted-in publication and confirmed delive
     assert.deepEqual(message.payload.allowed_mentions,{parse:[]});
     assert.equal(message.payload.embeds.length,1);
     const [embed]=message.payload.embeds;
-    assert.equal(embed.url,'https://enthusia.info/news#hello');
+    assert.equal(embed.url,'https://enthusia.info/news/hello');
     assert.match(embed.description,/Short summary/);
     assert.ok(embed.description.includes('**🏠 Homes**\n> • Use `/home`'));
     assert.deepEqual(embed.footer,{text:'by Fain',icon_url:avatarUrl});

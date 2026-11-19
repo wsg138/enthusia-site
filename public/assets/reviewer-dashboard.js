@@ -1,3 +1,4 @@
+import {staffCapabilities, hasStaffTools} from './staff-capabilities.js';
 const authRoot = document.querySelector("#staff-dashboard-auth");
 const accessStatus = document.querySelector("#staff-dashboard-access");
 const signIn = document.querySelector("#staff-dashboard-sign-in");
@@ -79,29 +80,27 @@ async function loadCompetitionStatus() {
   }
 }
 
-async function loadDashboard() {
+async function loadDashboard(event) {
   refreshButton.disabled = true;
   accessStatus.textContent = "Checking staff access…";
   signIn.hidden = true;
   try {
-    const { response, payload } = await requestJson("/api/reviewer/session");
-    if (response.status === 401) {
+    const access = await staffCapabilities(event?.type === 'click' || event?.persisted);
+    const { appeals, competitions } = access;
+    if (!hasStaffTools(access)) {
       dashboard.hidden = true;
       authRoot.hidden = false;
-      accessStatus.textContent = "Sign in with Discord to open the staff dashboard.";
-      signIn.href = "/api/competitions/auth/discord/start?returnTo=%2Freviewer%2F";
-      signIn.hidden = false;
+      if (access.signedOut) {
+        accessStatus.textContent = "Sign in with Discord to open the staff dashboard.";
+        signIn.href = "/api/competitions/auth/discord/start?returnTo=%2Freviewer%2F";
+        signIn.hidden = false;
+      } else {
+        accessStatus.textContent = access.unavailable ? "Staff access could not be checked. Refresh to try again." : "This account does not have access to staff website tools.";
+      }
       return;
     }
-    if (!response.ok) throw new Error("staff_access_unavailable");
-    const appeals = payload.appeals === true;
-    const competitions = payload.competitions === true;
-    if (!appeals && !competitions) {
-      dashboard.hidden = true;
-      authRoot.hidden = false;
-      accessStatus.textContent = "This account does not have access to staff website tools.";
-      return;
-    }
+    document.querySelector('#staff-news-work').hidden = !access.publishing;
+    document.querySelector('#staff-gallery-work').hidden = !access.gallery;
     authRoot.hidden = true;
     dashboard.hidden = false;
     appealWork.hidden = !appeals;
@@ -120,4 +119,5 @@ async function loadDashboard() {
 }
 
 refreshButton.addEventListener("click", loadDashboard);
+window.addEventListener("pageshow", event => { if (event.persisted) loadDashboard(event); });
 loadDashboard();
