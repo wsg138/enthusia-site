@@ -215,3 +215,5 @@ a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
   .home-community-sections .lb-name-text { white-space: normal; overflow-wrap: anywhere; }
   .home-community-sections .lb-row:hover { transform: none; }
 }
+
+.home-community-sections .lb-row.top .identity-link { color:var(--edge); }
