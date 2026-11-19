@@ -129,3 +129,21 @@ test("competition history locks reject reassignment and roll back the entire ref
   assert.equal(db.prepare("SELECT discord_user_id AS owner FROM competition_minecraft_links WHERE minecraft_uuid = ?").get(A).owner, USER);
   assert.equal(db.prepare("SELECT discord_user_id AS owner FROM competition_minecraft_links WHERE minecraft_uuid = ?").get(B).owner, OTHER);
 });
+
+test("competition editor distinguishes a linked-account outage from missing staff access", async (t) => {
+  const { onRequest } = await import("../functions/competitions/admin/_middleware.js");
+  const database = await migratedDatabase();
+  t.after(() => database.close());
+  const db = d1(database);
+  const identity = await createIdentitySession(db, { id: USER, username: "Builder", guildMember: true });
+  const env = { ...ENV, NETWORK_ACCOUNT_LINKS: "true", COMPETITIONS_ENABLED: "true", COMPETITIONS_DB: db };
+  t.mock.method(globalThis, "fetch", async () => new Response(null, { status: 503 }));
+  const url = "https://enthusia.info/competitions/admin/";
+  const next = () => assert.fail("Editor must stay protected");
+  const visitor = await onRequest({ request: new Request(url), env, next });
+  assert.equal(visitor.status, 404);
+  const request = new Request(url, { headers: { cookie: `__Host-enthusia_competition_session=${identity.token}` } });
+  const response = await onRequest({ request, env, next });
+  assert.equal(response.status, 503);
+  assert.match(await response.text(), /Minecraft account/i);
+});
