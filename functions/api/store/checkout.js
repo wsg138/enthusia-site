@@ -23,8 +23,9 @@ async function readCheckoutResponse(response) {
 }
 
 function validSelection(input, packages) {
-  return packages.has(input?.rank) && typeof input.username === 'string' &&
-    /^[^\s\p{C}]{1,32}$/u.test(input.username);
+  if (!packages.has(input?.rank) || typeof input.username !== 'string') return false;
+  const name = input.username;
+  return name.length > 0 && name.length <= 64 && Array.from(name).length <= 32 && name.search(/[\s\p{C}]/u) === -1;
 }
 
 export async function checkout({request, env}, send) {
