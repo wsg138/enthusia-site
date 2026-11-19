@@ -36,3 +36,25 @@ test('news ordering controls and category filtering update the actual reader wit
   newest.events.click();
   assert.deepEqual(list.children.map(x=>x.dataset.slug),['newer','older']);
 });
+
+test('News uses the founder’s Minecraft skin while preserving the Fain byline', async () => {
+  const image = {}, rank = {};
+  const name = { parentElement: { querySelector: () => image } };
+  const document = {
+    body: { dataset: {} },
+    documentElement: { hasAttribute: () => false },
+    querySelector: selector => selector === '[data-author-name]' ? name : rank
+  };
+  const source = await readFile(new URL('../public/assets/exact-news.js', import.meta.url), 'utf8');
+  const code = source.trimEnd().replace(/^import .*;\r?\n/gm, '').replace(/\(page===.*\n?$/, '');
+  const context = vm.createContext({ document });
+  const renderAuthor = vm.runInContext(code + '\nauthor', context);
+  renderAuthor({ authorName: 'Fain', authorRank: 'Founder' });
+  assert.equal(image.src, 'https://minotar.net/helm/FainNeito/40');
+  assert.equal(name.textContent, 'Fain');
+  assert.equal(rank.textContent, 'Founder');
+  renderAuthor({ authorName: 'Fain', authorRank: 'Admin' });
+  assert.equal(image.src, 'https://minotar.net/helm/Fain/40');
+  renderAuthor({ authorName: 'FainNeito', authorRank: 'Founder' });
+  assert.equal(image.src, 'https://minotar.net/helm/FainNeito/40');
+});
