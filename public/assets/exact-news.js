@@ -1,5 +1,5 @@
 import { changelogEmbed,changelogColor } from './changelog-embed.js?v=discord-avatar';
-import { api,el } from './community-dom.js';
+import { api,el } from './community-dom.js?v=news-receipts';
 import { renderMarkup,formattedDate,notice,newsImageSource } from './exact-markup.js?v=news-images-20261103';
 import { orderNewsPosts } from './news-order.js';
 const page=document.body.dataset.exactPage;
