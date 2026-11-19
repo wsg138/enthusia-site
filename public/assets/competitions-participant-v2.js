@@ -585,8 +585,10 @@ function reviewStep(wizard, panel) {
         wizard.submission.status = response.status;
         wizard.submission.revision = response.revision;
         await refreshOwn(wizard.state);
-        setMessage(wizard, "Submitted for staff review.", "is-success");
-        renderWizard(wizard);
+        renderWorkspace(wizard.state);
+        const confirmation = el("p", "participant-wizard-message is-success", "Submitted for staff review.");
+        confirmation.setAttribute("role", "status");
+        wizard.state.panel.prepend(confirmation);
       } catch (error) {
         setMessage(wizard, humanError(error), "is-error");
         submit.disabled = false;
@@ -759,6 +761,18 @@ async function renderVote(state) {
   panel.replaceChildren(shell);
 }
 
+function showEntryError(panel, error) {
+  const signedOut = error.status === 401;
+  const message = signedOut ? "Sign in with Discord to enter this competition." : humanError(error);
+  panel.replaceChildren(el("p", "participant-muted", message));
+  if (signedOut || error.code === "discord_reauthentication_required") {
+    const link = el("a", "competition-primary-action", "Sign in with Discord");
+    const returnTo = location.pathname + location.search + "#entry-form";
+    link.href = API_ROOT + "/auth/discord/start?returnTo=" + encodeURIComponent(returnTo);
+    panel.append(link);
+  }
+}
+
 export async function initParticipant(slug, shell, publicPayload) {
   const state = { slug, shell, competition: publicPayload.competition, publicPayload, panel: null, me: null, submissions: [], invites: [] };
   const open = state.competition.lifecycleState === "SUBMISSIONS_OPEN";
@@ -779,15 +793,7 @@ export async function initParticipant(slug, shell, publicPayload) {
     renderWorkspace(state);
   } catch (error) {
     if (!state.panel) return;
-    const signedOut = error.status === 401;
-    const message = signedOut ? "Sign in with Discord to enter this competition." : humanError(error);
-    state.panel.replaceChildren(el("p", "participant-muted", message));
-    if (signedOut || error.code === "discord_reauthentication_required") {
-      const link = el("a", "competition-primary-action", "Sign in with Discord");
-      const returnTo = location.pathname + location.search + "#entry-form";
-      link.href = API_ROOT + "/auth/discord/start?returnTo=" + encodeURIComponent(returnTo);
-      state.panel.append(link);
-    }
+    showEntryError(state.panel, error);
   }
 }
 
