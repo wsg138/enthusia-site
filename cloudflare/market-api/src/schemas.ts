@@ -24,7 +24,7 @@ const bannerDesignSchema = z.object({
   baseColor: bannerColorSchema,
   patterns: z.array(z.object({ type: bannerPatternTypeSchema, color: bannerColorSchema }).strict()).max(6),
 }).strict();
-const publicHeadUrlSchema = z.string().url().max(2048).regex(/^https:\/\/minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png$/);
+const publicHeadUrlSchema = z.string().url().max(2048).regex(/^https:\/\/(?:minotar\.net\/helm\/[A-Za-z0-9._%+-]+\/96\.png|market-api\.enthusia\.info\/v1\/player-heads\/[a-f0-9]{64}\.png)$/);
 
 const enchantmentSchema = z.object({
   id: shortString,
@@ -121,7 +121,7 @@ export const stallSchema = z.object({
       kind: z.string().min(1).max(32),
       source: z.string().min(1).max(32).nullable().optional(),
       includesOuterLayer: z.boolean().nullable().optional(),
-      url: z.string().max(2048).optional(),
+      url: z.string().max(2048).nullish(),
       banner: bannerDesignSchema.nullable().optional(),
     }).strict(),
   }).strict(),
