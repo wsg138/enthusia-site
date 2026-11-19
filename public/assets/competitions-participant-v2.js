@@ -72,21 +72,6 @@ function humanError(error) {
   return labels[code] ?? String(code).replaceAll("_", " ");
 }
 
-function slugFromLocation() {
-  return new URLSearchParams(window.location.search).get("competition")?.trim().toLowerCase() ?? "";
-}
-
-async function waitForShell(timeout = 6000) {
-  const started = Date.now();
-  while (Date.now() - started < timeout) {
-    const tabs = document.querySelector(".competition-detail-tabs");
-    const content = document.querySelector(".competition-detail-content");
-    if (tabs && content) return { tabs, content };
-    await new Promise((resolve) => setTimeout(resolve, 40));
-  }
-  return null;
-}
-
 function canEdit(competition, submission) {
   if (competition.lifecycleState === "SUBMISSIONS_OPEN" && submission.status === "DRAFT") return true;
   if (competition.lifecycleState !== "REVIEW" || submission.status !== "NEEDS_CHANGES") return false;
@@ -774,27 +759,36 @@ async function renderVote(state) {
   panel.replaceChildren(shell);
 }
 
-async function init() {
-  if (document.body.dataset.competitionPage !== "detail") return;
-  const slug = slugFromLocation();
-  if (!slug) return;
-  const shell = await waitForShell();
-  if (!shell) return;
-  let publicPayload;
-  try { publicPayload = await api(`${API_ROOT}/${encodeURIComponent(slug)}`); } catch { return; }
+export async function initParticipant(slug, shell, publicPayload) {
   const state = { slug, shell, competition: publicPayload.competition, publicPayload, panel: null, me: null, submissions: [], invites: [] };
-  await renderVote(state);
-  try {
-    state.me = await api(`${API_ROOT}/${encodeURIComponent(slug)}/me`);
+  const open = state.competition.lifecycleState === "SUBMISSIONS_OPEN";
+  if (open) {
     addTab(state);
+    state.panel.textContent = "Loading your entry...";
+    if (location.hash === "#entry-form") {
+      shell.tabs.querySelector('[data-tab="my-submission"]').click();
+      shell.tabs.scrollIntoView();
+    }
+  }
+
+  try {
+    await renderVote(state);
+    state.me = await api(`${API_ROOT}/${encodeURIComponent(slug)}/me`);
+    if (!state.panel) addTab(state);
     await refreshOwn(state);
     renderWorkspace(state);
-  } catch {
-    // Signed-out visitors see the persistent header sign-in control. Do not add
-    // a second empty workspace panel to an otherwise public competition page.
+  } catch (error) {
+    if (!state.panel) return;
+    const signedOut = error.status === 401;
+    const message = signedOut ? "Sign in with Discord to enter this competition." : humanError(error);
+    state.panel.replaceChildren(el("p", "participant-muted", message));
+    if (signedOut || error.code === "discord_reauthentication_required") {
+      const link = el("a", "competition-primary-action", "Sign in with Discord");
+      const returnTo = location.pathname + location.search + "#entry-form";
+      link.href = API_ROOT + "/auth/discord/start?returnTo=" + encodeURIComponent(returnTo);
+      state.panel.append(link);
+    }
   }
 }
-
-init();
 
 export { ApiError, canEdit, humanError, modelFromSubmission, validateModel };

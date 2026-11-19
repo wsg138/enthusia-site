@@ -1,4 +1,5 @@
-import { exactDetailHead, exactDetailStage, exactDetailOverview } from './exact-detail.js';
+import { initParticipant } from './competitions-participant-v2.js?v=4';
+import { exactDetailHead, exactDetailStage, exactDetailOverview } from './exact-detail.js?v=entry2';
 import { renderExactFeatured, renderExactGrid } from './exact-competition-catalog.js';
 const API_ROOT = "/api/competitions";
 
@@ -790,12 +791,12 @@ function renderPlaceholderPanel(root, name, message) {
   root.append(section);
 }
 
-function setupTabs(buttons, panels) {
-  buttons.forEach((button) => {
+function setupTabs(tabs, content) {
+  tabs.querySelectorAll("[data-tab]").forEach((button) => {
     button.addEventListener("click", () => {
       const name = button.dataset.tab;
-      buttons.forEach((candidate) => candidate.classList.toggle("is-active", candidate === button));
-      panels.forEach((panel) => { panel.hidden = panel.dataset.tabPanel !== name; });
+      tabs.querySelectorAll("[data-tab]").forEach((candidate) => candidate.classList.toggle("is-active", candidate === button));
+      content.querySelectorAll("[data-tab-panel]").forEach((panel) => { panel.hidden = panel.dataset.tabPanel !== name; });
     });
   });
 }
@@ -854,14 +855,13 @@ async function loadDetail() {
     if (competition.config?.voting?.enabled && competition.lifecycleState === "VOTING") tabDefinitions.push(["vote", "Vote"]);
     if (competition.config?.judging?.enabled) tabDefinitions.push(["judges", "Judges"]);
     if (completed && payload.results?.length) tabDefinitions.push(["results", "Results"]);
-    const buttons = tabDefinitions.map(([name, label], index) => {
+    tabDefinitions.forEach(([name, label], index) => {
       const button = document.createElement("button");
       button.type = "button";
       button.dataset.tab = name;
       button.textContent = label;
       if (index === 0) button.classList.add("is-active");
       tabs.append(button);
-      return button;
     });
 
     const content = document.createElement("div");
@@ -881,7 +881,8 @@ async function loadDetail() {
     }else shell.append(hero, tabs, content);
     root.classList.remove("competition-loading");
     root.replaceChildren(shell);
-    setupTabs(buttons, [...content.querySelectorAll("[data-tab-panel]")]);
+    setupTabs(tabs, content);
+    void initParticipant(slug, { tabs, content }, payload);
   } catch {
     const error = document.createElement("div");
     error.className = "competition-error";
