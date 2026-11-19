@@ -2,7 +2,7 @@ import { api,el } from './community-dom.js';
 import { notice } from './exact-markup.js';
 import { createHistoryOrder } from './history-order.js';
 import { restoreTimelineScreenshots } from './timeline-screenshots.js';
-import { timelineDisplayBody } from './timeline-content.js';
+import { timelineDisplayBody, timelineReleaseTitle } from './timeline-content.js?v=release-details';
 import { renderHallOfFame } from './halloffame-render.js';
 const kind=document.body.dataset.exactCollection,params=new URL(location.href).searchParams;
 const demo=kind==='timeline'&&params.get('timeline-restore-demo')==='1'||kind==='halloffame'&&params.get('halloffame-live-demo')==='1';
@@ -45,6 +45,41 @@ function populate(node,item){
   if(kind==='timeline'||kind==='changelog'){
     const date=node.querySelector('.ev-date'),value=new Date(item.date);if(date)date.replaceChildren(el('b',{text:item.date?value.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}):'Undated'}),el('span',{text:item.date?value.getUTCFullYear():''}));
     if(kind!=='timeline'&&item.verification!=='verified')node.querySelector('.ev-card')?.append(el('span',{class:'tag tag-plain',text:'Awaiting source verification'}));
+  }
+}
+function populateTimelineCard(node,item,index,timelineSources,releaseNotes){
+  const source = timelineSources.get(node.querySelector('h3').textContent);
+  if(!preview){
+    restoreTimelineScreenshots(node,item,templates);
+    const category = String(item.category || 'milestone').toLowerCase();
+    const known = ['milestone','guild','update','community','event'].includes(category);
+    const marker = known ? 'k-' + category : '';
+    node.setAttribute('data-b-class', 'ev ' + marker + ' {{e' + index + '}}');
+    const badge = node.querySelector('.ev-text .tag');
+    badge.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+    badge.className = 'tag ' + ({milestone:'tag-gold',guild:'tag-guild',community:'tag-dark',event:'tag-red'}[category] || 'tag-plain');
+    const displayDate = source?.content.querySelector('.ev-date b')?.textContent;
+    const originalYear = source?.content.querySelector('.ev-date span')?.textContent;
+    if (item.date?.startsWith(originalYear + '-') && displayDate && !/^\d{1,2} [A-Z][a-z]{2}$/.test(displayDate)) {
+      node.querySelector('.ev-date b').textContent = displayDate;
+    }
+    const summary = node.querySelector('.ev-text p');
+    const originalText = source?.content.querySelector('.ev-text p')?.textContent;
+    const caption = source?.content.querySelector('.ev-shot figcaption, .ev-shot span')?.textContent;
+    if (originalText) {
+      const imported = summary.textContent.trim();
+      const alternatives = [originalText, badge.textContent + ' ' + originalText];
+      if (caption) alternatives.push(...alternatives.map(text => text + ' ' + caption));
+      if (alternatives.includes(imported)) summary.textContent = originalText;
+    }
+  }
+  const release = releaseNotes.get(timelineReleaseTitle(item.slug));
+  if(release){
+    const details = el('details',{class:'timeline-release'},[
+      el('summary',{text:'Release details'}),
+      el('ul',{},release.body.split(/\r?\n/).filter(Boolean).map(line => el('li',{text:line.replace(/^- /,'')})))
+    ]);
+    node.querySelector('.ev-text').append(details);
   }
 }
 function renderAchievementDefinitions(section,items,data){
@@ -92,6 +127,17 @@ async function start(){
     if(kind==='achievements'&&!preview&&data.curated!==true){renderAchievementDefinitions(sections[1],items,data);return;}
     if(!items.length){const section=sections[1];if(section){section.hidden=false;section.replaceChildren(el('div',{class:'panel exact-empty'},[el('p',{text:'No published records yet.'})]));}return;}
     const historyEntries=[];
+    const timelineSources = new Map();
+    let releaseNotes = new Map();
+    if (kind === 'timeline') {
+      for (const template of templates.values()) {
+        timelineSources.set(template.content.querySelector('h3').textContent, template);
+      }
+      try {
+        const response = await fetch(new URL('./release-history.json', import.meta.url));
+        if (response.ok) releaseNotes = new Map((await response.json()).map(note => [note.title, note]));
+      } catch { /* The timeline remains readable when the optional archive is unavailable. */ }
+    }
     for(const [index,item]of items.entries()){
       const group=kind==='timeline'?tag(item,['dev','beta1','beta2','ch1','ch2'],'ch2'):kind==='roadmap'?tag(item,['live','next','later'],'later'):kind==='halloffame'?tag(item,['ch2','ch1','beta'],'ch2'):null;
       const original=preview?templates.get(item.designIndex)??template:group?[...templates.values()].find(node=>node.dataset.group===group)??template:template;if(!original)continue;
@@ -99,7 +145,7 @@ async function start(){
       if(kind==='timeline'&&!preview)for(const shot of node.querySelectorAll('.ev-shot'))shot.remove();
       for(const element of [node,...node.querySelectorAll('*')])for(const attr of [...element.attributes])if(attr.name.startsWith('data-b-')||attr.name.startsWith('data-on-')){let value=attr.value.replace(/(vd|[eilmt])\d+/g,(value,family)=>family===prefix?prefix+index:value);if(kind==='museum')value=value.replace(/mk\d+/g,'mk'+index);element.setAttribute(attr.name,value);}
       populate(node,item);
-      if(kind==='timeline'&&!preview)restoreTimelineScreenshots(node,item,templates);
+      if(kind==='timeline')populateTimelineCard(node,item,index,timelineSources,releaseNotes);
       original.parentElement.insertBefore(node,original);
       if(kind==='timeline'||kind==='changelog')historyEntries.push({date:historyDate(item,node),node,era:node.closest('.era')});
     }
