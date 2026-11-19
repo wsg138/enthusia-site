@@ -201,3 +201,17 @@ a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
 .home-community-sections h2 { color:var(--head); text-align:center; }
 
 .home-warzone-header { display:grid; justify-items:center; gap:12px; text-align:center; }
+
+@media (max-width: 540px) {
+  .home-community-sections #leaderboards { grid-template-columns: minmax(0, 1fr); }
+  .home-community-sections .lb-row {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    column-gap: 8px;
+    row-gap: 2px;
+  }
+  .home-community-sections :is(.lb-rank, .lb-head) { grid-row: span 2; }
+  .home-community-sections .lb-value { grid-column: 3; white-space: normal; overflow-wrap: anywhere; }
+  .home-community-sections .lb-name-text { white-space: normal; overflow-wrap: anywhere; }
+  .home-community-sections .lb-row:hover { transform: none; }
+}
