@@ -9,7 +9,7 @@ const site = 'https://enthusia.info';
 const changelogRoleId = '1410343158402781195';
 
 function announcementMention(article) {
-  if (article.category === 'Changelog') return 'changelog';
+  if (article.category === 'Changelog' && article.pingChangelogRole === true) return 'changelog';
   if (article.category === 'Announcement' && article.pingEveryone === true) return 'everyone';
   return null;
 }
@@ -23,7 +23,7 @@ function mentionFields(mention) {
 export function queueAnnouncement(db, article, actor, now) {
   const url = site + '/news#' + encodeURIComponent(article.slug);
   const channel = article.category === 'Changelog' ? 'CHANGELOG' : 'NEWS';
-  const embed = channel === 'CHANGELOG' ? changelogEmbed(article) : {
+  const embed = channel === 'CHANGELOG' ? changelogEmbed(article, actor.avatarUrl) : {
     author: {name: '✦ ENTHUSIA SMP · ANNOUNCEMENT'},
     title: article.title, url, color: Number.parseInt('b3201a',16),
     description: article.discordSummary + '\n\n[Read the full post](' + url + ')'
@@ -55,13 +55,13 @@ async function send(embed, mention, endpoint) {
   destination.searchParams.set('wait','true');
   try {
     const response = await fetchDiscord(destination, {
-      method:'POST', headers:{'content-type':'application/json'}, redirect:'error',
+      method:'POST', headers:{'content-type':'application/json'}, redirect:'manual',
       body:JSON.stringify({embeds:[embed], ...mentionFields(mention)})
     });
     if (response.ok) {
       const message = await response.json();
       if (/^\d{16,22}$/.test(message?.id)) return {status:'sent', messageId:message.id};
-    } else if (response.status >= 400 && response.status < 500) {
+    } else if (response.status >= 300 && response.status < 500) {
       return {status:'rejected'};
     }
   } catch { /* Discord may have accepted a request even when its reply is lost. */ }

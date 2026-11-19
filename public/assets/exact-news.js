@@ -71,13 +71,17 @@ async function editor(){
     finally { retry.disabled=false; }
   });
   const everyone=one('[data-ping-everyone]');
+  const rolePing=one('[data-ping-role]');
+  let publisherAvatar;
+  function mentionOption(control,container,applies){
+    one(container).hidden=!applies;
+    control.disabled=!applies;
+    if(!applies)control.checked=false;
+  }
   let publisherName = 'Staff';
   function drawDiscord() {
-    const showEveryone=ping.checked && category==='Announcement';
-    one('[data-everyone-option]').hidden=!showEveryone;
-    everyone.disabled=!showEveryone;
-    if(!showEveryone)everyone.checked=false;
-    one('[data-changelog-ping]').hidden=category!=='Changelog';
+    mentionOption(everyone,'[data-everyone-option]',ping.checked && category==='Announcement');
+    mentionOption(rolePing,'[data-changelog-ping]',ping.checked && category==='Changelog');
     one('[data-discord-options]').hidden=!ping.checked;
     if(!ping.checked)return;
     text('[data-discord-brand]','✦ ENTHUSIA SMP · '+(category==='Changelog'?'CHANGELOG':'ANNOUNCEMENT'));
@@ -87,10 +91,14 @@ async function editor(){
     description.closest('article').style.borderLeftColor=changelog?changelogColor:'#b3201a';
     text('label[for="discord-summary"]',changelog?'Discord introduction (optional)':'Discord summary');
     footer.hidden=!changelog;
+    one('[data-discord-post-link]').hidden=changelog;
     if(changelog){
-      const embed=changelogEmbed({title:title.value,slug:slug||newsSlug(title.value),body:body.value,discordSummary:summary.value,authorName:publisherName});
+      const embed=changelogEmbed({title:title.value,slug:slug||newsSlug(title.value),body:body.value,discordSummary:summary.value,authorName:publisherName},publisherAvatar);
       renderMarkup(description,embed.description);
-      footer.textContent=embed.footer.text;
+      text('[data-discord-byline]',embed.footer.text);
+      const icon=footer.querySelector('img');
+      icon.hidden=!embed.footer.icon_url;
+      if(embed.footer.icon_url)icon.src=embed.footer.icon_url;
     }else{description.textContent=summary.value;}
     const img=one('[data-discord-cover]');
     img.hidden=!cover;
@@ -151,7 +159,7 @@ async function editor(){
     const controls=[...document.querySelectorAll('main button')],disabled=controls.map(node=>node.disabled);controls.forEach(node=>node.disabled=true);
     try{
       const safeSlug=slug||newsSlug(title.value)||'post-'+Date.now();
-      const record=await api('admin/news',{method:'POST',body:JSON.stringify({kind:'news',slug:safeSlug,title:title.value,body:body.value,image:cover,category,discordSummary:summary.value,announce:state==='published'&&ping.checked,pingEveryone:everyone.checked,status:state,revision,date:new Date().toISOString(),pinned:pin.checked})});
+      const record=await api('admin/news',{method:'POST',body:JSON.stringify({kind:'news',slug:safeSlug,title:title.value,body:body.value,image:cover,category,discordSummary:summary.value,announce:state==='published'&&ping.checked,pingEveryone:everyone.checked,pingChangelogRole:rolePing.checked,status:state,revision,date:new Date().toISOString(),pinned:pin.checked})});
       slug=record.slug;revision=record.revision;message.hidden=false;message.textContent=state==='published'?'Published to News.':'Draft saved.';
       if(record.discordDelivery)showDelivery(record.discordDelivery);
       history.replaceState(null,'','?slug='+encodeURIComponent(slug));
@@ -160,7 +168,7 @@ async function editor(){
   one('[data-on-click="publish"]').addEventListener('click',()=>save('published'));
   const draft=[...document.querySelectorAll('main button')].find(node=>node.textContent==='Save draft');draft?.addEventListener('click',()=>save('draft'));
   try{
-    const session=await api('admin/session');publisherName=session.name;author({authorName:session.name,authorRank:session.rank});
+    const session=await api('admin/session');publisherName=session.name;publisherAvatar=session.avatarUrl;author({authorName:session.name,authorRank:session.rank});
     const records=await api('admin/news'),requested=new URLSearchParams(location.search).get('slug');
     const record=records.items.find(item=>item.slug===requested)??(document.documentElement.hasAttribute('data-preview-root')?records.items[0]:null);
     if(record){summary.value=record.discordSummary??'';title.value=record.title;body.value=document.documentElement.hasAttribute('data-preview-root')&&!requested?records.editorDraft??record.body:record.body;category=record.category;slug=record.slug;revision=record.revision;cover=record.image??'';pin.checked=document.documentElement.hasAttribute('data-preview-root')&&!requested||record.pinned===true;ping.checked=document.documentElement.hasAttribute('data-preview-root');for(const option of document.querySelectorAll('[data-on-click^="pickC"]'))option.setAttribute('aria-pressed',String(option.dataset.onClick==='pickC'+category));}

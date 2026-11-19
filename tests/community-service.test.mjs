@@ -20,7 +20,7 @@ test('configured Discord publisher can publish during a Minecraft lookup outage'
   const {db,sql}=database();
   const publisherId='123456789012345678', founderRoleId='234567890123456789';
   const now=new Date().toISOString();
-  const session={discordUserId:publisherId,username:'Publisher',globalName:null,
+  const session={discordUserId:publisherId,avatarHash:'a'.repeat(32),username:'Publisher',globalName:null,
     expiresAt:now,authenticatedAt:now,discordRolesCheckedAt:now,
     guildRoleIdsJson:JSON.stringify({member:true,roleIds:[founderRoleId]})};
   const env={
@@ -42,7 +42,7 @@ test('configured Discord publisher can publish during a Minecraft lookup outage'
   try {
     const editor=await call('admin/session');
     assert.equal(editor.status,200);
-    assert.deepEqual(await editor.json(),{editor:true,name:'Publisher',rank:'Founder'});
+    assert.deepEqual(await editor.json(),{editor:true,name:'Publisher',rank:'Founder',avatarUrl:'https://cdn.discordapp.com/avatars/'+publisherId+'/'+'a'.repeat(32)+'.png?size=64'});
     for(const kind of ['news','changelog']){
       const response=await call('admin/'+kind,{...news,kind,status:'published'});
       assert.equal(response.status,200);
@@ -337,9 +337,10 @@ test('Discord announcement requires an opted-in publication and confirmed delive
   const {db,sql}=database();
   const originalFetch=globalThis.fetch;
   const sends=[];
+  const avatarUrl='https://cdn.discordapp.com/avatars/123456789012345678/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png?size=64';
   globalThis.fetch=async(url,options)=>{
     assert.equal(new URL(url).origin,'https://discord.com');
-    assert.equal(options.redirect,'error');
+    assert.equal(options.redirect,'manual');
     sends.push({url:String(url),payload:JSON.parse(options.body)});
     return Response.json({id:'123456789012345678'});
   };
@@ -347,7 +348,7 @@ test('Discord announcement requires an opted-in publication and confirmed delive
   const call=(path,payload,origin='https://enthusia.info')=>handleCommunity({
     request:new Request(origin+'/api/community/'+path,{method:payload?'POST':'GET',headers:{origin},...(payload?{body:JSON.stringify(payload)}:{})}),
     params:{path},env
-  },dependencies);
+  },{...dependencies,editor:async()=>({id:'editor',name:'Fain',avatarUrl})});
   try {
     const article={...news,category:'Changelog',body:'## 🏠 Homes\n- Use `/home`',discordSummary:'Short summary',image:'/api/community/news-media/'+'a'.repeat(32)};
     await call('admin/news',{...article,announce:true});
@@ -357,14 +358,14 @@ test('Discord announcement requires an opted-in publication and confirmed delive
     assert.equal((await result.json()).discordDelivery,'sent');
     const [message]=sends;
     assert.equal(new URL(message.url).searchParams.get('wait'),'true');
-    assert.equal(message.payload.content,'<@&1410343158402781195>');
-    assert.deepEqual(message.payload.allowed_mentions,{parse:[],roles:['1410343158402781195']});
+    assert.equal(message.payload.content,undefined);
+    assert.deepEqual(message.payload.allowed_mentions,{parse:[]});
     assert.equal(message.payload.embeds.length,1);
     const [embed]=message.payload.embeds;
     assert.equal(embed.url,'https://enthusia.info/news#hello');
     assert.match(embed.description,/Short summary/);
     assert.ok(embed.description.includes('**🏠 Homes**\n> • Use `/home`'));
-    assert.ok(embed.footer.text.startsWith('by '));
+    assert.deepEqual(embed.footer,{text:'by Fain',icon_url:avatarUrl});
     assert.equal(embed.image.url,'https://enthusia.info'+article.image);
     await call('admin/news',{...article,status:'published',announce:true,revision:3});
     await call('admin/discord-delivery/news/hello',{});
@@ -372,12 +373,13 @@ test('Discord announcement requires an opted-in publication and confirmed delive
     const preview=await call('admin/news',{...article,slug:'preview-only',status:'published',announce:true},'https://preview.pages.dev');
     assert.equal(preview.ok,false);
     assert.equal(sends.length,1);
+    assert.equal(sql.prepare("SELECT json_extract(payload,'$.messageId') AS id FROM community_records WHERE kind='discord_news_delivery' AND slug='hello'").get().id,'123456789012345678');
     env.COMMUNITY_DISCORD_NEWS_WEBHOOK=env.COMMUNITY_DISCORD_CHANGELOG_WEBHOOK;
     for(const [slug,category,pingEveryone,expected] of [
       ['all','Announcement',true,'@everyone'],['silent','Announcement',false,undefined],
       ['event','Event',true,undefined],['role','Changelog',true,'<@&1410343158402781195>']
     ]){
-      const saved=await call('admin/news',{...article,slug,category,pingEveryone,status:'published',announce:true});
+      const saved=await call('admin/news',{...article,slug,category,pingEveryone,pingChangelogRole:true,status:'published',announce:true});
       assert.equal((await saved.json()).discordDelivery,'sent');
       const {payload}=sends.at(-1);
       assert.equal(payload.content,expected);

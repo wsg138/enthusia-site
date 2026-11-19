@@ -17,7 +17,7 @@ function* changeLines(body) {
   }
 }
 
-export function changelogEmbed(article) {
+export function changelogEmbed(article, avatarUrl) {
   const url = 'https://enthusia.info/news#' + encodeURIComponent(article.slug);
   const link = '[Read the full changelog](' + url + ')';
   const overflow = 'More changes on the site. ';
@@ -32,15 +32,15 @@ export function changelogEmbed(article) {
       description += line;
     }
     description = description.trim() + '\n\n' + overflow;
-    return buildEmbed(article, url, description.trimStart() + link);
+    return buildEmbed(article, url, description.trimStart() + link, avatarUrl);
   }
-  return buildEmbed(article, url, [description, link].filter(Boolean).join('\n\n'));
+  return buildEmbed(article, url, [description, link].filter(Boolean).join('\n\n'), avatarUrl);
 }
 
-function buildEmbed(article, url, description) {
+function buildEmbed(article, url, description, avatarUrl) {
   return {
     title: article.title, url, description, color: Number.parseInt(changelogColor.slice(1), 16),
     author: {name: '✦ ENTHUSIA SMP · CHANGELOG'},
-    footer: {text: 'by ' + (article.authorName || 'Staff')}
+    footer: {text: 'by ' + (article.authorName || 'Staff'), ...(avatarUrl && {icon_url: avatarUrl})}
   };
 }
