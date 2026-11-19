@@ -6,6 +6,7 @@ import { runCommunitySync } from '../cloudflare/community-sync/index.js';
 import { readCommunitySales } from '../functions/lib/community/upstream.js';
 function database() {
   const sql=new DatabaseSync(':memory:');sql.exec(readFileSync(new URL('../migrations/community/0001_community.sql',import.meta.url),'utf8'));
+  sql.exec(readFileSync(new URL('../migrations/community/0002_market_generation_fence.sql',import.meta.url),'utf8'));
   const db={prepare(query){let values=[];return {bind(...args){values=args;return this;},async first(){return sql.prepare(query).get(...values)??null;},async run(){return {meta:{changes:Number(sql.prepare(query).run(...values).changes)}};}};},async batch(statements){sql.exec('BEGIN');try{const results=[];for(const statement of statements)results.push(await statement.run());sql.exec('COMMIT');return results;}catch(error){sql.exec('ROLLBACK');throw error;}}};
   return {sql,db};
 }
@@ -107,4 +108,13 @@ test('failed sales batch does not persist its terminal checkpoint',async()=>{
   const result=await runCommunitySync(env,async()=>Response.json({items:[sale()],nextCursor:null,checkpointCursor:'8'}));
   assert.equal(result.results.at(-1).status,'failed');
   assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM community_snapshots').get().n,0);
+});
+
+test('an active generation blocks the legacy poller even when its environment has no v2 flag',async()=>{
+  const {db,sql}=database(),env={COMMUNITY_DB:db,COMMUNITY_SYNC_ENABLED:'true',COMMUNITY_SALES_API_URL:'https://source.example/sales'};
+  sql.prepare("INSERT INTO market_generation_state VALUES (1,'generation-current',1,'active')").run();
+  const result=await runCommunitySync(env,async()=>Response.json({items:[sale()],nextCursor:null,checkpointCursor:'1',complete:false}));
+  assert.equal(result.results.at(-1).status,'failed');
+  assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM market_sales').get().n,0);
+  assert.equal(sql.prepare("SELECT COUNT(*) AS n FROM community_snapshots WHERE kind='sales_cursor'").get().n,0);
 });
