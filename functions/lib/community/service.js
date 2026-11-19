@@ -72,7 +72,7 @@ function prepareAnnouncement(input,record) {
   if(record.kind!=='news') return false;
   const announce=record.status==='published' && input.announce===true;
   if(input.pingEveryone===true && record.category==='Announcement') record.pingEveryone=true;
-  if(input.discordSummary!=null || announce) record.discordSummary=text(input.discordSummary,1000,announce);
+  if(input.discordSummary!=null || announce) record.discordSummary=text(input.discordSummary,1000,announce && record.category!=='Changelog');
   return announce;
 }
 
