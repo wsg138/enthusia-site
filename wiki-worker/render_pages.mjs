@@ -129,7 +129,7 @@ function mainPage() {
 <p>Guides for Enthusia's permanent semi-anarchy world, Raw Gold economy, guilds, PvP, progression, base privacy and community history.</p>
 <div class="enthusia-quick">[[Server Information|Start here]] · [[Mechanics|Browse mechanics]] · [[Commands|Commands]] · [[History & Lore|History & Lore]]</div>
 </div>
-<div class="enthusia-cross"><strong>Cross-platform</strong><br>Java and Bedrock players can both join and play together on the same SMP.<br><code>enthusia.net</code> · Bedrock port <code>19132</code></div>
+<div class="enthusia-cross"><strong>Cross-platform</strong><br>Java and Bedrock players can both join and play together on the same SMP.<br>Java: <code>enthusia.net</code> · Bedrock: <code>bedrock.enthusia.net</code> · port <code>19132</code></div>
 <h2>Explore Enthusia</h2>
 <div class="enthusia-home-grid">${cardHtml}</div>
 <div class="enthusia-home-columns">

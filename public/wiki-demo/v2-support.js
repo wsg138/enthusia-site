@@ -55,7 +55,7 @@ P.giveaways={title:'Giveaways',section:'Mechanics',summary:'Free-entry scheduled
 `};
 
 P['java-bedrock']={title:'Java & Bedrock',section:'Mechanics',summary:'Joining from either edition and the interface differences that matter on the shared SMP.',body:`
-${facts([['Java','enthusia.net'],['Bedrock','enthusia.net · port 19132'],['World','Shared'],['Economy/progression','Shared']])}
+${facts([['Java','enthusia.net'],['Bedrock','bedrock.enthusia.net · port 19132'],['World','Shared'],['Economy/progression','Shared']])}
 <p>Java and Bedrock players play together on the same SMP. Bedrock is not a separate server or separate economy.</p>
 <h2>Menus</h2><p>Some systems show Java players an inventory GUI while Bedrock players receive a Bedrock-friendly form. The buttons may look different, but they control the same server data.</p>
 <h2>Commands</h2><p>The normal slash commands in this wiki generally work on both editions unless a page explicitly says otherwise.</p>

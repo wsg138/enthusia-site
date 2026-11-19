@@ -41,7 +41,7 @@ link('java-bedrock','Java & Bedrock','what is shared and where the interface dif
 
 P['server-information']={title:'Server Information',section:'Mechanics',summary:'How Enthusia works as a survival server and the rules that matter before you start.',body:`
 <p>Enthusia is a permanent semi-anarchy survival world. The world is meant to last, bases are not protected by land claims, and Java and Bedrock players share the same SMP.</p>
-${facts([['Java','enthusia.net'],['Bedrock','enthusia.net · port 19132'],['World','Permanent SMP'],['Land claims','None']])}
+${facts([['Java','enthusia.net'],['Bedrock','bedrock.enthusia.net · port 19132'],['World','Permanent SMP'],['Land claims','None']])}
 <h2>No land claims</h2><div class="callout"><b>Bases can be found, raided and griefed.</b> There are no automatic claim borders protecting your builds.</div>
 <p>Location privacy, trust and how much information your base exposes matter. <a data-page="piecloak">PieCloak</a> reduces several client-side base-finding methods, but it does not make a base invulnerable or impossible to find.</p>
 <h2>PvP</h2><p><strong>Outside Spawn and the Warzone, combat is unrestricted vanilla PvP.</strong> The normal wilderness does not use Warzone kits or rotating weapon rules.</p>
