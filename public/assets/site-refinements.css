@@ -269,3 +269,9 @@ a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
   .en #competitionDetail:has(> .competition-error) { padding: 32px 16px; }
   .en section.s-cream > .exact-empty:only-child { box-sizing: border-box; }
 }
+
+@media screen {
+  .en.workflow-page .gallery-page { padding-top: 0; }
+  .en .gallery-page .gallery-hero-inner { padding-block: clamp(24px, 4vw, 56px); }
+  .en .gallery-page .gallery-tabs { flex-wrap: wrap; }
+}
