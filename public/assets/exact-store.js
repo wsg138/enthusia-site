@@ -55,11 +55,4 @@ window.EnthusiaDesign.mount(StoreDesign, {});
 
 if (!document.documentElement.hasAttribute('data-preview-root')) {
   for (const node of document.querySelectorAll('main span')) if (/^\$[0-9]/.test(node.textContent.trim())) node.textContent='See Tebex';
-  const summary=document.querySelector('[data-tebex-summary]');
-  for (const panel of summary.querySelectorAll('.panel')) {
-    const heading=panel.querySelector('h3');
-    const title=heading?.textContent;
-    panel.replaceChildren(heading);
-    const note=document.createElement('p');note.textContent=title==='Recent supporters'?'View recent supporters on Tebex.':title==='Monthly goal'?'The current goal is displayed on Tebex.':'Current supporters are displayed on Tebex.';panel.append(note);
-  }
 }
