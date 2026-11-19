@@ -73,7 +73,7 @@ class StoreDesign extends window.DesignController {
     v.lineDev = show(st.dev);
     v.emptyShow = show(!st.avid && !st.dev);
     var sum = (st.avid ? 5 : 0) + (st.dev ? 10 : 0);
-    v.total = document.documentElement.hasAttribute('data-preview-root') ? '$' + sum.toFixed(2) + ' USD' : 'See Tebex';
+    v.total = '$' + sum.toFixed(2) + ' USD';
     const rank = st.avid ? 'avid' : (st.dev ? 'devotee' : '');
     const rankLabel = st.avid ? 'Avid' : 'Devotee';
     document.querySelector('[data-tebex-checkout]').disabled = !rank || !st.who || !!st.pending;
@@ -83,9 +83,4 @@ class StoreDesign extends window.DesignController {
     return v;
   }
 }
-window.EnthusiaDesign.mount(StoreDesign, {});
-
-if (!document.documentElement.hasAttribute('data-preview-root')) {
-  for (const node of document.querySelectorAll('main span')) if (/^\$[0-9]/.test(node.textContent.trim())) node.textContent='See Tebex';
-}
-
+window.EnthusiaDesign.mount(StoreDesign, {});
