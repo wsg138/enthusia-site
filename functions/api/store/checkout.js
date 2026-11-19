@@ -6,7 +6,7 @@ function checkoutUrl(raw) {
   const url = new URL(raw);
   if (url.hostname !== 'enthusia-shop.tebex.io' || url.username || url.password || url.port ||
       !['http:', 'https:'].includes(url.protocol) || !url.pathname.startsWith('/buy/')) {
-    throw new Error('Unexpected checkout URL');
+    return null;
   }
   url.protocol = 'https:';
   return url.href;
@@ -27,8 +27,11 @@ export async function checkout({request, env}, send) {
       method:'POST', redirect:'error', headers:{'Content-Type':'application/json','X-Tebex-Secret':env.TEBEX_PLUGIN_SECRET},
       body:JSON.stringify({package_id:packageId, username:input.username})
     });
-    if (!response.ok) return json({error:'tebex_unavailable'},502);
-    return json({url:checkoutUrl((await response.json()).url)},200);
+    if (!response.ok) return json({error:'tebex_rejected', providerStatus:response.status},502);
+    const raw = (await response.json()).url;
+    const url = checkoutUrl(raw);
+    if (!url) return json({error:'unexpected_checkout_url', providerHost:new URL(raw).hostname},502);
+    return json({url},200);
   } catch {
     return json({error:'tebex_unavailable'},502);
   }
