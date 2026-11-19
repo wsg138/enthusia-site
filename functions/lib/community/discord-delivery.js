@@ -5,6 +5,20 @@ import { fetchDiscord } from '../discord-transport.js';
 const receipt = "kind='discord_news_delivery' AND slug=?";
 const site = 'https://enthusia.info';
 
+const changelogRoleId = '1410343158402781195';
+
+function announcementMention(article) {
+  if (article.category === 'Changelog') return 'changelog';
+  if (article.category === 'Announcement' && article.pingEveryone === true) return 'everyone';
+  return null;
+}
+
+function mentionFields(mention) {
+  if (mention === 'changelog') return {content:`<@&${changelogRoleId}>`, allowed_mentions:{parse:[],roles:[changelogRoleId]}};
+  if (mention === 'everyone') return {content:'@everyone', allowed_mentions:{parse:['everyone']}};
+  return {allowed_mentions:{parse:[]}};
+}
+
 export function queueAnnouncement(db, article, actor, now) {
   const url = site + '/news#' + encodeURIComponent(article.slug);
   const channel = article.category === 'Changelog' ? 'CHANGELOG' : 'NEWS';
@@ -18,7 +32,7 @@ export function queueAnnouncement(db, article, actor, now) {
   return db.prepare(`INSERT INTO community_records(kind,slug,status,payload,editor,updated_at)
     SELECT 'discord_news_delivery',?,'pending',?,?,? WHERE changes()>0
     ON CONFLICT(kind,slug) DO NOTHING`)
-    .bind(article.slug, JSON.stringify({channel, embed}), actor.id, now);
+    .bind(article.slug, JSON.stringify({channel, embed, mention:announcementMention(article)}), actor.id, now);
 }
 
 export async function deliveryStatus(db, slug) {
@@ -33,7 +47,7 @@ function webhook(raw) {
   return parts ? {id:parts[1], token:parts[2]} : null;
 }
 
-async function send(embed, endpoint) {
+async function send(embed, mention, endpoint) {
   if (!endpoint) return {status:'unconfigured'};
   const destination = new URL('https://discord.com/api/webhooks/');
   destination.pathname += encodeURIComponent(endpoint.id) + '/' + encodeURIComponent(endpoint.token);
@@ -41,7 +55,7 @@ async function send(embed, endpoint) {
   try {
     const response = await fetchDiscord(destination, {
       method:'POST', headers:{'content-type':'application/json'}, redirect:'error',
-      body:JSON.stringify({embeds:[embed], allowed_mentions:{parse:[]}})
+      body:JSON.stringify({embeds:[embed], ...mentionFields(mention)})
     });
     if (response.ok) {
       const message = await response.json();
@@ -61,8 +75,8 @@ export async function deliverAnnouncement(env, slug, retry = false) {
       AND EXISTS (SELECT 1 FROM community_records WHERE kind='news' AND slug=? AND status='published')
     RETURNING payload`).bind(new Date().toISOString(),slug,slug).first();
   if (!row) return deliveryStatus(db,slug);
-  const {channel,embed} = JSON.parse(row.payload);
-  const result = await send(embed,webhook(env['COMMUNITY_DISCORD_' + channel + '_WEBHOOK']));
+  const {channel,embed,mention} = JSON.parse(row.payload);
+  const result = await send(embed,mention,webhook(env['COMMUNITY_DISCORD_' + channel + '_WEBHOOK']));
   await db.prepare(`UPDATE community_records SET status=?,updated_at=?,payload=json_set(payload,'$.messageId',?)
     WHERE ${receipt} AND status='processing'`)
     .bind(result.status,new Date().toISOString(),result.messageId ?? null,slug).run();
