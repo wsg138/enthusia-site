@@ -6,7 +6,18 @@ const one=selector=>document.querySelector(selector);
 const text=(selector,value)=>{const node=one(selector);if(node)node.textContent=value??'';};
 const tags=new Map([['Announcement','tag-red'],['Changelog','tag-dark'],['Event','tag-gold']]);
 function clearBindings(node){for(const child of [node,...node.querySelectorAll('*')])for(const attr of [...child.attributes])if(attr.name.startsWith('data-b-')||attr.name.startsWith('data-on-'))child.removeAttribute(attr.name);return node;}
-function author(record){const image=document.querySelector('[data-author-name]')?.parentElement?.querySelector('img');if(image&&!document.documentElement.hasAttribute('data-preview-root')){image.hidden=!record.authorName;if(record.authorName)image.src='https://minotar.net/helm/'+encodeURIComponent(record.authorName)+'/40';}text('[data-author-name]',record.authorName??'Staff');text('[data-author-rank]',record.authorRank??'Staff');}
+function author(record) {
+  const name = record.authorName;
+  const image = one('[data-author-name]')?.parentElement?.querySelector('img');
+  if (image && !document.documentElement.hasAttribute('data-preview-root')) {
+    // Historical News records store the staff byline. The roster lists Fain's Minecraft account as FainNeito.
+    const skinName = name === 'Fain' && record.authorRank === 'Founder' ? 'FainNeito' : name;
+    image.hidden = !skinName;
+    if (skinName) image.src = 'https://minotar.net/helm/' + encodeURIComponent(skinName) + '/40';
+  }
+  text('[data-author-name]', name ?? 'Staff');
+  text('[data-author-rank]', record.authorRank ?? 'Staff');
+}
 function setCover(url){const image=one('[data-news-cover]');if(!image)return;image.hidden=!url;if(url)image.src=newsImageSource(url);else image.removeAttribute('src');}
 async function reader(){
   const template=one('#news-row-template'),panel=one('article.panel.swap'),list=template.parentElement.firstElementChild;let posts=[],selected=null,category='All',order='newest';
