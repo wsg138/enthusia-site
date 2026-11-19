@@ -198,4 +198,6 @@ a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
 
 .home-community-sections { box-sizing:border-box; max-width:1240px; margin:auto; padding:32px 24px; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:24px; align-items:start; }
 .home-community-sections > section { display:grid; gap:12px; padding:clamp(16px,3vw,28px); min-width:0; }
-.home-community-sections h2 { color:var(--head); }
+.home-community-sections h2 { color:var(--head); text-align:center; }
+
+.home-warzone-header { display:grid; justify-items:center; gap:12px; text-align:center; }
