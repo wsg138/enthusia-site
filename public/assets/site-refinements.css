@@ -84,11 +84,11 @@ body[data-competition-page=detail] .competition-reward-dialog :where(p,small){co
 
 @media screen {
   /* Frame the existing content wrapper so its own grid and width stay intact. */
-  .en section.s-cream:has(> :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap)) {
+  .en section.s-cream:has(> :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap, .exact-empty, .exact-detail-inner)) {
     background-color: var(--site-crimson);
   }
 
-  .en section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap) {
+  .en section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap, .exact-empty, .exact-detail-inner) {
     background-color: #fff1cf;
     border: 3px solid var(--edge);
     box-shadow: var(--site-rails);
@@ -100,7 +100,7 @@ body[data-competition-page=detail] .competition-reward-dialog :where(p,small){co
     box-shadow: inset 0 3px var(--edge), inset 0 5px var(--gold);
   }
 
-  .en section:has(+ section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap)) > .crenel {
+  .en section:has(+ section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap, .exact-empty, .exact-detail-inner)) > .crenel {
     --divider-color: var(--site-crimson);
   }
 
@@ -108,7 +108,7 @@ body[data-competition-page=detail] .competition-reward-dialog :where(p,small){co
     --divider-color: var(--site-red);
   }
 
-  .en section:has(+ section.s-red, + section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap)) > .crenel {
+  .en section:has(+ section.s-red, + section.s-cream > :only-child:is([style*="max-width"], .wrap, .container, .quest-wrap, .exact-empty, .exact-detail-inner)) > .crenel {
     background-image: linear-gradient(90deg, transparent 25%, var(--divider-color) 25% 75%, transparent 75%);
   }
 
@@ -232,13 +232,17 @@ a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
 
   .en .market-stage,
   .en.workflow-page .page-main:has(> .exact-workflow-wrap),
-  .en.workflow-page .page-main > .page-section.band {
+  .en.workflow-page .page-main > .page-section.band,
+  .en.workflow-page .gallery-page > .page-section.compact,
+  .en #competitionDetail:has(> .competition-error) {
     background-color: var(--site-crimson);
   }
 
   .en .market-stage > .market-page-root,
   .en.workflow-page .page-main > .exact-workflow-wrap,
-  .en.workflow-page .page-section.band > .container {
+  .en.workflow-page .page-section.band > .container,
+  .en.workflow-page .gallery-page > .page-section.compact > .container,
+  .en #competitionDetail > .competition-error {
     box-sizing: border-box;
     background-color: #fff1cf;
     border: 3px solid var(--edge);
@@ -251,4 +255,17 @@ a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
   .en .hero:has(+ .market-stage, + .exact-workflow-wrap) > .crenel {
     background-image: linear-gradient(90deg, transparent 25%, var(--site-crimson) 25% 75%, transparent 75%);
   }
+}
+
+@media screen {
+  .en .gallery-page .gallery-hero {
+    background: var(--site-red);
+    border-bottom: 4px solid var(--gold);
+    color: #fff6e0;
+  }
+
+  .en .gallery-hero :is(h1, .eyebrow) { color: #ffdb2e; }
+  .en .gallery-hero .page-lead { color: #fff6e0; }
+  .en #competitionDetail:has(> .competition-error) { padding: 32px 16px; }
+  .en section.s-cream > .exact-empty:only-child { box-sizing: border-box; }
 }
