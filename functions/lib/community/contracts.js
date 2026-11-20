@@ -142,11 +142,18 @@ export function validateSale(input,now=Date.now()) {
   return {id:identifier(input.id),stall:text(input.stall,80),guild:text(input.guild,80),item:identifier(input.item),quantity,gold,occurredAt};
 }
 export async function verifyProducer(request,env,body,now=Date.now()) {
-  if(typeof env.COMMUNITY_INGEST_SECRET!=='string'||env.COMMUNITY_INGEST_SECRET.length<32)return false;
   const time=request.headers.get('x-enthusia-timestamp'),nonce=request.headers.get('x-enthusia-nonce'),signature=request.headers.get('x-enthusia-signature');
   if(!/^\d{13}$/.test(time??'')||Math.abs(now-Number(time))>300000||!/^[A-Za-z0-9_-]{16,80}$/.test(nonce??'')||!/^[a-f0-9]{64}$/.test(signature??''))return false;
   const encoder=new TextEncoder();
-  const key=await crypto.subtle.importKey('raw',encoder.encode(env.COMMUNITY_INGEST_SECRET),{name:'HMAC',hash:'SHA-256'},false,['verify']);
   const bytes=Uint8Array.from(signature.match(/../g),v=>parseInt(v,16));
-  return crypto.subtle.verify('HMAC',key,bytes,encoder.encode(`${time}\n${nonce}\n${new URL(request.url).pathname}\n${body}`));
+  const message=encoder.encode(`${time}\n${nonce}\n${new URL(request.url).pathname}\n${body}`);
+  if(await validHmac(env.COMMUNITY_INGEST_SECRET,bytes,message))return true;
+  if(!await validHmac(env.WARZONE_INGEST_SECRET,bytes,message))return false;
+  try { return JSON.parse(body)?.kind==='warzone'; } catch { return false; }
+}
+
+async function validHmac(secret,signature,message) {
+  if(typeof secret!=='string'||secret.length<32)return false;
+  const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(secret),{name:'HMAC',hash:'SHA-256'},false,['verify']);
+  return crypto.subtle.verify('HMAC',key,signature,message);
 }

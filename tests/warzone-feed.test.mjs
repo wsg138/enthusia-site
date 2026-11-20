@@ -26,3 +26,18 @@ test('website accepts the independent Java HMAC contract and rejects tampering',
   assert.equal(result.weekStartsAt,input.weekStartsAt);assert.equal(result.duelResultsComplete,true);
   assert.throws(()=>projectSnapshot('warzone',{...input,weekStartsAt:new Date(week.getTime()-86400000).toISOString()}));
  });
+
+test('Warzone key accepts only a signed Warzone snapshot', async () => {
+  const {createHmac} = await import('node:crypto');
+  const secret = 'w'.repeat(32);
+  const env = {WARZONE_INGEST_SECRET:secret, COMMUNITY_INGEST_SECRET:'c'.repeat(32)};
+  const timestamp = String(Date.now()), nonce = 'warzone-test-nonce', path = '/api/community/ingest';
+  for (const kind of ['warzone','sales','guilds','players']) {
+    const body = JSON.stringify({kind, items:[]});
+    const signature = createHmac('sha256',secret).update([timestamp,nonce,path,body].join('\n')).digest('hex');
+    const req = new Request('https://example.com'+path,{headers:{
+      'x-enthusia-timestamp':timestamp,'x-enthusia-nonce':nonce,'x-enthusia-signature':signature
+    }});
+    assert.equal(await verifyProducer(req,env,body),kind==='warzone');
+  }
+});
