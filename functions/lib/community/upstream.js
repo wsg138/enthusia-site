@@ -1,7 +1,7 @@
 import { SNAPSHOT_KINDS, projectSnapshot,validateSale } from './contracts.js';
 const MAX_BYTES=150000;
 function configuration(kind,env) {
-  if(!SNAPSHOT_KINDS.has(kind)&&kind!=='sales'&&kind!=='player_guilds')return null;
+  if(!SNAPSHOT_KINDS.has(kind)&&kind!=='sales'&&kind!=='player_guilds'&&kind!=='player_achievements')return null;
   const prefix='COMMUNITY_'+kind.toUpperCase()+'_API';
   try {
     const url=new URL(env[prefix+'_URL']);
@@ -9,6 +9,7 @@ function configuration(kind,env) {
     if(!url.hostname.includes('.')||url.hostname.includes(':')||/^\d+\.\d+\.\d+\.\d+$/.test(url.hostname)
       ||/\.(local|localhost|internal|test)$/.test(url.hostname))return null;
     const token=String(env[prefix+'_TOKEN']??'');
+    if(kind==='player_achievements'&&token.length<32)return null;
     if(/[\r\n]/.test(token)||token.length>8192)return null;
     return {url,headers:{accept:'application/json',...(token?{authorization:'Bearer '+token}:{})}};
   } catch { return null; }
@@ -53,6 +54,27 @@ export async function readPlayerGuildMemberships(ids,env,fetchImpl=fetch,now=Dat
     const projected=projectSnapshot('players',{items:input.items.map(row=>({id:row.id,name:'Guild lookup',guildsKnown:true,guildMemberships:row.guildMemberships}))});
     return {items:projected.items,generatedAt:new Date(time).toISOString()};
   } catch { return null; }
+}
+function validAchievementBatch(input,ids,now){
+  const time=Date.parse(input?.generatedAt);
+  if(!Number.isFinite(time)||time>now+60000||now-time>900000)return false;
+  if(!Array.isArray(input.items)||input.items.length>ids.length)return false;
+  return input.items.every(row=>validAchievementRow(row,ids));
+}
+function validAchievementRow(row,ids){
+  return ids.includes(row.id)&&row.achievementsKnown===true&&Array.isArray(row.achievements)&&row.achievements.length<=200;
+}
+export async function readPlayerAchievements(ids,env,fetchImpl=fetch,now=Date.now()) {
+  const config=configuration('player_achievements',env);if(!config)return null;
+  try {
+    if(ids.length<1||ids.length>50||new Set(ids).size!==ids.length)return null;
+    config.url.searchParams.set('players',ids.join(','));
+    const response=await fetchImpl(config.url,{headers:config.headers,redirect:'error',signal:globalThis.AbortSignal.timeout(5000)});
+    const input=await boundedJson(response);
+    if(!validAchievementBatch(input,ids,now))return null;
+    const projected=projectSnapshot('players',{items:input.items.map(row=>({id:row.id,name:'Achievement lookup',achievementsKnown:true,achievements:row.achievements}))});
+    return {items:projected.items,generatedAt:new Date(input.generatedAt).toISOString()};
+  } catch {return null;}
 }
 export async function readCommunitySales(env,fetchImpl=fetch,now=Date.now(),cursor=null) {
   const config=configuration('sales',env);if(!config)return null;

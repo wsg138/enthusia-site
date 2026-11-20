@@ -1,5 +1,5 @@
 import { projectSnapshot } from './community/contracts.js';
-import {readPlayerGuildMemberships} from './community/upstream.js';
+import {readPlayerGuildMemberships,readPlayerAchievements} from './community/upstream.js';
 import {readLiveGuildDirectory} from './live-guild-directory.js';
 import {projectGuildDirectory} from './guild-directory-source.js';
 const UUID=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
@@ -83,6 +83,21 @@ export async function enrichStoredPlayerGuilds(snapshot,env,now=Date.now(),fetch
   return {...snapshot,items:snapshot.items.map(player=>players.get(String(player.id).toLowerCase())??player),
     sourceUpdatedAt,generatedAt:[snapshot.generatedAt,directory.generatedAt].filter(Boolean).sort().at(-1)};
 }
+export async function enrichPlayerAchievements(snapshot,env,now=Date.now(),fetchImpl=fetch) {
+  if(!env.COMMUNITY_PLAYER_ACHIEVEMENTS_API_URL||!Array.isArray(snapshot.items))return snapshot;
+  const players=new Map(snapshot.items.filter(player=>UUID.test(player.id))
+    .map(player=>[player.id.toLowerCase(),{...player}]));
+  const ids=[...players.keys()].filter(id=>players.get(id).achievementsKnown!==true).slice(0,1000);
+  let changed=false;
+  for(let offset=0;offset<ids.length;offset+=100){
+    const results=await Promise.all([ids.slice(offset,offset+50),ids.slice(offset+50,offset+100)]
+      .filter(batch=>batch.length).map(batch=>readPlayerAchievements(batch,env,fetchImpl,now)));
+    for(const result of results.filter(Boolean))for(const row of result.items){
+      Object.assign(players.get(row.id),{achievementsKnown:true,achievements:row.achievements});changed=true;
+    }
+  }
+  return changed?{...snapshot,items:snapshot.items.map(player=>players.get(String(player.id).toLowerCase())??player)}:snapshot;
+}
 export async function readPublicPlayerDirectory(env,now=Date.now(),fetchImpl=fetch) {
   const [playtime,balance]=await Promise.all([
     board(env.PLAYTIME_LEADERBOARDS,'leaderboards/playtime-active-all.json',now),
@@ -99,6 +114,18 @@ export async function readPublicPlayerDirectory(env,now=Date.now(),fetchImpl=fet
     for(const result of results.filter(Boolean)){
       sources.push(result);
       for(const row of result.items)Object.assign(players.get(row.id),{guildsKnown:true,guildMemberships:row.guildMemberships});
+    }
+  }
+  if(env.COMMUNITY_PLAYER_ACHIEVEMENTS_API_URL){
+    const ids=[...players.keys()].slice(0,1000);
+    // Bound simultaneous bridge work; absent and failed rows stay unknown.
+    for(let offset=0;offset<ids.length;offset+=100){
+      const results=await Promise.all([ids.slice(offset,offset+50),ids.slice(offset+50,offset+100)]
+        .filter(batch=>batch.length).map(batch=>readPlayerAchievements(batch,env,fetchImpl,now)));
+      for(const result of results.filter(Boolean)){
+        sources.push(result);
+        for(const row of result.items)Object.assign(players.get(row.id),{achievementsKnown:true,achievements:row.achievements});
+      }
     }
   }
   if (env.GUILDS_DIRECTORY_API_URL && env.GUILDS_API_BEARER) {

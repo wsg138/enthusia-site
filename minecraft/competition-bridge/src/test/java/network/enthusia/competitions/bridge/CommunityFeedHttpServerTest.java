@@ -7,14 +7,40 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CommunityFeedHttpServerTest {
+    @Test void requestedPlayerFeedRequiresTokenRejectsInvalidQueriesAndDoesNotCacheAcrossRequests() throws Exception {
+        int port = freePort();
+        String token="test-only-"+"a".repeat(32); AtomicInteger captures=new AtomicInteger();
+        var server=new CommunityFeedHttpServer(port,token,new CommunityFeedHttpServer.Source() {
+            public Map<String,Object> read(String kind) { return Map.of(); }
+            public Map<String,Object> readPlayers(List<UUID> players) { captures.incrementAndGet(); return Map.of("count",players.size()); }
+        });
+        server.start();
+        try {
+            HttpClient client=HttpClient.newHttpClient();String base="http://127.0.0.1:"+port+"/api/community/player-achievements";
+            String id="aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+            String queryPrefix = "?players=";
+            java.util.function.BiFunction<String,Boolean,HttpResponse<String>> get=(query,auth)->{
+                try { var request=HttpRequest.newBuilder(URI.create(base+query)); if(auth)request.header("Authorization","Bearer "+token);
+                    return client.send(request.build(),HttpResponse.BodyHandlers.ofString()); }
+                catch(Exception failure) { throw new IllegalStateException(failure); }
+            };
+            assertEquals(401,get.apply(queryPrefix+id,false).statusCode());
+            assertEquals(400,get.apply(queryPrefix+id+","+id.toUpperCase(java.util.Locale.ROOT),true).statusCode());
+            assertEquals(400,get.apply(queryPrefix+id+"&extra=1",true).statusCode());
+            assertEquals(200,get.apply(queryPrefix+id,true).statusCode());
+            assertEquals(200,get.apply(queryPrefix+id,true).statusCode());
+            assertEquals(2,captures.get());
+        } finally { server.close(); }
+    }
     @Test void publicRoutesEnforceAuthenticationMethodPathAndCacheWithoutDroppingNulls() throws Exception {
-        int port;
-        try (var socket = new ServerSocket(0)) { port = socket.getLocalPort(); }
+        int port = freePort();
         String token = "test-only-" + "a".repeat(32);
         AtomicInteger captures = new AtomicInteger();
         var server = new CommunityFeedHttpServer(port, token, kind -> {
@@ -39,6 +65,9 @@ class CommunityFeedHttpServerTest {
             var queried = HttpRequest.newBuilder(URI.create(base + "/api/community/achievements?private=true")).header("Authorization", "Bearer " + token).build();
             assertEquals(400, client.send(queried, HttpResponse.BodyHandlers.ofString()).statusCode());
         } finally { server.close(); }
+    }
+    private static int freePort() throws Exception {
+        try (var socket = new ServerSocket(0)) { return socket.getLocalPort(); }
     }
     @Test void missingTokenCannotOpenListener() {
         assertThrows(IllegalArgumentException.class, () -> new CommunityFeedHttpServer(8766, "", kind -> Map.of()));
