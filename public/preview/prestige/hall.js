@@ -2,7 +2,8 @@ import {api,el} from '../../assets/community-dom.js';
 import {playerHead} from '../../assets/exact-player-profile.js';
 
 const date = value => new Date(value).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
-const gold = value => value.toLocaleString('en-US') + ' gold';
+const gold = value => value==null ? null : value.toLocaleString('en-US') + ' gold';
+const sampleMode = new URLSearchParams(location.search).get('source') !== 'server';
 const art = file => new URL(file, import.meta.url).href;
 const badge = (tier, size) => el('img', {src:art('badge-' + tier + '.png'), width:size, height:size, alt:''});
 const guildLink = (guild,tier,label=guild.name) => el('a', {
@@ -38,15 +39,16 @@ function milestone(guildId, entry, tier, players) {
   people.addEventListener('toggle', () => {
     if (!people.open || people.childElementCount > 1) return;
     const heads = el('div',{class:'heads'});
-    const named=entry.credited.map(id=>players.get(id)).filter(Boolean);
-    for (const player of named) {
+    for (const credit of entry.credited) {
+      const player=typeof credit==='string' ? (players.get(credit)??{id:credit}) : {id:credit.uuid,name:credit.name};
       const head=playerHead(player,32);
-      head.alt='';
-      heads.append(el('a',{href:'players.html#'+encodeURIComponent(player.id)},[head,player.name]));
+      head.alt=player.name?'':'Credited member';
+      const profile=(sampleMode?'':'../')+'players.html#'+encodeURIComponent(player.id);
+      heads.append(player.name ? el('a',{href:profile},[head,player.name]) : head);
     }
     people.append(heads);
-    const remaining=entry.creditedTotal-named.length;
-    if(remaining)people.append(el('small',{text:remaining+' credited '+(remaining===1?'member':'members')+' without a public name'}));
+    const remaining=entry.creditedTotal-entry.credited.length;
+    if(remaining)people.append(el('small',{text:'and '+remaining+' more'}));
   });
   return el('li',{id:'g-'+guildId+'-tier-'+tier.tier,tabindex:'-1'},[badge(entry.tier,32), el('strong',{text:'Prestige ' + tier.roman}),
     el('time',{datetime:entry.reachedAt,text:date(entry.reachedAt)}),
@@ -59,7 +61,8 @@ function render(snapshot, players) {
   const guilds = [...snapshot.guilds].sort((a,b) => a.hallRank-b.hallRank);
   const recent = snapshot.recent.find(event => !event.disbanded && guilds.some(g => g.id === event.guildId));
   // The demo is frozen at the supplied snapshot, including its spotlight window.
-  const fresh = recent && Date.parse(snapshot.generatedAt)-Date.parse(recent.reachedAt) < 7*86400000;
+  const now = sampleMode ? Date.parse(snapshot.generatedAt) : Date.now();
+  const fresh = recent && now-Date.parse(recent.reachedAt) < 7*86400000;
   const guild = fresh ? guilds.find(g => g.id === recent.guildId) : guilds[0];
   if (guild) {
     const tier = fresh ? recent.tier : guild.tier;
@@ -92,7 +95,7 @@ function render(snapshot, players) {
         el('strong',{text:'#' + g.hallRank + ' ' + g.name}),el('small',{text:[g.tag,'Level ' + g.level,g.memberCount+' members'].join(' · ')}),
         el('small',{text:'Prestige ' + tier.roman + ' since ' + date(g.reachedAt)})]),badge(g.tier,32)]);
       const card=el('details',{class:'tip guild-card',id:'g-'+g.id},[summary,
-        el('a',{class:'btn btn-dark',href:'guilds.html#'+encodeURIComponent(g.id),text:'View guild profile'}),
+        el('a',{class:'btn btn-dark',href:(sampleMode?'':'../')+'guilds.html#'+encodeURIComponent(g.id),text:'View guild profile'}),
         el('ol',{class:'milestones'},g.history.map(h=>milestone(g.id,h,tiers.get(h.tier),players)))]);
       ladder.append(card);
     }
@@ -112,11 +115,26 @@ function render(snapshot, players) {
   openGuild();
 }
 
+const sourceLink=document.querySelector('#feed-switch');
+if (!sampleMode) {
+  sourceLink.href='?source=sample';
+  sourceLink.textContent='View sample Hall';
+}
+const status=document.querySelector('#feed-status');
 try {
-  const response=await fetch(art('sample.json'));
-  if(!response.ok) throw new Error('Sample unavailable');
-  const directory=await api('players').catch(()=>({items:[]}));
-  render(await response.json(), new Map(directory.items.map(player=>[player.id,player])));
+  let snapshot,players=[];
+  if (sampleMode) {
+    const response=await fetch(art('sample.json'));
+    if(!response.ok) throw new Error('Sample unavailable');
+    snapshot=await response.json();
+    players=(await api('players').catch(()=>({items:[]}))).items;
+    status.textContent='Sample guilds and milestones · '+date(snapshot.generatedAt);
+  } else {
+    snapshot=await api('prestige');
+    status.textContent=(snapshot.stale?'Last known standings':'Server standings')+' · Updated '+new Date(snapshot.generatedAt).toLocaleString();
+  }
+  render(snapshot,new Map(players.map(player=>[player.id,player])));
 } catch {
-  document.querySelector('#hall').replaceChildren(el('p',{class:'tip fees',role:'status',text:'The sample Hall of Prestige could not be loaded. Refresh to try again.'}));
+  status.textContent=sampleMode?'Sample standings unavailable.':'Server standings unavailable.';
+  for (const section of document.querySelectorAll('#hall > section')) section.hidden=true;
 }

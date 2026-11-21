@@ -4,6 +4,7 @@
 .sample-note { text-align:center; color:var(--muted); }
 .spotlight { padding:clamp(20px,4vw,40px); display:flex; align-items:center; justify-content:center; gap:28px; }
 .spotlight h2 { margin:12px 0; }
+#hall > section[hidden] { display:none; }
 .rank-art { display:grid; place-items:center; width:256px; max-width:100%; min-height:128px; background:#4a0b08; }
 .rank-art canvas { max-width:100%; height:auto; }
 .prestige-wrap img,.prestige-wrap canvas { image-rendering:pixelated; }

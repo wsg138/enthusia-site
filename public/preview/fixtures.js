@@ -124,6 +124,7 @@ function previewApi(url) {
 window.fetch = async (input,options={}) => {
   const url=new URL(input instanceof Request?input.url:String(input),location.href);
   if(url.hostname==='market-api.enthusia.info'){await ready;return json(market);}
+  if(url.origin===location.origin && url.pathname==='/api/community/prestige' && (options.method??'GET')==='GET')return nativeFetch(input,options);
   if(!url.pathname.startsWith('/api/'))return nativeFetch(input,options);
   await ready;
   const method=options.method||(input instanceof Request?input.method:'GET');

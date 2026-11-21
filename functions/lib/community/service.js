@@ -5,6 +5,7 @@ import { json } from '../responses.js';
 import { readGuildDirectory } from '../../api/leaderboards/[[path]].js';
 import { readLiveGuildDirectory, readPublicLeaderboardPlayers, resolvePublicGuildMembers } from '../live-guild-directory.js';
 import { publicMarketBanners } from '../guild-banner-source.js';
+import { readPrestige } from '../live-prestige.js';
 import { projectGuildDirectory } from '../guild-directory-source.js';
 import { readPublicPlayerDirectory, enrichStoredPlayerGuilds } from '../player-directory-source.js';
 import { readCommunityUpstream } from './upstream.js';
@@ -140,7 +141,7 @@ async function ingest(db,request,env){
     statements=[snapshotStatement(db,input.kind,snapshot,now)];
   }
   try{const result=await db.batch([first,...statements,cleanup]);if(input.kind!=='sales'&&!result[1].meta.changes)return json({error:input.kind==='guildquests'?'stale_quest_snapshot':'stale_snapshot'},409);}catch(error){if(String(error).includes('UNIQUE'))return json({error:'producer_replay'},409);throw error;}
-  return json({ok:true,received:input.items.length});
+  return json({ok:true,received:input.kind==='prestige'?input.guilds.length:input.items.length});
 }
 // SQLite has no timezone database. Apply modern US daylight-saving boundaries
 // to the UTC timestamp before grouping each sale by its New York calendar week.
@@ -300,6 +301,29 @@ async function snapshotRoute(db, kind, env) {
   return json({...await response.json(),curated:true});
 }
 
+async function prestigeResponse(env,db) {
+  let stored=null, players=[];
+  try {
+    const row=await db?.prepare("SELECT payload FROM community_snapshots WHERE kind='prestige'").first();
+    if (row) stored=JSON.parse(row.payload);
+  } catch { /* The live source can serve the Hall independently. */ }
+  const snapshot=await readPrestige(env,stored);
+  if (!snapshot) return unavailable();
+  try {
+    const row=await db?.prepare("SELECT payload FROM community_snapshots WHERE kind='players'").first();
+    if (row) players=projectSnapshot('players',JSON.parse(row.payload)).items;
+  } catch { /* Public leaderboard names can still be resolved. */ }
+  const names=new Map(players.map(p=>[p.id.toLowerCase(),p.name]));
+  const history=snapshot.guilds.flatMap(g=>g.history);
+  if (history.some(h=>h.credited.some(id=>!names.has(id)))) {
+    for (const p of await readPublicLeaderboardPlayers()) {
+      if (!names.has(p.id.toLowerCase())) names.set(p.id.toLowerCase(),p.name);
+    }
+  }
+  for (const h of history) h.credited=h.credited.map(uuid=>({uuid,name:names.get(uuid)??null}));
+  return json(snapshot);
+}
+
 async function publicRoute(context, parts) {
   if (context.request.method!=='GET' || parts.length!==1) return notFound();
   const db = context.env.COMMUNITY_DB, kind = parts[0];
@@ -345,6 +369,9 @@ export async function handleCommunity(context,dependencies={editor,identity}) {
   const parts=contextParts(params);
   const rejected = requestBoundary(request,parts);
   if (rejected) return rejected;
+  if (parts.length===1 && parts[0]==='prestige' && request.method==='GET') {
+    return prestigeResponse(env,db);
+  }
   if (isGuildRead(request,parts)) {
     const fallback = await guildFallback(context,db);
     if (fallback) return fallback;
