@@ -35,14 +35,26 @@ function pageControls(nav, page, total, go) {
   if (nav.hidden) { nav.replaceChildren(); return; }
   const controls = [pageButton('«',page-1,{'aria-label':'Previous page',disabled:page===1?'':null},go)];
   let previous = 0;
-  for (let n=1;n<=total;n++) {
-    if (n!==1 && n!==total && Math.abs(n-page)>1 && !(page<=2 && n<=3) && !(page>=total-1 && n>=total-2)) continue;
+  const middle = Math.max(2, Math.min(page, total-1));
+  const pages = new Set([1, middle-1, middle, middle+1, total]);
+  for (const n of [...pages].filter(n => n <= total)) {
     if (n>previous+1) controls.push(el('span',{'aria-hidden':'true',text:'…'}));
     controls.push(pageButton(n,n,{'aria-label':'Page '+n,'aria-current':n===page?'page':null},go));
     previous=n;
   }
   controls.push(pageButton('»',page+1,{'aria-label':'Next page',disabled:page===total?'':null},go));
   nav.replaceChildren(...controls);
+}
+
+function combineReleaseNotes(archive, items) {
+  const entries = archive.map(item => ({...item, date:item.dateLabel}));
+  for (const item of items) {
+    if (item.designIndex != null || !item.title) continue;
+    const entry = {...item, dateLabel:formattedDate(item.date) || 'Undated'};
+    const index = entries.findIndex(old => old.title === item.title && old.body === item.body);
+    if (index < 0) entries.push(entry);
+  }
+  return entries;
 }
 
 export function releaseHistory(section) {
@@ -89,13 +101,7 @@ export function releaseHistory(section) {
       list.textContent = 'Earlier release notes are unavailable.';
       return;
     }
-    entries = (archive.value || []).map(item => ({...item, date:item.dateLabel}));
-    for (const item of feed.value?.items || []) {
-      if (item.designIndex != null || !item.title) continue;
-      const entry = {...item, dateLabel:formattedDate(item.date) || 'Undated'};
-      const index = entries.findIndex(old => old.title === item.title && old.body === item.body);
-      if (index < 0) entries.push(entry);
-    }
+    entries = combineReleaseNotes(archive.value || [], feed.value?.items || []);
     draw();
   }
 

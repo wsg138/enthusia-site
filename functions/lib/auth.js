@@ -2,6 +2,8 @@ import { isCanonicalUuid } from "./validation.js";
 import { getCompetitionIdentitySession } from "./competitions/identity.js";
 import { refreshDiscordRoleSnapshot } from "./competitions/discord-role-refresh.js";
 
+import { NetworkAccountLookupError } from "./competitions/network-accounts.js";
+
 const encoder = new TextEncoder();
 const DISCORD_ROLE_MAX_AGE_MS = 60 * 60 * 1000;
 const DISCORD_STAFF_LOGIN_MAX_AGE_MS = 8 * 60 * 60 * 1000;
@@ -192,7 +194,8 @@ export async function authenticateRequest(request, env, verifier = verifyAccessJ
           discordError = error;
         }
       }
-    } catch {
+    } catch (error) {
+      if (error instanceof NetworkAccountLookupError) discordError = error;
       // Access authentication remains available while the Discord session store is unavailable.
     }
   }

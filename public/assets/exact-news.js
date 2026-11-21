@@ -43,10 +43,10 @@ function storyCard(post, row, embedded, lead) {
   const card = embedded ? row : el('a', {href:'/news/' + encodeURIComponent(post.slug) + location.search});
   card.className = 'postbtn news-story';
   const [tag, title, byline] = row.children;
-  const copy = el('span', {class:'news-story-copy'}, [tag, title]);
+  const copy = el(embedded ? 'span' : 'div', {class:'news-story-copy'}, [tag, title]);
   title.className = 'news-story-title';
   const excerpt = cardExcerpt(post.body, post.title);
-  if (excerpt) copy.append(el('span', {class:'news-story-excerpt', text:excerpt}));
+  if (excerpt) copy.append(el(embedded ? 'span' : 'p', {class:'news-story-excerpt', text:excerpt}));
   copy.append(byline);
   card.replaceChildren(copy);
   if (post.image) card.prepend(storyCover(post.image, lead));
@@ -54,6 +54,11 @@ function storyCard(post, row, embedded, lead) {
 }
 async function reader(){
   const embedded=document.documentElement.hasAttribute('data-preview-root');
+  if(location.hash==='#changelog-title'){
+    const url=new URL(location.href);
+    url.hash='news-title';
+    history.replaceState(null,'',url);
+  }
   if(!embedded && location.hash && !['#main-content','#news-title','#site-nav','#release-history-title'].includes(location.hash)){
     let legacy;
     try { legacy=decodeURIComponent(location.hash.slice(1)); } catch { legacy=''; }

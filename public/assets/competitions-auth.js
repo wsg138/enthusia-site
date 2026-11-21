@@ -53,7 +53,7 @@
     panel.setAttribute("aria-live", "polite");
     const tabs = document.querySelector(".competition-detail-tabs");
     if(document.querySelector('#exact-detail-head')){
-      panel.hidden=true;main.append(panel);
+      panel.hidden=!tabs?.querySelector('[data-tab="my-submission"].is-active');main.append(panel);
       document.addEventListener('click',event=>{const tab=event.target.closest?.('[data-tab]');if(tab)panel.hidden=tab.dataset.tab!=='my-submission';});
     }else if (tabs?.parentNode) tabs.parentNode.insertBefore(panel, tabs);
     else main.prepend(panel);

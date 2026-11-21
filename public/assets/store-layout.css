@@ -1,0 +1,30 @@
+.store-details {padding: 12px 16px; min-width: 0;}
+.store-details summary {color: var(--head); font: inherit; font-weight: bold; cursor: pointer;}
+.store-details[open] > summary {margin-bottom: 12px;}
+.store-perks {display: grid; gap: 10px;}
+.rank .store-details {padding-inline: 0; border-top: 2px solid var(--edge);}
+.store-compare {padding: 16px 24px;}
+.store-support {padding: 40px 0;}
+.store-support-inner {max-width: 1240px; margin: auto; padding: 0 24px; display: grid; grid-template-columns: 3fr 2fr; gap: 24px; align-items: start;}
+.store-support-inner h2 {margin-bottom: 12px;}
+.store-support-inner details + details {margin-top: 8px;}
+.store-community {padding: 24px; display: grid; justify-items: center; text-align: center; gap: 12px;}
+.store-community h2 {margin: 0;}
+@media (max-width: 720px) {
+  .store-support-inner {grid-template-columns: minmax(0,1fr);}
+  .store-compare {padding: 12px;}
+}
+.rank .store-details summary {padding: 8px 12px; background: var(--row); border-left: 4px solid var(--accent);}
+.store-perks h4 {color: var(--head); border-bottom: 2px solid #d8ad53; margin-top: 8px;}
+.store-perks code, .store-compare code {font: inherit; background: #ffedbd; color: #4a0b08; padding-inline: 3px;}
+.store-compare p {margin-block: 12px 16px;}
+.store-compare table {border-collapse: collapse; table-layout: fixed; width: 100%; color: var(--ink); background: var(--paper, #fff7e4);}
+.store-compare th, .store-compare td {text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 2px solid #dfbd71; overflow-wrap: anywhere;}
+.store-compare thead th {background: #781510; color: #ffe193; border-bottom: 4px solid #d8ad53;}
+.store-compare tbody tr:nth-child(even) {background: #fff0cd;}
+@media (max-width: 520px) {
+  .store-compare th, .store-compare td {padding: 8px 5px; line-height: 1.35;}
+}
+
+.store-checkout-panels > div {text-align: center; justify-content: center;}
+.store-checkout-panels .field {text-align: center;}

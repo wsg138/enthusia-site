@@ -1,6 +1,14 @@
 import { signedStaffRequest } from "../staff-api.js";
 import { isCanonicalUuid } from "../validation.js";
 
+export class NetworkAccountLookupError extends Error {
+  constructor(stage, status) {
+    super("Minecraft account verification is temporarily unavailable");
+    this.stage = stage;
+    this.status = status;
+  }
+}
+
 export function networkAccountsEnabled(env) {
   return String(env?.NETWORK_ACCOUNT_LINKS ?? "").trim().toLowerCase() === "true";
 }
@@ -29,9 +37,19 @@ export function normalizeNetworkAccounts(payload) {
 }
 
 export async function refreshNetworkAccounts(db, env, discordUserId) {
-  const response = await signedStaffRequest(env, "/v1/website/accounts", { discordUserId });
-  if (!response.ok) throw new Error("Network account service unavailable");
-  const accounts = normalizeNetworkAccounts(await response.json());
+  let response;
+  try {
+    response = await signedStaffRequest(env, "/v1/website/accounts", { discordUserId });
+  } catch {
+    throw new NetworkAccountLookupError("request");
+  }
+  if (!response.ok) throw new NetworkAccountLookupError("upstream", response.status);
+  let accounts;
+  try {
+    accounts = normalizeNetworkAccounts(await response.json());
+  } catch {
+    throw new NetworkAccountLookupError("invalid_response");
+  }
   const now = new Date().toISOString();
   const placeholders = accounts.map(() => "?").join(",");
   const statements = [db.prepare(`DELETE FROM competition_minecraft_links WHERE discord_user_id = ?

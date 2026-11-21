@@ -223,3 +223,11 @@ flag alone do not display an appeal link. Anonymous sessions, unavailable
 ownership, other players' records and cooldowns keep the link hidden. Verified
 links preselect the owned Minecraft account and punishment. Submission ownership
 continues to be enforced by the existing server-side workflow.
+
+### Store checkout
+
+The Store uses the Tebex Plugin API checkout endpoint to open a hosted basket for one rank and the confirmed Minecraft username. Configure each Pages environment separately and redeploy after changing bindings.
+
+- Set the encrypted secret `TEBEX_PLUGIN_SECRET` to the server integration secret for the Enthusia Tebex store.
+- Set `TEBEX_AVID_PACKAGE_ID` to the numeric ID of the permanent Avid package and `TEBEX_DEVOTEE_PACKAGE_ID` to the monthly Devotee package ID.
+- For acceptance, select each rank in turn, confirm a test username, and follow Continue to Tebex. Verify the recipient, package, and billing terms in the hosted basket before payment.

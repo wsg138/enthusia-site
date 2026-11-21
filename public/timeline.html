@@ -137,11 +137,28 @@ a{color:#b3201a}a:hover{color:#7d120e}
 .ev-node{position:relative;margin-top:14px;width:20px;height:20px;background:#fff8e6;border:4px solid var(--edge);box-sizing:border-box}
 .k-milestone .ev-node{margin-top:10px;width:28px;height:28px;background:var(--gold)}
 .ev-card{grid-column:3;grid-row:1;padding:12px 20px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px 24px}
+.timeline-release{border-top:2px solid #ecc873;padding-top:8px}.timeline-release summary{cursor:pointer;color:var(--head);width:fit-content}.timeline-release ul{padding-left:22px;margin:10px 0 0}.timeline-release li+li{margin-top:6px}
 .ev-text{flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:8px}
 .ev-shot{flex:0 1 240px;min-width:0;padding:0;border:4px solid var(--edge);background:#7d120e;cursor:pointer;display:block;font-family:inherit}
 .ev-shot img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
 .ev-shot span{display:block;padding:4px 8px;color:#fff6e0;font-size:16px;line-height:24px;text-align:left}
 .ev-shot.big{flex:1 1 100%}
+/* Give paired event photos their own row below the story. */
+.ev-card:has(.ev-shot ~ .ev-shot){
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.ev-card:has(.ev-shot ~ .ev-shot) > .ev-text,
+.ev-card:has(.ev-shot ~ .ev-shot) > .ev-shot.big{grid-column:1 / -1}
+.ev-card:has(.ev-shot ~ .ev-shot) > .ev-shot{width:100%;cursor:zoom-in}
+.ev-card:has(.ev-shot ~ .ev-shot) > .ev-shot.big{cursor:zoom-out}
+.ev-card:has(.ev-shot ~ .ev-shot) .ev-shot img{aspect-ratio:auto;height:auto}
+.ev-card:has(.ev-shot ~ .ev-shot) .ev-shot span{border-top:2px solid var(--gold);padding:6px 10px}
+@media (max-width:720px){
+  .ev-card:has(.ev-shot ~ .ev-shot){grid-template-columns:minmax(0,1fr)}
+  .ev-card:has(.ev-shot ~ .ev-shot) > .ev-shot:not(.big){width:88%;justify-self:center}
+}
 .tl.noshots .ev-shot{display:none}
 .shop{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;padding:12px 16px;background:var(--row);overflow-wrap:anywhere}
 .tag-guild{background:#3a0d0a;color:#fff1cf}
@@ -157,7 +174,7 @@ a{color:#b3201a}a:hover{color:#7d120e}
 }
 
 </style>
-<link rel="stylesheet" href="assets/exact-design.css"><link rel="stylesheet" href="assets/site-refinements.css">
+<link rel="stylesheet" href="assets/exact-design.css"><link rel="stylesheet" href="assets/site-refinements.css?v=header-20261119">
 </head>
 <body data-exact-collection="timeline">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -1214,4 +1231,4 @@ a{color:#b3201a}a:hover{color:#7d120e}
 
 
 
-<script src="assets/site-config.js" defer=""></script><script src="assets/enthusia.js" defer=""></script><script src="assets/design-bindings.js" defer=""></script><script type="module" src="assets/exact-collections.js?v=timeline-display-20261103"></script><script type="module" src="assets/staff-navigation.js"></script></body></html>
+<script src="assets/site-config.js" defer=""></script><script src="assets/enthusia.js" defer=""></script><script src="assets/design-bindings.js" defer=""></script><script type="module" src="assets/exact-collections.js?v=timeline-release-details"></script><script type="module" src="assets/staff-navigation.js"></script></body></html>
