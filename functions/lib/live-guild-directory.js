@@ -1,5 +1,5 @@
 // Optional authenticated producer. Never forward browser credentials or follow redirects.
-function directoryHeaders(env){
+export function directoryHeaders(env){
   const headers={Accept:'application/json',Authorization:'Bearer '+env.GUILDS_API_BEARER};
   if(env.CF_ACCESS_CLIENT_ID&&env.CF_ACCESS_CLIENT_SECRET){headers['CF-Access-Client-Id']=env.CF_ACCESS_CLIENT_ID;headers['CF-Access-Client-Secret']=env.CF_ACCESS_CLIENT_SECRET;}
   return headers;

@@ -1,6 +1,7 @@
 export const CONTENT_KINDS = new Set(['news','changelog','roadmap','timeline','halloffame','creators','museum','achievements','polls']);
 import { projectGuildQuests } from '../../../public/assets/guild-quests-model.js';
-export const SNAPSHOT_KINDS = new Set(['guilds','players','bounties','achievements','warzone','guildquests']);
+import { projectPrestige } from '../live-prestige.js';
+export const SNAPSHOT_KINDS = new Set(['guilds','players','bounties','achievements','warzone','guildquests','prestige']);
 export function text(value, max=200, required=false) {
   if (value === undefined || value === null) { if(required) throw new Error('missing_text'); return ''; }
   if(typeof value !== 'string' || value.length>max || (required&&!value.trim())) throw new Error('invalid_text');
@@ -121,6 +122,11 @@ function validDuelWeek(start,generated){
   return Boolean(start)&&Number.isFinite(generated)&&new Date(week).getUTCDay()===1&&week%86400000===0&&generated>=week&&generated<week+7*86400000;
 }
 export function projectSnapshot(kind,input) {
+  if (kind==='prestige') {
+    const snapshot={...input};
+    delete snapshot.kind;
+    return projectPrestige(snapshot);
+  }
   if(kind==='guildquests')return projectGuildQuests(input);
   if(!SNAPSHOT_KINDS.has(kind)||!Array.isArray(input?.items)||input.items.length>1000)throw new Error('invalid_snapshot');
   const ids=new Set();

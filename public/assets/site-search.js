@@ -5,7 +5,7 @@ import { saleItemName } from './market/history-model.js';
 const header = document.querySelector('.site-head-in');
 if (header) install(header);
 
-function navigationResults(header,root) {
+function navigationResults(header,root,preview) {
   const pages = new Map();
   for (const a of header.querySelectorAll('nav a[href]')) {
     if (a.origin !== location.origin || a.closest('[data-staff-link]')) continue;
@@ -14,6 +14,8 @@ function navigationResults(header,root) {
   for (const [path, label] of [['index.html','Home'],['join.html#commands','Player guide · Commands'],['join.html#warzone','Warzone rules and rotations'],['join.html#join-faq-title','Joining FAQ']]) {
     pages.set(new URL(path, root).href, label);
   }
+  if (preview) pages.set(new URL('guildquests.html', root).href, 'Weekly Guild Quests');
+  if (preview) pages.set(new URL('prestige.html', root).href, 'Hall of Prestige');
   return Array.from(pages, ([href, name]) => ({href, name}));
 }
 
@@ -23,7 +25,7 @@ function install(header) {
   const groups = new Map();
   const identities = new Map();
   const typed = {players:new Map(),guilds:new Map()};
-  groups.set('Pages and guides', navigationResults(header,root));
+  groups.set('Pages and guides', navigationResults(header,root,preview));
 
   const trigger = el('button', {type:'button',class:'site-search-trigger','aria-label':'Search site','aria-haspopup':'dialog',title:'Search site (/)'});
   trigger.append(el('span', {class:'site-search-glass','aria-hidden':'true'}));

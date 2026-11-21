@@ -204,6 +204,10 @@ a.identity-link:is(:hover,:focus-visible) { color:#4a0b08; background:#ffcf1f; }
 
 .home-warzone-header { display:grid; justify-items:center; gap:12px; text-align:center; }
 
+.guild-pages { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; padding:12px; background:#821611; border-block:3px solid #edb72e; }
+.guild-pages .btn { padding-inline:12px; }
+@media(max-width:480px) { .guild-pages .btn { padding:6px; font-size:14px; } }
+
 @media (max-width: 540px) {
   .home-community-sections #leaderboards { grid-template-columns: minmax(0, 1fr); }
   .home-community-sections .lb-row {

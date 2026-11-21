@@ -20,4 +20,4 @@ const key=await crypto.subtle.importKey('raw',encoder.encode(secret),{name:'HMAC
 const signature=[...new Uint8Array(await crypto.subtle.sign('HMAC',key,encoder.encode(`${timestamp}\n${nonce}\n${url.pathname}\n${body}`)))].map(value=>value.toString(16).padStart(2,'0')).join('');
 const response=await fetch(url,{method:'POST',redirect:'error',headers:{'content-type':'application/json','x-enthusia-timestamp':timestamp,'x-enthusia-nonce':nonce,'x-enthusia-signature':signature},body});
 if(!response.ok)throw new Error('Export was rejected (HTTP '+response.status+').');
-console.log('Export accepted: '+input.kind+', '+input.items.length+' public records.');
+console.log('Export accepted: '+input.kind+', '+(input.kind==='prestige'?input.guilds.length:input.items.length)+' public records.');

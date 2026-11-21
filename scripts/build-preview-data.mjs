@@ -24,4 +24,37 @@ communityPreview.editorDraft=exactNews.editor;
 const referenceCompetitions=[{...base,id:'reference-build',slug:'build',title:'Build Competition',lifecycleState:'UPCOMING',visualVariant:'reference'},{...base,id:'reference-mapart',slug:'mapart',title:'Mapart Competition',lifecycleState:'UPCOMING',visualVariant:'reference'}];
 communityPreview.polls={items:[{kind:'polls',slug:'reference-poll',title:'[Poll question]',body:'[A sentence or two about what is being decided and why your vote matters.]',closesAt:'2099-10-25T00:00:00Z',options:['[Option one]','[Option two]','[Option three]']}]};
 communityPreview.guildquests=guildQuestPreview();
+const prestige = JSON.parse(await readFile('public/preview/prestige/sample.json','utf8'));
+const sampleNames = [['SampleAsh','SampleLark'],['SampleReed','SampleBay'],['SampleFlint','SampleWren']];
+for (const [index,guild] of prestige.guilds.entries()) {
+  const milestone = guild.history.find(h => h.tier === guild.tier);
+  const names = sampleNames[index];
+  communityPreview.guilds.items.push({id:guild.id,name:guild.name,tag:guild.tag,level:guild.level,
+    members:guild.memberCount,prestige:guild.tier,banner:guild.banner,previewExample:true});
+  names.forEach((name,i) => communityPreview.players.items.push({
+    id:milestone.credited[i],name,previewExample:true
+  }));
+}
+for (const week of communityPreview.guildquests.items) {
+  const ids = new Map(week.guilds.map(g => [g.id,communityPreview.guilds.items.find(item => item.name === g.name).id]));
+  for (const g of week.guilds) g.id = ids.get(g.id);
+  const current = week.id === communityPreview.guildquests.currentWeekId;
+  if (current) {
+    for (const {id,name,banner} of prestige.guilds) {
+      const questBanner = banner && {
+        baseColor:banner.baseColor,
+        patterns:banner.patterns.map(p=>({color:p.color,type:p.type.replace('minecraft:','').toUpperCase()}))
+      };
+      week.guilds.push({id,name,banner:questBanner});
+    }
+  }
+  for (const quest of week.quests) {
+    for (const row of quest.standings) row.guildId = ids.get(row.guildId);
+    if (current) prestige.guilds.forEach((g,i) => quest.standings.push({
+      guildId:g.id,count:String(i+1),claimed:false,rewardDelivered:false
+    }));
+    quest.standings.sort((a,b)=>Number(b.count)-Number(a.count)||a.guildId.localeCompare(b.guildId));
+    quest.standings.forEach((row,i)=>{row.rank=i+1;});
+  }
+}
 await writeFile('public/preview/data.json',JSON.stringify({competitions,referenceCompetitions,adminConfig:config,community:communityPreview},null,2)+'\n');

@@ -15,7 +15,7 @@ function drawBoard(){
   board.append(el('p',{class:'quest-kicker',text:q.leaderboard?'Featured competition':'Quest standings'}),el('h2',{text:q.name}),el('p',{text:'Scores keep counting beyond the objective. Ties follow the server’s guild ID order.'}));
   if(q.payouts.length)board.append(el('p',{text:'Weekly placement rewards: '+q.payouts.map(p=>'#'+p.rank+' · '+format(p.experience)+' XP').join(' / ')}));
   const standings=el('ol',{class:'quest-ranks','aria-label':q.name+' leaderboard'});
-  for(const row of q.standings){const guild=week.guilds.find(g=>g.id===row.guildId);standings.append(el('li',{class:'quest-rank'+(guildId===guild.id?' selected':'')},[el('span',{text:'#'+row.rank}),banner(guild),el('div',{},[el('p',{class:'quest-rank-name',text:guild.name}),el('p',{class:'quest-rank-score',text:format(row.count)+' contributed'}),el('div',{class:'quest-progress','aria-hidden':'true'},[el('span',{style:'width:'+progressPercent(row.count,q.targetCount)+'%'})])])]));}
+  for(const row of q.standings){const guild=week.guilds.find(g=>g.id===row.guildId);standings.append(el('li',{class:'quest-rank'+(guildId===guild.id?' selected':'')},[el('span',{text:'#'+row.rank}),banner(guild),el('div',{},[preview ? el('a',{href:'guilds.html#'+encodeURIComponent(guild.id),text:guild.name}) : el('p',{class:'quest-rank-name',text:guild.name}),el('p',{class:'quest-rank-score',text:format(row.count)+' contributed'}),el('div',{class:'quest-progress','aria-hidden':'true'},[el('span',{style:'width:'+progressPercent(row.count,q.targetCount)+'%'})])])]));}
   board.append(standings);if(!q.standings.length)board.append(el('p',{text:'No guild standings have been published for this quest yet.'}));
   board.append(el('p',{text:'Only exported standings are shown; a missing guild is not a zero score.'}));
 }
@@ -37,7 +37,10 @@ async function load(){
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),10000);
   try{const raw=await api('guildquests',{signal:controller.signal});data=projectGuildQuests(raw);one('quest-updated').textContent='Updated '+new Date(data.generatedAt).toLocaleString();message((preview?'Design preview · illustrative quests, guild scores and rewards. ':'')+(raw.stale||Date.now()-Date.parse(data.generatedAt)>900000?'The last snapshot is over 15 minutes old. Scores may have changed. ':'')+(data.currentWeekId===null?'No active quest rotation has been published.':''));
     if(!data.items.length){one('quest-catalog').replaceChildren();one('quest-board').replaceChildren();message('No quest weeks have been published yet.');return;}
-    one('quest-week').replaceChildren(...[...data.items].sort((a,b)=>Date.parse(b.startsAt)-Date.parse(a.startsAt)).map(w=>el('option',{value:w.id,text:(w.id===data.currentWeekId?'Current · ':'Archive · ')+date(w.startsAt)+' – '+date(w.endsAt)})));one('quest-week').value=data.currentWeekId??one('quest-week').value;one('quest-controls').hidden=false;chooseWeek();interval=setInterval(tick,30000);
+    one('quest-week').replaceChildren(...[...data.items].sort((a,b)=>Date.parse(b.startsAt)-Date.parse(a.startsAt)).map(w=>el('option',{value:w.id,text:(w.id===data.currentWeekId?'Current · ':'Archive · ')+date(w.startsAt)+' – '+date(w.endsAt)})));one('quest-week').value=data.currentWeekId??one('quest-week').value;one('quest-controls').hidden=false;chooseWeek();
+    const requestedGuild=new URL(location.href).searchParams.get('guild');
+    if(preview && week.guilds.some(g=>g.id===requestedGuild)){one('quest-guild').value=requestedGuild;draw();}
+    interval=setInterval(tick,30000);
   }catch{data=null;week=null;one('quest-catalog').replaceChildren();one('quest-board').replaceChildren(el('p',{text:'Standings will appear when the server quest feed is connected.'}));one('quest-clock').textContent='Quest feed unavailable';one('quest-updated').textContent='';one('quest-bonus').textContent='';message('Weekly quests are not available from the server yet. Check guild quests in-game or try again later.');}
   finally{clearTimeout(timeout);one('quest-retry').disabled=false;}
 }

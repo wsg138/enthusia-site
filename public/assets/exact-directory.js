@@ -17,6 +17,13 @@ function guildProfile(node,item){
   const stats=el('div',{class:'stats',style:'display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:16px'},metrics.map(([label,number])=>el('div',{class:'stat',style:'display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0;padding:16px'},[el('b',{text:value(number),style:'font-size:28px;line-height:36px'}),el('span',{text:label})])));
   const details=el('div',{},[el('h3',{text:'Public members',style:'font-size:24px;line-height:32px'}),item.membersList?.length?el('ul',{class:'plain'},item.membersList.map(name=>el('li',{class:'who'},[el('span',{text:name})]))):el('p',{text:'Member names are not available yet. The member count above comes from the server.'}),el('p',{text:'Recruitment: '+(item.recruiting===null||item.recruiting===undefined?'Not available':item.recruiting?'Open':'Closed')}),el('p',{text:'Guild stance: '+(item.peaceful===null||item.peaceful===undefined?'Not available':item.peaceful?'Peaceful':'Hostile')})]);
   node.replaceChildren(heading,stats,details);
+  if(preview && item.previewExample && item.prestige) {
+    const roman=['','I','II','III','IV','V','VI'][item.prestige];
+    const milestone=link('prestige.html#g-'+item.id+'-tier-'+item.prestige,'Prestige '+roman+' milestone','btn btn-gold');
+    milestone.prepend(el('img',{src:'prestige/badge-'+item.prestige+'.png',alt:'',width:32,height:32}));
+    stats.children[1].replaceChildren(milestone);
+    node.append(link('guildquests.html?guild='+encodeURIComponent(item.id),'Weekly quest progress','btn btn-dark'));
+  }
   if(limited)node.append(el('p',{text:'This page currently shows leaderboard details. Full guild profiles, recruitment and membership details are not connected yet.'}));
   if(!item.banner)node.append(el('p',{text:'This guild’s banner design is not available yet.'}));
   for(const entry of item.links??[])node.append(link(entry.url,entry.label,'btn btn-dark'));
@@ -35,7 +42,7 @@ function replace(type,nodes){const parent=target(type);if(!parent)return;for(con
 function hydrateProfile(node,item){
   // Preview variants are immutable, user-supplied sample presentations. API records never select
   // a variant on production pages, and no live record is merged into literal sample data.
-  if(preview)return;
+  if(preview && !item.previewExample)return;
   if(kind==='guilds'){guildProfile(node,item);return;}
   if(kind==='players')playerProfile(node,item);
 }
@@ -67,10 +74,10 @@ function draw(){
     const node=clone(type,item);if(!node)return null;node.dataset.recordId=item.id;
     if(kind==='guilds'){
       const rank=one('.rk span',node);if(rank)rank.textContent=index+1;
-      if(!preview){one('.nm>span',node).textContent=item.name;one('.nm small',node).textContent='Level '+(item.level??'Not available')+' · '+(item.members??'Not available')+' members'+(item.elo===null||item.elo===undefined?' · ELO unavailable':' · '+item.elo+' ELO');for(const tag of node.querySelectorAll('.tag'))tag.remove();if(item.recruiting)node.append(el('span',{class:'tag tag-good',text:'Recruiting'}));for(const banner of node.querySelectorAll('.bn'))banner.replaceWith(guildBanner(item));}
+      if(!preview || item.previewExample){one('.nm>span',node).textContent=item.name;one('.nm small',node).textContent='Level '+(item.level??'Not available')+' · '+(item.members??'Not available')+' members'+(item.elo===null||item.elo===undefined?' · ELO unavailable':' · '+item.elo+' ELO');for(const tag of node.querySelectorAll('.tag'))tag.remove();if(item.recruiting)node.append(el('span',{class:'tag tag-good',text:'Recruiting'}));for(const banner of node.querySelectorAll('.bn'))banner.replaceWith(guildBanner(item));}
     }else if(kind==='bounties'){
       node.classList.toggle('done',item.state==='claimed');if(!preview){one('h3',node).textContent=item.name;const fields=[...node.children].filter(child=>child.tagName==='SPAN');if(fields[1])fields[1].textContent=item.gold??'Unavailable';if(fields[3])fields[3].textContent=item.description??'';if(fields[4])fields[4].textContent=item.expiresAt?formattedDate(item.expiresAt):'';const img=one('img',node);if(img)img.src='https://minotar.net/helm/'+encodeURIComponent(item.name)+'/96';}
-    }else if(!preview){node.classList.add('player-picker-card');node.replaceChildren(playerHead(item,32),el('span',{text:item.name}));}
+    }else if(!preview || item.previewExample){node.classList.add('player-picker-card');node.replaceChildren(playerHead(item,32),el('span',{text:item.name}));}
     if(kind!=='bounties'){node.setAttribute('aria-pressed',String(selected?.id===item.id));node.addEventListener('click',()=>choose(item));}return node;
   }));
   const count=one('[data-b-text="countLine"]');if(count)count.textContent=directoryCount(rows.length);
