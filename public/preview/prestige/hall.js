@@ -56,17 +56,23 @@ function milestone(guildId, entry, tier, players) {
     el('p',{text:[gold(entry.feePaid),entry.keptReward?.name].filter(Boolean).join(' · ')}), people]);
 }
 
-function render(snapshot, players) {
-  const tiers = new Map(snapshot.tiers.map(t => [t.tier,t]));
-  const guilds = [...snapshot.guilds].sort((a,b) => a.hallRank-b.hallRank);
+function renderSpotlight(snapshot, tiers, guilds) {
   const recent = snapshot.recent.find(event => !event.disbanded && guilds.some(g => g.id === event.guildId));
   // The demo is frozen at the supplied snapshot, including its spotlight window.
   const now = sampleMode ? Date.parse(snapshot.generatedAt) : Date.now();
-  const fresh = recent && now-Date.parse(recent.reachedAt) < 7*86400000;
+  const weekMs = 7*24*60*60*1000;
+  const fresh = recent && now-Date.parse(recent.reachedAt) < weekMs;
   const guild = fresh ? guilds.find(g => g.id === recent.guildId) : guilds[0];
-  if (guild) {
-    const tier = fresh ? recent.tier : guild.tier;
-    const reached = fresh ? recent.reachedAt : guild.reachedAt;
+  if (!guild) {
+    document.querySelector('#spotlight').textContent='No guild has prestiged yet.';
+    return;
+  }
+  spotlightCard(guild, fresh ? recent : guild, tiers, Boolean(fresh));
+}
+
+function spotlightCard(guild, event, tiers, fresh) {
+    const tier = event.tier;
+    const reached = event.reachedAt;
     const history = guild.history.find(h => h.tier === tier);
     document.querySelector('#spotlight').append(fresh ? rankUp(tier) : badge(tier,128),
       el('div',{},[el('p',{class:'tag tag-gold',text:fresh?'Latest prestige':'Reigning guild'}),
@@ -74,7 +80,9 @@ function render(snapshot, players) {
         el('p',{text:'Prestige ' + tiers.get(tier).roman + ' · ' + date(reached)}),
         history && el('p',{text:history.creditedTotal + ' members stood with them.' + (history.keptReward?' They kept ' + history.keptReward.name + '.':'')}),
         history && el('a',{class:'btn btn-gold',href:'#g-'+guild.id+'-tier-'+tier,text:'View milestone'})]));
-  } else document.querySelector('#spotlight').textContent='No guild has prestiged yet.';
+}
+
+function renderFirsts(snapshot) {
   for (const tier of snapshot.tiers) {
     const first=tier.first;
     document.querySelector('#firsts').append(el('article',{class:'tip first' + (first?'':' unclaimed')},[
@@ -82,8 +90,11 @@ function render(snapshot, players) {
       first && !first.disbanded ? guildLink(first,tier.tier) : el('strong',{text:first?.name ?? 'Unclaimed'}),
       first && el('time',{datetime:first.reachedAt,text:date(first.reachedAt)}),
       first?.disbanded && el('span',{class:'tag tag-plain',text:'Disbanded'})]));
-    document.querySelector('#fees').append(el('li',{text:'Prestige ' + tier.roman + ' · ' + [gold(tier.fee), ...tier.perks.map(p=>p.replaceAll('_',' '))].join(' · ')}));
+    document.querySelector('#fees').append(el('li',{text:'Prestige ' + tier.roman + ' · ' + [gold(tier.fee), ...tier.perks.map(p=>p.split('_').join(' '))].join(' · ')}));
   }
+}
+
+function renderLadder(snapshot, tiers, guilds, players) {
   for (const tier of [...snapshot.tiers].reverse()) {
     const group = guilds.filter(g=>g.tier===tier.tier);
     if (!group.length) continue;
@@ -100,6 +111,14 @@ function render(snapshot, players) {
       ladder.append(card);
     }
   }
+}
+
+function render(snapshot, players) {
+  const tiers = new Map(snapshot.tiers.map(t => [t.tier,t]));
+  const guilds = [...snapshot.guilds].sort((a,b) => a.hallRank-b.hallRank);
+  renderSpotlight(snapshot,tiers,guilds);
+  renderFirsts(snapshot);
+  renderLadder(snapshot,tiers,guilds,players);
   for(const [label,value] of [['Prestiges completed',snapshot.totals.prestiges],['Guilds that have prestiged',snapshot.totals.guildsPrestiged],['Server firsts claimed',snapshot.totals.tiersClaimed+' / '+snapshot.maxTier],['Gold invested',snapshot.totals.goldSpent.toLocaleString('en-US')]]) {
     document.querySelector('#totals').append(el('div',{},[el('dt',{text:label}),el('dd',{text:value})]));
   }

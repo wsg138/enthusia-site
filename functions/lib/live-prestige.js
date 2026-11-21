@@ -5,18 +5,22 @@ import { directoryHeaders } from './live-guild-directory.js';
 const validator = new Validator(schema, '2020-12');
 const numerals = ['I','II','III','IV','V','VI'];
 
+function validateHistory(guild) {
+  let previous = 0;
+  for (const entry of guild.history) {
+    if (entry.tier <= previous || entry.tier > guild.tier || entry.creditedTotal < entry.credited.length)
+      throw new Error('invalid_prestige_history');
+    previous = entry.tier;
+  }
+}
+
 export function projectPrestige(snapshot) {
   if (!validator.validate(snapshot).valid) throw new Error('invalid_prestige');
   const ids = new Set();
   for (const [index,guild] of snapshot.guilds.entries()) {
     if (ids.has(guild.id) || guild.hallRank !== index+1) throw new Error('invalid_prestige_rank');
     ids.add(guild.id);
-    let previous = 0;
-    for (const entry of guild.history) {
-      if (entry.tier <= previous || entry.tier > guild.tier || entry.creditedTotal < entry.credited.length)
-        throw new Error('invalid_prestige_history');
-      previous = entry.tier;
-    }
+    validateHistory(guild);
   }
   if (!snapshot.tiers.every((t,i)=>t.tier===i+1 && t.roman===numerals[i])) throw new Error('invalid_prestige_tiers');
   return {...snapshot,generatedAt:new Date(snapshot.generatedAt).toISOString()};

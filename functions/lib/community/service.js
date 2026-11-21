@@ -302,13 +302,19 @@ async function snapshotRoute(db, kind, env) {
 }
 
 async function prestigeResponse(env,db) {
-  let stored=null, players=[];
+  let stored=null;
   try {
     const row=await db?.prepare("SELECT payload FROM community_snapshots WHERE kind='prestige'").first();
     if (row) stored=JSON.parse(row.payload);
   } catch { /* The live source can serve the Hall independently. */ }
   const snapshot=await readPrestige(env,stored);
   if (!snapshot) return unavailable();
+  await resolvePrestigeCredits(snapshot,db);
+  return json(snapshot);
+}
+
+async function resolvePrestigeCredits(snapshot,db) {
+  let players=[];
   try {
     const row=await db?.prepare("SELECT payload FROM community_snapshots WHERE kind='players'").first();
     if (row) players=projectSnapshot('players',JSON.parse(row.payload)).items;
@@ -321,7 +327,6 @@ async function prestigeResponse(env,db) {
     }
   }
   for (const h of history) h.credited=h.credited.map(uuid=>({uuid,name:names.get(uuid)??null}));
-  return json(snapshot);
 }
 
 async function publicRoute(context, parts) {
